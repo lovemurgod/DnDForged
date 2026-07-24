@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DnDForged - Self-Hosted Virtual Tabletop</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- DnDForged Custom Premium Stylesheet -->
+    <link rel="stylesheet" href="css/vtt.css?v=8">
+    
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Dice Box CDN for 3D Dice -->
+    <script src="https://cdn.jsdelivr.net/npm/@dice-box/canvas-renderer@1.2.1/dist/index.min.js"></script>
+    
+    <!-- 5etools Parsers & Common Utilities -->
+    <script type="text/javascript" src="lib/localforage.js"></script>
+    <script type="text/javascript" src="js/parser.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/utils-ui.js"></script>
+    <script type="module" src="js/utils-brew.js"></script>
+    <script type="module" src="js/utils-config.js"></script>
+    <script type="module" src="js/utils-dataloader.js"></script>
+    <script type="text/javascript" src="js/hist.js"></script>
+    <script type="text/javascript" src="js/render.js"></script>
+    <script type="text/javascript" src="js/render-dice.js"></script>
+    <script type="text/javascript" src="js/render-markdown.js"></script>
+    <script type="module" src="js/vtt-assets.js"></script>
+</head>
+<body>
+
+    <!-- 3D Dice Roller Canvas Overlay -->
+    <div id="dice-box-canvas-container"></div>
+
+    <!-- Login Overlay Window -->
+    <div id="login-overlay" class="vtt-overlay-panel">
+        <div class="login-card glassmorphism animated-fade-in">
+            <div class="login-header">
+                <i class="fa-solid fa-dice-d20 logo-icon spin-hover"></i>
+                <h1>DnD<span>Forged</span></h1>
+                <p>Self-Hosted Virtual Tabletop System</p>
+            </div>
+            
+            <div class="login-body">
+                <div class="form-group">
+                    <label for="login-username"><i class="fa-solid fa-user"></i> Player Name</label>
+                    <input type="text" id="login-username" placeholder="Enter player name..." value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-role"><i class="fa-solid fa-crown"></i> Tabletop Role</label>
+                    <select id="login-role">
+                        <option value="GM">Game Master (GM)</option>
+                        <option value="Player">Player</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-campaign"><i class="fa-solid fa-book-bookmark"></i> Select Campaign</label>
+                    <div class="flex-row">
+                        <select id="login-campaign">
+                            <option value="default">Default Campaign</option>
+                        </select>
+                        <button id="btn-create-campaign" class="btn btn-secondary" title="Create New Campaign">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button id="btn-join-game" class="btn btn-primary btn-block">
+                    <i class="fa-solid fa-door-open"></i> Enter Tabletop
+                </button>
+            </div>
+            
+            <div class="login-footer">
+                <p>DnDForged integrates directly with your 5etools library.</p>
+                <a href="index.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open 5etools Reference Sheet</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Tabletop Workspace -->
+    <div id="vtt-workspace" class="vtt-hidden">
+        
+        <!-- Floating Left Toolbar (GM / Player Controls) -->
+        <nav id="vtt-controls" class="glassmorphism">
+            <button id="tool-select" class="control-btn active" title="Select & Move Tokens (S)">
+                <i class="fa-solid fa-mouse-pointer"></i>
+            </button>
+            <button id="tool-lighting" class="control-btn gm-only" title="Add Lighting Object (L)">
+                <i class="fa-solid fa-lightbulb"></i>
+            </button>
+            <button id="tool-measure" class="control-btn" title="Measure Distance (M)">
+                <i class="fa-solid fa-ruler"></i>
+            </button>
+            <button id="tool-shape" class="control-btn" title="Create Persistent Shape (C)">
+                <i class="fa-solid fa-shapes"></i>
+            </button>
+            <button id="tool-ping" class="control-btn" title="Ping Location (P)">
+                <i class="fa-solid fa-bullseye"></i>
+            </button>
+            <div class="control-divider gm-only"></div>
+            <button id="btn-change-map" class="control-btn gm-only" title="Upload & Change Map Background">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </button>
+            <button id="btn-toggle-initiative" class="control-btn gm-only" title="Toggle Initiative Tracker">
+                <i class="fa-solid fa-list-ol"></i>
+            </button>
+            <button id="btn-layers" class="control-btn gm-only" title="Switch Layers (L)">
+                <i class="fa-solid fa-layer-group"></i>
+            </button>
+            <div style="flex-grow: 1;"></div>
+            <div class="control-divider"></div>
+            <button id="btn-logout" class="control-btn" title="Exit Game" style="color: var(--color-danger);">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </nav>
+
+        <!-- Creature Sheet Left Side Panel -->
+        <div id="creature-sheet-panel" class="glassmorphism">
+            <!-- Minimize / Expand Button stuck to right edge of panel -->
+            <button id="creature-sheet-minimize-btn" class="cs-minimize-btn" title="Minimize Creature Sheet">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- Scrollable content area -->
+            <div id="vtt-creature-sheet-panel" class="scroll-styled">
+                <!-- Placeholder shown when no creature is loaded -->
+                <div class="cs-placeholder">
+                    <i class="fa-solid fa-dragon"></i>
+                    <p>Right-click a token or click a monster in the Bestiary to open its stat block.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Sheet Left Side Panel -->
+        <div id="player-sheet-panel" class="glassmorphism">
+            <!-- Minimize / Expand Button stuck to right edge of panel -->
+            <button id="player-sheet-minimize-btn" class="cs-minimize-btn" title="Minimize Player Sheet">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- Scrollable content area -->
+            <div id="player-sheet-content" class="scroll-styled" style="display: flex; flex-direction: column; height: 100%;">
+                <!-- Placeholder shown when no character is loaded -->
+                <div class="cs-placeholder" id="player-sheet-placeholder">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <p>Select a character from the Player Characters tab to open their sheet.</p>
+                </div>
+                <!-- Actual Sheet Content (hidden initially) -->
+                <div id="player-sheet-active" class="vtt-hidden" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                    <!-- Inner Tabs Header -->
+                    <div class="ps-tabs-header" style="display: flex; flex-shrink: 0; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--color-border-subtle);">
+                        <button class="ps-tab-btn active" data-tab="ps-primary" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-primary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Primary</button>
+                        <button class="ps-tab-btn" data-tab="ps-equipment" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Equipment</button>
+                        <button class="ps-tab-btn" data-tab="ps-spells" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Spells</button>
+                        <button class="ps-tab-btn" data-tab="ps-info" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Abilities</button>
+                        <button class="ps-tab-btn" data-tab="ps-build" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Build</button>
+                    </div>
+                    <!-- Inner Tabs Content Area -->
+                    <div class="ps-tabs-body scroll-styled" style="flex: 1; position: relative; overflow-y: auto;">
+                        <div id="ps-primary" class="ps-tab-content active" style="padding: 16px;"></div>
+                        <div id="ps-equipment" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                        <div id="ps-spells" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                        <div id="ps-info" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                        <div id="ps-build" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Canvas Viewport Area -->
+        <main id="vtt-canvas-viewport">
+            <!-- Secret Map Preview Banner (GM Only) -->
+            <div id="vtt-map-preview-banner" class="glassmorphism vtt-hidden" style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 8px 16px; border-radius: 30px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--color-border-active); box-shadow: 0 4px 20px rgba(0,0,0,0.5); background: rgba(18, 22, 33, 0.95); animation: fadeIn 0.3s ease;">
+                <span style="font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; color: var(--color-gold-light); display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-eye-slash text-gradient-gold"></i> Secret View: Previewing <span id="banner-previewing-map-name" style="font-weight: 700; color: #fff;">"Initial Map"</span>
+                </span>
+                <span class="coord-divider" style="color: rgba(255,255,255,0.15)">|</span>
+                <button id="btn-banner-push-players" class="btn btn-primary btn-xxs" style="padding: 4px 10px; border-radius: 20px;">
+                    <i class="fa-solid fa-bullhorn"></i> Push to Players
+                </button>
+            </div>
+
+            <div id="canvas-container" style="position: relative; overflow: hidden; width: 100%; height: 100%;">
+                <!-- Map Background Image -->
+                <!-- Map Background Container (Supports image, video, iframe) -->
+                <div id="vtt-map-bg-container" class="vtt-hidden" style="position: absolute; top: 0; left: 0; transform-origin: top left;"></div>
+                
+                <!-- Canvas layers overlay -->
+                <canvas id="vtt-canvas-grid"></canvas>
+                
+                <!-- HTML Asset Overlays Layer (for Videos & Embeds) -->
+                <div id="vtt-html-overlays" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; transform-origin: 0 0; z-index: 5;"></div>
+
+                <canvas id="vtt-canvas-fog"></canvas>
+                <canvas id="vtt-canvas-interaction"></canvas>
+            </div>
+            
+            <!-- Zoom and Coordinates Indicator -->
+            <div id="vtt-coordinates-indicator" class="glassmorphism font-code">
+                <span>Zoom: <span id="val-zoom">100%</span></span>
+                <span class="coord-divider">|</span>
+                <span>X: <span id="val-coord-x">0</span> Y: <span id="val-coord-y">0</span></span>
+            </div>
+
+
+            <!-- Asset Gallery Context Menu -->
+            <div id="vtt-asset-context-menu" class="glassmorphism context-menu vtt-hidden">
+                <button id="btn-asset-ctx-edit" class="btn btn-ctx-item">
+                    <i class="fa-solid fa-pencil"></i> <span>Edit Name/URL</span>
+                </button>
+                <div class="ctx-divider"></div>
+                <button id="btn-asset-ctx-delete" class="btn btn-ctx-item btn-danger">
+                    <i class="fa-solid fa-trash"></i> <span>Delete Asset</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- Initiative Tracker Vertical Layout -->
+        <div id="vtt-initiative-carousel-container" class="vtt-hidden tracker-floating">
+            <!-- Top Controls -->
+            <div class="init-controls-top">
+                <span class="current-round" title="Current Round"><i class="fa-solid fa-hourglass-half"></i> <span id="init-round-num">1</span></span>
+                <button id="btn-init-minimize" class="btn btn-icon btn-secondary" title="Minimize Tracker">
+                    <i class="fa-solid fa-compress"></i>
+                </button>
+            </div>
+            
+            <!-- Tracking Icons -->
+            <div id="init-list" class="init-carousel-list scroll-styled">
+                <div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "Add".</div>
+            </div>
+
+            <!-- Bottom Controls -->
+            <div class="init-controls-bottom header-actions">
+                <button id="btn-init-prev" class="btn btn-icon btn-secondary gm-only" title="Previous Turn"><i class="fa-solid fa-chevron-up"></i></button>
+                <button id="btn-init-next" class="btn btn-icon btn-primary gm-only" title="Next Turn"><i class="fa-solid fa-chevron-down"></i></button>
+                <button id="btn-init-add" class="btn btn-icon btn-secondary gm-only" title="Add Creature to Tracker">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button id="btn-init-clear" class="btn btn-icon btn-danger gm-only" title="Clear Tracker">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        
+
+
+        <!-- Right Panels (Collapsible Tabs Sidebar) -->
+        <aside id="vtt-sidebar" class="glassmorphism">
+            
+            <!-- Tab Headers -->
+            <div class="sidebar-tabs">
+                <button class="tab-header active" data-tab="tab-chat" title="Game Chat & Dice Roller">
+                    <i class="fa-solid fa-comments"></i>
+                </button>
+                <button class="tab-header" data-tab="tab-characters" title="Player Characters">
+                    <i class="fa-solid fa-users"></i>
+                </button>
+                <button class="tab-header" data-tab="tab-handouts" title="Campaign Handouts">
+                    <i class="fa-solid fa-note-sticky"></i>
+                </button>
+                <button class="tab-header gm-only" data-tab="tab-library" title="Bestiary Drawer (Drag & Drop)">
+                    <i class="fa-solid fa-book-skull"></i>
+                </button>
+                <button class="tab-header gm-only" data-tab="tab-assets" title="Asset Gallery (Drag & Drop)">
+                    <i class="fa-solid fa-photo-film"></i>
+                </button>
+                <button class="tab-header gm-only" data-tab="tab-config" title="Settings & Local Connections">
+                    <i class="fa-solid fa-gears"></i>
+                </button>
+            </div>
+
+            <!-- Tab Content Panel -->
+            <div class="sidebar-content">
+                
+                <!-- Chat Panel -->
+                <div id="tab-chat" class="tab-panel active">
+                    
+                    <div id="chat-messages" class="chat-message-list scroll-styled">
+                        <!-- Dynamic chat messages go here -->
+                        <div class="chat-message system-card">
+                            <span class="timestamp">12:00</span>
+                            <span class="message-text">DnDForged is ready. Welcome to your campaign!</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <!-- Fast Dice Roller Quick Bar -->
+                        <div class="fast-dice-bar">
+                            <button class="fast-dice" data-formula="1d4" title="Roll 1d4"><i class="fa-solid fa-dice-d4"></i> d4</button>
+                            <button class="fast-dice" data-formula="1d6" title="Roll 1d6"><i class="fa-solid fa-dice-d6"></i> d6</button>
+                            <button class="fast-dice" data-formula="1d8" title="Roll 1d8"><i class="fa-solid fa-dice-d8"></i> d8</button>
+                            <button class="fast-dice" data-formula="1d10" title="Roll 1d10"><i class="fa-solid fa-dice"></i> d10</button>
+                            <button class="fast-dice" data-formula="1d12" title="Roll 1d12"><i class="fa-solid fa-dice"></i> d12</button>
+                            <button class="fast-dice" data-formula="1d20" title="Roll 1d20"><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> d20</button>
+                            <button class="fast-dice" data-formula="1d100" title="Roll 1d100"><i class="fa-solid fa-percent"></i> d100</button>
+                        </div>
+                        
+                        <div class="roll-mode-toggle-group chat-roll-mode" style="margin-bottom:8px; display:flex;">
+                            <button class="roll-mode-btn adv" data-mode="adv" title="Advantage (Shift+Click rolls)">Adv</button>
+                            <button class="roll-mode-btn active" data-mode="normal" title="Normal">Norm</button>
+                            <button class="roll-mode-btn dis" data-mode="dis" title="Disadvantage (Ctrl+Click rolls)">Dis</button>
+                            <button id="btn-gm-whisper" class="roll-mode-btn" title="Whisper to GM (Toggle)">GM</button>
+                        </div>
+                        <div class="flex-row">
+                            <input type="text" id="chat-input" placeholder="Type message or roll formula (e.g. /roll 2d6+3)..." autocomplete="off">
+                            <button id="btn-chat-send" class="btn btn-icon btn-primary" title="Send Message (Enter)">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chat Panel ends, Initiative Tracker moved to carousel -->
+                
+                <!-- Bestiary / Library Panel -->
+                <div id="tab-library" class="tab-panel gm-only" style="display: flex; flex-direction: column;">
+                    <div class="panel-header" style="padding-bottom: 0;">
+                        <div class="library-tabs-header" style="display: flex; flex-shrink: 0; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--color-border-subtle); width: 100%; margin-left: -16px; margin-right: -16px; padding: 0 16px;">
+                            <button class="lib-tab-btn active" data-tab="lib-official" style="flex:1; padding:8px 0; background:transparent; border:none; color:var(--color-text-primary); cursor:pointer; font-weight:600; border-bottom: 2px solid var(--color-gold-base); transition: all 0.2s;">Official</button>
+                            <button class="lib-tab-btn" data-tab="lib-custom" style="flex:1; padding:8px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent; transition: all 0.2s;">Custom NPCs</button>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-body h-100" style="position: relative; flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+                        <!-- Official Tab Content -->
+                        <div id="lib-official" class="lib-tab-content active" style="display: flex; flex-direction: column; height: 100%;">
+                            <div class="search-box">
+                                <input type="text" id="library-search" placeholder="Search monsters (e.g., Goblin)...">
+                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            </div>
+                            
+                            <div id="library-monster-list" class="library-items scroll-styled" style="flex: 1; overflow-y: auto;">
+                                <!-- Dynamic monster query lists loaded via bridge -->
+                                <div class="library-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading 5etools library...</div>
+                            </div>
+                        </div>
+
+                        <!-- Custom NPCs Tab Content -->
+                        <div id="lib-custom" class="lib-tab-content vtt-hidden" style="display: flex; flex-direction: column; height: 100%;">
+                            <div style="padding: 12px 0; border-bottom: 1px solid var(--color-border-subtle); flex-shrink: 0;">
+                                <button id="btn-add-custom-npc" class="btn btn-secondary btn-sm" style="width: 100%;">
+                                    <i class="fa-solid fa-plus"></i> Import & Customize NPC
+                                </button>
+                            </div>
+                            <div id="library-custom-list" class="library-items scroll-styled" style="flex: 1; overflow-y: auto;">
+                                <div class="init-empty-state">No custom NPCs yet. Click "Import & Customize NPC" to add one.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Asset Gallery Panel (GM Only) -->
+                <div id="tab-assets" class="tab-panel gm-only">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-photo-film text-gradient-gold"></i> Asset Gallery</h3>
+                        <div class="header-actions">
+                            <button id="btn-asset-new-folder" class="btn btn-xxs btn-secondary" title="New Folder">
+                                <i class="fa-solid fa-folder-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-body flex-col h-100">
+                        <div class="asset-actions flex-row" style="gap: 8px; margin-bottom: 8px;">
+                            <label for="asset-file-upload" class="btn btn-xs btn-primary" style="flex: 1; text-align: center; cursor: pointer;">
+                                <i class="fa-solid fa-upload"></i> Upload
+                            </label>
+                            <input type="file" id="asset-file-upload" class="vtt-hidden" accept="image/*,video/*,.gif">
+                            
+                            <button id="btn-asset-add-url" class="btn btn-xs btn-secondary" style="flex: 1;">
+                                <i class="fa-solid fa-link"></i> Add URL
+                            </button>
+                        </div>
+                        
+                        <div class="search-box">
+                            <input type="text" id="asset-search" placeholder="Search assets...">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        </div>
+                        
+                        <div class="asset-breadcrumbs" id="asset-breadcrumbs" style="font-size: 0.8rem; padding: 4px 0; color: var(--color-gold-light);">
+                            <span class="breadcrumb" data-path="">Root</span>
+                        </div>
+                        
+                        <div id="asset-gallery-list" class="asset-items scroll-styled" style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; align-content: start;">
+                            <!-- Assets populate here -->
+                            <div class="init-empty-state" style="grid-column: 1 / -1;">Loading assets...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Player Characters Panel -->
+                <div id="tab-characters" class="tab-panel">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-users text-gradient-gold"></i> Player Characters</h3>
+                        <div class="header-actions">
+                            <button id="btn-char-add" class="btn btn-xxs btn-secondary" title="Create New Character">
+                                <i class="fa-solid fa-plus"></i> New
+                            </button>
+                            <button id="btn-char-add-companion" class="btn btn-xxs btn-secondary gm-only" title="Add Player Companion">
+                                <i class="fa-solid fa-paw"></i> Companion
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-body flex-col h-100">
+                        <div id="character-list" class="character-list scroll-styled" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Dynamic character cards loaded here -->
+                            <div class="init-empty-state">No characters yet. Click "New" to create one.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Handouts Panel -->
+                <div id="tab-handouts" class="tab-panel">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-note-sticky text-gradient-gold"></i> Campaign Handouts</h3>
+                        <div class="header-actions">
+                            <button id="btn-handout-create" class="btn btn-xxs btn-secondary gm-only" title="Create New Handout">
+                                <i class="fa-solid fa-plus"></i> New
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-body flex-col h-100">
+                        <div id="handout-list" class="character-list scroll-styled" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Dynamic handouts loaded here -->
+                            <div class="init-empty-state">No handouts shared yet.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Config & Connection Settings Panel -->
+                <div id="tab-config" class="tab-panel gm-only">
+                    <div class="panel-header">
+                        <h3><i class="fa-solid fa-gears text-gradient-gold"></i> Connection & Setup</h3>
+                    </div>
+                    
+                    <div class="panel-body flex-col scroll-styled">
+                        <!-- Server Access Addresses Card -->
+                        <div class="config-card">
+                            <h4><i class="fa-solid fa-network-wired text-gradient-gold"></i> Server Connection URL</h4>
+                            <p class="config-desc text-muted">Remote players can connect using this HTTPS address:</p>
+                            <div class="url-copy-box">
+                                <input type="text" id="config-remote-url" readonly value="https://xyz.loca.lt/vtt.html">
+                                <button id="btn-copy-remote-url" class="btn btn-icon btn-secondary" title="Copy Link"><i class="fa-solid fa-copy"></i></button>
+                            </div>
+                            <p class="config-desc text-muted mt-2">Local network users (IP):</p>
+                            <div class="url-copy-box">
+                                <input type="text" id="config-local-url" readonly value="http://localhost:5050/vtt.html">
+                                <button id="btn-copy-local-url" class="btn btn-icon btn-secondary" title="Copy Link"><i class="fa-solid fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <!-- Allowlist Settings Card (GM Only) -->
+                        <div class="config-card gm-only" id="config-allowlist-card">
+                            <h4><i class="fa-solid fa-users-gear text-gradient-gold"></i> Player Allowlist</h4>
+                            <p class="config-desc text-muted">Manage which usernames are allowed to join this campaign. If the list is empty, anyone can join.</p>
+                            
+                            <div class="config-setting" style="display: flex; gap: 8px;">
+                                <input type="text" id="config-allowlist-input" placeholder="Enter username..." style="flex: 1; padding: 4px 8px; font-size: 0.8rem;">
+                                <button id="btn-allowlist-add" class="btn btn-xs btn-primary" onclick="addAllowlistUser()"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                            
+                            <div id="config-allowlist-users" style="margin-top: 12px; display: flex; flex-direction: column; gap: 4px;">
+                                <!-- Allowed users will appear here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Roll Visibility Setting Card (GM Only) -->
+                        <div class="config-card gm-only">
+                            <h4><i class="fa-solid fa-eye text-gradient-gold"></i> GM Roll Visibility</h4>
+                            <p class="config-desc text-muted">Control whether GM ability rolls from the creature sheet are visible to all players or only to you.</p>
+                            <div class="config-setting">
+                                <label for="config-roll-visibility">Roll Visibility</label>
+                                <select id="config-roll-visibility" style="width: 140px; padding: 4px 8px; font-size: 0.8rem;">
+                                    <option value="public">Public (all see)</option>
+                                    <option value="private">Private (GM only)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Global HP Bar Settings Card (GM Only) -->
+                        <div class="config-card gm-only" id="config-hp-settings-card">
+                            <h4><i class="fa-solid fa-heart-pulse text-gradient-gold"></i> Global View Settings</h4>
+                            <p class="config-desc text-muted">Set campaign defaults for Player vs GM views.</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 20px;">
+                                <!-- Player View Settings -->
+                                <div style="flex: 1;">
+                                    <h5 style="margin-bottom: 10px; color: var(--color-gold-base); border-bottom: 1px solid var(--color-gold-base); padding-bottom: 4px;">Player View</h5>
+                                    
+                                    <div class="config-setting">
+                                        <label for="config-player-monster-hp-visible">Monster HP Bar</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select id="config-player-monster-hp-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                                <option value="always">Always Visible</option>
+                                                <option value="hover" selected>On Hover Only</option>
+                                                <option value="never">Never Visible</option>
+                                            </select>
+                                            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem; margin: 0; color: var(--text-muted); cursor: pointer;">
+                                                <input type="checkbox" id="config-player-monster-hp-num-visible" style="cursor: pointer; width: 12px; height: 12px;"> Num
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="config-setting">
+                                        <label for="config-player-monster-name-visible">Monster Name</label>
+                                        <select id="config-player-monster-name-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                            <option value="always" selected>Always Visible</option>
+                                            <option value="hover">On Hover Only</option>
+                                            <option value="never">Never Visible</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="config-setting" style="margin-top: 10px;">
+                                        <label for="config-player-player-hp-visible">Player HP Bar</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select id="config-player-player-hp-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                                <option value="always" selected>Always Visible</option>
+                                                <option value="hover">On Hover Only</option>
+                                                <option value="never">Never Visible</option>
+                                            </select>
+                                            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem; margin: 0; color: var(--text-muted); cursor: pointer;">
+                                                <input type="checkbox" id="config-player-player-hp-num-visible" checked style="cursor: pointer; width: 12px; height: 12px;"> Num
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="config-setting">
+                                        <label for="config-player-player-name-visible">Player Name</label>
+                                        <select id="config-player-player-name-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                            <option value="always" selected>Always Visible</option>
+                                            <option value="hover">On Hover Only</option>
+                                            <option value="never">Never Visible</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="config-setting" style="margin-top: 10px;">
+                                        <label for="config-player-temp-hp-visible">Temp HP Bar</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select id="config-player-temp-hp-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                                <option value="always" selected>Always Visible</option>
+                                                <option value="hover">On Hover Only</option>
+                                                <option value="never">Never Visible</option>
+                                            </select>
+                                            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem; margin: 0; color: var(--text-muted); cursor: pointer;">
+                                                <input type="checkbox" id="config-player-temp-hp-num-visible" checked style="cursor: pointer; width: 12px; height: 12px;"> Num
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- GM View Settings -->
+                                <div style="flex: 1;">
+                                    <h5 style="margin-bottom: 10px; color: var(--color-gold-base); border-bottom: 1px solid var(--color-gold-base); padding-bottom: 4px;">GM View</h5>
+                                    
+                                    <div class="config-setting">
+                                        <label for="config-gm-monster-hp-visible">Monster HP Bar</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select id="config-gm-monster-hp-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                                <option value="always" selected>Always Visible</option>
+                                                <option value="hover">On Hover Only</option>
+                                                <option value="never">Never Visible</option>
+                                            </select>
+                                            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem; margin: 0; color: var(--text-muted); cursor: pointer;">
+                                                <input type="checkbox" id="config-gm-monster-hp-num-visible" checked style="cursor: pointer; width: 12px; height: 12px;"> Num
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="config-setting">
+                                        <label for="config-gm-monster-name-visible">Monster Name</label>
+                                        <select id="config-gm-monster-name-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                            <option value="always" selected>Always Visible</option>
+                                            <option value="hover">On Hover Only</option>
+                                            <option value="never">Never Visible</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="config-setting" style="margin-top: 10px;">
+                                        <label for="config-gm-player-hp-visible">Player HP Bar</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select id="config-gm-player-hp-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                                <option value="always" selected>Always Visible</option>
+                                                <option value="hover">On Hover Only</option>
+                                                <option value="never">Never Visible</option>
+                                            </select>
+                                            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem; margin: 0; color: var(--text-muted); cursor: pointer;">
+                                                <input type="checkbox" id="config-gm-player-hp-num-visible" checked style="cursor: pointer; width: 12px; height: 12px;"> Num
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="config-setting">
+                                        <label for="config-gm-player-name-visible">Player Name</label>
+                                        <select id="config-gm-player-name-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                            <option value="always" selected>Always Visible</option>
+                                            <option value="hover">On Hover Only</option>
+                                            <option value="never">Never Visible</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="config-setting" style="margin-top: 10px;">
+                                        <label for="config-gm-temp-hp-visible">Temp HP Bar</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select id="config-gm-temp-hp-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                                <option value="always" selected>Always Visible</option>
+                                                <option value="hover">On Hover Only</option>
+                                                <option value="never">Never Visible</option>
+                                            </select>
+                                            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem; margin: 0; color: var(--text-muted); cursor: pointer;">
+                                                <input type="checkbox" id="config-gm-temp-hp-num-visible" checked style="cursor: pointer; width: 12px; height: 12px;"> Num
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            
+                            <div class="config-setting" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                                <label for="config-temp-hp-style">Temp HP Bar Style</label>
+                                <select id="config-temp-hp-style" style="width: 160px; padding: 4px 8px; font-size: 0.8rem;">
+                                    <option value="stacked" selected>Stacked (Top Bar)</option>
+                                    <option value="layered">Layered (Vertical Stack)</option>
+                                    <option value="appended">Appended (Extends Max)</option>
+                                    <option value="split">Split (Left/Right)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Campaign Encumbrance Rules (GM Only) -->
+                        <div class="config-card gm-only" id="config-encumbrance-settings-card">
+                            <h4><i class="fa-solid fa-weight-hanging text-gradient-gold"></i> Campaign Encumbrance Rules</h4>
+                            <p class="config-desc text-muted">Set how encumbrance is calculated for players.</p>
+                            
+                            <div class="config-setting">
+                                <label for="config-encumbrance-rule">Encumbrance Rule</label>
+                                <select id="config-encumbrance-rule" style="width: 140px; padding: 4px 8px; font-size: 0.8rem;">
+                                    <option value="standard" selected>Standard (Max = STR × 15)</option>
+                                    <option value="variant">Variant (STR × 5 / 10 / 15)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Initiative Tracker Settings Card -->
+                        <div class="config-card" id="config-init-settings-card">
+                            <h4><i class="fa-solid fa-swords text-gradient-gold"></i> Initiative Tracker</h4>
+                            
+                            <div class="config-setting gm-only">
+                                <label for="config-init-visible-global">Global Visibility (GM)</label>
+                                <select id="config-init-visible-global" style="width: 130px; padding: 4px 8px; font-size: 0.8rem;">
+                                    <option value="visible" selected>Visible to Players</option>
+                                    <option value="hidden">Hidden from Players</option>
+                                </select>
+                            </div>
+
+                            <div class="config-setting">
+                                <label for="config-init-position">Tracker Position</label>
+                                <select id="config-init-position" style="width: 130px; padding: 4px 8px; font-size: 0.8rem;">
+                                    <option value="top" selected>Top of Screen</option>
+                                    <option value="bottom">Bottom of Screen</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Settings Card -->
+                        <div class="config-card">
+                            <h4><i class="fa-solid fa-sliders text-gradient-gold"></i> Canvas Preferences</h4>
+                            
+                            <div class="config-setting">
+                                <label for="config-grid-color">Grid Outline Color</label>
+                                <input type="color" id="config-grid-color" value="#888888">
+                            </div>
+                            
+                            <div class="config-setting">
+                                <label for="config-grid-opacity">Grid Opacity</label>
+                                <input type="range" id="config-grid-opacity" min="0" max="1" step="0.1" value="0.3">
+                            </div>
+                            
+                            <div class="config-setting">
+                                <label for="config-light-sight">Dynamic Sight Radius</label>
+                                <input type="number" id="config-light-sight" min="5" max="120" step="5" value="60">
+                            </div>
+                        </div>
+
+                        <!-- Info Card -->
+                        <div class="config-card config-footer-info">
+                            <p><strong>DnDForged Engine v1.0.0</strong></p>
+                            <p class="text-muted">A beautiful self-hosted wrapper around 5etools content.</p>
+                            <p class="text-muted">Developers: DeepMind Antigravity AI Team.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modals Layer -->
+    <!-- Create Campaign Modal -->
+    <div id="modal-create-campaign" class="vtt-modal vtt-hidden">
+        <div class="modal-content glassmorphism">
+            <h3>Create New Campaign</h3>
+            <div class="form-group">
+                <label for="new-campaign-name">Campaign Name</label>
+                <input type="text" id="new-campaign-name" placeholder="Enter campaign title...">
+            </div>
+            <div class="modal-buttons">
+                <button id="btn-modal-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="btn-modal-submit" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Manager Modal -->
+    <div id="modal-upload-map" class="vtt-modal vtt-hidden">
+        <div class="modal-content glassmorphism" style="width: 780px; max-width: 95vw;">
+            <div class="modal-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 12px;">
+                <h3 style="margin: 0;"><i class="fa-solid fa-map text-gradient-gold"></i> Campaign Map Manager</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button id="btn-map-modal-open-import" class="btn btn-secondary btn-xs">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Import 5eTools Maps
+                    </button>
+                    <button id="btn-map-modal-open-create" class="btn btn-primary btn-xs">
+                        <i class="fa-solid fa-plus"></i> Create New Map
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Create Map Panel (Collapsible/Hidden by default) -->
+            <div id="map-create-panel" class="vtt-hidden" style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--color-border-subtle); border-radius: 8px; padding: 16px; margin-bottom: 20px; animation: fadeIn 0.3s ease;">
+                <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-gold-light); font-size: 0.9rem; font-family: var(--font-heading);"><i class="fa-solid fa-circle-plus"></i> Create New Map</h4>
+                <div class="form-group">
+                    <label for="new-map-name">Map Name</label>
+                    <input type="text" id="new-map-name" placeholder="e.g. Goblin Lair, Tavern Ground Floor...">
+                </div>
+                
+                <div class="form-group">
+                    <label>Select Background Option</label>
+                    <select id="map-select-source">
+                        <option value="5etools">Import from 5eTools</option>
+                        <option value="upload">Upload Custom File</option>
+                        <option value="url">External Image URL</option>
+                        <option value="blank" selected>Blank Tactical Grid (No Image)</option>
+                    </select>
+                </div>
+                
+                <!-- 5eTools Import Panel -->
+                <div id="map-5etools-panel" class="vtt-hidden" style="background: rgba(212, 175, 55, 0.05); border: 1px dashed var(--color-gold-dark); border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+                    <div class="form-group">
+                        <label for="map-5etools-adventure">Select Adventure / Source</label>
+                        <select id="map-5etools-adventure">
+                            <option value="">Loading 5eTools map catalog...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 8px; align-items: flex-end;">
+                        <div style="flex: 1; min-width: 0;">
+                            <label for="map-5etools-map">Select Map</label>
+                            <select id="map-5etools-map" disabled style="width: 100%; text-overflow: ellipsis;">
+                                <option value="">Select an adventure first...</option>
+                            </select>
+                        </div>
+                        <button id="btn-map-bulk-import" class="btn btn-secondary" disabled title="Import ALL maps from this adventure" style="height: 38px;">
+                            <i class="fa-solid fa-layer-group"></i> Import All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Upload Panel (hidden by default since blank is default) -->
+                <div id="map-upload-panel" class="form-group vtt-hidden">
+                    <label for="map-file-input" class="file-upload-label" style="background: rgba(255,255,255,0.03); border: 1px dashed var(--color-border-subtle); border-radius: 6px; padding: 12px; text-align: center; cursor: pointer; display: block; font-weight: 500; font-size: 0.85rem; color: var(--color-text-secondary); transition: var(--transition-smooth);">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.2rem; margin-bottom: 6px; display: block; color: var(--color-gold-base);"></i> Click to Select Image File (JPG/PNG/WEBP)
+                    </label>
+                    <input type="file" id="map-file-input" accept="image/*" class="vtt-hidden">
+                    <span id="map-file-name" class="text-muted" style="font-size: 0.75rem; text-align: center; display: block; margin-top: 4px;">No file selected.</span>
+                </div>
+                
+                <!-- URL Panel -->
+                <div id="map-url-panel" class="form-group vtt-hidden">
+                    <label for="map-url-input">Image URL Address</label>
+                    <input type="text" id="map-url-input" placeholder="Paste HTTPS image address...">
+                </div>
+                
+                <div class="flex-row" style="justify-content: flex-end; margin-top: 16px;">
+                    <button id="btn-map-create-cancel" class="btn btn-secondary btn-xs">Cancel</button>
+                    <button id="btn-map-create-submit" class="btn btn-primary btn-xs">Create Map</button>
+                </div>
+            </div>
+            
+            <!-- Map List Area -->
+            <div id="maps-list-container" class="scroll-styled" style="min-height: 260px; max-height: 480px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; padding-right: 4px; width: 100%;">
+                <!-- Cards will be populated here dynamically -->
+            </div>
+            
+            <div class="modal-buttons" style="border-top: 1px solid var(--color-border-subtle); padding-top: 16px; margin-top: 20px;">
+                <button id="btn-map-modal-cancel" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Push Players Modal (GM Only) -->
+    <div id="modal-push-players" class="vtt-modal vtt-hidden">
+        <div class="modal-content glassmorphism" style="width: 400px; max-width: 90vw;">
+            <h3 style="margin: 0 0 16px 0; color: var(--color-gold-base);"><i class="fa-solid fa-users"></i> Push Players to Map</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 12px;">Select which players to bring to this map.</p>
+            
+            <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--color-border-subtle); border-radius: 6px; padding: 12px; max-height: 300px; overflow-y: auto;" class="scroll-styled">
+                <label style="display: flex; align-items: center; gap: 8px; padding: 6px 8px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 4px; font-weight: bold; color: var(--color-gold-light);">
+                    <input type="checkbox" id="push-players-all" checked>
+                    All Players
+                </label>
+                <div id="push-players-list" style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+                    <!-- Player checkboxes populated dynamically -->
+                </div>
+            </div>
+            
+            <div class="modal-buttons" style="margin-top: 20px;">
+                <button id="btn-push-players-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="btn-push-players-confirm" class="btn btn-primary">Confirm Push</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Handout Editor Modal (GM Only) -->
+    <div id="modal-edit-handout" class="vtt-modal vtt-hidden">
+        <div class="modal-content glassmorphism">
+            <h3 id="modal-edit-handout-title"><i class="fa-solid fa-note-sticky text-gradient-gold"></i> Create Handout</h3>
+            <div class="form-group">
+                <label for="edit-handout-name">Title</label>
+                <input type="text" id="edit-handout-name" placeholder="Handout Title">
+            </div>
+            <div class="form-group">
+                <label for="edit-handout-desc">Description / Notes</label>
+                <textarea id="edit-handout-desc" placeholder="Handout text..." style="width: 100%; min-height: 100px; resize: vertical; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-subtle); color: var(--color-text-primary); padding: 8px; font-family: var(--font-primary); font-size: 0.85rem; border-radius: 4px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="edit-handout-url">Media URL (Image, Video, YouTube, Vimeo)</label>
+                <input type="text" id="edit-handout-url" placeholder="https://...">
+            </div>
+            <div class="modal-buttons" style="margin-top: 16px;">
+                <button id="btn-handout-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="btn-handout-save" class="btn btn-primary">Save Handout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Handout Viewer Modal (Players & GM) -->
+    <div id="modal-view-handout" class="vtt-modal vtt-hidden" style="z-index: 2000;">
+        <div class="modal-content glassmorphism" style="max-width: 800px; width: 90vw; max-height: 90vh; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 12px; margin-bottom: 16px; flex-shrink: 0;">
+                <h3 id="view-handout-title" style="margin: 0; color: var(--color-gold-base);">Handout Title</h3>
+                <button id="btn-view-handout-close" style="background: transparent; border: none; color: var(--color-text-muted); cursor: pointer; font-size: 1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="scroll-styled" style="flex: 1; overflow-y: auto;">
+                <div id="view-handout-media-container" style="margin-bottom: 16px; text-align: center;"></div>
+                <div id="view-handout-desc" style="white-space: pre-wrap; font-size: 0.9rem; line-height: 1.5; color: var(--color-text-primary);"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Map Modal -->
+    <div id="modal-edit-map" class="vtt-modal vtt-hidden">
+        <div class="modal-content glassmorphism">
+            <h3>Edit Map</h3>
+            <div class="form-group">
+                <label for="edit-map-name">Map Name</label>
+                <input type="text" id="edit-map-name">
+            </div>
+            <div class="form-group">
+                <label for="edit-map-url">Media URL (Image, Video, YouTube, GIF)</label>
+                <input type="text" id="edit-map-url" placeholder="https://...">
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-grid-width">Grid Width</label>
+                    <input type="number" id="edit-map-grid-width" min="1" placeholder="Auto">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-grid-height">Grid Height</label>
+                    <input type="number" id="edit-map-grid-height" min="1" placeholder="Auto">
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-grid-type">Grid Type</label>
+                    <select id="edit-map-grid-type">
+                        <option value="square" selected>Square</option>
+                        <option value="hex-v">Hex (Vertical)</option>
+                        <option value="hex-h">Hex (Horizontal)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-grid-size">Cell Size (px)</label>
+                    <input type="number" id="edit-map-grid-size" value="50" min="20" max="200">
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-offset-x">Grid Shift X</label>
+                    <input type="number" id="edit-map-offset-x" value="0" min="-200" max="200">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-offset-y">Grid Shift Y</label>
+                    <input type="number" id="edit-map-offset-y" value="0" min="-200" max="200">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="edit-map-grid-color">Grid Color</label>
+                <input type="color" id="edit-map-grid-color" value="#888888">
+            </div>
+            <div class="form-group">
+                <label for="edit-map-grid-opacity">Grid Opacity</label>
+                <input type="range" id="edit-map-grid-opacity" min="0" max="1" step="0.1" value="0.3">
+            </div>
+
+            <h4 style="margin-top: 16px; margin-bottom: 8px; color: var(--color-gold-base); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;">Dynamic Lighting Settings</h4>
+            <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <input type="checkbox" id="edit-map-daylight-mode">
+                <label for="edit-map-daylight-mode" style="margin: 0;">Daylight Mode (Global Illumination)</label>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <input type="checkbox" id="edit-map-restrict-movement">
+                <label for="edit-map-restrict-movement" style="margin: 0;">Restrict Player Movement Through Walls</label>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                <input type="checkbox" id="edit-map-update-on-drop" checked>
+                <label for="edit-map-update-on-drop" style="margin: 0;">Update Vision Only on Token Drop</label>
+            </div>
+
+            <div class="modal-buttons">
+                <button id="btn-edit-map-close" class="btn btn-primary">Done</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Tabletop Layers Panel (GM Only) -->
+    <div id="panel-layers-config" class="glassmorphism floating-tool-panel vtt-hidden">
+        <h4><i class="fa-solid fa-layer-group text-gradient-gold"></i> Tabletop Layers</h4>
+        <div class="layers-list">
+            <button class="layer-btn active" data-layer="token" title="Switch to Token Layer (`+1)">
+                <i class="fa-solid fa-users"></i> Token Layer
+            </button>
+            <button class="layer-btn" data-layer="gm" title="Switch to GM Layer (`+2)">
+                <i class="fa-solid fa-eye-slash"></i> GM Layer
+            </button>
+            <button class="layer-btn" data-layer="lighting" title="Switch to Lighting Layer (`+3)">
+                <i class="fa-solid fa-lightbulb"></i> Lighting Layer
+            </button>
+            <button class="layer-btn" data-layer="notes" title="Switch to Notes Layer (`+4)">
+                <i class="fa-solid fa-book-journal-whills"></i> Notes Layer
+            </button>
+            <button class="layer-btn" data-layer="map" title="Switch to Map Layer (`+5)">
+                <i class="fa-solid fa-map"></i> Map Layer
+            </button>
+        </div>
+    </div>
+
+    <!-- Lighting Configurator Sidebar Tool Panel -->
+    <div id="panel-lighting-config" class="glassmorphism floating-tool-panel vtt-hidden">
+        <h4><i class="fa-solid fa-lightbulb text-gradient-gold"></i> Lighting Object</h4>
+        
+        <div class="layers-list">
+            <button class="layer-btn lighting-btn active" data-lighting="wall" title="Wall (Static)">
+                <i class="fa-solid fa-border-all"></i> Wall (Static)
+            </button>
+            <button class="layer-btn lighting-btn" data-lighting="door" title="Door (Open/Close)">
+                <i class="fa-solid fa-door-closed"></i> Door (Interactive)
+            </button>
+            <button class="layer-btn lighting-btn" data-lighting="window" title="Window (Open/Close + Draw/Undraw)">
+                <i class="fa-solid fa-window-maximize"></i> Window (Interactive)
+            </button>
+            <button class="layer-btn lighting-btn" data-lighting="light" title="Light Emitter (Standalone)">
+                <i class="fa-solid fa-lightbulb"></i> Light Emitter (Standalone)
+            </button>
+        </div>
+
+        <div id="lighting-light-options" class="vtt-hidden" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 80px;">
+                    <label for="light-bright">Bright (ft)</label>
+                    <input type="number" id="light-bright" min="0" value="20">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 80px;">
+                    <label for="light-dim">Dim (ft)</label>
+                    <input type="number" id="light-dim" min="0" value="40">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="light-color">Light Color</label>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="color" id="light-color" value="#ffaa00">
+                    <span style="font-size: 0.75rem; color: var(--color-text-muted);">Base tint</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shape/Measurement Configurator Sidebar Tool Panel -->
+    <div id="panel-measure-config" class="glassmorphism floating-tool-panel vtt-hidden">
+        <h4><i class="fa-solid fa-ruler text-gradient-gold"></i> Spell & Ruler Shapes</h4>
+        
+        <div class="form-group">
+            <label for="measure-shape">Template Shape</label>
+            <select id="measure-shape" style="width: 100%;">
+                <option value="line" selected>Line (Default Ruler)</option>
+                <option value="circle">Circle (Sphere/Cylinder)</option>
+                <option value="square">Square (Cube)</option>
+                <option value="cone">Cone (90° Sector)</option>
+                <option value="beam">Beam (Line/Rectangle)</option>
+            </select>
+        </div>
+
+        <!-- Dynamic elements based on selection -->
+        <div id="measure-square-options" class="vtt-hidden">
+            <div class="form-group">
+                <label for="measure-square-anchor">Square Anchor Mode</label>
+                <select id="measure-square-anchor" style="width: 100%;">
+                    <option value="center" selected>Center-Anchored</option>
+                    <option value="corner">Corner-Anchored</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="measure-beam-options" class="vtt-hidden">
+            <div class="form-group">
+                <label for="measure-beam-width">Beam Width (ft)</label>
+                <input type="number" id="measure-beam-width" value="5" min="5" max="100" step="5">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="measure-color">Template Theme Color</label>
+            <select id="measure-color" style="width: 100%;">
+                <option value="gold" selected>Gold (Arcane/Divine)</option>
+                <option value="red">Red (Spellfire/Evocation)</option>
+                <option value="blue">Blue (Frost/Mana)</option>
+                <option value="green">Green (Acid/Nature)</option>
+                <option value="purple">Purple (Void/Illusion)</option>
+            </select>
+        </div>
+    </div>
+
+
+    <!-- Token Inspector Modal -->
+    <div id="modal-token-edit" class="vtt-modal vtt-hidden">
+        <div class="modal-content glassmorphism">
+            <h3 id="token-edit-title">Edit Token</h3>
+            
+            <div class="form-group">
+                <label for="token-edit-name">Token Name</label>
+                <input type="text" id="token-edit-name">
+            </div>
+            
+            <div class="flex-row">
+                <div class="form-group w-50">
+                    <label for="token-edit-hp">HP Current</label>
+                    <input type="number" id="token-edit-hp">
+                </div>
+                <div class="form-group w-50">
+                    <label for="token-edit-max-hp">HP Max</label>
+                    <input type="number" id="token-edit-max-hp">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="token-edit-temp-hp">Temporary HP (Temp HP)</label>
+                <input type="number" id="token-edit-temp-hp" placeholder="0" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="token-edit-hp-visible">HP Bar Visibility Override</label>
+                <select id="token-edit-hp-visible">
+                    <option value="default" selected>Use Campaign Default</option>
+                    <option value="always">Always Visible to Players</option>
+                    <option value="hover">Visible on Hover to Players</option>
+                    <option value="never">Hidden from Players</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="token-edit-hp-num-visible">HP Number Override</label>
+                <select id="token-edit-hp-num-visible">
+                    <option value="default" selected>Use Campaign Default</option>
+                    <option value="always">Always Show Numbers</option>
+                    <option value="never">Hide Numbers</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="token-edit-size">Token Size Category</label>
+                <select id="token-edit-size">
+                    <option value="0.5">Small (0.5x0.5 Grid)</option>
+                    <option value="1">Medium (1x1 Grid)</option>
+                    <option value="2">Large (2x2 Grid)</option>
+                    <option value="3">Huge (3x3 Grid)</option>
+                    <option value="4">Gargantuan (4x4 Grid)</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+            <div id="token-edit-custom-size-fields" class="form-group vtt-hidden">
+                <div class="flex-row" style="gap: 0.75rem;">
+                    <div class="form-group w-50">
+                        <label for="token-edit-custom-width">Token Width (grid squares)</label>
+                        <input type="number" id="token-edit-custom-width" min="1" value="1">
+                    </div>
+                    <div class="form-group w-50">
+                        <label for="token-edit-custom-height">Token Height (grid squares)</label>
+                        <input type="number" id="token-edit-custom-height" min="1" value="1">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="token-edit-sight">Sight Range (feet)</label>
+                <input type="number" id="token-edit-sight" min="0" max="240" step="5" value="60">
+            </div>
+
+            <!-- Light Emission Settings Section -->
+            <div class="form-group border-top-subtle pt-3 mt-3">
+                <h4 style="margin: 0 0 12px 0; font-size: 0.9rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; justify-content: space-between;">
+                    <span><i class="fa-solid fa-lightbulb"></i> Token Light Emission</span>
+                    <label class="toggle-switch" style="font-size: 0.75rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="token-edit-light-enabled">
+                        Enable Light
+                    </label>
+                </h4>
+                
+                <div id="token-light-settings" class="vtt-hidden" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid var(--color-border-subtle);">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 80px;">
+                            <label for="token-edit-light-bright">Bright (ft)</label>
+                            <input type="number" id="token-edit-light-bright" min="0" max="240" step="5" value="20">
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 80px;">
+                            <label for="token-edit-light-dim">Dim (ft)</label>
+                            <input type="number" id="token-edit-light-dim" min="0" max="240" step="5" value="40">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="token-edit-light-color">Light Tint Color</label>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="color" id="token-edit-light-color" value="#ffaa00">
+                            <span style="font-size: 0.7rem; color: var(--color-text-muted);">Changes how the light appears through the fog of war</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group gm-only">
+                <label for="token-edit-layer">Tabletop Layer</label>
+                <select id="token-edit-layer">
+                    <option value="token">Token Layer (Visible to Players)</option>
+                    <option value="gm">GM Layer (Invisible to Players)</option>
+                    <option value="map">Map Layer (Decorative Background Asset)</option>
+                </select>
+            </div>
+
+            <!-- Aura Settings Section -->
+            <div class="form-group border-top-subtle pt-3 mt-3">
+                <h4 style="margin: 0 0 12px 0; font-size: 0.9rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; justify-content: space-between;">
+                    <span><i class="fa-solid fa-circle-nodes"></i> Token Auras</span>
+                    <button type="button" id="btn-token-add-aura" class="btn btn-secondary btn-xxs" style="padding: 4px 8px; font-size: 0.72rem;">
+                        <i class="fa-solid fa-plus"></i> Add Aura
+                    </button>
+                </h4>
+                
+                <div id="token-auras-list" style="margin-top: 10px; max-height: 260px; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Auras dynamically rendered here -->
+                </div>
+            </div>
+            
+            <!-- Token Visual Effects Section -->
+            <div class="form-group border-top-subtle pt-3 mt-3">
+                <h4 style="margin: 0 0 12px 0; font-size: 0.9rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Token Visual Effects
+                </h4>
+                
+                <!-- Tab Headers inside modal for effects to save space -->
+                <div class="flex-row" style="gap: 4px; margin-bottom: 12px;">
+                    <button type="button" id="tab-btn-fx-overlay" class="btn btn-secondary btn-xxs active" style="flex: 1; padding: 4px 0; font-size: 0.7rem; border-radius: 4px;">Overlay</button>
+                    <button type="button" id="tab-btn-fx-vignette" class="btn btn-secondary btn-xxs" style="flex: 1; padding: 4px 0; font-size: 0.7rem; border-radius: 4px;">Vignette</button>
+                    <button type="button" id="tab-btn-fx-shadow" class="btn btn-secondary btn-xxs" style="flex: 1; padding: 4px 0; font-size: 0.7rem; border-radius: 4px;">Shadow</button>
+                </div>
+                
+                <!-- Overlay FX Panel -->
+                <div id="panel-fx-overlay" class="fx-panel" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="config-setting">
+                        <label for="token-edit-fx-overlay-enabled">Enable Color Overlay</label>
+                        <input type="checkbox" id="token-edit-fx-overlay-enabled" style="cursor: pointer; width: 14px; height: 14px;">
+                    </div>
+                    <div id="fx-overlay-details" class="vtt-hidden">
+                        <div class="config-setting">
+                            <label for="token-edit-fx-overlay-opacity">Overlay Opacity</label>
+                            <div style="display: flex; align-items: center; gap: 8px; width: 150px;">
+                                <input type="range" id="token-edit-fx-overlay-opacity" min="0.05" max="0.9" step="0.05" value="0.3" style="flex: 1; cursor: pointer;">
+                                <span id="val-fx-overlay-opacity" style="font-family: monospace; font-size: 0.8rem; font-weight: bold; width: 36px; text-align: right;">30%</span>
+                            </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label style="font-size: 0.72rem; color: var(--color-text-secondary);">Overlay Color</label>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px;">
+                                <input type="color" id="token-edit-fx-overlay-color" value="#007bff" style="width: 44px; height: 32px; border: 1px solid var(--color-border-subtle); border-radius: 4px; padding: 0; cursor: pointer; background: none;">
+                                <div class="fx-overlay-swatches swatches-row" style="display: flex; gap: 6px; flex: 1;">
+                                    <button type="button" class="swatch" data-color="#dc3545" style="width: 24px; height: 24px; border-radius: 50%; background: #dc3545; border: 2px solid transparent; cursor: pointer;" title="Red"></button>
+                                    <button type="button" class="swatch" data-color="#007bff" style="width: 24px; height: 24px; border-radius: 50%; background: #007bff; border: 2px solid transparent; cursor: pointer;" title="Blue"></button>
+                                    <button type="button" class="swatch" data-color="#28a745" style="width: 24px; height: 24px; border-radius: 50%; background: #28a745; border: 2px solid transparent; cursor: pointer;" title="Green"></button>
+                                    <button type="button" class="swatch" data-color="#ffc107" style="width: 24px; height: 24px; border-radius: 50%; background: #ffc107; border: 2px solid transparent; cursor: pointer;" title="Yellow"></button>
+                                    <button type="button" class="swatch" data-color="#6f42c1" style="width: 24px; height: 24px; border-radius: 50%; background: #6f42c1; border: 2px solid transparent; cursor: pointer;" title="Purple"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vignette FX Panel -->
+                <div id="panel-fx-vignette" class="fx-panel vtt-hidden" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="config-setting">
+                        <label for="token-edit-fx-vignette-enabled">Enable Border Vignette</label>
+                        <input type="checkbox" id="token-edit-fx-vignette-enabled" style="cursor: pointer; width: 14px; height: 14px;">
+                    </div>
+                    <div id="fx-vignette-details" class="vtt-hidden">
+                        <div class="config-setting">
+                            <label for="token-edit-fx-vignette-opacity">Vignette Depth</label>
+                            <div style="display: flex; align-items: center; gap: 8px; width: 150px;">
+                                <input type="range" id="token-edit-fx-vignette-opacity" min="0.1" max="1.0" step="0.05" value="0.6" style="flex: 1; cursor: pointer;">
+                                <span id="val-fx-vignette-opacity" style="font-family: monospace; font-size: 0.8rem; font-weight: bold; width: 36px; text-align: right;">60%</span>
+                            </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label style="font-size: 0.72rem; color: var(--color-text-secondary);">Vignette Color</label>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px;">
+                                <input type="color" id="token-edit-fx-vignette-color" value="#000000" style="width: 44px; height: 32px; border: 1px solid var(--color-border-subtle); border-radius: 4px; padding: 0; cursor: pointer; background: none;">
+                                <div class="fx-vignette-swatches swatches-row" style="display: flex; gap: 6px; flex: 1;">
+                                    <button type="button" class="swatch" data-color="#000000" style="width: 24px; height: 24px; border-radius: 50%; background: #000000; border: 2px solid transparent; cursor: pointer;" title="Classic Black"></button>
+                                    <button type="button" class="swatch" data-color="#ffffff" style="width: 24px; height: 24px; border-radius: 50%; background: #ffffff; border: 2px solid transparent; cursor: pointer;" title="Glow White"></button>
+                                    <button type="button" class="swatch" data-color="#dc3545" style="width: 24px; height: 24px; border-radius: 50%; background: #dc3545; border: 2px solid transparent; cursor: pointer;" title="Furious Red"></button>
+                                    <button type="button" class="swatch" data-color="#28a745" style="width: 24px; height: 24px; border-radius: 50%; background: #28a745; border: 2px solid transparent; cursor: pointer;" title="Nature Green"></button>
+                                    <button type="button" class="swatch" data-color="#ff9900" style="width: 24px; height: 24px; border-radius: 50%; background: #ff9900; border: 2px solid transparent; cursor: pointer;" title="Fire Orange"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shadow FX Panel -->
+                <div id="panel-fx-shadow" class="fx-panel vtt-hidden" style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="config-setting">
+                        <label for="token-edit-fx-shadow-enabled">Enable Floor Shadow</label>
+                        <input type="checkbox" id="token-edit-fx-shadow-enabled" style="cursor: pointer; width: 14px; height: 14px;">
+                    </div>
+                    <div id="fx-shadow-details" class="vtt-hidden">
+                        <div class="flex-row">
+                            <div class="form-group w-50" style="margin-bottom: 0;">
+                                <label style="font-size: 0.72rem; color: var(--color-text-secondary);">Shadow Blur (px)</label>
+                                <input type="number" id="token-edit-fx-shadow-blur" min="0" max="40" value="12" style="width: 100%; font-size: 0.8rem; padding: 4px 8px;">
+                            </div>
+                            <div class="form-group w-50" style="margin-bottom: 0;">
+                                <label style="font-size: 0.72rem; color: var(--color-text-secondary);">Shadow Offset (px)</label>
+                                <input type="number" id="token-edit-fx-shadow-offset" min="-20" max="20" value="4" style="width: 100%; font-size: 0.8rem; padding: 4px 8px;">
+                            </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label style="font-size: 0.72rem; color: var(--color-text-secondary);">Shadow Color & Opacity</label>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px;">
+                                <input type="color" id="token-edit-fx-shadow-color" value="#000000" style="width: 44px; height: 32px; border: 1px solid var(--color-border-subtle); border-radius: 4px; padding: 0; cursor: pointer; background: none;">
+                                <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                                    <input type="range" id="token-edit-fx-shadow-opacity" min="0.1" max="1.0" step="0.05" value="0.7" style="flex: 1; cursor: pointer;">
+                                    <span id="val-fx-shadow-opacity" style="font-family: monospace; font-size: 0.8rem; font-weight: bold; width: 36px; text-align: right;">70%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-buttons" style="flex-wrap: wrap;">
+                <button id="btn-token-edit-save-defaults" class="btn btn-warning" style="margin-right: auto;"><i class="fa-solid fa-save"></i> Save Token Defaults</button>
+                <button id="btn-token-edit-delete" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete Token</button>
+                <button id="btn-token-edit-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="btn-token-edit-submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Front-End Code scripts bundle -->
+    <script type="module">
+        const _v = Date.now(); // cache-bust: forces fresh module load on every page load
+        const { initVttCanvas } = await import(`./js/vtt-canvas.js?v=${_v}`);
+        const { initVttCreatureSheet } = await import(`./js/vtt-creature-sheet.js?v=${_v}`);
+        const { initVttSpellManager } = await import(`./js/vtt-spell-manager.js?v=${_v}`);
+        const { initVttPlayerSheet } = await import(`./js/vtt-player-sheet.js?v=${_v}`);
+        const { initVttChat } = await import(`./js/vtt-chat.js?v=${_v}`);
+        const { initVttDataBridge } = await import(`./js/vtt-data-bridge.js?v=${_v}`);
+        const { initVttHandouts } = await import(`./js/vtt-handouts.js?v=${_v}`);
+
+        // Keep globally accessible configurations
+        window.VTT = {
+            socket: null,
+            campaignId: 'default',
+            username: 'Game Master',
+            role: 'GM',
+            campaignState: null,
+            canvasEngine: null,
+            chatEngine: null,
+            creatureSheet: null,
+            playerSheet: null,
+            dataBridge: null
+        };
+        
+        // Initialize handlers directly, we are already deferred and loaded
+        setupLoginHandlers();
+        setupSidebarTabs();
+
+        async function setupLoginHandlers() {
+            const btnJoin = document.getElementById('btn-join-game');
+            const usernameInput = document.getElementById('login-username');
+            const roleSelect = document.getElementById('login-role');
+            const campaignSelect = document.getElementById('login-campaign');
+            const btnCreateCamp = document.getElementById('btn-create-campaign');
+            
+            // Query active campaigns list on backend
+            try {
+                const res = await fetch('/api/campaigns', {
+                    headers: {
+                        'Bypass-Tunnel-Reminder': 'true',
+                        'ngrok-skip-browser-warning': 'true'
+                    }
+                });
+                if (res.ok) {
+                    const contentType = res.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                        const list = await res.json();
+                        campaignSelect.innerHTML = '';
+                        if (list.length === 0) {
+                            const opt = document.createElement('option');
+                            opt.value = 'default';
+                            opt.textContent = 'Default Campaign';
+                            campaignSelect.appendChild(opt);
+                        } else {
+                            list.forEach(c => {
+                                const opt = document.createElement('option');
+                                opt.value = c.id;
+                                opt.textContent = c.name;
+                                campaignSelect.appendChild(opt);
+                            });
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Could not query campaigns list, defaulting", e);
+            }
+
+            // Create campaign modal handling
+            const modalCreate = document.getElementById('modal-create-campaign');
+            const newCampName = document.getElementById('new-campaign-name');
+            btnCreateCamp.addEventListener('click', () => modalCreate.classList.remove('vtt-hidden'));
+            document.getElementById('btn-modal-cancel').addEventListener('click', () => modalCreate.classList.add('vtt-hidden'));
+            document.getElementById('btn-modal-submit').addEventListener('click', async () => {
+                const name = newCampName.value.trim();
+                if (!name) return alert("Please enter a campaign name");
+                try {
+                    const res = await fetch('/api/campaigns', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name })
+                    });
+                    if (res.ok) {
+                        const camp = await res.json();
+                        const opt = document.createElement('option');
+                        opt.value = camp.id;
+                        opt.textContent = camp.name;
+                        campaignSelect.appendChild(opt);
+                        campaignSelect.value = camp.id;
+                        newCampName.value = '';
+                        modalCreate.classList.add('vtt-hidden');
+                    }
+                } catch(e) {
+                    alert("Error creating campaign: " + e.message);
+                }
+            });
+
+            // Join Game handler
+            btnJoin.addEventListener('click', () => {
+                const username = usernameInput.value.trim();
+                const role = roleSelect.value;
+                const campaignId = campaignSelect.value;
+                
+                if (!username) {
+                    usernameInput.classList.add('form-control--error');
+                    return;
+                }
+                
+                window.VTT.username = username;
+                window.VTT.role = role;
+                window.VTT.campaignId = campaignId;
+
+                // Sync connection details to DOM displays
+                const selectedOpt = campaignSelect.options[campaignSelect.selectedIndex];
+                const campName = selectedOpt ? selectedOpt.text : campaignId || 'Default Campaign';
+                const elCampName = document.getElementById('display-campaign-name');
+                if (elCampName) elCampName.textContent = campName;
+                const elUserRole = document.getElementById('display-user-role');
+                if (elUserRole) {
+                    elUserRole.textContent = role;
+                    elUserRole.className = `user-role-badge ${role.toLowerCase()}-badge`;
+                }
+                const elUsername = document.getElementById('display-username');
+                if (elUsername) elUsername.textContent = username;
+                
+                // Hide GM only features for players
+                const dmScreenLink1 = document.getElementById('btn-dmscreen-link');
+                if (role !== 'GM') {
+                    document.querySelectorAll('.gm-only').forEach(el => el.classList.add('vtt-hidden'));
+                    if (dmScreenLink1) dmScreenLink1.classList.add('vtt-hidden');
+                } else {
+                    document.querySelectorAll('.gm-only').forEach(el => el.classList.remove('vtt-hidden'));
+                    if (dmScreenLink1) dmScreenLink1.classList.remove('vtt-hidden');
+                }
+
+                // Initialise Socket connection
+                // Prioritize websocket to prevent loca.lt long-polling 502 connection throttling
+                const socket = io({
+                    transports: ['websocket', 'polling']
+                });
+
+                // Override emit to automatically inject whisperToGM state from the UI toggle
+                const originalEmit = socket.emit;
+                socket.emit = function(eventName, ...args) {
+                    if (eventName === 'chat:msg' && args.length > 0 && typeof args[0] === 'object') {
+                        if (window.VTT && window.VTT.whisperGM !== undefined && args[0].whisperToGM === undefined) {
+                            args[0].whisperToGM = window.VTT.whisperGM;
+                        }
+                    }
+                    return originalEmit.apply(this, [eventName, ...args]);
+                };
+
+                window.VTT.socket = socket;
+
+                // Sync URL indicators
+                const absoluteHost = window.location.origin;
+                const elLocalUrl = document.getElementById('config-local-url');
+                const elRemoteUrl = document.getElementById('config-remote-url');
+                if (elLocalUrl) elLocalUrl.value = `${absoluteHost}/vtt.html`;
+                // Try fetching external tunnel URL
+                if (elRemoteUrl) elRemoteUrl.value = `${absoluteHost}/vtt.html`;
+
+                socket.on('connect', () => {
+                    console.log("Connected to VTT backend!");
+                    socket.emit('join', { campaignId, username, role });
+                });
+
+                socket.on('join_rejected', ({ reason }) => {
+                    alert(`Connection Rejected: ${reason}`);
+                    window.location.reload();
+                });
+
+                function renderAllowlist(users) {
+                    const container = document.getElementById('config-allowlist-users');
+                    if (!container) return;
+                    container.innerHTML = '';
+                    if (!users || users.length === 0) {
+                        container.innerHTML = '<span class="text-muted" style="font-size: 0.8rem;"><i>Allowlist is empty. Anyone can join.</i></span>';
+                        return;
+                    }
+                    users.forEach((u, idx) => {
+                        const row = document.createElement('div');
+                        row.style.display = 'flex';
+                        row.style.justifyContent = 'space-between';
+                        row.style.alignItems = 'center';
+                        row.style.background = 'rgba(255,255,255,0.05)';
+                        row.style.padding = '4px 8px';
+                        row.style.borderRadius = '4px';
+                        row.innerHTML = `<span style="font-size: 0.85rem;">${u}</span>
+                            <button class="btn btn-xxs btn-danger btn-remove-allowlist" onclick="removeAllowlistUser(${idx})"><i class="fa-solid fa-times"></i></button>`;
+                        container.appendChild(row);
+                    });
+                }
+
+                socket.on('allowlist:updated', ({ allowedUsers }) => {
+                    if (window.VTT.campaignState) {
+                        window.VTT.campaignState.allowedUsers = allowedUsers;
+                        renderAllowlist(allowedUsers);
+                    }
+                });
+
+                socket.on('joined', ({ campaignState, chatHistory }) => {
+                    window.VTT.campaignState = campaignState;
+                    
+                    // Enforce role based on GM assignment in server
+                    if (campaignState.gmUsername) {
+                        if (campaignState.gmUsername === username) {
+                            window.VTT.role = 'GM';
+                        } else {
+                            window.VTT.role = 'Player';
+                        }
+                        const elUserRole2 = document.getElementById('display-user-role');
+                        if (elUserRole2) elUserRole2.textContent = window.VTT.role;
+                        const dmScreenLink2 = document.getElementById('btn-dmscreen-link');
+                        if (window.VTT.role !== 'GM') {
+                            document.querySelectorAll('.gm-only').forEach(el => el.classList.add('vtt-hidden'));
+                            if (dmScreenLink2) dmScreenLink2.classList.add('vtt-hidden');
+                        } else {
+                            document.querySelectorAll('.gm-only').forEach(el => el.classList.remove('vtt-hidden'));
+                            if (dmScreenLink2) dmScreenLink2.classList.remove('vtt-hidden');
+                        }
+                    }
+
+                    renderAllowlist(campaignState.allowedUsers || []);
+
+                    document.getElementById('login-overlay').classList.add('vtt-hidden');
+                    document.getElementById('vtt-workspace').classList.remove('vtt-hidden');
+                    
+                    // Boot VTT Modules
+                    try {
+                        window.VTT.canvasEngine = initVttCanvas(window.VTT);
+                        window.VTT.chatEngine = initVttChat(window.VTT, chatHistory);
+                        window.VTT.creatureSheet = initVttCreatureSheet(window.VTT);
+                        window.VTT.spellManager = initVttSpellManager(window.VTT);
+                        window.VTT.playerSheet = initVttPlayerSheet(window.VTT);
+                        window.VTT.handoutsEngine = initVttHandouts(window.VTT);
+                        window.VTT.dataBridge = initVttDataBridge(window.VTT);
+                        
+                        console.log("Joined and VTT loaded!");
+                    } catch (err) {
+                        alert("INIT ERROR: " + err.message + "\n" + err.stack);
+                        document.body.innerHTML = "<div style='color:red; background:white; padding: 20px; font-size:24px; position:absolute; z-index:999999; top:0; left:0; width:100vw; height:100vh;'><pre>" + err.stack + "</pre></div>";
+                    }
+                });
+
+                socket.on('sys_message', (msg) => {
+                    if (window.VTT.chatEngine) {
+                        window.VTT.chatEngine.appendSystemMessage(msg.text, msg.timestamp);
+                    }
+                });
+
+                // Private whisper (GM-only rolls from creature sheet)
+                socket.on('chat:whisper', (msg) => {
+                    if (window.VTT.chatEngine) {
+                        window.VTT.chatEngine.appendWhisperMessage(msg);
+                    }
+                });
+            });
+
+            document.getElementById('btn-logout').addEventListener('click', () => {
+                window.location.reload();
+            });
+        }
+
+        function setupSidebarTabs() {
+            const tabs = document.querySelectorAll('.tab-header');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+                    // Deactivate all
+                    tabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                    
+                    // Activate current
+                    tab.classList.add('active');
+                    document.getElementById(target).classList.add('active');
+                });
+            });
+        }
+
+        // Allowlist Global Handlers
+        window.addAllowlistUser = function() {
+            const ipt = document.getElementById('config-allowlist-input');
+            if (!ipt) return;
+            const val = ipt.value.trim();
+            if (val && window.VTT && window.VTT.socket) {
+                const newUsers = [...(window.VTT.campaignState.allowedUsers || [])];
+                if (!newUsers.includes(val)) {
+                    newUsers.push(val);
+                    window.VTT.socket.emit('allowlist:update', { allowedUsers: newUsers });
+                    ipt.value = '';
+                }
+            }
+        };
+
+        window.removeAllowlistUser = function(idx) {
+            if (window.VTT && window.VTT.socket) {
+                const newUsers = [...(window.VTT.campaignState.allowedUsers || [])];
+                newUsers.splice(idx, 1);
+                window.VTT.socket.emit('allowlist:update', { allowedUsers: newUsers });
+            }
+        };
+    </script>
+</body>
+</html>
