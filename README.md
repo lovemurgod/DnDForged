@@ -10,6 +10,7 @@ DnDForged combines rich 5e content lookup with interactive VTT capabilities: rea
 
 - **Self-Hosted & Private:** All campaign state, maps, fog of war, tokens, and logs remain 100% local on your machine.
 - **Real-Time Multiplayer Sync:** Socket.IO handles synchronized token movement, map switching, dice rolls, and chat logs between DM and players.
+- **Interactive Online Launcher:** Dynamic subdomain routing allowing games to be hosted on custom subdomains (e.g., `https://dm-alice.forgedvtt.com`).
 - **5etools Integration:** Built-in proxy and renderer support for 5e rules, spell cards, creature stat blocks, and official assets.
 - **Zero Database Setup:** Automatically initializes a lightweight, file-backed local data store (`.dndforged-data/`).
 
@@ -35,7 +36,7 @@ DnDForged combines rich 5e content lookup with interactive VTT capabilities: rea
    npm install
    ```
 
-3. **Start the server:**
+3. **Start local server:**
    ```bash
    npm start
    ```
@@ -43,30 +44,39 @@ DnDForged combines rich 5e content lookup with interactive VTT capabilities: rea
 4. **Access the VTT:**
    Open your browser and navigate to:
    ```
-   http://localhost:3000
+   http://localhost:5050
    ```
 
 ---
 
-## Hosting & Remote Play Options
+## Remote Play & Online Hosting Options
 
-### Local Play (LAN)
-Players on your local Wi-Fi network can join directly by opening your computer's local IP address (e.g., `http://192.168.1.X:3000`).
+### 1. Dedicated Subdomain Launcher (Recommended)
+To host online for remote players with a custom subdomain under `forgedvtt.com`:
 
-### Remote Play via Tunnels (e.g. Cloudflare / Localtunnel)
-To host online for remote players without exposing your local network:
+```bash
+npm run online
+```
+*(Or double-click `start-online.bat` on Windows)*
 
-1. **Cloudflare Tunnel (Subdomain Routing):**
-   ```bash
-   npm run tunnel
-   ```
-   *Note: Requires Cloudflare `cloudflared` CLI configured on your host machine.*
+The launcher will prompt for your desired subdomain name (e.g. `cosmic` or `dm-alice`), start your local server, and launch the tunnel.
 
-2. **Instant Localtunnel (Zero Config):**
-   ```bash
-   npx localtunnel --port 3000
-   ```
-   Share the generated public HTTPS URL with your players.
+### 2. Local Play (LAN)
+Players on your local Wi-Fi network can join directly by opening your computer's local IP address (e.g., `http://192.168.1.X:5050`).
+
+### 3. Instant Localtunnel (Zero Config)
+```bash
+npx localtunnel --port 5050
+```
+Share the generated public HTTPS URL with your players.
+
+---
+
+## Cloudflare Worker API Setup (For Admins)
+
+For custom dynamic subdomain routing, deploy `worker/index.js` as a Cloudflare Worker:
+- **Location**: [worker/index.js](file:///d:/GitHub/repo/DnDForged/worker/index.js)
+- Configured with `CF_ZONE_ID` and `CF_API_TOKEN` to register CNAME records dynamically on `forgedvtt.com`.
 
 ---
 
