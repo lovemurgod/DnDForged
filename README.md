@@ -72,14 +72,6 @@ Share the generated public HTTPS URL with your players.
 
 ---
 
-## Cloudflare Worker API Setup (For Admins)
-
-For custom dynamic subdomain routing, deploy `worker/index.js` as a Cloudflare Worker:
-- **Location**: [worker/index.js](file:///d:/GitHub/repo/DnDForged/worker/index.js)
-- Configured with `CF_ZONE_ID` and `CF_API_TOKEN` to register CNAME records dynamically on `forgedvtt.com`.
-
----
-
 ## Data & Privacy Architecture
 
 When you start the server for the first time, DnDForged creates a hidden local directory `.dndforged-data/` on your host machine to store:
