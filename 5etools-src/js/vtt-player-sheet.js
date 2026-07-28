@@ -181,15 +181,37 @@ function simulateRoll(formula, critRange = 20) {
         simulateRoll: (formula, crit) => simulateRoll(formula, crit),
         parseSpellToMacro: (spData, newSpell) => window.VTTSpellManager?.parseSpellToMacro(spData, newSpell),
         renderAndInjectSpell: (spellName, containerEl, fallbackDesc, spData) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, spData),
-        openSpellModal: (level, idx, customChar, onSaveCallback) => window.VTTSpellManager?.openModal(level, idx, customChar, onSaveCallback),
         renderSpellRowHtml: (sp, slKey, idx, isAllTab) => {
             const opacity = (sp.prepared === false && slKey !== 'cantrip' && slKey !== 'legacy') ? 'opacity: 0.6;' : '';
             let badges = '';
             const spText = JSON.stringify(sp).toLowerCase();
-            if ((Array.isArray(sp.duration) && sp.duration.some(d => d.concentration)) || spText.includes("concentration")) {
+            let isConcentration = sp.concentration;
+            let isRitual = sp.ritual;
+
+            if (isConcentration === undefined || isRitual === undefined) {
+                const spellCache = window.vttPlayerSheetAPI?.getSpellCache ? window.vttPlayerSheetAPI.getSpellCache() : null;
+                const cachedSp = spellCache?.find(s => s.name && s.name.toLowerCase() === (sp.name || '').toLowerCase());
+                if (cachedSp) {
+                    if (isConcentration === undefined) {
+                        isConcentration = !!(cachedSp.duration?.some(d => d.concentration) || cachedSp.meta?.concentration);
+                    }
+                    if (isRitual === undefined) {
+                        isRitual = !!cachedSp.meta?.ritual;
+                    }
+                }
+            }
+
+            if (isConcentration === undefined) {
+                isConcentration = (Array.isArray(sp.duration) && sp.duration.some(d => d.concentration)) || spText.includes("concentration");
+            }
+            if (isRitual === undefined) {
+                isRitual = (sp.meta && sp.meta.ritual) || spText.includes("ritual");
+            }
+
+            if (isConcentration) {
                 badges += `<span class="badge badge-c" style="background:#f44336; color:#fff; border-radius:4px; padding:2px 4px; font-size:0.6rem; margin-left:4px;" title="Concentration">C</span>`;
             }
-            if ((sp.meta && sp.meta.ritual) || spText.includes("ritual")) {
+            if (isRitual) {
                 badges += `<span class="badge badge-r" style="background:#2196f3; color:#fff; border-radius:4px; padding:2px 4px; font-size:0.6rem; margin-left:4px;" title="Ritual">R</span>`;
             }
 
@@ -2653,7 +2675,7 @@ function simulateRoll(formula, critRange = 20) {
             return; // Not assigned to this player
         }
 
-        if (char.isCompanion && vtt.creatureSheet) {
+        if ((char.isCompanion || char.isCustomNpc || char.monsterData) && vtt.creatureSheet) {
             vtt.creatureSheet.openSheet(char.monsterData, null, char.id);
             return;
         }
@@ -2811,6 +2833,8 @@ function simulateRoll(formula, critRange = 20) {
         char.tokenImages = char.tokenImages || [];
         char.activeTokenIndex = char.activeTokenIndex || 0;
         char.proficiencies = char.proficiencies || { languages: '', weapons: '', armor: '' };
+        char.inspiration = !!char.inspiration;
+        char.heroPoints = typeof char.heroPoints === 'number' ? char.heroPoints : (parseInt(char.heroPoints) || 0);
 
         const activeImageUrl = (char.tokenImages && char.tokenImages.length > 0 && char.activeTokenIndex < char.tokenImages.length)
             ? char.tokenImages[char.activeTokenIndex].url
@@ -2881,7 +2905,21 @@ function simulateRoll(formula, critRange = 20) {
                 </div>
             </div>
             
-
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;">
+                <div class="cs-stat-pill pc-inspiration-pill ${char.inspiration ? 'active' : ''}" id="pc-inspiration-toggle" style="cursor:pointer; user-select:none; flex:1; display:flex; align-items:center; justify-content:center; gap:8px; height:36px; padding:6px 12px; border-radius:20px; font-size:0.9rem; font-family:var(--font-heading); ${char.inspiration ? 'border:1.5px solid var(--color-gold-base); background:rgba(212,175,55,0.25); color:var(--color-gold-light); box-shadow:0 0 12px rgba(212,175,55,0.4);' : 'background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); opacity:0.8;'}" title="Toggle DM Inspiration">
+                    <i class="fa-solid fa-dice-d20" style="font-size:1.05rem; ${char.inspiration ? 'color:var(--color-gold-light); text-shadow:0 0 8px var(--color-gold-base);' : 'color:var(--color-text-muted);'}"></i>
+                    <span style="font-weight:600; font-size:0.9rem; letter-spacing:0.5px;">Inspired</span>
+                </div>
+                <div class="cs-stat-pill" style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; height:36px; padding:6px 12px; border-radius:20px; font-size:0.9rem; font-family:var(--font-heading); background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1);" title="Hero Points">
+                    <i class="fa-solid fa-shield-heart" style="font-size:1.05rem; color:var(--color-gold-base);"></i>
+                    <span style="font-size:0.9rem; font-weight:600; letter-spacing:0.5px;">Hero Pts</span>
+                    <div style="display:flex; align-items:center; gap:4px; margin-left:auto;">
+                        <button class="cs-hp-btn" id="pc-hero-minus" style="padding:0; height:22px; width:22px; font-size:0.85rem; display:flex; align-items:center; justify-content:center;" title="Spend Hero Point">−</button>
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" id="pc-hero-points-input" value="${char.heroPoints || 0}" style="width:26px; background:transparent; border:none; color:var(--color-gold-light); text-align:center; font-family:var(--font-heading); font-size:1rem; font-weight:bold; padding:0;">
+                        <button class="cs-hp-btn" id="pc-hero-plus" style="padding:0; height:22px; width:22px; font-size:0.85rem; display:flex; align-items:center; justify-content:center;" title="Add Hero Point">+</button>
+                    </div>
+                </div>
+            </div>
             
             <div class="cs-hp-container" style="margin-bottom:16px;">
                 <div style="display: flex; gap: 4px; margin-bottom: 8px; align-items: center;">
@@ -2893,25 +2931,29 @@ function simulateRoll(formula, critRange = 20) {
                         <div class="cs-hp-bar-fill" id="pc-temp-hp-bar" style="height: 100%; background: var(--color-info, #2196f3); width: 100%;"></div>
                     </div>` : ''}
                 </div>
-                <div class="cs-hp-row" style="display:flex; align-items:center; justify-content: space-between;">
-                    <div style="display:flex; align-items:center;">
-                        <div class="cs-hp-label"><i class="fa-solid fa-heart"></i> HP</div>
-                        <div class="cs-hp-controls">
+                <div class="cs-hp-row" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="cs-hp-label" style="font-size:0.85rem; font-weight:600; margin-bottom:0; display:flex; align-items:center; gap:4px;">
+                            <i class="fa-solid fa-heart" style="color:#e53935; font-size:0.95rem;"></i> HP
+                        </div>
+                        <div class="cs-hp-controls" style="margin-bottom:0;">
                             <button class="cs-hp-btn" id="pc-hp-minus" title="Damage">−</button>
-                            <div class="cs-hp-display">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="pc-hp-current-input" value="${char.hpCurrent}" style="width:28px; background:transparent; border:none; color:var(--color-text-primary); text-align:right; font-family:var(--font-heading); font-size:1rem; font-weight:700; padding:0;">
-                                <span class="cs-hp-divider">/</span>
-                                <span id="pc-hp-max">${char.hpMax}</span>
+                            <div class="cs-hp-display" style="display:flex; align-items:center;">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="pc-hp-current-input" value="${char.hpCurrent}" style="width:32px; background:transparent; border:none; color:var(--color-text-primary); text-align:right; font-family:var(--font-heading); font-size:1rem; font-weight:700; padding:0;">
+                                <span class="cs-hp-divider" style="margin:0 2px;">/</span>
+                                <span id="pc-hp-max" style="font-size:1rem; font-weight:700;">${char.hpMax}</span>
                             </div>
                             <button class="cs-hp-btn" id="pc-hp-plus" title="Heal">+</button>
                         </div>
                     </div>
-                    <div style="display:flex; align-items:center;">
-                        <div class="cs-hp-label" style="margin-left: 8px; font-size: 0.85rem;"><i class="fa-solid fa-shield"></i> Temp</div>
-                        <div class="cs-hp-controls" style="min-width: 80px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <div class="cs-hp-label" style="font-size:0.85rem; font-weight:600; margin-bottom:0; display:flex; align-items:center; gap:4px;">
+                            <i class="fa-solid fa-shield" style="color:#2196f3; font-size:0.95rem;"></i> Temp
+                        </div>
+                        <div class="cs-hp-controls" style="margin-bottom:0;">
                             <button class="cs-hp-btn" id="pc-temp-hp-minus" title="Reduce Temp HP">−</button>
-                            <div class="cs-hp-display" style="width: 30px;">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="pc-temp-hp-current" value="${char.tempHp || 0}" style="width:100%; background:transparent; border:none; color:var(--color-text-primary); text-align:center; font-family:var(--font-code); font-size:1.1rem; padding:0;">
+                            <div class="cs-hp-display" style="display:flex; align-items:center; justify-content:center;">
+                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="pc-temp-hp-current" value="${char.tempHp || 0}" style="width:32px; background:transparent; border:none; color:var(--color-text-primary); text-align:center; font-family:var(--font-heading); font-size:1rem; font-weight:700; padding:0;">
                             </div>
                             <button class="cs-hp-btn" id="pc-temp-hp-plus" title="Add Temp HP">+</button>
                         </div>
@@ -2924,7 +2966,7 @@ function simulateRoll(formula, critRange = 20) {
                 <div style="flex-shrink:0;">
                     <div class="cs-stat-pill" style="font-size:1.5rem; padding:8px 16px; border:2px solid var(--color-gold-base);"><i class="fa-solid fa-shield-halved"></i><span style="font-weight:bold;">AC ${char.ac}</span></div>
                 </div>
-                <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; flex:1; min-width:0;">
+                <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; align-items:center; flex:1; min-width:0;">
                     ${Object.entries(char.speed).filter(([k,v]) => v > 0).map(([k,v]) => {
                         const icons = { walk:'fa-shoe-prints', climb:'fa-mountain', fly:'fa-feather-pointed', burrow:'fa-trowel' };
                         return '<div class="cs-stat-pill"><i class="fa-solid ' + (icons[k] || 'fa-shoe-prints') + '"></i><span>' + k.charAt(0).toUpperCase() + k.slice(1) + ' ' + v + ' ft</span></div>';
@@ -2935,8 +2977,10 @@ function simulateRoll(formula, critRange = 20) {
 
             <!-- Reverted Ability Grid to full width -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);">Stats and Saves</h4>
-                <button class="btn btn-xs pc-save-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer;"><i class="fa-solid fa-cog"></i></button>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <button class="btn btn-xs pc-save-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; padding:0;" title="Configure Save Mods & Toggles"><i class="fa-solid fa-cog"></i></button>
+                    <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);">Stats and Saves</h4>
+                </div>
             </div>
             <div class="cs-ability-grid" style="margin-bottom: ${char.saveToggles && char.saveToggles.length > 0 ? '12px' : '24px'};">
                 ${['str', 'dex', 'con', 'int', 'wis', 'cha'].map(ab => {
@@ -2971,8 +3015,8 @@ function simulateRoll(formula, critRange = 20) {
             <div style="display:block;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="btn btn-xs pc-skill-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; padding:0;" title="Configure Skill Mods & Toggles"><i class="fa-solid fa-cog"></i></button>
                         <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);">Skill Checks</h4>
-                        <button class="btn btn-xs pc-skill-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer;"><i class="fa-solid fa-cog"></i></button>
                     </div>
                     <button class="btn btn-xs btn-primary pc-roll-init" title="Roll Initiative"><i class="fa-solid fa-dice-d20"></i> Initiative</button>
                 </div>
@@ -3044,8 +3088,8 @@ function simulateRoll(formula, critRange = 20) {
             <div style="display:block; margin-top:12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="btn btn-xs pc-tool-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; padding:0;" title="Configure Tool Proficiencies & Mods"><i class="fa-solid fa-cog"></i></button>
                         <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);">Tool Checks</h4>
-                        <button class="btn btn-xs pc-tool-settings-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer;"><i class="fa-solid fa-cog"></i></button>
                     </div>
                 </div>
                 <div id="pc-tools-list" style="display:grid; grid-template-columns: 1fr 1fr; gap:4px; margin-bottom: 24px;">
@@ -3428,8 +3472,9 @@ function simulateRoll(formula, critRange = 20) {
                 ${char.equipment.map((eq, i) => `
                     <div class="equip-row glassmorphism" style="padding:8px; display:flex; flex-direction:column; gap:4px;">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div class="pc-equip-toggle" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:8px;" title="Click to expand/collapse description">
-                                <i class="fa-solid fa-chevron-right text-gradient-gold" style="font-size:0.8rem; margin-right:4px; transition:transform 0.2s;" id="pc-equip-chevron-${i}"></i> ${eq.name}
+                            <div class="pc-equip-toggle" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); flex:1; min-width:0; display:flex; align-items:center; gap:6px; padding-right:8px;" title="Click to expand/collapse description">
+                                <i class="fa-solid fa-chevron-right text-gradient-gold" style="font-size:0.8rem; flex-shrink:0; transition:transform 0.2s;" id="pc-equip-chevron-${i}"></i>
+                                <span style="word-break:break-word; overflow-wrap:anywhere;">${eq.name}</span>
                             </div>
                             <div style="display:flex; gap:8px; align-items:center; flex-shrink:0;">
                                 <span style="font-size:0.8rem; color:var(--color-text-muted);">Wt: ${eq.weight || 0} lb</span>
@@ -3847,6 +3892,25 @@ function simulateRoll(formula, critRange = 20) {
             char.tempHp = parseInt(e.target.value) || 0;
             saveAndEmit(char);
         });
+
+        const inspirationToggle = document.getElementById('pc-inspiration-toggle');
+        if (inspirationToggle) {
+            inspirationToggle.addEventListener('click', () => {
+                char.inspiration = !char.inspiration;
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+        }
+
+        const heroInput = document.getElementById('pc-hero-points-input');
+        if (heroInput) {
+            heroInput.addEventListener('change', (e) => {
+                const val = Math.max(0, parseInt(e.target.value) || 0);
+                char.heroPoints = val;
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+        }
 
         ['languages', 'weapons', 'armor'].forEach(type => {
             document.getElementById(`pc-prof-${type}`)?.addEventListener('change', (e) => {
@@ -4553,14 +4617,23 @@ function simulateRoll(formula, critRange = 20) {
                 let formula = (d.formula || '').trim();
                 let statMod = 0;
 
-                if (d.stat) {
-                    const score = getTotalStat(char, d.stat.toLowerCase()) || 10;
+                if (d.stat && d.stat !== 'none' && d.stat !== '') {
+                    let statKey = d.stat.toLowerCase();
+                    if (statKey === 'spell') {
+                        statKey = (char.spellSettings?.ability || char.spellcastingAbility || 'int').toLowerCase();
+                    }
+                    const score = getTotalStat(char, statKey) || 10;
                     statMod = getMod(score);
                 }
 
                 let rollFormula = formula;
                 if (statMod !== 0) {
-                    rollFormula += `${statMod >= 0 ? '+' : ''}${statMod}[${d.stat.toUpperCase()}]`;
+                    rollFormula += `${statMod >= 0 ? '+' : ''}${statMod}[${(d.stat || 'STAT').toUpperCase()}]`;
+                }
+                if (d.custom && d.custom.trim() !== '') {
+                    let c = d.custom.trim();
+                    let cleanC = c.startsWith('+') || c.startsWith('-') ? c : '+' + c;
+                    rollFormula += `${cleanC}[Custom]`;
                 }
                 if (globalDmgMod !== 0) {
                     rollFormula += `${globalDmgMod >= 0 ? '+' : ''}${globalDmgMod}[Global]`;
@@ -4958,12 +5031,12 @@ function simulateRoll(formula, critRange = 20) {
         }));
 
         document.querySelectorAll('.btn-add-spell').forEach(btn => btn.addEventListener('click', (e) => {
-            if (window.vttPlayerSheetAPI) { window.vttPlayerSheetAPI.openSpellModal(e.currentTarget.dataset.level, -1, currentChar, (char) => { saveAndEmit(char); renderSheetData(char); }); }
+            if (window.VTTSpellManager) { window.VTTSpellManager.openModal(e.currentTarget.dataset.level, -1, currentChar, (char) => { saveAndEmit(char); renderSheetData(char); }); }
         }));
 
         document.querySelectorAll('.pc-spell-edit').forEach(btn => btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (window.vttPlayerSheetAPI) { window.vttPlayerSheetAPI.openSpellModal(e.currentTarget.dataset.level, e.currentTarget.dataset.idx, currentChar, (char) => { saveAndEmit(char); renderSheetData(char); }); }
+            if (window.VTTSpellManager) { window.VTTSpellManager.openModal(e.currentTarget.dataset.level, e.currentTarget.dataset.idx, currentChar, (char) => { saveAndEmit(char); renderSheetData(char); }); }
         }));
 
         document.querySelectorAll('.pc-slot-current').forEach(inp => inp.addEventListener('change', (e) => {
@@ -5502,6 +5575,18 @@ function simulateRoll(formula, critRange = 20) {
                 const add = parseInt(val || '1');
                 if (!isNaN(add)) { currentChar.tempHp = (currentChar.tempHp || 0) + add; saveAndEmit(currentChar); debouncedRenderSheetData(currentChar); }
             });
+        } else if (e.target.closest('#pc-hero-minus')) {
+            if (currentChar) {
+                currentChar.heroPoints = Math.max(0, (currentChar.heroPoints || 0) - 1);
+                saveAndEmit(currentChar);
+                renderSheetData(currentChar);
+            }
+        } else if (e.target.closest('#pc-hero-plus')) {
+            if (currentChar) {
+                currentChar.heroPoints = (currentChar.heroPoints || 0) + 1;
+                saveAndEmit(currentChar);
+                renderSheetData(currentChar);
+            }
         }
     });
 
@@ -5599,7 +5684,7 @@ function simulateRoll(formula, critRange = 20) {
                 document.getElementById('modal-attack-settings-atk').value = currentChar.attackSettings.atkMod || 0;
                 document.getElementById('modal-attack-settings-dmg').value = currentChar.attackSettings.dmgMod || 0;
                 document.getElementById('modal-attack-settings-dc').value = currentChar.attackSettings.dcMod || 0;
-                renderAttackTogglesList();
+                window.VTTSpellManager?.renderAttackTogglesList();
 
                 document.getElementById('modal-attack-toggle-form')?.classList.add('vtt-hidden');
                 document.getElementById('btn-add-attack-toggle')?.classList.remove('vtt-hidden');
@@ -5619,7 +5704,7 @@ function simulateRoll(formula, critRange = 20) {
                 document.getElementById('modal-settings-atk').value = currentChar.spellSettings.atkMod || 0;
                 document.getElementById('modal-settings-dc').value = currentChar.spellSettings.dcMod || 0;
                 document.getElementById('modal-settings-dmg').value = currentChar.spellSettings.dmgMod || 0;
-                renderTogglesList();
+                window.VTTSpellManager?.renderTogglesList();
 
                 // Hide any nested forms and reset toggle editor state
                 document.getElementById('modal-toggle-form')?.classList.add('vtt-hidden');

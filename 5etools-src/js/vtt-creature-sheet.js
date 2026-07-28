@@ -211,6 +211,14 @@ export function initVttCreatureSheet(vtt) {
         const acFrom = (typeof ac === 'object' && ac.from) ? ` (${ac.from.join(', ')})` : '';
         const speed = buildSpeedString(m.speed);
 
+        const dexScore = m.dex || 10;
+        let initMod = Math.floor((dexScore - 10) / 2);
+        if (m.initiative !== undefined) {
+            if (typeof m.initiative === 'number') initMod = m.initiative;
+            else if (typeof m.initiative?.bonus === 'number') initMod = m.initiative.bonus;
+        }
+        const initModStr = initMod >= 0 ? `+${initMod}` : `${initMod}`;
+
         const abilityScores = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
         const abilityLabels = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
 
@@ -326,6 +334,7 @@ export function initVttCreatureSheet(vtt) {
                     <div class="cs-stat-pill"><i class="fa-solid fa-shield-halved"></i><span>AC ${acValue}${acFrom}</span></div>
                     <div class="cs-stat-pill"><i class="fa-solid fa-shoe-prints"></i><span>${speed}</span></div>
                     <div class="cs-stat-pill"><i class="fa-solid fa-star"></i><span>Prof +${profBonus}</span></div>
+                    <div class="cs-stat-pill cs-roll-initiative-btn" style="cursor: pointer;" title="Roll Initiative"><i class="fa-solid fa-dice-d20" style="color: var(--color-gold-base);"></i><span>Init ${initModStr}</span></div>
                     ${m.passive !== undefined ? `<div class="cs-stat-pill"><i class="fa-solid fa-eye"></i><span>Passive ${m.passive}</span></div>` : ''}
                 </div>
 
@@ -365,6 +374,9 @@ export function initVttCreatureSheet(vtt) {
         // Wire ability score chips (for rolling ability checks)
         wireAbilityScoreClicks();
 
+        // Wire Initiative Roll
+        wireInitiativeRoll(m);
+
         // Wire Tabs
         if (hasSpells) {
             wireTabs();
@@ -381,6 +393,61 @@ export function initVttCreatureSheet(vtt) {
         }
 
 
+    }
+
+    function wireInitiativeRoll(m) {
+        const initBtns = contentEl.querySelectorAll('.cs-roll-initiative-btn');
+        initBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const dexScore = m.dex || 10;
+                let initMod = Math.floor((dexScore - 10) / 2);
+                if (m.initiative !== undefined) {
+                    if (typeof m.initiative === 'number') initMod = m.initiative;
+                    else if (typeof m.initiative?.bonus === 'number') initMod = m.initiative.bonus;
+                }
+                const modStr = initMod >= 0 ? `+${initMod}` : `${initMod}`;
+                const formula = `1d20${modStr}`;
+
+                let rollData = null;
+                if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
+                    rollData = window.vttPlayerSheetAPI.simulateRoll(formula);
+                } else {
+                    const r = Math.floor(Math.random() * 20) + 1;
+                    rollData = { total: r + initMod, rolls: [r], modifier: initMod, formula };
+                }
+
+                if (window.VTT && window.VTT.socket) {
+                    window.VTT.socket.emit('chat:msg', {
+                        text: `[${m.name}] rolls **Initiative**`,
+                        roll: rollData
+                    });
+                }
+
+                if (window.VTT && window.VTT.chatEngine) {
+                    let added = false;
+                    if (linkedTokenId) {
+                        window.VTT.chatEngine.addToInitiative(m.name, rollData.total, linkedTokenId);
+                        added = true;
+                    }
+                    if (window.VTT.canvasEngine) {
+                        const selectedIds = window.VTT.canvasEngine.getSelectedTokenIds();
+                        const tokens = window.VTT.canvasEngine.getTokens();
+                        selectedIds.forEach(tId => {
+                            const t = tokens[tId];
+                            if (t && (t.characterId === linkedCharacterId || t.name === m.name)) {
+                                if (tId !== linkedTokenId) {
+                                    window.VTT.chatEngine.addToInitiative(t.name, rollData.total, t.id);
+                                    added = true;
+                                }
+                            }
+                        });
+                    }
+                    if (!added) {
+                        window.VTT.chatEngine.addToInitiative(m.name, rollData.total, null);
+                    }
+                }
+            });
+        });
     }
 
     function wireTabs() {
@@ -1890,7 +1957,10 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function evaluateDiceHelper(formula, isCrit = false) {
-        if (!formula) return { total: 0, diceList: [], isCritSuccess: false, isCritFail: false, breakdownStr: '' };
+        if (!formula) return { total: 0, diceList: [], isCritSuccess: false, isCritFail: false, breakdownStr: '', formula: '' };
+        if (isCrit) {
+            formula = formula.replace(/(?:(\d+)\s*)?[dD]\s*(\d+)/gi, (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`);
+        }
         const cleanForm = formula.replace(/\s+/g, '').toLowerCase();
         let total = 0;
         let diceList = [];
@@ -1942,10 +2012,6 @@ export function initVttCreatureSheet(vtt) {
                     if (keptRoll === 1) isCritFail = true;
                     total += sign * keptRoll;
                 } else {
-                    if (isCrit) {
-                        count *= 2;
-                    }
-    
                     for (let i = 0; i < count; i++) {
                         const roll = Math.floor(Math.random() * faces) + 1;
                         if (faces === 20 && count === 1 && !isCrit) {
@@ -1968,7 +2034,7 @@ export function initVttCreatureSheet(vtt) {
             }
         }
 
-        return { total, diceList, isCritSuccess, isCritFail, breakdownStr: bdParts.join(' ') };
+        return { total, diceList, isCritSuccess, isCritFail, breakdownStr: bdParts.join(' '), formula };
     }
 
     function extractSpellcastingStats(m) {
@@ -2269,12 +2335,13 @@ export function initVttCreatureSheet(vtt) {
                 type = 'Slashing';
             }
             const evalRoll = evaluateDiceHelper(formula, isCrit);
+            const rolledFormula = evalRoll.formula || formula;
             mc.dmgRolls.push({
                 type: type,
-                formula: formula,
+                formula: rolledFormula,
                 roll: {
                     total: evalRoll.total,
-                    formula: formula,
+                    formula: rolledFormula,
                     breakdownStr: evalRoll.breakdownStr,
                     diceList: evalRoll.diceList
                 }
@@ -2289,12 +2356,13 @@ export function initVttCreatureSheet(vtt) {
                 const formula = match[1];
                 let type = match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase();
                 const evalRoll = evaluateDiceHelper(formula, isCrit);
+                const rolledFormula = evalRoll.formula || formula;
                 mc.dmgRolls.push({
                     type: type,
-                    formula: formula,
+                    formula: rolledFormula,
                     roll: {
                         total: evalRoll.total,
-                        formula: formula,
+                        formula: rolledFormula,
                         breakdownStr: evalRoll.breakdownStr,
                         diceList: evalRoll.diceList
                     }
@@ -2535,14 +2603,23 @@ export function initVttCreatureSheet(vtt) {
                     }
                 }
 
+                let isCrit = atkRoll && atkRoll.isCritSuccess;
                 dList.forEach(d => {
                     let dform = d.formula;
-                    if (d.stat && d.stat !== 'none') {
-                        const mod = d.stat === 'spell' ? spellCastingMod : getAbilityMod(d.stat);
-                        dform += ` + ${mod}`;
+                    if (isCrit) {
+                        dform = dform.replace(/(?:(\d+)\s*)?[dD]\s*(\d+)/gi, (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`);
                     }
-                    if (d.prof) dform += ` + ${pb}`;
-                    if (d.extra) dform += ` + ${d.extra}`;
+                    if (d.stat && d.stat !== 'none' && d.stat !== '') {
+                        const mod = d.stat === 'spell' ? spellCastingMod : getAbilityMod(d.stat);
+                        dform += ` ${mod >= 0 ? '+' : ''}${mod}[${d.stat.toUpperCase()}]`;
+                    }
+                    if (d.custom && d.custom.trim() !== '') {
+                        let c = d.custom.trim();
+                        let cleanC = c.startsWith('+') || c.startsWith('-') ? c : '+' + c;
+                        dform += ` ${cleanC}[Custom]`;
+                    }
+                    if (d.prof) dform += ` + ${pb}[Prof]`;
+                    if (d.extra) dform += ` + ${d.extra}[Extra]`;
                     const res = window.vttPlayerSheetAPI.simulateRoll(dform);
                     dmgRolls.push({ formula: dform, type: d.type || '', roll: res });
                 });

@@ -22,6 +22,16 @@ export function initVttSpellManager(vtt) {
             if (spData.duration) newSpell.duration = window.Parser.spDurationToFull(spData.duration);
         }
 
+        if (spData.duration && Array.isArray(spData.duration) && spData.duration.some(d => d.concentration)) {
+            newSpell.concentration = true;
+        }
+        if (spData.meta) {
+            if (spData.meta.concentration) newSpell.concentration = true;
+            if (spData.meta.ritual) newSpell.ritual = true;
+        }
+        if (newSpell.concentration === undefined) newSpell.concentration = false;
+        if (newSpell.ritual === undefined) newSpell.ritual = false;
+
         const text = JSON.stringify(spData.entries).toLowerCase();
 
         if (text.includes("spell attack") || text.includes("{@atk ms}") || text.includes("{@atk rs}") || text.includes("{@atk ms,rs}")) {
@@ -165,6 +175,16 @@ export function initVttSpellManager(vtt) {
                         <div class="form-group" style="flex:1;">
                             <label>Duration</label>
                             <input type="text" id="modal-spell-duration" placeholder="e.g. 1 round" style="width:100%;">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:16px; margin-bottom:12px; align-items:center;">
+                        <div class="form-group" style="display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" id="modal-spell-concentration" style="margin:0;">
+                            <label for="modal-spell-concentration" style="margin:0; font-size:0.85rem; cursor:pointer;">Concentration (C)</label>
+                        </div>
+                        <div class="form-group" style="display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" id="modal-spell-ritual" style="margin:0;">
+                            <label for="modal-spell-ritual" style="margin:0; font-size:0.85rem; cursor:pointer;">Ritual (R)</label>
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom:12px;">
@@ -655,6 +675,15 @@ export function initVttSpellManager(vtt) {
             const durEl = document.getElementById('modal-spell-duration');
             if (durEl) durEl.value = sp.duration || '';
 
+            const concEl = document.getElementById('modal-spell-concentration');
+            if (concEl) {
+                concEl.checked = sp.concentration !== undefined ? !!sp.concentration : !!(Array.isArray(sp.duration) ? sp.duration.some(d => d.concentration) : (sp.duration && sp.duration.toString().toLowerCase().includes('concentration')));
+            }
+            const ritEl = document.getElementById('modal-spell-ritual');
+            if (ritEl) {
+                ritEl.checked = sp.ritual !== undefined ? !!sp.ritual : !!(sp.meta?.ritual || (sp.duration && sp.duration.toString().toLowerCase().includes('ritual')));
+            }
+
             const macroDescEl = document.getElementById('modal-spell-macro-desc');
             if (macroDescEl) macroDescEl.value = sp.macroDescription || '';
 
@@ -700,6 +729,10 @@ export function initVttSpellManager(vtt) {
             if (nameInput) nameInput.value = '';
             const descInput = document.getElementById('modal-spell-desc');
             if (descInput) descInput.value = '';
+            const concInput = document.getElementById('modal-spell-concentration');
+            if (concInput) concInput.checked = false;
+            const ritInput = document.getElementById('modal-spell-ritual');
+            if (ritInput) ritInput.checked = false;
             const macroDescInput = document.getElementById('modal-spell-macro-desc');
             if (macroDescInput) macroDescInput.value = '';
 
@@ -768,25 +801,43 @@ export function initVttSpellManager(vtt) {
         document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
         document.getElementById('pc-spell-modal')?.classList.add('vtt-hidden');
         document.getElementById('pc-spell-filter-modal')?.classList.add('vtt-hidden');
+        document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
     }
 
     function renderModalSpellDamage() {
         const list = document.getElementById('modal-spell-damage-list');
         if (!list) return;
         const dmgTypes = ["Slashing", "Piercing", "Bludgeoning", "Fire", "Cold", "Lightning", "Thunder", "Poison", "Acid", "Necrotic", "Radiant", "Force", "Psychic", "Healing"];
+        const statOptions = [
+            { val: '', label: 'Stat (None)' },
+            { val: 'spell', label: 'Spellcasting Stat' },
+            { val: 'str', label: 'STR' },
+            { val: 'dex', label: 'DEX' },
+            { val: 'con', label: 'CON' },
+            { val: 'int', label: 'INT' },
+            { val: 'wis', label: 'WIS' },
+            { val: 'cha', label: 'CHA' }
+        ];
+
         list.innerHTML = modalSpellDamageRows.map((d, i) => `
             <div style="display:flex; gap:4px; align-items:center; margin-bottom:4px;">
-                <input type="text" class="modal-spell-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="1d8" style="width:40%; padding:4px; font-size:0.8rem;">
-                <select class="modal-spell-dmg-type" data-idx="${i}" style="width:40%; padding:4px; font-size:0.8rem;">
+                <input type="text" class="modal-spell-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="Formula (1d8)" style="width:26%; padding:4px; font-size:0.8rem;">
+                <select class="modal-spell-dmg-type" data-idx="${i}" style="width:22%; padding:4px; font-size:0.8rem;">
                     <option value="">Type</option>
                     ${dmgTypes.map(t => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('')}
                 </select>
-                <button class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:20%;"><i class="fa-solid fa-trash"></i></button>
+                <select class="modal-spell-dmg-stat" data-idx="${i}" style="width:26%; padding:4px; font-size:0.8rem;">
+                    ${statOptions.map(s => `<option value="${s.val}" ${(d.stat || '').toLowerCase() === s.val.toLowerCase() ? 'selected' : ''}>${s.label}</option>`).join('')}
+                </select>
+                <input type="text" class="modal-spell-dmg-custom" data-idx="${i}" value="${d.custom || ''}" placeholder="Mod (+2)" style="width:18%; padding:4px; font-size:0.8rem;">
+                <button class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:8%; padding:4px 2px;" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
             </div>
         `).join('');
 
         document.querySelectorAll('.modal-spell-dmg-formula').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].formula = e.target.value));
         document.querySelectorAll('.modal-spell-dmg-type').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].type = e.target.value));
+        document.querySelectorAll('.modal-spell-dmg-stat').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].stat = e.target.value));
+        document.querySelectorAll('.modal-spell-dmg-custom').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value));
         document.querySelectorAll('.modal-spell-dmg-del').forEach(el => el.addEventListener('click', (e) => {
             modalSpellDamageRows.splice(e.currentTarget.dataset.idx, 1);
             renderModalSpellDamage();
@@ -843,21 +894,27 @@ export function initVttSpellManager(vtt) {
         });
 
         document.getElementById('delete-prompt-confirm')?.addEventListener('click', (e) => {
-            const char = currentChar;
+            const char = activeSpellEditContext && activeSpellEditContext.char ? activeSpellEditContext.char : currentChar;
             if (!char) return;
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
             if (level && idx !== undefined) {
-                char.spells[level].splice(idx, 1);
+                if (char.spells && char.spells[level]) {
+                    char.spells[level].splice(idx, 1);
+                }
                 document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
                 closeSpellModal();
-                saveAndEmit(char);
-                renderSheetData(char);
+                if (activeSpellEditContext && activeSpellEditContext.onSave) {
+                    activeSpellEditContext.onSave(char);
+                } else {
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
             }
         });
 
         document.getElementById('btn-add-spell-damage')?.addEventListener('click', () => {
-            modalSpellDamageRows.push({ id: 'dmg_' + Date.now(), formula: '1d8', type: '' });
+            modalSpellDamageRows.push({ id: 'dmg_' + Date.now(), formula: '1d8', type: '', stat: '', custom: '' });
             renderModalSpellDamage();
         });
 
@@ -922,6 +979,8 @@ export function initVttSpellManager(vtt) {
                 const range = document.getElementById('modal-spell-range')?.value || '';
                 const components = document.getElementById('modal-spell-components')?.value || '';
                 const duration = document.getElementById('modal-spell-duration')?.value || '';
+                const concentration = document.getElementById('modal-spell-concentration') ? document.getElementById('modal-spell-concentration').checked : false;
+                const ritual = document.getElementById('modal-spell-ritual') ? document.getElementById('modal-spell-ritual').checked : false;
                 const macroDescription = document.getElementById('modal-spell-macro-desc')?.value || '';
                 const attackStat = document.getElementById('modal-spell-atk-stat').value;
                 const attackProf = document.getElementById('modal-spell-atk-prof').checked;
@@ -940,9 +999,9 @@ export function initVttSpellManager(vtt) {
                 if (!char.spells[level]) char.spells[level] = [];
 
                 if (idx >= 0) {
-                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, castingTime, range, components, duration, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus };
+                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, castingTime, range, components, duration, concentration, ritual, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus };
                 } else {
-                    char.spells[level].push({ id: 'sp_' + Date.now() + Math.random(), name, description, castingTime, range, components, duration, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus });
+                    char.spells[level].push({ id: 'sp_' + Date.now() + Math.random(), name, description, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus });
                 }
             } else {
                 if (spellBulkSelection.size === 0) return alert("No spells selected.");
@@ -1005,6 +1064,8 @@ export function initVttSpellManager(vtt) {
         list.querySelectorAll('.toggle-enable-cb').forEach(cb => cb.addEventListener('change', (e) => {
             const idx = e.currentTarget.dataset.idx;
             char.spellSettings.toggles[idx].enabled = e.currentTarget.checked;
+            if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+            if (renderSheetData && currentChar) renderSheetData(currentChar);
         }));
 
         list.querySelectorAll('.toggle-edit-btn').forEach(btn => btn.addEventListener('click', (e) => {
@@ -1023,6 +1084,8 @@ export function initVttSpellManager(vtt) {
             if (confirm("Delete this toggle?")) {
                 const idx = e.currentTarget.dataset.idx;
                 char.spellSettings.toggles.splice(idx, 1);
+                if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+                if (renderSheetData && currentChar) renderSheetData(currentChar);
                 renderTogglesList();
             }
         }));
@@ -1060,6 +1123,8 @@ export function initVttSpellManager(vtt) {
         list.querySelectorAll('.attack-toggle-enable-cb').forEach(cb => cb.addEventListener('change', (e) => {
             const idx = e.currentTarget.dataset.idx;
             char.attackSettings.toggles[idx].enabled = e.currentTarget.checked;
+            if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+            if (renderSheetData && currentChar) renderSheetData(currentChar);
         }));
 
         list.querySelectorAll('.attack-toggle-edit-btn').forEach(btn => btn.addEventListener('click', (e) => {
@@ -1078,6 +1143,8 @@ export function initVttSpellManager(vtt) {
             if (confirm("Delete this toggle?")) {
                 const idx = e.currentTarget.dataset.idx;
                 char.attackSettings.toggles.splice(idx, 1);
+                if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+                if (renderSheetData && currentChar) renderSheetData(currentChar);
                 renderAttackTogglesList();
             }
         }));
@@ -1120,6 +1187,8 @@ export function initVttSpellManager(vtt) {
             }
             document.getElementById('modal-attack-toggle-form').classList.add('vtt-hidden');
             document.getElementById('btn-add-attack-toggle').classList.remove('vtt-hidden');
+            if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+            if (renderSheetData && currentChar) renderSheetData(currentChar);
             renderAttackTogglesList();
         });
 
@@ -1171,6 +1240,8 @@ export function initVttSpellManager(vtt) {
             }
             document.getElementById('modal-toggle-form').classList.add('vtt-hidden');
             document.getElementById('btn-add-toggle').classList.remove('vtt-hidden');
+            if (saveAndEmit && currentChar) saveAndEmit(currentChar);
+            if (renderSheetData && currentChar) renderSheetData(currentChar);
             renderTogglesList();
         });
 
@@ -1200,6 +1271,8 @@ export function initVttSpellManager(vtt) {
         getSpellCache: () => spellCache,
         setSpellCache: (cache) => { spellCache = cache; },
         parseSpellToMacro: (spData, newSpell) => parseSpellToMacro(spData, newSpell),
-        ensureSpellModalsExist: () => ensureSpellModalsExist()
+        ensureSpellModalsExist: () => ensureSpellModalsExist(),
+        renderTogglesList: () => renderTogglesList(),
+        renderAttackTogglesList: () => renderAttackTogglesList()
     };
 }

@@ -90,6 +90,8 @@ export function initVttCanvas(vtt) {
     // Relative movement start offsets
     let relativeMovementOffsets = {}; // { id: { dx, dy } }
     let tokenDragOriginalPositions = {}; // { id: { x, y } }
+    let tokenAnimations = {};
+    let tokenAnimFrame = null;
 
     let activeResizeTokenId = null;
     let contextMenuTargetId = null;
@@ -837,6 +839,8 @@ let lastBroadcastedTokens = {};
 
         // 5. Redraw everything
         renderAll();
+        updateContainerTransform();
+        updateCoordinateDisplay(currentMouseCoords);
     }
 
     function updatePreviewBanner() {
@@ -937,6 +941,27 @@ let lastBroadcastedTokens = {};
         if (container) {
             container.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
         }
+        const zoomEl = document.getElementById('val-zoom');
+        if (zoomEl) {
+            zoomEl.textContent = `${Math.round(zoom * 100)}%`;
+        }
+    }
+
+    function updateCoordinateDisplay(mouse) {
+        const coordXEl = document.getElementById('val-coord-x');
+        const coordYEl = document.getElementById('val-coord-y');
+        if (!coordXEl || !coordYEl) return;
+        if (!mouse || !grid) {
+            coordXEl.textContent = '0';
+            coordYEl.textContent = '0';
+            return;
+        }
+        const unitSize = (grid.size || 50) * (grid.scale || 1.0);
+        if (unitSize <= 0) return;
+        const gridX = Math.floor((mouse.x - (grid.offsetX || 0)) / unitSize);
+        const gridY = Math.floor((mouse.y - (grid.offsetY || 0)) / unitSize);
+        coordXEl.textContent = gridX;
+        coordYEl.textContent = gridY;
     }
     function renderAll() {
         const isGmViewing = vtt.role === 'GM';
@@ -2333,9 +2358,11 @@ let lastBroadcastedTokens = {};
                 // Determine size
                 const { drawW, drawH } = getTokenDrawDimensions(token);
                 
+                const renderPos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
+
                 // Sync position and size
-                node.style.left = `${token.x}px`;
-                node.style.top = `${token.y}px`;
+                node.style.left = `${renderPos.x}px`;
+                node.style.top = `${renderPos.y}px`;
                 node.style.width = `${drawW}px`;
                 node.style.height = `${drawH}px`;
                 node.style.zIndex = sortedIndex;
@@ -2416,9 +2443,10 @@ let lastBroadcastedTokens = {};
                 return;
             }
 
+            const renderPos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
             const { drawW, drawH, tokenRadius } = getTokenDrawDimensions(token);
-            const tx = token.x + drawW / 2;
-            const ty = token.y + drawH / 2;
+            const tx = renderPos.x + drawW / 2;
+            const ty = renderPos.y + drawH / 2;
 
             // Draw ghost token if currently dragging this token
             if (id === dragTargetId) {
@@ -2483,7 +2511,7 @@ let lastBroadcastedTokens = {};
                 ctxInteraction.shadowBlur = isTokenSelected ? 12 : 8;
                 
                 if (token.isAsset) {
-                    ctxInteraction.strokeRect(token.x - 2, token.y - 2, drawW + 4, drawH + 4);
+                    ctxInteraction.strokeRect(renderPos.x - 2, renderPos.y - 2, drawW + 4, drawH + 4);
                 } else {
                     ctxInteraction.beginPath();
                     ctxInteraction.arc(tx, ty, tokenRadius + (isTokenSelected ? 3.5 : 2), 0, Math.PI * 2);
@@ -2498,7 +2526,7 @@ let lastBroadcastedTokens = {};
                     ctxInteraction.setLineDash([4, 4]);
                     
                     if (token.isAsset) {
-                        ctxInteraction.strokeRect(token.x, token.y, drawW, drawH);
+                        ctxInteraction.strokeRect(renderPos.x, renderPos.y, drawW, drawH);
                     } else {
                         ctxInteraction.beginPath();
                         ctxInteraction.arc(tx, ty, tokenRadius + 1, 0, Math.PI * 2);
@@ -2519,7 +2547,7 @@ let lastBroadcastedTokens = {};
                 ctxInteraction.globalAlpha = oOpacity;
                 ctxInteraction.fillStyle = oColor;
                 if (token.isAsset) {
-                    ctxInteraction.fillRect(token.x, token.y, drawW, drawH);
+                    ctxInteraction.fillRect(renderPos.x, renderPos.y, drawW, drawH);
                 } else {
                     ctxInteraction.beginPath();
                     ctxInteraction.arc(tx, ty, tokenRadius, 0, Math.PI * 2);
@@ -2552,7 +2580,7 @@ let lastBroadcastedTokens = {};
                 
                 ctxInteraction.fillStyle = grad;
                 if (token.isAsset) {
-                    ctxInteraction.fillRect(token.x, token.y, drawW, drawH);
+                    ctxInteraction.fillRect(renderPos.x, renderPos.y, drawW, drawH);
                 } else {
                     ctxInteraction.beginPath();
                     ctxInteraction.arc(tx, ty, tokenRadius, 0, Math.PI * 2);
@@ -2633,7 +2661,7 @@ let lastBroadcastedTokens = {};
                     
                     // 1. Position Container using hardware-accelerated transform
                     const { drawW, drawH } = getTokenDrawDimensions(token);
-                    uiNode.style.transform = `translate3d(${token.x}px, ${token.y}px, 0)`;
+                    uiNode.style.transform = `translate3d(${renderPos.x}px, ${renderPos.y}px, 0)`;
                     uiNode.style.width = `${drawW}px`;
                     uiNode.style.height = `${drawH}px`;
                     uiNode.style.display = 'block';
@@ -2842,8 +2870,9 @@ let lastBroadcastedTokens = {};
                 ctxInteraction.strokeStyle = 'var(--color-gold-base)';
                 ctxInteraction.lineWidth = 2;
                 ctxInteraction.beginPath();
+                const renderPos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
                 const { drawW, drawH } = getTokenDrawDimensions(token);
-                ctxInteraction.rect(token.x + drawW - 8, token.y + drawH - 8, 16, 16);
+                ctxInteraction.rect(renderPos.x + drawW - 8, renderPos.y + drawH - 8, 16, 16);
                 ctxInteraction.fill();
                 ctxInteraction.stroke();
                 
@@ -2851,9 +2880,9 @@ let lastBroadcastedTokens = {};
                 ctxInteraction.beginPath();
                 ctxInteraction.strokeStyle = '#aaaaaa';
                 ctxInteraction.lineWidth = 1;
-                ctxInteraction.moveTo(token.x + drawW - 2, token.y + drawH - 5);
-                ctxInteraction.lineTo(token.x + drawW + 5, token.y + drawH + 2);
-                ctxInteraction.moveTo(token.x + drawW - 5, token.y + drawH - 2);
+                ctxInteraction.moveTo(renderPos.x + drawW - 2, renderPos.y + drawH - 5);
+                ctxInteraction.lineTo(renderPos.x + drawW + 5, renderPos.y + drawH + 2);
+                ctxInteraction.moveTo(renderPos.x + drawW - 5, renderPos.y + drawH - 2);
                 ctxInteraction.stroke();
                 ctxInteraction.restore();
             }
@@ -3136,10 +3165,9 @@ let lastBroadcastedTokens = {};
                         ...req,
                         startTime: now,
                         segments,
-                        totalDist
+                        totalDist,
+                        currentPos: { x: req.startX, y: req.startY }
                     };
-                    tokensObj[id].x = req.startX;
-                    tokensObj[id].y = req.startY;
                     startAnim = true;
                 }
                 if (!retainReqs) {
@@ -3151,9 +3179,6 @@ let lastBroadcastedTokens = {};
             tokenAnimFrame = requestAnimationFrame(animateTokens);
         }
     }
-
-    let tokenAnimations = {};
-    let tokenAnimFrame = null;
 
     function animateTokens() {
         let hasActive = false;
@@ -3170,8 +3195,7 @@ let lastBroadcastedTokens = {};
             const progress = Math.min(elapsed / anim.duration, 1);
             
             if (anim.totalDist === 0) {
-                t.x = anim.endX;
-                t.y = anim.endY;
+                anim.currentPos = { x: anim.endX, y: anim.endY };
                 delete tokenAnimations[id];
                 continue;
             }
@@ -3193,12 +3217,10 @@ let lastBroadcastedTokens = {};
                 currentDist += seg.dist;
             }
 
-            t.x = currentPos.x;
-            t.y = currentPos.y;
+            anim.currentPos = currentPos;
 
             if (progress >= 1) {
-                t.x = anim.endX;
-                t.y = anim.endY;
+                anim.currentPos = { x: anim.endX, y: anim.endY };
                 delete tokenAnimations[id];
             } else {
                 hasActive = true;
@@ -3402,6 +3424,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (tokens[data.tokenId]) {
                     Object.assign(tokens[data.tokenId], data.changes);
                     lastBroadcastedTokens[data.tokenId] = JSON.parse(JSON.stringify(tokens[data.tokenId]));
+                    processTokenAnimReqs(tokens);
                     renderAll();
                     if (window.VTT?.chatEngine?.refreshInitiative) window.VTT.chatEngine.refreshInitiative();
                 }
@@ -4929,7 +4952,7 @@ window.emitTokenUpdates = function(currentTokens) {
         let monsterData = token.monsterData;
         if (!monsterData && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
             const char = window.VTT.campaignState.characters[token.characterId];
-            if (char.isCompanion && char.monsterData) {
+            if ((char.isCompanion || char.isCustomNpc || char.monsterData) && char.monsterData) {
                 monsterData = char.monsterData;
             }
         }
@@ -5324,10 +5347,24 @@ window.emitTokenUpdates = function(currentTokens) {
             if (monsterData) {
                 const score = monsterData.dex || 10;
                 let mod = Math.floor((score - 10) / 2);
+                if (monsterData.initiative !== undefined) {
+                    if (typeof monsterData.initiative === 'number') mod = monsterData.initiative;
+                    else if (typeof monsterData.initiative?.bonus === 'number') mod = monsterData.initiative.bonus;
+                }
                 formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
             } else if (token.isPlayer && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
                 const char = window.VTT.campaignState.characters[token.characterId];
-                formula = getPcRollFormula(char, 'initiative');
+                if (char.isCustomNpc || char.monsterData) {
+                    const score = char.monsterData?.dex || 10;
+                    let mod = Math.floor((score - 10) / 2);
+                    if (char.monsterData?.initiative !== undefined) {
+                        if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
+                        else if (typeof char.monsterData.initiative?.bonus === 'number') mod = char.monsterData.initiative.bonus;
+                    }
+                    formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                } else {
+                    formula = getPcRollFormula(char, 'initiative');
+                }
             } else {
                 const input = prompt(`Enter Initiative Modifier for ${token.name}:`, "0");
                 if (input === null) { menu.remove(); return; }
@@ -5876,7 +5913,7 @@ window.emitTokenUpdates = function(currentTokens) {
             if (t.monsterData) return t.monsterData;
             if (t.characterId && window.VTT?.campaignState?.characters?.[t.characterId]) {
                 const char = window.VTT.campaignState.characters[t.characterId];
-                if (char.isCompanion && char.monsterData) return char.monsterData;
+                if ((char.isCompanion || char.isCustomNpc || char.monsterData) && char.monsterData) return char.monsterData;
             }
             return null;
         };
@@ -5915,10 +5952,24 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (mData) {
                     const score = mData.dex || 10;
                     let mod = Math.floor((score - 10) / 2);
+                    if (mData.initiative !== undefined) {
+                        if (typeof mData.initiative === 'number') mod = mData.initiative;
+                        else if (typeof mData.initiative?.bonus === 'number') mod = mData.initiative.bonus;
+                    }
                     formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
                 } else if (t.isPlayer && t.characterId && window.VTT?.campaignState?.characters?.[t.characterId]) {
                     const char = window.VTT.campaignState.characters[t.characterId];
-                    formula = getPcRollFormula(char, 'initiative');
+                    if (char.isCustomNpc || char.monsterData) {
+                        const score = char.monsterData?.dex || 10;
+                        let mod = Math.floor((score - 10) / 2);
+                        if (char.monsterData?.initiative !== undefined) {
+                            if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
+                            else if (typeof char.monsterData.initiative?.bonus === 'number') mod = char.monsterData.initiative.bonus;
+                        }
+                        formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                    } else {
+                        formula = getPcRollFormula(char, 'initiative');
+                    }
                 } else {
                     let mod = fallbackMod;
                     formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
@@ -7915,6 +7966,7 @@ window.emitTokenUpdates = function(currentTokens) {
         window.addEventListener('mousemove', e => {
             lastMouseEvent = e;
             currentMouseCoords = getCanvasMouseCoords(e);
+            updateCoordinateDisplay(currentMouseCoords);
             if (isPanning) {
                 hasPanned = true;
                 panX = e.clientX - startPanX;
@@ -8855,7 +8907,11 @@ window.emitTokenUpdates = function(currentTokens) {
     }
 
     // Initial render
-    setTimeout(() => renderAll(), 500);
+    setTimeout(() => {
+        renderAll();
+        updateContainerTransform();
+        updateCoordinateDisplay(currentMouseCoords);
+    }, 500);
     
     // Start Visual FX continuous loop
     animateVisualFx();
