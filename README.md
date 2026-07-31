@@ -1,8 +1,8 @@
-# DnDForged VTT
+# ForgeDVTT — Tabletop Freedom
 
 > A lightweight, self-hosted Virtual Tabletop (VTT) server-side integration powered by Express, Socket.IO, and 5etools.
 
-DnDForged combines rich 5e content lookup with interactive VTT capabilities: real-time map canvas, interactive token management, dynamic fog of war, lighting, integrated 3D dice rolling, party combat tracking, and live DM tools.
+ForgeDVTT combines rich 5e content lookup with interactive VTT capabilities: real-time map canvas, interactive token management, dynamic fog of war, lighting, integrated 3D dice rolling, party combat tracking, and live DM tools.
 
 ---
 

@@ -43,10 +43,30 @@ if (!fs.existsSync(ASSETS_DIR)) fs.mkdirSync(ASSETS_DIR, { recursive: true });
 const DISCORD_CACHE_DIR = path.join(DATA_DIR, 'discord-cache');
 if (!fs.existsSync(DISCORD_CACHE_DIR)) fs.mkdirSync(DISCORD_CACHE_DIR, { recursive: true });
 
-// Setup file upload engine for maps and tokens
+// Helper to extract subdomain slug from Host header
+function extractSubdomain(hostHeader) {
+  if (!hostHeader) return null;
+  const host = hostHeader.split(':')[0].toLowerCase().trim();
+  if (host === 'localhost' || host === '127.0.0.1' || /^(\d{1,3}\.){3}\d{1,3}$/.test(host)) {
+    return null;
+  }
+  const parts = host.split('.');
+  if (parts.length >= 3) {
+    const sub = parts[0];
+    if (sub && sub !== 'www' && sub !== 'api') return sub;
+  } else if (parts.length === 2 && parts[1] === 'localhost') {
+    return parts[0];
+  }
+  return null;
+}
+
+// Setup file upload engine for maps and tokens (per-campaign subdomain isolated)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, UPLOADS_DIR);
+    const sub = extractSubdomain(req.headers.host) || req.body.campaignId || 'default';
+    const targetDir = path.join(DATA_DIR, 'campaigns', sub, 'uploads');
+    if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
+    cb(null, targetDir);
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
@@ -74,8 +94,42 @@ const assetStorage = multer.diskStorage({
 });
 const assetUpload = multer({ storage: assetStorage });
 
-// Serve custom uploads
-app.use('/vtt-uploads', express.static(UPLOADS_DIR));
+// Serve custom uploads with per-campaign subdomain isolation & legacy fallbacks
+app.use('/vtt-uploads', (req, res, next) => {
+  const sub = extractSubdomain(req.headers.host);
+  const relPath = req.path;
+
+  // 1. Check campaign-specific uploads directory if subdomain is active
+  if (sub) {
+    const subFilePath = path.join(DATA_DIR, 'campaigns', sub, 'uploads', relPath);
+    if (fs.existsSync(subFilePath) && fs.statSync(subFilePath).isFile()) {
+      return res.sendFile(subFilePath);
+    }
+  }
+
+  // 2. Check root UPLOADS_DIR
+  const globalFilePath = path.join(UPLOADS_DIR, relPath);
+  if (fs.existsSync(globalFilePath) && fs.statSync(globalFilePath).isFile()) {
+    return res.sendFile(globalFilePath);
+  }
+
+  // 3. Fallback: check across any campaign uploads directory
+  const campaignsDir = path.join(DATA_DIR, 'campaigns');
+  if (fs.existsSync(campaignsDir)) {
+    try {
+      const dirs = fs.readdirSync(campaignsDir);
+      for (const dir of dirs) {
+        const cand = path.join(campaignsDir, dir, 'uploads', relPath);
+        if (fs.existsSync(cand) && fs.statSync(cand).isFile()) {
+          return res.sendFile(cand);
+        }
+      }
+    } catch (e) {}
+  }
+
+  res.status(404).send('Upload file not found');
+});
+
 app.use('/assets', express.static(ASSETS_DIR));
 
 // Middleware: If a request for /img/* results in a 404 locally,
@@ -133,9 +187,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// Redirect root to VTT
+// Route root / and /vtt.html
 app.get('/', (req, res) => {
+  const sub = extractSubdomain(req.headers.host);
+  if (!sub) {
+    return res.sendFile(path.join(__dirname, '5etools-src', 'launcher.html'));
+  }
   res.redirect('/vtt.html');
+});
+
+app.get('/vtt.html', (req, res, next) => {
+  const sub = extractSubdomain(req.headers.host);
+  if (!sub) {
+    return res.sendFile(path.join(__dirname, '5etools-src', 'launcher.html'));
+  }
+  getOrCreateCampaign(sub);
+  return next();
 });
 
 // Serve 5etools-src statically
@@ -289,16 +356,33 @@ process.on('SIGTERM', gracefulShutdown);
 
 loadDatabase();
 
+function getOrCreateCampaign(campId) {
+  if (!campaigns[campId]) {
+    const displayName = campId.charAt(0).toUpperCase() + campId.slice(1) + " Campaign";
+    campaigns[campId] = createCampaignTemplate(campId, displayName);
+    saveCampaigns();
+  }
+  return campaigns[campId];
+}
+
 // REST APIs
 // Get campaign list
 app.get('/api/campaigns', (req, res) => {
+  const sub = extractSubdomain(req.headers.host);
+  if (sub) {
+    const c = getOrCreateCampaign(sub);
+    return res.json([{ id: c.id, name: c.name }]);
+  }
   res.json(Object.values(campaigns).map(c => ({ id: c.id, name: c.name })));
 });
 
 // Get detailed campaign state
 app.get('/api/campaigns/:id', (req, res) => {
-  const campaign = campaigns[req.params.id];
-  if (!campaign) return res.status(404).json({ error: "Campaign not found" });
+  const sub = extractSubdomain(req.headers.host);
+  if (sub && req.params.id !== sub) {
+    return res.status(403).json({ error: `Access denied: Domain "${sub}" can only access campaign "${sub}".` });
+  }
+  const campaign = getOrCreateCampaign(req.params.id);
   res.json(campaign);
 });
 
@@ -630,37 +714,44 @@ app.get('/api/chat', (req, res) => {
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
+  const socketSubdomain = extractSubdomain(socket.handshake.headers.host);
+
   // Handle player/GM registration to a campaign room
   socket.on('join', ({ campaignId, username, role }) => {
-    if (!campaigns[campaignId]) {
-        if (campaignId === 'default') {
-            campaigns['default'] = createCampaignTemplate('default', "Default Campaign");
-            saveCampaigns();
-        } else {
-            socket.emit('join_rejected', { reason: "Campaign does not exist." });
-            socket.disconnect(true);
-            return;
-        }
+    let targetCampaignId = campaignId;
+
+    if (socketSubdomain) {
+      if (campaignId && campaignId !== socketSubdomain) {
+        socket.emit('join_rejected', { reason: `Access restricted: Domain "${socketSubdomain}" can only access campaign "${socketSubdomain}".` });
+        socket.disconnect(true);
+        return;
+      }
+      targetCampaignId = socketSubdomain;
     }
 
+    if (!campaigns[targetCampaignId]) {
+      getOrCreateCampaign(targetCampaignId);
+    }
+    const activeCampId = targetCampaignId;
+
     // Auto-GM logic: first person to join the campaign becomes GM
-    if (!campaigns[campaignId].gmUsername) {
+    if (!campaigns[activeCampId].gmUsername) {
         if (role !== 'GM') {
             socket.emit('join_rejected', { reason: "The first person to join a new campaign must be the Game Master." });
             socket.disconnect(true);
             return;
         }
-        campaigns[campaignId].gmUsername = username;
+        campaigns[activeCampId].gmUsername = username;
         saveCampaigns();
     }
 
-    if (role === 'GM' && campaigns[campaignId].gmUsername && username !== campaigns[campaignId].gmUsername) {
+    if (role === 'GM' && campaigns[activeCampId].gmUsername && username !== campaigns[activeCampId].gmUsername) {
         socket.emit('join_rejected', { reason: "You are not the Game Master for this campaign." });
         socket.disconnect(true);
         return;
     }
 
-    if (role === 'Player' && username === campaigns[campaignId].gmUsername) {
+    if (role === 'Player' && username === campaigns[activeCampId].gmUsername) {
         socket.emit('join_rejected', { reason: "That username is reserved for the Game Master." });
         socket.disconnect(true);
         return;
@@ -669,7 +760,7 @@ io.on('connection', (socket) => {
     let finalRole = role;
     if (finalRole === 'Player') {
         // Enforce allowlist if it exists and is populated
-        const allowed = campaigns[campaignId].allowedUsers || [];
+        const allowed = campaigns[activeCampId].allowedUsers || [];
         if (allowed.length > 0 && !allowed.includes(username)) {
             socket.emit('join_rejected', { reason: "Username not on the allowed list" });
             socket.disconnect(true);
@@ -677,29 +768,29 @@ io.on('connection', (socket) => {
         }
     }
 
-    socket.join(campaignId);
-    socket.campaignId = campaignId;
+    socket.join(activeCampId);
+    socket.campaignId = activeCampId;
     socket.username = username;
     socket.role = finalRole;
     
-    if (!campaigns[campaignId].knownPlayers) {
-        campaigns[campaignId].knownPlayers = [];
+    if (!campaigns[activeCampId].knownPlayers) {
+        campaigns[activeCampId].knownPlayers = [];
     }
-    if (!campaigns[campaignId].knownPlayers.includes(username)) {
-        campaigns[campaignId].knownPlayers.push(username);
+    if (!campaigns[activeCampId].knownPlayers.includes(username)) {
+        campaigns[activeCampId].knownPlayers.push(username);
         saveCampaigns();
     }
     
-    console.log(`${username} joined campaign ${campaignId} as ${finalRole}`);
+    console.log(`${username} joined campaign ${activeCampId} as ${finalRole}`);
 
     // Welcome user and send current state
     socket.emit('joined', {
-      campaignState: campaigns[campaignId] || null,
-      chatHistory: (chatLogs[campaignId] || []).slice(-50)
+      campaignState: campaigns[activeCampId] || null,
+      chatHistory: (chatLogs[activeCampId] || []).slice(-50)
     });
 
     // Notify others
-    socket.to(campaignId).emit('sys_message', {
+    socket.to(activeCampId).emit('sys_message', {
       text: `${username} has joined the game.`,
       timestamp: Date.now()
     });

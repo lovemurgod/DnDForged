@@ -64,7 +64,8 @@ function isPortActive(port) {
 
 async function main() {
   console.log('\n======================================================');
-  console.log('   ⚔️   DnDForged VTT Online Game Launcher   ⚔️');
+  console.log('   ⚔️   ForgeDVTT Online Game Launcher   ⚔️');
+  console.log('   🛡️   Tabletop Freedom | Self-Hosted VTT');
   console.log('======================================================\n');
 
   const cloudflaredBin = findCloudflared();
@@ -74,9 +75,29 @@ async function main() {
     process.exit(1);
   }
 
+  const tokenFile = path.join(__dirname, '.dndforged-data', 'tunnel-token.txt');
+  let savedToken = '';
+  if (fs.existsSync(tokenFile)) {
+    savedToken = fs.readFileSync(tokenFile, 'utf8').trim();
+  }
+
+  let token = savedToken;
+  if (!token) {
+    const inputToken = await prompt('👉 Paste Cloudflare Tunnel Token (Press ENTER for default config/quick tunnel): ');
+    if (inputToken) {
+      token = inputToken;
+      const dataDir = path.join(__dirname, '.dndforged-data');
+      if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+      fs.writeFileSync(tokenFile, token, 'utf8');
+      console.log('✅ Tunnel Token saved for future launches.');
+    }
+  } else {
+    console.log('🔑 Using saved Cloudflare Tunnel Token.');
+  }
+
   let subdomain = '';
   while (!subdomain) {
-    const input = await prompt('👉 Enter subdomain (Press ENTER for main site "forgedvtt.com"): ');
+    const input = await prompt('👉 Enter subdomain slug for this session (e.g. julz or cosmic): ');
     if (!input) {
       subdomain = '@';
       break;
@@ -96,9 +117,9 @@ async function main() {
   let serverProcess = null;
 
   if (alreadyRunning) {
-    console.log(`\nℹ️  DnDForged server is already active on port ${DEFAULT_PORT}. Reusing existing instance.`);
+    console.log(`\nℹ️  ForgeDVTT server is already active on port ${DEFAULT_PORT}. Reusing existing instance.`);
   } else {
-    console.log('\n🚀 Starting local DnDForged Node server...');
+    console.log('\n🚀 Starting local ForgeDVTT Node server...');
     serverProcess = spawn('node', ['server.js'], {
       cwd: __dirname,
       stdio: 'inherit'
@@ -110,9 +131,10 @@ async function main() {
   console.log('🌐 Launching Cloudflare Tunnel...');
   const tunnelArgs = [];
 
-  // Correct flag ordering for cloudflared: --config <path> tunnel run
   const localConfig = path.join(process.env.USERPROFILE || process.env.HOME || '', '.cloudflared', 'config.yml');
-  if (fs.existsSync(localConfig)) {
+  if (token) {
+    tunnelArgs.push('tunnel', 'run', '--token', token);
+  } else if (fs.existsSync(localConfig)) {
     tunnelArgs.push('--config', localConfig, 'tunnel', 'run');
   } else {
     tunnelArgs.push('tunnel', '--url', `http://127.0.0.1:${DEFAULT_PORT}`);
@@ -124,10 +146,14 @@ async function main() {
   });
 
   console.log('\n======================================================');
-  console.log('   🎉  YOUR DNDFORGED GAME IS ONLINE!');
-  console.log(`   🌐  Public Game URL: ${registeredUrl}/vtt.html`);
-  console.log(`   💻  Local Access:    http://localhost:${DEFAULT_PORT}/vtt.html`);
+  console.log('   🎉  YOUR FORGEDVTT GAME IS ONLINE!');
+  console.log(`   🌐  Selected Game URL: ${registeredUrl}/vtt.html`);
+  console.log(`   🌐  Portal / Launcher: https://forgedvtt.com/`);
+  console.log(`   💻  Local Access:      http://localhost:${DEFAULT_PORT}/`);
+  console.log('   🔒  Subdomain Isolation: ACTIVE');
   console.log('======================================================');
+  console.log('\n💡 Tip: Any subdomain (e.g. julz.forgedvtt.com) automatically loads');
+  console.log('   its own isolated campaign data from your local server.');
   console.log('\n(Press Ctrl+C at any time to shut down the server and tunnel)\n');
 
   function shutdown() {
