@@ -3,715 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForgeDVTT — Tabletop Freedom | Self-Hosted VTT & 5e Compendium</title>
-    <meta name="description" content="ForgeDVTT provides total Tabletop Freedom: a self-hosted, high-performance Virtual Tabletop with real-time multiplayer map canvas, 3D dice rolling, dynamic fog of war, and integrated 5e rules.">
-    <link rel="stylesheet" href="5etools-src/css/bootstrap.css">
-    <link rel="stylesheet" href="5etools-src/css/style.css">
+    <title>DnDForged — Tabletop Freedom | Self-Hosted VTT & 5e Compendium</title>
+    <meta name="description" content="DnDForged provides total Tabletop Freedom: a self-hosted, high-performance Virtual Tabletop with real-time multiplayer map canvas, 3D dice rolling, dynamic fog of war, and integrated 5e rules.">
+    
+    <!-- Fonts & FontAwesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-navy: #0a0f1d;
-            --bg-card: rgba(16, 23, 42, 0.85);
-            --bg-card-hover: rgba(23, 33, 58, 0.95);
-            
-            /* Logo Palette Colors */
-            --green-stone: #6fa247;
-            --green-stone-light: #85c35b;
-            --green-stone-dark: #4d772f;
-            
-            --red-crimson: #dc2626;
-            --red-crimson-light: #ef4444;
-            
-            --steel-gray: #94a3b8;
-            --steel-light: #cbd5e1;
-            
-            --gold-accent: #dfa01e;
-            --gold-bright: #f5c453;
-            
-            --border-card: rgba(148, 163, 184, 0.25);
-            --border-gold: rgba(223, 160, 30, 0.35);
-            
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            
-            --font-heading: 'Cinzel', serif;
-            --font-body: 'Inter', sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--bg-navy);
-            background-image: 
-                radial-gradient(circle at 50% 12%, rgba(111, 162, 71, 0.12) 0%, transparent 55%),
-                radial-gradient(circle at 85% 65%, rgba(220, 38, 38, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 15% 75%, rgba(223, 160, 30, 0.08) 0%, transparent 50%);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        /* Navigation Header */
-        .site-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 5%;
-            background: rgba(10, 15, 29, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-gold);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-logo {
-            font-family: var(--font-heading);
-            font-size: 1.6rem;
-            font-weight: 900;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: 1px;
-        }
-
-        .logo-forge {
-            color: var(--green-stone-light);
-            text-shadow: 0 0 12px rgba(111, 162, 71, 0.4);
-        }
-
-        .logo-d {
-            color: var(--red-crimson-light);
-            text-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
-        }
-
-        .logo-vtt {
-            color: var(--steel-light);
-            font-size: 1.2rem;
-            background: rgba(148, 163, 184, 0.15);
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(148, 163, 184, 0.3);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold-bright);
-        }
-
-        .btn-nav-launch {
-            background: linear-gradient(135deg, var(--green-stone) 0%, var(--green-stone-dark) 100%);
-            color: #ffffff !important;
-            font-family: var(--font-heading);
-            font-weight: 800;
-            padding: 9px 20px;
-            border-radius: 6px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 14px rgba(111, 162, 71, 0.35);
-            transition: all 0.2s ease !important;
-            border: 1px solid var(--green-stone-light);
-        }
-
-        .btn-nav-launch:hover {
-            background: linear-gradient(135deg, var(--green-stone-light) 0%, var(--green-stone) 100%) !important;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(111, 162, 71, 0.5);
-        }
-
-        /* Hero Section */
-        .hero-section {
-            max-width: 1200px;
-            margin: 55px auto 40px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(220, 38, 38, 0.15);
-            border: 1px solid rgba(220, 38, 38, 0.4);
-            color: #fca5a5;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
-        }
-
-        .hero-title {
-            font-family: var(--font-heading);
-            font-size: 3.6rem;
-            font-weight: 900;
-            color: #ffffff;
-            margin: 0 0 16px 0;
-            line-height: 1.15;
-            letter-spacing: 1px;
-        }
-
-        .hero-title .title-forge {
-            color: var(--green-stone-light);
-            text-shadow: 0 0 20px rgba(111, 162, 71, 0.35);
-        }
-
-        .hero-title .title-d {
-            color: var(--red-crimson);
-            text-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
-        }
-
-        .hero-title .title-vtt {
-            color: var(--steel-light);
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            max-width: 760px;
-            margin: 0 auto 40px auto;
-            font-weight: 400;
-        }
-
-        /* Subdomain Launcher Card */
-        .launcher-card {
-            max-width: 640px;
-            margin: 0 auto 70px auto;
-            background: var(--bg-card);
-            border: 1px solid var(--border-gold);
-            border-radius: 16px;
-            padding: 38px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(111, 162, 71, 0.12);
-            backdrop-filter: blur(10px);
-            text-align: left;
-        }
-
-        .launcher-title {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--gold-accent);
-            margin: 0 0 8px 0;
-            letter-spacing: 0.5px;
-        }
-
-        .launcher-desc {
-            font-size: 0.92rem;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-        }
-
-        .input-group-custom {
-            display: flex;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border-card);
-            background: rgba(8, 12, 22, 0.9);
-            margin-bottom: 20px;
-            transition: border-color 0.2s ease;
-        }
-
-        .input-group-custom:focus-within {
-            border-color: var(--green-stone);
-            box-shadow: 0 0 14px rgba(111, 162, 71, 0.35);
-        }
-
-        .input-group-custom input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            padding: 16px 20px;
-            font-size: 1.1rem;
-            outline: none;
-        }
-
-        .input-group-custom input::placeholder {
-            color: #475569;
-        }
-
-        .input-group-addon {
-            padding: 16px 20px;
-            background: rgba(111, 162, 71, 0.15);
-            color: var(--green-stone-light);
-            font-size: 0.95rem;
-            font-weight: 700;
-            border-left: 1px solid var(--border-card);
-            display: flex;
-            align-items: center;
-        }
-
-        .btn-launch-hero {
-            width: 100%;
-            padding: 17px;
-            background: linear-gradient(135deg, var(--green-stone) 0%, var(--green-stone-dark) 100%);
-            border: 1px solid var(--green-stone-light);
-            border-radius: 8px;
-            color: #ffffff;
-            font-family: var(--font-heading);
-            font-weight: 900;
-            font-size: 1.15rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 20px rgba(111, 162, 71, 0.35);
-        }
-
-        .btn-launch-hero:hover {
-            background: linear-gradient(135deg, var(--green-stone-light) 0%, var(--green-stone) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(111, 162, 71, 0.55);
-        }
-
-        /* Active Games Section */
-        .active-games-section {
-            max-width: 1100px;
-            margin: 0 auto 80px auto;
-            padding: 0 20px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 2.1rem;
-            color: #ffffff;
-            margin: 0 0 10px 0;
-        }
-
-        .section-title span {
-            color: var(--gold-accent);
-        }
-
-        .campaign-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .campaign-card-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: 12px;
-            padding: 20px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-main);
-            transition: all 0.25s ease;
-        }
-
-        .campaign-card-item:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--green-stone);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(111, 162, 71, 0.25);
-            color: #ffffff;
-        }
-
-        .campaign-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .campaign-name-text {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .campaign-sub-badge {
-            font-size: 0.8rem;
-            color: var(--green-stone-light);
-            margin-top: 4px;
-        }
-
-        .btn-join-pill {
-            background: rgba(111, 162, 71, 0.15);
-            border: 1px solid var(--green-stone);
-            color: var(--green-stone-light);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: all 0.2s ease;
-        }
-
-        .campaign-card-item:hover .btn-join-pill {
-            background: var(--green-stone);
-            color: #ffffff;
-        }
-
-        /* Features Section */
-        .features-section {
-            max-width: 1200px;
-            margin: 0 auto 90px auto;
-            padding: 0 20px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 25px;
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: 14px;
-            padding: 30px;
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card:hover {
-            border-color: var(--border-gold);
-            background: var(--bg-card-hover);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
-        }
-
-        .feature-icon {
-            font-size: 2.3rem;
-            margin-bottom: 16px;
-            display: inline-block;
-        }
-
-        .feature-title {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0 0 10px 0;
-        }
-
-        .feature-desc {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        /* Compendium Quick Links Bar */
-        .compendium-bar {
-            max-width: 1200px;
-            margin: 0 auto 90px auto;
-            padding: 35px 25px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-gold);
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-        }
-
-        .compendium-title {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            color: var(--gold-accent);
-            text-align: center;
-            margin: 0 0 25px 0;
-        }
-
-        .compendium-links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-        }
-
-        .compendium-btn {
-            background: rgba(8, 12, 22, 0.8);
-            border: 1px solid var(--border-card);
-            border-radius: 8px;
-            padding: 14px 18px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .compendium-btn:hover {
-            background: rgba(111, 162, 71, 0.15);
-            border-color: var(--green-stone);
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-
-        .compendium-btn span {
-            font-size: 1.3rem;
-        }
-
-        /* Footer */
-        .site-footer {
-            border-top: 1px solid rgba(148, 163, 184, 0.15);
-            padding: 40px 20px;
-            text-align: center;
-            background: rgba(6, 9, 17, 0.95);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Modal styling */
-        .vtt-modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.82);
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease;
-        }
-
-        .vtt-modal-backdrop.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .vtt-modal-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-gold);
-            border-radius: 14px;
-            max-width: 550px;
-            width: 90%;
-            padding: 35px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.85);
-        }
-
-        .vtt-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .vtt-modal-title {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            color: var(--gold-accent);
-            margin: 0;
-        }
-
-        .vtt-modal-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- VTT Master Website Stylesheet -->
+    <link rel="stylesheet" href="5etools-src/css/website.css?v=2">
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <nav class="site-navbar">
-        <a href="#" class="nav-logo">
-            ⚔️ <span class="logo-forge">FORGE</span><span class="logo-d">D</span> <span class="logo-vtt">VTT</span>
+    <!-- Animated Canvas Grid & Ambient Glowing Background -->
+    <div class="bg-tactical-grid"></div>
+    <div class="bg-ambient-lights"></div>
+
+    <!-- Sticky VTT Navigation Header Bar -->
+    <nav class="navbar-vtt">
+        <a href="index.html" class="nav-brand">
+            <img src="5etools-src/img/logo.png" alt="DnDForged Logo" class="nav-brand-logo">
+            <span class="nav-brand-text">DnD<span>Forged</span></span>
         </a>
-        <ul class="nav-links">
-            <li><a href="#launcher">Join Game</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#compendium">5e Compendium</a></li>
-            <li><a href="#hosting" id="nav-host-guide">DM Hosting</a></li>
-            <li><a href="#launcher" class="btn-nav-launch">LAUNCH VTT</a></li>
-        </ul>
+
+        <div class="nav-tabs">
+            <button class="nav-tab-btn active" onclick="switchTab('connect')">
+                <i class="fa-solid fa-gamepad"></i> Sessions
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('compendium')">
+                <i class="fa-solid fa-book-bookmark"></i> 5e Compendium
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('features')">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> VTT Features
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('hosting')">
+                <i class="fa-solid fa-server"></i> Host Setup
+            </button>
+        </div>
+
+        <div class="nav-actions">
+            <a href="https://github.com/lovemurgod/DnDForged" target="_blank" class="btn-vtt-outline">
+                <i class="fa-brands fa-github"></i> GitHub
+            </a>
+            <button onclick="switchTab('connect')" class="btn-vtt-gold">
+                <i class="fa-solid fa-right-to-bracket"></i> Enter Tabletop
+            </button>
+        </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section" id="launcher">
-        <div class="hero-badge">⚔️ TABLETOP FREEDOM — 100% SELF-HOSTED</div>
-        <h1 class="hero-title"><span class="title-forge">FORGE</span><span class="title-d">D</span> <span class="title-vtt">VTT</span></h1>
-        <p class="hero-subtitle">
-            Unrestricted, high-performance Virtual Tabletop with real-time multiplayer map canvas, dynamic fog of war, 3D dice rolling, and integrated 5e rules compendium.
-        </p>
+    <!-- Main Container -->
+    <main class="main-wrapper">
 
-        <!-- Subdomain Launcher Card -->
-        <div class="launcher-card">
-            <h2 class="launcher-title">Enter Campaign Subdomain</h2>
-            <p class="launcher-desc">Type your DM's campaign subdomain to enter their live game session.</p>
-
-            <form id="hero-launch-form">
-                <div class="input-group-custom">
-                    <input type="text" id="hero-subdomain-input" placeholder="e.g. julz or cosmic" autocomplete="off" required>
-                    <div class="input-group-addon" id="hero-domain-suffix">.forgedvtt.com</div>
+        <!-- TAB 1: SESSION CONNECT & HOST HUB -->
+        <section id="tab-connect" class="tab-content active">
+            <!-- Hero Header with High-Res Logo Centerpiece -->
+            <div class="glass-panel hero-card">
+                <div class="hero-logo-wrapper">
+                    <img src="5etools-src/img/logo.png" alt="FORGED VTT - Tabletop Freedom" class="hero-logo-img">
                 </div>
-                <button type="submit" class="btn-launch-hero">ENTER CAMPAIGN GAME ⚔️</button>
-            </form>
-        </div>
-    </section>
+                <p class="hero-subtitle">
+                    Self-hosted, high-performance Virtual Tabletop with real-time multiplayer token controls, 3D physics dice, dynamic fog of war, and native 5etools integration.
+                </p>
 
-    <!-- Active Games Feed -->
-    <section class="active-games-section">
-        <div class="section-header">
-            <h2 class="section-title">Active <span>Campaigns</span></h2>
-            <p style="color: var(--text-muted); margin: 0;">Click any active game server below to enter instantly.</p>
-        </div>
-        <div class="campaign-grid" id="hero-campaigns-grid">
-            <div style="text-align: center; color: var(--text-muted); padding: 30px; grid-column: 1 / -1;">
-                Querying active campaign servers...
+                <!-- Subdomain Session Joiner Form -->
+                <div class="connect-box">
+                    <label for="subdomain-input" class="connect-label">
+                        <i class="fa-solid fa-dungeon"></i> Enter Campaign Subdomain
+                    </label>
+                    <form id="session-join-form">
+                        <div class="subdomain-input-group">
+                            <input type="text" id="subdomain-input" placeholder="e.g. dragonheist or cosmic" autocomplete="off" required>
+                            <div class="subdomain-suffix" id="domain-suffix-display">.forgedvtt.com</div>
+                        </div>
+                        <button type="submit" class="btn-vtt-gold btn-connect">
+                            <i class="fa-solid fa-shield-halved"></i> JOIN VTT SESSION
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Active Campaigns Feed -->
+                <div class="active-sessions-section">
+                    <h3 class="section-title">
+                        <i class="fa-solid fa-tower-cell"></i> Active Hosted Campaigns
+                    </h3>
+                    <div id="sessions-container" class="sessions-grid">
+                        <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 20px;">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Checking for active campaign servers...
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Features Showcase -->
-    <section class="features-section" id="features">
-        <div class="section-header">
-            <h2 class="section-title">Built for <span>Epic Campaigns</span></h2>
-            <p style="color: var(--text-muted); margin: 0;">Everything your DM and party need for immersive 5th Edition gameplay.</p>
-        </div>
+        <!-- TAB 2: 5E COMPENDIUM SEARCH -->
+        <section id="tab-compendium" class="tab-content">
+            <div class="glass-panel hero-card" style="text-align: left;">
+                <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 8px;">
+                    <i class="fa-solid fa-book-open-reader"></i> 5e Rules & Compendium Reference
+                </h2>
+                <p style="color: var(--text-secondary); margin-bottom: 25px;">
+                    Direct access to the complete integrated 5e ruleset, spells, monsters, magic items, and character options.
+                </p>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <span class="feature-icon">🗺️</span>
-                <h3 class="feature-title">Real-Time Multiplayer Canvas</h3>
-                <p class="feature-desc">Synchronized token movement, grid snapping, map scale controls, and multiple map scenes managed live by the DM.</p>
+                <div class="compendium-search-box">
+                    <input type="text" id="comp-search-input" class="compendium-input" placeholder="Search spells, creatures, items, rules... (e.g. Fireball, Beholder, Longsword)" onkeyup="filterCompendium()">
+                </div>
+
+                <div class="compendium-results" id="comp-results-grid">
+                    <a href="5etools-src/spells.html" class="comp-card" target="_blank">
+                        <div class="comp-category">Spell Compendium</div>
+                        <div class="comp-name">Spells & Magic</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Browse complete 5e spell lists, casting filters, and damage calculators.</p>
+                    </a>
+                    <a href="5etools-src/bestiary.html" class="comp-card" target="_blank">
+                        <div class="comp-category">Bestiary</div>
+                        <div class="comp-name">Monsters & Statblocks</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Full monster statblocks with integrated VTT token roll support.</p>
+                    </a>
+                    <a href="5etools-src/items.html" class="comp-card" target="_blank">
+                        <div class="comp-category">Equipment</div>
+                        <div class="comp-name">Items & Artifacts</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Weapons, armor, potions, and legendary magic items.</p>
+                    </a>
+                    <a href="5etools-src/classes.html" class="comp-card" target="_blank">
+                        <div class="comp-category">Rules</div>
+                        <div class="comp-name">Classes & Subclasses</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Class progression tables, features, and spellcasting traits.</p>
+                    </a>
+                    <a href="5etools-src/races.html" class="comp-card" target="_blank">
+                        <div class="comp-category">Character Creation</div>
+                        <div class="comp-name">Races & Species</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Racial traits, lineages, speed, and vision rules.</p>
+                    </a>
+                    <a href="5etools-src/quickreference.html" class="comp-card" target="_blank">
+                        <div class="comp-category">DM Tools</div>
+                        <div class="comp-name">Quick Reference Rules</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Combat actions, cover, conditions, and environment rules.</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: VTT FEATURES SHOWCASE -->
+        <section id="tab-features" class="tab-content">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-gold-bright);">
+                    Built for Ultimate Tabletop Freedom
+                </h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 8px auto 0;">
+                    No subscriptions, no cloud data limits, complete self-hosted control.
+                </p>
             </div>
 
-            <div class="feature-card">
-                <span class="feature-icon">🎲</span>
-                <h3 class="feature-title">Integrated 3D Dice Roller</h3>
-                <p class="feature-desc">Physics-based 3D d20, d6, d8, d10, d12, and d100 dice rolling with advantage, disadvantage, and instant chat logging.</p>
-            </div>
+            <div class="features-grid">
+                <div class="glass-panel feature-card">
+                    <i class="fa-solid fa-dice-d20 feature-icon"></i>
+                    <h3 class="feature-title">3D Physics Dice Rolling</h3>
+                    <p class="feature-desc">Full 3D physics-simulated dice box powered by WebGL. Custom colors, themes, and instant chat roll synchronization.</p>
+                </div>
 
-            <div class="feature-card">
-                <span class="feature-icon">📜</span>
-                <h3 class="feature-title">Built-In 5e Rules Compendium</h3>
-                <p class="feature-desc">Instant lookup for official 5e spell cards, creature stat blocks, magical items, character classes, feats, and background options.</p>
-            </div>
+                <div class="glass-panel feature-card">
+                    <i class="fa-solid fa-map-location-dot feature-icon"></i>
+                    <h3 class="feature-title">Real-time Token Canvas</h3>
+                    <p class="feature-desc">Multiplayer interactive map canvas with grid snapping, token scaling, elevation control, and GM vision overlays.</p>
+                </div>
 
-            <div class="feature-card">
-                <span class="feature-icon">⚔️</span>
-                <h3 class="feature-title">Party Combat & Initiative</h3>
-                <p class="feature-desc">Live party turn-order tracker, HP meters, condition tracking, GM secrets, and real-time whisper messaging.</p>
-            </div>
+                <div class="glass-panel feature-card">
+                    <i class="fa-solid fa-lightbulb feature-icon"></i>
+                    <h3 class="feature-title">Dynamic Fog of War</h3>
+                    <p class="feature-desc">Line-of-sight vision occlusion, darkness layers, and customizable lighting sources for immersive tactical exploration.</p>
+                </div>
 
-            <div class="feature-card">
-                <span class="feature-icon">🔒</span>
-                <h3 class="feature-title">Subdomain Campaign Isolation</h3>
-                <p class="feature-desc">Each DM receives their own dedicated subdomain and isolated campaign folder, preventing cross-game data access.</p>
-            </div>
+                <div class="glass-panel feature-card">
+                    <i class="fa-solid fa-id-card feature-icon"></i>
+                    <h3 class="feature-title">Integrated Character Sheets</h3>
+                    <p class="feature-desc">Interactive 5e player sheets with automated skill check calculations, spell slot tracking, and inventory management.</p>
+                </div>
 
-            <div class="feature-card">
-                <span class="feature-icon">⚡</span>
-                <h3 class="feature-title">Zero Setup Player Access</h3>
-                <p class="feature-desc">Players join directly in their web browser via link. No software installation or account creation required for players.</p>
-            </div>
-        </div>
-    </section>
+                <div class="glass-panel feature-card">
+                    <i class="fa-solid fa-network-wired feature-icon"></i>
+                    <h3 class="feature-title">Subdomain Isolated Campaigns</h3>
+                    <p class="feature-desc">Each campaign operates on its own dedicated subdomain with isolated map uploads, chat histories, and campaign states.</p>
+                </div>
 
-    <!-- 5e Compendium Quick Bar -->
-    <section class="compendium-bar" id="compendium">
-        <h2 class="compendium-title">📖 5e Rules & Reference Compendium</h2>
-        <div class="compendium-links-grid">
-            <a href="5etools-src/spells.html" class="compendium-btn">
-                <span>✨</span> Spells
-            </a>
-            <a href="5etools-src/bestiary.html" class="compendium-btn">
-                <span>🐉</span> Bestiary
-            </a>
-            <a href="5etools-src/items.html" class="compendium-btn">
-                <span>⚔️</span> Items
-            </a>
-            <a href="5etools-src/classes.html" class="compendium-btn">
-                <span>🛡️</span> Classes
-            </a>
-            <a href="5etools-src/races.html" class="compendium-btn">
-                <span>🧝</span> Races
-            </a>
-            <a href="5etools-src/feats.html" class="compendium-btn">
-                <span>📜</span> Feats
-            </a>
-        </div>
-    </section>
+                <div class="glass-panel feature-card">
+                    <i class="fa-solid fa-bolt feature-icon"></i>
+                    <h3 class="feature-title">Zero Subscription Hosting</h3>
+                    <p class="feature-desc">Run directly on your local desktop using our launcher script and share with your party via instant Cloudflare Tunnels.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- Hosting Guide Modal -->
-    <div class="vtt-modal-backdrop" id="host-modal">
-        <div class="vtt-modal-box">
-            <div class="vtt-modal-header">
-                <h3 class="vtt-modal-title">🚀 How to Host as a DM</h3>
-                <button class="vtt-modal-close" id="host-modal-close">&times;</button>
+        <!-- TAB 4: HOST SETUP & SERVER GUIDE -->
+        <section id="tab-hosting" class="tab-content">
+            <div class="glass-panel hero-card" style="text-align: left;">
+                <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 8px;">
+                    <i class="fa-solid fa-server"></i> How to Host a DnDForged Session
+                </h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                    Game Masters can host campaigns directly from their computer with zero port-forwarding using Cloudflare Tunnels.
+                </p>
+
+                <div class="guide-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Run Local Launcher</h3>
+                        <p style="color: var(--text-secondary);">Start the DnDForged server launcher script on your host machine:</p>
+                        <div class="code-block">node launcher.js</div>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Set Campaign Subdomain</h3>
+                        <p style="color: var(--text-secondary);">Choose your session's unique subdomain slug (e.g. <code>julz</code> or <code>cosmic</code>) when prompted by the launcher.</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Invite Players</h3>
+                        <p style="color: var(--text-secondary);">Share your unique campaign URL with your players (e.g. <code>https://julz.forgedvtt.com</code>) to jump straight into the VTT tabletop!</p>
+                    </div>
+                </div>
             </div>
-            <div style="color: var(--text-main); font-size: 0.95rem;">
-                <p>To host a campaign server on your own computer:</p>
-                <ol style="padding-left: 20px; color: var(--text-muted); line-height: 1.8;">
-                    <li>Double-click <code style="color: var(--green-stone-light);">start-online.bat</code> on your PC.</li>
-                    <li>Paste your Cloudflare Tunnel Token when prompted (or press Enter for local play).</li>
-                    <li>Enter your subdomain slug (e.g. <code style="color: var(--green-stone-light);">julz</code>).</li>
-                    <li>Share your game link <code style="color: var(--green-stone-light);">https://your-name.forgedvtt.com</code> with your players!</li>
-                </ol>
-            </div>
-        </div>
-    </div>
+        </section>
+
+    </main>
 
     <!-- Footer -->
-    <footer class="site-footer">
-        <p style="margin: 0 0 8px 0;">⚔️ <strong>ForgeDVTT</strong> — Tabletop Freedom</p>
-        <p style="margin: 0; font-size: 0.85rem; color: #64748b;">
-            Powered by Express, Socket.IO, and 5etools. Fan Content under Wizards of the Coast Fan Content Policy.
-        </p>
+    <footer class="footer-vtt">
+        <p>© 2026 DnDForged — Self-Hosted Virtual Tabletop System. Powered by 5etools integration.</p>
     </footer>
 
+    <!-- Interactive Logic Script -->
     <script>
-        const heroForm = document.getElementById('hero-launch-form');
-        const heroInput = document.getElementById('hero-subdomain-input');
-        const heroSuffix = document.getElementById('hero-domain-suffix');
-        const campaignsGrid = document.getElementById('hero-campaigns-grid');
+        // Subdomain URL detection
+        const domainSuffixDisplay = document.getElementById('domain-suffix-display');
+        const subdomainInput = document.getElementById('subdomain-input');
+        const joinForm = document.getElementById('session-join-form');
+        const sessionsContainer = document.getElementById('sessions-container');
 
         const currentHost = window.location.hostname;
         const currentPort = window.location.port;
-        const isLocal = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost.startsWith('192.168.');
 
-        if (isLocal) {
-            heroSuffix.textContent = `.${currentHost}${currentPort ? ':' + currentPort : ''}`;
+        const isLocalhost = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost.startsWith('192.168.');
+        
+        if (isLocalhost) {
+            domainSuffixDisplay.textContent = `.${currentHost}${currentPort ? ':' + currentPort : ''}`;
+        } else {
+            const baseDomain = currentHost.split('.').slice(-2).join('.');
+            domainSuffixDisplay.textContent = `.${baseDomain}`;
         }
 
-        heroForm.addEventListener('submit', (e) => {
+        // Handle session join form submission
+        joinForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const raw = heroInput.value.trim().toLowerCase();
+            const raw = subdomainInput.value.trim().toLowerCase();
             const cleaned = raw.replace(/[^a-z0-9-]/g, '');
 
-            if (!cleaned || cleaned.length < 2 || cleaned.length > 32) return;
+            if (!cleaned || cleaned.length < 2) {
+                alert('Please enter a valid subdomain (at least 2 characters).');
+                return;
+            }
 
-            if (isLocal) {
+            if (isLocalhost) {
                 const portSuffix = currentPort ? `:${currentPort}` : '';
                 window.location.href = `${window.location.protocol}//${cleaned}.${currentHost}${portSuffix}/vtt.html`;
             } else {
@@ -720,60 +280,65 @@
             }
         });
 
-        // Query active campaigns
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) targetTab.classList.add('active');
+
+            const activeBtn = Array.from(document.querySelectorAll('.nav-tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        // Fetch active campaign sessions from API
         fetch('/api/campaigns')
             .then(res => res.json())
             .then(campaigns => {
-                campaignsGrid.innerHTML = '';
+                sessionsContainer.innerHTML = '';
                 if (!campaigns || campaigns.length === 0) {
-                    campaignsGrid.innerHTML = `
-                        <div style="text-align: center; color: var(--text-muted); padding: 25px; grid-column: 1 / -1; background: var(--bg-card); border-radius: 12px; border: 1px dashed var(--border-card);">
-                            No active campaign servers currently registered. Type your campaign subdomain above to launch.
+                    sessionsContainer.innerHTML = `
+                        <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 15px;">
+                            No active campaign servers detected right now. Enter your GM's subdomain above to join!
                         </div>`;
                     return;
                 }
 
                 campaigns.forEach(c => {
                     const card = document.createElement('a');
-                    card.className = 'campaign-card-item';
-                    card.href = isLocal 
+                    card.className = 'session-card';
+                    card.href = isLocalhost 
                         ? `${window.location.protocol}//${c.id}.${currentHost}${currentPort ? ':' + currentPort : ''}/vtt.html`
                         : `https://${c.id}.forgedvtt.com/vtt.html`;
 
                     card.innerHTML = `
-                        <div class="campaign-info">
-                            <span class="campaign-name-text">⚔️ ${c.name}</span>
-                            <span class="campaign-sub-badge">${c.id}.forgedvtt.com</span>
-                        </div>
-                        <span class="btn-join-pill">Join Game →</span>
+                        <span class="session-name"><i class="fa-solid fa-dice-d20" style="color: var(--color-gold); margin-right: 8px;"></i> ${c.name}</span>
+                        <span class="session-badge">${c.id}</span>
                     `;
-                    campaignsGrid.appendChild(card);
+                    sessionsContainer.appendChild(card);
                 });
             })
             .catch(err => {
-                campaignsGrid.innerHTML = `
-                    <div style="text-align: center; color: var(--text-muted); padding: 20px; grid-column: 1 / -1;">
-                        Enter a subdomain above to launch your campaign.
+                sessionsContainer.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 15px;">
+                        Enter a campaign subdomain above to jump into your tabletop session.
                     </div>`;
             });
 
-        // DM Host Guide Modal
-        const hostModal = document.getElementById('host-modal');
-        const hostBtn = document.getElementById('nav-host-guide');
-        const hostClose = document.getElementById('host-modal-close');
-
-        if (hostBtn) hostBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            hostModal.classList.add('active');
-        });
-
-        if (hostClose) hostClose.addEventListener('click', () => {
-            hostModal.classList.remove('active');
-        });
-
-        if (hostModal) hostModal.addEventListener('click', (e) => {
-            if (e.target === hostModal) hostModal.classList.remove('active');
-        });
+        // Compendium Live Search Filter
+        function filterCompendium() {
+            const query = document.getElementById('comp-search-input').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.comp-card');
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (!query || text.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
     </script>
 </body>
 </html>
