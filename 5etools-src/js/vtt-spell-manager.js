@@ -153,9 +153,25 @@ export function initVttSpellManager(vtt) {
 
                 <!-- Custom Tab -->
                 <div id="pc-spell-tab-custom" class="vtt-hidden" style="padding:16px; overflow-y:auto; flex:1;">
-                    <div class="form-group" style="margin-bottom:8px;">
-                        <label>Spell Name</label>
-                        <input type="text" id="modal-spell-name" style="width:100%;">
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <div class="form-group" style="flex:2;">
+                            <label>Spell Name</label>
+                            <input type="text" id="modal-spell-name" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>School</label>
+                            <select id="modal-spell-school" style="width:100%;">
+                                <option value="">None</option>
+                                <option value="A">Abjuration</option>
+                                <option value="C">Conjuration</option>
+                                <option value="D">Divination</option>
+                                <option value="E">Enchantment</option>
+                                <option value="V">Evocation</option>
+                                <option value="I">Illusion</option>
+                                <option value="N">Necromancy</option>
+                                <option value="T">Transmutation</option>
+                            </select>
+                        </div>
                     </div>
                     <div style="display:flex; gap:8px; margin-bottom:8px;">
                         <div class="form-group" style="flex:1;">
@@ -666,6 +682,8 @@ export function initVttSpellManager(vtt) {
             }
             document.getElementById('modal-spell-desc').value = desc;
             
+            const schoolEl = document.getElementById('modal-spell-school');
+            if (schoolEl) schoolEl.value = sp.school || '';
             const timeEl = document.getElementById('modal-spell-time');
             if (timeEl) timeEl.value = sp.castingTime || '';
             const rangeEl = document.getElementById('modal-spell-range');
@@ -727,6 +745,8 @@ export function initVttSpellManager(vtt) {
             if (titleEl) titleEl.textContent = "Add Spell";
             const nameInput = document.getElementById('modal-spell-name');
             if (nameInput) nameInput.value = '';
+            const schoolInput = document.getElementById('modal-spell-school');
+            if (schoolInput) schoolInput.value = '';
             const descInput = document.getElementById('modal-spell-desc');
             if (descInput) descInput.value = '';
             const concInput = document.getElementById('modal-spell-concentration');
@@ -975,6 +995,7 @@ export function initVttSpellManager(vtt) {
                 const idx = parseInt(document.getElementById('modal-spell-idx').value);
                 const name = document.getElementById('modal-spell-name').value.trim();
                 const description = document.getElementById('modal-spell-desc').value;
+                const school = document.getElementById('modal-spell-school')?.value || '';
                 const castingTime = document.getElementById('modal-spell-time')?.value || '';
                 const range = document.getElementById('modal-spell-range')?.value || '';
                 const components = document.getElementById('modal-spell-components')?.value || '';
@@ -999,9 +1020,9 @@ export function initVttSpellManager(vtt) {
                 if (!char.spells[level]) char.spells[level] = [];
 
                 if (idx >= 0) {
-                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, castingTime, range, components, duration, concentration, ritual, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus };
+                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus };
                 } else {
-                    char.spells[level].push({ id: 'sp_' + Date.now() + Math.random(), name, description, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus });
+                    char.spells[level].push({ id: 'sp_' + Date.now() + Math.random(), name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus });
                 }
             } else {
                 if (spellBulkSelection.size === 0) return alert("No spells selected.");

@@ -804,9 +804,33 @@ export function initVttDataBridge(vtt) {
         });
     }
 
+    async function resolveMediaUrl(url) {
+        if (!url || typeof url !== 'string') return { resolvedUrl: url, isVideo: false };
+        const cleanUrl = url.trim();
+        if (!cleanUrl) return { resolvedUrl: cleanUrl, isVideo: false };
+
+        if (cleanUrl.includes('pin.it') || cleanUrl.includes('pinterest.com/pin/') || (!cleanUrl.match(/\.(mp4|webm|ogg|png|jpg|jpeg|gif|webp|svg)(\?.*)?$/i) && !cleanUrl.includes('youtube.com') && !cleanUrl.includes('youtu.be') && cleanUrl.startsWith('http'))) {
+            try {
+                const res = await fetch(`/api/resolve-media-url?url=${encodeURIComponent(cleanUrl)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.resolvedUrl) {
+                        return data;
+                    }
+                }
+            } catch (e) {
+                console.warn('[VTT] Failed to resolve media URL via server API:', e);
+            }
+        }
+
+        const isVideo = !!cleanUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || cleanUrl.includes('pinimg.com/videos') || cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be');
+        return { resolvedUrl: cleanUrl, isVideo };
+    }
+
     // Attach to window so other modules can trigger a refresh if needed
     window.VTT = window.VTT || {};
     window.VTT.renderCustomNpcList = renderCustomNpcList;
+    window.VTT.resolveMediaUrl = resolveMediaUrl;
 
     if (vtt.socket) {
         vtt.socket.on('character:sync', () => {
@@ -1103,6 +1127,7 @@ export function initVttDataBridge(vtt) {
         pushStateUpdate,
         emitForceShowHandout,
         load5eToolsMapCatalog,
-        import5etoolsMap
+        import5etoolsMap,
+        resolveMediaUrl
     };
 }

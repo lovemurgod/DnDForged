@@ -150,8 +150,9 @@ export function initVttCreatureSheet(vtt) {
                     : currentMonster.legendaryGroup;
                 
                 const lg = data.legendaryGroup.find(g => 
-                    g.name === groupRef.name && 
-                    (g.source === groupRef.source || !groupRef.source)
+                    g.name && groupRef.name &&
+                    g.name.toLowerCase() === groupRef.name.toLowerCase() && 
+                    (!groupRef.source || !g.source || g.source.toLowerCase() === groupRef.source.toLowerCase())
                 );
                 
                 if (lg && lg.lairActions) {
@@ -159,21 +160,42 @@ export function initVttCreatureSheet(vtt) {
                     const actions = [];
                     lg.lairActions.forEach(la => {
                         if (typeof la === 'string') {
-                            desc += (desc ? '\\n' : '') + la;
+                            desc += (desc ? '\n' : '') + la;
                         } else if (la.type === 'list' && la.items) {
                             la.items.forEach(item => {
-                                // Sometimes items have a bold name at the start like "{@b Name.} description"
                                 let actionName = '';
-                                let actionDesc = item;
+                                let actionEntries = [];
                                 if (typeof item === 'string') {
-                                    const match = item.match(/^{@b ([^}]+)}\\.?\\s*(.*)/);
+                                    const match = item.match(/^{@b ([^}]+)}\.?\s*(.*)/);
                                     if (match) {
                                         actionName = match[1];
-                                        actionDesc = match[2];
+                                        actionEntries = [match[2]];
+                                    } else {
+                                        actionEntries = [item];
+                                    }
+                                } else if (item && typeof item === 'object') {
+                                    actionName = item.name || '';
+                                    if (item.entries) {
+                                        actionEntries = Array.isArray(item.entries) ? item.entries : [item.entries];
+                                    } else if (item.entry) {
+                                        actionEntries = Array.isArray(item.entry) ? item.entry : [item.entry];
+                                    } else {
+                                        actionEntries = [item];
                                     }
                                 }
-                                actions.push({ name: actionName, entries: [actionDesc] });
+                                actions.push({ name: actionName, entries: actionEntries });
                             });
+                        } else if (la && typeof la === 'object') {
+                            let actionName = la.name || '';
+                            let actionEntries = [];
+                            if (la.entries) {
+                                actionEntries = Array.isArray(la.entries) ? la.entries : [la.entries];
+                            } else if (la.entry) {
+                                actionEntries = Array.isArray(la.entry) ? la.entry : [la.entry];
+                            }
+                            if (actionName || actionEntries.length > 0) {
+                                actions.push({ name: actionName, entries: actionEntries });
+                            }
                         }
                     });
                     currentMonster.lairActionsDesc = desc;
@@ -809,15 +831,21 @@ export function initVttCreatureSheet(vtt) {
             return `<ul style="margin: 8px 0; padding-left: 20px;">${itemsHtml}</ul>`;
         }
         
+        if (e.type === 'itemSub' || e.type === 'item') {
+            const nameStr = e.name ? `<strong><em>${e.name}.</em></strong> ` : '';
+            const entryStr = e.entry ? formatRawEntry(e.entry) : (e.entries ? formatRawEntry(e.entries) : '');
+            return `${nameStr}${entryStr}`;
+        }
+        
         if (e.type === 'entries') {
             const nameStr = e.name ? `<strong><em>${e.name}.</em></strong> ` : '';
-            const entryStr = e.entries ? formatRawEntry(e.entries) : '';
+            const entryStr = e.entries ? formatRawEntry(e.entries) : (e.entry ? formatRawEntry(e.entry) : '');
             return `<div style="margin-top: 8px;">${nameStr}${entryStr}</div>`;
         }
 
         if (e.type === 'inset') {
             const nameStr = e.name ? `<strong>${e.name}</strong><br>` : '';
-            const entryStr = e.entries ? formatRawEntry(e.entries) : '';
+            const entryStr = e.entries ? formatRawEntry(e.entries) : (e.entry ? formatRawEntry(e.entry) : '');
             return `<div style="margin: 8px 0; padding: 8px; border-left: 3px solid var(--color-gold-base); background: rgba(0,0,0,0.2);">${nameStr}${entryStr}</div>`;
         }
         
@@ -826,12 +854,13 @@ export function initVttCreatureSheet(vtt) {
         }
         
         if (e.type === 'inlineBlock') {
-            const entryStr = e.entries ? formatRawEntry(e.entries) : '';
+            const entryStr = e.entries ? formatRawEntry(e.entries) : (e.entry ? formatRawEntry(e.entry) : '');
             return `<span>${entryStr}</span>`;
         }
 
         if (e.entries) return formatRawEntry(e.entries);
-        return ''; // Fallback for unknown object types without entries to prevent ugly JSON text
+        if (e.entry) return formatRawEntry(e.entry);
+        return '';
     }
 
     function buildAbilityEntryHtml(entry) {
@@ -847,7 +876,6 @@ export function initVttCreatureSheet(vtt) {
             ? parsedName 
             : `<span style="color:var(--color-primary); font-size:0.85em;"><i class="fa-solid fa-tower-broadcast"></i> Ping</span>`;
 
-        // Store raw entries safely for macro parsing
         const rawJson = encodeURIComponent(JSON.stringify(rawEntries));
 
         return `
@@ -871,7 +899,6 @@ export function initVttCreatureSheet(vtt) {
         if (!text) return '';
         let result = text;
 
-        // 1. Attack tags: {@atk mw}, {@atk rw}, {@atk mw,rw}, {@atkr m}, {@atkr r}, {@atkr m,r}
         result = result.replace(/\{@atk\s+([^}]+)\}/gi, (match, type) => {
             const t = type.toLowerCase();
             if (t === 'mw') return '<strong>Melee Weapon Attack:</strong>';
@@ -887,31 +914,25 @@ export function initVttCreatureSheet(vtt) {
             return '<strong>Attack:</strong>';
         });
 
-        // 2. Hit tags: {@hit 5} or {@hit 5} to hit -> convert to standard (+5 to hit)
         result = result.replace(/\{@hit\s+([+\-]?\d+)\}(?:\s+to\s+hit)?/gi, (match, bonus) => {
             const sign = bonus.startsWith('+') || bonus.startsWith('-') ? '' : '+';
             return `${sign}${bonus} to hit`;
         });
 
-        // 3. Hit symbols: {@h} -> Hit:
         result = result.replace(/\{@h\}/gi, '<strong>Hit:</strong> ');
 
-        // 4. Damage tags: {@damage 1d4 + 2|...} -> extract formula
         result = result.replace(/\{@damage\s+([^}]+)\}/gi, (match, contents) => {
             const parts = contents.split('|');
             return parts[0].trim();
         });
 
-        // 5. DC tags: {@dc 15} -> DC 15
         result = result.replace(/\{@dc\s+(\d+)\}/gi, '<strong>DC $1</strong>');
 
-        // 6. Recharge tags: {@recharge 5} -> (Recharge 5-6), {@recharge} -> (Recharge 6)
         result = result.replace(/\{@recharge\s*(\d*)\}/gi, (match, num) => {
             const val = num ? `${num}–6` : '6';
             return `<strong>(Recharge ${val})</strong>`;
         });
 
-        // 7. 2024 / New Action Format tags
         result = result.replace(/\{@actSave\s+([^}]+)\}/gi, (match, stat) => {
             return `<strong>${stat.toUpperCase()} Saving Throw:</strong>`;
         });
@@ -925,7 +946,6 @@ export function initVttCreatureSheet(vtt) {
         result = result.replace(/\{@condition\s+([^|}]+)[^}]*\}/gi, '<strong>$1</strong>');
         result = result.replace(/\{@variantrule\s+([^|}]+)[^}]*\}/gi, '<strong>$1</strong>');
 
-        // 8. Generic tag cleaner for: status, quickref, spell, item, creature, filter, etc.
         result = result.replace(/\{@([a-z]+)\s+([^}]+)\}/gi, (match, tag, contents) => {
             if (tag === 'b') return `<strong>${contents}</strong>`;
             if (tag === 'i') return `<em>${contents}</em>`;
@@ -951,24 +971,19 @@ export function initVttCreatureSheet(vtt) {
     // ─── Dice chip injector ───────────────────────────────────────────────────
     function injectDiceChips(text) {
         if (!text) return '';
-        // Match patterns like "2d6+3", "1d20", "4d8 + 2", "+5 to hit"
         let result = text;
 
-        // 1. XdY+Z or XdY-Z or just XdY (runs first to avoid double wrapping generated buttons)
-        // We use (?![^<]*>) to ensure we don't accidentally match inside an HTML tag attribute!
         result = result.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?(?![^<]*>)/gi, (match, count, faces, sign, mod) => {
             let formula = `${count}d${faces}`;
             if (sign && mod) formula += `${sign}${mod}`;
             return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
         });
 
-        // 2. +N to hit → clickable 1d20+N chip
         result = result.replace(/\+(\d+)\s+to\s+hit(?![^<]*>)/gi, (match, bonus) => {
             const formula = `1d20+${bonus}`;
             return `<button class="dice-chip" data-formula="${formula}" title="Roll attack: ${formula}">+${bonus} to hit</button>`;
         });
 
-        // 3. DC N → clickable ping chip
         result = result.replace(/DC\s+(\d+)(?![^<]*>)/gi, (match, dcVal) => {
             return `<button class="dice-chip dc-chip" data-dc="${dcVal}" style="border-color: var(--color-gold-base);" title="Ping DC ${dcVal} to Chat">DC ${dcVal}</button>`;
         });
@@ -1159,7 +1174,6 @@ export function initVttCreatureSheet(vtt) {
         const modeText = isAdvantage ? ' (Advantage)' : isDisadvantage ? ' (Disadvantage)' : '';
 
         if (visibility === 'private') {
-            // Whisper only to this GM
             vtt.socket.emit('chat:whisper', {
                 to: vtt.username,
                 text: `[${label}] rolls **${formula}**${modeText}`,
@@ -1192,15 +1206,12 @@ export function initVttCreatureSheet(vtt) {
 
     // ─── Event delegation for dice chips and ability name clicks ─────────────
     contentEl.addEventListener('click', (e) => {
-        // Dice chip or native roller click inside the panel
         const rollerTarget = e.target.closest('.dice-chip, .render-roller');
         if (rollerTarget) {
-            // Check if it's a DC chip instead of a rollable formula
             if (rollerTarget.classList.contains('dc-chip')) {
                 const dcVal = rollerTarget.dataset.dc;
                 const visibility = getVisibilitySetting();
                 
-                // Try to find if it's specifically a spellcasting DC
                 const isSpellcasting = !!rollerTarget.closest('.cs-spellcasting-header');
                 const label = isSpellcasting ? "Spellcasting DC" : "Save DC";
                 
@@ -1230,7 +1241,6 @@ export function initVttCreatureSheet(vtt) {
             return;
         }
 
-        // Info button click -> post standard description card to chat
         const infoEl = e.target.closest('.cs-ability-info-btn');
         if (infoEl) {
             const entry = infoEl.closest('.cs-ability-entry');
@@ -1257,7 +1267,6 @@ export function initVttCreatureSheet(vtt) {
             return;
         }
 
-        // Ability name click -> evaluate and post macro card
         const nameEl = e.target.closest('.cs-ability-name');
         if (nameEl) {
             const entry = nameEl.closest('.cs-ability-entry');
@@ -1276,9 +1285,7 @@ export function initVttCreatureSheet(vtt) {
             const charName = currentMonster?.name || 'Creature';
             const macroCard = parseActionMacro(abilityName, rawEntries, abilityText, charName);
             
-            // Wait to see if they just wanted a description and macro generated nothing
             if (!macroCard.atkRoll && !macroCard.saveInfo && macroCard.dmgRolls.length === 0) {
-                // Fallback to basic ping if there's no rollable macro stuff
                 const abilityCard = {
                     creatureName: currentMonster?.name || 'Creature',
                     abilityName: abilityName,
@@ -1291,7 +1298,6 @@ export function initVttCreatureSheet(vtt) {
                     vtt.socket.emit('chat:msg', { text: `uses ${abilityName}`, abilityCard });
                 }
             } else {
-                // Post macro card
                 const visibility = getVisibilitySetting();
                 const msgOut = { 
                     text: `uses ${abilityName}`, 
@@ -1309,7 +1315,6 @@ export function initVttCreatureSheet(vtt) {
             return;
         }
         
-        // Spell expand button click → expand/collapse details inline
         if (e.target.closest('.cs-spell-expand-btn')) {
             const item = e.target.closest('.cs-spell-item');
             const details = item.querySelector('.cs-spell-details');
@@ -1327,7 +1332,6 @@ export function initVttCreatureSheet(vtt) {
                 details.style.display = 'block';
                 btnEl.classList.add('expanded');
                 
-                // Fetch and render spell data
                 if (!spellCache && window.DataUtil?.spell) {
                     descEl.innerHTML = `<em>Loading spell data...</em>`;
                     window.DataUtil.spell.pLoadAll().then(spells => {
@@ -1356,8 +1360,6 @@ export function initVttCreatureSheet(vtt) {
             }
         }
 
-        // Spell name click handling has been moved to the specific spell buttons (rollNpcSpell)
-
         function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp) {
             if (!spellCache) return;
             
@@ -1365,10 +1367,13 @@ export function initVttCreatureSheet(vtt) {
             
             let metaHtml = '';
             if (window.Parser) {
-                let time = sp?.castingTime || (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
-                let range = sp?.range || (spell ? Parser.spRangeToFull(spell.range) : '');
-                let components = sp?.components || (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
-                let duration = sp?.duration || (spell ? Parser.spDurationToFull(spell.duration) : '');
+                let meta = window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.getSpellMetaStrings ? window.vttPlayerSheetAPI.getSpellMetaStrings(sp || (spell ? { name: spell.name, level: spell.level, school: spell.school } : spellName)) : {};
+                let level = meta.level || (sp?.level !== undefined ? (Parser.spLevelToFullLevelText ? Parser.spLevelToFullLevelText(sp.level) : sp.level) : (spell ? Parser.spLevelToFullLevelText(spell.level) : ''));
+                let school = meta.school || (sp?.school || (spell ? Parser.spSchoolAbvToFull(spell.school) : ''));
+                let time = meta.time || (sp?.castingTime || (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : ''));
+                let range = meta.range || (sp?.range || (spell ? Parser.spRangeToFull(spell.range) : ''));
+                let components = meta.components || (sp?.components || (spell ? Parser.spComponentsToFull(spell.components, spell.level) : ''));
+                let duration = meta.duration || (sp?.duration || (spell ? Parser.spDurationToFull(spell.duration) : ''));
                 
                 time = typeof time === 'string' ? time : (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
                 range = typeof range === 'string' ? range : (spell ? Parser.spRangeToFull(spell.range) : '');
@@ -1376,6 +1381,8 @@ export function initVttCreatureSheet(vtt) {
                 duration = typeof duration === 'string' ? duration : (spell ? Parser.spDurationToFull(spell.duration) : '');
                 
                 metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
+                if (level) metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${level}</div>`;
+                if (school) metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${school}</div>`;
                 if (time) metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${time}</div>`;
                 if (range) metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${range}</div>`;
                 if (components) metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${components}</div>`;
@@ -1388,13 +1395,11 @@ export function initVttCreatureSheet(vtt) {
                 return;
             }
             if (spell && RenderSpells) {
-                // Generate HTML via 5eTools renderer
                 let rawRender = RenderSpells.getRenderedSpell(spell);
                 let html = "";
                 if (typeof rawRender === "string") {
                     html = rawRender;
                 } else {
-                    // It's likely a DocumentFragment or Element. Append to a temp table to extract HTML.
                     const temp = document.createElement("table");
                     try {
                         if (rawRender.appendTo) rawRender.appendTo(temp);
@@ -1405,18 +1410,16 @@ export function initVttCreatureSheet(vtt) {
                     }
                 }
                 
-                // The renderer output is wrapped in table structures.
-                // We strip out the table row/body wrappers for a clean card layout.
                 html = html.replace(/<\/?tbody[^>]*>/g, '').replace(/<\/?tr[^>]*>/g, '').replace(/<\/?td[^>]*>/g, '<div>').replace(/<\/td>/g, '</div>');
+                html = html.replace(/<div><b>(?:Casting Time|Range|Components|Duration):<\/b>.*?<\/div>/ig, '');
+                html = html.replace(/<div><i>.*?(?:level|cantrip).*?<\/i><\/div>/ig, '');
                 
-                // Inject our dice chip buttons
                 html = injectDiceChips(html);
-                containerEl.innerHTML = html;
+                containerEl.innerHTML = metaHtml + html;
             } else {
-                containerEl.innerHTML = `<em>Could not find full text for ${spellName}</em>`;
+                containerEl.innerHTML = fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<em>Could not find full text for ${spellName}</em>`;
             }
         }
-
     });
 
     // ─── Editing Logic ───────────────────────────────────────────────────────
@@ -1426,21 +1429,16 @@ export function initVttCreatureSheet(vtt) {
         currentEditCharId = charId;
         const char = window.VTT.campaignState.characters[charId];
         
-        // Remove existing if any
         let overlay = document.getElementById('cs-edit-modal-overlay');
         if (overlay) overlay.remove();
 
-        // Create overlay on body
         overlay = document.createElement('div');
         overlay.id = 'cs-edit-modal-overlay';
         overlay.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:9999; display:flex; justify-content:center; align-items:center;";
         
-        // Modal Container
         const modalContainer = document.createElement('div');
         modalContainer.style.cssText = "width: 500px; max-width: 90vw; max-height: 85vh; background:var(--color-bg-base, #11151f); border:1px solid var(--color-border, #444); border-radius: 8px; display:flex; flex-direction:column; box-shadow: 0 4px 16px rgba(0,0,0,0.8);";
 
-        
-        // Header
         const header = document.createElement('div');
         header.style.cssText = "padding:12px; border-bottom:1px solid var(--color-border); display:flex; justify-content:space-between; align-items:center; background:var(--color-bg-dark); border-radius: 8px 8px 0 0;";
         header.innerHTML = `
@@ -1451,7 +1449,6 @@ export function initVttCreatureSheet(vtt) {
             </div>
         `;
         
-        // Content
         const content = document.createElement('div');
         content.id = 'cs-edit-modal-content';
         content.style.cssText = "flex:1; overflow-y:auto; padding:12px;";
@@ -1461,10 +1458,8 @@ export function initVttCreatureSheet(vtt) {
         overlay.appendChild(modalContainer);
         document.body.appendChild(overlay);
 
-        // Parse existing values
         const name = char.name || m.name || '';
         
-        // Ensure tokens are initialized and normalized
         if (!char.tokenImages) {
             char.tokenImages = [];
             char.activeTokenIndex = 0;
@@ -1472,7 +1467,6 @@ export function initVttCreatureSheet(vtt) {
             char.tokenImages = [{ url: char.tokenImages, name: 'Imported Token' }];
             char.activeTokenIndex = 0;
         } else if (Array.isArray(char.tokenImages)) {
-            // Normalize old string entries
             char.tokenImages = char.tokenImages.map(t => typeof t === 'string' ? { url: t, name: 'Imported Token' } : (t && typeof t === 'object' ? t : { url: '', name: 'Unknown' }));
         } else {
             char.tokenImages = [];
@@ -1488,7 +1482,6 @@ export function initVttCreatureSheet(vtt) {
         
         let html = `
             <div style="display:flex; flex-direction:column; gap:16px;">
-                <!-- Identity -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Identity</h4>
                     <div style="display:flex; gap:12px; margin-bottom:8px;">
@@ -1508,12 +1501,10 @@ export function initVttCreatureSheet(vtt) {
                             </div>
                         </div>
                         <div id="cs-edit-token-gallery" style="display:flex; gap:8px; flex-wrap:wrap; padding:8px; background:var(--color-bg-dark); border-radius:4px; min-height:80px;">
-                            <!-- Gallery items rendered here -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Core Stats -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Core Stats</h4>
                     <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:8px;">
@@ -1526,7 +1517,6 @@ export function initVttCreatureSheet(vtt) {
                     </div>
                 </div>
 
-                <!-- Combat -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Combat</h4>
                     <div style="display:flex; gap:12px;">
@@ -1545,7 +1535,6 @@ export function initVttCreatureSheet(vtt) {
                     </div>
                 </div>
 
-                <!-- Defenses & Info -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Defenses & Info</h4>
                     <div style="display:flex; flex-direction:column; gap:8px;">
@@ -1576,7 +1565,6 @@ export function initVttCreatureSheet(vtt) {
                     </div>
                 </div>
 
-                <!-- Saves -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Saving Throws (Modifiers)</h4>
                     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
@@ -1589,28 +1577,24 @@ export function initVttCreatureSheet(vtt) {
                     </div>
                 </div>
 
-                <!-- Traits -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Traits</h4>
                     <div id="cs-edit-traits-list"></div>
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-trait">+ Add Trait</button>
                 </div>
 
-                <!-- Actions -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Actions</h4>
                     <div id="cs-edit-actions-list"></div>
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-action">+ Add Action</button>
                 </div>
 
-                <!-- Reactions -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Reactions</h4>
                     <div id="cs-edit-reactions-list"></div>
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-reaction">+ Add Reaction</button>
                 </div>
 
-                <!-- Legendary Actions -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Legendary Actions</h4>
                     <textarea id="cs-edit-legendary-desc" class="vtt-input mb-2" style="width:100%; height:60px;" placeholder="Legendary action description...">${m.legendaryActions || ''}</textarea>
@@ -1618,7 +1602,6 @@ export function initVttCreatureSheet(vtt) {
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-legendary">+ Add Legendary Action</button>
                 </div>
 
-                <!-- Lair Actions -->
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Lair Actions</h4>
                     <textarea id="cs-edit-lair-desc" class="vtt-input mb-2" style="width:100%; height:60px;" placeholder="Lair action description...">${m.lairActionsDesc || ''}</textarea>

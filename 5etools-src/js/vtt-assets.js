@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 // File or URL
                 let thumbHtml = "";
-                const isVideo = item.url && item.url.match(/\.(mp4|webm|ogg)$/i);
+                const isVideo = item.url && (item.url.match(/\.(mp4|webm|ogg)$/i) || item.url.includes('v.pinimg.com'));
                 
                 const isYoutube = item.url && item.url.includes('youtube.com/embed');
                 
@@ -205,6 +205,15 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAddUrl.addEventListener('click', async () => {
         let url = prompt("Enter direct image/video URL or YouTube link:");
         if (!url) return;
+        
+        if (window.VTT && typeof window.VTT.resolveMediaUrl === 'function') {
+            try {
+                const res = await window.VTT.resolveMediaUrl(url);
+                if (res && res.resolvedUrl) {
+                    url = res.resolvedUrl;
+                }
+            } catch (e) {}
+        }
         
         let name = prompt("Enter a name for this asset:", "External Asset");
         if (!name) name = "External Asset";

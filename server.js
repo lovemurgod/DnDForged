@@ -319,6 +319,92 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
   res.json({ url: relativeUrl });
 });
 
+// Resolve media URL (e.g. Pinterest pin.it shortlinks, pinterest.com pin pages, shortlinks)
+app.get('/api/resolve-media-url', async (req, res) => {
+  const targetUrl = req.query.url;
+  if (!targetUrl || typeof targetUrl !== 'string') {
+    return res.status(400).json({ error: "No URL provided" });
+  }
+
+  const cleanTarget = targetUrl.trim();
+  
+    // Fast check: if already direct video or YouTube
+  const isVideoExt = !!cleanTarget.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || cleanTarget.includes('pinimg.com/videos');
+  const isYoutube = cleanTarget.includes('youtube.com') || cleanTarget.includes('youtu.be');
+  const isDirectImage = !!cleanTarget.match(/\.(png|jpg|jpeg|gif|webp|svg)(\?.*)?$/i);
+
+  if (isVideoExt || isYoutube || (isDirectImage && !cleanTarget.includes('pin.it') && !cleanTarget.includes('pinterest.com/pin/'))) {
+    return res.json({
+      resolvedUrl: cleanTarget,
+      isVideo: isVideoExt || isYoutube,
+      isYoutube
+    });
+  }
+
+  try {
+    const fetchRes = await fetch(cleanTarget, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9'
+      },
+      redirect: 'follow'
+    });
+
+    const finalUrl = fetchRes.url || cleanTarget;
+    const html = await fetchRes.text();
+
+    // 1. Look for Pinterest video stream (v1.pinimg.com / v.pinimg.com / .mp4 matches)
+    const pinVideoMatch = html.match(/(https?:\/\/[a-z0-9.]*pinimg\.com\/videos\/[^\s"'<>\\]+\.mp4[^\s"'<>\\]*)/i) ||
+                          html.match(/(https?:\/\/[^\s"'<>\\]+\.mp4(?:\?[^\s"'<>\\]*)?)/i) ||
+                          html.match(/<meta[^>]+property=["']og:video(?::secure_url)?["'][^>]+content=["']([^"']+)["']/i) ||
+                          html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:video(?::secure_url)?["']/i);
+
+    if (pinVideoMatch && pinVideoMatch[1]) {
+      let videoUrl = pinVideoMatch[1].replace(/\\u0026/g, '&').replace(/\\/g, '');
+      return res.json({
+        resolvedUrl: videoUrl,
+        isVideo: true,
+        originalUrl: targetUrl
+      });
+    }
+
+    // 2. Look for high-res Pinterest image (i.pinimg.com/originals/...) or og:image
+    const pinImageMatch = html.match(/(https:\/\/i\.pinimg\.com\/(?:originals|[0-9]+x)\/[^\s"'<>\\]+)/i) ||
+                          html.match(/<meta[^>]+property=["']og:image(?::secure_url)?["'][^>]+content=["']([^"']+)["']/i) ||
+                          html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image(?::secure_url)?["']/i);
+
+    if (pinImageMatch && pinImageMatch[1]) {
+      let imageUrl = pinImageMatch[1].replace(/\\u0026/g, '&').replace(/\\/g, '');
+      // Try upgrading low-res thumbnail paths (e.g. 236x, 736x) to originals for full resolution
+      imageUrl = imageUrl.replace(/\/i\.pinimg\.com\/[0-9]+x\//, '/i.pinimg.com/originals/');
+      const isGif = imageUrl.toLowerCase().split('?')[0].endsWith('.gif');
+      return res.json({
+        resolvedUrl: imageUrl,
+        isVideo: isGif,
+        isGif,
+        originalUrl: targetUrl
+      });
+    }
+
+    // Fallback: return finalUrl after redirect
+    const isFinalVideo = !!finalUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || finalUrl.includes('pinimg.com/videos');
+    res.json({
+      resolvedUrl: finalUrl,
+      isVideo: isFinalVideo,
+      originalUrl: targetUrl
+    });
+  } catch (err) {
+    console.error('[resolve-media-url] Error resolving URL:', err.message);
+    res.json({
+      resolvedUrl: cleanTarget,
+      isVideo: isVideoExt,
+      error: err.message
+    });
+  }
+});
+
+
 // Recursively get directory structure for assets
 function getAssetTree(dirPath, relativePath = '') {
   const result = { name: path.basename(dirPath) === 'assets' && relativePath === '' ? 'Root' : path.basename(dirPath), path: relativePath, type: 'folder', children: [] };

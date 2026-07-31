@@ -38,23 +38,55 @@ export function initVttPlayerSheet(vtt) {
         return result;
     }
 
+    function getSpellMetaStrings(sp) {
+        if (!sp && !spellCache) return {};
+        const spellName = typeof sp === 'string' ? sp : sp?.name;
+        const spell = spellCache ? spellCache.find(s => s.name.toLowerCase() === (spellName || '').toLowerCase()) : null;
+        
+        let school = (sp && typeof sp === 'object' ? sp.school : null) || (spell ? spell.school : '');
+        if (school && window.Parser && Parser.spSchoolAbvToFull) school = Parser.spSchoolAbvToFull(school) || school;
+        
+        let levelVal = (sp && typeof sp === 'object' && sp.level !== undefined) ? sp.level : (spell ? spell.level : undefined);
+        let level = '';
+        if (levelVal !== undefined && levelVal !== null && levelVal !== '') {
+            let levelNum = Number(levelVal);
+            if (!isNaN(levelNum)) {
+                level = window.Parser && Parser.spLevelToFullLevelText ? Parser.spLevelToFullLevelText(levelNum) : (levelNum === 0 ? 'Cantrip' : `Level ${levelNum}`);
+            } else {
+                level = String(levelVal);
+            }
+        }
+
+        let time = (sp && typeof sp === 'object' ? sp.castingTime : null) || (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
+        let range = (sp && typeof sp === 'object' ? sp.range : null) || (spell ? Parser.spRangeToFull(spell.range) : '');
+        let components = (sp && typeof sp === 'object' ? sp.components : null) || (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
+        let duration = (sp && typeof sp === 'object' ? sp.duration : null) || (spell ? Parser.spDurationToFull(spell.duration) : '');
+
+        time = typeof time === 'string' ? time : (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
+        range = typeof range === 'string' ? range : (spell ? Parser.spRangeToFull(spell.range) : '');
+        components = typeof components === 'string' ? components : (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
+        duration = typeof duration === 'string' ? duration : (spell ? Parser.spDurationToFull(spell.duration) : '');
+
+        return { school, level, time, range, components, duration };
+    }
+
     function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp) {
         if (!spellCache) return;
         
         const spell = spellCache.find(s => s.name.toLowerCase() === spellName.toLowerCase());
         let metaHtml = '';
         if (window.Parser) {
-            let time = sp?.castingTime || (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
-            let range = sp?.range || (spell ? Parser.spRangeToFull(spell.range) : '');
-            let components = sp?.components || (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
-            let duration = sp?.duration || (spell ? Parser.spDurationToFull(spell.duration) : '');
-            
-            time = typeof time === 'string' ? time : (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
-            range = typeof range === 'string' ? range : (spell ? Parser.spRangeToFull(spell.range) : '');
-            components = typeof components === 'string' ? components : (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
-            duration = typeof duration === 'string' ? duration : (spell ? Parser.spDurationToFull(spell.duration) : '');
+            let meta = getSpellMetaStrings(sp || (spell ? { name: spell.name, level: spell.level, school: spell.school } : spellName));
+            let level = meta.level;
+            let school = meta.school;
+            let time = meta.time;
+            let range = meta.range;
+            let components = meta.components;
+            let duration = meta.duration;
             
             metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
+            if (level) metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${level}</div>`;
+            if (school) metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${school}</div>`;
             if (time) metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${time}</div>`;
             if (range) metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${range}</div>`;
             if (components) metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${components}</div>`;
@@ -83,6 +115,7 @@ export function initVttPlayerSheet(vtt) {
             }
             html = html.replace(/<\/?tbody[^>]*>/g, '').replace(/<\/?tr[^>]*>/g, '').replace(/<\/?td[^>]*>/g, '<div>').replace(/<\/td>/g, '</div>');
             html = html.replace(/<div><b>(?:Casting Time|Range|Components|Duration):<\/b>.*?<\/div>/ig, '');
+            html = html.replace(/<div><i>.*?(?:level|cantrip).*?<\/i><\/div>/ig, '');
             html = injectDiceChips(html);
             containerEl.innerHTML = metaHtml + html;
         } else {
@@ -177,7 +210,7 @@ function simulateRoll(formula, critRange = 20) {
     window.vttPlayerSheetAPI = {
         getSpellCache: () => spellCache,
         setSpellCache: (cache) => { spellCache = cache; },
-        getSpellMetaStrings: (sp) => ({}),
+        getSpellMetaStrings: (sp) => getSpellMetaStrings(sp),
         simulateRoll: (formula, crit) => simulateRoll(formula, crit),
         parseSpellToMacro: (spData, newSpell) => window.VTTSpellManager?.parseSpellToMacro(spData, newSpell),
         renderAndInjectSpell: (spellName, containerEl, fallbackDesc, spData) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, spData),
@@ -216,9 +249,12 @@ function simulateRoll(formula, critRange = 20) {
             }
 
             return `
-                <div class="spell-row cs-spell-item glassmorphism" data-spell-name="${sp.name.toLowerCase().replace(/"/g, '&quot;')}" style="padding:8px; display:flex; flex-direction:column; gap:4px; ${opacity}">
+                <div class="spell-row cs-spell-item glassmorphism" data-spell-name="${sp.name.toLowerCase().replace(/"/g, '&quot;')}" data-level="${slKey}" data-idx="${idx}" data-prepared="${sp.prepared !== false}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s; ${opacity}">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div style="display:flex; align-items:center; gap:6px;">
+                            <div class="pc-spell-drag-handle" data-level="${slKey}" data-idx="${idx}" title="Click and drag to reorder spell" style="cursor:grab; padding:2px 6px 2px 2px; opacity:0.6; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="if(!this.dataset.disabled){this.style.opacity='1'; this.style.color='var(--color-gold-base)';}" onmouseout="if(!this.dataset.disabled){this.style.opacity='0.6'; this.style.color='inherit';}">
+                                <i class="fa-solid fa-grip-vertical" style="font-size:0.85rem;"></i>
+                            </div>
                             <div class="pc-spell-prep-toggle" data-level="${slKey}" data-idx="${idx}" style="cursor: pointer; color: var(--color-gold-base); font-size: 0.8rem; display: ${slKey === 'cantrip' || slKey === 'legacy' ? 'none' : 'block'};">
                                 <i class="${sp.prepared !== false ? 'fa-solid' : 'fa-regular'} fa-circle"></i>
                             </div>
@@ -448,6 +484,12 @@ function simulateRoll(formula, critRange = 20) {
                         <input type="text" id="modal-ability-name" style="width:100%;">
                     </div>
                     <div class="form-group" style="margin-bottom:8px;">
+                        <label>Category</label>
+                        <select id="modal-ability-category" style="width:100%; padding:4px; font-size:0.8rem;">
+                            <option value="">Uncategorized</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:8px;">
                         <label>Description</label>
                         <textarea id="modal-ability-desc" placeholder="Details of the ability..." style="width:100%; min-height:56px; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:6px 8px; font-family:var(--font-primary); font-size:0.8rem; border-radius:4px; line-height:1.4;"></textarea>
                     </div>
@@ -565,10 +607,10 @@ function simulateRoll(formula, critRange = 20) {
                 if (label || entry) customFields.push({ label, entry });
             });
 
+            const categoryId = document.getElementById('modal-ability-category')?.value || null;
             const ab = { 
                 id: (idx >= 0 ? char.abilityCards[idx].id : 'ab_' + Date.now()), 
-                name, description, formula, customFields, hasCounter, usesCurrent, usesMax 
-
+                name, categoryId, description, formula, customFields, hasCounter, usesCurrent, usesMax 
             };
 
             if (idx >= 0) char.abilityCards[idx] = ab;
@@ -1855,8 +1897,9 @@ function simulateRoll(formula, critRange = 20) {
                         <textarea id="pc-custom-item-desc" style="width:100%; height:80px; resize:vertical;" class="form-control" placeholder="Item description..."></textarea>
                     </div>
                 </div>
-                <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:flex-end; background:rgba(0,0,0,0.2);">
-                    <button id="pc-custom-item-modal-add" class="btn btn-primary">Save Item</button>
+                <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2);">
+                    <button id="pc-custom-item-modal-del" class="btn btn-danger btn-xs" style="display:none;"><i class="fa-solid fa-trash"></i> Delete Item</button>
+                    <button id="pc-custom-item-modal-add" class="btn btn-primary btn-xs">Save Item</button>
                 </div>
             </div>
         `;
@@ -1872,6 +1915,23 @@ function simulateRoll(formula, critRange = 20) {
             // Keep overlay if item modal is open
             if (document.getElementById('pc-item-modal').classList.contains('vtt-hidden')) {
                 document.getElementById('pc-item-overlay').classList.add('vtt-hidden');
+            }
+        });
+
+        document.getElementById('pc-custom-item-modal-del').addEventListener('click', () => {
+            if (!currentChar) return;
+            const saveBtn = document.getElementById('pc-custom-item-modal-add');
+            const editIdx = saveBtn?.dataset.editIdx;
+            if (editIdx !== undefined && editIdx !== null && editIdx !== '') {
+                if (confirm("Delete this item?")) {
+                    currentChar.equipment.splice(parseInt(editIdx), 1);
+                    saveAndEmit(currentChar);
+                    renderSheetData(currentChar);
+                    document.getElementById('pc-custom-item-modal').classList.add('vtt-hidden');
+                    if (document.getElementById('pc-item-modal').classList.contains('vtt-hidden')) {
+                        document.getElementById('pc-item-overlay').classList.add('vtt-hidden');
+                    }
+                }
             }
         });
 
@@ -1983,6 +2043,11 @@ function simulateRoll(formula, critRange = 20) {
         const titleEl = document.getElementById('pc-custom-item-modal-title');
         if (titleEl) {
             titleEl.textContent = isEdit ? 'Edit Item' : 'Custom Item';
+        }
+
+        const delBtn = document.getElementById('pc-custom-item-modal-del');
+        if (delBtn) {
+            delBtn.style.display = isEdit ? 'inline-block' : 'none';
         }
 
         document.getElementById('pc-custom-item-modal').classList.remove('vtt-hidden');
@@ -2619,7 +2684,9 @@ function simulateRoll(formula, critRange = 20) {
                 spells: { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [], legacy: [] },
                 bio: { height: '', age: '', weight: '', backstory: '', notes: '' },
                 abilityCards: [],
+                abilityCategories: [],
                 macros: [],
+                macroCategories: [],
                 toHit: '',
                 dcAbility: 'INT',
                 skills: {},
@@ -2790,7 +2857,11 @@ function simulateRoll(formula, critRange = 20) {
         char.spells = (typeof char.spells === 'object' && char.spells !== null && !Array.isArray(char.spells)) ? char.spells : { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [], legacy: [{ id: 'sp_legacy', name: 'Legacy Spells', description: char.spells || '' }] };
         char.bio = char.bio || { height: '', age: '', weight: '', backstory: '', notes: char.info || '' };
         char.abilityCards = char.abilityCards || [];
+        char.abilityCategories = char.abilityCategories || [];
+        char.abilityCards.forEach(c => { if (c.categoryId === undefined) c.categoryId = null; });
         char.macros = char.macros || [];
+        char.macroCategories = char.macroCategories || [];
+        char.macros.forEach(m => { if (m.categoryId === undefined) m.categoryId = null; });
         char.spellSlots = char.spellSlots || {
             level1: { current: 0, max: 0 },
             level2: { current: 0, max: 0 },
@@ -3158,19 +3229,19 @@ function simulateRoll(formula, critRange = 20) {
 
                 <div style="display:flex; justify-content:center; align-items:center; margin-top:24px; margin-bottom:12px; gap: 16px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border: 1px solid var(--color-border-subtle);">
                     <div style="display:flex; gap:4px; align-items:center;">
-                        <span style="font-size:0.75rem; color:var(--color-text-muted); margin-right:4px; font-family:var(--font-heading);">SUCCESSES</span>
-                        <input type="checkbox" class="pc-ds-success" data-idx="1" ${char.deathSaves.successes >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
-                        <input type="checkbox" class="pc-ds-success" data-idx="2" ${char.deathSaves.successes >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
-                        <input type="checkbox" class="pc-ds-success" data-idx="3" ${char.deathSaves.successes >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
+                        <span style="font-size:0.75rem; color:var(--color-text-muted); margin-right:4px; font-family:var(--font-heading);">FAILURES</span>
+                        <input type="checkbox" class="pc-ds-failure" data-idx="3" ${char.deathSaves.failures >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
+                        <input type="checkbox" class="pc-ds-failure" data-idx="2" ${char.deathSaves.failures >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
+                        <input type="checkbox" class="pc-ds-failure" data-idx="1" ${char.deathSaves.failures >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
                     </div>
                     <button id="pc-roll-death-save" class="btn btn-danger" style="border-radius:50%; width:48px; height:48px; display:flex; justify-content:center; align-items:center; box-shadow:0 0 10px rgba(244, 67, 54, 0.5);" title="Roll Death Save">
                         <i class="fa-solid fa-skull" style="font-size:1.5rem;"></i>
                     </button>
                     <div style="display:flex; gap:4px; align-items:center;">
-                        <input type="checkbox" class="pc-ds-failure" data-idx="1" ${char.deathSaves.failures >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
-                        <input type="checkbox" class="pc-ds-failure" data-idx="2" ${char.deathSaves.failures >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
-                        <input type="checkbox" class="pc-ds-failure" data-idx="3" ${char.deathSaves.failures >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #f44336;">
-                        <span style="font-size:0.75rem; color:var(--color-text-muted); margin-left:4px; font-family:var(--font-heading);">FAILURES</span>
+                        <input type="checkbox" class="pc-ds-success" data-idx="1" ${char.deathSaves.successes >= 1 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
+                        <input type="checkbox" class="pc-ds-success" data-idx="2" ${char.deathSaves.successes >= 2 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
+                        <input type="checkbox" class="pc-ds-success" data-idx="3" ${char.deathSaves.successes >= 3 ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px; accent-color: #4caf50;">
+                        <span style="font-size:0.75rem; color:var(--color-text-muted); margin-left:4px; font-family:var(--font-heading);">SUCCESSES</span>
                     </div>
                 </div>
         `;
@@ -3235,14 +3306,14 @@ function simulateRoll(formula, critRange = 20) {
                 <button id="pc-add-class" class="btn btn-secondary btn-xs" style="margin-top:8px;"><i class="fa-solid fa-plus"></i> Add Class</button>
             </div>
             
-            <div style="display:flex; gap:12px; margin-bottom:12px;">
-                <div class="form-group" style="flex:1;">
+            <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+                <div class="form-group" style="flex:1; min-width:120px;">
                     <label>Species / Race</label>
                     <select id="pc-race" data-val="${char.race}" style="width:100%;">
                         <option value="${char.race}">${char.race || 'Select Species'}</option>
                     </select>
                 </div>
-                <div class="form-group" style="flex:1;">
+                <div class="form-group" style="flex:1; min-width:120px;">
                     <label>Background</label>
                     <select id="pc-background" data-val="${char.background}" style="width:100%;">
                         <option value="${char.background}">${char.background || 'Select Background'}</option>
@@ -3250,12 +3321,12 @@ function simulateRoll(formula, critRange = 20) {
                 </div>
             </div>
             
-            <div style="display:flex; gap:12px; margin-bottom:16px;">
-                <div class="form-group" style="flex:1;">
+            <div style="display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+                <div class="form-group" style="flex:1; min-width:80px;">
                     <label>Max HP</label>
                     <input type="number" id="pc-hpMax" value="${char.hpMax}" style="width:100%;">
                 </div>
-                <div class="form-group" style="flex:1;">
+                <div class="form-group" style="flex:1; min-width:80px;">
                     <label>Armor Class</label>
                     <input type="number" id="pc-ac" value="${char.ac}" style="width:100%;">
                 </div>
@@ -3302,18 +3373,18 @@ function simulateRoll(formula, critRange = 20) {
             </div>
             
             <h4 style="margin:0 0 8px 0; color:var(--color-gold-base); font-family:var(--font-heading);">Character Info</h4>
-            <div style="display:flex; gap:12px; margin-bottom:12px;">
-                <div class="form-group" style="flex:1;">
+            <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+                <div class="form-group" style="flex:1; min-width:70px;">
                     <label>Age</label>
-                    <input type="text" id="pc-bio-age" value="${char.bio.age}">
+                    <input type="text" id="pc-bio-age" value="${char.bio.age}" style="width:100%;">
                 </div>
-                <div class="form-group" style="flex:1;">
+                <div class="form-group" style="flex:1; min-width:70px;">
                     <label>Height (ft)</label>
-                    <input type="text" id="pc-bio-height" value="${char.bio.height}">
+                    <input type="text" id="pc-bio-height" value="${char.bio.height}" style="width:100%;">
                 </div>
-                <div class="form-group" style="flex:1;">
+                <div class="form-group" style="flex:1; min-width:70px;">
                     <label>Weight (lbs)</label>
-                    <input type="text" id="pc-bio-weight" value="${char.bio.weight}">
+                    <input type="text" id="pc-bio-weight" value="${char.bio.weight}" style="width:100%;">
                 </div>
             </div>
             <div class="form-group" style="margin-bottom:12px;">
@@ -3412,10 +3483,29 @@ function simulateRoll(formula, critRange = 20) {
         }
 
         char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
+        char.containers = char.containers || [];
+        char.equipment = char.equipment || [];
+        char.equipment.forEach(eq => { if (eq.containerId === undefined) eq.containerId = null; });
+
         const coinCount = (parseInt(char.currency.cp) || 0) + (parseInt(char.currency.sp) || 0) + (parseInt(char.currency.ep) || 0) + (parseInt(char.currency.gp) || 0) + (parseInt(char.currency.pp) || 0);
         const coinWeight = coinCount * 0.02;
 
-        const totalWeight = char.equipment.reduce((acc, eq) => acc + ((parseFloat(eq.weight) || 0) * (parseInt(eq.qty) || 1)), 0) + coinWeight;
+        // Container weight calculation
+        const getContainerEffectiveWeight = (c) => {
+            const cItems = char.equipment.filter(eq => eq.containerId === c.id);
+            const rawWeight = cItems.reduce((acc, eq) => acc + ((parseFloat(eq.weight) || 0) * (parseInt(eq.qty) || 1)), 0);
+            if (c.weightRule === 'fixed') {
+                return parseFloat(c.customWeight) || 0;
+            } else if (c.weightRule === 'weightless') {
+                return 0;
+            }
+            return rawWeight;
+        };
+
+        const unbaggedWeight = char.equipment.filter(eq => !eq.containerId).reduce((acc, eq) => acc + ((parseFloat(eq.weight) || 0) * (parseInt(eq.qty) || 1)), 0);
+        const totalEquipWeight = unbaggedWeight + char.containers.reduce((acc, c) => acc + getContainerEffectiveWeight(c), 0);
+        const totalWeight = totalEquipWeight + coinWeight;
+
         const strScore = getTotalStat(char, 'str') || 10;
         const encRule = document.getElementById('config-encumbrance-rule')?.value || 'standard';
 
@@ -3437,6 +3527,53 @@ function simulateRoll(formula, critRange = 20) {
                 encumbranceStatus = `<span style="color:var(--color-danger); font-weight:bold;">Over-encumbered (0 speed)</span>`;
             }
         }
+
+        const renderEquipRowHtml = (eq, i) => `
+            <div class="equip-row glassmorphism" data-idx="${i}" data-container-id="${eq.containerId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="pc-equip-drag-handle" data-idx="${i}" title="Click and drag to move/reorder item" style="cursor:grab; padding:2px 8px 2px 2px; opacity:0.6; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
+                        <i class="fa-solid fa-grip-vertical" style="font-size:0.9rem;"></i>
+                    </div>
+                    <div class="pc-equip-toggle" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); flex:1; min-width:0; display:flex; align-items:center; gap:6px; padding-right:8px;" title="Click to expand/collapse description">
+                        <i class="fa-solid fa-chevron-right text-gradient-gold" style="font-size:0.8rem; flex-shrink:0; transition:transform 0.2s;" id="pc-equip-chevron-${i}"></i>
+                        <span style="word-break:break-word; overflow-wrap:anywhere;">${eq.name}</span>
+                    </div>
+                    <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
+                        <span style="font-size:0.8rem; color:var(--color-text-muted);">Wt: ${eq.weight || 0} lb</span>
+                        <div style="display:flex; align-items:center; gap:4px; margin: 0 2px;">
+                            <button class="btn btn-xxs btn-secondary pc-equip-qty-minus" data-idx="${i}">-</button>
+                            <span style="font-size:0.8rem; width:16px; text-align:center;">${eq.qty}</span>
+                            <button class="btn btn-xxs btn-secondary pc-equip-qty-plus" data-idx="${i}">+</button>
+                        </div>
+                        <button class="btn btn-xxs btn-secondary pc-equip-ping" data-idx="${i}" title="Ping Item to Chat"><i class="fa-solid fa-comment-dots"></i></button>
+                    </div>
+                </div>
+                <div class="pc-equip-desc vtt-hidden" id="pc-equip-desc-${i}" style="padding: 8px 4px 0 16px; font-size: 0.85rem; color: var(--color-text-secondary); border-top: 1px solid var(--color-border-subtle); margin-top: 4px; line-height: 1.4;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:0.75rem; color:var(--color-text-muted);"><i class="fa-solid fa-box-archive" style="color:var(--color-gold-base);"></i> Move to:</span>
+                            <select class="pc-equip-container-select" data-idx="${i}" title="Move to Bag" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
+                                <option value="" ${!eq.containerId ? 'selected' : ''}>Main Inventory</option>
+                                ${(char.containers || []).map(c => `
+                                    <option value="${c.id}" ${eq.containerId === c.id ? 'selected' : ''}>📦 ${c.name}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                        <button class="btn btn-xxs btn-secondary pc-equip-edit" data-idx="${i}" title="Edit Item"><i class="fa-solid fa-pen"></i> Edit Item</button>
+                    </div>
+                    <div style="white-space: pre-wrap;">
+                        ${(function () {
+                            if (!eq.description) return '<i style="opacity:0.5;">No description available.</i>';
+                            let html = eq.description.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                            html = html.replace(/\*\*(.*?)\*\*(.*?)\*\*/g, '<b>$1</b>');
+                            html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
+                            html = html.replace(/---/g, '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">');
+                            return html;
+                        })()}
+                    </div>
+                </div>
+            </div>
+        `;
 
         let equipmentHtml = `
             <div style="display:flex; justify-content:center; gap:16px; margin-bottom:16px; background:rgba(0,0,0,0.2); padding:12px; border-radius:8px; border:1px solid var(--color-border-subtle);">
@@ -3464,42 +3601,71 @@ function simulateRoll(formula, critRange = 20) {
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);"><i class="fa-solid fa-backpack"></i> Inventory</h4>
                 <div style="display:flex; gap:8px;">
+                    <button id="btn-create-bag" class="btn btn-secondary btn-xs"><i class="fa-solid fa-sack-xmark"></i> Create Bag</button>
                     <button id="btn-add-equip-db" class="btn btn-secondary btn-xs"><i class="fa-solid fa-book-open"></i> Add Items</button>
                     <button id="btn-add-equip-custom" class="btn btn-secondary btn-xs"><i class="fa-solid fa-plus"></i> Custom Item</button>
                 </div>
             </div>
             <div id="pc-equip-list" style="display:flex; flex-direction:column; gap:8px;">
-                ${char.equipment.map((eq, i) => `
-                    <div class="equip-row glassmorphism" style="padding:8px; display:flex; flex-direction:column; gap:4px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div class="pc-equip-toggle" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); flex:1; min-width:0; display:flex; align-items:center; gap:6px; padding-right:8px;" title="Click to expand/collapse description">
-                                <i class="fa-solid fa-chevron-right text-gradient-gold" style="font-size:0.8rem; flex-shrink:0; transition:transform 0.2s;" id="pc-equip-chevron-${i}"></i>
-                                <span style="word-break:break-word; overflow-wrap:anywhere;">${eq.name}</span>
-                            </div>
-                            <div style="display:flex; gap:8px; align-items:center; flex-shrink:0;">
-                                <span style="font-size:0.8rem; color:var(--color-text-muted);">Wt: ${eq.weight || 0} lb</span>
-                                <div style="display:flex; align-items:center; gap:4px; margin: 0 4px;">
-                                    <button class="btn btn-xxs btn-secondary pc-equip-qty-minus" data-idx="${i}">-</button>
-                                    <span style="font-size:0.8rem; width:16px; text-align:center;">${eq.qty}</span>
-                                    <button class="btn btn-xxs btn-secondary pc-equip-qty-plus" data-idx="${i}">+</button>
+                ${(function() {
+                    let html = '';
+                    // 1. Bags / Containers Accordions
+                    (char.containers || []).forEach((c, cIdx) => {
+                        const cItems = char.equipment.map((eq, i) => ({ eq, i })).filter(({ eq }) => eq.containerId === c.id);
+                        const itemWeightSum = cItems.reduce((acc, { eq }) => acc + ((parseFloat(eq.weight) || 0) * (parseInt(eq.qty) || 1)), 0);
+                        
+                        let weightLabel = `${itemWeightSum.toFixed(1)} lb`;
+                        if (c.weightRule === 'fixed') {
+                            weightLabel = `${(parseFloat(c.customWeight) || 0).toFixed(1)} lb (Fixed)`;
+                        } else if (c.weightRule === 'weightless') {
+                            weightLabel = `0.0 lb (Weightless)`;
+                        }
+
+                        html += `
+                            <div class="pc-bag-card glassmorphism" data-container-id="${c.id}" data-container-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
+                                <div class="pc-bag-header" data-container-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+                                    <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+                                        <div class="pc-bag-drag-handle" data-container-idx="${cIdx}" title="Click and drag to reorder bag" style="cursor:grab; opacity:0.5; padding-right:4px;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.5'; this.style.color='inherit';" onclick="event.stopPropagation();">
+                                            <i class="fa-solid fa-grip-vertical"></i>
+                                        </div>
+                                        <i class="fa-solid ${c.icon || 'fa-sack-xmark'} text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
+                                        <i class="fa-solid fa-chevron-right text-gradient-gold pc-bag-chevron" data-container-id="${c.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${c.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'};"></i>
+                                        <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${c.name}</span>
+                                        <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${cItems.length} item${cItems.length !== 1 ? 's' : ''} • ${weightLabel}</span>
+                                    </div>
+                                    <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" onclick="event.stopPropagation();">
+                                        <button class="btn btn-xxs btn-secondary pc-bag-edit" data-container-id="${c.id}" title="Edit Bag"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="btn btn-xxs btn-danger pc-bag-del" data-container-id="${c.id}" title="Delete Bag"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
                                 </div>
-                                <button class="btn btn-xxs btn-secondary pc-equip-ping" data-idx="${i}" title="Ping Item to Chat"><i class="fa-solid fa-comment-dots"></i></button>
-                                <button class="btn btn-xxs btn-secondary pc-equip-edit" data-idx="${i}" title="Edit Item"><i class="fa-solid fa-pen"></i></button>
-                                <button class="btn btn-xxs btn-danger pc-equip-del" data-idx="${i}" title="Delete Item"><i class="fa-solid fa-trash"></i></button>
+                                <div class="pc-bag-contents ${c.collapsed ? 'vtt-hidden' : ''}" data-container-id="${c.id}" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px; border-left:3px solid var(--color-gold-base); background:rgba(0,0,0,0.15);">
+                                    ${cItems.map(({ eq, i }) => renderEquipRowHtml(eq, i)).join('')}
+                                    ${cItems.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">Drag items here or drop onto header to move into this bag.</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // 2. Main Inventory (Unbagged items)
+                    const unbaggedItems = char.equipment.map((eq, i) => ({ eq, i })).filter(({ eq }) => !eq.containerId);
+                    html += `
+                        <div class="pc-bag-card glassmorphism" data-container-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
+                            <div class="pc-bag-header pc-main-inv-header" data-container-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+                                <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+                                    <i class="fa-solid fa-backpack text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
+                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-gold-light);">Main Inventory (Carried)</span>
+                                    <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${unbaggedItems.length} item${unbaggedItems.length !== 1 ? 's' : ''}</span>
+                                </div>
+                            </div>
+                            <div class="pc-bag-contents" data-container-id="" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px;">
+                                ${unbaggedItems.map(({ eq, i }) => renderEquipRowHtml(eq, i)).join('')}
+                                ${unbaggedItems.length === 0 && (char.containers || []).length > 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">All items are packed into bags.</div>` : ''}
+                                ${char.equipment.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center;">No items added yet.</div>` : ''}
                             </div>
                         </div>
-                        <div class="pc-equip-desc vtt-hidden" id="pc-equip-desc-${i}" style="padding: 8px 4px 0 16px; font-size: 0.85rem; color: var(--color-text-secondary); border-top: 1px solid var(--color-border-subtle); margin-top: 4px; white-space: pre-wrap; line-height: 1.4;">
-                            ${(function () {
-                if (!eq.description) return '<i style="opacity:0.5;">No description available.</i>';
-                let html = eq.description.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
-                html = html.replace(/---/g, '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">');
-                return html;
-            })()}
-                        </div>
-                    </div>
-                `).join('')}
+                    `;
+                    return html;
+                })()}
             </div>
             <div style="margin-top:16px; padding:8px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                 <div>
@@ -3622,7 +3788,11 @@ function simulateRoll(formula, critRange = 20) {
                             return `
                                 <div class="pc-spell-page ${sl.key === activeSpellTab ? '' : 'vtt-hidden'}" id="spell-page-${sl.key}">
                                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:8px;">
-                                        <span style="font-size:0.9rem; font-weight:600;">All Prepared Spells</span>
+                                        <span style="font-size:0.9rem; font-weight:600;">All Spells</span>
+                                        <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; color:var(--color-text-secondary); user-select:none;">
+                                            <input type="checkbox" id="all-spells-prep-only" style="cursor:pointer;">
+                                            <span>Show Prepared Only</span>
+                                        </label>
                                     </div>
                                     <div style="margin-bottom:12px;">
                                         <input type="text" id="all-spells-search" placeholder="Search spells..." style="width:100%; padding:6px; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
@@ -3632,7 +3802,6 @@ function simulateRoll(formula, critRange = 20) {
                                             const allLvlSpells = char.spells[lvl.key] || [];
                                             const lvlSpellsRendered = allLvlSpells
                                                 .map((sp, idx) => ({ sp, idx }))
-                                                .filter(({ sp }) => sp.prepared !== false || lvl.key === 'cantrip' || lvl.key === 'legacy')
                                                 .map(({ sp, idx }) => renderSpellRowHtml(sp, lvl.key, idx, true));
                                                 
                                             if (lvlSpellsRendered.length === 0) return '';
@@ -3674,10 +3843,94 @@ function simulateRoll(formula, critRange = 20) {
         `;
         document.getElementById('ps-spells').innerHTML = spellsHtml;
 
+        const renderMacroRowHtml = (m, i) => `
+            <div class="macro-row glassmorphism" data-idx="${i}" data-category-id="${m.categoryId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:6px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:0;">
+                        <div class="pc-macro-drag-handle" data-idx="${i}" title="Click and drag to move/reorder macro" style="cursor:grab; opacity:0.6; padding-right:4px; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
+                            <i class="fa-solid fa-grip-vertical" style="font-size:0.9rem;"></i>
+                        </div>
+                        <button class="btn pc-macro-roll-all" data-idx="${i}" title="Roll all: ${m.name}" style="font-weight:600; color:var(--color-text-primary); background:transparent; border:none; padding:0; cursor:pointer; display:flex; align-items:center; gap:6px; font-size:0.875rem; font-family:inherit; transition:color 0.15s ease; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" onmouseover="this.style.color='var(--color-gold-light)'" onmouseout="this.style.color='var(--color-text-primary)'"><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> ${m.name}</button>
+                    </div>
+                    <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
+                        <button class="btn btn-xxs btn-secondary pc-macro-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-xxs btn-danger pc-macro-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                ${(m.range || m.target) ? `
+                <div style="display:flex; gap:10px; font-size:0.7rem; color:var(--color-text-muted); margin-top:-2px; margin-bottom:2px; padding:0 2px;">
+                    ${m.range ? `<span><i class="fa-solid fa-location-crosshairs" style="color:var(--color-gold-base); font-size:0.65rem; margin-right:4px;"></i>${m.range}</span>` : ''}
+                    ${m.target ? `<span><i class="fa-solid fa-bullseye" style="color:var(--color-gold-base); font-size:0.65rem; margin-right:4px;"></i>${m.target}</span>` : ''}
+                </div>` : ''}
+                ${m.description ? `
+                <div style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.2); border-radius:4px; padding:4px 6px;">
+                    <span style="font-size:0.72rem; color:var(--color-text-muted); font-style:italic; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.description}</span>
+                    <button class="btn btn-xxs btn-secondary pc-macro-desc-ping" data-idx="${i}" title="Ping description to chat" style="flex-shrink:0;"><i class="fa-solid fa-comment-dots"></i></button>
+                </div>` : ''}
+                <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+                    <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                        ${((m.attackStat && m.attackStat !== 'none') || m.attackBonus) ? `<button class="btn btn-xxs btn-primary pc-macro-attack" data-idx="${i}">⚔️ Attack (${calculatedAtkBonus(m)})</button>` : ''}
+                        ${m.saveAbility ? `<button class="btn btn-xxs btn-secondary pc-macro-save" data-idx="${i}">🛡️ DC ${calculatedSaveDc(m)} ${m.saveAbility}</button>` : ''}
+                        ${m.damage && m.damage.length ? `<button class="btn btn-xxs btn-danger pc-macro-damage" data-idx="${i}">💥 Damage</button>` : ''}
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px; margin-left:auto;">
+                        <span style="font-size:0.7rem; color:var(--color-text-muted);"><i class="fa-solid fa-folder" style="color:var(--color-gold-base); font-size:0.65rem;"></i></span>
+                        <select class="pc-macro-cat-select" data-idx="${i}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.7rem; border-radius:4px; padding:1px 4px; max-width:120px;">
+                            <option value="" ${!m.categoryId ? 'selected' : ''}>Uncategorized</option>
+                            ${(char.macroCategories || []).map(c => `
+                                <option value="${c.id}" ${m.categoryId === c.id ? 'selected' : ''}>📁 ${c.name}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const renderAbilityRowHtml = (card, i) => `
+            <div class="ability-row glassmorphism" data-idx="${i}" data-category-id="${card.categoryId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <div class="pc-ability-drag-handle" data-idx="${i}" title="Click and drag to move/reorder ability card" style="cursor:grab; opacity:0.6; padding-right:4px; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
+                            <i class="fa-solid fa-grip-vertical" style="font-size:0.9rem;"></i>
+                        </div>
+                        <i class="fa-solid fa-chevron-right pc-ability-expand" data-idx="${i}" style="transition:transform 0.2s; cursor:pointer; font-size:0.7rem; color:var(--color-text-muted);"></i>
+                        <div class="pc-ability-ping" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary);"><i class="fa-solid fa-bolt text-gradient-gold"></i> ${card.name}</div>
+                    </div>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        ${card.hasCounter ? `
+                        <div style="display:flex; align-items:center; gap:4px;">
+                            <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${i}">-</button>
+                            <span style="font-size:0.8rem; font-family:monospace; min-width:24px; text-align:center;">${card.usesCurrent || 0} / ${card.usesMax || 0}</span>
+                            <button class="btn btn-xxs btn-secondary pc-ability-uses-plus" data-idx="${i}">+</button>
+                        </div>
+                        ` : ''}
+                        <button class="btn btn-xxs btn-secondary pc-ability-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-xxs btn-danger pc-ability-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="pc-ability-details" id="pc-ability-details-${i}" style="display:none; font-size:0.8rem; margin-top:4px; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px; color:var(--color-text-muted);">
+                    <div>${card.description ? card.description.replace(/\\n/g, '<br>') : ''}</div>
+                    <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:6px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.05);">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:0.72rem; color:var(--color-text-muted);"><i class="fa-solid fa-folder" style="color:var(--color-gold-base);"></i> Category:</span>
+                            <select class="pc-ability-cat-select" data-idx="${i}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
+                                <option value="" ${!card.categoryId ? 'selected' : ''}>Uncategorized</option>
+                                ${(char.abilityCategories || []).map(c => `
+                                    <option value="${c.id}" ${card.categoryId === c.id ? 'selected' : ''}>📁 ${c.name}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
         let infoHtml = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);">Attacks & Macros</h4>
+                    <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);"><i class="fa-solid fa-burst"></i> Attacks & Macros</h4>
                     <div style="display:flex; align-items:center; gap:8px;">
+                        <button id="btn-create-macro-cat" class="btn btn-secondary btn-xs"><i class="fa-solid fa-folder-plus"></i> Category</button>
+                        <button id="btn-add-macro" class="btn btn-secondary btn-xs"><i class="fa-solid fa-plus"></i> Add Attack</button>
                         <button class="btn btn-xxs btn-secondary pc-attack-settings-btn" title="Attack Settings"><i class="fa-solid fa-cog"></i></button>
                     </div>
                 </div>
@@ -3690,35 +3943,56 @@ function simulateRoll(formula, critRange = 20) {
                     `).join('')}
                 </div>` : ''}
                 
-                <div id="pc-macros-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
-                    ${char.macros.map((m, i) => `
-                        <div class="macro-row glassmorphism" style="padding:8px; display:flex; flex-direction:column; gap:6px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <button class="btn pc-macro-roll-all" data-idx="${i}" title="Roll all: ${m.name}" style="font-weight:600; color:var(--color-text-primary); background:transparent; border:none; padding:0; cursor:pointer; display:flex; align-items:center; gap:6px; font-size:0.875rem; font-family:inherit; transition:color 0.15s ease;" onmouseover="this.style.color='var(--color-gold-light)'" onmouseout="this.style.color='var(--color-text-primary)'"><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> ${m.name}</button>
-                                <div>
-                                    <button class="btn btn-xxs btn-secondary pc-macro-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-xxs btn-danger pc-macro-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
+                <div id="pc-macros-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+                    ${(function() {
+                        let html = '';
+                        (char.macroCategories || []).forEach((c, cIdx) => {
+                            const cItems = char.macros.map((m, i) => ({ m, i })).filter(({ m }) => m.categoryId === c.id);
+                            html += `
+                                <div class="pc-macro-cat-card glassmorphism" data-category-id="${c.id}" data-category-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
+                                    <div class="pc-macro-cat-header" data-category-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+                                        <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+                                            <div class="pc-macro-cat-drag-handle" data-category-idx="${cIdx}" title="Click and drag to reorder category" style="cursor:grab; opacity:0.5; padding-right:4px;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.5'; this.style.color='inherit';" onclick="event.stopPropagation();">
+                                                <i class="fa-solid fa-grip-vertical"></i>
+                                            </div>
+                                            <i class="fa-solid fa-folder text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
+                                            <i class="fa-solid fa-chevron-right text-gradient-gold pc-macro-cat-chevron" data-category-id="${c.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${c.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'};"></i>
+                                            <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${c.name}</span>
+                                            <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${cItems.length} item${cItems.length !== 1 ? 's' : ''}</span>
+                                        </div>
+                                        <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" onclick="event.stopPropagation();">
+                                            <button class="btn btn-xxs btn-secondary pc-macro-cat-edit" data-category-id="${c.id}" title="Edit Category"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="btn btn-xxs btn-danger pc-macro-cat-del" data-category-id="${c.id}" title="Delete Category"><i class="fa-solid fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="pc-macro-cat-contents ${c.collapsed ? 'vtt-hidden' : ''}" data-category-id="${c.id}" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px; border-left:3px solid var(--color-gold-base); background:rgba(0,0,0,0.15);">
+                                        ${cItems.map(({ m, i }) => renderMacroRowHtml(m, i)).join('')}
+                                        ${cItems.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">Drag items here or drop onto header to move into this category.</div>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        const uncatMacros = char.macros.map((m, i) => ({ m, i })).filter(({ m }) => !m.categoryId);
+                        html += `
+                            <div class="pc-macro-cat-card glassmorphism" data-category-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
+                                <div class="pc-macro-cat-header pc-main-macro-header" data-category-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+                                    <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+                                        <i class="fa-solid fa-burst text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
+                                        <span style="font-weight:700; font-size:0.875rem; color:var(--color-gold-light);">Uncategorized Attacks / Macros</span>
+                                        <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${uncatMacros.length} item${uncatMacros.length !== 1 ? 's' : ''}</span>
+                                    </div>
+                                </div>
+                                <div class="pc-macro-cat-contents" data-category-id="" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px;">
+                                    ${uncatMacros.map(({ m, i }) => renderMacroRowHtml(m, i)).join('')}
+                                    ${uncatMacros.length === 0 && (char.macroCategories || []).length > 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">All macros are organized into categories.</div>` : ''}
+                                    ${char.macros.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center;">No macros added yet.</div>` : ''}
                                 </div>
                             </div>
-                            ${(m.range || m.target) ? `
-                            <div style="display:flex; gap:10px; font-size:0.7rem; color:var(--color-text-muted); margin-top:-2px; margin-bottom:2px; padding:0 2px;">
-                                ${m.range ? `<span><i class="fa-solid fa-location-crosshairs" style="color:var(--color-gold-base); font-size:0.65rem; margin-right:4px;"></i>${m.range}</span>` : ''}
-                                ${m.target ? `<span><i class="fa-solid fa-bullseye" style="color:var(--color-gold-base); font-size:0.65rem; margin-right:4px;"></i>${m.target}</span>` : ''}
-                            </div>` : ''}
-                            ${m.description ? `
-                            <div style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.2); border-radius:4px; padding:4px 6px;">
-                                <span style="font-size:0.72rem; color:var(--color-text-muted); font-style:italic; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.description}</span>
-                                <button class="btn btn-xxs btn-secondary pc-macro-desc-ping" data-idx="${i}" title="Ping description to chat" style="flex-shrink:0;"><i class="fa-solid fa-comment-dots"></i></button>
-                            </div>` : ''}
-                            <div style="display:flex; gap:4px; flex-wrap:wrap;">
-                                ${((m.attackStat && m.attackStat !== 'none') || m.attackBonus) ? `<button class="btn btn-xxs btn-primary pc-macro-attack" data-idx="${i}">⚔️ Attack (${calculatedAtkBonus(m)})</button>` : ''}
-                                ${m.saveAbility ? `<button class="btn btn-xxs btn-secondary pc-macro-save" data-idx="${i}">🛡️ DC ${calculatedSaveDc(m)} ${m.saveAbility}</button>` : ''}
-                                ${m.damage && m.damage.length ? `<button class="btn btn-xxs btn-danger pc-macro-damage" data-idx="${i}">💥 Damage</button>` : ''}
-                            </div>
-                        </div>
-                    `).join('')}
+                        `;
+                        return html;
+                    })()}
                 </div>
-                <button id="btn-add-macro" class="btn btn-secondary btn-xs btn-block"><i class="fa-solid fa-plus"></i> Add Attack / Macro</button>
 
                 <div id="pc-macro-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); padding:16px; border-radius:8px; z-index:1000; width:400px; max-height:80vh; overflow-y:auto; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
                     <h3 style="margin-top:0; color:var(--color-gold-base);">Edit Macro</h3>
@@ -3726,6 +4000,13 @@ function simulateRoll(formula, critRange = 20) {
                     <div class="form-group" style="margin-bottom:8px;">
                         <label>Name</label>
                         <input type="text" id="modal-macro-name" style="width:100%;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <label>Category</label>
+                        <select id="modal-macro-category" style="width:100%; padding:4px; font-size:0.8rem;">
+                            <option value="">Uncategorized</option>
+                            ${(char.macroCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="form-group" style="margin-bottom:8px;">
                         <label>Description <span style="font-size:0.7rem; color:var(--color-text-muted); font-weight:400;">(Optional — shown at top of ping card)</span></label>
@@ -3832,32 +4113,60 @@ function simulateRoll(formula, critRange = 20) {
 
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);"><i class="fa-solid fa-address-card"></i> Ability Cards</h4>
-                <button id="btn-add-ability" class="btn btn-secondary btn-xs"><i class="fa-solid fa-plus"></i> Add Card</button>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <button id="btn-create-ability-cat" class="btn btn-secondary btn-xs"><i class="fa-solid fa-folder-plus"></i> Category</button>
+                    <button id="btn-add-ability" class="btn btn-secondary btn-xs"><i class="fa-solid fa-plus"></i> Add Card</button>
+                </div>
             </div>
             <div id="pc-ability-list" style="display:flex; flex-direction:column; gap:8px;">
-                ${char.abilityCards.map((card, i) => `
-                    <div class="ability-row glassmorphism" style="padding:8px; display:flex; flex-direction:column; gap:4px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div style="display:flex; align-items:center; gap:6px;">
-                                <i class="fa-solid fa-chevron-right pc-ability-expand" data-idx="${i}" style="transition:transform 0.2s; cursor:pointer; font-size:0.7rem; color:var(--color-text-muted);"></i>
-                                <div class="pc-ability-ping" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary);"><i class="fa-solid fa-bolt text-gradient-gold"></i> ${card.name}</div>
-                            </div>
-                            <div style="display:flex; gap:12px; align-items:center;">
-                                ${card.hasCounter ? `
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${i}">-</button>
-                                    <span style="font-size:0.8rem; font-family:monospace; min-width:24px; text-align:center;">${card.usesCurrent || 0} / ${card.usesMax || 0}</span>
-                                    <button class="btn btn-xxs btn-secondary pc-ability-uses-plus" data-idx="${i}">+</button>
+                ${(function() {
+                    let html = '';
+                    (char.abilityCategories || []).forEach((c, cIdx) => {
+                        const cItems = char.abilityCards.map((card, i) => ({ card, i })).filter(({ card }) => card.categoryId === c.id);
+                        html += `
+                            <div class="pc-ability-cat-card glassmorphism" data-category-id="${c.id}" data-category-idx="${cIdx}" draggable="true" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden; transition:border-color 0.15s, box-shadow 0.15s;">
+                                <div class="pc-ability-cat-header" data-category-id="${c.id}" style="padding:8px 12px; background:rgba(0,0,0,0.25); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+                                    <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+                                        <div class="pc-ability-cat-drag-handle" data-category-idx="${cIdx}" title="Click and drag to reorder category" style="cursor:grab; opacity:0.5; padding-right:4px;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.5'; this.style.color='inherit';" onclick="event.stopPropagation();">
+                                            <i class="fa-solid fa-grip-vertical"></i>
+                                        </div>
+                                        <i class="fa-solid fa-folder text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
+                                        <i class="fa-solid fa-chevron-right text-gradient-gold pc-ability-cat-chevron" data-category-id="${c.id}" style="font-size:0.75rem; flex-shrink:0; transition:transform 0.2s; transform:${c.collapsed ? 'rotate(0deg)' : 'rotate(90deg)'};"></i>
+                                        <span style="font-weight:700; font-size:0.875rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${c.name}</span>
+                                        <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${cItems.length} item${cItems.length !== 1 ? 's' : ''}</span>
+                                    </div>
+                                    <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;" onclick="event.stopPropagation();">
+                                        <button class="btn btn-xxs btn-secondary pc-ability-cat-edit" data-category-id="${c.id}" title="Edit Category"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="btn btn-xxs btn-danger pc-ability-cat-del" data-category-id="${c.id}" title="Delete Category"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
                                 </div>
-                                ` : ''}
-                                <button class="btn btn-xxs btn-secondary pc-ability-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
+                                <div class="pc-ability-cat-contents ${c.collapsed ? 'vtt-hidden' : ''}" data-category-id="${c.id}" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px; border-left:3px solid var(--color-gold-base); background:rgba(0,0,0,0.15);">
+                                    ${cItems.map(({ card, i }) => renderAbilityRowHtml(card, i)).join('')}
+                                    ${cItems.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">Drag items here or drop onto header to move into this category.</div>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    const uncatAbilities = char.abilityCards.map((card, i) => ({ card, i })).filter(({ card }) => !card.categoryId);
+                    html += `
+                        <div class="pc-ability-cat-card glassmorphism" data-category-id="" style="border:1px solid var(--color-border-subtle); border-radius:8px; margin-bottom:4px; overflow:hidden;">
+                            <div class="pc-ability-cat-header pc-main-ability-header" data-category-id="" style="padding:8px 12px; background:rgba(0,0,0,0.2); display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;">
+                                <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+                                    <i class="fa-solid fa-address-card text-gradient-gold" style="font-size:0.95rem; flex-shrink:0;"></i>
+                                    <span style="font-weight:700; font-size:0.875rem; color:var(--color-gold-light);">Uncategorized Abilities</span>
+                                    <span style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:12px;">${uncatAbilities.length} item${uncatAbilities.length !== 1 ? 's' : ''}</span>
+                                </div>
+                            </div>
+                            <div class="pc-ability-cat-contents" data-category-id="" style="padding:8px; border-top:1px solid rgba(255,255,255,0.05); display:flex; flex-direction:column; gap:8px;">
+                                ${uncatAbilities.map(({ card, i }) => renderAbilityRowHtml(card, i)).join('')}
+                                ${uncatAbilities.length === 0 && (char.abilityCategories || []).length > 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center; font-style:italic;">All abilities are organized into categories.</div>` : ''}
+                                ${char.abilityCards.length === 0 ? `<div style="font-size:0.8rem; color:var(--color-text-muted); padding:8px; text-align:center;">No ability cards added yet.</div>` : ''}
                             </div>
                         </div>
-                        <div class="pc-ability-details" id="pc-ability-details-${i}" style="display:none; font-size:0.8rem; margin-top:4px; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px; color:var(--color-text-muted);">
-                            ${card.description ? card.description.replace(/\\n/g, '<br>') : ''}
-                        </div>
-                    </div>
-                `).join('')}
+                    `;
+                    return html;
+                })()}
             </div>
 
         `;
@@ -4359,6 +4668,11 @@ function simulateRoll(formula, critRange = 20) {
             if (idx >= 0) {
                 const m = char.macros[idx];
                 document.getElementById('modal-macro-name').value = m.name || '';
+                const catSel = document.getElementById('modal-macro-category');
+                if (catSel) {
+                    catSel.innerHTML = '<option value="">Uncategorized</option>' + (char.macroCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
+                    catSel.value = m.categoryId || '';
+                }
                 document.getElementById('modal-macro-desc').value = m.description || '';
                 document.getElementById('modal-macro-range').value = m.range || '';
                 document.getElementById('modal-macro-target').value = m.target || '';
@@ -4394,6 +4708,11 @@ function simulateRoll(formula, critRange = 20) {
                 modalDamageRows = m.damage ? JSON.parse(JSON.stringify(m.damage)) : [];
             } else {
                 document.getElementById('modal-macro-name').value = '';
+                const catSel = document.getElementById('modal-macro-category');
+                if (catSel) {
+                    catSel.innerHTML = '<option value="">Uncategorized</option>' + (char.macroCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
+                    catSel.value = '';
+                }
                 document.getElementById('modal-macro-desc').value = '';
                 document.getElementById('modal-macro-range').value = '';
                 document.getElementById('modal-macro-target').value = '';
@@ -4441,6 +4760,7 @@ function simulateRoll(formula, critRange = 20) {
             const m = {
                 id: idx >= 0 ? char.macros[idx].id : 'mac_' + Date.now(),
                 name: document.getElementById('modal-macro-name').value || 'New Macro',
+                categoryId: document.getElementById('modal-macro-category')?.value || null,
                 description: document.getElementById('modal-macro-desc').value.trim(),
                 range: document.getElementById('modal-macro-range').value.trim(),
                 target: document.getElementById('modal-macro-target').value.trim(),
@@ -4472,6 +4792,40 @@ function simulateRoll(formula, critRange = 20) {
             if (confirm("Delete this macro?")) {
                 char.macros.splice(e.currentTarget.dataset.idx, 1);
                 saveAndEmit(char); renderSheetData(char);
+            }
+        }));
+
+        // Macro Category Management
+        document.getElementById('btn-create-macro-cat')?.addEventListener('click', () => openCategoryModal('macro'));
+
+        document.querySelectorAll('.pc-macro-cat-edit').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openCategoryModal('macro', e.currentTarget.dataset.categoryId);
+        }));
+
+        document.querySelectorAll('.pc-macro-cat-del').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openCategoryDeleteModal('macro', e.currentTarget.dataset.categoryId);
+        }));
+
+        document.querySelectorAll('.pc-macro-cat-header').forEach(hdr => hdr.addEventListener('click', (e) => {
+            const cId = e.currentTarget.dataset.categoryId;
+            if (!cId) return;
+            const cat = (char.macroCategories || []).find(c => c.id === cId);
+            if (cat) {
+                cat.collapsed = !cat.collapsed;
+                saveAndEmit(char);
+                renderSheetData(char);
+            }
+        }));
+
+        document.querySelectorAll('.pc-macro-cat-select').forEach(sel => sel.addEventListener('change', (e) => {
+            const idx = parseInt(e.currentTarget.dataset.idx);
+            const newCatId = e.currentTarget.value || null;
+            if (char.macros && char.macros[idx]) {
+                char.macros[idx].categoryId = newCatId;
+                saveAndEmit(char);
+                renderSheetData(char);
             }
         }));
 
@@ -4737,6 +5091,368 @@ function simulateRoll(formula, critRange = 20) {
             });
         }));
 
+        // Category Modal & Management Logic
+        function ensureCategoryModalExists() {
+            if (document.getElementById('pc-category-modal')) return;
+
+            const modalHtml = `
+                <div id="pc-category-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
+                <div id="pc-category-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:380px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
+                        <h3 style="margin:0; color:var(--color-gold-base); font-size:1.05rem;" id="modal-cat-title"><i class="fa-solid fa-folder-plus"></i> Add Category</h3>
+                        <button id="modal-cat-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <input type="hidden" id="modal-cat-type" value="macro">
+                    <input type="hidden" id="modal-cat-id" value="">
+                    <div class="form-group" style="margin-bottom:16px;">
+                        <label style="font-size:0.8rem; font-weight:600; margin-bottom:6px; display:block; color:var(--color-text-primary);">Category Name</label>
+                        <input type="text" id="modal-cat-name" placeholder="e.g. Melee Attacks, Class Features, Feats" style="width:100%; padding:6px; font-size:0.85rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:8px; border-top:1px solid var(--color-border-subtle); padding-top:12px;">
+                        <button id="modal-cat-cancel" class="btn btn-secondary btn-xs">Cancel</button>
+                        <button id="modal-cat-save" class="btn btn-primary btn-xs">Save Category</button>
+                    </div>
+                </div>
+            `;
+            const div = document.createElement('div');
+            div.innerHTML = modalHtml;
+            document.body.appendChild(div);
+
+            const closeCatModal = () => {
+                document.getElementById('pc-category-modal').classList.add('vtt-hidden');
+                document.getElementById('pc-category-overlay').classList.add('vtt-hidden');
+            };
+
+            document.getElementById('modal-cat-close').addEventListener('click', closeCatModal);
+            document.getElementById('modal-cat-cancel').addEventListener('click', closeCatModal);
+            document.getElementById('pc-category-overlay').addEventListener('click', closeCatModal);
+
+            document.getElementById('modal-cat-name').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('modal-cat-save').click();
+                }
+            });
+
+            document.getElementById('modal-cat-save').addEventListener('click', () => {
+                const type = document.getElementById('modal-cat-type').value;
+                const id = document.getElementById('modal-cat-id').value;
+                const name = document.getElementById('modal-cat-name').value.trim();
+                if (!name) return alert("Category name is required.");
+
+                if (type === 'macro') {
+                    char.macroCategories = char.macroCategories || [];
+                    if (id) {
+                        const cat = char.macroCategories.find(c => c.id === id);
+                        if (cat) cat.name = name;
+                    } else {
+                        char.macroCategories.push({
+                            id: 'mcat_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                            name,
+                            collapsed: false
+                        });
+                    }
+                } else if (type === 'ability') {
+                    char.abilityCategories = char.abilityCategories || [];
+                    if (id) {
+                        const cat = char.abilityCategories.find(c => c.id === id);
+                        if (cat) cat.name = name;
+                    } else {
+                        char.abilityCategories.push({
+                            id: 'acat_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                            name,
+                            collapsed: false
+                        });
+                    }
+                }
+                closeCatModal();
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+        }
+
+        function openCategoryModal(type = 'macro', catId = null) {
+            ensureCategoryModalExists();
+            const modal = document.getElementById('pc-category-modal');
+            const overlay = document.getElementById('pc-category-overlay');
+            const titleEl = document.getElementById('modal-cat-title');
+            const typeInp = document.getElementById('modal-cat-type');
+            const idInp = document.getElementById('modal-cat-id');
+            const nameInp = document.getElementById('modal-cat-name');
+
+            typeInp.value = type;
+            idInp.value = catId || '';
+
+            const list = type === 'macro' ? (char.macroCategories || []) : (char.abilityCategories || []);
+            const catName = catId ? (list.find(c => c.id === catId)?.name || '') : '';
+
+            if (catId) {
+                titleEl.innerHTML = `<i class="fa-solid fa-pen"></i> Edit Category`;
+                nameInp.value = catName;
+            } else {
+                const typeLabel = type === 'macro' ? 'Attack' : 'Ability';
+                titleEl.innerHTML = `<i class="fa-solid fa-folder-plus"></i> Create ${typeLabel} Category`;
+                nameInp.value = '';
+            }
+
+            modal.classList.remove('vtt-hidden');
+            overlay.classList.remove('vtt-hidden');
+            setTimeout(() => nameInp.focus(), 50);
+        }
+
+        function ensureCategoryDeleteModalExists() {
+            if (document.getElementById('pc-category-delete-modal')) return;
+
+            const modalHtml = `
+                <div id="pc-category-delete-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
+                <div id="pc-category-delete-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:380px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
+                        <h3 style="margin:0; color:#f44336; font-size:1.05rem;"><i class="fa-solid fa-trash"></i> Delete Category</h3>
+                        <button id="modal-cat-del-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <input type="hidden" id="modal-cat-del-type" value="macro">
+                    <input type="hidden" id="modal-cat-del-id" value="">
+                    <p style="font-size:0.85rem; color:var(--color-text-secondary); line-height:1.4; margin-bottom:16px;" id="modal-cat-del-msg">Are you sure you want to delete this category?</p>
+                    <div style="display:flex; justify-content:flex-end; gap:8px; border-top:1px solid var(--color-border-subtle); padding-top:12px;">
+                        <button id="modal-cat-del-cancel" class="btn btn-secondary btn-xs">Cancel</button>
+                        <button id="modal-cat-del-confirm" class="btn btn-danger btn-xs"><i class="fa-solid fa-trash"></i> Delete Category</button>
+                    </div>
+                </div>
+            `;
+            const div = document.createElement('div');
+            div.innerHTML = modalHtml;
+            document.body.appendChild(div);
+
+            const closeDelModal = () => {
+                document.getElementById('pc-category-delete-modal').classList.add('vtt-hidden');
+                document.getElementById('pc-category-delete-overlay').classList.add('vtt-hidden');
+            };
+
+            document.getElementById('modal-cat-del-close').addEventListener('click', closeDelModal);
+            document.getElementById('modal-cat-del-cancel').addEventListener('click', closeDelModal);
+            document.getElementById('pc-category-delete-overlay').addEventListener('click', closeDelModal);
+
+            document.getElementById('modal-cat-del-confirm').addEventListener('click', () => {
+                const type = document.getElementById('modal-cat-del-type').value;
+                const id = document.getElementById('modal-cat-del-id').value;
+
+                if (type === 'macro') {
+                    (char.macros || []).filter(m => m.categoryId === id).forEach(m => { m.categoryId = null; });
+                    char.macroCategories = (char.macroCategories || []).filter(c => c.id !== id);
+                } else if (type === 'ability') {
+                    (char.abilityCards || []).filter(card => card.categoryId === id).forEach(card => { card.categoryId = null; });
+                    char.abilityCategories = (char.abilityCategories || []).filter(c => c.id !== id);
+                }
+
+                closeDelModal();
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+        }
+
+        function openCategoryDeleteModal(type, catId) {
+            ensureCategoryDeleteModalExists();
+            const modal = document.getElementById('pc-category-delete-modal');
+            const overlay = document.getElementById('pc-category-delete-overlay');
+            const typeInp = document.getElementById('modal-cat-del-type');
+            const idInp = document.getElementById('modal-cat-del-id');
+            const msgEl = document.getElementById('modal-cat-del-msg');
+
+            typeInp.value = type;
+            idInp.value = catId;
+
+            const list = type === 'macro' ? (char.macroCategories || []) : (char.abilityCategories || []);
+            const cat = list.find(c => c.id === catId);
+            const catName = cat ? cat.name : 'this category';
+
+            msgEl.innerHTML = `Are you sure you want to delete <b>"${catName}"</b>?<br><br><span style="font-size:0.8rem; color:var(--color-text-muted);">Contained items will return to <i>Uncategorized</i>.</span>`;
+
+            modal.classList.remove('vtt-hidden');
+            overlay.classList.remove('vtt-hidden');
+        }
+
+        // Bags & Pouches Modal & Management Logic
+        function ensureBagModalExists() {
+            if (document.getElementById('pc-bag-modal')) return;
+
+            const modalHtml = `
+                <div id="pc-bag-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
+                <div id="pc-bag-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:420px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
+                        <h3 style="margin:0; color:var(--color-gold-base); font-size:1.1rem;" id="modal-bag-title"><i class="fa-solid fa-sack-xmark"></i> Create Bag / Pouch</h3>
+                        <button id="modal-bag-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <input type="hidden" id="modal-bag-id" value="">
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label style="font-size:0.8rem; font-weight:600; margin-bottom:4px; display:block; color:var(--color-text-primary);">Container Name</label>
+                        <input type="text" id="modal-bag-name" placeholder="e.g. Bag of Holding, Belt Pouch, Backpack" style="width:100%; padding:6px; font-size:0.85rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                    </div>
+                    <div style="display:flex; gap:12px; margin-bottom:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label style="font-size:0.8rem; font-weight:600; margin-bottom:4px; display:block; color:var(--color-text-primary);">Icon</label>
+                            <select id="modal-bag-icon" style="width:100%; padding:6px; font-size:0.85rem; background:#222; border:1px solid var(--color-border-subtle); color:#fff; border-radius:4px;">
+                                <option value="fa-sack-xmark">🎒 Sack (X)</option>
+                                <option value="fa-sack-dollar">💰 Sack ($)</option>
+                                <option value="fa-backpack">🎒 Backpack</option>
+                                <option value="fa-box-archive">📦 Box / Chest</option>
+                                <option value="fa-gem">👛 Pouch / Purse</option>
+                                <option value="fa-briefcase">💼 Satchel / Case</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label style="font-size:0.8rem; font-weight:600; margin-bottom:4px; display:block; color:var(--color-text-primary);">Weight Rule</label>
+                            <select id="modal-bag-rule" style="width:100%; padding:6px; font-size:0.85rem; background:#222; border:1px solid var(--color-border-subtle); color:#fff; border-radius:4px;">
+                                <option value="standard">Standard (Sums contents)</option>
+                                <option value="fixed">Fixed Container Weight</option>
+                                <option value="weightless">Weightless Contents (0 lb)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="modal-bag-custom-weight-group" style="margin-bottom:16px; display:none;">
+                        <label style="font-size:0.8rem; font-weight:600; margin-bottom:4px; display:block; color:var(--color-text-primary);">Container Empty Weight (lbs)</label>
+                        <input type="number" step="0.1" id="modal-bag-custom-weight" value="15" style="width:100%; padding:6px; font-size:0.85rem; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); border-radius:4px;">
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:8px; border-top:1px solid var(--color-border-subtle); padding-top:12px;">
+                        <button id="modal-bag-cancel" class="btn btn-secondary btn-xs">Cancel</button>
+                        <button id="modal-bag-save" class="btn btn-primary btn-xs">Save Bag</button>
+                    </div>
+                </div>
+            `;
+            const div = document.createElement('div');
+            div.innerHTML = modalHtml;
+            document.body.appendChild(div);
+
+            const ruleSelect = document.getElementById('modal-bag-rule');
+            const customWeightGroup = document.getElementById('modal-bag-custom-weight-group');
+            ruleSelect.addEventListener('change', () => {
+                customWeightGroup.style.display = ruleSelect.value === 'fixed' ? 'block' : 'none';
+            });
+
+            const closeBagModal = () => {
+                document.getElementById('pc-bag-modal').classList.add('vtt-hidden');
+                document.getElementById('pc-bag-overlay').classList.add('vtt-hidden');
+            };
+
+            document.getElementById('modal-bag-close').addEventListener('click', closeBagModal);
+            document.getElementById('modal-bag-cancel').addEventListener('click', closeBagModal);
+            document.getElementById('pc-bag-overlay').addEventListener('click', closeBagModal);
+
+            document.getElementById('modal-bag-save').addEventListener('click', () => {
+                const id = document.getElementById('modal-bag-id').value;
+                const name = document.getElementById('modal-bag-name').value.trim() || 'New Bag';
+                const icon = document.getElementById('modal-bag-icon').value;
+                const weightRule = document.getElementById('modal-bag-rule').value;
+                const customWeight = parseFloat(document.getElementById('modal-bag-custom-weight').value) || 0;
+
+                char.containers = char.containers || [];
+                if (id) {
+                    const bag = char.containers.find(c => c.id === id);
+                    if (bag) {
+                        bag.name = name;
+                        bag.icon = icon;
+                        bag.weightRule = weightRule;
+                        bag.customWeight = customWeight;
+                    }
+                } else {
+                    const newBag = {
+                        id: 'bag_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        name,
+                        icon,
+                        weightRule,
+                        customWeight,
+                        collapsed: false
+                    };
+                    char.containers.push(newBag);
+                }
+                closeBagModal();
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+        }
+
+        function openBagModal(bagId = null) {
+            ensureBagModalExists();
+            const modal = document.getElementById('pc-bag-modal');
+            const overlay = document.getElementById('pc-bag-overlay');
+            const titleEl = document.getElementById('modal-bag-title');
+            const idInp = document.getElementById('modal-bag-id');
+            const nameInp = document.getElementById('modal-bag-name');
+            const iconSel = document.getElementById('modal-bag-icon');
+            const ruleSel = document.getElementById('modal-bag-rule');
+            const weightInp = document.getElementById('modal-bag-custom-weight');
+            const customWeightGroup = document.getElementById('modal-bag-custom-weight-group');
+
+            char.containers = char.containers || [];
+            if (bagId) {
+                const bag = char.containers.find(c => c.id === bagId);
+                if (bag) {
+                    titleEl.innerHTML = `<i class="fa-solid fa-pen"></i> Edit Container`;
+                    idInp.value = bag.id;
+                    nameInp.value = bag.name || '';
+                    iconSel.value = bag.icon || 'fa-sack-xmark';
+                    ruleSel.value = bag.weightRule || 'standard';
+                    weightInp.value = bag.customWeight !== undefined ? bag.customWeight : 15;
+                    customWeightGroup.style.display = bag.weightRule === 'fixed' ? 'block' : 'none';
+                }
+            } else {
+                titleEl.innerHTML = `<i class="fa-solid fa-sack-xmark"></i> Create Bag / Pouch`;
+                idInp.value = '';
+                nameInp.value = '';
+                iconSel.value = 'fa-sack-xmark';
+                ruleSel.value = 'standard';
+                weightInp.value = 15;
+                customWeightGroup.style.display = 'none';
+            }
+
+            modal.classList.remove('vtt-hidden');
+            overlay.classList.remove('vtt-hidden');
+        }
+
+        document.getElementById('btn-create-bag')?.addEventListener('click', () => openBagModal(null));
+
+        document.querySelectorAll('.pc-bag-edit').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openBagModal(e.currentTarget.dataset.containerId);
+        }));
+
+        document.querySelectorAll('.pc-bag-del').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const cId = e.currentTarget.dataset.containerId;
+            const bag = (char.containers || []).find(c => c.id === cId);
+            if (!bag) return;
+
+            const cItems = char.equipment.filter(eq => eq.containerId === cId);
+            if (cItems.length > 0) {
+                const choice = confirm(`Delete container "${bag.name}"?\n\nClick OK to unpack items into Main Inventory.\nClick Cancel to abort deletion.`);
+                if (!choice) return;
+                cItems.forEach(eq => { eq.containerId = null; });
+            }
+            char.containers = char.containers.filter(c => c.id !== cId);
+            saveAndEmit(char);
+            renderSheetData(char);
+        }));
+
+        document.querySelectorAll('.pc-bag-header').forEach(hdr => hdr.addEventListener('click', (e) => {
+            const cId = e.currentTarget.dataset.containerId;
+            if (!cId) return;
+            const bag = (char.containers || []).find(c => c.id === cId);
+            if (bag) {
+                bag.collapsed = !bag.collapsed;
+                saveAndEmit(char);
+                renderSheetData(char);
+            }
+        }));
+
+        document.querySelectorAll('.pc-equip-container-select').forEach(sel => sel.addEventListener('change', (e) => {
+            const idx = parseInt(e.currentTarget.dataset.idx);
+            const newContainerId = e.currentTarget.value || null;
+            if (char.equipment[idx]) {
+                char.equipment[idx].containerId = newContainerId;
+                saveAndEmit(char);
+                renderSheetData(char);
+            }
+        }));
+
         document.getElementById('btn-add-equip-db')?.addEventListener('click', () => {
             window.openItemModal();
         });
@@ -4787,6 +5503,676 @@ function simulateRoll(formula, critRange = 20) {
                 if (chevEl) chevEl.style.transform = 'rotate(0deg)';
             }
         }));
+
+        // Upgraded Multi-Target Drag-and-Drop Logic (Items, Bags, Macros, Abilities & Spells)
+        let equipDragHandlePressed = false;
+        let equipDraggedIdx = null;
+        let bagDragHandlePressed = false;
+        let bagDraggedIdx = null;
+
+        let macroDragHandlePressed = false;
+        let macroDraggedIdx = null;
+        let macroCatDragHandlePressed = false;
+        let macroCatDraggedIdx = null;
+
+        let abilityDragHandlePressed = false;
+        let abilityDraggedIdx = null;
+        let abilityCatDragHandlePressed = false;
+        let abilityCatDraggedIdx = null;
+
+        let spellDragHandlePressed = false;
+        let spellDraggedIdx = null;
+        let spellDraggedLevel = null;
+
+        const clearAllDropIndicators = () => {
+            document.querySelectorAll('#pc-equip-list .equip-row, #pc-macros-list .macro-row, #pc-ability-list .ability-row, #ps-spells .spell-row').forEach(row => {
+                row.style.borderTop = '';
+                row.style.borderBottom = '';
+                row.style.boxShadow = '';
+                row.style.opacity = '';
+            });
+            document.querySelectorAll('#pc-equip-list .pc-bag-header, #pc-macros-list .pc-macro-cat-header, #pc-ability-list .pc-ability-cat-header').forEach(hdr => {
+                hdr.style.outline = '';
+                hdr.style.background = '';
+            });
+            document.querySelectorAll('#pc-equip-list .pc-bag-card, #pc-macros-list .pc-macro-cat-card, #pc-ability-list .pc-ability-cat-card').forEach(card => {
+                card.style.borderTop = '';
+                card.style.borderBottom = '';
+                card.style.opacity = '';
+            });
+            document.querySelectorAll('#ps-spells .spell-row').forEach(row => {
+                row.style.borderTop = '';
+                row.style.borderBottom = '';
+                row.style.boxShadow = '';
+                row.style.opacity = '';
+            });
+        };
+
+        document.querySelectorAll('.pc-equip-drag-handle').forEach(handle => {
+            handle.addEventListener('mousedown', () => { equipDragHandlePressed = true; });
+        });
+        document.querySelectorAll('.pc-bag-drag-handle').forEach(handle => {
+            handle.addEventListener('mousedown', () => { bagDragHandlePressed = true; });
+        });
+        document.querySelectorAll('.pc-macro-drag-handle').forEach(handle => {
+            handle.addEventListener('mousedown', () => { macroDragHandlePressed = true; });
+        });
+        document.querySelectorAll('.pc-macro-cat-drag-handle').forEach(handle => {
+            handle.addEventListener('mousedown', () => { macroCatDragHandlePressed = true; });
+        });
+        document.querySelectorAll('.pc-ability-drag-handle').forEach(handle => {
+            handle.addEventListener('mousedown', () => { abilityDragHandlePressed = true; });
+        });
+        document.querySelectorAll('.pc-ability-cat-drag-handle').forEach(handle => {
+            handle.addEventListener('mousedown', () => { abilityCatDragHandlePressed = true; });
+        });
+        document.querySelectorAll('.pc-spell-drag-handle').forEach(handle => {
+            handle.addEventListener('mousedown', () => { spellDragHandlePressed = true; });
+        });
+
+        window.addEventListener('mouseup', () => {
+            equipDragHandlePressed = false;
+            bagDragHandlePressed = false;
+            macroDragHandlePressed = false;
+            macroCatDragHandlePressed = false;
+            abilityDragHandlePressed = false;
+            abilityCatDragHandlePressed = false;
+            spellDragHandlePressed = false;
+        });
+
+        // 1. Item Dragging onto Rows and Bag Headers
+        document.querySelectorAll('#pc-equip-list .equip-row').forEach(row => {
+            row.addEventListener('dragstart', (e) => {
+                if (!equipDragHandlePressed) {
+                    e.preventDefault();
+                    return;
+                }
+                equipDraggedIdx = parseInt(row.dataset.idx);
+                e.dataTransfer.setData('text/plain', equipDraggedIdx.toString());
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => { row.style.opacity = '0.4'; }, 0);
+            });
+
+            row.addEventListener('dragover', (e) => {
+                if (equipDraggedIdx === null || equipDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                clearAllDropIndicators();
+                const draggedRow = document.querySelector(`#pc-equip-list .equip-row[data-idx="${equipDraggedIdx}"]`);
+                if (draggedRow) draggedRow.style.opacity = '0.4';
+
+                if (e.clientY < midY) {
+                    row.style.borderTop = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 -4px 8px -2px rgba(212, 175, 55, 0.6)';
+                } else {
+                    row.style.borderBottom = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 4px 8px -2px rgba(212, 175, 55, 0.6)';
+                }
+            });
+
+            row.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = equipDraggedIdx;
+                const targetIdx = parseInt(row.dataset.idx);
+                const targetContainerId = row.dataset.containerId || null;
+                equipDraggedIdx = null;
+                equipDragHandlePressed = false;
+
+                if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                let insertAt = targetIdx;
+                if (e.clientY >= midY) {
+                    insertAt = targetIdx + 1;
+                }
+                if (fromIdx < insertAt) {
+                    insertAt--;
+                }
+
+                const [movedItem] = char.equipment.splice(fromIdx, 1);
+                movedItem.containerId = targetContainerId;
+                char.equipment.splice(insertAt, 0, movedItem);
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+
+            row.addEventListener('dragend', () => {
+                equipDraggedIdx = null;
+                equipDragHandlePressed = false;
+                clearAllDropIndicators();
+            });
+        });
+
+        // 2. Item Dragging onto Bag Headers (Move into Bag)
+        document.querySelectorAll('#pc-equip-list .pc-bag-header').forEach(hdr => {
+            hdr.addEventListener('dragover', (e) => {
+                if (equipDraggedIdx === null || equipDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+                clearAllDropIndicators();
+                const draggedRow = document.querySelector(`#pc-equip-list .equip-row[data-idx="${equipDraggedIdx}"]`);
+                if (draggedRow) draggedRow.style.opacity = '0.4';
+
+                hdr.style.outline = '2px dashed var(--color-gold-base)';
+                hdr.style.background = 'rgba(212, 175, 55, 0.15)';
+            });
+
+            hdr.addEventListener('drop', (e) => {
+                if (equipDraggedIdx === null || equipDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = equipDraggedIdx;
+                const targetContainerId = hdr.dataset.containerId || null;
+                equipDraggedIdx = null;
+                equipDragHandlePressed = false;
+
+                if (!isNaN(fromIdx) && char.equipment[fromIdx]) {
+                    char.equipment[fromIdx].containerId = targetContainerId;
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
+            });
+        });
+
+        // 3. Container Card Dragging (Reorder Bags)
+        document.querySelectorAll('#pc-equip-list .pc-bag-card[data-container-idx]').forEach(card => {
+            card.addEventListener('dragstart', (e) => {
+                if (!bagDragHandlePressed) return;
+                bagDraggedIdx = parseInt(card.dataset.containerIdx);
+                e.dataTransfer.setData('text/plain', 'bag_' + bagDraggedIdx);
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => { card.style.opacity = '0.4'; }, 0);
+            });
+
+            card.addEventListener('dragover', (e) => {
+                if (bagDraggedIdx === null || bagDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+
+                const rect = card.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                clearAllDropIndicators();
+                const draggedCard = document.querySelector(`#pc-equip-list .pc-bag-card[data-container-idx="${bagDraggedIdx}"]`);
+                if (draggedCard) draggedCard.style.opacity = '0.4';
+
+                if (e.clientY < midY) {
+                    card.style.borderTop = '2px solid var(--color-gold-base)';
+                } else {
+                    card.style.borderBottom = '2px solid var(--color-gold-base)';
+                }
+            });
+
+            card.addEventListener('drop', (e) => {
+                if (bagDraggedIdx === null || bagDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = bagDraggedIdx;
+                const targetIdx = parseInt(card.dataset.containerIdx);
+                bagDraggedIdx = null;
+                bagDragHandlePressed = false;
+
+                if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
+
+                const rect = card.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                let insertAt = targetIdx;
+                if (e.clientY >= midY) {
+                    insertAt = targetIdx + 1;
+                }
+                if (fromIdx < insertAt) {
+                    insertAt--;
+                }
+
+                const [movedContainer] = char.containers.splice(fromIdx, 1);
+                char.containers.splice(insertAt, 0, movedContainer);
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+
+            card.addEventListener('dragend', () => {
+                bagDraggedIdx = null;
+                bagDragHandlePressed = false;
+                clearAllDropIndicators();
+            });
+        });
+
+        // 4. Spell Dragging onto Spell Rows (Reorder within Level)
+        document.querySelectorAll('#ps-spells .spell-row').forEach(row => {
+            row.addEventListener('dragstart', (e) => {
+                const searchInput = document.getElementById('all-spells-search');
+                if (searchInput && searchInput.value.trim() !== '') {
+                    e.preventDefault();
+                    return;
+                }
+                if (!spellDragHandlePressed) {
+                    e.preventDefault();
+                    return;
+                }
+                spellDraggedIdx = parseInt(row.dataset.idx);
+                spellDraggedLevel = row.dataset.level;
+                e.dataTransfer.setData('text/plain', `spell_${spellDraggedLevel}_${spellDraggedIdx}`);
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => { row.style.opacity = '0.4'; }, 0);
+            });
+
+            row.addEventListener('dragover', (e) => {
+                if (spellDraggedIdx === null || spellDraggedIdx === undefined || !spellDraggedLevel) return;
+                const searchInput = document.getElementById('all-spells-search');
+                if (searchInput && searchInput.value.trim() !== '') return;
+
+                const targetLevel = row.dataset.level;
+                if (targetLevel !== spellDraggedLevel) return;
+
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                clearAllDropIndicators();
+
+                const draggedRow = document.querySelector(`#ps-spells .spell-row[data-level="${spellDraggedLevel}"][data-idx="${spellDraggedIdx}"]`);
+                if (draggedRow) draggedRow.style.opacity = '0.4';
+
+                if (e.clientY < midY) {
+                    row.style.borderTop = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 -4px 8px -2px rgba(212, 175, 55, 0.6)';
+                } else {
+                    row.style.borderBottom = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 4px 8px -2px rgba(212, 175, 55, 0.6)';
+                }
+            });
+
+            row.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = spellDraggedIdx;
+                const fromLevel = spellDraggedLevel;
+                const targetIdx = parseInt(row.dataset.idx);
+                const targetLevel = row.dataset.level;
+                spellDraggedIdx = null;
+                spellDraggedLevel = null;
+                spellDragHandlePressed = false;
+
+                if (fromLevel !== targetLevel || isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                let insertAt = targetIdx;
+                if (e.clientY >= midY) {
+                    insertAt = targetIdx + 1;
+                }
+                if (fromIdx < insertAt) {
+                    insertAt--;
+                }
+
+                if (char.spells[fromLevel] && char.spells[fromLevel][fromIdx]) {
+                    const [movedSpell] = char.spells[fromLevel].splice(fromIdx, 1);
+                    char.spells[fromLevel].splice(insertAt, 0, movedSpell);
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
+            });
+
+            row.addEventListener('dragend', () => {
+                spellDraggedIdx = null;
+                spellDraggedLevel = null;
+                spellDragHandlePressed = false;
+                clearAllDropIndicators();
+            });
+        });
+
+        // 5. Macro Row & Macro Category Drag-and-Drop
+        document.querySelectorAll('#pc-macros-list .macro-row').forEach(row => {
+            row.addEventListener('dragstart', (e) => {
+                if (!macroDragHandlePressed) {
+                    e.preventDefault();
+                    return;
+                }
+                macroDraggedIdx = parseInt(row.dataset.idx);
+                e.dataTransfer.setData('text/plain', `macro_${macroDraggedIdx}`);
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => { row.style.opacity = '0.4'; }, 0);
+            });
+
+            row.addEventListener('dragover', (e) => {
+                if (macroDraggedIdx === null || macroDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                clearAllDropIndicators();
+                const draggedRow = document.querySelector(`#pc-macros-list .macro-row[data-idx="${macroDraggedIdx}"]`);
+                if (draggedRow) draggedRow.style.opacity = '0.4';
+
+                if (e.clientY < midY) {
+                    row.style.borderTop = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 -4px 8px -2px rgba(212, 175, 55, 0.6)';
+                } else {
+                    row.style.borderBottom = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 4px 8px -2px rgba(212, 175, 55, 0.6)';
+                }
+            });
+
+            row.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = macroDraggedIdx;
+                const targetIdx = parseInt(row.dataset.idx);
+                const targetCategoryId = row.dataset.categoryId || null;
+                macroDraggedIdx = null;
+                macroDragHandlePressed = false;
+
+                if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                let insertAt = targetIdx;
+                if (e.clientY >= midY) {
+                    insertAt = targetIdx + 1;
+                }
+                if (fromIdx < insertAt) {
+                    insertAt--;
+                }
+
+                const [movedItem] = char.macros.splice(fromIdx, 1);
+                movedItem.categoryId = targetCategoryId;
+                char.macros.splice(insertAt, 0, movedItem);
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+
+            row.addEventListener('dragend', () => {
+                macroDraggedIdx = null;
+                macroDragHandlePressed = false;
+                clearAllDropIndicators();
+            });
+        });
+
+        document.querySelectorAll('#pc-macros-list .pc-macro-cat-header').forEach(hdr => {
+            hdr.addEventListener('dragover', (e) => {
+                if (macroDraggedIdx === null || macroDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+                clearAllDropIndicators();
+                const draggedRow = document.querySelector(`#pc-macros-list .macro-row[data-idx="${macroDraggedIdx}"]`);
+                if (draggedRow) draggedRow.style.opacity = '0.4';
+
+                hdr.style.outline = '2px dashed var(--color-gold-base)';
+                hdr.style.background = 'rgba(212, 175, 55, 0.15)';
+            });
+
+            hdr.addEventListener('drop', (e) => {
+                if (macroDraggedIdx === null || macroDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = macroDraggedIdx;
+                const targetCategoryId = hdr.dataset.categoryId || null;
+                macroDraggedIdx = null;
+                macroDragHandlePressed = false;
+
+                if (!isNaN(fromIdx) && char.macros[fromIdx]) {
+                    char.macros[fromIdx].categoryId = targetCategoryId;
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
+            });
+        });
+
+        document.querySelectorAll('#pc-macros-list .pc-macro-cat-card[data-category-idx]').forEach(card => {
+            card.addEventListener('dragstart', (e) => {
+                if (!macroCatDragHandlePressed) return;
+                macroCatDraggedIdx = parseInt(card.dataset.categoryIdx);
+                e.dataTransfer.setData('text/plain', 'mcat_' + macroCatDraggedIdx);
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => { card.style.opacity = '0.4'; }, 0);
+            });
+
+            card.addEventListener('dragover', (e) => {
+                if (macroCatDraggedIdx === null || macroCatDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+
+                const rect = card.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                clearAllDropIndicators();
+                const draggedCard = document.querySelector(`#pc-macros-list .pc-macro-cat-card[data-category-idx="${macroCatDraggedIdx}"]`);
+                if (draggedCard) draggedCard.style.opacity = '0.4';
+
+                if (e.clientY < midY) {
+                    card.style.borderTop = '2px solid var(--color-gold-base)';
+                } else {
+                    card.style.borderBottom = '2px solid var(--color-gold-base)';
+                }
+            });
+
+            card.addEventListener('drop', (e) => {
+                if (macroCatDraggedIdx === null || macroCatDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = macroCatDraggedIdx;
+                const targetIdx = parseInt(card.dataset.categoryIdx);
+                macroCatDraggedIdx = null;
+                macroCatDragHandlePressed = false;
+
+                if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
+
+                const rect = card.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                let insertAt = targetIdx;
+                if (e.clientY >= midY) {
+                    insertAt = targetIdx + 1;
+                }
+                if (fromIdx < insertAt) {
+                    insertAt--;
+                }
+
+                const [movedContainer] = char.macroCategories.splice(fromIdx, 1);
+                char.macroCategories.splice(insertAt, 0, movedContainer);
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+
+            card.addEventListener('dragend', () => {
+                macroCatDraggedIdx = null;
+                macroCatDragHandlePressed = false;
+                clearAllDropIndicators();
+            });
+        });
+
+        // 6. Ability Card Row & Ability Category Drag-and-Drop
+        document.querySelectorAll('#pc-ability-list .ability-row').forEach(row => {
+            row.addEventListener('dragstart', (e) => {
+                if (!abilityDragHandlePressed) {
+                    e.preventDefault();
+                    return;
+                }
+                abilityDraggedIdx = parseInt(row.dataset.idx);
+                e.dataTransfer.setData('text/plain', `ability_${abilityDraggedIdx}`);
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => { row.style.opacity = '0.4'; }, 0);
+            });
+
+            row.addEventListener('dragover', (e) => {
+                if (abilityDraggedIdx === null || abilityDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                clearAllDropIndicators();
+                const draggedRow = document.querySelector(`#pc-ability-list .ability-row[data-idx="${abilityDraggedIdx}"]`);
+                if (draggedRow) draggedRow.style.opacity = '0.4';
+
+                if (e.clientY < midY) {
+                    row.style.borderTop = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 -4px 8px -2px rgba(212, 175, 55, 0.6)';
+                } else {
+                    row.style.borderBottom = '2px solid var(--color-gold-base)';
+                    row.style.boxShadow = '0 4px 8px -2px rgba(212, 175, 55, 0.6)';
+                }
+            });
+
+            row.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = abilityDraggedIdx;
+                const targetIdx = parseInt(row.dataset.idx);
+                const targetCategoryId = row.dataset.categoryId || null;
+                abilityDraggedIdx = null;
+                abilityDragHandlePressed = false;
+
+                if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                let insertAt = targetIdx;
+                if (e.clientY >= midY) {
+                    insertAt = targetIdx + 1;
+                }
+                if (fromIdx < insertAt) {
+                    insertAt--;
+                }
+
+                const [movedItem] = char.abilityCards.splice(fromIdx, 1);
+                movedItem.categoryId = targetCategoryId;
+                char.abilityCards.splice(insertAt, 0, movedItem);
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+
+            row.addEventListener('dragend', () => {
+                abilityDraggedIdx = null;
+                abilityDragHandlePressed = false;
+                clearAllDropIndicators();
+            });
+        });
+
+        document.querySelectorAll('#pc-ability-list .pc-ability-cat-header').forEach(hdr => {
+            hdr.addEventListener('dragover', (e) => {
+                if (abilityDraggedIdx === null || abilityDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+                clearAllDropIndicators();
+                const draggedRow = document.querySelector(`#pc-ability-list .ability-row[data-idx="${abilityDraggedIdx}"]`);
+                if (draggedRow) draggedRow.style.opacity = '0.4';
+
+                hdr.style.outline = '2px dashed var(--color-gold-base)';
+                hdr.style.background = 'rgba(212, 175, 55, 0.15)';
+            });
+
+            hdr.addEventListener('drop', (e) => {
+                if (abilityDraggedIdx === null || abilityDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = abilityDraggedIdx;
+                const targetCategoryId = hdr.dataset.categoryId || null;
+                abilityDraggedIdx = null;
+                abilityDragHandlePressed = false;
+
+                if (!isNaN(fromIdx) && char.abilityCards[fromIdx]) {
+                    char.abilityCards[fromIdx].categoryId = targetCategoryId;
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
+            });
+        });
+
+        document.querySelectorAll('#pc-ability-list .pc-ability-cat-card[data-category-idx]').forEach(card => {
+            card.addEventListener('dragstart', (e) => {
+                if (!abilityCatDragHandlePressed) return;
+                abilityCatDraggedIdx = parseInt(card.dataset.categoryIdx);
+                e.dataTransfer.setData('text/plain', 'acat_' + abilityCatDraggedIdx);
+                e.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => { card.style.opacity = '0.4'; }, 0);
+            });
+
+            card.addEventListener('dragover', (e) => {
+                if (abilityCatDraggedIdx === null || abilityCatDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'move';
+
+                const rect = card.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                clearAllDropIndicators();
+                const draggedCard = document.querySelector(`#pc-ability-list .pc-ability-cat-card[data-category-idx="${abilityCatDraggedIdx}"]`);
+                if (draggedCard) draggedCard.style.opacity = '0.4';
+
+                if (e.clientY < midY) {
+                    card.style.borderTop = '2px solid var(--color-gold-base)';
+                } else {
+                    card.style.borderBottom = '2px solid var(--color-gold-base)';
+                }
+            });
+
+            card.addEventListener('drop', (e) => {
+                if (abilityCatDraggedIdx === null || abilityCatDraggedIdx === undefined) return;
+                e.preventDefault();
+                e.stopPropagation();
+                clearAllDropIndicators();
+
+                const fromIdx = abilityCatDraggedIdx;
+                const targetIdx = parseInt(card.dataset.categoryIdx);
+                abilityCatDraggedIdx = null;
+                abilityCatDragHandlePressed = false;
+
+                if (isNaN(fromIdx) || isNaN(targetIdx) || fromIdx === targetIdx) return;
+
+                const rect = card.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                let insertAt = targetIdx;
+                if (e.clientY >= midY) {
+                    insertAt = targetIdx + 1;
+                }
+                if (fromIdx < insertAt) {
+                    insertAt--;
+                }
+
+                const [movedContainer] = char.abilityCategories.splice(fromIdx, 1);
+                char.abilityCategories.splice(insertAt, 0, movedContainer);
+                saveAndEmit(char);
+                renderSheetData(char);
+            });
+
+            card.addEventListener('dragend', () => {
+                abilityCatDraggedIdx = null;
+                abilityCatDragHandlePressed = false;
+                clearAllDropIndicators();
+            });
+        });
 
         document.querySelectorAll('.pc-currency-input').forEach(input => input.addEventListener('change', (e) => {
             const coinType = e.currentTarget.dataset.coin;
@@ -4896,7 +6282,8 @@ function simulateRoll(formula, critRange = 20) {
             const descEl = item.querySelector('.pc-spell-desc');
             
             const postToChat = (html) => {
-                vtt.socket.emit('chat:msg', { abilityCard: { creatureName: char.name, abilityName: sp.name, text: html } });
+                const meta = getSpellMetaStrings(sp);
+                vtt.socket.emit('chat:msg', { abilityCard: { creatureName: char.name, abilityName: sp.name, text: html, ...meta } });
             };
             
             if (descEl.innerHTML.includes('Loading spell details...')) {
@@ -5073,19 +6460,41 @@ function simulateRoll(formula, critRange = 20) {
             }
         }));
 
-        document.getElementById('all-spells-search')?.addEventListener('input', (e) => {
-            const val = e.target.value.toLowerCase();
+        const applyAllSpellsFilters = () => {
+            const val = document.getElementById('all-spells-search')?.value.toLowerCase().trim() || '';
+            const isPrepOnly = document.getElementById('all-spells-prep-only')?.checked || false;
+            const isSearching = val !== '';
+
+            document.querySelectorAll('#spell-page-all .pc-spell-drag-handle').forEach(handle => {
+                if (isSearching) {
+                    handle.dataset.disabled = 'true';
+                    handle.style.opacity = '0.2';
+                    handle.style.cursor = 'not-allowed';
+                    handle.title = 'Reordering disabled during search';
+                } else {
+                    delete handle.dataset.disabled;
+                    handle.style.opacity = '0.6';
+                    handle.style.cursor = 'grab';
+                    handle.title = 'Click and drag to reorder spell';
+                }
+            });
+
             document.querySelectorAll('#spell-page-all .spell-row').forEach(row => {
-                const name = row.dataset.spellName || '';
-                if (name.includes(val)) row.style.display = 'flex';
-                else row.style.display = 'none';
+                const name = (row.dataset.spellName || '').toLowerCase();
+                const isPrep = row.dataset.prepared === 'true' || row.dataset.level === 'cantrip' || row.dataset.level === 'legacy';
+                const matchesSearch = !val || name.includes(val);
+                const matchesPrep = !isPrepOnly || isPrep;
+                row.style.display = (matchesSearch && matchesPrep) ? 'flex' : 'none';
             });
+
             document.querySelectorAll('.all-spells-group').forEach(group => {
-                const visibleSpells = group.querySelectorAll('.spell-row[style*="display: flex"]');
-                const hasVisible = visibleSpells.length > 0;
-                group.style.display = hasVisible ? 'block' : 'none';
+                const visibleSpells = Array.from(group.querySelectorAll('.spell-row')).filter(row => row.style.display !== 'none');
+                group.style.display = visibleSpells.length > 0 ? 'block' : 'none';
             });
-        });
+        };
+
+        document.getElementById('all-spells-search')?.addEventListener('input', applyAllSpellsFilters);
+        document.getElementById('all-spells-prep-only')?.addEventListener('change', applyAllSpellsFilters);
 
         // Bio saving logic moved to harvestBuildTab
 
@@ -5382,6 +6791,11 @@ function simulateRoll(formula, critRange = 20) {
         document.getElementById('btn-add-ability')?.addEventListener('click', () => {
             document.getElementById('modal-ability-idx').value = '-1';
             document.getElementById('modal-ability-name').value = '';
+            const catSel = document.getElementById('modal-ability-category');
+            if (catSel) {
+                catSel.innerHTML = '<option value="">Uncategorized</option>' + (char.abilityCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
+                catSel.value = '';
+            }
             document.getElementById('modal-ability-desc').value = '';
             document.getElementById('modal-ability-formula').value = '';
             document.getElementById('modal-ability-has-counter').checked = false;
@@ -5400,6 +6814,11 @@ function simulateRoll(formula, critRange = 20) {
             const ab = char.abilityCards[idx];
             document.getElementById('modal-ability-idx').value = idx;
             document.getElementById('modal-ability-name').value = ab.name || '';
+            const catSel = document.getElementById('modal-ability-category');
+            if (catSel) {
+                catSel.innerHTML = '<option value="">Uncategorized</option>' + (char.abilityCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
+                catSel.value = ab.categoryId || '';
+            }
             document.getElementById('modal-ability-desc').value = ab.description || '';
             document.getElementById('modal-ability-formula').value = ab.formula || '';
             document.getElementById('modal-ability-has-counter').checked = !!ab.hasCounter;
@@ -5431,6 +6850,52 @@ function simulateRoll(formula, critRange = 20) {
             } else {
                 ab.usesCurrent = current + 1;
                 saveAndEmit(char); renderSheetData(char);
+            }
+        }));
+
+        // Ability Category Management
+        document.getElementById('btn-create-ability-cat')?.addEventListener('click', () => openCategoryModal('ability'));
+
+        document.querySelectorAll('.pc-ability-cat-edit').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openCategoryModal('ability', e.currentTarget.dataset.categoryId);
+        }));
+
+        document.querySelectorAll('.pc-ability-cat-del').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openCategoryDeleteModal('ability', e.currentTarget.dataset.categoryId);
+        }));
+
+        document.querySelectorAll('.pc-ability-cat-header').forEach(hdr => hdr.addEventListener('click', (e) => {
+            const cId = e.currentTarget.dataset.categoryId;
+            if (!cId) return;
+            const cat = (char.abilityCategories || []).find(c => c.id === cId);
+            if (cat) {
+                cat.collapsed = !cat.collapsed;
+                saveAndEmit(char);
+                renderSheetData(char);
+            }
+        }));
+
+        document.querySelectorAll('.pc-ability-cat-select').forEach(sel => sel.addEventListener('change', (e) => {
+            const idx = parseInt(e.currentTarget.dataset.idx);
+            const newCatId = e.currentTarget.value || null;
+            if (char.abilityCards && char.abilityCards[idx]) {
+                char.abilityCards[idx].categoryId = newCatId;
+                saveAndEmit(char);
+                renderSheetData(char);
+            }
+        }));
+
+        document.querySelectorAll('.pc-ability-del').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(e.currentTarget.dataset.idx);
+            if (!isNaN(idx) && char.abilityCards[idx]) {
+                if (confirm("Delete this ability card?")) {
+                    char.abilityCards.splice(idx, 1);
+                    saveAndEmit(char);
+                    renderSheetData(char);
+                }
             }
         }));
 

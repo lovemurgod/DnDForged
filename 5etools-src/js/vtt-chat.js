@@ -408,45 +408,12 @@ export function initVttChat(vtt, chatHistory) {
             const ac = msg.abilityCard;
             let descHtml = parseSimpleMarkdown(ac.text);
             
-            if (ac.school || ac.time || ac.range) {
-                descHtml = descHtml.replace(/<p[^>]*>.*?<strong>Casting Time:<\/strong>.*?<\/p>/gi, '');
-                descHtml = descHtml.replace(/<p[^>]*>.*?<strong>Range:<\/strong>.*?<\/p>/gi, '');
-                descHtml = descHtml.replace(/<p[^>]*>.*?<strong>Components:<\/strong>.*?<\/p>/gi, '');
-                descHtml = descHtml.replace(/<p[^>]*>.*?<strong>Duration:<\/strong>.*?<\/p>/gi, '');
-                descHtml = descHtml.replace(/<p[^>]*><i[^>]*>.*?level.*?<\/i><\/p>/gi, '');
-                descHtml = descHtml.replace(/<p[^>]*><i[^>]*>.*?cantrip.*?<\/i><\/p>/gi, '');
-                
-                descHtml = descHtml.replace(/<tr[^>]*>.*?<strong>Casting Time:<\/strong>.*?<\/tr>/gi, '');
-                descHtml = descHtml.replace(/<tr[^>]*>.*?<strong>Range:<\/strong>.*?<\/tr>/gi, '');
-                descHtml = descHtml.replace(/<tr[^>]*>.*?<strong>Components:<\/strong>.*?<\/tr>/gi, '');
-                descHtml = descHtml.replace(/<tr[^>]*>.*?<strong>Duration:<\/strong>.*?<\/tr>/gi, '');
-            }
-
-            let metaSection = '';
-            const pills = [];
-            const pillStyle = 'background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 3px 8px; border-radius: 12px; color: #fff; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;';
-            
-            if (ac.school) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-graduation-cap" style="color:#b39ddb;"></i> ${ac.school}</span>`);
-            if (ac.time) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-hourglass-half" style="color:#a5d6a7;"></i> ${ac.time}</span>`);
-            if (ac.range) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-ruler" style="color:#90caf9;"></i> ${ac.range}</span>`);
-            if (ac.components) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-hand-sparkles" style="color:#ffcc80;"></i> ${ac.components}</span>`);
-            if (ac.duration) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-clock" style="color:#ef9a9a;"></i> ${ac.duration}</span>`);
-            
-            if (pills.length > 0) {
-                metaSection = `<div class="spell-premium-meta" style="display:flex; flex-wrap:wrap; gap:8px; padding:10px 12px; background:rgba(0,0,0,0.25); border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.85rem; font-family:var(--font-primary);">${pills.join('')}</div>`;
-            } else if (ac.range || ac.target) {
-                const parts = [];
-                if (ac.range) parts.push(`<strong>Range:</strong> ${ac.range}`);
-                if (ac.target) parts.push(`<strong>Target:</strong> ${ac.target}`);
-                metaSection = `<div class="ability-chat-meta" style="font-size:0.9rem; color:var(--color-text-muted); padding:6px 12px; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; gap:12px; background:rgba(0,0,0,0.15); font-family:var(--font-primary);">${parts.join(' &nbsp;•&nbsp; ')}</div>`;
-            }
             bodyText = `
                 <div class="ability-chat-card">
                     <div class="ability-chat-header">
                         <span class="ability-chat-creature">${ac.creatureName}</span>
                         <i class="fa-solid fa-bolt ability-chat-icon"></i>
                     </div>
-                    ${metaSection}
                     <div class="ability-chat-name">${ac.abilityName}</div>
                     <div class="ability-chat-desc">${descHtml}</div>
                 </div>
@@ -590,18 +557,7 @@ export function initVttChat(vtt, chatHistory) {
             }).join('');
 
             let metaSection = '';
-            const pills = [];
-            const pillStyle = 'background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 3px 8px; border-radius: 12px; color: #fff; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;';
-            
-            if (mc.school) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-graduation-cap" style="color:#b39ddb;"></i> ${mc.school}</span>`);
-            if (mc.time) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-hourglass-half" style="color:#a5d6a7;"></i> ${mc.time}</span>`);
-            if (mc.range) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-ruler" style="color:#90caf9;"></i> ${mc.range}</span>`);
-            if (mc.components) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-hand-sparkles" style="color:#ffcc80;"></i> ${mc.components}</span>`);
-            if (mc.duration) pills.push(`<span class="spell-meta-pill" style="${pillStyle}"><i class="fa-solid fa-clock" style="color:#ef9a9a;"></i> ${mc.duration}</span>`);
-            
-            if (pills.length > 0) {
-                metaSection = `<div class="spell-premium-meta" style="display:flex; flex-wrap:wrap; gap:8px; padding:10px 12px; background:rgba(0,0,0,0.25); border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.85rem; font-family:var(--font-primary);">${pills.join('')}</div>`;
-            } else if (mc.range || mc.target) {
+            if (mc.range || mc.target) {
                 const parts = [];
                 if (mc.range) parts.push(`<strong>Range:</strong> ${mc.range}`);
                 if (mc.target) parts.push(`<strong>Target:</strong> ${mc.target}`);

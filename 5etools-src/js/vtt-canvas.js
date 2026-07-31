@@ -94,6 +94,13 @@ export function initVttCanvas(vtt) {
     let tokenAnimFrame = null;
 
     let activeResizeTokenId = null;
+    let hoveredResizeTokenId = null;
+    let resizeDragStartMouse = null;
+    let resizeDragStartDims = null;
+    let activeRotateTokenId = null;
+    let rotateStartMouseAngle = 0;
+    let rotateInitialTokenRotation = 0;
+    let hoveredRotateTokenId = null;
     let contextMenuTargetId = null;
     let dragTargetId = null;
     let currentMouseCoords = { x: 0, y: 0 };
@@ -222,6 +229,36 @@ export function initVttCanvas(vtt) {
         const tokenRadius = Math.min(drawW, drawH) / 2;
 
         return { drawW, drawH, tokenRadius };
+    }
+
+    function getTokenRotationHandlePos(token) {
+        if (!token) return null;
+        const { drawW, drawH } = getTokenDrawDimensions(token);
+        const renderPos = tokenAnimations[token.id]?.currentPos || { x: token.x, y: token.y };
+        const cx = renderPos.x + drawW / 2;
+        const cy = renderPos.y + drawH / 2;
+        const rad = ((token.rotation || 0) * Math.PI) / 180;
+        
+        const stemOffset = -drawH / 2 - 22;
+        const worldX = cx + (0 * Math.cos(rad) - stemOffset * Math.sin(rad));
+        const worldY = cy + (0 * Math.sin(rad) + stemOffset * Math.cos(rad));
+        
+        const topCenterX = cx + (0 * Math.cos(rad) - (-drawH / 2) * Math.sin(rad));
+        const topCenterY = cy + (0 * Math.sin(rad) + (-drawH / 2) * Math.cos(rad));
+        
+        return { x: worldX, y: worldY, cx, cy, rad, topCenterX, topCenterY };
+    }
+
+    function getTokenResizeHandlePos(token) {
+        if (!token || !token.isAsset) return null;
+        const { drawW, drawH } = getTokenDrawDimensions(token);
+        const renderPos = tokenAnimations[token.id]?.currentPos || { x: token.x, y: token.y };
+        return {
+            x: renderPos.x + drawW,
+            y: renderPos.y + drawH,
+            cx: renderPos.x + drawW / 2,
+            cy: renderPos.y + drawH / 2
+        };
     }
 
     // Line-of-sight vision polygons for players
@@ -1074,12 +1111,13 @@ let lastBroadcastedTokens = {};
                     if (vtt.role === 'GM' && activeLayer !== 'map') {
                         ctxGrid.globalAlpha = 0.5; // Faintly dim inactive map assets for GM
                     }
-                    if (token.flipX || token.flipY) {
+                    if (token.rotation || token.flipX || token.flipY) {
                         ctxGrid.save();
                         const cx = token.x + drawW / 2;
                         const cy = token.y + drawH / 2;
                         ctxGrid.translate(cx, cy);
-                        ctxGrid.scale(token.flipX ? -1 : 1, token.flipY ? -1 : 1);
+                        if (token.rotation) ctxGrid.rotate((token.rotation * Math.PI) / 180);
+                        if (token.flipX || token.flipY) ctxGrid.scale(token.flipX ? -1 : 1, token.flipY ? -1 : 1);
                         ctxGrid.drawImage(cachedImg, -drawW / 2, -drawH / 2, drawW, drawH);
                         ctxGrid.restore();
                     } else {
@@ -1096,6 +1134,12 @@ let lastBroadcastedTokens = {};
 
             // Draw a subtle border outline only when GM is actively editing the Map Layer
             if (vtt.role === 'GM' && activeLayer === 'map') {
+                ctxGrid.save();
+                if (token.rotation) {
+                    ctxGrid.translate(tx, ty);
+                    ctxGrid.rotate((token.rotation * Math.PI) / 180);
+                    ctxGrid.translate(-tx, -ty);
+                }
                 ctxGrid.strokeStyle = 'var(--color-gold-base)';
                 ctxGrid.lineWidth = 2;
                 ctxGrid.strokeRect(token.x, token.y, drawW, drawH);
@@ -1108,6 +1152,7 @@ let lastBroadcastedTokens = {};
                 ctxGrid.font = 'bold 10px Inter';
                 ctxGrid.textAlign = 'center';
                 ctxGrid.fillText(token.name, tx, token.y + drawH + 12);
+                ctxGrid.restore();
             }
 
             ctxGrid.restore();
@@ -2383,8 +2428,9 @@ let lastBroadcastedTokens = {};
                     node.style.objectFit = 'fill';
                     node.style.border = 'none';
                 }
-                // Apply flip transform
+                // Apply flip and rotation transform
                 let transformStr = '';
+                if (token.rotation) transformStr += `rotate(${token.rotation}deg) `;
                 if (token.flipX) transformStr += 'scaleX(-1) ';
                 if (token.flipY) transformStr += 'scaleY(-1)';
                 transformStr = transformStr.trim();
@@ -2462,12 +2508,13 @@ let lastBroadcastedTokens = {};
                             ctxInteraction.arc(originalPos.x + drawW / 2, originalPos.y + drawH / 2, tokenRadius, 0, Math.PI * 2);
                             ctxInteraction.clip();
                         }
-                        if (token.flipX || token.flipY) {
+                        if (token.rotation || token.flipX || token.flipY) {
                             ctxInteraction.save();
                             const cx = originalPos.x + drawW / 2;
                             const cy = originalPos.y + drawH / 2;
                             ctxInteraction.translate(cx, cy);
-                            ctxInteraction.scale(token.flipX ? -1 : 1, token.flipY ? -1 : 1);
+                            if (token.rotation) ctxInteraction.rotate((token.rotation * Math.PI) / 180);
+                            if (token.flipX || token.flipY) ctxInteraction.scale(token.flipX ? -1 : 1, token.flipY ? -1 : 1);
                             ctxInteraction.drawImage(cachedImg, -drawW / 2, -drawH / 2, drawW, drawH);
                             ctxInteraction.restore();
                         } else {
@@ -2505,10 +2552,18 @@ let lastBroadcastedTokens = {};
             // Draw selection glow outline if hovered, dragged, or multi-selected
             const isTokenSelected = selectedTokenIds.has(id);
             if (id === activeDragTokenId || id === hoverTokenId || isTokenSelected) {
+                ctxInteraction.save();
                 ctxInteraction.strokeStyle = isTokenSelected ? 'var(--color-gold-base)' : 'rgba(212, 175, 55, 0.6)';
                 ctxInteraction.lineWidth = isTokenSelected ? 4.5 : 3;
                 ctxInteraction.shadowColor = 'var(--color-gold-light)';
                 ctxInteraction.shadowBlur = isTokenSelected ? 12 : 8;
+                
+                const rad = ((token.rotation || 0) * Math.PI) / 180;
+                if (token.rotation) {
+                    ctxInteraction.translate(tx, ty);
+                    ctxInteraction.rotate(rad);
+                    ctxInteraction.translate(-tx, -ty);
+                }
                 
                 if (token.isAsset) {
                     ctxInteraction.strokeRect(renderPos.x - 2, renderPos.y - 2, drawW + 4, drawH + 4);
@@ -2535,7 +2590,42 @@ let lastBroadcastedTokens = {};
                     ctxInteraction.restore();
                 }
                 
-                ctxInteraction.shadowBlur = 0; // reset
+                ctxInteraction.restore();
+            }
+
+            // Draw Rotation Handle for selected tokens/assets
+            if (isTokenSelected && activeTool === 'select' && (vtt.role === 'GM' || tokenLayer !== 'gm') && isTokenControlledByPlayer(token)) {
+                const handleInfo = getTokenRotationHandlePos(token);
+                if (handleInfo) {
+                    ctxInteraction.save();
+                    
+                    // Stem line
+                    ctxInteraction.beginPath();
+                    ctxInteraction.strokeStyle = 'var(--color-gold-base)';
+                    ctxInteraction.lineWidth = 2;
+                    ctxInteraction.moveTo(handleInfo.topCenterX, handleInfo.topCenterY);
+                    ctxInteraction.lineTo(handleInfo.x, handleInfo.y);
+                    ctxInteraction.stroke();
+                    
+                    // Handle circle
+                    const isHovered = hoveredRotateTokenId === token.id || activeRotateTokenId === token.id;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(handleInfo.x, handleInfo.y, 7, 0, Math.PI * 2);
+                    ctxInteraction.fillStyle = isHovered ? '#ffe875' : '#ffffff';
+                    ctxInteraction.fill();
+                    ctxInteraction.strokeStyle = 'var(--color-gold-base)';
+                    ctxInteraction.lineWidth = 2;
+                    ctxInteraction.stroke();
+                    
+                    // Rotation arrow icon
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(handleInfo.x, handleInfo.y, 3.5, -Math.PI * 0.7, Math.PI * 0.7);
+                    ctxInteraction.strokeStyle = '#222222';
+                    ctxInteraction.lineWidth = 1.5;
+                    ctxInteraction.stroke();
+                    
+                    ctxInteraction.restore();
+                }
             }
 
             // Render Color Overlay FX
@@ -3007,7 +3097,7 @@ let lastBroadcastedTokens = {};
         }
     }
 
-    function setMapBackground(url) {
+    async function setMapBackground(url) {
         const bgContainer = document.getElementById('vtt-map-bg-container');
         if (!bgContainer) return;
 
@@ -3018,6 +3108,19 @@ let lastBroadcastedTokens = {};
             bgContainer.removeAttribute('data-natural-height');
             renderAll();
             return;
+        }
+
+        if (url.includes('pin.it') || url.includes('pinterest.com/pin/')) {
+            try {
+                if (window.VTT && typeof window.VTT.resolveMediaUrl === 'function') {
+                    const res = await window.VTT.resolveMediaUrl(url);
+                    if (res && res.resolvedUrl) {
+                        url = res.resolvedUrl;
+                    }
+                }
+            } catch (e) {
+                console.warn('[setMapBackground] Error resolving URL:', e);
+            }
         }
 
         const setBackgroundDimensions = (width, height) => {
@@ -3052,7 +3155,7 @@ let lastBroadcastedTokens = {};
             return;
         }
 
-        const isVideo = url.match(/\.(mp4|webm|ogg)(\?.*)?$/i);
+        const isVideo = url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos');
         const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
 
         let mediaEl;
@@ -4045,10 +4148,24 @@ window.emitTokenUpdates = function(currentTokens) {
                 // Optimistic placeholder render (server will follow with state-sync)
                 renderMapGrid();
             } else if (mapSelect.value === 'url') {
-                const url = urlInput.value.trim();
+                let url = urlInput.value.trim();
                 if (!url) return alert("Please enter image URL");
                 
-                console.log('[map:create] Emitting map:create for URL map...');
+                try {
+                    btnCreateSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Resolving...';
+                    if (window.VTT && typeof window.VTT.resolveMediaUrl === 'function') {
+                        const res = await window.VTT.resolveMediaUrl(url);
+                        if (res && res.resolvedUrl) {
+                            url = res.resolvedUrl;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('[map:create] URL resolution warning:', e);
+                } finally {
+                    btnCreateSubmit.innerHTML = 'Create Map';
+                }
+
+                console.log('[map:create] Emitting map:create for URL map...', url);
                 vtt.socket.emit('map:create', { name, mapImage: url });
                 createPanel.classList.add('vtt-hidden');
                 renderMapGrid();
@@ -4558,6 +4675,16 @@ window.emitTokenUpdates = function(currentTokens) {
                 tokens[selectedTokenIdForEdit].size = size;
                 delete tokens[selectedTokenIdForEdit].customWidth;
                 delete tokens[selectedTokenIdForEdit].customHeight;
+            }
+
+            // Sync pixelWidth and pixelHeight for Freeform Assets or tokens with explicit pixel sizes
+            const targetToken = tokens[selectedTokenIdForEdit];
+            if (targetToken.isAsset || Number.isFinite(targetToken.pixelWidth)) {
+                const widthUnits = targetToken.customWidth || targetToken.size || 1;
+                const heightUnits = targetToken.customHeight || targetToken.size || 1;
+                const gridPx = (grid.size || 50) * (grid.scale || 1.0);
+                targetToken.pixelWidth = widthUnits * gridPx;
+                targetToken.pixelHeight = heightUnits * gridPx;
             }
             tokens[selectedTokenIdForEdit].sightRange = sightRange;
             tokens[selectedTokenIdForEdit].lightEnabled = lightEnabled;
@@ -5253,6 +5380,9 @@ window.emitTokenUpdates = function(currentTokens) {
             <div class="vtt-token-menu-item" id="menu-flip-v">
                 <span><i class="fa-solid fa-arrows-up-down item-icon"></i> Flip Vertically</span>
             </div>
+            <div class="vtt-token-menu-item" id="menu-reset-rotation">
+                <span><i class="fa-solid fa-rotate-left item-icon"></i> Reset Rotation</span>
+            </div>
         `;
 
         // 5. Z-ordering (GM Only)
@@ -5640,6 +5770,20 @@ window.emitTokenUpdates = function(currentTokens) {
             });
         }
 
+        const btnResetRot = menu.querySelector('#menu-reset-rotation');
+        if (btnResetRot) {
+            btnResetRot.addEventListener('click', () => {
+                const targetIds = selectedTokenIds.has(tokenId) ? Array.from(selectedTokenIds) : [tokenId];
+                targetIds.forEach(id => {
+                    const t = tokens[id];
+                    if (t) t.rotation = 0;
+                });
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+                menu.remove();
+            });
+        }
+
 
         // Z-Ordering functions (GM Only)
         if (vtt.role === 'GM') {
@@ -5775,6 +5919,9 @@ window.emitTokenUpdates = function(currentTokens) {
         const oldMenu = document.getElementById('vtt-token-context-menu');
         if (oldMenu) oldMenu.remove();
 
+        const targetTokens = tokenIds.map(id => tokens[id]).filter(Boolean);
+        if (targetTokens.length === 0) return;
+
         // Create container
         const menu = document.createElement('div');
         menu.id = 'vtt-token-context-menu';
@@ -5817,7 +5964,7 @@ window.emitTokenUpdates = function(currentTokens) {
         // Header showing Mass Roll title
         let html = `
             <div class="vtt-token-menu-header">
-                <i class="fa-solid fa-dice-d20"></i> Mass Roll (${tokenIds.length} Tokens)
+                <i class="fa-solid fa-users"></i> ${tokenIds.length} Tokens Selected
             </div>
             <div class="vtt-token-menu-item" id="menu-apply-damage">
                 <span><i class="fa-solid fa-heart-crack item-icon"></i> Apply Damage</span>
@@ -5891,6 +6038,121 @@ window.emitTokenUpdates = function(currentTokens) {
             </div>
         `;
 
+        // 4. Mass Elevation
+        const baseElevation = targetTokens[0]?.flightHeight || 0;
+        html += `
+            <div class="vtt-token-menu-item" style="cursor: default; display: flex; justify-content: space-between; align-items: center; padding-right: 8px;">
+                <span><i class="fa-solid fa-arrows-up-down item-icon"></i> Elevation</span>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <button class="menu-btn-flight-dec" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+                    <input type="number" class="menu-input-flight" value="${baseElevation}" step="5" style="width: 40px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; text-align: center; border-radius: 4px; font-size: 12px; height: 20px; padding: 0;">
+                    <button class="menu-btn-flight-inc" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 20px; height: 20px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                </div>
+            </div>
+        `;
+
+        // 5. Mass Conditions Submenu
+        html += `
+            <div class="vtt-token-menu-item">
+                <span><i class="fa-solid fa-heart-pulse item-icon"></i> Conditions</span>
+                <i class="fa-solid fa-chevron-right chevron-icon"></i>
+                <div class="vtt-token-submenu">
+                    <div class="vtt-token-submenu-list scroll-styled" style="max-height: 280px;">
+                        <div class="vtt-submenu-item menu-add-custom-condition" style="cursor: pointer; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--color-gold-base); font-weight: bold; text-align: center; background: rgba(255,255,255,0.05); transition: background 0.2s;">
+                            <i class="fa-solid fa-plus"></i> Add Custom Condition...
+                        </div>
+        `;
+
+        const sortedConditions = Object.keys(CONDITION_ICONS).sort();
+        sortedConditions.forEach(condName => {
+            const iconClass = CONDITION_ICONS[condName];
+            
+            const allHavePhb = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName && c.source === 'PHB'));
+            const allHaveXphb = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName && c.source === 'XPHB'));
+
+            html += `
+                <div class="vtt-submenu-item" style="cursor: default; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <div style="font-weight: bold; color: var(--color-gold-base);"><i class="fa-solid ${iconClass}"></i> ${condName}</div>
+                    <div style="display: flex; gap: 8px; width: 100%;">
+                        <div class="menu-toggle-mass-condition" data-cond="${condName}" data-source="PHB" style="flex: 1; text-align: center; cursor: pointer; padding: 2px 4px; border-radius: 4px; background: ${allHavePhb ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; color: ${allHavePhb ? '#000' : '#fff'}; transition: all 0.2s;">PHB</div>
+                        <div class="menu-toggle-mass-condition" data-cond="${condName}" data-source="XPHB" style="flex: 1; text-align: center; cursor: pointer; padding: 2px 4px; border-radius: 4px; background: ${allHaveXphb ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; color: ${allHaveXphb ? '#000' : '#fff'}; transition: all 0.2s;">XPHB</div>
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // 6. Transform options (All Users)
+        html += `
+            <div class="vtt-token-menu-divider"></div>
+            <div class="vtt-token-menu-item" id="menu-flip-h">
+                <span><i class="fa-solid fa-arrows-left-right item-icon"></i> Flip Horizontally</span>
+            </div>
+            <div class="vtt-token-menu-item" id="menu-flip-v">
+                <span><i class="fa-solid fa-arrows-up-down item-icon"></i> Flip Vertically</span>
+            </div>
+            <div class="vtt-token-menu-item" id="menu-reset-rotation">
+                <span><i class="fa-solid fa-rotate-left item-icon"></i> Reset Rotation</span>
+            </div>
+        `;
+
+        // 7. Z-ordering & Layers & Conversions & Delete (GM Only)
+        if (vtt.role === 'GM') {
+            html += `
+                <div class="vtt-token-menu-divider"></div>
+                <div class="vtt-token-menu-item" id="menu-move-front">
+                    <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Front</span>
+                </div>
+                <div class="vtt-token-menu-item" id="menu-move-back">
+                    <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Back</span>
+                </div>
+                <div class="vtt-token-menu-divider"></div>
+                <div class="vtt-token-menu-item">
+                    <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Layer</span>
+                    <i class="fa-solid fa-chevron-right chevron-icon"></i>
+                    <div class="vtt-token-submenu" style="min-width: 180px;">
+                        <div class="vtt-token-submenu-list scroll-styled">
+                            <div class="vtt-submenu-item menu-ctx-move-layer" data-layer="token">
+                                <span><i class="fa-solid fa-users" style="width: 16px; text-align: center; margin-right: 8px;"></i> Token Layer</span>
+                            </div>
+                            <div class="vtt-submenu-item menu-ctx-move-layer" data-layer="gm">
+                                <span><i class="fa-solid fa-user-secret" style="width: 16px; text-align: center; margin-right: 8px;"></i> GM Layer</span>
+                            </div>
+                            <div class="vtt-submenu-item menu-ctx-move-layer" data-layer="map">
+                                <span><i class="fa-solid fa-map" style="width: 16px; text-align: center; margin-right: 8px;"></i> Map Layer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vtt-token-menu-divider"></div>
+                <div class="vtt-token-menu-item">
+                    <span><i class="fa-solid fa-sync item-icon"></i> Convert</span>
+                    <i class="fa-solid fa-chevron-right chevron-icon"></i>
+                    <div class="vtt-token-submenu" style="min-width: 220px;">
+                        <div class="vtt-token-submenu-list scroll-styled">
+                            <div class="vtt-submenu-item" id="menu-ctx-convert-freeform">
+                                <span><i class="fa-solid fa-image" style="width: 16px; text-align: center; margin-right: 8px;"></i> To Freeform Asset</span>
+                            </div>
+                            <div class="vtt-submenu-item" id="menu-ctx-convert-borderless">
+                                <span><i class="fa-solid fa-circle" style="width: 16px; text-align: center; margin-right: 8px;"></i> To Borderless Token</span>
+                            </div>
+                            <div class="vtt-submenu-item" id="menu-ctx-convert-bordered">
+                                <span><i class="fa-solid fa-ring" style="width: 16px; text-align: center; margin-right: 8px;"></i> To Bordered Token</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vtt-token-menu-item text-danger" id="menu-ctx-delete" style="color: var(--color-danger);">
+                    <span><i class="fa-solid fa-trash item-icon"></i> Delete (${tokenIds.length} Tokens)</span>
+                </div>
+            `;
+        }
+
         menu.innerHTML = html;
         document.body.appendChild(menu);
 
@@ -5941,8 +6203,6 @@ window.emitTokenUpdates = function(currentTokens) {
 
         // Initiative
         menu.querySelector('#menu-roll-init').addEventListener('click', () => {
-            // Check if any token is stat-less
-            const targetTokens = tokenIds.map(id => tokens[id]);
             const fallbackMod = getFallbackModIfNeeded(targetTokens, "Initiative");
             if (fallbackMod === null) { menu.remove(); return; }
 
@@ -5990,7 +6250,6 @@ window.emitTokenUpdates = function(currentTokens) {
                 const abKey = item.dataset.ability;
                 const abLabel = item.dataset.label;
 
-                const targetTokens = tokenIds.map(id => tokens[id]);
                 const fallbackMod = getFallbackModIfNeeded(targetTokens, `${abLabel} Check`);
                 if (fallbackMod === null) { menu.remove(); return; }
 
@@ -6021,7 +6280,6 @@ window.emitTokenUpdates = function(currentTokens) {
                 const abKey = item.dataset.ability;
                 const abLabel = item.dataset.label;
 
-                const targetTokens = tokenIds.map(id => tokens[id]);
                 const fallbackMod = getFallbackModIfNeeded(targetTokens, `${abLabel} Save`);
                 if (fallbackMod === null) { menu.remove(); return; }
 
@@ -6055,7 +6313,6 @@ window.emitTokenUpdates = function(currentTokens) {
                 const skKey = item.dataset.skill;
                 const skLabel = item.dataset.label;
 
-                const targetTokens = tokenIds.map(id => tokens[id]);
                 const fallbackMod = getFallbackModIfNeeded(targetTokens, `${skLabel} Check`);
                 if (fallbackMod === null) { menu.remove(); return; }
 
@@ -6084,9 +6341,264 @@ window.emitTokenUpdates = function(currentTokens) {
                 menu.remove();
             });
         });
+
+        // Mass Elevation
+        const updateMassFlight = (newHeight) => {
+            let updated = false;
+            targetTokens.forEach(t => {
+                t.flightHeight = newHeight;
+                updated = true;
+            });
+            if (updated) {
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+            }
+        };
+
+        const btnFlightDec = menu.querySelector('.menu-btn-flight-dec');
+        const btnFlightInc = menu.querySelector('.menu-btn-flight-inc');
+        const inputFlight = menu.querySelector('.menu-input-flight');
+        if (btnFlightDec && btnFlightInc && inputFlight) {
+            btnFlightDec.addEventListener('click', (e) => {
+                e.stopPropagation();
+                let val = parseInt(inputFlight.value) || 0;
+                val -= 5;
+                inputFlight.value = val;
+                updateMassFlight(val);
+            });
+            btnFlightInc.addEventListener('click', (e) => {
+                e.stopPropagation();
+                let val = parseInt(inputFlight.value) || 0;
+                val += 5;
+                inputFlight.value = val;
+                updateMassFlight(val);
+            });
+            inputFlight.addEventListener('change', (e) => {
+                e.stopPropagation();
+                updateMassFlight(parseInt(inputFlight.value) || 0);
+            });
+            inputFlight.addEventListener('click', (e) => e.stopPropagation());
+        }
+
+        // Mass Conditions Toggle
+        menu.querySelectorAll('.menu-toggle-mass-condition').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const condName = item.dataset.cond;
+                const source = item.dataset.source;
+
+                const allHaveIt = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName && c.source === source));
+
+                targetTokens.forEach(t => {
+                    if (!t.conditions) t.conditions = [];
+                    const existingIdx = t.conditions.findIndex(c => c.name === condName && c.source === source);
+                    if (allHaveIt) {
+                        if (existingIdx !== -1) t.conditions.splice(existingIdx, 1);
+                    } else {
+                        if (existingIdx === -1) t.conditions.push({ name: condName, source: source });
+                    }
+                });
+
+                if (allHaveIt) {
+                    item.style.background = 'rgba(255,255,255,0.1)';
+                    item.style.color = '#fff';
+                } else {
+                    item.style.background = 'var(--color-gold-base)';
+                    item.style.color = '#000';
+                }
+
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+            });
+        });
+
+        // Add Custom Condition Modal
+        const btnAddCustom = menu.querySelector('.menu-add-custom-condition');
+        if (btnAddCustom) {
+            btnAddCustom.addEventListener('mouseenter', () => btnAddCustom.style.background = 'rgba(255,255,255,0.1)');
+            btnAddCustom.addEventListener('mouseleave', () => btnAddCustom.style.background = 'rgba(255,255,255,0.05)');
+            btnAddCustom.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menu.remove();
+                contextMenuTargetId = null;
+                showAddCustomConditionModal(tokenIds);
+            });
+        }
+
+        // Transformations
+        const btnFlipH = menu.querySelector('#menu-flip-h');
+        if (btnFlipH) {
+            btnFlipH.addEventListener('click', () => {
+                targetTokens.forEach(t => {
+                    t.flipX = !t.flipX;
+                });
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+                menu.remove();
+            });
+        }
+
+        const btnFlipV = menu.querySelector('#menu-flip-v');
+        if (btnFlipV) {
+            btnFlipV.addEventListener('click', () => {
+                targetTokens.forEach(t => {
+                    t.flipY = !t.flipY;
+                });
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+                menu.remove();
+            });
+        }
+
+        const btnResetRot = menu.querySelector('#menu-reset-rotation');
+        if (btnResetRot) {
+            btnResetRot.addEventListener('click', () => {
+                targetTokens.forEach(t => {
+                    t.rotation = 0;
+                });
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+                menu.remove();
+            });
+        }
+
+        // Z-Ordering, Layer Movement, Conversions, and Deletion (GM Only)
+        if (vtt.role === 'GM') {
+            const btnMoveFront = menu.querySelector('#menu-move-front');
+            if (btnMoveFront) {
+                btnMoveFront.addEventListener('click', () => {
+                    changeMassTokenZOrder(tokenIds, 'front');
+                    menu.remove();
+                });
+            }
+
+            const btnMoveBack = menu.querySelector('#menu-move-back');
+            if (btnMoveBack) {
+                btnMoveBack.addEventListener('click', () => {
+                    changeMassTokenZOrder(tokenIds, 'back');
+                    menu.remove();
+                });
+            }
+
+            menu.querySelectorAll('.menu-ctx-move-layer').forEach(item => {
+                item.addEventListener('click', () => {
+                    const targetLayer = item.dataset.layer;
+                    targetTokens.forEach(t => {
+                        t.layer = targetLayer;
+                    });
+                    if (vtt.socket) window.emitTokenUpdates(tokens);
+                    renderAll();
+                    menu.remove();
+                });
+            });
+
+            const btnConvertFreeform = menu.querySelector('#menu-ctx-convert-freeform');
+            if (btnConvertFreeform) {
+                btnConvertFreeform.addEventListener('click', () => {
+                    targetTokens.forEach(t => {
+                        const { drawW, drawH } = getTokenDrawDimensions(t);
+                        t.isAsset = true;
+                        t.isBorderless = false;
+                        t.pixelWidth = drawW;
+                        t.pixelHeight = drawH;
+                        t.imgRadius = '0';
+                    });
+                    if (vtt.socket) window.emitTokenUpdates(tokens);
+                    renderAll();
+                    menu.remove();
+                });
+            }
+
+            const btnConvertBorderless = menu.querySelector('#menu-ctx-convert-borderless');
+            if (btnConvertBorderless) {
+                btnConvertBorderless.addEventListener('click', () => {
+                    targetTokens.forEach(t => {
+                        t.isAsset = false;
+                        t.isBorderless = true;
+                        const snap = snapToGrid(t.x, t.y, true);
+                        t.x = snap.x;
+                        t.y = snap.y;
+                        t.size = 1;
+                        if (t.assetType === 'video' || (t.url && t.url.split('?')[0].toLowerCase().endsWith('.gif'))) {
+                            t.imgRadius = '50%';
+                        }
+                    });
+                    if (vtt.socket) window.emitTokenUpdates(tokens);
+                    renderAll();
+                    menu.remove();
+                });
+            }
+
+            const btnConvertBordered = menu.querySelector('#menu-ctx-convert-bordered');
+            if (btnConvertBordered) {
+                btnConvertBordered.addEventListener('click', () => {
+                    targetTokens.forEach(t => {
+                        t.isAsset = false;
+                        t.isBorderless = false;
+                        const snap = snapToGrid(t.x, t.y, true);
+                        t.x = snap.x;
+                        t.y = snap.y;
+                        t.size = 1;
+                        if (t.assetType === 'video' || (t.url && t.url.split('?')[0].toLowerCase().endsWith('.gif'))) {
+                            t.imgRadius = '50%';
+                        }
+                    });
+                    if (vtt.socket) window.emitTokenUpdates(tokens);
+                    renderAll();
+                    menu.remove();
+                });
+            }
+
+            const btnDelete = menu.querySelector('#menu-ctx-delete');
+            if (btnDelete) {
+                btnDelete.addEventListener('click', () => {
+                    tokenIds.forEach(id => {
+                        delete tokens[id];
+                        selectedTokenIds.delete(id);
+                    });
+                    if (vtt.socket) window.emitTokenUpdates(tokens);
+                    renderAll();
+                    menu.remove();
+                });
+            }
+        }
     }
 
-    function showAddCustomConditionModal(tokenId) {
+    function changeMassTokenZOrder(tokenIds, action) {
+        const tokenList = Object.values(tokens);
+        if (tokenList.length === 0 || tokenIds.length === 0) return;
+
+        const selectedSet = new Set(tokenIds);
+        const selectedTokens = tokenIds.map(id => tokens[id]).filter(Boolean);
+        if (selectedTokens.length === 0) return;
+
+        const otherZIndexes = tokenList
+            .filter(t => !selectedSet.has(t.id))
+            .map(t => t.zIndex || 0);
+
+        const maxZ = otherZIndexes.length > 0 ? Math.max(...otherZIndexes) : 0;
+        const minZ = otherZIndexes.length > 0 ? Math.min(...otherZIndexes) : 0;
+
+        // Sort selected tokens by current zIndex ascending to maintain relative stack order
+        selectedTokens.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+
+        if (action === 'front') {
+            selectedTokens.forEach((t, i) => {
+                t.zIndex = maxZ + 1 + i;
+            });
+        } else if (action === 'back') {
+            const startZ = minZ - selectedTokens.length;
+            selectedTokens.forEach((t, i) => {
+                t.zIndex = startZ + i;
+            });
+        }
+
+        if (vtt.socket) window.emitTokenUpdates(tokens);
+        renderAll();
+    }
+
+    function showAddCustomConditionModal(targetTokenIds) {
+        const tokenIdsArr = Array.isArray(targetTokenIds) ? targetTokenIds : [targetTokenIds];
         const oldModal = document.getElementById('vtt-add-custom-condition-modal');
         if (oldModal) oldModal.remove();
 
@@ -6102,7 +6614,7 @@ window.emitTokenUpdates = function(currentTokens) {
         modal.innerHTML = `
             <div class="vtt-modal-content" style="max-width: 320px;">
                 <div class="vtt-modal-header">
-                    <h3><i class="fa-solid fa-paintbrush"></i> Custom Condition</h3>
+                    <h3><i class="fa-solid fa-paintbrush"></i> Custom Condition (${tokenIdsArr.length} Token${tokenIdsArr.length > 1 ? 's' : ''})</h3>
                     <button class="vtt-modal-close"><i class="fa-solid fa-times"></i></button>
                 </div>
                 <div class="vtt-modal-body">
@@ -6175,14 +6687,20 @@ window.emitTokenUpdates = function(currentTokens) {
                 alert("Please enter a condition label.");
                 return;
             }
-            const activeToken = tokens[tokenId];
-            if (activeToken) {
-                if (!activeToken.conditions) activeToken.conditions = [];
-                activeToken.conditions.push({
-                    name: label,
-                    color: selectedColor,
-                    isCustom: true
-                });
+            let updated = false;
+            tokenIdsArr.forEach(tokenId => {
+                const activeToken = tokens[tokenId];
+                if (activeToken) {
+                    if (!activeToken.conditions) activeToken.conditions = [];
+                    activeToken.conditions.push({
+                        name: label,
+                        color: selectedColor,
+                        isCustom: true
+                    });
+                    updated = true;
+                }
+            });
+            if (updated) {
                 window.emitTokenUpdates(tokens);
                 renderAll();
             }
@@ -6459,6 +6977,25 @@ window.emitTokenUpdates = function(currentTokens) {
 
         if (!isInputActive && selectedTokenIds.size > 0) {
             const k = e.key.toLowerCase();
+            if (k === 'q' || k === 'e') {
+                const step = e.shiftKey ? 5 : 45;
+                const delta = k === 'q' ? -step : step;
+                let updated = false;
+                selectedTokenIds.forEach(id => {
+                    const token = tokens[id];
+                    if (token && isTokenControlledByPlayer(token)) {
+                        let cur = token.rotation || 0;
+                        let next = (cur + delta) % 360;
+                        if (next < 0) next += 360;
+                        token.rotation = next;
+                        updated = true;
+                    }
+                });
+                if (updated) {
+                    if (vtt.socket) window.emitTokenUpdates(tokens);
+                    renderAll();
+                }
+            }
             if (['w', 'a', 's', 'd'].includes(k)) {
                 let updated = false;
                 selectedTokenIds.forEach(id => {
@@ -6918,9 +7455,10 @@ window.emitTokenUpdates = function(currentTokens) {
     }
 
     function getTokenAtPoint(mouse, requireControl = true) {
-        const tokenIds = Object.keys(tokens || {});
-        for (let i = tokenIds.length - 1; i >= 0; i--) {
-            const token = tokens[tokenIds[i]];
+        const sortedTokens = Object.values(tokens || {})
+            .sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+
+        for (const token of sortedTokens) {
             if (!token) continue;
             if (token.layer !== activeLayer && activeLayer !== 'gm') continue;
             if (token.layer === 'gm' && vtt.role !== 'GM') continue;
@@ -7609,25 +8147,52 @@ window.emitTokenUpdates = function(currentTokens) {
             }
         });
 
+        canvasInteraction.addEventListener('dblclick', (e) => {
+            if (activeTool !== 'select') return;
+            const mouse = getCanvasMouseCoords(e);
+            let resetId = null;
+            selectedTokenIds.forEach(id => {
+                const token = tokens[id];
+                if (token && isTokenControlledByPlayer(token)) {
+                    const h = getTokenRotationHandlePos(token);
+                    if (h) {
+                        const dist = Math.hypot(mouse.x - h.x, mouse.y - h.y);
+                        if (dist <= 10 / zoom) {
+                            resetId = id;
+                        }
+                    }
+                }
+            });
+            if (resetId) {
+                selectedTokenIds.forEach(id => {
+                    if (tokens[id]) tokens[id].rotation = 0;
+                });
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+            }
+        });
+
         canvasInteraction.addEventListener('mousedown', e => {
             lastMouseEvent = e;
             const mouse = getCanvasMouseCoords(e);
 
             if (e.button === 0) {
                 if (pingHoldTimeout) clearTimeout(pingHoldTimeout);
-                const isShift = e.shiftKey;
-                const isGM = vtt.role === 'GM';
-                const startMouseX = mouse.x;
-                const startMouseY = mouse.y;
-                
-                pingHoldTimeout = setTimeout(() => {
-                    pingHoldTimeout = null;
-                    if (isShift && isGM) {
-                        vtt.socket.emit('map:panTo', { mapId: currentMapId, x: startMouseX, y: startMouseY });
-                    }
-                    vtt.socket.emit('map:ping', { mapId: currentMapId, x: startMouseX, y: startMouseY, username: vtt.username, role: vtt.role });
-                    triggerPingAnimation(startMouseX, startMouseY, vtt.username, vtt.role);
-                }, 1000);
+                if (activeTool !== 'measure' && activeTool !== 'shape') {
+                    const isShift = e.shiftKey;
+                    const isGM = vtt.role === 'GM';
+                    const startMouseX = mouse.x;
+                    const startMouseY = mouse.y;
+                    
+                    pingHoldTimeout = setTimeout(() => {
+                        pingHoldTimeout = null;
+                        if (isShift && isGM) {
+                            vtt.socket.emit('map:panTo', { mapId: currentMapId, x: startMouseX, y: startMouseY });
+                        }
+                        vtt.socket.emit('map:ping', { mapId: currentMapId, x: startMouseX, y: startMouseY, username: vtt.username, role: vtt.role });
+                        triggerPingAnimation(startMouseX, startMouseY, vtt.username, vtt.role);
+                    }, 1000);
+                }
             }
 
             // Check for interactive doors/windows
@@ -7839,19 +8404,53 @@ window.emitTokenUpdates = function(currentTokens) {
                     selectedShapeId = null;
                     selectedShapeComponent = null;
 
-                    let clickedId = null;
-                    const tokenIds = Object.keys(tokens);
-                    for (let i = tokenIds.length - 1; i >= 0; i--) {
-                        const t = tokens[tokenIds[i]];
-                        if (t.layer !== activeLayer && activeLayer !== 'gm') continue;
-                        if (!isTokenControlledByPlayer(t)) continue;
-                        
-                        const { drawW, drawH } = getTokenDrawDimensions(t);
-                        if (mouse.x >= t.x && mouse.x <= t.x + drawW && mouse.y >= t.y && mouse.y <= t.y + drawH) {
-                            clickedId = t.id;
-                            break;
-                        }
+                    let clickedResizeTokenId = null;
+                    let clickedRotateTokenId = null;
+                    if (e.button === 0) {
+                        selectedTokenIds.forEach(id => {
+                            const t = tokens[id];
+                            if (t && isTokenControlledByPlayer(t) && (t.layer === activeLayer || activeLayer === 'gm')) {
+                                if (t.isAsset) {
+                                    const rh = getTokenResizeHandlePos(t);
+                                    if (rh) {
+                                        if (mouse.x >= rh.x - 8 && mouse.x <= rh.x + 8 && mouse.y >= rh.y - 8 && mouse.y <= rh.y + 8) {
+                                            clickedResizeTokenId = id;
+                                        }
+                                    }
+                                }
+                                const h = getTokenRotationHandlePos(t);
+                                if (h && !clickedResizeTokenId) {
+                                    const dist = Math.hypot(mouse.x - h.x, mouse.y - h.y);
+                                    if (dist <= 10 / zoom) {
+                                        clickedRotateTokenId = id;
+                                    }
+                                }
+                            }
+                        });
                     }
+
+                    if (clickedResizeTokenId) {
+                        activeResizeTokenId = clickedResizeTokenId;
+                        const token = tokens[clickedResizeTokenId];
+                        const { drawW, drawH } = getTokenDrawDimensions(token);
+                        resizeDragStartMouse = { x: mouse.x, y: mouse.y };
+                        resizeDragStartDims = { pixelWidth: drawW, pixelHeight: drawH };
+                        renderAll();
+                        return;
+                    }
+
+                    if (clickedRotateTokenId) {
+                        activeRotateTokenId = clickedRotateTokenId;
+                        const token = tokens[clickedRotateTokenId];
+                        rotateInitialTokenRotation = token.rotation || 0;
+                        const h = getTokenRotationHandlePos(token);
+                        rotateStartMouseAngle = Math.atan2(mouse.y - h.cy, mouse.x - h.cx) * 180 / Math.PI;
+                        renderAll();
+                        return;
+                    }
+
+                    const clickedToken = getTokenAtPoint(mouse, true);
+                    const clickedId = clickedToken ? clickedToken.id : null;
                     
                     if (clickedId) {
                         dragTargetId = clickedId;
@@ -7995,6 +8594,122 @@ window.emitTokenUpdates = function(currentTokens) {
                         renderAll();
                     }
                     return;
+                }
+                
+                if (activeResizeTokenId) {
+                    const token = tokens[activeResizeTokenId];
+                    if (token && resizeDragStartDims) {
+                        const gridPx = (grid.size || 50) * (grid.scale || 1.0);
+                        let rawW = Math.max(20, mouse.x - token.x);
+                        let rawH = Math.max(20, mouse.y - token.y);
+
+                        // Shift key: preserve aspect ratio
+                        if (e.shiftKey && resizeDragStartDims.pixelWidth > 0 && resizeDragStartDims.pixelHeight > 0) {
+                            const aspect = resizeDragStartDims.pixelWidth / resizeDragStartDims.pixelHeight;
+                            if (rawW / rawH > aspect) {
+                                rawW = rawH * aspect;
+                            } else {
+                                rawH = rawW / aspect;
+                            }
+                        }
+
+                        let newPixelW, newPixelH;
+                        if (e.altKey) {
+                            // Alt key: free unsnapped pixel resize
+                            newPixelW = Math.round(rawW);
+                            newPixelH = Math.round(rawH);
+                        } else {
+                            // Default: grid-cell snapped resize
+                            let widthUnits = Math.max(1, Math.round(rawW / gridPx));
+                            let heightUnits = Math.max(1, Math.round(rawH / gridPx));
+                            newPixelW = widthUnits * gridPx;
+                            newPixelH = heightUnits * gridPx;
+                            if (e.shiftKey && resizeDragStartDims.pixelWidth > 0 && resizeDragStartDims.pixelHeight > 0) {
+                                const aspect = resizeDragStartDims.pixelWidth / resizeDragStartDims.pixelHeight;
+                                if (widthUnits / heightUnits > aspect) {
+                                    newPixelW = Math.round(newPixelH * aspect);
+                                } else {
+                                    newPixelH = Math.round(newPixelW / aspect);
+                                }
+                            }
+                        }
+
+                        token.pixelWidth = newPixelW;
+                        token.pixelHeight = newPixelH;
+
+                        // Sync grid dimensions
+                        const customW = Math.max(1, Math.round((newPixelW / gridPx) * 100) / 100);
+                        const customH = Math.max(1, Math.round((newPixelH / gridPx) * 100) / 100);
+                        token.customWidth = customW;
+                        token.customHeight = customH;
+                        token.size = Math.max(customW, customH);
+
+                        renderAll();
+                    }
+                    return;
+                }
+
+                if (activeRotateTokenId) {
+                    const token = tokens[activeRotateTokenId];
+                    if (token) {
+                        const { drawW, drawH } = getTokenDrawDimensions(token);
+                        const renderPos = tokenAnimations[token.id]?.currentPos || { x: token.x, y: token.y };
+                        const cx = renderPos.x + drawW / 2;
+                        const cy = renderPos.y + drawH / 2;
+                        const currentMouseAngle = Math.atan2(mouse.y - cy, mouse.x - cx) * 180 / Math.PI;
+                        
+                        let delta = currentMouseAngle - rotateStartMouseAngle;
+                        let newAngle = (rotateInitialTokenRotation + delta) % 360;
+                        if (newAngle < 0) newAngle += 360;
+                        
+                        if (e.shiftKey) {
+                            newAngle = Math.round(newAngle / 15) * 15 % 360;
+                        } else {
+                            newAngle = Math.round(newAngle * 10) / 10;
+                        }
+                        
+                        token.rotation = newAngle;
+                        renderAll();
+                    }
+                    return;
+                }
+
+                let newHoveredResizeTokenId = null;
+                let newHoveredRotateTokenId = null;
+                if (activeTool === 'select' && !dragTargetId && !activeRotateTokenId && !activeResizeTokenId) {
+                    selectedTokenIds.forEach(id => {
+                        const token = tokens[id];
+                        if (token && isTokenControlledByPlayer(token) && (token.layer === activeLayer || activeLayer === 'gm')) {
+                            if (token.isAsset) {
+                                const rh = getTokenResizeHandlePos(token);
+                                if (rh) {
+                                    if (mouse.x >= rh.x - 8 && mouse.x <= rh.x + 8 && mouse.y >= rh.y - 8 && mouse.y <= rh.y + 8) {
+                                        newHoveredResizeTokenId = id;
+                                    }
+                                }
+                            }
+                            const h = getTokenRotationHandlePos(token);
+                            if (h && !newHoveredResizeTokenId) {
+                                const dist = Math.hypot(mouse.x - h.x, mouse.y - h.y);
+                                if (dist <= 10 / zoom) {
+                                    newHoveredRotateTokenId = id;
+                                }
+                            }
+                        }
+                    });
+                }
+                if (hoveredResizeTokenId !== newHoveredResizeTokenId) {
+                    hoveredResizeTokenId = newHoveredResizeTokenId;
+                    if (hoveredResizeTokenId) canvasInteraction.style.cursor = 'nwse-resize';
+                    renderAll();
+                }
+                if (hoveredRotateTokenId !== newHoveredRotateTokenId) {
+                    hoveredRotateTokenId = newHoveredRotateTokenId;
+                    if (hoveredRotateTokenId) canvasInteraction.style.cursor = 'grab';
+                    renderAll();
+                }
+                if (!hoveredResizeTokenId && !hoveredRotateTokenId && !hoverTokenId && !hoveredNoteId && !dragTargetId && !activeResizeTokenId && !activeRotateTokenId) {
+                    canvasInteraction.style.cursor = '';
                 }
                 
                 if (!activeDragShapeId && !dragTargetId && !activeDragLightId && !activeDragWallVertex && activeDragWallSegmentIdx === -1) {
@@ -8302,6 +9017,22 @@ window.emitTokenUpdates = function(currentTokens) {
                 return;
             }
             if (e.button !== 0) return;
+
+            if (activeResizeTokenId) {
+                activeResizeTokenId = null;
+                resizeDragStartMouse = null;
+                resizeDragStartDims = null;
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+                return;
+            }
+
+            if (activeRotateTokenId) {
+                activeRotateTokenId = null;
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+                return;
+            }
 
             if (isBoxSelecting) {
                 if (boxSelectStart && boxSelectEnd) {
