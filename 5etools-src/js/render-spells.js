@@ -350,11 +350,16 @@ export class RenderSpells {
 	 * @param [opts.settings]
 	 */
 	static getRenderedSpell (ent, opts) {
-		const styleHint = VetoolsConfig.get("styleSwitcher", "style");
+		let styleHint;
+		try {
+			styleHint = VetoolsConfig.get("styleSwitcher", "style");
+		} catch (e) {
+			styleHint = SITE_STYLE__CLASSIC;
+		}
 		switch (styleHint) {
-			case SITE_STYLE__CLASSIC: return this._RENDER_CLASSIC.getRendered(ent, opts);
 			case SITE_STYLE__ONE: return this._RENDER_ONE.getRendered(ent, opts);
-			default: throw new Error(`Unhandled style "${styleHint}"!`);
+			case SITE_STYLE__CLASSIC:
+			default: return this._RENDER_CLASSIC.getRendered(ent, opts);
 		}
 	}
 }

@@ -11,9 +11,21 @@ const __dirname = path.dirname(__filename);
 const DEFAULT_PORT = 5050;
 
 function findCloudflared() {
-  // Check local directory first
-  const localExe = path.join(__dirname, 'cloudflared.exe');
+  if (process.env.CLOUDFLARED_BIN && fs.existsSync(process.env.CLOUDFLARED_BIN)) {
+    return process.env.CLOUDFLARED_BIN;
+  }
+
+  // Check bundled resources directory for Electron
+  const binName = process.platform === 'win32' ? 'cloudflared.exe' : 'cloudflared';
+  const resourceBin = path.join(__dirname, '..', 'bin', binName);
+  if (fs.existsSync(resourceBin)) return resourceBin;
+
+  const localExe = path.join(__dirname, 'resources', 'bin', binName);
   if (fs.existsSync(localExe)) return localExe;
+
+  // Check local directory first
+  const rootExe = path.join(__dirname, binName);
+  if (fs.existsSync(rootExe)) return rootExe;
 
   // Common Windows installation paths
   const winPaths = [

@@ -1367,10 +1367,9 @@ input:focus, select:focus {
     font-weight: 700;
     font-size: 1.05rem;
     color: var(--color-gold-light);
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.25;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 .cs-creature-type {
     font-size: 0.72rem;
@@ -1379,9 +1378,15 @@ input:focus, select:focus {
     margin-top: 2px;
     text-transform: capitalize;
 }
+.cs-header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+}
 .cs-cr-badge {
     display: inline-flex;
-    margin-top: 4px;
     padding: 2px 7px;
     border-radius: 10px;
     background: rgba(212, 175, 55, 0.12);
@@ -1391,6 +1396,18 @@ input:focus, select:focus {
     font-weight: 700;
     font-size: 0.7rem;
     letter-spacing: 0.3px;
+}
+.cs-edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    line-height: 1;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
 }
 
 /* ── HP Row ── */
@@ -1598,6 +1615,7 @@ input:focus, select:focus {
 }
 
 /* ── Ability Sections (Traits / Actions / Reactions / Legendary) ── */
+/* ── Ability Sections (Traits / Actions / Reactions / Legendary) ── */
 .cs-section {
     padding: 0 0 4px 0;
     border-bottom: 1px solid var(--color-border-subtle);
@@ -1613,10 +1631,28 @@ input:focus, select:focus {
     align-items: center;
     gap: 7px;
     text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+}
+.cs-section-title:hover {
+    background: rgba(255, 255, 255, 0.03);
 }
 .cs-section-title i {
     font-size: 0.65rem;
     opacity: 0.7;
+}
+.cs-section-chevron {
+    margin-left: auto;
+    font-size: 0.7rem !important;
+    color: var(--color-gold-base);
+    transition: transform 0.2s ease;
+}
+.cs-section.collapsed .cs-section-chevron {
+    transform: rotate(-90deg);
+}
+.cs-section.collapsed .cs-section-content {
+    display: none;
 }
 .cs-legendary-section .cs-section-title {
     color: #e3b964;
@@ -1634,24 +1670,42 @@ input:focus, select:focus {
     transition: background 0.15s;
 }
 .cs-ability-entry:hover { background: rgba(255,255,255,0.02); }
+.cs-ability-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+.cs-card-chevron {
+    font-size: 0.65rem;
+    color: var(--color-gold-base);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+.cs-ability-entry.expanded .cs-card-chevron {
+    transform: rotate(90deg);
+}
 .cs-ability-name {
     font-family: var(--font-heading);
     font-weight: 600;
     font-size: 0.78rem;
     color: var(--color-text-primary);
-    cursor: pointer;
-    margin-bottom: 3px;
     display: inline-block;
     transition: color 0.15s;
 }
 .cs-ability-name:hover {
     color: var(--color-gold-light);
-    text-decoration: underline dotted;
 }
 .cs-ability-text {
     font-size: 0.72rem;
     color: var(--color-text-secondary);
     line-height: 1.6;
+    display: none;
+    margin-top: 6px;
+}
+.cs-ability-entry.expanded .cs-ability-text {
+    display: block;
 }
 
 /* ── Dice Chips ── */

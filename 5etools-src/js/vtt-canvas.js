@@ -8251,17 +8251,20 @@ window.emitTokenUpdates = function(currentTokens) {
 
             if (e.button === 2) {
                 if (activeTool === 'select' && dragTargetId) {
+                    const t = tokens[dragTargetId];
                     const tOriginalPos = tokenDragOriginalPositions[dragTargetId];
+                    const { drawW, drawH } = t ? getTokenDrawDimensions(t) : { drawW: 0, drawH: 0 };
+                    const currentCenter = t ? { x: t.x + drawW / 2, y: t.y + drawH / 2 } : mouse;
                     if (!localIsMeasuring) {
                         isTokenMeasuring = true;
                         localIsMeasuring = true;
-                        localMeasureStart = tOriginalPos ? { x: tOriginalPos.x + getTokenDrawDimensions(tokens[dragTargetId]).drawW / 2, y: tOriginalPos.y + getTokenDrawDimensions(tokens[dragTargetId]).drawH / 2 } : mouse;
-                        localMeasureEnd = mouse;
-                        measureAnchorPoints = [localMeasureStart, e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y)];
+                        localMeasureStart = tOriginalPos ? { x: tOriginalPos.x + drawW / 2, y: tOriginalPos.y + drawH / 2 } : mouse;
+                        localMeasureEnd = currentCenter;
+                        measureAnchorPoints = [localMeasureStart];
                         renderAll();
                     } else {
-                        measureAnchorPoints.push(e.altKey ? mouse : snapToGridCenter(mouse.x, mouse.y));
-                        localMeasureEnd = mouse;
+                        measureAnchorPoints.push(currentCenter);
+                        localMeasureEnd = currentCenter;
                         renderAll();
                     }
                     return;
@@ -8939,6 +8942,16 @@ window.emitTokenUpdates = function(currentTokens) {
                             t.y = ny;
                         }
                     }
+                    if (localIsMeasuring && isTokenMeasuring) {
+                        const { drawW, drawH } = getTokenDrawDimensions(t);
+                        const tokenCenter = { x: t.x + drawW / 2, y: t.y + drawH / 2 };
+                        localMeasureEnd = tokenCenter;
+                        const color = document.getElementById('measure-color')?.value || '#00ffff';
+                        const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
+                        const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
+                        const points = (measureAnchorPoints.length > 0) ? [...measureAnchorPoints, localMeasureEnd] : null;
+                        vtt.socket.emit('measure:updated', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
+                    }
                     renderAll();
                 }
             } else if (localIsMeasuring && (activeTool === 'measure' || isTokenMeasuring)) {
@@ -9107,7 +9120,7 @@ window.emitTokenUpdates = function(currentTokens) {
                             startY: originalPos.y,
                             endX: t.x,
                             endY: t.y,
-                            waypoints: isTokenMeasuring ? [...measureAnchorPoints] : [],
+                            waypoints: isTokenMeasuring ? measureAnchorPoints.slice(1) : [],
                             timestamp: Date.now(),
                             duration: 500
                         };

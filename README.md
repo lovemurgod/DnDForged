@@ -1,92 +1,80 @@
 # ForgeDVTT — Tabletop Freedom
 
-> A lightweight, self-hosted Virtual Tabletop (VTT) server-side integration powered by Express, Socket.IO, and 5etools.
-
-ForgeDVTT combines rich 5e content lookup with interactive VTT capabilities: real-time map canvas, interactive token management, dynamic fog of war, lighting, integrated 3D dice rolling, party combat tracking, and live DM tools.
-
----
-
-## Key Features
-
-- **Self-Hosted & Private:** All campaign state, maps, fog of war, tokens, and logs remain 100% local on your machine.
-- **Real-Time Multiplayer Sync:** Socket.IO handles synchronized token movement, map switching, dice rolls, and chat logs between DM and players.
-- **Interactive Online Launcher:** Dynamic subdomain routing allowing games to be hosted on custom subdomains (e.g., `https://dm-alice.forgedvtt.com`).
-- **5etools Integration:** Built-in proxy and renderer support for 5e rules, spell cards, creature stat blocks, and official assets.
-- **Zero Database Setup:** Automatically initializes a lightweight, file-backed local data store (`.dndforged-data/`).
+> **Plug & Play Virtual Tabletop (VTT) for Dungeons & Dragons 5e**
+> A lightweight, self-hosted VTT application combining full 5e content lookup, interactive map canvas, token management, dynamic fog of war, 3D dice rolling, party combat tracking, and zero-config online tunneling.
 
 ---
 
-## Quickstart Guide
+## 🚀 Quickstart Guide (For Game Masters & Players)
+
+ForgeDVTT is packaged as a **single-download desktop app**. No Node.js, terminal commands, or complicated network configuration required!
+
+### Step 1: Download & Run
+1. Download the latest **[ForgeDVTT Setup.exe](https://github.com/YOUR_USERNAME/DnDForged/releases)** (or the **Portable .exe**).
+2. Double-click the file to launch the **ForgeDVTT Control Center**.
+
+### Step 2: Choose Your Game Subdomain
+1. In the Control Center, type your desired subdomain slug (e.g., `julz` or `cosmic`).
+2. Click **🚀 Start Online Tunnel**.
+
+### Step 3: Play & Share
+- Click **⚔️ Open VTT Window** to play inside the desktop app.
+- Click **📋 Copy Link** to share your secure online game URL (`https://julz.forgedvtt.com/vtt.html`) directly with your players!
+
+---
+
+## ✨ Desktop App Features
+
+- **Zero Terminal Setup:** Click-to-start local Node server and online Cloudflare Tunnel.
+- **Bundled Cloudflare Tunnel:** Expose your local game securely over HTTPS without port forwarding.
+- **Embedded VTT Window:** Play directly inside the app or open in any external web browser.
+- **Campaign Data Management:** 1-click **Open Data Folder** and **Backup Campaign** buttons to keep your maps, tokens, and character sheets safe.
+- **System Tray Integration:** Minimize the control center to your system tray while keeping the game server active in the background.
+
+---
+
+## 🛠️ Developer & Source Build Instructions
+
+If you wish to modify the source code or build the desktop app executables yourself:
 
 ### Prerequisites
+- **Node.js** (v18.0.0 or higher)
+- **npm**
 
-- **Node.js** (v18.0.0 or higher recommended)
-- **npm** (comes bundled with Node.js)
-
-### Installation & Running
-
-1. **Clone the repository:**
+### Local Development
+1. Clone the repository:
    ```bash
    git clone https://github.com/YOUR_USERNAME/DnDForged.git
    cd DnDForged
    ```
 
-2. **Install dependencies:**
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. **Start local server:**
+3. Launch Electron app in development mode:
+   ```bash
+   npm run app
+   ```
+
+4. Or run local headless server:
    ```bash
    npm start
    ```
 
-4. **Access the VTT:**
-   Open your browser and navigate to:
-   ```
-   http://localhost:5050
-   ```
-
----
-
-## Remote Play & Online Hosting Options
-
-### 1. Dedicated Subdomain Launcher (Recommended)
-To host online for remote players with a custom subdomain under `forgedvtt.com`:
-
+### Building Executables & Installers
+To generate the Windows NSIS Installer (`dist/ForgeDVTT Setup 1.0.0.exe`) and Portable binary:
 ```bash
-npm run online
+npm run dist
 ```
-*(Or double-click `start-online.bat` on Windows)*
-
-The launcher will prompt for your desired subdomain name (e.g. `cosmic` or `dm-alice`), start your local server, and launch the tunnel.
-
-### 2. Local Play (LAN)
-Players on your local Wi-Fi network can join directly by opening your computer's local IP address (e.g., `http://192.168.1.X:5050`).
-
-### 3. Instant Localtunnel (Zero Config)
-```bash
-npx localtunnel --port 5050
-```
-Share the generated public HTTPS URL with your players.
 
 ---
 
-## Data & Privacy Architecture
-
-When you start the server for the first time, DnDForged creates a hidden local directory `.dndforged-data/` on your host machine to store:
-- Active campaign states (`campaigns.json`)
-- Game chat history (`chat-log.json`)
-- Custom uploaded map images & tokens (`uploads/` & `assets/`)
-
-This directory is excluded from version control (`.gitignore`) to ensure your campaign content, player details, and GM notes remain entirely private to your local system.
-
----
-
-## License & Legal Disclaimer
+## 📄 License & Legal Disclaimer
 
 ### Ownership & Copyright
 Copyright (c) 2026. All Rights Reserved.
 
 ### Fan Content Disclaimer
-DnDForged is unofficial Fan Content permitted under the Wizards of the Coast Fan Content Policy. Portions of the materials used are property of Wizards of the Coast. (c)Wizards of the Coast LLC.
+ForgeDVTT is unofficial Fan Content permitted under the Wizards of the Coast Fan Content Policy. Portions of the materials used are property of Wizards of the Coast. (c)Wizards of the Coast LLC.

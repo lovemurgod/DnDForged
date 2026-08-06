@@ -28,7 +28,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Campaign data persistence directories
-const DATA_DIR = path.join(__dirname, '.dndforged-data');
+const DATA_DIR = process.env.FORGEDVTT_DATA_DIR || path.join(__dirname, '.dndforged-data');
 const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
 const CAMPAIGNS_FILE = path.join(DATA_DIR, 'campaigns.json');
 const CHAT_FILE = path.join(DATA_DIR, 'chat-log.json');
@@ -370,18 +370,13 @@ function getOrCreateCampaign(campId) {
 app.get('/api/campaigns', (req, res) => {
   const sub = extractSubdomain(req.headers.host);
   if (sub) {
-    const c = getOrCreateCampaign(sub);
-    return res.json([{ id: c.id, name: c.name }]);
+    getOrCreateCampaign(sub);
   }
   res.json(Object.values(campaigns).map(c => ({ id: c.id, name: c.name })));
 });
 
 // Get detailed campaign state
 app.get('/api/campaigns/:id', (req, res) => {
-  const sub = extractSubdomain(req.headers.host);
-  if (sub && req.params.id !== sub) {
-    return res.status(403).json({ error: `Access denied: Domain "${sub}" can only access campaign "${sub}".` });
-  }
   const campaign = getOrCreateCampaign(req.params.id);
   res.json(campaign);
 });
@@ -718,16 +713,7 @@ io.on('connection', (socket) => {
 
   // Handle player/GM registration to a campaign room
   socket.on('join', ({ campaignId, username, role }) => {
-    let targetCampaignId = campaignId;
-
-    if (socketSubdomain) {
-      if (campaignId && campaignId !== socketSubdomain) {
-        socket.emit('join_rejected', { reason: `Access restricted: Domain "${socketSubdomain}" can only access campaign "${socketSubdomain}".` });
-        socket.disconnect(true);
-        return;
-      }
-      targetCampaignId = socketSubdomain;
-    }
+    let targetCampaignId = campaignId || socketSubdomain || 'default';
 
     if (!campaigns[targetCampaignId]) {
       getOrCreateCampaign(targetCampaignId);

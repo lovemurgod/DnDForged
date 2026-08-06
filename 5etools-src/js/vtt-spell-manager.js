@@ -1,4 +1,64 @@
-// vtt-spell-manager.js
+let sharedSpellCache = null;
+let pSpellPromise = null;
+
+if (typeof window !== 'undefined') {
+    window.VTTSpellManager = window.VTTSpellManager || {
+        loadSpells: () => loadSpells(),
+        cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
+        getSpellCache: () => sharedSpellCache,
+        setSpellCache: (cache) => { sharedSpellCache = cache; }
+    };
+}
+
+export async function loadSpells() {
+    if (sharedSpellCache) return sharedSpellCache;
+    if (pSpellPromise) return pSpellPromise;
+    if (window.DataUtil && window.DataUtil.spell) {
+        pSpellPromise = window.DataUtil.spell.pLoadAll().then(spells => {
+            sharedSpellCache = spells;
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                window.vttPlayerSheetAPI.setSpellCache(spells);
+            }
+            return spells;
+        }).catch(err => {
+            pSpellPromise = null;
+            throw err;
+        });
+        return pSpellPromise;
+    }
+    return null;
+}
+
+export function cleanSpellBodyHtml(html) {
+    if (!html) return '';
+    let cleaned = html;
+
+    // 1. Remove top spell-meta container if present
+    cleaned = cleaned.replace(/<div class="spell-meta"[^>]*>[\s\S]*?<\/div>/ig, '');
+
+    // 2. Pre-table pass: Strip <tr> rows containing h1/h2 title, level/school subtitle, or metadata headers
+    cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<h[12][^>]*>.*?<\/h[12]>\s*<\/td>\s*<\/tr>/ig, '');
+    cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*<\/td>\s*<\/tr>/ig, '');
+    cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>[\s\S]*?<\/td>\s*<\/tr>/ig, '');
+
+    // 3. Convert table elements to div elements
+    cleaned = cleaned.replace(/<\/?tbody[^>]*>/g, '')
+                     .replace(/<\/?tr[^>]*>/g, '')
+                     .replace(/<\/?td[^>]*>/g, '<div>')
+                     .replace(/<\/td>/g, '</div>');
+
+    // 4. Post-table pass: Strip inline/block h1/h2, level/school subtitle, and metadata headers
+    cleaned = cleaned.replace(/<h[12][^>]*>.*?<\/h[12]>/ig, '');
+    cleaned = cleaned.replace(/<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*(?:<br\s*\/?>)*/ig, '');
+    cleaned = cleaned.replace(/<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>.*?(?:<br\s*\/?>|\n|$)/ig, '');
+
+    // 5. Clean up redundant line breaks and empty container spacing
+    cleaned = cleaned.replace(/<div>\s*(?:<br\s*\/?>\s*)*/ig, '<div>');
+    cleaned = cleaned.replace(/(?:<br\s*\/?>\s*)+/g, '<br>');
+    cleaned = cleaned.replace(/^(?:\s*<br\s*\/?>)+|(?:\s*<br\s*\/?>)+$/ig, '');
+
+    return cleaned.trim();
+}
 
 export function initVttSpellManager(vtt) {
     let spellCache = null;
@@ -1285,13 +1345,22 @@ export function initVttSpellManager(vtt) {
             saveAndEmit = ctx.saveAndEmit;
             renderSheetData = ctx.renderSheetData;
             spellCache = ctx.spellCache;
+            if (ctx.spellCache) sharedSpellCache = ctx.spellCache;
         },
         openModal: (level, idx, customChar, onSaveCallback) => {
             openSpellModal(level, idx, customChar, onSaveCallback);
         },
-        getSpellCache: () => spellCache,
-        setSpellCache: (cache) => { spellCache = cache; },
+        getSpellCache: () => sharedSpellCache || spellCache,
+        setSpellCache: (cache) => { 
+            sharedSpellCache = cache; 
+            spellCache = cache; 
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                window.vttPlayerSheetAPI.setSpellCache(cache);
+            }
+        },
+        loadSpells: () => loadSpells(),
         parseSpellToMacro: (spData, newSpell) => parseSpellToMacro(spData, newSpell),
+        cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
         ensureSpellModalsExist: () => ensureSpellModalsExist(),
         renderTogglesList: () => renderTogglesList(),
         renderAttackTogglesList: () => renderAttackTogglesList()

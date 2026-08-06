@@ -7,7 +7,6 @@ export function initVttCreatureSheet(vtt) {
 
     if (!panel || !minimizeBtn || !contentEl) {
         console.warn('[CreatureSheet] Panel elements not found in DOM.');
-        return {};
     }
 
     let currentMonster = null;
@@ -272,7 +271,12 @@ export function initVttCreatureSheet(vtt) {
 
         const profBonus = getProfBonus(crStr);
 
-        const hasSpells = m.spellcasting && m.spellcasting.length > 0;
+        ensureSpellcastingFromTraits(m);
+        const hasSpells = (m.spellcasting && m.spellcasting.length > 0) || 
+                          (m.spells && Object.values(m.spells).some(arr => Array.isArray(arr) && arr.length > 0)) ||
+                          (m.slots && Object.keys(m.slots).length > 0) ||
+                          (m.spellSlots && Object.keys(m.spellSlots).length > 0) ||
+                          Boolean(linkedCharacterId);
         let tabsHtml = '';
         let spellsHtml = '';
 
@@ -283,14 +287,19 @@ export function initVttCreatureSheet(vtt) {
                     <div class="cs-tab-btn" data-tab="spells">Spells</div>
                 </div>
             `;
-            spellsHtml = buildSpellcastingHtml(m);
+            try {
+                spellsHtml = buildSpellcastingHtml(m);
+            } catch (err) {
+                console.error('[CreatureSheet] Error building spellcasting HTML:', err);
+                spellsHtml = `<div class="alert alert-warning" style="padding:12px; background:rgba(255,165,0,0.15); border:1px solid orange; border-radius:4px; color:#ffcc00;"><i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i>Could not format spellcasting list: ${err.message}</div>`;
+            }
         }
 
         let editBtnHtml = '';
         if (linkedCharacterId && window.VTT?.campaignState?.characters) {
             const char = window.VTT.campaignState.characters[linkedCharacterId];
             if (char && (window.VTT.role === 'GM' || (char.assignedPlayers && (char.assignedPlayers.includes(window.VTT.username) || char.assignedPlayers.includes('*'))))) {
-                editBtnHtml = `<button class="btn btn-sm btn-secondary cs-edit-btn" style="position:absolute; top:12px; right:12px; z-index: 10;" title="Edit Companion"><i class="fa-solid fa-pen"></i> Edit</button>`;
+                editBtnHtml = `<button class="btn btn-sm btn-secondary cs-edit-btn" title="Edit Companion"><i class="fa-solid fa-pen"></i> Edit</button>`;
             }
         }
 
@@ -316,15 +325,17 @@ export function initVttCreatureSheet(vtt) {
 
         contentEl.innerHTML = `
             <!-- Header -->
-            <div class="cs-header" style="position:relative;">
-                ${editBtnHtml}
+            <div class="cs-header">
                 <div class="cs-token-portrait">
                     ${portraitMediaHtml}
                 </div>
                 <div class="cs-header-info">
                     <h2 class="cs-creature-name">${m.name}</h2>
                     <p class="cs-creature-type">${typeStr}</p>
-                    <div class="cs-cr-badge">CR ${crStr}</div>
+                    <div class="cs-header-meta">
+                        <div class="cs-cr-badge">CR ${crStr}</div>
+                        ${editBtnHtml}
+                    </div>
                 </div>
             </div>
 
@@ -377,6 +388,13 @@ export function initVttCreatureSheet(vtt) {
                 <!-- Divider -->
                 <div class="cs-section-divider"></div>
 
+                <!-- Global Collapse Control -->
+                <div style="display: flex; justify-content: flex-end; padding: 6px 16px 2px 16px;">
+                    <button id="cs-toggle-all-btn" class="btn btn-secondary btn-xxs" style="font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;" title="Expand or collapse all sections and cards">
+                        <i class="fa-solid fa-angles-down"></i> <span>Expand All</span>
+                    </button>
+                </div>
+
                 <!-- Traits / Actions / Reactions / Legendary -->
                 ${traits}
                 ${actions}
@@ -398,6 +416,9 @@ export function initVttCreatureSheet(vtt) {
 
         // Wire Initiative Roll
         wireInitiativeRoll(m);
+
+        // Wire Collapsible Sections and Cards
+        wireCollapsibleHandlers();
 
         // Wire Tabs
         if (hasSpells) {
@@ -489,7 +510,6 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function wireSpellSlots() {
-        // Fetch current spell slot state from token if available
         let savedSlots = {};
         if (linkedTokenId && window.VTT?.canvasEngine) {
             const token = window.VTT.canvasEngine.getTokens()[linkedTokenId];
@@ -497,39 +517,114 @@ export function initVttCreatureSheet(vtt) {
                 savedSlots = token.spellSlots;
             }
         }
+        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+            const char = window.VTT.campaignState.characters[linkedCharacterId];
+            if (char && char.spellSlots) {
+                for (let k in char.spellSlots) {
+                    if (savedSlots[k] === undefined) {
+                        const s = char.spellSlots[k];
+                        savedSlots[k] = s;
+                    }
+                }
+            }
+        }
 
-        const slotInputs = contentEl.querySelectorAll('.cs-spell-slot-input');
-        slotInputs.forEach(input => {
+        const currentInputs = contentEl.querySelectorAll('.cs-spell-slot-input[data-type="current"]');
+        const maxInputs = contentEl.querySelectorAll('.cs-spell-slot-input[data-type="max"]');
+
+        currentInputs.forEach(input => {
             const level = input.dataset.level;
-            const max = parseInt(input.dataset.max) || 0;
-            
-            // Initialize from token state if available, else max
+            const maxInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="max"][data-level="${level}"]`);
+            const defaultMax = maxInput ? (parseInt(maxInput.value) || 0) : (parseInt(input.dataset.max) || 0);
+
             if (savedSlots[level] !== undefined) {
-                input.value = savedSlots[level];
+                const s = savedSlots[level];
+                input.value = typeof s === 'object' && s.current !== undefined ? s.current : s;
             } else {
-                input.value = max;
+                input.value = defaultMax;
             }
 
             input.addEventListener('change', (e) => {
                 let val = parseInt(e.target.value);
                 if (isNaN(val)) val = 0;
-                val = Math.max(0, Math.min(val, max));
+                const currentMax = maxInput ? (parseInt(maxInput.value) || 0) : defaultMax;
+                val = Math.max(0, val);
                 e.target.value = val;
 
-                // Sync to token
-                if (linkedTokenId && window.VTT && window.VTT.socket) {
-                    const canvasEngine = window.VTT.canvasEngine;
-                    if (canvasEngine) {
-                        const allTokens = canvasEngine.getTokens();
-                        if (allTokens[linkedTokenId]) {
-                            allTokens[linkedTokenId].spellSlots = allTokens[linkedTokenId].spellSlots || {};
-                            allTokens[linkedTokenId].spellSlots[level] = val;
-                            window.VTT.socket.emit('token:update', { tokens: allTokens });
-                        }
-                    }
-                }
+                syncSlotsState(level, val, currentMax);
             });
         });
+
+        maxInputs.forEach(input => {
+            const level = input.dataset.level;
+            const curInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="current"][data-level="${level}"]`);
+
+            if (savedSlots[level] !== undefined && typeof savedSlots[level] === 'object' && savedSlots[level].max !== undefined) {
+                input.value = savedSlots[level].max;
+            }
+
+            input.addEventListener('change', (e) => {
+                let maxVal = parseInt(e.target.value);
+                if (isNaN(maxVal)) maxVal = 0;
+                maxVal = Math.max(0, maxVal);
+                e.target.value = maxVal;
+
+                let curVal = curInput ? (parseInt(curInput.value) || 0) : 0;
+                if (curVal > maxVal) {
+                    curVal = maxVal;
+                    if (curInput) curInput.value = curVal;
+                }
+
+                syncSlotsState(level, curVal, maxVal);
+            });
+        });
+
+        // Reset Slots Button
+        contentEl.querySelectorAll('.cs-btn-reset-slots, #cs-reset-slots-btn').forEach(resetBtn => {
+            resetBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                currentInputs.forEach(curInput => {
+                    const level = curInput.dataset.level;
+                    const maxInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="max"][data-level="${level}"]`);
+                    const maxVal = maxInput ? (parseInt(maxInput.value) || 0) : (parseInt(curInput.dataset.max) || 0);
+                    curInput.value = maxVal;
+                    syncSlotsState(level, maxVal, maxVal);
+                });
+            });
+        });
+
+        function syncSlotsState(level, curVal, maxVal) {
+            if (currentMonster) {
+                currentMonster.slots = currentMonster.slots || {};
+                currentMonster.slots[level] = { current: curVal, max: maxVal };
+                currentMonster.spellSlots = currentMonster.spellSlots || {};
+                currentMonster.spellSlots[level] = { current: curVal, max: maxVal };
+            }
+            if (linkedTokenId && window.VTT && window.VTT.socket) {
+                const canvasEngine = window.VTT.canvasEngine;
+                if (canvasEngine) {
+                    const allTokens = canvasEngine.getTokens();
+                    if (allTokens[linkedTokenId]) {
+                        allTokens[linkedTokenId].spellSlots = allTokens[linkedTokenId].spellSlots || {};
+                        allTokens[linkedTokenId].spellSlots[level] = { current: curVal, max: maxVal };
+                        window.VTT.socket.emit('token:update', { tokens: allTokens });
+                    }
+                }
+            }
+            if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+                const char = window.VTT.campaignState.characters[linkedCharacterId];
+                if (char) {
+                    char.spellSlots = char.spellSlots || {};
+                    char.spellSlots[level] = { current: curVal, max: maxVal };
+                    if (char.monsterData) {
+                        char.monsterData.slots = char.monsterData.slots || {};
+                        char.monsterData.slots[level] = { current: curVal, max: maxVal };
+                    }
+                    window.VTT.socket.emit('character:update', { character: char });
+                }
+            }
+        }
 
         // Listen for external token slot updates
         if (vtt.socket) {
@@ -537,10 +632,23 @@ export function initVttCreatureSheet(vtt) {
                 if (linkedTokenId && data.tokens && data.tokens[linkedTokenId]) {
                     const updatedSlots = data.tokens[linkedTokenId].spellSlots;
                     if (updatedSlots) {
-                        slotInputs.forEach(input => {
+                        currentInputs.forEach(input => {
                             const level = input.dataset.level;
-                            if (updatedSlots[level] !== undefined && input.value !== updatedSlots[level].toString()) {
-                                input.value = updatedSlots[level];
+                            if (updatedSlots[level] !== undefined) {
+                                const s = updatedSlots[level];
+                                const curVal = typeof s === 'object' && s.current !== undefined ? s.current : s;
+                                if (input.value !== curVal.toString()) {
+                                    input.value = curVal;
+                                }
+                            }
+                        });
+                        maxInputs.forEach(input => {
+                            const level = input.dataset.level;
+                            if (updatedSlots[level] !== undefined && typeof updatedSlots[level] === 'object' && updatedSlots[level].max !== undefined) {
+                                const maxVal = updatedSlots[level].max;
+                                if (input.value !== maxVal.toString()) {
+                                    input.value = maxVal;
+                                }
                             }
                         });
                     }
@@ -668,14 +776,70 @@ export function initVttCreatureSheet(vtt) {
         });
     }
 
+    function wireCollapsibleHandlers() {
+        // 1. Section Title Click (Collapse/Expand entire section category)
+        contentEl.querySelectorAll('.cs-section-title').forEach(titleEl => {
+            titleEl.addEventListener('click', () => {
+                const section = titleEl.closest('.cs-section');
+                if (section) {
+                    section.classList.toggle('collapsed');
+                }
+            });
+        });
+
+        // 2. Card Header Click (Collapse/Expand individual card description)
+        contentEl.querySelectorAll('.cs-ability-header').forEach(headerEl => {
+            headerEl.addEventListener('click', (e) => {
+                if (e.target.closest('.cs-macro-trigger') || e.target.closest('.cs-ability-info-btn') || e.target.closest('button') || e.target.closest('.dice-chip')) {
+                    return;
+                }
+                const entry = headerEl.closest('.cs-ability-entry');
+                if (entry) {
+                    entry.classList.toggle('expanded');
+                }
+            });
+        });
+
+        // 3. Global Expand All / Collapse All Button
+        const toggleAllBtn = contentEl.querySelector('#cs-toggle-all-btn');
+        if (toggleAllBtn) {
+            let isAllExpanded = false;
+            toggleAllBtn.addEventListener('click', () => {
+                isAllExpanded = !isAllExpanded;
+                
+                contentEl.querySelectorAll('.cs-section').forEach(sec => {
+                    if (isAllExpanded) sec.classList.remove('collapsed');
+                    else sec.classList.add('collapsed');
+                });
+
+                contentEl.querySelectorAll('.cs-ability-entry').forEach(card => {
+                    if (isAllExpanded) card.classList.add('expanded');
+                    else card.classList.remove('expanded');
+                });
+
+                const icon = toggleAllBtn.querySelector('i');
+                const textSpan = toggleAllBtn.querySelector('span');
+                if (isAllExpanded) {
+                    if (icon) icon.className = 'fa-solid fa-angles-up';
+                    if (textSpan) textSpan.textContent = 'Collapse All';
+                } else {
+                    if (icon) icon.className = 'fa-solid fa-angles-down';
+                    if (textSpan) textSpan.textContent = 'Expand All';
+                }
+            });
+        }
+    }
+
     // ─── Ability sections builder ─────────────────────────────────────────────
     function buildAbilitySection(title, list) {
         if (!list || list.length === 0) return '';
         const rows = list.map(entry => buildAbilityEntryHtml(entry)).join('');
         return `
             <div class="cs-section">
-                <h3 class="cs-section-title"><i class="fa-solid fa-bolt"></i> ${title}</h3>
-                ${rows}
+                <h3 class="cs-section-title"><i class="fa-solid fa-bolt"></i> <span>${title}</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
+                <div class="cs-section-content">
+                    ${rows}
+                </div>
             </div>
         `;
     }
@@ -687,9 +851,11 @@ export function initVttCreatureSheet(vtt) {
             const rows = m.legendary.map(entry => buildAbilityEntryHtml(entry)).join('');
             html += `
                 <div class="cs-section cs-legendary-section">
-                    <h3 class="cs-section-title"><i class="fa-solid fa-crown"></i> Legendary Actions</h3>
-                    ${lairDesc}
-                    ${rows}
+                    <h3 class="cs-section-title"><i class="fa-solid fa-crown"></i> <span>Legendary Actions</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
+                    <div class="cs-section-content">
+                        ${lairDesc}
+                        ${rows}
+                    </div>
                 </div>
             `;
         }
@@ -699,9 +865,11 @@ export function initVttCreatureSheet(vtt) {
             const rows = m.lairActions.map(entry => buildAbilityEntryHtml(entry)).join('');
             html += `
                 <div class="cs-section cs-legendary-section" style="margin-top:12px;">
-                    <h3 class="cs-section-title"><i class="fa-solid fa-dungeon"></i> Lair Actions</h3>
-                    ${lairDesc}
-                    ${rows}
+                    <h3 class="cs-section-title"><i class="fa-solid fa-dungeon"></i> <span>Lair Actions</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
+                    <div class="cs-section-content">
+                        ${lairDesc}
+                        ${rows}
+                    </div>
                 </div>
             `;
         }
@@ -709,33 +877,159 @@ export function initVttCreatureSheet(vtt) {
         return html;
     }
 
+    function ensureSpellcastingFromTraits(m) {
+        if (!m || !m.trait || !Array.isArray(m.trait) || m.trait.length === 0) return;
+        
+        const scTraits = m.trait.filter(t => t && t.name && /spellcasting|psionics|innate|magic/i.test(t.name));
+        if (scTraits.length === 0) return;
+
+        m.spellcasting = m.spellcasting && Array.isArray(m.spellcasting) ? m.spellcasting : [];
+
+        scTraits.forEach(trait => {
+            if (m.spellcasting.some(sc => sc.name === trait.name)) return; // Avoid duplicate parsing
+
+            const entries = trait.entries || [];
+            const flatEntries = entries.map(e => formatRawEntry(e)).join('\n');
+
+            let ability = 'int';
+            if (/charisma/i.test(flatEntries)) ability = 'cha';
+            else if (/wisdom/i.test(flatEntries)) ability = 'wis';
+            else if (/intelligence/i.test(flatEntries)) ability = 'int';
+            else if (/constitution/i.test(flatEntries)) ability = 'con';
+            else if (/dexterity/i.test(flatEntries)) ability = 'dex';
+            else if (/strength/i.test(flatEntries)) ability = 'str';
+
+            let dc = undefined;
+            const dcMatch = flatEntries.match(/save DC (\d+)/i);
+            if (dcMatch) dc = parseInt(dcMatch[1]);
+
+            let atkMod = undefined;
+            const atkMatch = flatEntries.match(/([+-]\d+)\s+to hit/i);
+            if (atkMatch) atkMod = parseInt(atkMatch[1]);
+
+            const spells = {};
+            const will = [];
+            const daily = {};
+
+            const lines = flatEntries.split('\n');
+            const headerEntries = [];
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
+
+                const cantripMatch = trimmed.match(/^(?:Cantrips\s*\([^)]*\)|At\s+will):\s*(.*)$/i);
+                if (cantripMatch) {
+                    const rawSpells = cantripMatch[1].split(/,\s*/);
+                    rawSpells.forEach(s => {
+                        const cleanName = s.replace(/{@spell ([^|}]+).*?}/, '$1').replace(/[*†‡]/g, '').trim();
+                        if (cleanName) {
+                            if (/at\s+will/i.test(trimmed) && !/cantrips/i.test(trimmed)) {
+                                will.push(cleanName);
+                            } else {
+                                spells['0'] = spells['0'] || { slots: 0, spells: [] };
+                                spells['0'].spells.push(cleanName);
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                const dailyMatch = trimmed.match(/^(\d+)\/day(?:\s+each)?:\s*(.*)$/i);
+                if (dailyMatch) {
+                    const count = dailyMatch[1];
+                    const rawSpells = dailyMatch[2].split(/,\s*/);
+                    const key = count + 'e';
+                    daily[key] = daily[key] || [];
+                    rawSpells.forEach(s => {
+                        const cleanName = s.replace(/{@spell ([^|}]+).*?}/, '$1').replace(/[*†‡]/g, '').trim();
+                        if (cleanName) daily[key].push(cleanName);
+                    });
+                    return;
+                }
+
+                const levelMatch = trimmed.match(/^(\d+)(?:st|nd|rd|th)\s+level\s*\((?:(\d+)\s+slots?|at\s+will)\):\s*(.*)$/i);
+                if (levelMatch) {
+                    const lvlNum = levelMatch[1];
+                    const numSlots = parseInt(levelMatch[2]) || 0;
+                    const rawSpells = levelMatch[3].split(/,\s*/);
+                    spells[lvlNum] = spells[lvlNum] || { slots: numSlots, spells: [] };
+                    rawSpells.forEach(s => {
+                        const cleanName = s.replace(/{@spell ([^|}]+).*?}/, '$1').replace(/[*†‡]/g, '').trim();
+                        if (cleanName) spells[lvlNum].spells.push(cleanName);
+                    });
+                    return;
+                }
+
+                headerEntries.push(line);
+            });
+
+            const scBlock = {
+                name: trait.name,
+                ability,
+                dc,
+                atkMod,
+                headerEntries: headerEntries.length > 0 ? headerEntries : [trait.name]
+            };
+            if (Object.keys(spells).length > 0) scBlock.spells = spells;
+            if (will.length > 0) scBlock.will = will;
+            if (Object.keys(daily).length > 0) scBlock.daily = daily;
+
+            m.spellcasting.push(scBlock);
+        });
+    }
+
     function ensureNpcSpells(m) {
-        if (m.spells) return m.spells;
+        ensureSpellcastingFromTraits(m);
+        if (m.spells && !m.spellcasting) return m.spells;
         let spells = {
             cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: []
         };
-        if (m.spellcasting) {
-            m.spellcasting.forEach(sc => {
+
+        m.dailyUsages = m.dailyUsages || {};
+
+        if (m.spellcasting && Array.isArray(m.spellcasting)) {
+            m.spellcasting.forEach((sc, scIdx) => {
+                sc.id = sc.id || ('sc_' + scIdx + '_' + Date.now());
                 if (sc.spells) {
                     for (let lvl in sc.spells) {
                         let levelKey = lvl === '0' ? 'cantrip' : 'level' + lvl;
-                        sc.spells[lvl].spells.forEach(sp => {
+                        let rawList = Array.isArray(sc.spells[lvl]) ? sc.spells[lvl] : (sc.spells[lvl]?.spells || []);
+                        rawList.forEach((sp, spIdx) => {
                             let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                            if (spells[levelKey]) spells[levelKey].push({ id: 'sp_' + Date.now() + Math.random(), name: name, prepared: true });
+                            let spObj = typeof sp === 'object' ? sp : { id: 'sp_' + scIdx + '_' + lvl + '_' + spIdx, name: name, prepared: true };
+                            spObj.id = spObj.id || ('sp_' + scIdx + '_' + lvl + '_' + spIdx);
+                            spObj.name = name;
+                            if (spells[levelKey] && !spells[levelKey].some(s => s.name === name)) {
+                                spells[levelKey].push(spObj);
+                            }
                         });
                     }
                 }
                 if (sc.will) {
-                    sc.will.forEach(sp => {
+                    sc.will.forEach((sp, spIdx) => {
                         let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                        spells.cantrip.push({ id: 'sp_' + Date.now() + Math.random(), name: name, prepared: true, innate: true });
+                        let spObj = typeof sp === 'object' ? sp : { id: 'sp_will_' + scIdx + '_' + spIdx, name: name, prepared: true, innate: true, uses: 'at_will' };
+                        spObj.id = spObj.id || ('sp_will_' + scIdx + '_' + spIdx);
+                        spObj.name = name;
+                        spObj.uses = 'at_will';
+                        if (!spells.cantrip.some(s => s.name === name)) spells.cantrip.push(spObj);
                     });
                 }
                 if (sc.daily) {
-                    for (let dailyLvl in sc.daily) {
-                        sc.daily[dailyLvl].forEach(sp => {
+                    for (let dailyKey in sc.daily) {
+                        let usesMax = parseInt(dailyKey) || 1;
+                        sc.daily[dailyKey].forEach((sp, spIdx) => {
                             let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                            spells.level1.push({ id: 'sp_' + Date.now() + Math.random(), name: name, prepared: true, innate: true });
+                            let spId = 'sp_daily_' + scIdx + '_' + dailyKey + '_' + spIdx;
+                            let usesRemaining = m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
+                            let spObj = typeof sp === 'object' ? sp : { id: spId, name: name, prepared: true, innate: true, usesMax, usesRemaining, dailyKey };
+                            spObj.id = spObj.id || spId;
+                            spObj.name = name;
+                            spObj.usesMax = usesMax;
+                            spObj.usesRemaining = usesRemaining;
+                            spObj.dailyKey = dailyKey;
+                            if (!spells.level1.some(s => s.name === name)) spells.level1.push(spObj);
                         });
                     }
                 }
@@ -745,11 +1039,41 @@ export function initVttCreatureSheet(vtt) {
         return m.spells;
     }
 
+    function getMaxSlotsForLevel(m, slKey) {
+        if (!slKey || slKey === 'cantrip') return 0;
+        const lvlNum = slKey.replace('level', '');
+        
+        if (m.spellcasting) {
+            for (let sc of m.spellcasting) {
+                if (sc.spells && sc.spells[lvlNum] && sc.spells[lvlNum].slots !== undefined) {
+                    return parseInt(sc.spells[lvlNum].slots) || 0;
+                }
+            }
+        }
+        if (m.slots && m.slots[slKey] !== undefined) {
+            const val = m.slots[slKey];
+            return typeof val === 'object' ? (parseInt(val.max) || 0) : (parseInt(val) || 0);
+        }
+        if (m.spellSlots && m.spellSlots[slKey] !== undefined) {
+            const val = m.spellSlots[slKey];
+            return typeof val === 'object' ? (parseInt(val.max) || 0) : (parseInt(val) || 0);
+        }
+        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+            const char = window.VTT.campaignState.characters[linkedCharacterId];
+            if (char && char.spellSlots && char.spellSlots[slKey]) {
+                const val = char.spellSlots[slKey];
+                return typeof val === 'object' ? (parseInt(val.max) || 0) : (parseInt(val) || 0);
+            }
+        }
+        return 0;
+    }
+
     function buildSpellcastingHtml(m) {
+        ensureSpellcastingFromTraits(m);
         const spellsObj = ensureNpcSpells(m);
         const spellLevels = [
             { key: 'cantrip', label: 'Cantrips/At Will' },
-            { key: 'level1', label: '1st Level/Daily' },
+            { key: 'level1', label: '1st Level' },
             { key: 'level2', label: '2nd Level' },
             { key: 'level3', label: '3rd Level' },
             { key: 'level4', label: '4th Level' },
@@ -760,57 +1084,173 @@ export function initVttCreatureSheet(vtt) {
             { key: 'level9', label: '9th Level' }
         ];
 
-        let html = `<div style="display:flex; flex-direction:column; gap:16px;">`;
+        let html = `<div style="display:flex; flex-direction:column; gap:14px;">`;
         
-        if (m.spellcasting && m.spellcasting.length > 0) {
-            html += `<div class="cs-spellcasting-desc" style="background: rgba(0,0,0,0.15); padding: 12px; border-radius: 4px; font-size: 0.9rem; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: 4px; border-left: 3px solid var(--color-gold-base);">`;
-            m.spellcasting.forEach((sc, i) => {
-                const name = sc.name ? `<strong style="color:var(--color-gold-light); font-size: 1rem; display:block; margin-bottom: 4px;">${sc.name}</strong> ` : '';
+        html += `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px; border:1px solid var(--color-border-subtle, rgba(255,255,255,0.1)); margin-bottom:4px;">
+                <span style="font-size:0.95rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-wand-magic-sparkles" style="margin-right:6px;"></i>Spellcasting</span>
+                <button class="btn btn-secondary btn-xxs cs-btn-reset-slots" id="cs-reset-slots-btn" title="Reset all spell slots & innate daily usages"><i class="fa-solid fa-rotate-left"></i> Reset Slots & Usages</button>
+            </div>
+        `;
+        
+        if (m.spellcasting && Array.isArray(m.spellcasting) && m.spellcasting.length > 0) {
+            m.spellcasting.forEach((sc, scIdx) => {
+                const scName = sc.name || 'Spellcasting';
+                const abilityStr = (sc.ability || 'INT').toUpperCase();
+                const dcVal = sc.dc || (sc.ability ? (8 + getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0') + Math.floor(((m[sc.ability] || 10) - 10) / 2)) : null);
+                const atkVal = sc.atkMod !== undefined ? sc.atkMod : (dcVal ? dcVal - 8 : null);
+
                 const hEntries = sc.headerEntries ? sc.headerEntries.map(e => formatRawEntry(e)).join('<br>') : '';
                 const fEntries = sc.footerEntries ? '<br>' + sc.footerEntries.map(e => formatRawEntry(e)).join('<br>') : '';
                 const desc = injectDiceChips(parse5eMarkup(hEntries + fEntries));
-                html += `<div style="margin-bottom: ${i < m.spellcasting.length - 1 ? '16px' : '0'};">${name}${desc}</div>`;
-            });
-            html += `</div>`;
-        }
 
-        spellLevels.forEach(sl => {
-            const list = spellsObj[sl.key];
-            if (list && list.length > 0) {
                 html += `
-                    <div class="cs-spell-page" style="margin-bottom:8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-                            <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);">${sl.label}</span>
-                            ${linkedCharacterId ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                    <div class="cs-spellcasting-block" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid var(--color-gold-base);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">
+                            <strong style="color:var(--color-gold-light); font-size: 1.05rem;"><i class="fa-solid fa-hand-sparkles" style="margin-right:6px;"></i>${scName}</strong>
+                            <div style="display:flex; align-items:center; gap:6px; font-size:0.78rem;">
+                                <span style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); padding:2px 8px; border-radius:4px; font-weight:600;">${abilityStr}</span>
+                                ${dcVal ? `<span style="background:rgba(255,255,255,0.08); color:var(--color-text-primary); padding:2px 8px; border-radius:4px;">DC ${dcVal}</span>` : ''}
+                                ${atkVal !== null ? `<span style="background:rgba(255,255,255,0.08); color:var(--color-text-primary); padding:2px 8px; border-radius:4px;">${atkVal >= 0 ? '+' : ''}${atkVal} Atk</span>` : ''}
+                            </div>
                         </div>
-                        <div style="display:flex; flex-direction:column; gap:8px;">
-                            ${list.map((sp, idx) => {
-                                if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderSpellRowHtml) {
-                                    let rawHtml = window.vttPlayerSheetAPI.renderSpellRowHtml(sp, sl.key, idx, false);
-                                    rawHtml = rawHtml.replace(/pc-spell-/g, 'cs-spell-');
-                                    if (!linkedCharacterId) {
-                                        rawHtml = rawHtml.replace(/<button[^>]*cs-spell-edit[^>]*>[\s\S]*?<\/button>/, '');
-                                    }
-                                    return rawHtml;
-                                }
-                                return `<div>${sp.name}</div>`;
-                            }).join('')}
-                        </div>
-                    </div>
+                        ${desc ? `<div style="font-size: 0.88rem; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: 12px;">${desc}</div>` : ''}
                 `;
-            } else {
-                html += `
-                    <div class="cs-spell-page" style="margin-bottom:8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-                            <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base); opacity:0.5;">${sl.label}</span>
-                            ${linkedCharacterId ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}"><i class="fa-solid fa-plus"></i> Add</button>` : ''}
+
+                if (sc.will && sc.will.length > 0) {
+                    html += `
+                        <div style="margin-bottom:10px;">
+                            <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); opacity:0.8; margin-bottom:4px;">At Will</div>
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                ${sc.will.map((sp) => {
+                                    let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
+                                    let flatIdx = spellsObj.cantrip.findIndex(s => s.name === spName || s.id === sp.id);
+                                    if (flatIdx === -1) flatIdx = 0;
+                                    return renderSingleSpellRowHtml(sp, 'cantrip', flatIdx);
+                                }).join('')}
+                            </div>
                         </div>
+                    `;
+                }
+
+                if (sc.daily) {
+                    for (let dailyKey in sc.daily) {
+                        const usesMax = parseInt(dailyKey) || 1;
+                        const label = dailyKey.includes('e') ? `${usesMax}/day each` : `${usesMax}/day`;
+                        const dailyList = sc.daily[dailyKey];
+                        html += `
+                            <div style="margin-bottom:10px;">
+                                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); opacity:0.8; margin-bottom:4px;">${label}</div>
+                                <div style="display:flex; flex-direction:column; gap:6px;">
+                                    ${dailyList.map((sp, idx) => {
+                                        const spId = 'sp_daily_' + scIdx + '_' + dailyKey + '_' + idx;
+                                        const curUses = m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
+                                        let checkBoxesHtml = '<div style="display:inline-flex; align-items:center; gap:3px; margin-right:6px;" title="Remaining Daily Uses">';
+                                        for (let u = 0; u < usesMax; u++) {
+                                            const isChecked = u < curUses;
+                                            checkBoxesHtml += `<i class="cs-innate-use-checkbox ${isChecked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}" data-spell-id="${spId}" data-uses-max="${usesMax}" data-use-idx="${u}" style="cursor:pointer; color:var(--color-gold-base); font-size:0.9rem;"></i>`;
+                                        }
+                                        checkBoxesHtml += '</div>';
+                                        
+                                        let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
+                                        let flatIdx = spellsObj.level1.findIndex(s => s.name === spName || s.id === spId);
+                                        if (flatIdx === -1) flatIdx = 0;
+
+                                        let rowHtml = renderSingleSpellRowHtml(sp, 'level1', flatIdx);
+                                        rowHtml = rowHtml.replace(/(<div class="cs-spell-name"[^>]*>)/, `$1 ${checkBoxesHtml}`);
+                                        return rowHtml;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                if (sc.spells) {
+                    for (let lvl in sc.spells) {
+                        const lvlKey = lvl === '0' ? 'cantrip' : 'level' + lvl;
+                        const lvlLabel = lvl === '0' ? 'Cantrips' : `Level ${lvl}`;
+                        const lvlObj = sc.spells[lvl];
+                        const rawList = Array.isArray(lvlObj) ? lvlObj : (lvlObj?.spells || []);
+                        const maxSlots = Array.isArray(lvlObj) ? 0 : (lvlObj?.slots || 0);
+                        const slotTrackerHtml = lvl !== '0' ? `
+                            <div class="cs-spell-level-slots" style="display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--color-border-subtle, #444);">
+                                <span style="color:var(--color-text-muted);">Slots:</span>
+                                <input type="number" class="cs-spell-slot-input" data-level="${lvlKey}" data-type="current" data-max="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Current Slots">
+                                <span style="color:var(--color-text-muted);">/</span>
+                                <input type="number" class="cs-spell-slot-input" data-level="${lvlKey}" data-type="max" value="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Max Slots">
+                            </div>
+                        ` : '';
+
+                        if (rawList && rawList.length > 0) {
+                            html += `
+                                <div style="margin-bottom:10px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                        <span style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base);">${lvlLabel}</span>
+                                        ${slotTrackerHtml}
+                                    </div>
+                                    <div style="display:flex; flex-direction:column; gap:6px;">
+                                        ${rawList.map((sp) => {
+                                            let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
+                                            let flatIdx = spellsObj[lvlKey] ? spellsObj[lvlKey].findIndex(s => s.name === spName) : 0;
+                                            if (flatIdx === -1) flatIdx = 0;
+                                            return renderSingleSpellRowHtml(sp, lvlKey, flatIdx);
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                }
+
+                html += `</div>`;
+            });
+        } else {
+            spellLevels.forEach(sl => {
+                const list = spellsObj[sl.key];
+                const maxSlots = getMaxSlotsForLevel(m, sl.key);
+                const slotTrackerHtml = sl.key !== 'cantrip' ? `
+                    <div class="cs-spell-level-slots" style="display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--color-border-subtle, #444);">
+                        <span style="color:var(--color-text-muted);">Slots:</span>
+                        <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-type="current" data-max="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Current Slots">
+                        <span style="color:var(--color-text-muted);">/</span>
+                        <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-type="max" value="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Max Slots">
                     </div>
-                `;
-            }
-        });
+                ` : '';
+
+                if (list && list.length > 0) {
+                    html += `
+                        <div class="cs-spell-page" style="margin-bottom:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                    <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);">${sl.label}</span>
+                                    ${slotTrackerHtml}
+                                </div>
+                                ${linkedCharacterId ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                ${list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx)).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
         html += `</div>`;
         return html;
+    }
+
+    function renderSingleSpellRowHtml(sp, slKey, idx) {
+        if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderSpellRowHtml) {
+            let rawHtml = window.vttPlayerSheetAPI.renderSpellRowHtml(sp, slKey, idx, false);
+            rawHtml = rawHtml.replace(/pc-spell-/g, 'cs-spell-');
+            if (!linkedCharacterId) {
+                rawHtml = rawHtml.replace(/<button[^>]*cs-spell-edit[^>]*>[\s\S]*?<\/button>/, '');
+            }
+            return rawHtml;
+        }
+        let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
+        return `<div>${spName}</div>`;
     }
 
     function formatRawEntry(e) {
@@ -880,11 +1320,12 @@ export function initVttCreatureSheet(vtt) {
 
         return `
             <div class="cs-ability-entry">
-                <div class="cs-ability-header" style="display: flex; align-items: center; gap: 8px;">
+                <div class="cs-ability-header">
+                    <i class="cs-card-chevron fa-solid fa-chevron-right"></i>
                     <div class="cs-ability-name cs-macro-trigger" title="Click to roll macro" style="cursor: pointer; flex: 0 0 auto;">
                         ${nameHtml} <i class="fa-solid fa-dice-d20" style="font-size: 0.85em; opacity: 0.6; margin-left: 2px;"></i>
                     </div>
-                    <div class="cs-ability-info-btn" title="Click to post description to chat" style="cursor: pointer; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: background 0.2s, color 0.2s;">
+                    <div class="cs-ability-info-btn" title="Click to post description to chat" style="cursor: pointer; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: background 0.2s, color 0.2s; margin-left: auto;">
                         <i class="fa-solid fa-circle-info"></i>
                     </div>
                 </div>
@@ -994,9 +1435,21 @@ export function initVttCreatureSheet(vtt) {
     // ─── Builders for sub-sections ────────────────────────────────────────────
     function buildTypeString(m) {
         const size = m.size ? sizeCode(m.size) : '';
-        const type = m.type ? (typeof m.type === 'object' ? m.type.type : m.type) : '';
-        const subtype = m.type?.tags ? ` (${m.type.tags.join(', ')})` : '';
-        const align = Array.isArray(m.alignment) ? ' ' + m.alignment.join(' ') : '';
+        const type = m.type ? (typeof m.type === 'object' ? (m.type.type || '') : m.type) : '';
+        const tags = m.type?.tags ? (Array.isArray(m.type.tags) ? m.type.tags.join(', ') : m.type.tags) : '';
+        const subtype = tags ? ` (${tags})` : '';
+        let align = '';
+        if (m.alignment) {
+            if (typeof Parser !== 'undefined' && Parser.alignmentListToFull) {
+                try {
+                    align = ', ' + Parser.alignmentListToFull(m.alignment).toLowerCase();
+                } catch (e) {
+                    align = ', ' + (Array.isArray(m.alignment) ? m.alignment.join(' ') : m.alignment);
+                }
+            } else {
+                align = ', ' + (Array.isArray(m.alignment) ? m.alignment.join(' ') : m.alignment);
+            }
+        }
         return `${size} ${type}${subtype}${align}`.trim();
     }
 
@@ -1075,17 +1528,54 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function getMonsterImageUrl(m) {
-        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
-            const char = window.VTT.campaignState.characters[linkedCharacterId];
-            if (char && char.tokenImages && char.tokenImages.length > 0 && char.activeTokenIndex !== -1) {
-                const idx = char.activeTokenIndex || 0;
-                if (idx >= 0 && idx < char.tokenImages.length) return char.tokenImages[idx].url;
+        if (!m) return 'favicon.svg';
+
+        // 1. If canvas token is linked, check token's explicit image/URL
+        if (linkedTokenId && window.VTT?.canvasEngine) {
+            const canvasTokens = window.VTT.canvasEngine.getTokens();
+            const token = canvasTokens ? canvasTokens[linkedTokenId] : null;
+            if (token) {
+                if (token.imgUrl) return token.imgUrl;
+                if (token.src) return token.src;
+                if (token.tokenUrl) return token.tokenUrl;
             }
         }
-        if (m.hasToken) {
-            const cleanName = m.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '_');
-            return `img/bestiary/tokens/${m.source}/${cleanName}.webp`;
+
+        // 2. If campaign character is linked, check character's custom token artwork / avatar
+        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+            const char = window.VTT.campaignState.characters[linkedCharacterId];
+            if (char) {
+                if (char.tokenImages && char.tokenImages.length > 0 && char.activeTokenIndex !== -1) {
+                    const idx = char.activeTokenIndex || 0;
+                    if (idx >= 0 && idx < char.tokenImages.length && char.tokenImages[idx]?.url) {
+                        return char.tokenImages[idx].url;
+                    }
+                }
+                if (char.avatarUrl) return char.avatarUrl;
+            }
         }
+
+        // 3. Check direct tokenUrl / imgUrl properties on monster object
+        if (m.tokenUrl) return m.tokenUrl;
+        if (m.imgUrl) return m.imgUrl;
+
+        // 4. Use 5etools Renderer.monster.getTokenUrl(m) if available
+        if (typeof window.Renderer !== 'undefined' && window.Renderer?.monster?.getTokenUrl) {
+            try {
+                const rUrl = window.Renderer.monster.getTokenUrl(m);
+                if (rUrl) return rUrl;
+            } catch (e) {
+                console.warn('[CreatureSheet] Renderer.monster.getTokenUrl failed', e);
+            }
+        }
+
+        // 5. Fallback path generator based on 5etools naming conventions
+        if (m.hasToken || m.source) {
+            const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(m.name) : m.name.replace(/ /g, '-').toLowerCase();
+            const source = m.source || 'MM';
+            return `img/bestiary/tokens/${source}/${cleanName}.webp`;
+        }
+
         return 'favicon.svg';
     }
 
@@ -1332,25 +1822,22 @@ export function initVttCreatureSheet(vtt) {
                 details.style.display = 'block';
                 btnEl.classList.add('expanded');
                 
-                if (!spellCache && window.DataUtil?.spell) {
+                let activeCache = spellCache || (window.VTTSpellManager?.getSpellCache ? window.VTTSpellManager.getSpellCache() : null) || (window.vttPlayerSheetAPI?.getSpellCache ? window.vttPlayerSheetAPI.getSpellCache() : null);
+
+                if (!activeCache && (window.VTTSpellManager?.loadSpells || window.DataUtil?.spell)) {
                     descEl.innerHTML = `<em>Loading spell data...</em>`;
-                    window.DataUtil.spell.pLoadAll().then(spells => {
+                    const pLoad = window.VTTSpellManager?.loadSpells ? window.VTTSpellManager.loadSpells() : window.DataUtil.spell.pLoadAll();
+                    pLoad.then(spells => {
                         spellCache = spells;
-                        if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderAndInjectSpell) {
-                            window.vttPlayerSheetAPI.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
-                        } else {
-                            renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
-                        }
+                        if (window.VTTSpellManager?.setSpellCache) window.VTTSpellManager.setSpellCache(spells);
+                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
                     }).catch(err => {
                         console.error(err);
                         descEl.innerHTML = `<em>Error loading spell data: ${err.message || err.toString()}</em>`;
                     });
-                } else if (spellCache) {
-                    if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderAndInjectSpell) {
-                        window.vttPlayerSheetAPI.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
-                    } else {
-                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
-                    }
+                } else if (activeCache) {
+                    spellCache = activeCache;
+                    renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
                 } else {
                     descEl.innerHTML = `<em>Cast ${spellName} (DataUtil not found)</em>`;
                 }
@@ -1360,7 +1847,30 @@ export function initVttCreatureSheet(vtt) {
             }
         }
 
+        function getCleanedSpellBody(html) {
+            if (window.VTTSpellManager && window.VTTSpellManager.cleanSpellBodyHtml) {
+                return window.VTTSpellManager.cleanSpellBodyHtml(html);
+            }
+            if (!html) return '';
+            let cleaned = html;
+            cleaned = cleaned.replace(/<div class="spell-meta"[^>]*>[\s\S]*?<\/div>/ig, '');
+            cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<h[12][^>]*>.*?<\/h[12]>\s*<\/td>\s*<\/tr>/ig, '');
+            cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*<\/td>\s*<\/tr>/ig, '');
+            cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>[\s\S]*?<\/td>\s*<\/tr>/ig, '');
+            cleaned = cleaned.replace(/<\/?tbody[^>]*>/g, '').replace(/<\/?tr[^>]*>/g, '').replace(/<\/?td[^>]*>/g, '<div>').replace(/<\/td>/g, '</div>');
+            cleaned = cleaned.replace(/<h[12][^>]*>.*?<\/h[12]>/ig, '');
+            cleaned = cleaned.replace(/<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*(?:<br\s*\/?>)*/ig, '');
+            cleaned = cleaned.replace(/<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>.*?(?:<br\s*\/?>|\n|$)/ig, '');
+            cleaned = cleaned.replace(/<div>\s*(?:<br\s*\/?>\s*)*/ig, '<div>');
+            cleaned = cleaned.replace(/(?:<br\s*\/?>\s*)+/g, '<br>');
+            cleaned = cleaned.replace(/^(?:\s*<br\s*\/?>)+|(?:\s*<br\s*\/?>)+$/ig, '');
+            return cleaned.trim();
+        }
+
         function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp) {
+            if (!spellCache && window.VTTSpellManager?.getSpellCache) {
+                spellCache = window.VTTSpellManager.getSpellCache();
+            }
             if (!spellCache) return;
             
             const spell = spellCache.find(s => s.name.toLowerCase().trim() === spellName.toLowerCase().trim());
@@ -1390,34 +1900,34 @@ export function initVttCreatureSheet(vtt) {
                 metaHtml += '</div>';
             }
 
-            if (fallbackDesc && fallbackDesc.trim() !== '') {
-                containerEl.innerHTML = metaHtml + `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`;
-                return;
-            }
+            let rawBody = '';
             if (spell && RenderSpells) {
                 let rawRender = RenderSpells.getRenderedSpell(spell);
-                let html = "";
                 if (typeof rawRender === "string") {
-                    html = rawRender;
+                    rawBody = rawRender;
                 } else {
                     const temp = document.createElement("table");
                     try {
                         if (rawRender.appendTo) rawRender.appendTo(temp);
                         else temp.appendChild(rawRender);
-                        html = temp.innerHTML;
+                        rawBody = temp.innerHTML;
                     } catch(e) {
-                        html = rawRender.outerHTML || rawRender.innerHTML || String(rawRender);
+                        rawBody = rawRender.outerHTML || rawRender.innerHTML || String(rawRender);
                     }
                 }
-                
-                html = html.replace(/<\/?tbody[^>]*>/g, '').replace(/<\/?tr[^>]*>/g, '').replace(/<\/?td[^>]*>/g, '<div>').replace(/<\/td>/g, '</div>');
-                html = html.replace(/<div><b>(?:Casting Time|Range|Components|Duration):<\/b>.*?<\/div>/ig, '');
-                html = html.replace(/<div><i>.*?(?:level|cantrip).*?<\/i><\/div>/ig, '');
-                
-                html = injectDiceChips(html);
-                containerEl.innerHTML = metaHtml + html;
-            } else {
+            } else if (fallbackDesc && fallbackDesc.trim() !== '') {
+                rawBody = `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`;
+            }
+
+            let cleanedBody = getCleanedSpellBody(rawBody);
+            if (typeof injectDiceChips === 'function') {
+                cleanedBody = injectDiceChips(cleanedBody);
+            }
+            
+            if (!cleanedBody && !metaHtml) {
                 containerEl.innerHTML = fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<em>Could not find full text for ${spellName}</em>`;
+            } else {
+                containerEl.innerHTML = metaHtml + cleanedBody;
             }
         }
     });
@@ -1473,12 +1983,99 @@ export function initVttCreatureSheet(vtt) {
             char.activeTokenIndex = 0;
         }
         if (typeof char.activeTokenIndex !== 'number') char.activeTokenIndex = 0;
+
+        let defaultTokenUrl = m.tokenUrl || m.imgUrl;
+        if (!defaultTokenUrl && typeof window.Renderer !== 'undefined' && window.Renderer.monster && window.Renderer.monster.getTokenUrl) {
+            try { defaultTokenUrl = window.Renderer.monster.getTokenUrl(m); } catch (e) {}
+        }
+        if (defaultTokenUrl && !char.defaultTokenDeleted) {
+            const hasDefault = char.tokenImages.some(t => t?.isDefault || (typeof t === 'string' ? t : t?.url) === defaultTokenUrl);
+            if (!hasDefault) {
+                char.tokenImages.unshift({ url: defaultTokenUrl, name: 'Default Token', isDefault: true });
+            }
+        }
+
         const acObj = Array.isArray(m.ac) ? m.ac[0] : m.ac;
         const ac = (typeof acObj === 'object' && acObj !== null) ? acObj.ac : (acObj || 10);
         const hpAvg = m.hp?.average || 0;
         const hpForm = m.hp?.formula || '';
 
         const saves = m.save || {};
+
+        const currSize = (Array.isArray(m.size) ? m.size[0] : (m.size || 'M')).toUpperCase();
+
+        const stdTypes = ['aberration', 'beast', 'celestial', 'construct', 'dragon', 'elemental', 'fey', 'fiend', 'giant', 'humanoid', 'monstrosity', 'ooze', 'plant', 'undead'];
+        let typeCategory = 'humanoid';
+        let customTypeValue = '';
+        let tagsStr = '';
+
+        if (typeof m.type === 'string') {
+            const rawType = m.type.toLowerCase();
+            if (stdTypes.includes(rawType)) {
+                typeCategory = rawType;
+            } else {
+                typeCategory = 'custom';
+                customTypeValue = m.type;
+            }
+        } else if (m.type && typeof m.type === 'object') {
+            const rawType = (m.type.type || (Array.isArray(m.type.choose) ? m.type.choose[0] : '') || '').toLowerCase();
+            if (stdTypes.includes(rawType)) {
+                typeCategory = rawType;
+            } else {
+                typeCategory = 'custom';
+                customTypeValue = m.type.type || '';
+            }
+            if (Array.isArray(m.type.tags)) {
+                tagsStr = m.type.tags.map(t => typeof t === 'string' ? t : t?.tag || '').filter(Boolean).join(', ');
+            } else if (typeof m.type.tags === 'string') {
+                tagsStr = m.type.tags;
+            }
+        }
+
+        let alignCategory = 'U';
+        let customAlignValue = '';
+
+        if (Array.isArray(m.alignment)) {
+            if (m.alignment.length === 2 && typeof m.alignment[0] === 'string' && typeof m.alignment[1] === 'string') {
+                const code = (m.alignment[0] + m.alignment[1]).toUpperCase();
+                if (['LG', 'NG', 'CG', 'LN', 'CN', 'LE', 'NE', 'CE'].includes(code)) {
+                    alignCategory = code;
+                } else {
+                    alignCategory = 'custom';
+                    customAlignValue = m.alignment.join(' ');
+                }
+            } else if (m.alignment.length === 1 && typeof m.alignment[0] === 'string') {
+                const code = m.alignment[0].toUpperCase();
+                if (code === 'N' || code === 'NX' || code === 'NY') alignCategory = 'N';
+                else if (code === 'U') alignCategory = 'U';
+                else if (code === 'A') alignCategory = 'A';
+                else {
+                    alignCategory = 'custom';
+                    customAlignValue = m.alignment[0];
+                }
+            } else if (m.alignment.length > 0) {
+                alignCategory = 'custom';
+                try {
+                    customAlignValue = typeof Parser !== 'undefined' && Parser.alignmentListToFull ? Parser.alignmentListToFull(m.alignment) : JSON.stringify(m.alignment);
+                } catch (e) {
+                    customAlignValue = m.alignment.join(' ');
+                }
+            }
+        } else if (typeof m.alignment === 'string') {
+            const rawAlign = m.alignment.toLowerCase();
+            const alignMap = {
+                'lawful good': 'LG', 'neutral good': 'NG', 'chaotic good': 'CG',
+                'lawful neutral': 'LN', 'true neutral': 'N', 'neutral': 'N', 'chaotic neutral': 'CN',
+                'lawful evil': 'LE', 'neutral evil': 'NE', 'chaotic evil': 'CE',
+                'unaligned': 'U', 'any alignment': 'A'
+            };
+            if (alignMap[rawAlign]) {
+                alignCategory = alignMap[rawAlign];
+            } else {
+                alignCategory = 'custom';
+                customAlignValue = m.alignment;
+            }
+        }
         
         let html = `
             <div style="display:flex; flex-direction:column; gap:16px;">
@@ -1501,6 +2098,68 @@ export function initVttCreatureSheet(vtt) {
                             </div>
                         </div>
                         <div id="cs-edit-token-gallery" style="display:flex; gap:8px; flex-wrap:wrap; padding:8px; background:var(--color-bg-dark); border-radius:4px; min-height:80px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
+                    <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Classification & Info</h4>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:8px;">
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Size</label>
+                            <select id="cs-edit-size" class="vtt-input" style="width:100%;">
+                                <option value="T" ${currSize === 'T' ? 'selected' : ''}>Tiny</option>
+                                <option value="S" ${currSize === 'S' ? 'selected' : ''}>Small</option>
+                                <option value="M" ${currSize === 'M' ? 'selected' : ''}>Medium</option>
+                                <option value="L" ${currSize === 'L' ? 'selected' : ''}>Large</option>
+                                <option value="H" ${currSize === 'H' ? 'selected' : ''}>Huge</option>
+                                <option value="G" ${currSize === 'G' ? 'selected' : ''}>Gargantuan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Creature Type</label>
+                            <select id="cs-edit-type-select" class="vtt-input" style="width:100%;">
+                                <option value="aberration" ${typeCategory === 'aberration' ? 'selected' : ''}>Aberration</option>
+                                <option value="beast" ${typeCategory === 'beast' ? 'selected' : ''}>Beast</option>
+                                <option value="celestial" ${typeCategory === 'celestial' ? 'selected' : ''}>Celestial</option>
+                                <option value="construct" ${typeCategory === 'construct' ? 'selected' : ''}>Construct</option>
+                                <option value="dragon" ${typeCategory === 'dragon' ? 'selected' : ''}>Dragon</option>
+                                <option value="elemental" ${typeCategory === 'elemental' ? 'selected' : ''}>Elemental</option>
+                                <option value="fey" ${typeCategory === 'fey' ? 'selected' : ''}>Fey</option>
+                                <option value="fiend" ${typeCategory === 'fiend' ? 'selected' : ''}>Fiend</option>
+                                <option value="giant" ${typeCategory === 'giant' ? 'selected' : ''}>Giant</option>
+                                <option value="humanoid" ${typeCategory === 'humanoid' ? 'selected' : ''}>Humanoid</option>
+                                <option value="monstrosity" ${typeCategory === 'monstrosity' ? 'selected' : ''}>Monstrosity</option>
+                                <option value="ooze" ${typeCategory === 'ooze' ? 'selected' : ''}>Ooze</option>
+                                <option value="plant" ${typeCategory === 'plant' ? 'selected' : ''}>Plant</option>
+                                <option value="undead" ${typeCategory === 'undead' ? 'selected' : ''}>Undead</option>
+                                <option value="custom" ${typeCategory === 'custom' ? 'selected' : ''}>Custom...</option>
+                            </select>
+                            <input type="text" id="cs-edit-type-custom" class="vtt-input" style="width:100%; margin-top:4px; display:${typeCategory === 'custom' ? 'block' : 'none'};" placeholder="e.g. Swarm of Insects" value="${customTypeValue}">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Subtype / Tags <span style="font-weight:normal; color:var(--color-text-muted);">(comma-separated)</span></label>
+                            <input type="text" id="cs-edit-tags" class="vtt-input" style="width:100%;" value="${tagsStr}" placeholder="e.g. elf, shapechanger">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Alignment</label>
+                            <select id="cs-edit-align-select" class="vtt-input" style="width:100%;">
+                                <option value="LG" ${alignCategory === 'LG' ? 'selected' : ''}>Lawful Good</option>
+                                <option value="NG" ${alignCategory === 'NG' ? 'selected' : ''}>Neutral Good</option>
+                                <option value="CG" ${alignCategory === 'CG' ? 'selected' : ''}>Chaotic Good</option>
+                                <option value="LN" ${alignCategory === 'LN' ? 'selected' : ''}>Lawful Neutral</option>
+                                <option value="N" ${alignCategory === 'N' ? 'selected' : ''}>True Neutral</option>
+                                <option value="CN" ${alignCategory === 'CN' ? 'selected' : ''}>Chaotic Neutral</option>
+                                <option value="LE" ${alignCategory === 'LE' ? 'selected' : ''}>Lawful Evil</option>
+                                <option value="NE" ${alignCategory === 'NE' ? 'selected' : ''}>Neutral Evil</option>
+                                <option value="CE" ${alignCategory === 'CE' ? 'selected' : ''}>Chaotic Evil</option>
+                                <option value="U" ${alignCategory === 'U' ? 'selected' : ''}>Unaligned</option>
+                                <option value="A" ${alignCategory === 'A' ? 'selected' : ''}>Any Alignment</option>
+                                <option value="custom" ${alignCategory === 'custom' ? 'selected' : ''}>Custom...</option>
+                            </select>
+                            <input type="text" id="cs-edit-align-custom" class="vtt-input" style="width:100%; margin-top:4px; display:${alignCategory === 'custom' ? 'block' : 'none'};" placeholder="e.g. Neutral Good (50%)" value="${customAlignValue}">
                         </div>
                     </div>
                 </div>
@@ -1608,6 +2267,14 @@ export function initVttCreatureSheet(vtt) {
                     <div id="cs-edit-lair-list"></div>
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-lair">+ Add Lair Action</button>
                 </div>
+
+                <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <h4 style="margin:0; color:var(--color-gold-base);"><i class="fa-solid fa-wand-magic-sparkles"></i> Spellcasting Sections</h4>
+                        <button class="btn btn-xs btn-secondary" id="cs-edit-add-spellcasting-block"><i class="fa-solid fa-plus"></i> Add Block</button>
+                    </div>
+                    <div id="cs-edit-spellcasting-blocks-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+                </div>
             </div>
         `;
         content.innerHTML = html;
@@ -1645,6 +2312,53 @@ export function initVttCreatureSheet(vtt) {
         renderAbilityList('cs-edit-reactions-list', m.reaction);
         renderAbilityList('cs-edit-legendary-list', m.legendary);
         renderAbilityList('cs-edit-lair-list', m.lairActions);
+
+        // Render Spellcasting Blocks in Modal
+        function renderModalSpellcastingBlocks() {
+            const container = content.querySelector('#cs-edit-spellcasting-blocks-list');
+            container.innerHTML = '';
+            const blocks = m.spellcasting && Array.isArray(m.spellcasting) ? m.spellcasting : [];
+            blocks.forEach((sc, idx) => {
+                const card = document.createElement('div');
+                card.className = 'cs-edit-sc-card';
+                card.style.cssText = "display:flex; flex-direction:column; gap:6px; padding:10px; background:var(--color-bg-dark); border-radius:6px; border:1px solid rgba(212,175,55,0.3);";
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                        <input type="text" class="vtt-input sc-edit-name" value="${sc.name || 'Spellcasting'}" placeholder="Block Name (e.g. Innate Spellcasting)" style="flex:1; font-weight:600; color:var(--color-gold-base);">
+                        <button class="btn btn-xxs btn-danger sc-edit-del"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:80px;">
+                            <label style="font-size:0.75rem; color:var(--color-text-muted);">Ability</label>
+                            <select class="vtt-input sc-edit-ability" style="width:100%;">
+                                ${['int','wis','cha','str','dex','con'].map(ab => `<option value="${ab}" ${sc.ability === ab ? 'selected' : ''}>${ab.toUpperCase()}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div style="flex:1; min-width:70px;">
+                            <label style="font-size:0.75rem; color:var(--color-text-muted);">Save DC</label>
+                            <input type="number" class="vtt-input sc-edit-dc" value="${sc.dc || ''}" placeholder="Auto" style="width:100%;">
+                        </div>
+                        <div style="flex:1; min-width:70px;">
+                            <label style="font-size:0.75rem; color:var(--color-text-muted);">Atk Bonus</label>
+                            <input type="number" class="vtt-input sc-edit-atk" value="${sc.atkMod !== undefined ? sc.atkMod : ''}" placeholder="Auto" style="width:100%;">
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Description / Header Notes</label>
+                        <textarea class="vtt-input sc-edit-desc" style="width:100%; height:40px; font-size:0.8rem;" placeholder="e.g. The creature is a 5th-level spellcaster...">${sc.headerEntries ? sc.headerEntries.join('\\n') : ''}</textarea>
+                    </div>
+                `;
+                card.querySelector('.sc-edit-del').addEventListener('click', () => card.remove());
+                container.appendChild(card);
+            });
+        }
+        renderModalSpellcastingBlocks();
+
+        content.querySelector('#cs-edit-add-spellcasting-block').addEventListener('click', () => {
+            m.spellcasting = m.spellcasting || [];
+            m.spellcasting.push({ name: 'Spellcasting', ability: 'int', headerEntries: [] });
+            renderModalSpellcastingBlocks();
+        });
 
         // Add buttons
         function wireAddBtn(btnId, containerId) {
@@ -1727,6 +2441,10 @@ export function initVttCreatureSheet(vtt) {
                 
                 delBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    const deletedToken = char.tokenImages[idx];
+                    if (deletedToken?.isDefault || (defaultTokenUrl && (typeof deletedToken === 'string' ? deletedToken : deletedToken?.url) === defaultTokenUrl)) {
+                        char.defaultTokenDeleted = true;
+                    }
                     char.tokenImages.splice(idx, 1);
                     if (char.activeTokenIndex >= char.tokenImages.length) {
                         char.activeTokenIndex = Math.max(0, char.tokenImages.length - 1);
@@ -1789,6 +2507,19 @@ export function initVttCreatureSheet(vtt) {
             }
         });
 
+        // Wiring Custom Type and Custom Alignment Toggles
+        const typeSelect = content.querySelector('#cs-edit-type-select');
+        const typeCustomInput = content.querySelector('#cs-edit-type-custom');
+        typeSelect.addEventListener('change', () => {
+            typeCustomInput.style.display = typeSelect.value === 'custom' ? 'block' : 'none';
+        });
+
+        const alignSelect = content.querySelector('#cs-edit-align-select');
+        const alignCustomInput = content.querySelector('#cs-edit-align-custom');
+        alignSelect.addEventListener('change', () => {
+            alignCustomInput.style.display = alignSelect.value === 'custom' ? 'block' : 'none';
+        });
+
         // Wiring Save/Cancel
         overlay.querySelector('#cs-edit-cancel-btn').onclick = () => overlay.remove();
         overlay.querySelector('#cs-edit-save-btn').onclick = () => saveCompanionEdits(m);
@@ -1811,6 +2542,39 @@ export function initVttCreatureSheet(vtt) {
 
         char.name = newName;
         m.name = newName;
+
+        // Classification & Info
+        const newSize = content.querySelector('#cs-edit-size').value;
+        m.size = [newSize];
+
+        const typeSel = content.querySelector('#cs-edit-type-select').value;
+        const typeCustom = content.querySelector('#cs-edit-type-custom').value.trim();
+        const tagsRaw = content.querySelector('#cs-edit-tags').value.trim();
+        
+        let finalTypeStr = typeSel === 'custom' ? (typeCustom || 'humanoid') : typeSel;
+        let tagsArr = tagsRaw ? tagsRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+        if (tagsArr.length > 0) {
+            m.type = { type: finalTypeStr, tags: tagsArr };
+        } else {
+            m.type = finalTypeStr;
+        }
+
+        const alignSel = content.querySelector('#cs-edit-align-select').value;
+        const alignCustom = content.querySelector('#cs-edit-align-custom').value.trim();
+        if (alignSel === 'custom') {
+            m.alignment = alignCustom ? [alignCustom] : ['U'];
+        } else if (alignSel === 'LG') m.alignment = ['L', 'G'];
+        else if (alignSel === 'NG') m.alignment = ['N', 'G'];
+        else if (alignSel === 'CG') m.alignment = ['C', 'G'];
+        else if (alignSel === 'LN') m.alignment = ['L', 'N'];
+        else if (alignSel === 'N') m.alignment = ['N'];
+        else if (alignSel === 'CN') m.alignment = ['C', 'N'];
+        else if (alignSel === 'LE') m.alignment = ['L', 'E'];
+        else if (alignSel === 'NE') m.alignment = ['N', 'E'];
+        else if (alignSel === 'CE') m.alignment = ['C', 'E'];
+        else if (alignSel === 'U') m.alignment = ['U'];
+        else if (alignSel === 'A') m.alignment = ['A'];
         // tokenImages and activeTokenIndex are already directly modified on 'char' via the gallery UI.
 
         char.ac = newAc;
@@ -1925,6 +2689,31 @@ export function initVttCreatureSheet(vtt) {
         if (newLair) m.lairActions = newLair; else delete m.lairActions;
 
         // Save back to char
+        // Extract Spellcasting Blocks
+        const scCards = content.querySelectorAll('#cs-edit-spellcasting-blocks-list .cs-edit-sc-card');
+        if (scCards.length > 0) {
+            const newSpellcasting = [];
+            scCards.forEach((card, idx) => {
+                const scName = card.querySelector('.sc-edit-name').value.trim() || 'Spellcasting';
+                const ability = card.querySelector('.sc-edit-ability').value;
+                const dcRaw = card.querySelector('.sc-edit-dc').value.trim();
+                const atkRaw = card.querySelector('.sc-edit-atk').value.trim();
+                const descRaw = card.querySelector('.sc-edit-desc').value.trim();
+
+                const existingBlock = (m.spellcasting && m.spellcasting[idx]) ? m.spellcasting[idx] : {};
+                const block = {
+                    ...existingBlock,
+                    name: scName,
+                    ability: ability,
+                    headerEntries: descRaw ? descRaw.split('\n') : []
+                };
+                if (dcRaw !== '') block.dc = parseInt(dcRaw) || undefined;
+                if (atkRaw !== '') block.atkMod = parseInt(atkRaw) || undefined;
+                newSpellcasting.push(block);
+            });
+            m.spellcasting = newSpellcasting;
+        }
+
         char.monsterData = m;
 
         // Sync to players
@@ -2497,6 +3286,94 @@ export function initVttCreatureSheet(vtt) {
                         setupCsSpellListeners(); // Rebind listeners
                     }
                 });
+            }
+        }));
+
+        contentEl.querySelectorAll('.cs-spell-prep-toggle').forEach(btn => btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const level = e.currentTarget.dataset.level;
+            const idx = parseInt(e.currentTarget.dataset.idx);
+            if (!currentMonster || !currentMonster.spells || !currentMonster.spells[level] || !currentMonster.spells[level][idx]) return;
+            
+            const sp = currentMonster.spells[level][idx];
+            sp.prepared = sp.prepared === false ? true : false;
+            
+            const icon = btn.querySelector('i');
+            const itemRow = btn.closest('.cs-spell-item');
+            if (sp.prepared) {
+                if (icon) {
+                    icon.classList.remove('fa-regular');
+                    icon.classList.add('fa-solid');
+                }
+                if (itemRow) {
+                    itemRow.dataset.prepared = 'true';
+                    itemRow.style.opacity = '1';
+                }
+            } else {
+                if (icon) {
+                    icon.classList.remove('fa-solid');
+                    icon.classList.add('fa-regular');
+                }
+                if (itemRow) {
+                    itemRow.dataset.prepared = 'false';
+                    if (level !== 'cantrip' && level !== 'legacy') {
+                        itemRow.style.opacity = '0.6';
+                    }
+                }
+            }
+
+            if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+                const char = window.VTT.campaignState.characters[linkedCharacterId];
+                if (char) {
+                    char.monsterData = currentMonster;
+                    window.VTT.socket.emit('character:update', { character: char });
+                }
+            } else if (window.VTT?.currentToken) {
+                window.VTT.currentToken.monsterData = currentMonster;
+                window.VTT.socket.emit('token:update', { token: window.VTT.currentToken });
+            }
+        }));
+
+        contentEl.querySelectorAll('.cs-innate-use-checkbox').forEach(cb => cb.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const spId = e.currentTarget.dataset.spellId;
+            const usesMax = parseInt(e.currentTarget.dataset.usesMax) || 1;
+            const useIdx = parseInt(e.currentTarget.dataset.useIdx) || 0;
+
+            currentMonster.dailyUsages = currentMonster.dailyUsages || {};
+            let curUsages = currentMonster.dailyUsages[spId] !== undefined ? currentMonster.dailyUsages[spId] : usesMax;
+
+            if (useIdx < curUsages) {
+                curUsages = useIdx;
+            } else {
+                curUsages = useIdx + 1;
+            }
+            currentMonster.dailyUsages[spId] = curUsages;
+
+            const row = e.currentTarget.closest('.cs-spell-item') || e.currentTarget.parentElement;
+            if (row) {
+                row.querySelectorAll('.cs-innate-use-checkbox').forEach((box, u) => {
+                    if (u < curUsages) {
+                        box.classList.remove('fa-regular', 'fa-square');
+                        box.classList.add('fa-solid', 'fa-square-check');
+                    } else {
+                        box.classList.remove('fa-solid', 'fa-square-check');
+                        box.classList.add('fa-regular', 'fa-square');
+                    }
+                });
+            }
+
+            if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+                const char = window.VTT.campaignState.characters[linkedCharacterId];
+                if (char) {
+                    char.monsterData = currentMonster;
+                    window.VTT.socket.emit('character:update', { character: char });
+                }
+            } else if (window.VTT?.currentToken) {
+                window.VTT.currentToken.monsterData = currentMonster;
+                window.VTT.socket.emit('token:update', { token: window.VTT.currentToken });
             }
         }));
     }
