@@ -44,6 +44,9 @@
         </div>
 
         <div class="nav-actions">
+            <a href="/download/installer" class="btn-vtt-gold" style="padding: 6px 14px; font-size: 0.85rem;">
+                <i class="fa-solid fa-download"></i> Download App (.exe)
+            </a>
             <a href="https://github.com/lovemurgod/DnDForged" target="_blank" class="btn-vtt-outline">
                 <i class="fa-brands fa-github"></i> GitHub
             </a>
@@ -66,6 +69,16 @@
                 <p class="hero-subtitle">
                     Self-hosted, high-performance Virtual Tabletop with real-time multiplayer token controls, 3D physics dice, dynamic fog of war, and native 5etools integration.
                 </p>
+
+                <!-- Desktop App Download CTA -->
+                <div style="margin: 15px 0 25px 0; display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                    <a href="/download/installer" class="btn-vtt-gold" style="font-size: 1.05rem; padding: 12px 28px; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);">
+                        <i class="fa-solid fa-download"></i> Download ForgeDVTT Desktop App (.exe)
+                    </a>
+                    <a href="https://github.com/lovemurgod/DnDForged/releases" target="_blank" class="btn-vtt-outline" style="font-size: 0.9rem; padding: 10px 18px;">
+                        <i class="fa-solid fa-box-archive"></i> Releases
+                    </a>
+                </div>
 
                 <!-- Subdomain Session Joiner Form -->
                 <div class="connect-box">
@@ -209,9 +222,14 @@
                 <div class="guide-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>Run Local Launcher</h3>
-                        <p style="color: var(--text-secondary);">Start the DnDForged server launcher script on your host machine:</p>
-                        <div class="code-block">node launcher.js</div>
+                        <h3>Download & Launch Desktop App</h3>
+                        <p style="color: var(--text-secondary);">Download and run the 1-click Windows Desktop Setup installer:</p>
+                        <div style="margin: 10px 0;">
+                            <a href="/download/installer" class="btn-vtt-gold" style="font-size: 0.9rem; padding: 8px 18px; display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-download"></i> Download ForgeDVTT Setup (.exe)
+                            </a>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Or for Node.js / CLI self-hosting, run: <code>node launcher.js</code></p>
                     </div>
                 </div>
 

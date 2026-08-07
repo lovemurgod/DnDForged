@@ -60,6 +60,16 @@ function extractSubdomain(hostHeader) {
   return null;
 }
 
+// Desktop app installer download routes
+app.get(['/download/installer', '/download/latest', '/download/setup'], (req, res) => {
+  const distDir = path.join(__dirname, 'dist');
+  const setupFile = path.join(distDir, 'ForgeDVTT-Setup-1.0.0.exe');
+  if (fs.existsSync(setupFile)) {
+    return res.download(setupFile, 'ForgeDVTT-Setup-1.0.0.exe');
+  }
+  return res.redirect('https://github.com/lovemurgod/DnDForged/releases');
+});
+
 // Setup file upload engine for maps and tokens (per-campaign subdomain isolated)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

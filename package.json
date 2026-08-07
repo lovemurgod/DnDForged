@@ -2,6 +2,7 @@
   "name": "forgedvtt",
   "version": "1.0.0",
   "description": "ForgeDVTT Virtual Tabletop (VTT) Desktop App & Server",
+  "author": "ForgeDVTT Team <lovemurgod92@gmail.com>",
   "main": "electron/main.js",
   "type": "module",
   "scripts": {
@@ -51,8 +52,14 @@
     ],
     "win": {
       "target": [
-        "dir"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
+      "icon": "electron/icon.ico",
       "forceCodeSigning": false,
       "sign": null
     },
@@ -61,7 +68,11 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "ForgeDVTT"
+      "shortcutName": "ForgeDVTT",
+      "installerIcon": "electron/icon.ico",
+      "uninstallerIcon": "electron/icon.ico",
+      "installerHeaderIcon": "electron/icon.ico",
+      "artifactName": "ForgeDVTT-Setup-${version}.${ext}"
     }
   }
 }
