@@ -81,8 +81,8 @@ app.get(['/download/installer', '/download/latest', '/download/setup', '/downloa
     return res.download(rootSetup, 'ForgeDVTT-Setup-1.0.0.exe');
   }
 
-  // 3. Fallback: redirect to GitHub releases page
-  return res.redirect('https://github.com/lovemurgod/DnDForged/releases');
+  // 3. Fallback: redirect to latest GitHub release asset
+  return res.redirect('https://github.com/lovemurgod/DnDForged/releases/latest');
 });
 
 // Setup file upload engine for maps and tokens (per-campaign subdomain isolated)
