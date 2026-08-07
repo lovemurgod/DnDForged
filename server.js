@@ -61,12 +61,27 @@ function extractSubdomain(hostHeader) {
 }
 
 // Desktop app installer download routes
-app.get(['/download/installer', '/download/latest', '/download/setup'], (req, res) => {
+app.get(['/download/installer', '/download/latest', '/download/setup', '/download/ForgeDVTT-Setup.exe'], (req, res) => {
   const distDir = path.join(__dirname, 'dist');
-  const setupFile = path.join(distDir, 'ForgeDVTT-Setup-1.0.0.exe');
-  if (fs.existsSync(setupFile)) {
-    return res.download(setupFile, 'ForgeDVTT-Setup-1.0.0.exe');
+  
+  // 1. Search dist/ directory for installer executable
+  if (fs.existsSync(distDir)) {
+    const files = fs.readdirSync(distDir);
+    const setupFile = files.find(f => f.toLowerCase().endsWith('.exe') && !f.includes('uninstaller'));
+    if (setupFile) {
+      const fullPath = path.join(distDir, setupFile);
+      res.setHeader('Content-Type', 'application/octet-stream');
+      return res.download(fullPath, setupFile);
+    }
   }
+
+  // 2. Search root directory fallback
+  const rootSetup = path.join(__dirname, 'ForgeDVTT-Setup-1.0.0.exe');
+  if (fs.existsSync(rootSetup)) {
+    return res.download(rootSetup, 'ForgeDVTT-Setup-1.0.0.exe');
+  }
+
+  // 3. Fallback: redirect to GitHub releases page
   return res.redirect('https://github.com/lovemurgod/DnDForged/releases');
 });
 
