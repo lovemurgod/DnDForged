@@ -547,6 +547,14 @@ function simulateRoll(formula, critRange = 20) {
                             <label>Max Uses</label>
                             <input type="number" id="modal-ability-uses-max" value="0" min="0" style="width:100%; padding:4px; font-size:0.8rem; text-align:center;">
                         </div>
+                        <div class="form-group" style="flex:1.2;">
+                            <label>Reset On</label>
+                            <select id="modal-ability-reset-type" style="width:100%; padding:4px; font-size:0.8rem; height:29px; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                <option value="long">Long Rest</option>
+                                <option value="short">Short Rest</option>
+                                <option value="none">None / Manual</option>
+                            </select>
+                        </div>
                     </div>
                     
                     <div style="border-top:1px solid var(--color-border-subtle); padding-top:10px; margin-bottom:12px;">
@@ -634,6 +642,7 @@ function simulateRoll(formula, critRange = 20) {
             const hasCounter = document.getElementById('modal-ability-has-counter').checked;
             const usesCurrent = parseInt(document.getElementById('modal-ability-uses-current').value) || 0;
             const usesMax = parseInt(document.getElementById('modal-ability-uses-max').value) || 0;
+            const resetType = document.getElementById('modal-ability-reset-type')?.value || 'long';
             
             const customFields = [];
             document.querySelectorAll('.modal-ability-field-row').forEach(row => {
@@ -645,7 +654,7 @@ function simulateRoll(formula, critRange = 20) {
             const categoryId = document.getElementById('modal-ability-category')?.value || null;
             const ab = { 
                 id: (idx >= 0 ? char.abilityCards[idx].id : 'ab_' + Date.now()), 
-                name, categoryId, description, formula, customFields, hasCounter, usesCurrent, usesMax 
+                name, categoryId, description, formula, customFields, hasCounter, usesCurrent, usesMax, resetType 
             };
 
             if (idx >= 0) char.abilityCards[idx] = ab;
@@ -2981,6 +2990,12 @@ function simulateRoll(formula, critRange = 20) {
         });
         hdHtml += '</div>';
 
+        let restHtml = '<div style="display:flex; align-items:center; justify-content:flex-start; gap:12px; padding:6px 12px; background:rgba(0,0,0,0.15); border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); margin-top:8px; border-radius:4px; width:100%;">';
+        restHtml += '<span style="font-family:var(--font-heading); font-size:0.75rem; color:var(--color-gold-base); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; margin-right:4px; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-campground"></i> Rests</span>';
+        restHtml += '<button class="btn btn-xs btn-secondary" id="pc-short-rest-btn" style="padding:3px 10px; font-size:0.75rem; display:inline-flex; align-items:center; gap:6px;" title="Restore Short Rest Abilities"><i class="fa-solid fa-mug-hot"></i> Short Rest</button>';
+        restHtml += '<button class="btn btn-xs btn-primary" id="pc-long-rest-btn" style="padding:3px 10px; font-size:0.75rem; display:inline-flex; align-items:center; gap:6px;" title="Restore all Abilities, HP, Spell Slots & regain half Hit Dice"><i class="fa-solid fa-bed"></i> Long Rest</button>';
+        restHtml += '</div>';
+
         const cleanUrl = activeImageUrl.split('?')[0].toLowerCase();
         const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
         const isYoutube = cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be');
@@ -3066,6 +3081,7 @@ function simulateRoll(formula, critRange = 20) {
                     </div>
                 </div>
                 ${hdHtml}
+                ${restHtml}
             </div>
 
             <div class="cs-core-stats" style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; gap:12px;">
@@ -3310,6 +3326,132 @@ function simulateRoll(formula, critRange = 20) {
                     renderSheetData(char);
                 }
             });
+        });
+
+        // Short Rest Execution
+        document.getElementById('pc-short-rest-btn')?.addEventListener('click', () => {
+            let restoredAbilities = [];
+            if (char.abilityCards && Array.isArray(char.abilityCards)) {
+                char.abilityCards.forEach(ab => {
+                    if (ab.hasCounter && ab.resetType === 'short') {
+                        if (ab.usesCurrent !== ab.usesMax) {
+                            ab.usesCurrent = ab.usesMax || 0;
+                            restoredAbilities.push(ab.name);
+                        }
+                    }
+                });
+            }
+            
+            let msgText = `☕ **${char.name || 'Player'}** completed a **Short Rest**.`;
+            if (restoredAbilities.length > 0) {
+                msgText += ` Restored resources: ${restoredAbilities.join(', ')}.`;
+            } else {
+                msgText += ` No Short Rest resources required resetting.`;
+            }
+            
+            vtt.socket.emit('chat:msg', { text: msgText });
+            saveAndEmit(char);
+            renderSheetData(char);
+        });
+
+        // Long Rest Execution
+        document.getElementById('pc-long-rest-btn')?.addEventListener('click', () => {
+            let restoredAbilities = [];
+            
+            // 1. Restore abilities (short + long rest)
+            if (char.abilityCards && Array.isArray(char.abilityCards)) {
+                char.abilityCards.forEach(ab => {
+                    if (ab.hasCounter && ab.resetType !== 'none') {
+                        if (ab.usesCurrent !== ab.usesMax) {
+                            ab.usesCurrent = ab.usesMax || 0;
+                            restoredAbilities.push(ab.name);
+                        }
+                    }
+                });
+            }
+
+            // 2. Full HP restoration
+            char.hpCurrent = char.hpMax || 0;
+
+            // 3. Spell slots restoration
+            let spellSlotsRestored = false;
+            if (char.spellSlots) {
+                Object.keys(char.spellSlots).forEach(lvl => {
+                    if (char.spellSlots[lvl] && char.spellSlots[lvl].max > 0) {
+                        if (char.spellSlots[lvl].current < char.spellSlots[lvl].max) {
+                            spellSlotsRestored = true;
+                        }
+                        char.spellSlots[lvl].current = char.spellSlots[lvl].max;
+                    }
+                });
+            }
+
+            // 4. Hit Dice recovery (half total HD rounded down, min 1 if spent > 0)
+            const standardHitDice = {
+                'barbarian': 'd12', 'bard': 'd8', 'cleric': 'd8', 'druid': 'd8',
+                'fighter': 'd10', 'monk': 'd8', 'paladin': 'd10', 'ranger': 'd10', 'rogue': 'd8',
+                'sorcerer': 'd6', 'warlock': 'd8', 'wizard': 'd6', 'blood hunter': 'd10'
+            };
+
+            const hdMax = {};
+            let totalHitDice = 0;
+            if (char.classes && char.classes.length > 0) {
+                char.classes.forEach(c => {
+                    const name = c.name.toLowerCase();
+                    const hd = standardHitDice[name] || 'd8';
+                    const count = (parseInt(c.level) || 1);
+                    hdMax[hd] = (hdMax[hd] || 0) + count;
+                    totalHitDice += count;
+                });
+            } else {
+                const count = char.level || 1;
+                hdMax['d8'] = count;
+                totalHitDice = count;
+            }
+
+            char.hitDiceSpent = char.hitDiceSpent || {};
+            let totalSpent = 0;
+            Object.keys(char.hitDiceSpent).forEach(hd => {
+                totalSpent += char.hitDiceSpent[hd] || 0;
+            });
+
+            let regainedHdCount = 0;
+            if (totalSpent > 0) {
+                let hdToRecover = Math.max(1, Math.floor(totalHitDice / 2));
+                hdToRecover = Math.min(hdToRecover, totalSpent);
+                regainedHdCount = hdToRecover;
+
+                // Priority to largest die types first (d12 > d10 > d8 > d6)
+                const dieRank = { 'd12': 12, 'd10': 10, 'd8': 8, 'd6': 6 };
+                const sortedHdTypes = Object.keys(char.hitDiceSpent).sort((a, b) => {
+                    const valA = dieRank[a] || 8;
+                    const valB = dieRank[b] || 8;
+                    return valB - valA;
+                });
+
+                for (const hd of sortedHdTypes) {
+                    while (hdToRecover > 0 && char.hitDiceSpent[hd] > 0) {
+                        char.hitDiceSpent[hd]--;
+                        hdToRecover--;
+                    }
+                }
+            }
+
+            let msgText = `🌙 **${char.name || 'Player'}** completed a **Long Rest**. Fully restored HP (${char.hpCurrent}/${char.hpMax})`;
+            if (regainedHdCount > 0) {
+                msgText += `, regained ${regainedHdCount} Hit ${regainedHdCount === 1 ? 'Die' : 'Dice'}`;
+            }
+            if (spellSlotsRestored) {
+                msgText += `, restored Spell Slots`;
+            }
+            if (restoredAbilities.length > 0) {
+                msgText += `, and restored abilities: ${restoredAbilities.join(', ')}`;
+            }
+            msgText += `.`;
+
+            vtt.socket.emit('chat:msg', { text: msgText });
+            saveAndEmit(char);
+            renderSheetData(char);
         });
 
         const buildHtml = `
@@ -3937,6 +4079,7 @@ function simulateRoll(formula, critRange = 20) {
                             <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${i}">-</button>
                             <span style="font-size:0.8rem; font-family:monospace; min-width:24px; text-align:center;">${card.usesCurrent || 0} / ${card.usesMax || 0}</span>
                             <button class="btn btn-xxs btn-secondary pc-ability-uses-plus" data-idx="${i}">+</button>
+                            <span style="font-size:0.65rem; color:var(--color-text-muted); opacity:0.8; margin-left:2px;" title="Resets on ${card.resetType === 'short' ? 'Short Rest' : card.resetType === 'none' ? 'Manual' : 'Long Rest'}">[${card.resetType === 'short' ? 'SR' : card.resetType === 'none' ? 'Man' : 'LR'}]</span>
                         </div>
                         ` : ''}
                         <button class="btn btn-xxs btn-secondary pc-ability-edit" data-idx="${i}"><i class="fa-solid fa-pen"></i></button>
@@ -6853,6 +6996,7 @@ function simulateRoll(formula, critRange = 20) {
             document.getElementById('modal-ability-uses-container').style.display = 'none';
             document.getElementById('modal-ability-uses-current').value = 0;
             document.getElementById('modal-ability-uses-max').value = 0;
+            if (document.getElementById('modal-ability-reset-type')) document.getElementById('modal-ability-reset-type').value = 'long';
             renderAbilityFields([]);
             switchModalTab('manual');
             initializeImportTab();
@@ -6876,6 +7020,7 @@ function simulateRoll(formula, critRange = 20) {
             document.getElementById('modal-ability-uses-container').style.display = ab.hasCounter ? 'flex' : 'none';
             document.getElementById('modal-ability-uses-current').value = ab.usesCurrent || 0;
             document.getElementById('modal-ability-uses-max').value = ab.usesMax || 0;
+            if (document.getElementById('modal-ability-reset-type')) document.getElementById('modal-ability-reset-type').value = ab.resetType || 'long';
             renderAbilityFields(ab.customFields || []);
             switchModalTab('manual');
             initializeImportTab();

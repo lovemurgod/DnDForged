@@ -257,6 +257,9 @@ body {
     color: var(--color-text-secondary);
 }
 input, select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     background: rgba(0, 0, 0, 0.35);
     border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
@@ -273,6 +276,26 @@ input:focus, select:focus {
 }
 .form-control--error {
     border-color: var(--color-danger-base) !important;
+}
+
+.form-group .flex-row {
+    width: 100%;
+    min-width: 0;
+}
+.form-group .flex-row select {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.form-group .flex-row button {
+    flex-shrink: 0;
+}
+select option {
+    background-color: #161a24;
+    color: #e0e6ed;
 }
 
 /* 3D Dice Box Canvas Overlay */

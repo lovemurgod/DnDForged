@@ -1358,6 +1358,7 @@
                                 const opt = document.createElement('option');
                                 opt.value = c.id;
                                 opt.textContent = c.name;
+                                opt.title = c.name;
                                 campaignSelect.appendChild(opt);
                             });
                             if (activeSubdomain) {
@@ -1366,6 +1367,10 @@
                                     campaignSelect.value = activeSubdomain;
                                 }
                             }
+                            campaignSelect.title = campaignSelect.options[campaignSelect.selectedIndex]?.text || '';
+                            campaignSelect.addEventListener('change', () => {
+                                campaignSelect.title = campaignSelect.options[campaignSelect.selectedIndex]?.text || '';
+                            });
                         }
                     }
                 }

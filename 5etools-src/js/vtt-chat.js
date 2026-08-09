@@ -621,15 +621,33 @@ export function initVttChat(vtt, chatHistory) {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    function extractFaces(dice) {
+        if (!dice) return 6;
+        if (typeof dice === 'number') return dice;
+        const raw = dice.faces ?? dice.type ?? dice.d ?? dice.numFaces ?? dice.sides ?? 6;
+        if (typeof raw === 'number') return raw;
+        const match = String(raw).match(/\d+/);
+        return match ? parseInt(match[0], 10) : 6;
+    }
+
+    function extractVal(dice) {
+        if (!dice) return 1;
+        if (typeof dice === 'number') return dice;
+        const raw = dice.val ?? dice.value ?? dice.v ?? dice.result ?? 1;
+        if (typeof raw === 'number') return raw;
+        const match = String(raw).match(/\d+/);
+        return match ? parseInt(match[0], 10) : 1;
+    }
+
     // 3D Physics simulated dice animation routines
     function trigger3dDiceRoll(diceList) {
         const colors = {
-            20: '#ffc107',
-            12: '#e83e8c',
-            10: '#fd7e14',
-            8: '#20c997',
-            6: '#007bff',
-            4: '#28a745'
+            20: { primary: '#7c4dff', secondary: '#311b92', rim: '#b388ff' }, // Amethyst Violet (Default d20)
+            12: { primary: '#e91e63', secondary: '#880e4f', rim: '#f8bbd0' }, // Rose Quartz
+            10: { primary: '#ff9800', secondary: '#e65100', rim: '#ffe0b2' }, // Amber
+            8:  { primary: '#00bfa5', secondary: '#004d40', rim: '#e0f2f1' }, // Emerald
+            6:  { primary: '#29b6f6', secondary: '#01579b', rim: '#e1f5fe' }, // Sapphire
+            4:  { primary: '#ef5350', secondary: '#b71c1c', rim: '#ffcdd2' }  // Ruby
         };
 
         const totalDice = diceList.length;
@@ -643,7 +661,24 @@ export function initVttChat(vtt, chatHistory) {
             const startX = base_x + (Math.random() * 20 - 10); // Small jitter
             const startY = window.innerHeight + 50 + (Math.random() * 40); // slight drop variance
             
-            const color = colors[dice.faces] || '#ffffff';
+            const facesNum = extractFaces(dice);
+            const diceVal = extractVal(dice);
+            const isDropped = Boolean(dice && typeof dice === 'object' && (dice.dropped || dice.isDropped || dice.discarded));
+
+            let colorInfo = colors[facesNum] || { primary: '#7c4dff', secondary: '#311b92', rim: '#b388ff' };
+
+            let critType = null;
+            if (facesNum === 20 || (dice && typeof dice === 'object' && (dice.isCritSuccess || dice.isCritFail))) {
+                if (diceVal === 20 || (dice && typeof dice === 'object' && dice.isCritSuccess)) {
+                    critType = 'success';
+                    // Dynamic Gold body color for Nat 20
+                    colorInfo = { primary: '#ffd700', secondary: '#b8860b', rim: '#ffffff' };
+                } else if (diceVal === 1 || (dice && typeof dice === 'object' && dice.isCritFail)) {
+                    critType = 'fail';
+                    // Dynamic Crimson Red body color for Nat 1
+                    colorInfo = { primary: '#d50000', secondary: '#5f0000', rim: '#ff8a80' };
+                }
+            }
 
             const d3 = {
                 x: startX,
@@ -652,11 +687,13 @@ export function initVttChat(vtt, chatHistory) {
                 vy: -(Math.random() * 10 + 18),
                 angularVelocity: (Math.random() - 0.5) * 0.4,
                 angle: Math.random() * Math.PI,
-                faces: dice.faces,
-                val: dice.val,
-                color: color,
-                scale: 30, // Pixel radius size of token dice
-                alpha: 1.0,
+                faces: facesNum,
+                val: diceVal,
+                colorInfo: colorInfo,
+                critType: critType,
+                particles: [],
+                scale: 45, // Increased radius size (+50% scale for high resolution visibility)
+                alpha: isDropped ? 0.45 : 1.0,
                 bounceCount: 0,
                 isDone: false
             };
@@ -700,8 +737,11 @@ export function initVttChat(vtt, chatHistory) {
                     d.angularVelocity = 0;
                     d.y = floor;
                     
-                    // Trigger fadeout timer
-                    setTimeout(() => { d.fade = true; }, 1500);
+                    // Trigger fadeout timer (2.5 seconds resting display time)
+                    if (!d.fadeTimerStarted) {
+                        d.fadeTimerStarted = true;
+                        setTimeout(() => { d.fade = true; }, 2500);
+                    }
                 }
             }
 
@@ -711,29 +751,122 @@ export function initVttChat(vtt, chatHistory) {
             }
 
             if (d.fade) {
-                d.alpha -= 0.05;
+                d.alpha -= 0.04;
                 if (d.alpha <= 0) {
                     d.isDone = true;
                 }
             }
 
-            // Draw the 3D polygon dice outline
+            // Draw critical hit (Nat 20) or critical miss (Nat 1) aura & particles
+            if (d.critType) {
+                diceCtx.save();
+                diceCtx.globalAlpha = d.alpha * 0.65;
+                const pulse = Math.sin(Date.now() * 0.009) * 8;
+                const auraRadius = d.scale + 16 + pulse;
+                const auraGrad = diceCtx.createRadialGradient(d.x, d.y, 5, d.x, d.y, auraRadius);
+                
+                if (d.critType === 'success') {
+                    auraGrad.addColorStop(0, 'rgba(255, 215, 0, 0.85)');
+                    auraGrad.addColorStop(0.5, 'rgba(255, 179, 0, 0.45)');
+                    auraGrad.addColorStop(1, 'rgba(255, 215, 0, 0)');
+                } else {
+                    auraGrad.addColorStop(0, 'rgba(244, 67, 54, 0.85)');
+                    auraGrad.addColorStop(0.5, 'rgba(183, 28, 28, 0.45)');
+                    auraGrad.addColorStop(1, 'rgba(244, 67, 54, 0)');
+                }
+                
+                diceCtx.fillStyle = auraGrad;
+                diceCtx.beginPath();
+                diceCtx.arc(d.x, d.y, auraRadius, 0, Math.PI * 2);
+                diceCtx.fill();
+                diceCtx.restore();
+
+                // Render floating banner text above resting die
+                if (d.bounceCount > 2) {
+                    diceCtx.save();
+                    diceCtx.globalAlpha = d.alpha;
+                    const bannerFontSize = Math.round(d.scale * 0.38);
+                    diceCtx.font = `bold ${bannerFontSize}px Outfit, sans-serif`;
+                    diceCtx.textAlign = 'center';
+                    diceCtx.textBaseline = 'bottom';
+                    
+                    const bannerText = d.critType === 'success' ? '★ NAT 20! ★' : '⚠ NAT 1! ⚠';
+                    const bannerColor = d.critType === 'success' ? '#ffd700' : '#ff5252';
+                    
+                    diceCtx.strokeStyle = '#000000';
+                    diceCtx.lineWidth = 3;
+                    diceCtx.lineJoin = 'round';
+                    diceCtx.strokeText(bannerText, d.x, d.y - d.scale - 8);
+                    
+                    diceCtx.fillStyle = bannerColor;
+                    diceCtx.shadowColor = bannerColor;
+                    diceCtx.shadowBlur = 10;
+                    diceCtx.fillText(bannerText, d.x, d.y - d.scale - 8);
+                    diceCtx.restore();
+                }
+
+                // Spawn floating sparkles/embers
+                if (Math.random() < 0.35 && !d.fade) {
+                    d.particles.push({
+                        x: d.x + (Math.random() - 0.5) * d.scale * 1.2,
+                        y: d.y + (Math.random() - 0.5) * d.scale * 1.2,
+                        vx: (Math.random() - 0.5) * 2.2,
+                        vy: -Math.random() * 2 - 0.5,
+                        size: Math.random() * 4 + 2,
+                        alpha: 1.0,
+                        color: d.critType === 'success' ? '#fff59d' : '#ff8a80'
+                    });
+                }
+            }
+
+            // Update & render active particles
+            if (d.particles && d.particles.length > 0) {
+                d.particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.alpha -= 0.035;
+                    if (p.alpha > 0) {
+                        diceCtx.save();
+                        diceCtx.globalAlpha = d.alpha * p.alpha;
+                        diceCtx.fillStyle = p.color;
+                        diceCtx.shadowColor = p.color;
+                        diceCtx.shadowBlur = 6;
+                        diceCtx.beginPath();
+                        diceCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        diceCtx.fill();
+                        diceCtx.restore();
+                    }
+                });
+                d.particles = d.particles.filter(p => p.alpha > 0);
+            }
+
+            // Draw the 3D polygon dice outline & facets
             diceCtx.save();
             diceCtx.globalAlpha = d.alpha;
             diceCtx.translate(d.x, d.y);
             diceCtx.rotate(d.angle);
             
-            // Draw polygon shape reflecting face count
-            drawDiceShape(d.faces, d.scale, d.color);
+            // Draw polygon shape & 3D facet geometry reflecting face count
+            drawDiceShape(d.faces, d.scale, d.colorInfo);
 
             // Print landing value in center
             diceCtx.rotate(-d.angle); // orient number upright
-            diceCtx.fillStyle = '#ffffff';
-            diceCtx.font = 'bold 12px Outfit';
+            
+            const fontScale = Math.round(d.scale * 0.4); // 18px for scale=45
+            diceCtx.font = `bold ${fontScale}px Outfit, sans-serif`;
             diceCtx.textAlign = 'center';
             diceCtx.textBaseline = 'middle';
-            diceCtx.shadowColor = 'rgba(0,0,0,0.8)';
-            diceCtx.shadowBlur = 4;
+
+            // Thin black stroke outline around the number
+            diceCtx.strokeStyle = '#000000';
+            diceCtx.lineWidth = 2.5;
+            diceCtx.lineJoin = 'round';
+            diceCtx.strokeText(d.val, 0, 0);
+
+            // High contrast white fill with drop shadow
+            diceCtx.fillStyle = '#ffffff';
+            diceCtx.shadowColor = 'rgba(0,0,0,0.9)';
+            diceCtx.shadowBlur = 5;
             diceCtx.fillText(d.val, 0, 0);
 
             diceCtx.restore();
@@ -749,27 +882,63 @@ export function initVttChat(vtt, chatHistory) {
         }
     }
 
-    function drawDiceShape(faces, scale, color) {
-        diceCtx.fillStyle = color;
-        diceCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-        diceCtx.lineWidth = 2;
+    function drawDiceShape(faces, scale, colorInfo) {
+        const facesNum = typeof faces === 'number' ? faces : parseInt(String(faces).replace(/\D/g, ''), 10) || 6;
+        const primary = colorInfo.primary || '#7c4dff';
+        const secondary = colorInfo.secondary || '#311b92';
+        const rim = colorInfo.rim || 'rgba(255, 255, 255, 0.7)';
+
+        // 3D Gemstone Radial Gradient Fill
+        const grad = diceCtx.createRadialGradient(-scale * 0.2, -scale * 0.2, scale * 0.1, 0, 0, scale * 0.85);
+        grad.addColorStop(0, primary);
+        grad.addColorStop(1, secondary);
+
+        diceCtx.fillStyle = grad;
+        diceCtx.strokeStyle = rim;
+        diceCtx.lineWidth = 2.2;
+
+        const radius = scale / 2;
 
         diceCtx.beginPath();
-        if (faces === 6) {
-            // Square d6
-            diceCtx.rect(-scale/2, -scale/2, scale, scale);
-        } else if (faces === 4) {
-            // Triangle d4
-            diceCtx.moveTo(0, -scale/2);
-            diceCtx.lineTo(scale/2, scale/2);
-            diceCtx.lineTo(-scale/2, scale/2);
+        if (facesNum === 4) {
+            // d4: 3-pointed Equilateral Triangle
+            diceCtx.moveTo(0, -radius * 1.15);
+            diceCtx.lineTo(radius * 1.05, radius * 0.75);
+            diceCtx.lineTo(-radius * 1.05, radius * 0.75);
+        } else if (facesNum === 6) {
+            // d6: 4-sided Square Cube
+            diceCtx.rect(-radius, -radius, scale, scale);
+        } else if (facesNum === 8) {
+            // d8: 4-pointed Octahedral Diamond
+            diceCtx.moveTo(0, -radius * 1.1);
+            diceCtx.lineTo(radius * 0.85, 0);
+            diceCtx.lineTo(0, radius * 1.1);
+            diceCtx.lineTo(-radius * 0.85, 0);
+        } else if (facesNum === 10) {
+            // d10: 10-point Pentagonal Trapezohedron Kite
+            for (let i = 0; i < 10; i++) {
+                const angle = (i * 2 * Math.PI) / 10 - Math.PI / 2;
+                const r = (i % 2 === 0) ? radius * 1.1 : radius * 0.65;
+                const sx = Math.cos(angle) * r;
+                const sy = Math.sin(angle) * r;
+                if (i === 0) diceCtx.moveTo(sx, sy);
+                else diceCtx.lineTo(sx, sy);
+            }
+        } else if (facesNum === 12) {
+            // d12: 5-sided Dodecahedron Pentagon
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+                const sx = Math.cos(angle) * radius * 1.08;
+                const sy = Math.sin(angle) * radius * 1.08;
+                if (i === 0) diceCtx.moveTo(sx, sy);
+                else diceCtx.lineTo(sx, sy);
+            }
         } else {
-            // Hexagon / Decagon approximation for D8, D10, D12, D20
-            const sides = faces === 8 ? 8 : (faces === 20 ? 10 : 6);
-            for (let i = 0; i < sides; i++) {
-                const angle = (i * 2 * Math.PI) / sides;
-                const sx = Math.cos(angle) * (scale / 2);
-                const sy = Math.sin(angle) * (scale / 2);
+            // d20: 6-sided Icosahedron Hexagon
+            for (let i = 0; i < 6; i++) {
+                const angle = (i * 2 * Math.PI) / 6 - Math.PI / 2;
+                const sx = Math.cos(angle) * radius * 1.05;
+                const sy = Math.sin(angle) * radius * 1.05;
                 if (i === 0) diceCtx.moveTo(sx, sy);
                 else diceCtx.lineTo(sx, sy);
             }
@@ -777,6 +946,100 @@ export function initVttChat(vtt, chatHistory) {
         diceCtx.closePath();
         diceCtx.fill();
         diceCtx.stroke();
+
+        // Draw internal 3D facet lines for realistic polyhedral geometry depth
+        diceCtx.save();
+        diceCtx.strokeStyle = 'rgba(255, 255, 255, 0.38)';
+        diceCtx.lineWidth = 1.2;
+        diceCtx.beginPath();
+
+        if (facesNum === 4) {
+            // d4 Tri-facet lines to center
+            diceCtx.moveTo(0, -radius * 1.15); diceCtx.lineTo(0, 0);
+            diceCtx.moveTo(radius * 1.05, radius * 0.75); diceCtx.lineTo(0, 0);
+            diceCtx.moveTo(-radius * 1.05, radius * 0.75); diceCtx.lineTo(0, 0);
+        } else if (facesNum === 6) {
+            // d6 Inset inner square facet lines
+            const inR = radius * 0.52;
+            diceCtx.rect(-inR, -inR, inR * 2, inR * 2);
+            diceCtx.moveTo(-radius, -radius); diceCtx.lineTo(-inR, -inR);
+            diceCtx.moveTo(radius, -radius); diceCtx.lineTo(inR, -inR);
+            diceCtx.moveTo(radius, radius); diceCtx.lineTo(inR, inR);
+            diceCtx.moveTo(-radius, radius); diceCtx.lineTo(-inR, inR);
+        } else if (facesNum === 8) {
+            // d8 Cross & inner diamond facet lines
+            diceCtx.moveTo(0, -radius * 1.1); diceCtx.lineTo(0, radius * 1.1);
+            diceCtx.moveTo(-radius * 0.85, 0); diceCtx.lineTo(radius * 0.85, 0);
+            const inR = radius * 0.45;
+            diceCtx.moveTo(0, -inR);
+            diceCtx.lineTo(inR * 0.75, 0);
+            diceCtx.lineTo(0, inR);
+            diceCtx.lineTo(-inR * 0.75, 0);
+            diceCtx.closePath();
+        } else if (facesNum === 10) {
+            // d10 Kite facet lines to center
+            for (let i = 0; i < 10; i++) {
+                const angle = (i * 2 * Math.PI) / 10 - Math.PI / 2;
+                const r = (i % 2 === 0) ? radius * 1.1 : radius * 0.65;
+                diceCtx.moveTo(Math.cos(angle) * r, Math.sin(angle) * r);
+                diceCtx.lineTo(0, 0);
+            }
+        } else if (facesNum === 12) {
+            // d12 Inverted inner pentagon & 5 radial vertex connectors
+            const inR = radius * 0.48;
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 2 * Math.PI) / 5 + Math.PI / 10;
+                const px = Math.cos(angle) * inR;
+                const py = Math.sin(angle) * inR;
+                if (i === 0) diceCtx.moveTo(px, py);
+                else diceCtx.lineTo(px, py);
+            }
+            diceCtx.closePath();
+            for (let i = 0; i < 5; i++) {
+                const outAngle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+                const outX = Math.cos(outAngle) * radius * 1.08;
+                const outY = Math.sin(outAngle) * radius * 1.08;
+                const inAngle1 = (i * 2 * Math.PI) / 5 - Math.PI / 10;
+                const inAngle2 = (i * 2 * Math.PI) / 5 + Math.PI / 10;
+                diceCtx.moveTo(outX, outY);
+                diceCtx.lineTo(Math.cos(inAngle1) * inR, Math.sin(inAngle1) * inR);
+                diceCtx.moveTo(outX, outY);
+                diceCtx.lineTo(Math.cos(inAngle2) * inR, Math.sin(inAngle2) * inR);
+            }
+        } else {
+            // d20 Central triangle grid & 6-vertex icosahedral face connectors
+            const inR = radius * 0.55;
+            for (let i = 0; i < 3; i++) {
+                const angle = (i * 2 * Math.PI) / 3 - Math.PI / 2;
+                const px = Math.cos(angle) * inR;
+                const py = Math.sin(angle) * inR;
+                if (i === 0) diceCtx.moveTo(px, py);
+                else diceCtx.lineTo(px, py);
+            }
+            diceCtx.closePath();
+            for (let i = 0; i < 3; i++) {
+                const inAngle = (i * 2 * Math.PI) / 3 - Math.PI / 2;
+                const px = Math.cos(inAngle) * inR;
+                const py = Math.sin(inAngle) * inR;
+                const outAngle1 = (i * 2 * Math.PI) / 3 - Math.PI / 2;
+                const outAngle2 = ((i + 0.5) * 2 * Math.PI) / 3 - Math.PI / 2;
+                diceCtx.moveTo(px, py);
+                diceCtx.lineTo(Math.cos(outAngle1) * radius * 1.05, Math.sin(outAngle1) * radius * 1.05);
+                diceCtx.moveTo(px, py);
+                diceCtx.lineTo(Math.cos(outAngle2) * radius * 1.05, Math.sin(outAngle2) * radius * 1.05);
+            }
+        }
+        diceCtx.stroke();
+        diceCtx.restore();
+
+        // Top specular arc light reflection
+        diceCtx.save();
+        diceCtx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        diceCtx.lineWidth = 1.8;
+        diceCtx.beginPath();
+        diceCtx.arc(0, 0, radius * 0.85, -Math.PI * 0.8, -Math.PI * 0.2);
+        diceCtx.stroke();
+        diceCtx.restore();
     }
 
     // Initiative tracker engine logic
