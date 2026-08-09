@@ -310,7 +310,8 @@
         // Fetch active campaign sessions from API
         fetch('/api/campaigns')
             .then(res => res.json())
-            .then(campaigns => {
+            .then(data => {
+                const campaigns = Array.isArray(data) ? data : (data.campaigns || []);
                 sessionsContainer.innerHTML = '';
                 if (!campaigns || campaigns.length === 0) {
                     sessionsContainer.innerHTML = `

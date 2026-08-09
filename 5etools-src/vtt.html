@@ -1343,7 +1343,10 @@
                 if (res.ok) {
                     const contentType = res.headers.get("content-type");
                     if (contentType && contentType.indexOf("application/json") !== -1) {
-                        const list = await res.json();
+                        const data = await res.json();
+                        const list = Array.isArray(data) ? data : (data.campaigns || []);
+                        const activeSubdomain = !Array.isArray(data) ? data.activeSubdomain : null;
+
                         campaignSelect.innerHTML = '';
                         if (list.length === 0) {
                             const opt = document.createElement('option');
@@ -1357,6 +1360,12 @@
                                 opt.textContent = c.name;
                                 campaignSelect.appendChild(opt);
                             });
+                            if (activeSubdomain) {
+                                const matchedOpt = Array.from(campaignSelect.options).find(o => o.value === activeSubdomain);
+                                if (matchedOpt) {
+                                    campaignSelect.value = activeSubdomain;
+                                }
+                            }
                         }
                     }
                 }

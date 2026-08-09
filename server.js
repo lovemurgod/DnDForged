@@ -215,18 +215,17 @@ app.use((req, res, next) => {
 // Route root / and /vtt.html
 app.get('/', (req, res) => {
   const sub = extractSubdomain(req.headers.host);
-  if (!sub) {
-    return res.sendFile(path.join(__dirname, '5etools-src', 'launcher.html'));
+  if (sub) {
+    getOrCreateCampaign(sub);
   }
-  res.redirect('/vtt.html');
+  return res.sendFile(path.join(__dirname, '5etools-src', 'vtt.html'));
 });
 
 app.get('/vtt.html', (req, res, next) => {
   const sub = extractSubdomain(req.headers.host);
-  if (!sub) {
-    return res.sendFile(path.join(__dirname, '5etools-src', 'launcher.html'));
+  if (sub) {
+    getOrCreateCampaign(sub);
   }
-  getOrCreateCampaign(sub);
   return next();
 });
 
@@ -397,7 +396,11 @@ app.get('/api/campaigns', (req, res) => {
   if (sub) {
     getOrCreateCampaign(sub);
   }
-  res.json(Object.values(campaigns).map(c => ({ id: c.id, name: c.name })));
+  const campaignsList = Object.values(campaigns).map(c => ({ id: c.id, name: c.name }));
+  res.json({
+    activeSubdomain: sub || null,
+    campaigns: campaignsList
+  });
 });
 
 // Get detailed campaign state
