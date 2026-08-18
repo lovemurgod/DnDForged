@@ -210,7 +210,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Skall casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -232,7 +232,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -419,7 +422,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The exorcist casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 14}, {@hit 6} to hit with spell attacks):"
 					],
@@ -440,7 +443,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

@@ -79,7 +79,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Aerisi is a 12th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). Aerisi has the following wizard spells prepared:"
 					],
@@ -140,7 +140,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 12
 				}
 			],
 			"trait": [
@@ -299,7 +302,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Bastian's innate spellcasting ability is Constitution (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He can innately cast the following spells:"
 					],
@@ -311,11 +314,14 @@
 							"{@spell burning hands}"
 						]
 					},
-					"ability": "con"
+					"ability": "con",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Bastian is a 9th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Bastian knows the following sorcerer spells:"
 					],
@@ -365,7 +371,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 9
 				}
 			],
 			"action": [
@@ -552,7 +561,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The priest is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -588,7 +597,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -873,7 +885,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The priest is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -910,7 +922,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -1392,7 +1407,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Elizar is a 7th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Elizar has the following druid spells prepared:"
 					],
@@ -1437,7 +1452,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 7
 				}
 			],
 			"trait": [
@@ -1690,7 +1708,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The priest is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -1726,7 +1744,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -1821,7 +1842,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Human Form Only)",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The fathomer is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has two 3rd-level spell slots, which it regains after finishing a short or long rest, and knows the following warlock spells:"
 					],
@@ -1845,7 +1866,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -1968,7 +1992,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The knight is a 1st-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It knows the following sorcerer spell:"
 					],
@@ -1989,7 +2013,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 1
 				}
 			],
 			"action": [
@@ -2160,7 +2187,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The flamewrath is a 7th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -2203,7 +2230,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 7
 				}
 			],
 			"trait": [
@@ -2310,7 +2340,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Gar is a 9th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 16}, {@hit 8} to hit with spell attacks). He has the following druid spells prepared:"
 					],
@@ -2361,7 +2391,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 9
 				}
 			],
 			"trait": [
@@ -2923,7 +2956,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The priest is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -2959,7 +2992,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -3074,7 +3110,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The hurricane is a 3rd-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 11}, {@hit 3} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -3102,7 +3138,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 3
 				}
 			],
 			"trait": [
@@ -3240,7 +3279,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Imix's innate spellcasting ability is Charisma (spell save {@dc 20}, {@hit 12} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -3255,7 +3294,10 @@
 							"{@spell teleport}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3428,7 +3470,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Lyzandra is a 9th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). Lyzandra has the following wizard spells prepared:"
 					],
@@ -3479,7 +3521,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 9
 				}
 			],
 			"tokenCustom": true,
@@ -3716,7 +3761,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Miraj's innate spellcasting ability is Constitution (spell save {@dc 14}). He can innately cast the following spell, requiring no material components:"
 					],
@@ -3725,11 +3770,14 @@
 							"{@spell pass without trace}"
 						]
 					},
-					"ability": "con"
+					"ability": "con",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Miraj is an 11th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). He knows the following sorcerer spells:"
 					],
@@ -3787,7 +3835,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 11
 				}
 			],
 			"trait": [
@@ -3997,7 +4048,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Ogrémoch's innate spellcasting ability is Charisma (spell save {@dc 20}, {@hit 12} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -4006,7 +4057,10 @@
 						"{@spell move earth}",
 						"{@spell wall of stone}"
 					],
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4217,7 +4271,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Olhydra's innate spellcasting ability is Charisma (spell save {@dc 20}, {@hit 12} to hit with spell attacks). She can innately cast the following spells, requiring no material components:"
 					],
@@ -4232,7 +4286,10 @@
 							"{@spell ice storm}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4426,7 +4483,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The one-eyed shiver is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -4459,7 +4516,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -4576,7 +4636,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Oreioth is a 6th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -4613,7 +4673,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 6
 				}
 			],
 			"trait": [
@@ -4840,7 +4903,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Renwick is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). Renwick has the following wizard spells prepared:"
 					],
@@ -4921,7 +4984,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 18
 				}
 			],
 			"tokenCustom": true,
@@ -5141,7 +5207,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Shoalar's innate spellcasting ability is Constitution (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He can innately cast the following spells:"
 					],
@@ -5153,11 +5219,14 @@
 							"{@spell create or destroy water}"
 						]
 					},
-					"ability": "con"
+					"ability": "con",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Shoalar is a 5th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He knows the following sorcerer spells:"
 					],
@@ -5193,7 +5262,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -5300,7 +5372,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The Skyweaver is a 6th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -5337,7 +5409,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 6
 				}
 			],
 			"action": [
@@ -5454,7 +5529,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The Stonemelder is a 7th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It knows the following sorcerer spells:"
 					],
@@ -5497,7 +5572,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 7
 				}
 			],
 			"trait": [
@@ -5607,7 +5685,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Thurl is a 5th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). Thurl knows the following sorcerer spells:"
 					],
@@ -5643,7 +5721,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -5794,7 +5875,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Vanifer is a 10th-level spellcaster. Her spellcasting ability is Charisma (spell save {@dc 16}, {@hit 8} to hit with spell attacks). Vanifer knows the following sorcerer spells:"
 					],
@@ -5849,7 +5930,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -5989,7 +6073,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Wiggan is a 4th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). He has the following cleric spells prepared:"
 					],
@@ -6022,7 +6106,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 4
 				}
 			],
 			"trait": [
@@ -6139,7 +6226,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Windharrow is an 8th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Windharrow knows the following bard spells:"
 					],
@@ -6183,7 +6270,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 8
 				}
 			],
 			"trait": [
@@ -6330,7 +6420,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Yan-C-Bin's innate spellcasting ability is Charisma (spell save {@dc 20}, {@hit 12} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -6346,7 +6436,10 @@
 							"{@spell haste}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

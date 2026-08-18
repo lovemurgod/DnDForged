@@ -93,7 +93,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Vecna casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 22}):"
 					],
@@ -119,7 +119,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 22,
+					"atkMod": 14,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

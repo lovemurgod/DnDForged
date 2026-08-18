@@ -198,7 +198,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The incarnation casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability:"
 					],
@@ -213,7 +213,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -446,7 +449,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The merrow casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -456,7 +459,10 @@
 						"{@spell Minor Illusion|XPHB}"
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -888,7 +894,7 @@
 				{
 					"name": "Wild Magic Cataclysm {@recharge 5}",
 					"entries": [
-						"{@actSave dex} {@dc 15}, each creature in a 20-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point within 120 feet. {@actSaveFail} 28 ({@damage 8d6}) damage (roll {@dice 1d4} to determine damage type: 1\u2014Acid; 2\u2014Fire; 3\u2014Lightning; 4\u2014Thunder). {@actSaveSuccess} Half damage."
+						"{@actSave dex} {@dc 15}, each creature in a 20-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point within 120 feet. {@actSaveFail} 28 ({@damage 8d6}) damage (roll {@dice 1d4} to determine damage type: 1—Acid; 2—Fire; 3—Lightning; 4—Thunder). {@actSaveSuccess} Half damage."
 					]
 				}
 			],

@@ -108,7 +108,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Andir's spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -124,7 +124,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1051,7 +1054,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The draconian casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -1070,7 +1073,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2282,7 +2288,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The draconian casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -2295,7 +2301,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2744,7 +2753,7 @@
 				{
 					"name": "Claw",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage plus 7 ({@damage 2d6}) poison damage. If the target is a Humanoid, it must succeed on a {@dc 12} Constitution saving throw or be infected with a disease\u2014a minuscule slaad egg.",
+						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage plus 7 ({@damage 2d6}) poison damage. If the target is a Humanoid, it must succeed on a {@dc 12} Constitution saving throw or be infected with a disease—a minuscule slaad egg.",
 						"A Humanoid host can carry only one slaad egg at a time. Over three months, the egg moves to the chest cavity, gestates, and forms a slaad tadpole. In the 24-hour period before the tadpole is born, the host feels unwell; its speed is halved; and it has disadvantage on attack rolls, ability checks, and saving throws. At birth, the tadpole chews its way through vital organs and out of the host's chest in 1 round, killing the host in the process.",
 						"If the disease is cured before the tadpole's emergence, the tadpole disintegrates."
 					]
@@ -3434,7 +3443,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Hrigg's spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). He has the following cleric spells prepared:"
 					],
@@ -3450,7 +3459,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5434,7 +5446,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Kansaldi casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -5453,7 +5465,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6856,7 +6871,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Lohezet casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -6877,7 +6892,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -7025,7 +7043,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Soth casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -7042,7 +7060,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -7838,7 +7859,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Tem's spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to spell attacks). She has the following druid spells prepared:"
 					],
@@ -7854,7 +7875,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -8886,7 +8910,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Wersten casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -8897,7 +8921,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

@@ -344,7 +344,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The lich casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -366,7 +366,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

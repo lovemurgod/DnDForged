@@ -6651,6 +6651,22 @@ globalThis.DataUtil = class {
 		static _DIR = "spells";
 		static _PROP = "spell";
 		static _IS_MUT_ENTITIES = true;
+		static _LOADED_CACHE = null;
+
+		static async pLoadAll () {
+			if (this._LOADED_CACHE) return this._LOADED_CACHE;
+			if (window.VTTSpellManager && window.VTTSpellManager.loadSpells) {
+				this._LOADED_CACHE = await window.VTTSpellManager.loadSpells();
+				return this._LOADED_CACHE;
+			}
+			try {
+				const res = await fetch('/data/spells-normalized.json');
+				this._LOADED_CACHE = await res.json();
+				return this._LOADED_CACHE;
+			} catch (e) {
+				return [];
+			}
+		}
 
 		static _SPELL_SOURCE_LOOKUP = null;
 

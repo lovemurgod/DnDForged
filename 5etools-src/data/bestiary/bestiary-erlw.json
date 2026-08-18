@@ -305,7 +305,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The knight is an 8th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It has the following paladin spells prepared:"
 					],
@@ -330,7 +330,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 8
 				}
 			],
 			"trait": [
@@ -951,7 +954,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The hag's spellcasting ability is Charisma (spell save {@dc 15}). She can innately cast the following spells, requiring no material components:"
 					],
@@ -970,7 +973,10 @@
 							"{@spell scrying}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1488,7 +1494,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The quori's spellcasting ability is Intelligence (spell save {@dc 16}). It can innately cast the following spells, requiring no components:"
 					],
@@ -1506,7 +1512,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -1646,7 +1655,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The Inspired's spellcasting ability is Intelligence (spell save {@dc 13}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -1663,7 +1672,10 @@
 							"{@spell mage armor}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2031,7 +2043,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The quori's spellcasting ability is Charisma (spell save {@dc 21}, {@hit 13} to hit with spell attacks). It can innately cast the following spells, requiring no components:"
 					],
@@ -2046,7 +2058,10 @@
 							"{@spell eyebite}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2475,7 +2490,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Illmarrow is a 20th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 23}, {@hit 15} to hit with spell attacks). Illmarrow has the following wizard spells prepared:"
 					],
@@ -2563,7 +2578,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 23,
+					"atkMod": 15,
+					"casterLevel": 20
 				}
 			],
 			"trait": [
@@ -3092,7 +3110,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The magewright's spellcasting ability is Intelligence (spell save {@dc 12}). To cast one of its rituals, the magewright must provide additional material components whose value in gold pieces is 20 times the spell's level. These components are consumed when the ritual is finished. The magewright knows the following spells:"
 					],
@@ -3103,7 +3121,10 @@
 					"ritual": [
 						"{@spell knock}"
 					],
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -3215,7 +3236,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Mordakhesh's spellcasting ability is Charisma (spell save {@dc 18}, {@hit 10} to hit with spell attacks). Mordakhesh can innately cast the following spells, requiring no material components:"
 					],
@@ -3235,7 +3256,10 @@
 							"{@spell true seeing}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3276,7 +3300,7 @@
 				{
 					"name": "Chromatic Resistance",
 					"entries": [
-						"Modakhesh gains resistance to one damage type of his choice\u2014acid, cold, fire, lightning, poison, or thunder\u2014until the start of his next turn."
+						"Modakhesh gains resistance to one damage type of his choice—acid, cold, fire, lightning, poison, or thunder—until the start of his next turn."
 					]
 				},
 				{
@@ -3402,7 +3426,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The radiant idol's spellcasting ability is Charisma (spell save {@dc 17}). The radiant idol can innately cast the following spells, requiring no material components:"
 					],
@@ -3421,7 +3445,10 @@
 							"{@spell raise dead}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3600,7 +3627,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Rak Tulkhesh's spellcasting ability is Charisma (spell save {@dc 24}). He can innately cast the following spells, requiring no material components:"
 					],
@@ -3616,7 +3643,10 @@
 							"{@spell staggering smite}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 24,
+					"atkMod": 16,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3935,7 +3965,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Sul Khatesh's spellcasting ability is Intelligence (spell save {@dc 26}, {@hit 18} to hit with spell attacks). She can innately cast the following spells, requiring no material components:"
 					],
@@ -3965,7 +3995,10 @@
 							"{@spell teleport}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 26,
+					"atkMod": 18,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4153,7 +4186,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The assassin's spellcasting ability is Constitution ({@hit 4} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -4165,7 +4198,10 @@
 							"{@spell chromatic orb}"
 						]
 					},
-					"ability": "con"
+					"ability": "con",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4317,7 +4353,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The Lord of Blades is a 20th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 18}, {@hit 10} to hit with spell attacks). He has the following artificer spells prepared:"
 					],
@@ -4370,7 +4406,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 20
 				}
 			],
 			"trait": [
@@ -4560,7 +4599,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The quori's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring no components:"
 					],
@@ -4572,7 +4611,10 @@
 							"{@spell fear}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -4722,7 +4764,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The councilor is a 13th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). It has the following cleric spells prepared:"
 					],
@@ -4790,7 +4832,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 13
 				}
 			],
 			"trait": [
@@ -5369,7 +5414,7 @@
 				{
 					"name": "Multiattack",
 					"entries": [
-						"The colossus makes three attacks\u2014one with its slam and two with its eldritch turrets\u2014and then uses Stomp."
+						"The colossus makes three attacks—one with its slam and two with its eldritch turrets—and then uses Stomp."
 					]
 				},
 				{
@@ -5751,7 +5796,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The rakshasa's innate spellcasting ability is Charisma (spell save {@dc 11}). The rakshasa can innately cast the following spells, requiring no material components:"
 					],
@@ -5764,7 +5809,10 @@
 							"{@spell shield}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

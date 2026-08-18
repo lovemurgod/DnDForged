@@ -330,7 +330,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The devil casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -345,7 +345,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -514,7 +517,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The vampire casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -535,7 +538,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -758,7 +764,7 @@
 			"spellcasting": [
 				{
 					"name": "Guardian's Command",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The vampire casts {@spell Compulsion|XPHB}, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 15})."
 					],
@@ -769,7 +775,10 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

@@ -312,7 +312,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The brain's innate spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It can innately cast the following spells, requiring no components:"
 					],
@@ -334,7 +334,10 @@
 							"{@spell Tasha's hideous laughter}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1418,7 +1421,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The inquisitor casts one of the following spells, requiring no components and using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -1438,7 +1441,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -1566,7 +1572,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The inquisitor casts one of the following spells, requiring no components and using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -1584,7 +1590,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1706,7 +1715,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The inquisitor casts one of the following spells, requiring no components and using Intelligence as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -1725,7 +1734,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -1885,7 +1897,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Isolde's spellcasting ability is Charisma (spell save {@dc 14}). Isolde can innately cast the following spells, requiring no material components:"
 					],
@@ -1899,7 +1911,10 @@
 							"{@spell detect magic}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

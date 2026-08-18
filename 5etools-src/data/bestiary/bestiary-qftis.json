@@ -112,7 +112,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Diplomat and Medic Only)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The android casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability:"
 					],
@@ -124,7 +124,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -721,7 +724,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The champion casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -743,7 +746,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -1030,7 +1036,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The derro casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 11}):"
 					],
@@ -1044,7 +1050,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1267,7 +1276,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Derwyth is a 4th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). She has the following druid spells prepared:"
 					],
@@ -1296,7 +1305,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 4
 				}
 			],
 			"trait": [
@@ -2205,7 +2217,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The leprechaun casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -2224,7 +2236,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2357,7 +2372,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mage casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -2374,7 +2389,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -2712,7 +2730,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Nafas casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 21}):"
 					],
@@ -2738,7 +2756,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2945,7 +2966,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Nafik casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -2962,7 +2983,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3153,7 +3177,7 @@
 			"spellcasting": [
 				{
 					"name": "Communal Spellcasting (2/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The pech works with three or more pechs to cast spells, requiring no spell components and using Wisdom as the spellcasting ability (save {@dc 12}). If at least three other pechs are within 30 feet of it, the pech can cast {@spell Wall of Stone}. If at least seven other pechs are within 30 feet of it, it can cast {@spell Greater Restoration}. Each other pech involved in casting the spell can't have the incapacitated condition and must have at least one use of Communal Spellcasting remaining, which it must immediately expend to participate (no action required)."
 					],
@@ -3167,7 +3191,10 @@
 					"displayAs": "action",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3461,7 +3488,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Sion casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -3477,7 +3504,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3792,7 +3822,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The Gardener casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -3813,7 +3843,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4064,7 +4097,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The tower sage casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -4084,7 +4117,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [

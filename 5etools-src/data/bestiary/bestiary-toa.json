@@ -109,7 +109,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Acererak is a 20th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 23}, {@hit 15} to hit with spell attacks). Acererak has the following wizard spells prepared:"
 					],
@@ -186,7 +186,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 23,
+					"atkMod": 15,
+					"casterLevel": 20
 				}
 			],
 			"trait": [
@@ -389,7 +392,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dwarf's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no material components:"
 					],
@@ -402,7 +405,10 @@
 							"{@spell speak with plants}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -902,7 +908,7 @@
 						{
 							"type": "list",
 							"items": [
-								"Artus can expend 1 charge and use the ring to lower the temperature in a 120-foot-radius sphere centered on a point he can see within 300 feet of him. The temperature in that area drops 20 degrees per minute, to a minimum of \u221230 degrees Fahrenheit. Frost and ice begin to form on surfaces once the temperature drops below 32 degrees. This effect is permanent unless Artus uses the ring to end the effect as an action, at which point the temperature in the area returns to normal at a rate of 10 degrees per minute.",
+								"Artus can expend 1 charge and use the ring to lower the temperature in a 120-foot-radius sphere centered on a point he can see within 300 feet of him. The temperature in that area drops 20 degrees per minute, to a minimum of −30 degrees Fahrenheit. Frost and ice begin to form on surfaces once the temperature drops below 32 degrees. This effect is permanent unless Artus uses the ring to end the effect as an action, at which point the temperature in the area returns to normal at a rate of 10 degrees per minute.",
 								"Artus can cast one of the following spells from the ring (spell save {@dc 17}) by expending the necessary number of charges: {@spell Bigby's hand} (2 charges) the hand is made of ice, is immune to cold damage, and deals bludgeoning damage instead of force damage as a clenched fist, {@spell cone of cold} (2 charges), {@spell flesh to stone||flesh to ice} (3 charges); as flesh to stone except that the target turns to solid ice with the density and durability of stone, {@spell ice storm} (2 charges), {@spell Otiluke's freezing sphere} (3 charges), {@spell sleet storm} (1 charge), {@spell spike growth} (1 charge) the spikes are made of ice, or {@spell wall of ice} (2 charges).",
 								"Artus can expend the necessary number of charges and use the ring to create either an inanimate ice object (2 charges) or an animated ice creature (4 charges). The ice object can't have any moving parts, must be able to fit inside a 10-foot cube, and has the density and durability of metal or stone (Artus's choice). The ice creature must be modeled after a beast with a challenge rating of 2 or less. The ice creature has the same statistics as the beast it models, with the following changes: the creature is a construct with vulnerability to fire damage, immunity to cold and poison damage, and immunity to the following conditions: {@condition charmed}, {@condition exhaustion}, {@condition frightened}, {@condition paralyzed}, {@condition petrified}, and {@condition poisoned}. The ice creature obeys only its creator's commands. The object or creature appears in an unoccupied space within 60 feet of Artus. It melts into a pool of normal water after 24 hours or when it drops to 0 hit points. In extreme heat, it loses 5 ({@dice 1d10}) hit points per minute as it melts. Use the guidelines in chapter 8 of the Dungeon Master's Guide to determine the hit points of an inanimate object if they become necessary."
 							]
@@ -987,7 +993,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Asharra is a 5th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Asharra has the following druid spells prepared:"
 					],
@@ -1023,7 +1029,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -1658,7 +1667,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The chwinga's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no material or verbal components:"
 					],
@@ -1668,7 +1677,10 @@
 						"{@spell pass without trace}",
 						"{@spell resistance}"
 					],
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2023,7 +2035,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The eblis's innate spellcasting ability is Intelligence (spell save {@dc 11}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -2034,7 +2046,10 @@
 							"{@spell minor illusion}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -3023,7 +3038,7 @@
 				{
 					"name": "Pounce",
 					"entries": [
-						"If the kamadan moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn that target must succeed on a {@dc 13} Strength saving throw or be knocked {@condition prone}. If the target is knocked {@condition prone}, the kamadan can make two attacks\u2014one with its bite and one with its snakes\u2014against it as a bonus action."
+						"If the kamadan moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn that target must succeed on a {@dc 13} Strength saving throw or be knocked {@condition prone}. If the target is knocked {@condition prone}, the kamadan can make two attacks—one with its bite and one with its snakes—against it as a bonus action."
 					]
 				}
 			],
@@ -3130,14 +3145,17 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The King of Feathers's innate spellcasting ability is Wisdom. It can innately cast the following spell, requiring no material components:"
 					],
 					"will": [
 						"{@spell misty step}"
 					],
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3598,7 +3616,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Mwaxanaré is a 2nd-level spellcaster. Her spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). She regains her expended spell slots when she finishes a short or long rest. She knows the following warlock spells:"
 					],
@@ -3619,7 +3637,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 2
 				}
 			],
 			"action": [
@@ -4065,7 +4086,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Ras Nsi's innate spellcasting ability is Charisma (spell save {@dc 16}). He can innately cast the following spells, requiring no material components:"
 					],
@@ -4077,11 +4098,14 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Ras Nsi is an 11th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 15}, {@hit 7} to hit with spell attacks).",
 						"Ras Nsi has the following wizard spells prepared:"
@@ -4142,7 +4166,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 11
 				}
 			],
 			"trait": [
@@ -5660,7 +5687,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Valindra is an 18th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). Valindra has the following wizard spells prepared:"
 					],
@@ -5741,7 +5768,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 18
 				}
 			],
 			"trait": [
@@ -5931,7 +5961,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Volo is a 1st-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -5952,7 +5982,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 1
 				}
 			],
 			"action": [
@@ -6120,7 +6153,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Withers is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Withers has the following wizard spells prepared:"
 					],
@@ -6171,7 +6204,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 9
 				}
 			],
 			"trait": [
@@ -6318,7 +6354,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Xandala is a 9th-level spellcaster. Her spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Xandala has the following sorcerer spells prepared:"
 					],
@@ -6368,7 +6404,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 9
 				}
 			],
 			"trait": [
@@ -6623,7 +6662,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -6638,7 +6677,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"damageTagsSpell": [
@@ -6815,7 +6857,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Zindar is a 14th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Zindar knows the following sorcerer spells:"
 					],
@@ -6879,7 +6921,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 14
 				}
 			],
 			"trait": [
@@ -7016,7 +7061,7 @@
 				{
 					"name": "Destructive Claws",
 					"entries": [
-						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}8 ({@damage 2d6 + 1}) slashing damage, and if the target is a creature wearing armor, carrying a shield, or in possession of a magic item that improves its AC, it must make a {@dc 11} Dexterity saving throw. On a failed save, one such item worn or carried by the creature (the target's choice) magically deteriorates, taking a permanent and cumulative \u22121 penalty to the AC it offers, and the zorbo gains a +1 bonus to AC until the start of its next turn. Armor reduced to an AC of 10 or a shield or magic item that drops to a 0 AC increase is destroyed."
+						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}8 ({@damage 2d6 + 1}) slashing damage, and if the target is a creature wearing armor, carrying a shield, or in possession of a magic item that improves its AC, it must make a {@dc 11} Dexterity saving throw. On a failed save, one such item worn or carried by the creature (the target's choice) magically deteriorates, taking a permanent and cumulative −1 penalty to the AC it offers, and the zorbo gains a +1 bonus to AC until the start of its next turn. Armor reduced to an AC of 10 or a shield or magic item that drops to a 0 AC increase is destroyed."
 					]
 				}
 			],

@@ -429,7 +429,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Bavlorna casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -447,7 +447,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -588,7 +591,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The brigganock casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 11}):"
 					],
@@ -605,7 +608,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1299,7 +1305,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Endelyn casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -1317,7 +1323,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2352,7 +2361,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Iggwilv casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 24}, {@hit 16} to hit with spell attacks):"
 					],
@@ -2380,7 +2389,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 24,
+					"atkMod": 16,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2862,7 +2874,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Kelek casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -2880,7 +2892,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3019,7 +3034,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Kettlesteam casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -3037,7 +3052,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3287,7 +3305,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Mercion casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -3309,7 +3327,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3453,7 +3474,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"While carrying the {@item Witchlight vane|WbtW}, Light casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks):"
 					],
@@ -3463,7 +3484,10 @@
 						"{@spell ray of frost}"
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3597,7 +3621,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"While carrying the {@item Witchlight watch|WbtW}, Witch casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks):"
 					],
@@ -3607,7 +3631,10 @@
 						"{@spell message}"
 					],
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4127,7 +4154,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Ringlerun casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -4150,7 +4177,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4404,7 +4434,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Sir Talavar's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components. As the dragon ages and changes color, it gains additional spells as shown below."
 					],
@@ -4423,7 +4453,10 @@
 							"{@spell minor illusion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4592,7 +4625,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Skabatha casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -4613,7 +4646,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4743,7 +4779,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Skylla casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -4759,7 +4795,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4996,7 +5035,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Strongheart casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -5013,7 +5052,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5635,7 +5677,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The hand casts one of the following spells, using Charisma as the spellcasting ability:"
 					],
@@ -5645,7 +5687,10 @@
 						"{@spell prestidigitation}"
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5906,7 +5951,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Zargash casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -5924,7 +5969,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

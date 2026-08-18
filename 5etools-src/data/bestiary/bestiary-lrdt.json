@@ -61,7 +61,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Alax casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -77,7 +77,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -182,7 +185,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Ervan casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -201,7 +204,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [

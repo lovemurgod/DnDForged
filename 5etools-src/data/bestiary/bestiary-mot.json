@@ -84,7 +84,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The abhorrent overlord's spellcasting ability is Charisma (spell save {@dc 15}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -95,7 +95,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -330,7 +333,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The alseid's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -346,7 +349,10 @@
 							"{@spell plant growth}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -957,7 +963,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The archon's spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The archon can innately cast the following spells, requiring no material components:"
 					],
@@ -972,7 +978,10 @@
 							"{@spell spirit guardians}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1138,7 +1147,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The ashen rider's spellcasting ability is Wisdom (spell save {@dc 18}). The rider can innately cast the following spells, requiring no material components:"
 					],
@@ -1152,7 +1161,10 @@
 							"{@spell blade barrier}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2900,7 +2912,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Hythonia's spellcasting ability is Charisma (spell save {@dc 18}). She can innately cast {@spell animate objects} once per day requiring no material components."
 					],
@@ -2909,7 +2921,10 @@
 							"{@spell animate objects}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3225,7 +3240,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The lampad's spellcasting ability is Charisma ({@hit 6} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3233,7 +3248,10 @@
 						"{@spell chill touch} (see \"Actions\" below)",
 						"{@spell gentle repose}"
 					],
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3353,7 +3371,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The leonin's spellcasting ability is Wisdom (spell save {@dc 14}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3363,7 +3381,10 @@
 							"{@spell detect evil and good}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3450,7 +3471,7 @@
 							"items": {
 								"name": "Multiattack",
 								"entries": [
-									"The medusa makes either three melee attacks\u2014one with its snake hair, one to constrict, and one with its shortsword\u2014or two ranged attacks with its longbow."
+									"The medusa makes either three melee attacks—one with its snake hair, one to constrict, and one with its shortsword—or two ranged attacks with its longbow."
 								]
 							}
 						},
@@ -3524,7 +3545,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The hoplite is a 3rd-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -3553,7 +3574,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 3
 				}
 			],
 			"action": [
@@ -3688,7 +3712,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The naiad's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3704,7 +3728,10 @@
 							"{@spell hypnotic pattern}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3843,7 +3870,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The shepherd's spellcasting ability is Charisma (spell save {@dc 17}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3855,7 +3882,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4071,7 +4101,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The oracle's spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -4092,7 +4122,10 @@
 							"{@spell scrying}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4202,7 +4235,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The oread's spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -4218,7 +4251,10 @@
 							"{@spell scorching ray}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5525,7 +5561,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The triton's spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -5542,7 +5578,10 @@
 							"{@spell wind wall}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5675,7 +5714,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The triton's spellcasting ability is Wisdom (spell save {@dc 12}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -5685,7 +5724,10 @@
 							"{@spell gust of wind}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

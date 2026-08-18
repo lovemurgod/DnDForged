@@ -236,7 +236,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -251,7 +251,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -591,7 +594,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 22}):"
 					],
@@ -607,7 +610,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 22,
+					"atkMod": 14,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -774,7 +780,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The aranea casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -788,7 +794,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1109,7 +1118,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Biha Babir casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -1130,7 +1139,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1302,7 +1314,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -1316,7 +1328,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1445,7 +1460,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -1459,7 +1474,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1585,7 +1603,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -1600,7 +1618,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1720,7 +1741,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The scion casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -1740,11 +1761,14 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				},
 				{
 					"name": "Command",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The scion casts {@spell Command|XPHB} (level 2 version), using the same spellcasting ability as Spellcasting. The scion can't take this action again until the start of its next turn."
 					],
@@ -1757,7 +1781,10 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					]
+					],
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2088,7 +2115,7 @@
 			"spellcasting": [
 				{
 					"name": "Underdark Magic (3/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow casts {@spell Darkness|XPHB}, {@spell Faerie Fire|XPHB}, or {@spell Levitate|XPHB} (self only), requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 12})."
 					],
@@ -2103,7 +2130,10 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2255,7 +2285,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 14}, {@hit 6} to hit with spell attacks):"
 					],
@@ -2271,11 +2301,14 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				},
 				{
 					"name": "Underdark Magic (3/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow casts {@spell Faerie Fire|XPHB} or {@spell Misty Step|XPHB}, requiring no Material components and using the same spellcasting ability as Spellcasting."
 					],
@@ -2289,7 +2322,10 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2418,7 +2454,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 11}):"
 					],
@@ -2431,7 +2467,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2574,7 +2613,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability:"
 					],
@@ -2584,11 +2623,14 @@
 						"{@spell Thaumaturgy|XPHB}"
 					],
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				},
 				{
 					"name": "Lolth's Blessing (3/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow casts {@spell Cure Wounds|XPHB}, {@spell Darkness|XPHB}, {@spell Dispel Magic|XPHB}, or {@spell Lesser Restoration|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -2604,7 +2646,10 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2842,7 +2887,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Karas casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 15}, {@hit 7} to hit with spell attacks):"
 					],
@@ -2861,7 +2906,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3050,7 +3098,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Manshoon casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -3078,11 +3126,14 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				},
 				{
 					"name": "Misty Step",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Manshoon casts {@spell Misty Step|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -3093,11 +3144,14 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				},
 				{
 					"name": "Protective Magic",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Manshoon casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -3109,7 +3163,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3579,7 +3636,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The phaerimm casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -3596,11 +3653,14 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				},
 				{
 					"name": "Protective Magic (3/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The phaerimm casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -3614,7 +3674,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3757,7 +3820,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The phaerimm casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -3766,7 +3829,10 @@
 						"{@spell Mage Hand|XPHB}"
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4475,7 +4541,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Sammaster casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 21}, {@hit 13} to hit with spell attacks):"
 					],
@@ -4498,7 +4564,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4699,7 +4768,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Sammaster casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 21}):"
 					],
@@ -4723,11 +4792,14 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				},
 				{
 					"name": "Protective Magic",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Sammaster casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -4739,7 +4811,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5156,7 +5231,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The swanmay casts one of the following spells, requiring no Somatic or Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -5172,7 +5247,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5344,7 +5422,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Valindra casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -5371,11 +5449,14 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				},
 				{
 					"name": "Illusory Disguise",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Valindra casts {@spell Disguise Self|XPHB}, using the same spellcasting ability as Spellcasting. The spell lasts until Valindra drops to 30 {@variantrule Hit Points|XPHB} or fewer or uses her Life-Rending Gaze Legendary Action. Intelligence ({@skill Investigation|XPHB}) checks made to discern her true appearance are made with {@variantrule Disadvantage|XPHB}."
 					],
@@ -5386,11 +5467,14 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				},
 				{
 					"name": "Protective Magic",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Valindra casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -5402,7 +5486,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5957,7 +6044,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The Zhentilar casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -5968,7 +6055,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6215,7 +6305,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Zlan casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -6238,11 +6328,14 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				},
 				{
 					"name": "Counterspell",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Zlan casts {@spell Counterspell|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -6253,7 +6346,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

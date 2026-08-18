@@ -77,6 +77,13 @@
                     </div>
                 </div>
                 
+                <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:10px; margin-bottom:14px; user-select:none;">
+                    <input type="checkbox" id="login-remember" style="cursor:pointer;" checked>
+                    <label for="login-remember" style="margin:0; font-size:0.85rem; cursor:pointer; color:var(--color-text-muted, #aaa);">
+                        <i class="fa-solid fa-bookmark" style="margin-right:4px; color:var(--color-gold-base, #d4af37);"></i> Remember my login credentials
+                    </label>
+                </div>
+
                 <button id="btn-join-game" class="btn btn-primary btn-block">
                     <i class="fa-solid fa-door-open"></i> Enter Tabletop
                 </button>
@@ -226,11 +233,19 @@
             </div>
         </main>
 
-        <!-- Initiative Tracker Vertical Layout -->
-        <div id="vtt-initiative-carousel-container" class="vtt-hidden tracker-floating">
+        <!-- Initiative Tracker Container -->
+        <div id="vtt-initiative-carousel-container" class="vtt-hidden tracker-floating pos-right">
             <!-- Top Controls -->
             <div class="init-controls-top">
+                <button id="btn-init-drag" class="btn btn-icon btn-secondary init-drag-handle" title="Drag to move tracker">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </button>
                 <span class="current-round" title="Current Round"><i class="fa-solid fa-hourglass-half"></i> <span id="init-round-num">1</span></span>
+                <select id="hud-init-position" class="hud-init-pos-select" title="Tracker Position Style">
+                    <option value="right" selected>Right</option>
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                </select>
                 <button id="btn-init-minimize" class="btn btn-icon btn-secondary" title="Minimize Tracker">
                     <i class="fa-solid fa-compress"></i>
                 </button>
@@ -669,8 +684,9 @@
                             <div class="config-setting">
                                 <label for="config-init-position">Tracker Position</label>
                                 <select id="config-init-position" style="width: 130px; padding: 4px 8px; font-size: 0.8rem;">
-                                    <option value="top" selected>Top of Screen</option>
-                                    <option value="bottom">Bottom of Screen</option>
+                                    <option value="right" selected>Right Aligned</option>
+                                    <option value="top">Top Aligned</option>
+                                    <option value="bottom">Bottom Aligned</option>
                                 </select>
                             </div>
                         </div>
@@ -1052,6 +1068,13 @@
                 <option value="purple">Purple (Void/Illusion)</option>
             </select>
         </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+            <label for="measure-broadcast" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 500;">
+                <input type="checkbox" id="measure-broadcast" checked style="accent-color: var(--color-gold-base, #c9a050); cursor: pointer; width: 16px; height: 16px;">
+                Broadcast to others
+            </label>
+        </div>
     </div>
 
 
@@ -1298,15 +1321,6 @@
 
     <!-- Front-End Code scripts bundle -->
     <script type="module">
-        const _v = Date.now(); // cache-bust: forces fresh module load on every page load
-        const { initVttCanvas } = await import(`./js/vtt-canvas.js?v=${_v}`);
-        const { initVttCreatureSheet } = await import(`./js/vtt-creature-sheet.js?v=${_v}`);
-        const { initVttSpellManager } = await import(`./js/vtt-spell-manager.js?v=${_v}`);
-        const { initVttPlayerSheet } = await import(`./js/vtt-player-sheet.js?v=${_v}`);
-        const { initVttChat } = await import(`./js/vtt-chat.js?v=${_v}`);
-        const { initVttDataBridge } = await import(`./js/vtt-data-bridge.js?v=${_v}`);
-        const { initVttHandouts } = await import(`./js/vtt-handouts.js?v=${_v}`);
-
         // Keep globally accessible configurations
         window.VTT = {
             socket: null,
@@ -1320,8 +1334,37 @@
             playerSheet: null,
             dataBridge: null
         };
-        
-        // Initialize handlers directly, we are already deferred and loaded
+
+        // Module preloader promise - loads all VTT ES modules concurrently in the background
+        const moduleInitPromise = (async () => {
+            try {
+                const _v = Date.now(); // cache-bust: forces fresh module load on every page load
+                const [canvasMod, creatureMod, spellMod, playerMod, chatMod, dataMod, handoutsMod] = await Promise.all([
+                    import(`./js/vtt-canvas.js?v=${_v}`),
+                    import(`./js/vtt-creature-sheet.js?v=${_v}`),
+                    import(`./js/vtt-spell-manager.js?v=${_v}`),
+                    import(`./js/vtt-player-sheet.js?v=${_v}`),
+                    import(`./js/vtt-chat.js?v=${_v}`),
+                    import(`./js/vtt-data-bridge.js?v=${_v}`),
+                    import(`./js/vtt-handouts.js?v=${_v}`)
+                ]);
+                
+                return {
+                    initVttCanvas: canvasMod.initVttCanvas,
+                    initVttCreatureSheet: creatureMod.initVttCreatureSheet,
+                    initVttSpellManager: spellMod.initVttSpellManager,
+                    initVttPlayerSheet: playerMod.initVttPlayerSheet,
+                    initVttChat: chatMod.initVttChat,
+                    initVttDataBridge: dataMod.initVttDataBridge,
+                    initVttHandouts: handoutsMod.initVttHandouts
+                };
+            } catch (err) {
+                console.error("VTT Module Import Error:", err);
+                throw err;
+            }
+        })();
+
+        // Initialize UI handlers immediately
         setupLoginHandlers();
         setupSidebarTabs();
 
@@ -1331,6 +1374,19 @@
             const roleSelect = document.getElementById('login-role');
             const campaignSelect = document.getElementById('login-campaign');
             const btnCreateCamp = document.getElementById('btn-create-campaign');
+            const rememberCb = document.getElementById('login-remember');
+
+            // Restore saved login details if Remember Me was enabled
+            const savedRemember = localStorage.getItem('vtt_remember');
+            if (savedRemember !== null && rememberCb) {
+                rememberCb.checked = savedRemember === 'true';
+            }
+            if (rememberCb && rememberCb.checked) {
+                const savedUser = localStorage.getItem('vtt_username');
+                const savedRole = localStorage.getItem('vtt_role');
+                if (savedUser && usernameInput) usernameInput.value = savedUser;
+                if (savedRole && roleSelect) roleSelect.value = savedRole;
+            }
             
             // Query active campaigns list on backend
             try {
@@ -1381,9 +1437,9 @@
             // Create campaign modal handling
             const modalCreate = document.getElementById('modal-create-campaign');
             const newCampName = document.getElementById('new-campaign-name');
-            btnCreateCamp.addEventListener('click', () => modalCreate.classList.remove('vtt-hidden'));
-            document.getElementById('btn-modal-cancel').addEventListener('click', () => modalCreate.classList.add('vtt-hidden'));
-            document.getElementById('btn-modal-submit').addEventListener('click', async () => {
+            if (btnCreateCamp) btnCreateCamp.addEventListener('click', () => modalCreate?.classList.remove('vtt-hidden'));
+            document.getElementById('btn-modal-cancel')?.addEventListener('click', () => modalCreate?.classList.add('vtt-hidden'));
+            document.getElementById('btn-modal-submit')?.addEventListener('click', async () => {
                 const name = newCampName.value.trim();
                 if (!name) return alert("Please enter a campaign name");
                 try {
@@ -1407,15 +1463,33 @@
                 }
             });
 
+            const resetBtnJoin = () => {
+                if (btnJoin) {
+                    btnJoin.disabled = false;
+                    btnJoin.innerHTML = '<i class="fa-solid fa-door-open"></i> Enter Tabletop';
+                }
+            };
+
             // Join Game handler
-            btnJoin.addEventListener('click', () => {
-                const username = usernameInput.value.trim();
+            const executeJoinGame = () => {
+                let username = usernameInput.value.trim();
                 const role = roleSelect.value;
-                const campaignId = campaignSelect.value;
+                const campaignId = campaignSelect.value || 'default';
                 
                 if (!username) {
-                    usernameInput.classList.add('form-control--error');
-                    return;
+                    username = role === 'GM' ? 'Game Master' : 'Player 1';
+                    usernameInput.value = username;
+                }
+                usernameInput.classList.remove('form-control--error');
+
+                if (rememberCb && rememberCb.checked) {
+                    localStorage.setItem('vtt_remember', 'true');
+                    localStorage.setItem('vtt_username', username);
+                    localStorage.setItem('vtt_role', role);
+                } else {
+                    localStorage.setItem('vtt_remember', 'false');
+                    localStorage.removeItem('vtt_username');
+                    localStorage.removeItem('vtt_role');
                 }
                 
                 window.VTT.username = username;
@@ -1445,10 +1519,22 @@
                     if (dmScreenLink1) dmScreenLink1.classList.remove('vtt-hidden');
                 }
 
+                // Show loading state
+                if (btnJoin) {
+                    btnJoin.disabled = true;
+                    btnJoin.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Connecting...';
+                }
+
+                // Clean up previous socket if any
+                if (window.VTT.socket) {
+                    try { window.VTT.socket.disconnect(); } catch (e) {}
+                }
+
                 // Initialise Socket connection
-                // Prioritize websocket to prevent loca.lt long-polling 502 connection throttling
                 const socket = io({
-                    transports: ['websocket', 'polling']
+                    transports: ['websocket', 'polling'],
+                    timeout: 8000,
+                    reconnectionAttempts: 2
                 });
 
                 // Override emit to automatically inject whisperToGM state from the UI toggle
@@ -1469,17 +1555,32 @@
                 const elLocalUrl = document.getElementById('config-local-url');
                 const elRemoteUrl = document.getElementById('config-remote-url');
                 if (elLocalUrl) elLocalUrl.value = `${absoluteHost}/vtt.html`;
-                // Try fetching external tunnel URL
                 if (elRemoteUrl) elRemoteUrl.value = `${absoluteHost}/vtt.html`;
 
+                let connTimeout = setTimeout(() => {
+                    if (!socket.connected) {
+                        resetBtnJoin();
+                        alert("Connection Timeout: Unable to connect to VTT server at " + absoluteHost + ".\nPlease ensure the backend server is running.");
+                    }
+                }, 8000);
+
+                socket.on('connect_error', (err) => {
+                    clearTimeout(connTimeout);
+                    resetBtnJoin();
+                    console.error("Socket connect_error:", err);
+                    alert("Connection Failure: Failed to reach VTT server (" + (err.message || 'Server offline') + ").\nPlease check if the backend server is running on " + absoluteHost);
+                });
+
                 socket.on('connect', () => {
+                    clearTimeout(connTimeout);
                     console.log("Connected to VTT backend!");
                     socket.emit('join', { campaignId, username, role });
                 });
 
                 socket.on('join_rejected', ({ reason }) => {
+                    clearTimeout(connTimeout);
+                    resetBtnJoin();
                     alert(`Connection Rejected: ${reason}`);
-                    window.location.reload();
                 });
 
                 function renderAllowlist(users) {
@@ -1511,7 +1612,9 @@
                     }
                 });
 
-                socket.on('joined', ({ campaignState, chatHistory }) => {
+                socket.on('joined', async ({ campaignState, chatHistory }) => {
+                    clearTimeout(connTimeout);
+                    resetBtnJoin();
                     window.VTT.campaignState = campaignState;
                     
                     // Enforce role based on GM assignment in server
@@ -1535,18 +1638,19 @@
 
                     renderAllowlist(campaignState.allowedUsers || []);
 
-                    document.getElementById('login-overlay').classList.add('vtt-hidden');
-                    document.getElementById('vtt-workspace').classList.remove('vtt-hidden');
+                    document.getElementById('login-overlay')?.classList.add('vtt-hidden');
+                    document.getElementById('vtt-workspace')?.classList.remove('vtt-hidden');
                     
-                    // Boot VTT Modules
+                    // Boot VTT Modules (awaiting promise guarantees all 7 modules finish importing)
                     try {
-                        window.VTT.canvasEngine = initVttCanvas(window.VTT);
-                        window.VTT.chatEngine = initVttChat(window.VTT, chatHistory);
-                        window.VTT.spellManager = initVttSpellManager(window.VTT);
-                        window.VTT.playerSheet = initVttPlayerSheet(window.VTT);
-                        window.VTT.creatureSheet = initVttCreatureSheet(window.VTT);
-                        window.VTT.handoutsEngine = initVttHandouts(window.VTT);
-                        window.VTT.dataBridge = initVttDataBridge(window.VTT);
+                        const mods = await moduleInitPromise;
+                        if (mods.initVttCanvas) window.VTT.canvasEngine = mods.initVttCanvas(window.VTT);
+                        if (mods.initVttChat) window.VTT.chatEngine = mods.initVttChat(window.VTT, chatHistory);
+                        if (mods.initVttSpellManager) window.VTT.spellManager = mods.initVttSpellManager(window.VTT);
+                        if (mods.initVttPlayerSheet) window.VTT.playerSheet = mods.initVttPlayerSheet(window.VTT);
+                        if (mods.initVttCreatureSheet) window.VTT.creatureSheet = mods.initVttCreatureSheet(window.VTT);
+                        if (mods.initVttHandouts) window.VTT.handoutsEngine = mods.initVttHandouts(window.VTT);
+                        if (mods.initVttDataBridge) window.VTT.dataBridge = mods.initVttDataBridge(window.VTT);
                         
                         console.log("Joined and VTT loaded!");
                     } catch (err) {
@@ -1567,6 +1671,11 @@
                         window.VTT.chatEngine.appendWhisperMessage(msg);
                     }
                 });
+            };
+
+            btnJoin.addEventListener('click', executeJoinGame);
+            usernameInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') executeJoinGame();
             });
 
             document.getElementById('btn-logout').addEventListener('click', () => {

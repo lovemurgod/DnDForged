@@ -230,7 +230,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The slug's innate spellcasting ability is Wisdom (spell save {@dc 11}, {@hit 3} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -241,7 +241,10 @@
 							"{@spell spiritual weapon}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

@@ -283,7 +283,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The artificer casts one of the following spells, using its Tinker's Tools as an Arcane Focus and using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -299,7 +299,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -626,7 +629,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The infiltrator casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -639,7 +642,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -760,7 +766,7 @@
 			"spellcasting": [
 				{
 					"name": "Slayer's Puppet (1/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mindkiller casts {@spell Dominate Person|XPHB}, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 17})."
 					],
@@ -773,7 +779,10 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -907,13 +916,13 @@
 				{
 					"name": "Flail",
 					"entries": [
-						"{@atkr m} {@hit 6}, reach 5 ft.  {@h}8 ({@damage 1d8 + 4}) Bludgeoning damage\u2014plus 7 ({@damage 2d6}) Necrotic damage if the commander is Bloodied\u2014and the target has {@variantrule Disadvantage|XPHB} on its next attack roll before the start of the commander's next turn."
+						"{@atkr m} {@hit 6}, reach 5 ft.  {@h}8 ({@damage 1d8 + 4}) Bludgeoning damage—plus 7 ({@damage 2d6}) Necrotic damage if the commander is Bloodied—and the target has {@variantrule Disadvantage|XPHB} on its next attack roll before the start of the commander's next turn."
 					]
 				},
 				{
 					"name": "Javelin",
 					"entries": [
-						"{@atkr m,r} {@hit 6}, reach 5 ft. or range 30/120 ft.  {@h}7 ({@damage 1d6 + 4}) Piercing damage\u2014plus 7 ({@damage 2d6}) Necrotic damage if the commander is {@status Bloodied|XPHB}."
+						"{@atkr m,r} {@hit 6}, reach 5 ft. or range 30/120 ft.  {@h}7 ({@damage 1d6 + 4}) Piercing damage—plus 7 ({@damage 2d6}) Necrotic damage if the commander is {@status Bloodied|XPHB}."
 					]
 				}
 			],
@@ -1000,13 +1009,13 @@
 				{
 					"name": "Flail",
 					"entries": [
-						"{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Bludgeoning damage\u2014plus 4 ({@damage 1d8}) Necrotic damage if the knight is Bloodied\u2014and the target has {@variantrule Disadvantage|XPHB} on its next attack roll before the start of the knight's next turn."
+						"{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Bludgeoning damage—plus 4 ({@damage 1d8}) Necrotic damage if the knight is Bloodied—and the target has {@variantrule Disadvantage|XPHB} on its next attack roll before the start of the knight's next turn."
 					]
 				},
 				{
 					"name": "Javelin",
 					"entries": [
-						"{@atkr m,r} {@hit 5}, reach 5 ft. or range 30/120 ft. {@h}6 ({@damage 1d6 + 3}) Piercing damage\u2014plus 4 ({@damage 1d8}) Necrotic damage if the knight is {@status Bloodied|XPHB}."
+						"{@atkr m,r} {@hit 5}, reach 5 ft. or range 30/120 ft. {@h}6 ({@damage 1d6 + 3}) Piercing damage—plus 4 ({@damage 1d8}) Necrotic damage if the knight is {@status Bloodied|XPHB}."
 					]
 				}
 			],
@@ -1094,7 +1103,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The troubleshooter casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -1105,7 +1114,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1315,7 +1327,7 @@
 			"spellcasting": [
 				{
 					"name": "Mark of Healing (2/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The medic casts {@spell Cure Wounds|XPHB} or {@spell Lesser Restoration|XPHB}, using Wisdom as the spellcasting ability."
 					],
@@ -1329,7 +1341,10 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1429,7 +1444,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The warden casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -1444,11 +1459,14 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				},
 				{
 					"name": "Protective Magic (3/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The warden casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -1462,7 +1480,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1592,7 +1613,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The scion casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -1602,11 +1623,14 @@
 						"{@spell Thunderwave|XPHB}"
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				},
 				{
 					"name": "Jump (2/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The scion casts {@spell Jump|XPHB}, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -1619,11 +1643,14 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				},
 				{
 					"name": "Feather Fall (2/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The scion casts {@spell Feather Fall|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -1636,7 +1663,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -1745,7 +1775,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The inquisitive casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):",
 						"At Will : Guidance"
@@ -1757,7 +1787,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -1882,7 +1915,7 @@
 			"spellcasting": [
 				{
 					"name": "Misty Step (2/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The enforcer casts {@spell Misty Step|XPHB}, using Intelligence as the spellcasting ability."
 					],
@@ -1895,7 +1928,10 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -2014,7 +2050,7 @@
 			"spellcasting": [
 				{
 					"name": "Shield (3/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The marshal casts {@spell Shield|XPHB} in response to the spell's trigger, using Wisdom as the spellcasting ability."
 					],
@@ -2027,7 +2063,10 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -2135,7 +2174,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The agent casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability ({@dc 14}):"
 					],
@@ -2149,7 +2188,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -2254,7 +2296,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The scribe casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability ({@dc 13}):"
 					],
@@ -2267,7 +2309,10 @@
 						"1/Da y: Sending"
 					],
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2469,7 +2514,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The marauder casts one of the following spells, requiring no Material components and using Constitution as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -2482,7 +2527,10 @@
 						]
 					},
 					"ability": "con",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2598,7 +2646,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The ruffian casts one of the following spells, requiring no Material components and using Constitution as the spellcasting ability (spell save {@dc 12}, {@hit 4} to hit with spell attacks):"
 					],
@@ -2611,7 +2659,10 @@
 						]
 					},
 					"ability": "con",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2830,7 +2881,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The shadow walker casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -2840,7 +2891,10 @@
 						"{@spell Minor Illusion|XPHB}"
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2966,7 +3020,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The heir casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -2985,7 +3039,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3232,7 +3289,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The priest casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks):"
 					],
@@ -3249,7 +3306,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

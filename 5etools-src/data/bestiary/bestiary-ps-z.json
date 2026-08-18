@@ -100,7 +100,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The archon's innate spellcasting ability is Charisma (spell save {@dc 17}). The archon can innately cast the following spells, requiring only verbal components:"
 					],
@@ -113,7 +113,10 @@
 							"{@spell geas}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -365,7 +368,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The felidar's innate spellcasting ability is Charisma (spell save {@dc 14}). The felidar can innately cast the following spells, requiring no components:"
 					],
@@ -381,7 +384,10 @@
 							"{@spell dispel evil and good}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -780,7 +786,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The kraken's innate spellcasting ability is Charisma (spell save {@dc 17}). The kraken can innately cast the following spells, requiring no components:"
 					],
@@ -790,7 +796,10 @@
 							"{@spell water breathing}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

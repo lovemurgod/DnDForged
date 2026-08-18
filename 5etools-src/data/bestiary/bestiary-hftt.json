@@ -161,7 +161,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mage is a 4th-level spellcaster that uses Intelligence as its spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks). The mage knows the following spells from the wizard's spell list:"
 					],
@@ -188,7 +188,10 @@
 							"slots": 3
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 4
 				}
 			],
 			"action": [

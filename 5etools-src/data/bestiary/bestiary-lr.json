@@ -82,7 +82,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Amble is a 12th-level spellcaster. Their spellcasting ability is Wisdom (spell save {@dc 16}, {@hit 8} to hit with spell attacks). Amble has the following druid spells prepared:"
 					],
@@ -142,7 +142,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 12
 				}
 			],
 			"trait": [
@@ -387,7 +390,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Gar is a 13th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 18}, {@hit 10} to hit with spell attacks). He has the following druid spells prepared:"
 					],
@@ -466,7 +469,10 @@
 					"footerEntries": [
 						"*Circle spells don't count against spells prepared."
 					],
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 13
 				}
 			],
 			"trait": [
@@ -668,7 +674,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Shoalar's innate spellcasting ability is Constitution (spell save {@dc 14}, {@hit 6} to hit with spell attacks). He can innately cast the following spells:"
 					],
@@ -680,11 +686,14 @@
 							"{@spell create or destroy water}"
 						]
 					},
-					"ability": "con"
+					"ability": "con",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Shoalar is a 7th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). He knows the following sorcerer spells:"
 					],
@@ -727,7 +736,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 7
 				}
 			],
 			"trait": [

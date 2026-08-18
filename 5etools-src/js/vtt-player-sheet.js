@@ -37,119 +37,78 @@ export function initVttPlayerSheet(vtt) {
         return result;
     }
 
-    function getSpellMetaStrings(sp) {
-        if (!sp && !spellCache) return {};
-        const spellName = typeof sp === 'string' ? sp : sp?.name;
-        const spell = spellCache ? spellCache.find(s => s.name.toLowerCase() === (spellName || '').toLowerCase()) : null;
+    function getSpellMetaStrings(sp, slKey) {
+        if (window.VTTSpellManager && window.VTTSpellManager.getSpellMetaStrings) {
+            return window.VTTSpellManager.getSpellMetaStrings(sp, slKey);
+        }
+        if (!sp || typeof sp !== 'object') return {};
         
-        let school = (sp && typeof sp === 'object' ? sp.school : null) || (spell ? spell.school : '');
-        if (school && window.Parser && Parser.spSchoolAbvToFull) school = Parser.spSchoolAbvToFull(school) || school;
-        
-        let levelVal = (sp && typeof sp === 'object' && sp.level !== undefined) ? sp.level : (spell ? spell.level : undefined);
+        let school = sp.school || '';
+        let levelVal = sp.level !== undefined ? sp.level : '';
         let level = '';
         if (levelVal !== undefined && levelVal !== null && levelVal !== '') {
             let levelNum = Number(levelVal);
             if (!isNaN(levelNum)) {
-                level = window.Parser && Parser.spLevelToFullLevelText ? Parser.spLevelToFullLevelText(levelNum) : (levelNum === 0 ? 'Cantrip' : `Level ${levelNum}`);
+                level = levelNum === 0 ? 'Cantrip' : `Level ${levelNum}`;
             } else {
                 level = String(levelVal);
             }
+        } else if (slKey) {
+            if (slKey === 'cantrip') level = 'Cantrip';
+            else if (typeof slKey === 'string' && slKey.startsWith('level')) {
+                const num = slKey.replace('level', '');
+                level = `Level ${num}`;
+            } else {
+                level = String(slKey);
+            }
         }
 
-        let time = (sp && typeof sp === 'object' ? sp.castingTime : null) || (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
-        let range = (sp && typeof sp === 'object' ? sp.range : null) || (spell ? Parser.spRangeToFull(spell.range) : '');
-        let components = (sp && typeof sp === 'object' ? sp.components : null) || (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
-        let duration = (sp && typeof sp === 'object' ? sp.duration : null) || (spell ? Parser.spDurationToFull(spell.duration) : '');
-
-        time = typeof time === 'string' ? time : (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
-        range = typeof range === 'string' ? range : (spell ? Parser.spRangeToFull(spell.range) : '');
-        components = typeof components === 'string' ? components : (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
-        duration = typeof duration === 'string' ? duration : (spell ? Parser.spDurationToFull(spell.duration) : '');
+        let time = sp.castingTime || '';
+        let range = sp.range || '';
+        let components = sp.components || '';
+        let duration = sp.duration || '';
 
         return { school, level, time, range, components, duration };
     }
 
     function cleanSpellHtml(html) {
-        if (window.VTTSpellManager && window.VTTSpellManager.cleanSpellBodyHtml) {
-            return window.VTTSpellManager.cleanSpellBodyHtml(html);
-        }
         if (!html) return '';
         let cleaned = html;
         cleaned = cleaned.replace(/<div class="spell-meta"[^>]*>[\s\S]*?<\/div>/ig, '');
-        cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<h[12][^>]*>.*?<\/h[12]>\s*<\/td>\s*<\/tr>/ig, '');
-        cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*<\/td>\s*<\/tr>/ig, '');
-        cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>[\s\S]*?<\/td>\s*<\/tr>/ig, '');
-        cleaned = cleaned.replace(/<\/?tbody[^>]*>/g, '').replace(/<\/?tr[^>]*>/g, '').replace(/<\/?td[^>]*>/g, '<div>').replace(/<\/td>/g, '</div>');
-        cleaned = cleaned.replace(/<h[12][^>]*>.*?<\/h[12]>/ig, '');
-        cleaned = cleaned.replace(/<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*(?:<br\s*\/?>)*/ig, '');
-        cleaned = cleaned.replace(/<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>.*?(?:<br\s*\/?>|\n|$)/ig, '');
-        cleaned = cleaned.replace(/<div>\s*(?:<br\s*\/?>\s*)*/ig, '<div>');
-        cleaned = cleaned.replace(/(?:<br\s*\/?>\s*)+/g, '<br>');
-        cleaned = cleaned.replace(/^(?:\s*<br\s*\/?>)+|(?:\s*<br\s*\/?>)+$/ig, '');
         return cleaned.trim();
     }
 
-    function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp) {
-        if (!spellCache && window.VTTSpellManager?.getSpellCache) {
-            spellCache = window.VTTSpellManager.getSpellCache();
+    function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey) {
+        if (window.VTTSpellManager && window.VTTSpellManager.renderAndInjectSpell) {
+            return window.VTTSpellManager.renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey);
         }
-
-        if (!spellCache && window.VTTSpellManager?.loadSpells) {
-            window.VTTSpellManager.loadSpells().then(spells => {
-                spellCache = spells;
-                renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp);
-            }).catch(() => {});
-        }
-
-        const spell = spellCache ? spellCache.find(s => s.name && s.name.toLowerCase() === (spellName || '').toLowerCase()) : null;
         let metaHtml = '';
-        if (window.Parser) {
-            let meta = getSpellMetaStrings(sp || (spell ? { name: spell.name, level: spell.level, school: spell.school } : spellName));
-            let level = meta.level;
-            let school = meta.school;
-            let time = meta.time;
-            let range = meta.range;
-            let components = meta.components;
-            let duration = meta.duration;
-            
-            metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
-            if (level) metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${level}</div>`;
-            if (school) metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${school}</div>`;
-            if (time) metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${time}</div>`;
-            if (range) metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${range}</div>`;
-            if (components) metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${components}</div>`;
-            if (duration) metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${duration}</div>`;
-            metaHtml += '</div>';
-        }
+        let meta = getSpellMetaStrings(sp || { name: spellName }, slKey);
+        let level = meta.level || (sp?.level !== undefined ? (sp.level === 0 ? 'Cantrips' : sp.level) : '');
+        let school = meta.school || sp?.school || '';
+        let time = meta.time || sp?.castingTime || '';
+        let range = meta.range || sp?.range || '';
+        let components = meta.components || sp?.components || '';
+        let duration = meta.duration || sp?.duration || '';
+        
+        metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
+        if (level !== undefined && level !== '') metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${level}</div>`;
+        if (school) metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${school}</div>`;
+        if (time) metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${time}</div>`;
+        if (range) metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${range}</div>`;
+        if (components) metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${components}</div>`;
+        if (duration) metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${duration}</div>`;
+        metaHtml += '</div>';
 
-        let rawBody = '';
-        if (spell && RenderSpells) {
-            try {
-                let rawRender = RenderSpells.getRenderedSpell(spell);
-                if (typeof rawRender === "string") {
-                    rawBody = rawRender;
-                } else {
-                    const temp = document.createElement("table");
-                    if (rawRender.appendTo) rawRender.appendTo(temp);
-                    else temp.appendChild(rawRender);
-                    rawBody = temp.innerHTML;
-                }
-            } catch (e) {
-                rawBody = fallbackDesc || '';
-            }
-        } else if (fallbackDesc && fallbackDesc.trim() !== '') {
-            rawBody = `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`;
-        }
-
-        let cleanedBody = cleanSpellHtml(rawBody);
+        let rawBody = sp?.description || fallbackDesc || '';
         if (typeof injectDiceChips === 'function') {
-            cleanedBody = injectDiceChips(cleanedBody);
+            rawBody = injectDiceChips(rawBody);
         }
 
-        if (!cleanedBody && !metaHtml) {
+        if (!rawBody && !metaHtml) {
             containerEl.innerHTML = fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<em>Could not find full text for ${spellName}</em>`;
         } else {
-            containerEl.innerHTML = metaHtml + cleanedBody;
+            containerEl.innerHTML = metaHtml + rawBody;
         }
     }
 
@@ -245,6 +204,9 @@ function simulateRoll(formula, critRange = 20) {
         parseSpellToMacro: (spData, newSpell) => window.VTTSpellManager?.parseSpellToMacro(spData, newSpell),
         renderAndInjectSpell: (spellName, containerEl, fallbackDesc, spData) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, spData),
         renderSpellRowHtml: (sp, slKey, idx, isAllTab) => {
+            if (window.VTTSpellManager && window.VTTSpellManager.renderSpellRowHtml) {
+                return window.VTTSpellManager.renderSpellRowHtml(sp, slKey, idx, { allowEdit: true, isAllTab, classPrefix: 'pc-spell-' });
+            }
             if (!sp) return '';
             const spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp?.name || 'Unknown');
             const isPrepared = typeof sp === 'object' && sp !== null ? sp.prepared !== false : true;
@@ -254,24 +216,21 @@ function simulateRoll(formula, critRange = 20) {
             let isConcentration = typeof sp === 'object' && sp !== null ? sp.concentration : undefined;
             let isRitual = typeof sp === 'object' && sp !== null ? sp.ritual : undefined;
 
-            if (isConcentration === undefined || isRitual === undefined) {
-                const spellCache = window.vttPlayerSheetAPI?.getSpellCache ? window.vttPlayerSheetAPI.getSpellCache() : null;
-                const cachedSp = spellCache?.find(s => s.name && s.name.toLowerCase() === spName.toLowerCase());
-                if (cachedSp) {
-                    if (isConcentration === undefined) {
-                        isConcentration = !!(cachedSp.duration?.some(d => d.concentration) || cachedSp.meta?.concentration);
-                    }
-                    if (isRitual === undefined) {
-                        isRitual = !!cachedSp.meta?.ritual;
-                    }
-                }
-            }
-
             if (isConcentration === undefined) {
-                isConcentration = (typeof sp === 'object' && sp !== null && Array.isArray(sp.duration) && sp.duration.some(d => d.concentration)) || spText.includes("concentration");
+                isConcentration = !!(
+                    (typeof sp === 'object' && sp !== null && sp.concentration) ||
+                    (typeof sp === 'object' && sp !== null && typeof sp.duration === 'string' && sp.duration.toLowerCase().includes('concentration')) ||
+                    (typeof sp === 'object' && sp !== null && Array.isArray(sp.duration) && sp.duration.some(d => d.concentration)) ||
+                    spText.includes("concentration")
+                );
             }
             if (isRitual === undefined) {
-                isRitual = (typeof sp === 'object' && sp !== null && sp.meta && sp.meta.ritual) || spText.includes("ritual");
+                isRitual = !!(
+                    (typeof sp === 'object' && sp !== null && sp.ritual) ||
+                    (typeof sp === 'object' && sp !== null && sp.meta && sp.meta.ritual) ||
+                    (typeof sp === 'object' && sp !== null && typeof sp.components === 'string' && sp.components.toLowerCase().includes('r')) ||
+                    spText.includes("ritual")
+                );
             }
 
             if (isConcentration) {
@@ -311,11 +270,6 @@ function simulateRoll(formula, critRange = 20) {
                         </div>
                     </div>
                     <div class="pc-spell-details" style="display: none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.1); font-size:0.8rem;">
-                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom: 8px;">
-                            ${(typeof sp === 'object' && sp !== null && ((sp.attackStat && sp.attackStat !== 'none') || sp.attackBonus)) ? `<button class="btn btn-xxs btn-primary pc-spell-macro-attack" data-level="${slKey}" data-idx="${idx}">⚔️ Attack</button>` : ''}
-                            ${(typeof sp === 'object' && sp !== null && sp.saveAbility) ? `<button class="btn btn-xxs btn-secondary pc-spell-macro-save" data-level="${slKey}" data-idx="${idx}">🛡️ DC ${sp.saveAbility}</button>` : ''}
-                            ${(typeof sp === 'object' && sp !== null && sp.damageList && sp.damageList.length) ? `<button class="btn btn-xxs btn-danger pc-spell-macro-damage" data-level="${slKey}" data-idx="${idx}">💥 Damage</button>` : ''}
-                        </div>
                         <div class="pc-spell-desc"><em>Loading spell details...</em></div>
                     </div>
                 </div>
@@ -2817,6 +2771,7 @@ function simulateRoll(formula, critRange = 20) {
     function renderSheetData(char) {
         if (!char) return;
         currentChar = char;
+
         if (window.VTTSpellManager) {
             window.VTTSpellManager.init({
                 currentChar: currentChar,
@@ -3916,10 +3871,6 @@ function simulateRoll(formula, critRange = 20) {
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);"><i class="fa-solid fa-book-open"></i> Spellbook</h4>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="display:flex; gap:8px; line-height: 1.2;">
-                        <button class="btn btn-xxs btn-secondary pc-spell-dc-btn" data-dc="${finalDC}" data-ability="${char.spellSettings.ability || 'INT'}" title="Ping Spell DC">🛡️ DC ${finalDC}</button>
-                        <button class="btn btn-xxs btn-primary pc-spell-atk-btn" data-atk="${finalAtkData}" title="Roll Spell Attack">⚔️ Atk ${finalAtkLabel}</button>
-                    </div>
                     <button class="btn btn-xxs btn-secondary pc-spell-settings-btn" title="Spell Settings"><i class="fa-solid fa-cog"></i></button>
                 </div>
             </div>
@@ -4019,6 +3970,39 @@ function simulateRoll(formula, critRange = 20) {
 
         `;
         document.getElementById('ps-spells').innerHTML = spellsHtml;
+
+        document.querySelectorAll('#ps-spells .btn-add-spell').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const level = e.currentTarget.dataset.level || 'cantrip';
+                const openFn = (window.VTTSpellManager && window.VTTSpellManager.openModal) || window.openSpellModal;
+                if (openFn) {
+                    openFn(level, -1, char, (updatedChar) => {
+                        if (updatedChar) {
+                            Object.assign(char, updatedChar);
+                            saveAndEmit(char);
+                            renderSheetData(char);
+                        }
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('#ps-spells .pc-spell-edit').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const level = e.currentTarget.dataset.level;
+                const idx = parseInt(e.currentTarget.dataset.idx);
+                const openFn = (window.VTTSpellManager && window.VTTSpellManager.openModal) || window.openSpellModal;
+                if (level && idx >= 0 && openFn) {
+                    openFn(level, idx, char, (updatedChar) => {
+                        if (updatedChar) {
+                            Object.assign(char, updatedChar);
+                            saveAndEmit(char);
+                            renderSheetData(char);
+                        }
+                    });
+                }
+            });
+        });
 
         const renderMacroRowHtml = (m, i) => `
             <div class="macro-row glassmorphism" data-idx="${i}" data-category-id="${m.categoryId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:6px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
@@ -6386,85 +6370,97 @@ function simulateRoll(formula, critRange = 20) {
                 if (charLvl >= 11) cCount = 3;
                 if (charLvl >= 17) cCount = 4;
                 for (let d of list) {
-                    if (d.formula.match(/(?:\d+\s*)?[dD]\s*\d+/)) {
-                        d.formula = d.formula.replace(/(?:\d+\s*)?([dD]\s*\d+)/, `${cCount}$1`);
+                    if (d.formula && d.formula.match(/(?:\d+\s*)?[dD]\s*\d+/)) {
+                        d.formula = d.formula.replace(/^(\d+)\s*([dD]\s*\d+)/, (m, countStr, die) => {
+                            const count = parseInt(countStr);
+                            if (count === 0) {
+                                const extraDice = cCount - 1;
+                                return extraDice > 0 ? `${extraDice}${die}` : '0';
+                            }
+                            return `${cCount * count}${die}`;
+                        });
                     }
                 }
             } else if (castLvl > baseLvl && sp.upcastBonus && list.length > 0) {
-                const extra = castLvl - baseLvl;
-                const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                if (upcastMatch) {
-                    const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                    const extraDice = diceCount * extra;
-                    const uSize = "d" + upcastMatch[2];
-                    
-                    let merged = false;
-                    for (let d of list) {
-                        const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                        let m = d.formula.match(diceRegex);
-                        if (m) {
-                            const baseCount = m[1] ? parseInt(m[1]) : 1;
-                            d.formula = d.formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
-                            merged = true;
-                            break;
+                const step = sp.upcastScaleStep || 1;
+                const extra = Math.floor((castLvl - baseLvl) / step);
+                if (extra > 0) {
+                    const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
+                    if (upcastMatch) {
+                        const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
+                        const extraDice = diceCount * extra;
+                        const uSize = "d" + upcastMatch[2];
+                        
+                        let merged = false;
+                        for (let d of list) {
+                            const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
+                            let m = d.formula.match(diceRegex);
+                            if (m) {
+                                const baseCount = m[1] ? parseInt(m[1]) : 1;
+                                d.formula = d.formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
+                                merged = true;
+                                break;
+                            }
                         }
+                        if (!merged) {
+                            list[0].formula += ` + ${extraDice}${uSize}`;
+                        }
+                    } else if (!isNaN(parseInt(sp.upcastBonus))) {
+                        list[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
                     }
-                    if (!merged) {
-                        list[0].formula += ` + ${extraDice}${uSize}`;
-                    }
-                } else if (!isNaN(parseInt(sp.upcastBonus))) {
-                    list[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
                 }
             }
             return list;
         }
 
-        document.querySelectorAll('.pc-spell-expand-btn').forEach(btn => btn.addEventListener('click', (e) => {
-            const item = e.currentTarget.closest('.cs-spell-item');
+        document.querySelectorAll('.pc-spell-expand-btn').forEach(btn => btn.addEventListener('click', async (e) => {
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            if (!item) return;
             const details = item.querySelector('.pc-spell-details');
             const nameEl = item.querySelector('.pc-spell-name');
-            const spellName = nameEl.textContent.trim();
-            const descEl = details.querySelector('.pc-spell-desc');
+            const spellName = nameEl ? nameEl.textContent.trim() : 'Spell';
+            const descEl = details ? details.querySelector('.pc-spell-desc') : null;
             const chevron = e.currentTarget.querySelector('.fa-chevron-right');
 
             const postChatBtn = item.querySelector('.pc-spell-post-chat');
-            const level = postChatBtn ? postChatBtn.dataset.level : null;
-            const idx = postChatBtn ? postChatBtn.dataset.idx : null;
-            const sp = (level && idx !== null && char.spells[level]) ? char.spells[level][idx] : null;
+            const level = item.dataset.level || (postChatBtn ? postChatBtn.dataset.level : null);
+            const idx = item.dataset.idx !== undefined ? parseInt(item.dataset.idx) : (postChatBtn ? parseInt(postChatBtn.dataset.idx) : null);
+            const sp = (level && idx !== null && !isNaN(idx) && char?.spells?.[level]) ? char.spells[level][idx] : null;
 
-            if (details.style.display === 'none') {
-                details.style.display = 'block';
-                chevron.style.transform = 'rotate(90deg)';
-                if (!spellCache && window.DataUtil?.spell) {
-                    descEl.innerHTML = `<em>Loading spell data...</em>`;
-                    window.DataUtil.spell.pLoadAll().then(spells => {
-                        spellCache = spells;
-                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
-                    });
-                } else if (spellCache) {
-                    renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
+            if (details) {
+                if (details.style.display === 'none') {
+                    details.style.display = 'block';
+                    if (chevron) chevron.style.transform = 'rotate(90deg)';
+                    if (sp && window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
+                        await window.VTTSpellManager.ensureSpellIsParsed(sp);
+                    }
+                    if (window.VTTSpellManager && window.VTTSpellManager.renderAndInjectSpell) {
+                        window.VTTSpellManager.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level);
+                    } else {
+                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level);
+                    }
                 } else {
-                    descEl.innerHTML = `<em>Could not load spell data.</em>`;
+                    details.style.display = 'none';
+                    if (chevron) chevron.style.transform = 'rotate(0deg)';
                 }
-            } else {
-                details.style.display = 'none';
-                chevron.style.transform = 'rotate(0deg)';
             }
         }));
 
-        document.querySelectorAll('.pc-spell-post-chat').forEach(btn => btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.pc-spell-post-chat').forEach(btn => btn.addEventListener('click', async (e) => {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = char.spells[level][idx];
-            const item = e.currentTarget.closest('.cs-spell-item');
-            const descEl = item.querySelector('.pc-spell-desc');
-            
-            const postToChat = (html) => {
-                const meta = getSpellMetaStrings(sp);
-                let cleanedText = html || '';
-                cleanedText = cleanedText.replace(/<div class="spell-meta"[^>]*>[\s\S]*?<\/div>/ig, '');
-                cleanedText = cleanSpellHtml(cleanedText);
+            const sp = char?.spells?.[level]?.[idx];
+            if (!sp) return;
 
+            if (window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
+                await window.VTTSpellManager.ensureSpellIsParsed(sp);
+            }
+
+            const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
+            if (window.VTTSpellManager && window.VTTSpellManager.postSpellToChat) {
+                window.VTTSpellManager.postSpellToChat(sp, level, char.name, visibility);
+            } else {
+                const meta = getSpellMetaStrings(sp, level);
                 let metaHtml = '';
                 if (meta && (meta.level || meta.school || meta.time || meta.range || meta.components || meta.duration)) {
                     metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
@@ -6476,25 +6472,9 @@ function simulateRoll(formula, critRange = 20) {
                     if (meta.duration) metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${meta.duration}</div>`;
                     metaHtml += '</div>';
                 }
-
-                vtt.socket.emit('chat:msg', { abilityCard: { creatureName: char.name, abilityName: sp.name, text: metaHtml + cleanedText, ...meta } });
-            };
-            
-            if (descEl.innerHTML.includes('Loading spell details...')) {
-                const nameEl = item.querySelector('.pc-spell-name');
-                const spellName = nameEl.textContent.trim();
-                if (!spellCache && window.DataUtil?.spell) {
-                    window.DataUtil.spell.pLoadAll().then(spells => {
-                        spellCache = spells;
-                        renderAndInjectSpell(spellName, descEl, sp.description || '', sp);
-                        postToChat(descEl.innerHTML);
-                    }).catch(() => postToChat(sp.description || ''));
-                } else if (spellCache) {
-                    renderAndInjectSpell(spellName, descEl, sp.description || '', sp);
-                    postToChat(descEl.innerHTML);
-                } else postToChat(sp.description || '');
-            } else {
-                postToChat(descEl.innerHTML);
+                let bodyText = sp.description || '';
+                if (typeof cleanSpellHtml === 'function') bodyText = cleanSpellHtml(bodyText);
+                vtt.socket.emit('chat:msg', { abilityCard: { creatureName: char.name, abilityName: sp.name, text: metaHtml + bodyText, ...meta } });
             }
         }));
 
@@ -6502,39 +6482,21 @@ function simulateRoll(formula, critRange = 20) {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
             const sp = char.spells[level][idx];
+            if (!sp) return;
             
-            const emitMacro = (castLvl) => {
-                let card = { charName: char.name, macroName: sp.name };
-                if (castLvl) card.macroName += ` (Level ${castLvl})`;
-                if (sp.macroDescription) card.description = sp.macroDescription;
-                
-                const r = evaluateAttackRoll(sp, true);
-                if (r) card.atkRoll = r;
-                
-                const saveInfo = evaluateSaveDc(sp, true);
-                if (saveInfo) {
-                    card.saveDc = saveInfo.dc;
-                    card.saveAbility = saveInfo.ability;
-                    card.target = `${saveInfo.ability} Save DC ${saveInfo.dc}`;
-                }
-
-                const dmgList = getUpcastedDamage(sp, castLvl || 0, level === 'cantrip' || level === 'legacy' ? 0 : parseInt(level.replace('level', '')), char.level || 1);
-                if (dmgList.length > 0) {
-                    const m = { damage: dmgList };
-                    let isCrit = r && r.isCritSuccess;
-                    const rolls = evaluateDamageRolls(m, true, isCrit);
-                    if (rolls && rolls.length) card.dmgRolls = rolls;
-                }
-                
-                vtt.socket.emit('chat:msg', { macroCard: card });
-            };
-
-            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus) {
-                promptUpcastLevel(parseInt(level.replace('level', '')), (lvl) => {
-                    if (lvl) emitMacro(lvl);
+            const upcastFn = window.VTTSpellManager?.promptUpcastLevel || promptUpcastLevel;
+            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+                upcastFn(parseInt(level.replace('level', '')) || 1, (lvl) => {
+                    if (lvl) {
+                        if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
+                            window.VTTSpellManager.rollSpell(sp, level, char, { type: 'roll', castLvl: lvl });
+                        }
+                    }
                 });
             } else {
-                emitMacro(null);
+                if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
+                    window.VTTSpellManager.rollSpell(sp, level, char, { type: 'roll' });
+                }
             }
         }));
 
@@ -6550,15 +6512,8 @@ function simulateRoll(formula, critRange = 20) {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
             const sp = char.spells[level][idx];
-            const r = evaluateAttackRoll(sp);
-            if (r) {
-                vtt.socket.emit('chat:msg', {
-                    macroCard: {
-                        charName: char.name,
-                        macroName: sp.name + " (Spell Attack)",
-                        atkRoll: r
-                    }
-                });
+            if (sp && window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
+                window.VTTSpellManager.rollSpell(sp, level, char, { type: 'attack' });
             }
         }));
 
@@ -6566,17 +6521,8 @@ function simulateRoll(formula, critRange = 20) {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
             const sp = char.spells[level][idx];
-            const saveInfo = evaluateSaveDc(sp, true);
-            if (saveInfo) {
-                vtt.socket.emit('chat:msg', {
-                    macroCard: {
-                        charName: char.name,
-                        macroName: sp.name + " (Spell Save)",
-                        saveDc: saveInfo.dc,
-                        saveAbility: saveInfo.ability,
-                        target: `${saveInfo.ability} Save DC ${saveInfo.dc}`
-                    }
-                });
+            if (sp && window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
+                window.VTTSpellManager.rollSpell(sp, level, char, { type: 'save' });
             }
         }));
 
@@ -6584,30 +6530,21 @@ function simulateRoll(formula, critRange = 20) {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
             const sp = char.spells[level][idx];
+            if (!sp) return;
             
-            const emitDamage = (castLvl) => {
-                const dmgList = getUpcastedDamage(sp, castLvl || 0, level === 'cantrip' || level === 'legacy' ? 0 : parseInt(level.replace('level', '')), char.level || 1);
-                if (dmgList.length > 0) {
-                    const m = { damage: dmgList };
-                    const rolls = evaluateDamageRolls(m, true);
-                    if (rolls && rolls.length) {
-                        vtt.socket.emit('chat:msg', {
-                            macroCard: {
-                                charName: char.name,
-                                macroName: sp.name + (castLvl ? ` (Level ${castLvl})` : '') + " (Damage)",
-                                dmgRolls: rolls
-                            }
-                        });
+            const upcastFn = window.VTTSpellManager?.promptUpcastLevel || promptUpcastLevel;
+            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+                upcastFn(parseInt(level.replace('level', '')) || 1, (lvl) => {
+                    if (lvl) {
+                        if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
+                            window.VTTSpellManager.rollSpell(sp, level, char, { type: 'damage', castLvl: lvl });
+                        }
                     }
-                }
-            };
-
-            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus) {
-                promptUpcastLevel(parseInt(level.replace('level', '')), (lvl) => {
-                    if (lvl) emitDamage(lvl);
                 });
             } else {
-                emitDamage(null);
+                if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
+                    window.VTTSpellManager.rollSpell(sp, level, char, { type: 'damage' });
+                }
             }
         }));
 

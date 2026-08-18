@@ -526,12 +526,13 @@ export function initVttChat(vtt, chatHistory) {
 
             // Save DC row
             let saveSection = '';
-            if (mc.saveInfo) {
+            const saveObj = mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
+            if (saveObj) {
                 saveSection = `
                     <div class="macro-card-row">
-                        <div class="macro-row-label"><i class="fa-solid fa-shield-halved macro-row-icon" style="color:#a5d6a7;"></i> ${mc.saveInfo.ability} Save DC</div>
+                        <div class="macro-row-label"><i class="fa-solid fa-shield-halved macro-row-icon" style="color:#a5d6a7;"></i> ${saveObj.ability} Save DC</div>
                         <div class="macro-row-right">
-                            <span class="macro-row-total" style="color:#a5d6a7;">${mc.saveInfo.dc}</span>
+                            <span class="macro-row-total" style="color:#a5d6a7;">${saveObj.dc}</span>
                         </div>
                     </div>`;
             }
@@ -556,14 +557,6 @@ export function initVttChat(vtt, chatHistory) {
                     </div>`;
             }).join('');
 
-            let metaSection = '';
-            if (mc.range || mc.target) {
-                const parts = [];
-                if (mc.range) parts.push(`<strong>Range:</strong> ${mc.range}`);
-                if (mc.target) parts.push(`<strong>Target:</strong> ${mc.target}`);
-                metaSection = `<div class="macro-card-meta" style="font-size:0.9rem; color:var(--color-text-muted); padding:6px 12px; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; gap:12px; background:rgba(0,0,0,0.15); font-family:var(--font-primary);">${parts.join(' &nbsp;•&nbsp; ')}</div>`;
-            }
-
             bodyText = `
                 <div class="macro-chat-card">
                     <div class="macro-card-header">
@@ -575,7 +568,6 @@ export function initVttChat(vtt, chatHistory) {
                             </div>
                         </div>
                     </div>
-                    ${metaSection}
                     ${descSection}
                     <div class="macro-card-rows">
                         ${atkSection}
@@ -1102,13 +1094,140 @@ export function initVttChat(vtt, chatHistory) {
             initContainer.classList.add('is-minimized');
         });
 
-        // Position changes
+        // Position & Free-Drag settings
+        const hudPosition = document.getElementById('hud-init-position');
+        const btnDrag = document.getElementById('btn-init-drag');
+
+        function updateChevronIcons(pos) {
+            const prevIcon = document.querySelector('#btn-init-prev i');
+            const nextIcon = document.querySelector('#btn-init-next i');
+            if (!prevIcon || !nextIcon) return;
+
+            const isHorizontal = pos === 'top' || pos === 'bottom' || pos === 'custom';
+            if (isHorizontal) {
+                prevIcon.className = 'fa-solid fa-chevron-left';
+                nextIcon.className = 'fa-solid fa-chevron-right';
+            } else {
+                prevIcon.className = 'fa-solid fa-chevron-up';
+                nextIcon.className = 'fa-solid fa-chevron-down';
+            }
+        }
+
+        function setPositionStyle(pos, coords = null) {
+            initContainer.classList.remove('pos-right', 'pos-top', 'pos-bottom', 'pos-custom');
+            initContainer.classList.add(`pos-${pos}`);
+
+            if (pos !== 'custom') {
+                initContainer.style.top = '';
+                initContainer.style.left = '';
+                initContainer.style.right = '';
+                initContainer.style.bottom = '';
+            } else if (coords && Number.isFinite(coords.left) && Number.isFinite(coords.top)) {
+                initContainer.style.left = `${coords.left}px`;
+                initContainer.style.top = `${coords.top}px`;
+                initContainer.style.right = 'auto';
+                initContainer.style.bottom = 'auto';
+            }
+
+            updateChevronIcons(pos);
+
+            if (configPosition) configPosition.value = pos;
+            if (hudPosition) hudPosition.value = pos;
+            localStorage.setItem('vtt_initiative_position_style', pos);
+        }
+
         if (configPosition) {
-            configPosition.addEventListener('change', (e) => {
-                const pos = e.target.value;
-                initContainer.classList.remove('pos-top', 'pos-bottom');
-                initContainer.classList.add(`pos-${pos}`);
-            });
+            configPosition.addEventListener('change', (e) => setPositionStyle(e.target.value));
+        }
+        if (hudPosition) {
+            hudPosition.addEventListener('change', (e) => setPositionStyle(e.target.value));
+        }
+
+        // Free dragging implementation
+        if (btnDrag && initContainer) {
+            let isDragging = false;
+            let startX = 0, startY = 0;
+            let startLeft = 0, startTop = 0;
+
+            const onPointerDown = (e) => {
+                isDragging = true;
+                const rect = initContainer.getBoundingClientRect();
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = rect.left;
+                startTop = rect.top;
+
+                initContainer.style.left = `${startLeft}px`;
+                initContainer.style.top = `${startTop}px`;
+                initContainer.style.right = 'auto';
+                initContainer.style.bottom = 'auto';
+                initContainer.classList.remove('pos-right', 'pos-top', 'pos-bottom');
+                initContainer.classList.add('pos-custom');
+
+                document.addEventListener('pointermove', onPointerMove);
+                document.addEventListener('pointerup', onPointerUp);
+                e.preventDefault();
+            };
+
+            const onPointerMove = (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                const newLeft = Math.max(0, Math.min(window.innerWidth - 100, startLeft + dx));
+                const newTop = Math.max(0, Math.min(window.innerHeight - 60, startTop + dy));
+
+                initContainer.style.left = `${newLeft}px`;
+                initContainer.style.top = `${newTop}px`;
+            };
+
+            const onPointerUp = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                document.removeEventListener('pointermove', onPointerMove);
+                document.removeEventListener('pointerup', onPointerUp);
+
+                const finalRect = initContainer.getBoundingClientRect();
+                const coords = { left: Math.round(finalRect.left), top: Math.round(finalRect.top) };
+                localStorage.setItem('vtt_initiative_custom_coords', JSON.stringify(coords));
+                localStorage.setItem('vtt_initiative_position_style', 'custom');
+
+                [configPosition, hudPosition].forEach(sel => {
+                    if (sel && !sel.querySelector('option[value="custom"]')) {
+                        const opt = document.createElement('option');
+                        opt.value = 'custom';
+                        opt.textContent = 'Custom Dragged';
+                        sel.appendChild(opt);
+                    }
+                    if (sel) sel.value = 'custom';
+                });
+            };
+
+            btnDrag.addEventListener('pointerdown', onPointerDown);
+        }
+
+        // Restore saved position on load
+        const savedPosStyle = localStorage.getItem('vtt_initiative_position_style') || 'right';
+        if (savedPosStyle === 'custom') {
+            try {
+                const savedCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
+                if (savedCoords) {
+                    [configPosition, hudPosition].forEach(sel => {
+                        if (sel && !sel.querySelector('option[value="custom"]')) {
+                            const opt = document.createElement('option');
+                            opt.value = 'custom';
+                            opt.textContent = 'Custom Dragged';
+                            sel.appendChild(opt);
+                        }
+                    });
+                    setPositionStyle('custom', savedCoords);
+                } else {
+                    setPositionStyle('right');
+                }
+            } catch (err) {
+                setPositionStyle('right');
+            }
+        } else {
+            setPositionStyle(savedPosStyle);
         }
         
         if (configVisibility && vtt.role === 'GM') {

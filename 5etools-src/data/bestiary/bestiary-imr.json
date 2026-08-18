@@ -342,7 +342,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Barbatos is a 6th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He has the following ranger spells prepared:"
 					],
@@ -362,7 +362,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 6
 				}
 			],
 			"trait": [
@@ -545,7 +548,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The medusa's innate spellcasting ability is Charisma (spell save {@dc 13}). The medusa can innately cast the following spells, requiring no material components:"
 					],
@@ -556,7 +559,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -836,7 +842,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Moghadam is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). He has the following artificer spells prepared:"
 					],
@@ -889,7 +895,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 18
 				}
 			],
 			"trait": [
@@ -1022,7 +1031,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The neo-otyugh's innate spellcasting ability is Intelligence (spell save {@dc 12}). It can innately cast the following spells, requiring no components:"
 					],
@@ -1035,7 +1044,10 @@
 							"{@spell hold person}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1554,7 +1566,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Thessalar is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). He has the following artificer spells prepared:"
 					],
@@ -1607,7 +1619,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 18
 				}
 			],
 			"trait": [

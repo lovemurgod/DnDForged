@@ -579,7 +579,7 @@ export function initVttCreatureSheet(vtt) {
             });
         });
 
-        // Reset Slots Button
+        // Reset Slots & Usages Button
         contentEl.querySelectorAll('.cs-btn-reset-slots, #cs-reset-slots-btn').forEach(resetBtn => {
             resetBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -591,6 +591,20 @@ export function initVttCreatureSheet(vtt) {
                     curInput.value = maxVal;
                     syncSlotsState(level, maxVal, maxVal);
                 });
+                if (currentMonster) {
+                    currentMonster.dailyUsages = {};
+                    if (currentMonster.spells) {
+                        for (let lk in currentMonster.spells) {
+                            if (Array.isArray(currentMonster.spells[lk])) {
+                                currentMonster.spells[lk].forEach(sp => {
+                                    if (sp.usesMax !== undefined) sp.usesRemaining = sp.usesMax;
+                                });
+                            }
+                        }
+                    }
+                    saveMonsterData(currentMonster);
+                    renderSheetData(currentMonster);
+                }
             });
         });
 
@@ -880,7 +894,14 @@ export function initVttCreatureSheet(vtt) {
     function ensureSpellcastingFromTraits(m) {
         if (!m || !m.trait || !Array.isArray(m.trait) || m.trait.length === 0) return;
         
-        const scTraits = m.trait.filter(t => t && t.name && /spellcasting|psionics|innate|magic/i.test(t.name));
+        const scTraits = m.trait.filter(t => {
+            if (!t || !t.name) return false;
+            const name = t.name.toLowerCase();
+            if (name.includes('magic weapon') || name.includes('magic resistance') || name.includes('magic absorption') || name.includes('magic item') || name.includes('magic sensitivity') || name.includes('magic awareness')) {
+                return false;
+            }
+            return /(?:innate\s+)?spellcasting|psionics/i.test(t.name);
+        });
         if (scTraits.length === 0) return;
 
         m.spellcasting = m.spellcasting && Array.isArray(m.spellcasting) ? m.spellcasting : [];
@@ -980,17 +1001,34 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function ensureNpcSpells(m) {
+        if (!m) return {};
         ensureSpellcastingFromTraits(m);
-        if (m.spells && !m.spellcasting) return m.spells;
+
         let spells = {
             cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: []
         };
-
         m.dailyUsages = m.dailyUsages || {};
 
-        if (m.spellcasting && Array.isArray(m.spellcasting)) {
+        if (m.spellcasting && Array.isArray(m.spellcasting) && m.spellcasting.length > 0) {
             m.spellcasting.forEach((sc, scIdx) => {
                 sc.id = sc.id || ('sc_' + scIdx + '_' + Date.now());
+                const isBlockInnate = sc.type === 'innate';
+                const abilityStr = (sc.ability || 'int').toLowerCase();
+                const pb = getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0');
+                const abScore = m[abilityStr] || 10;
+                const abMod = Math.floor((abScore - 10) / 2);
+                const dcVal = sc.dc !== undefined ? sc.dc : (8 + pb + abMod);
+                const atkVal = sc.atkMod !== undefined ? sc.atkMod : (pb + abMod);
+                const casterLvlVal = sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0);
+
+                const scSpells = {
+                    cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: []
+                };
+                const scInnate = {
+                    will: [],
+                    daily: {}
+                };
+
                 if (sc.spells) {
                     for (let lvl in sc.spells) {
                         let levelKey = lvl === '0' ? 'cantrip' : 'level' + lvl;
@@ -1000,12 +1038,38 @@ export function initVttCreatureSheet(vtt) {
                             let spObj = typeof sp === 'object' ? sp : { id: 'sp_' + scIdx + '_' + lvl + '_' + spIdx, name: name, prepared: true };
                             spObj.id = spObj.id || ('sp_' + scIdx + '_' + lvl + '_' + spIdx);
                             spObj.name = name;
+                            spObj.spellcastingBlockId = sc.id;
+                            spObj.spellcastingBlockName = sc.name || 'Spellcasting';
+                            spObj.spellcastingType = sc.type || (isBlockInnate ? 'innate' : 'slot');
+                            spObj.ability = abilityStr;
+                            spObj.dc = dcVal;
+                            spObj.atkMod = atkVal;
+                            spObj.casterLevel = casterLvlVal;
+
+                            if (isBlockInnate) {
+                                if (levelKey === 'cantrip') {
+                                    spObj.uses = 'at_will';
+                                    spObj.innate = true;
+                                    scInnate.will.push(spObj);
+                                } else {
+                                    spObj.innate = true;
+                                    spObj.usesMax = 1;
+                                    spObj.usesRemaining = m.dailyUsages[spObj.id] !== undefined ? m.dailyUsages[spObj.id] : 1;
+                                    scInnate.daily['1e'] = scInnate.daily['1e'] || [];
+                                    scInnate.daily['1e'].push(spObj);
+                                }
+                            } else {
+                                if (scSpells[levelKey] && !scSpells[levelKey].some(s => s.name === name)) {
+                                    scSpells[levelKey].push(spObj);
+                                }
+                            }
                             if (spells[levelKey] && !spells[levelKey].some(s => s.name === name)) {
                                 spells[levelKey].push(spObj);
                             }
                         });
                     }
                 }
+
                 if (sc.will) {
                     sc.will.forEach((sp, spIdx) => {
                         let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
@@ -1013,12 +1077,27 @@ export function initVttCreatureSheet(vtt) {
                         spObj.id = spObj.id || ('sp_will_' + scIdx + '_' + spIdx);
                         spObj.name = name;
                         spObj.uses = 'at_will';
+                        spObj.spellcastingBlockId = sc.id;
+                        spObj.spellcastingBlockName = sc.name || 'Innate Spellcasting';
+                        spObj.spellcastingType = sc.type || 'innate';
+                        spObj.ability = abilityStr;
+                        spObj.dc = dcVal;
+                        spObj.atkMod = atkVal;
+                        spObj.casterLevel = casterLvlVal;
+
+                        if (isBlockInnate) {
+                            scInnate.will.push(spObj);
+                        } else {
+                            if (!scSpells.cantrip.some(s => s.name === name)) scSpells.cantrip.push(spObj);
+                        }
                         if (!spells.cantrip.some(s => s.name === name)) spells.cantrip.push(spObj);
                     });
                 }
+
                 if (sc.daily) {
                     for (let dailyKey in sc.daily) {
                         let usesMax = parseInt(dailyKey) || 1;
+                        scInnate.daily[dailyKey] = scInnate.daily[dailyKey] || [];
                         sc.daily[dailyKey].forEach((sp, spIdx) => {
                             let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
                             let spId = 'sp_daily_' + scIdx + '_' + dailyKey + '_' + spIdx;
@@ -1029,11 +1108,48 @@ export function initVttCreatureSheet(vtt) {
                             spObj.usesMax = usesMax;
                             spObj.usesRemaining = usesRemaining;
                             spObj.dailyKey = dailyKey;
+                            spObj.spellcastingBlockId = sc.id;
+                            spObj.spellcastingBlockName = sc.name || 'Innate Spellcasting';
+                            spObj.spellcastingType = sc.type || 'innate';
+                            spObj.ability = abilityStr;
+                            spObj.dc = dcVal;
+                            spObj.atkMod = atkVal;
+                            spObj.casterLevel = casterLvlVal;
+
+                            if (isBlockInnate) {
+                                scInnate.daily[dailyKey].push(spObj);
+                            } else {
+                                if (!scSpells.level1.some(s => s.name === name)) scSpells.level1.push(spObj);
+                            }
                             if (!spells.level1.some(s => s.name === name)) spells.level1.push(spObj);
                         });
                     }
                 }
+
+                sc.spellsObj = scSpells;
+                sc.innateObj = scInnate;
             });
+        } else if (m.spells && typeof m.spells === 'object') {
+            spells = m.spells;
+        }
+
+        if (window.VTTSpellManager && window.VTTSpellManager.getSpellCache) {
+            const cache = window.VTTSpellManager.getSpellCache();
+            if (cache && window.vttPlayerSheetAPI?.parseSpellToMacro) {
+                for (let lk in spells) {
+                    if (Array.isArray(spells[lk])) {
+                        spells[lk].forEach(spObj => {
+                            if (!spObj.macroPopulated && spObj.name) {
+                                const spData = cache.find(s => s.name.toLowerCase().trim() === spObj.name.toLowerCase().trim());
+                                if (spData) {
+                                    window.vttPlayerSheetAPI.parseSpellToMacro(spData, spObj, true);
+                                    spObj.macroPopulated = true;
+                                }
+                            }
+                        });
+                    }
+                }
+            }
         }
         m.spells = spells;
         return m.spells;
@@ -1069,10 +1185,10 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function buildSpellcastingHtml(m) {
-        ensureSpellcastingFromTraits(m);
         const spellsObj = ensureNpcSpells(m);
+        const allowEdit = Boolean(linkedCharacterId || m.isCustomNpc || m.isCompanion);
         const spellLevels = [
-            { key: 'cantrip', label: 'Cantrips/At Will' },
+            { key: 'cantrip', label: 'Cantrips' },
             { key: 'level1', label: '1st Level' },
             { key: 'level2', label: '2nd Level' },
             { key: 'level3', label: '3rd Level' },
@@ -1097,117 +1213,134 @@ export function initVttCreatureSheet(vtt) {
             m.spellcasting.forEach((sc, scIdx) => {
                 const scName = sc.name || 'Spellcasting';
                 const abilityStr = (sc.ability || 'INT').toUpperCase();
-                const dcVal = sc.dc || (sc.ability ? (8 + getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0') + Math.floor(((m[sc.ability] || 10) - 10) / 2)) : null);
-                const atkVal = sc.atkMod !== undefined ? sc.atkMod : (dcVal ? dcVal - 8 : null);
+                const pb = getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0');
+                const abScore = m[sc.ability ? sc.ability.toLowerCase() : 'int'] || 10;
+                const abMod = Math.floor((abScore - 10) / 2);
+                const dcVal = sc.dc !== undefined ? sc.dc : (8 + pb + abMod);
+                const atkVal = sc.atkMod !== undefined ? sc.atkMod : (pb + abMod);
+                const casterLvlVal = sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0);
+                const isInnate = sc.type === 'innate';
 
                 const hEntries = sc.headerEntries ? sc.headerEntries.map(e => formatRawEntry(e)).join('<br>') : '';
                 const fEntries = sc.footerEntries ? '<br>' + sc.footerEntries.map(e => formatRawEntry(e)).join('<br>') : '';
                 const desc = injectDiceChips(parse5eMarkup(hEntries + fEntries));
 
                 html += `
-                    <div class="cs-spellcasting-block" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid var(--color-gold-base);">
+                    <div class="cs-spellcasting-block" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid var(--color-gold-base); margin-bottom: 8px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">
                             <strong style="color:var(--color-gold-light); font-size: 1.05rem;"><i class="fa-solid fa-hand-sparkles" style="margin-right:6px;"></i>${scName}</strong>
                             <div style="display:flex; align-items:center; gap:6px; font-size:0.78rem;">
                                 <span style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); padding:2px 8px; border-radius:4px; font-weight:600;">${abilityStr}</span>
                                 ${dcVal ? `<span style="background:rgba(255,255,255,0.08); color:var(--color-text-primary); padding:2px 8px; border-radius:4px;">DC ${dcVal}</span>` : ''}
-                                ${atkVal !== null ? `<span style="background:rgba(255,255,255,0.08); color:var(--color-text-primary); padding:2px 8px; border-radius:4px;">${atkVal >= 0 ? '+' : ''}${atkVal} Atk</span>` : ''}
+                                ${atkVal !== undefined && atkVal !== null ? `<span style="background:rgba(255,255,255,0.08); color:var(--color-text-primary); padding:2px 8px; border-radius:4px;">${atkVal >= 0 ? '+' : ''}${atkVal} Atk</span>` : ''}
+                                ${casterLvlVal ? `<span style="background:rgba(255,255,255,0.08); color:var(--color-text-primary); padding:2px 8px; border-radius:4px;" title="Caster Level">CL ${casterLvlVal}</span>` : ''}
                             </div>
                         </div>
-                        ${desc ? `<div style="font-size: 0.88rem; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: 12px;">${desc}</div>` : ''}
+                        ${desc ? `<div style="font-size: 0.88rem; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: 8px;">${desc}</div>` : ''}
                 `;
 
-                if (sc.will && sc.will.length > 0) {
-                    html += `
-                        <div style="margin-bottom:10px;">
-                            <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); opacity:0.8; margin-bottom:4px;">At Will</div>
-                            <div style="display:flex; flex-direction:column; gap:6px;">
-                                ${sc.will.map((sp) => {
-                                    let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                                    let flatIdx = spellsObj.cantrip.findIndex(s => s.name === spName || s.id === sp.id);
-                                    if (flatIdx === -1) flatIdx = 0;
-                                    return renderSingleSpellRowHtml(sp, 'cantrip', flatIdx);
-                                }).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
+                // If Innate Spellcasting block: render At Will and Daily groups cleanly
+                if (isInnate) {
+                    const willList = sc.innateObj?.will || [];
+                    const dailyObj = sc.innateObj?.daily || {};
+                    const hasDaily = Object.keys(dailyObj).some(k => dailyObj[k] && dailyObj[k].length > 0);
 
-                if (sc.daily) {
-                    for (let dailyKey in sc.daily) {
-                        const usesMax = parseInt(dailyKey) || 1;
-                        const label = dailyKey.includes('e') ? `${usesMax}/day each` : `${usesMax}/day`;
-                        const dailyList = sc.daily[dailyKey];
+                    // At Will group
+                    if (willList.length > 0 || allowEdit) {
                         html += `
-                            <div style="margin-bottom:10px;">
-                                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); opacity:0.8; margin-bottom:4px;">${label}</div>
-                                <div style="display:flex; flex-direction:column; gap:6px;">
-                                    ${dailyList.map((sp, idx) => {
-                                        const spId = 'sp_daily_' + scIdx + '_' + dailyKey + '_' + idx;
-                                        const curUses = m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
-                                        let checkBoxesHtml = '<div style="display:inline-flex; align-items:center; gap:3px; margin-right:6px;" title="Remaining Daily Uses">';
-                                        for (let u = 0; u < usesMax; u++) {
-                                            const isChecked = u < curUses;
-                                            checkBoxesHtml += `<i class="cs-innate-use-checkbox ${isChecked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}" data-spell-id="${spId}" data-uses-max="${usesMax}" data-use-idx="${u}" style="cursor:pointer; color:var(--color-gold-base); font-size:0.9rem;"></i>`;
-                                        }
-                                        checkBoxesHtml += '</div>';
-                                        
-                                        let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                                        let flatIdx = spellsObj.level1.findIndex(s => s.name === spName || s.id === spId);
-                                        if (flatIdx === -1) flatIdx = 0;
-
-                                        let rowHtml = renderSingleSpellRowHtml(sp, 'level1', flatIdx);
-                                        rowHtml = rowHtml.replace(/(<div class="cs-spell-name"[^>]*>)/, `$1 ${checkBoxesHtml}`);
-                                        return rowHtml;
-                                    }).join('')}
+                            <div class="cs-spell-page" style="margin-bottom:8px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                                    <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-infinity" style="margin-right:4px;"></i> At Will</span>
+                                    ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="cantrip" data-block-id="${sc.id}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                                </div>
+                                <div style="display:flex; flex-direction:column; gap:8px;">
+                                    ${willList.length > 0 ? willList.map((sp, idx) => renderSingleSpellRowHtml(sp, 'cantrip', idx, allowEdit)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No at-will spells added.</div>'}
                                 </div>
                             </div>
                         `;
                     }
-                }
 
-                if (sc.spells) {
-                    for (let lvl in sc.spells) {
-                        const lvlKey = lvl === '0' ? 'cantrip' : 'level' + lvl;
-                        const lvlLabel = lvl === '0' ? 'Cantrips' : `Level ${lvl}`;
-                        const lvlObj = sc.spells[lvl];
-                        const rawList = Array.isArray(lvlObj) ? lvlObj : (lvlObj?.spells || []);
-                        const maxSlots = Array.isArray(lvlObj) ? 0 : (lvlObj?.slots || 0);
-                        const slotTrackerHtml = lvl !== '0' ? `
-                            <div class="cs-spell-level-slots" style="display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--color-border-subtle, #444);">
-                                <span style="color:var(--color-text-muted);">Slots:</span>
-                                <input type="number" class="cs-spell-slot-input" data-level="${lvlKey}" data-type="current" data-max="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Current Slots">
-                                <span style="color:var(--color-text-muted);">/</span>
-                                <input type="number" class="cs-spell-slot-input" data-level="${lvlKey}" data-type="max" value="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Max Slots">
-                            </div>
-                        ` : '';
+                    // Daily groups
+                    if (hasDaily || allowEdit) {
+                        const dailyKeys = Object.keys(dailyObj).length > 0 ? Object.keys(dailyObj).sort((a, b) => parseInt(b) - parseInt(a)) : ['1e'];
+                        dailyKeys.forEach(dailyKey => {
+                            const list = dailyObj[dailyKey] || [];
+                            if (list.length === 0 && !allowEdit) return;
+                            const count = parseInt(dailyKey) || 1;
+                            const isEach = dailyKey.endsWith('e');
+                            const label = isEach ? `${count}/Day Each` : `${count}/Day`;
 
-                        if (rawList && rawList.length > 0) {
                             html += `
-                                <div style="margin-bottom:10px;">
-                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                                        <span style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base);">${lvlLabel}</span>
-                                        ${slotTrackerHtml}
+                                <div class="cs-spell-page" style="margin-bottom:8px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                                        <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-regular fa-calendar-check" style="margin-right:4px;"></i> ${label}</span>
+                                        ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="level1" data-block-id="${sc.id}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
                                     </div>
-                                    <div style="display:flex; flex-direction:column; gap:6px;">
-                                        ${rawList.map((sp) => {
-                                            let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                                            let flatIdx = spellsObj[lvlKey] ? spellsObj[lvlKey].findIndex(s => s.name === spName) : 0;
-                                            if (flatIdx === -1) flatIdx = 0;
-                                            return renderSingleSpellRowHtml(sp, lvlKey, flatIdx);
-                                        }).join('')}
+                                    <div style="display:flex; flex-direction:column; gap:8px;">
+                                        ${list.length > 0 ? list.map((sp, idx) => {
+                                            const rowHtml = renderSingleSpellRowHtml(sp, 'level1', idx, allowEdit);
+                                            const usesMax = sp.usesMax || count;
+                                            const spId = sp.id;
+                                            const curUsages = m.dailyUsages?.[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
+                                            let boxesHtml = '';
+                                            for (let u = 0; u < usesMax; u++) {
+                                                const checked = u < curUsages;
+                                                boxesHtml += `<i class="cs-innate-use-checkbox ${checked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}" data-spell-id="${spId}" data-uses-max="${usesMax}" data-use-idx="${u}" style="cursor:pointer; color:var(--color-gold-base); font-size:1rem; margin-right:3px;" title="Daily Use ${u+1}/${usesMax}"></i>`;
+                                            }
+                                            return `
+                                                <div style="display:flex; flex-direction:column; gap:2px;">
+                                                    <div style="display:flex; align-items:center; justify-content:flex-end; padding:0 8px;">
+                                                        <span style="font-size:0.7rem; color:var(--color-text-muted); margin-right:6px;">Uses:</span>
+                                                        ${boxesHtml}
+                                                    </div>
+                                                    ${rowHtml}
+                                                </div>
+                                            `;
+                                        }).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No daily spells added.</div>'}
                                     </div>
                                 </div>
                             `;
-                        }
+                        });
                     }
+                } else {
+                    // Standard / Leveled Spells block
+                    const scSpellsObj = sc.spellsObj || spellsObj;
+                    spellLevels.forEach(sl => {
+                        const list = scSpellsObj[sl.key] || [];
+                        if (list.length === 0 && !allowEdit && m.spellcasting.length > 1) return;
+
+                        const maxSlots = getMaxSlotsForLevel(m, sl.key);
+                        const slotTrackerHtml = sl.key !== 'cantrip' ? `
+                            <div class="cs-spell-level-slots" style="display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--color-border-subtle, #444);">
+                                <span style="color:var(--color-text-muted);">Slots:</span>
+                                <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-type="current" data-max="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Current Slots">
+                                <span style="color:var(--color-text-muted);">/</span>
+                                <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-type="max" value="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Max Slots">
+                            </div>
+                        ` : '';
+
+                        html += `
+                            <div class="cs-spell-page" style="margin-bottom:8px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                                    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                        <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);">${sl.label}</span>
+                                        ${slotTrackerHtml}
+                                    </div>
+                                    ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}" data-block-id="${sc.id}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                                </div>
+                                <div style="display:flex; flex-direction:column; gap:8px;">
+                                    ${list.length > 0 ? list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx, allowEdit)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No spells added.</div>'}
+                                </div>
+                            </div>
+                        `;
+                    });
                 }
 
                 html += `</div>`;
             });
         } else {
             spellLevels.forEach(sl => {
-                const list = spellsObj[sl.key];
+                const list = spellsObj[sl.key] || [];
                 const maxSlots = getMaxSlotsForLevel(m, sl.key);
                 const slotTrackerHtml = sl.key !== 'cantrip' ? `
                     <div class="cs-spell-level-slots" style="display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--color-border-subtle, #444);">
@@ -1218,34 +1351,37 @@ export function initVttCreatureSheet(vtt) {
                     </div>
                 ` : '';
 
-                if (list && list.length > 0) {
-                    html += `
-                        <div class="cs-spell-page" style="margin-bottom:8px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                                    <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);">${sl.label}</span>
-                                    ${slotTrackerHtml}
-                                </div>
-                                ${linkedCharacterId ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                html += `
+                    <div class="cs-spell-page" style="margin-bottom:8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);">${sl.label}</span>
+                                ${slotTrackerHtml}
                             </div>
-                            <div style="display:flex; flex-direction:column; gap:8px;">
-                                ${list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx)).join('')}
-                            </div>
+                            ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
                         </div>
-                    `;
-                }
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            ${list.length > 0 ? list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx, allowEdit)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No spells added.</div>'}
+                        </div>
+                    </div>
+                `;
             });
         }
+
         html += `</div>`;
         return html;
     }
 
-    function renderSingleSpellRowHtml(sp, slKey, idx) {
+    function renderSingleSpellRowHtml(sp, slKey, idx, allowEdit = false) {
+        if (window.VTTSpellManager && window.VTTSpellManager.renderSpellRowHtml) {
+            return window.VTTSpellManager.renderSpellRowHtml(sp, slKey, idx, { allowEdit, classPrefix: 'cs-spell-' });
+        }
         if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderSpellRowHtml) {
             let rawHtml = window.vttPlayerSheetAPI.renderSpellRowHtml(sp, slKey, idx, false);
             rawHtml = rawHtml.replace(/pc-spell-/g, 'cs-spell-');
-            if (!linkedCharacterId) {
-                rawHtml = rawHtml.replace(/<button[^>]*cs-spell-edit[^>]*>[\s\S]*?<\/button>/, '');
+            if (!allowEdit) {
+                rawHtml = rawHtml.replace(/<button class="[^"]*cs-spell-edit[^"]*"[\s\S]*?<\/button>/gi, '');
+                rawHtml = rawHtml.replace(/<div class="cs-spell-drag-handle"[\s\S]*?<\/div>/gi, '');
             }
             return rawHtml;
         }
@@ -1303,6 +1439,15 @@ export function initVttCreatureSheet(vtt) {
         return '';
     }
 
+    function isPassiveAbility(name, rawEntries, cleanText) {
+        const combined = (name + ' ' + (typeof rawEntries === 'string' ? rawEntries : JSON.stringify(rawEntries)) + ' ' + cleanText).toLowerCase();
+        if (/\{@atk\s/i.test(combined) || /\{@hit\s/i.test(combined) || /\bto hit\b/i.test(combined)) return false;
+        if (/\{@dc\s/i.test(combined) || /\bsaving throw\b/i.test(combined) || /\bsave dc\b/i.test(combined)) return false;
+        if (/\{@damage\s/i.test(combined) || /\b\d+d\d+\b/i.test(combined)) return false;
+        if (/\{@recharge/i.test(combined) || /\brecharge\s+\d/i.test(combined)) return false;
+        return true;
+    }
+
     function buildAbilityEntryHtml(entry) {
         if (!entry) return '';
         const name = entry.name || '';
@@ -1317,14 +1462,23 @@ export function initVttCreatureSheet(vtt) {
             : `<span style="color:var(--color-primary); font-size:0.85em;"><i class="fa-solid fa-tower-broadcast"></i> Ping</span>`;
 
         const rawJson = encodeURIComponent(JSON.stringify(rawEntries));
+        const isPassive = isPassiveAbility(name, rawEntries, cleanText);
+
+        const nameSectionHtml = isPassive ? `
+            <div class="cs-ability-name cs-passive-trigger" title="Click to expand details" style="cursor: pointer; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;">
+                ${nameHtml} <span class="badge" style="background: rgba(255,255,255,0.08); color: var(--color-text-muted); font-size: 0.65rem; padding: 1px 6px; border-radius: 10px; font-weight: normal; text-transform: uppercase; letter-spacing: 0.5px;">Passive</span>
+            </div>
+        ` : `
+            <div class="cs-ability-name cs-macro-trigger" title="Click to roll macro" style="cursor: pointer; flex: 0 0 auto;">
+                ${nameHtml} <i class="fa-solid fa-dice-d20" style="font-size: 0.85em; opacity: 0.6; margin-left: 2px;"></i>
+            </div>
+        `;
 
         return `
             <div class="cs-ability-entry">
                 <div class="cs-ability-header">
                     <i class="cs-card-chevron fa-solid fa-chevron-right"></i>
-                    <div class="cs-ability-name cs-macro-trigger" title="Click to roll macro" style="cursor: pointer; flex: 0 0 auto;">
-                        ${nameHtml} <i class="fa-solid fa-dice-d20" style="font-size: 0.85em; opacity: 0.6; margin-left: 2px;"></i>
-                    </div>
+                    ${nameSectionHtml}
                     <div class="cs-ability-info-btn" title="Click to post description to chat" style="cursor: pointer; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: background 0.2s, color 0.2s; margin-left: auto;">
                         <i class="fa-solid fa-circle-info"></i>
                     </div>
@@ -1695,7 +1849,7 @@ export function initVttCreatureSheet(vtt) {
     }
 
     // ─── Event delegation for dice chips and ability name clicks ─────────────
-    contentEl.addEventListener('click', (e) => {
+    contentEl.addEventListener('click', async (e) => {
         const rollerTarget = e.target.closest('.dice-chip, .render-roller');
         if (rollerTarget) {
             if (rollerTarget.classList.contains('dc-chip')) {
@@ -1805,129 +1959,103 @@ export function initVttCreatureSheet(vtt) {
             return;
         }
         
+        const addSpellBtn = e.target.closest('.cs-btn-add-spell');
+        if (addSpellBtn) {
+            const level = addSpellBtn.dataset.level || 'cantrip';
+            const openFn = (window.VTTSpellManager && window.VTTSpellManager.openModal) || window.openSpellModal;
+            if (openFn) {
+                openFn(level, -1, currentMonster, (updatedChar) => {
+                    currentMonster = updatedChar;
+                    renderSheetData(currentMonster);
+                    saveMonsterData(currentMonster);
+                });
+            }
+            e.stopPropagation();
+            return;
+        }
+
+        const editSpellBtn = e.target.closest('.cs-spell-edit');
+        if (editSpellBtn) {
+            const level = editSpellBtn.dataset.level;
+            const idx = parseInt(editSpellBtn.dataset.idx);
+            const openFn = (window.VTTSpellManager && window.VTTSpellManager.openModal) || window.openSpellModal;
+            if (level && idx >= 0 && openFn) {
+                openFn(level, idx, currentMonster, (updatedChar) => {
+                    currentMonster = updatedChar;
+                    renderSheetData(currentMonster);
+                    saveMonsterData(currentMonster);
+                });
+            }
+            e.stopPropagation();
+            return;
+        }
+
         if (e.target.closest('.cs-spell-expand-btn')) {
             const item = e.target.closest('.cs-spell-item');
+            if (!item) return;
             const details = item.querySelector('.cs-spell-details');
             const nameEl = item.querySelector('.cs-spell-name');
-            const spellName = nameEl.textContent.trim();
-            const descEl = details.querySelector('.cs-spell-desc');
+            const spellName = nameEl ? nameEl.textContent.trim() : 'Spell';
+            const descEl = details ? details.querySelector('.cs-spell-desc') : null;
             const btnEl = item.querySelector('.cs-spell-expand-btn');
             
-            const editBtn = item.querySelector('.cs-spell-edit');
-            const level = editBtn ? editBtn.dataset.level : null;
-            const idx = editBtn ? editBtn.dataset.idx : null;
-            const sp = (level && idx && currentMonster.spells && currentMonster.spells[level]) ? currentMonster.spells[level][idx] : null;
+            const level = item.dataset.level || item.querySelector('[data-level]')?.dataset.level;
+            const idx = item.dataset.idx !== undefined ? parseInt(item.dataset.idx) : null;
+            const sp = (level && idx !== null && idx >= 0 && currentMonster?.spells?.[level]) ? currentMonster.spells[level][idx] : null;
 
-            if (details.style.display === 'none') {
-                details.style.display = 'block';
-                btnEl.classList.add('expanded');
-                
-                let activeCache = spellCache || (window.VTTSpellManager?.getSpellCache ? window.VTTSpellManager.getSpellCache() : null) || (window.vttPlayerSheetAPI?.getSpellCache ? window.vttPlayerSheetAPI.getSpellCache() : null);
-
-                if (!activeCache && (window.VTTSpellManager?.loadSpells || window.DataUtil?.spell)) {
-                    descEl.innerHTML = `<em>Loading spell data...</em>`;
-                    const pLoad = window.VTTSpellManager?.loadSpells ? window.VTTSpellManager.loadSpells() : window.DataUtil.spell.pLoadAll();
-                    pLoad.then(spells => {
-                        spellCache = spells;
-                        if (window.VTTSpellManager?.setSpellCache) window.VTTSpellManager.setSpellCache(spells);
-                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
-                    }).catch(err => {
-                        console.error(err);
-                        descEl.innerHTML = `<em>Error loading spell data: ${err.message || err.toString()}</em>`;
-                    });
-                } else if (activeCache) {
-                    spellCache = activeCache;
-                    renderAndInjectSpell(spellName, descEl, sp?.description || '', sp);
+            if (details) {
+                if (details.style.display === 'none') {
+                    details.style.display = 'block';
+                    if (btnEl) btnEl.classList.add('expanded');
+                    
+                    if (sp && window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
+                        await window.VTTSpellManager.ensureSpellIsParsed(sp);
+                    }
+                    if (window.VTTSpellManager && window.VTTSpellManager.renderAndInjectSpell) {
+                        window.VTTSpellManager.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level);
+                    }
                 } else {
-                    descEl.innerHTML = `<em>Cast ${spellName} (DataUtil not found)</em>`;
+                    details.style.display = 'none';
+                    if (btnEl) btnEl.classList.remove('expanded');
                 }
-            } else {
-                details.style.display = 'none';
-                btnEl.classList.remove('expanded');
             }
         }
 
         function getCleanedSpellBody(html) {
-            if (window.VTTSpellManager && window.VTTSpellManager.cleanSpellBodyHtml) {
-                return window.VTTSpellManager.cleanSpellBodyHtml(html);
-            }
             if (!html) return '';
             let cleaned = html;
             cleaned = cleaned.replace(/<div class="spell-meta"[^>]*>[\s\S]*?<\/div>/ig, '');
-            cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<h[12][^>]*>.*?<\/h[12]>\s*<\/td>\s*<\/tr>/ig, '');
-            cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*<\/td>\s*<\/tr>/ig, '');
-            cleaned = cleaned.replace(/<tr>\s*<td[^>]*>\s*<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>[\s\S]*?<\/td>\s*<\/tr>/ig, '');
-            cleaned = cleaned.replace(/<\/?tbody[^>]*>/g, '').replace(/<\/?tr[^>]*>/g, '').replace(/<\/?td[^>]*>/g, '<div>').replace(/<\/td>/g, '</div>');
-            cleaned = cleaned.replace(/<h[12][^>]*>.*?<\/h[12]>/ig, '');
-            cleaned = cleaned.replace(/<i>\s*(?:\d+(?:st|nd|rd|th)-level|cantrip).*?<\/i>\s*(?:<br\s*\/?>)*/ig, '');
-            cleaned = cleaned.replace(/<b>\s*(?:Casting Time|Range|Components|Duration)\s*:\s*<\/b>.*?(?:<br\s*\/?>|\n|$)/ig, '');
-            cleaned = cleaned.replace(/<div>\s*(?:<br\s*\/?>\s*)*/ig, '<div>');
-            cleaned = cleaned.replace(/(?:<br\s*\/?>\s*)+/g, '<br>');
-            cleaned = cleaned.replace(/^(?:\s*<br\s*\/?>)+|(?:\s*<br\s*\/?>)+$/ig, '');
             return cleaned.trim();
         }
 
         function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp) {
-            if (!spellCache && window.VTTSpellManager?.getSpellCache) {
-                spellCache = window.VTTSpellManager.getSpellCache();
-            }
-            if (!spellCache) return;
-            
-            const spell = spellCache.find(s => s.name.toLowerCase().trim() === spellName.toLowerCase().trim());
-            
             let metaHtml = '';
-            if (window.Parser) {
-                let meta = window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.getSpellMetaStrings ? window.vttPlayerSheetAPI.getSpellMetaStrings(sp || (spell ? { name: spell.name, level: spell.level, school: spell.school } : spellName)) : {};
-                let level = meta.level || (sp?.level !== undefined ? (Parser.spLevelToFullLevelText ? Parser.spLevelToFullLevelText(sp.level) : sp.level) : (spell ? Parser.spLevelToFullLevelText(spell.level) : ''));
-                let school = meta.school || (sp?.school || (spell ? Parser.spSchoolAbvToFull(spell.school) : ''));
-                let time = meta.time || (sp?.castingTime || (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : ''));
-                let range = meta.range || (sp?.range || (spell ? Parser.spRangeToFull(spell.range) : ''));
-                let components = meta.components || (sp?.components || (spell ? Parser.spComponentsToFull(spell.components, spell.level) : ''));
-                let duration = meta.duration || (sp?.duration || (spell ? Parser.spDurationToFull(spell.duration) : ''));
-                
-                time = typeof time === 'string' ? time : (spell ? Parser.spTimeListToFull(spell.time, spell.meta) : '');
-                range = typeof range === 'string' ? range : (spell ? Parser.spRangeToFull(spell.range) : '');
-                components = typeof components === 'string' ? components : (spell ? Parser.spComponentsToFull(spell.components, spell.level) : '');
-                duration = typeof duration === 'string' ? duration : (spell ? Parser.spDurationToFull(spell.duration) : '');
-                
-                metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
-                if (level) metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${level}</div>`;
-                if (school) metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${school}</div>`;
-                if (time) metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${time}</div>`;
-                if (range) metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${range}</div>`;
-                if (components) metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${components}</div>`;
-                if (duration) metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${duration}</div>`;
-                metaHtml += '</div>';
-            }
+            let meta = window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.getSpellMetaStrings ? window.vttPlayerSheetAPI.getSpellMetaStrings(sp || { name: spellName }) : {};
+            let level = meta.level || (sp?.level !== undefined ? sp.level : '');
+            let school = meta.school || sp?.school || '';
+            let time = meta.time || sp?.castingTime || '';
+            let range = meta.range || sp?.range || '';
+            let components = meta.components || sp?.components || '';
+            let duration = meta.duration || sp?.duration || '';
+            
+            metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
+            if (level !== undefined && level !== '') metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${level}</div>`;
+            if (school) metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${school}</div>`;
+            if (time) metaHtml += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${time}</div>`;
+            if (range) metaHtml += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${range}</div>`;
+            if (components) metaHtml += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${components}</div>`;
+            if (duration) metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${duration}</div>`;
+            metaHtml += '</div>';
 
-            let rawBody = '';
-            if (spell && RenderSpells) {
-                let rawRender = RenderSpells.getRenderedSpell(spell);
-                if (typeof rawRender === "string") {
-                    rawBody = rawRender;
-                } else {
-                    const temp = document.createElement("table");
-                    try {
-                        if (rawRender.appendTo) rawRender.appendTo(temp);
-                        else temp.appendChild(rawRender);
-                        rawBody = temp.innerHTML;
-                    } catch(e) {
-                        rawBody = rawRender.outerHTML || rawRender.innerHTML || String(rawRender);
-                    }
-                }
-            } else if (fallbackDesc && fallbackDesc.trim() !== '') {
-                rawBody = `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>`;
-            }
-
-            let cleanedBody = getCleanedSpellBody(rawBody);
+            let rawBody = sp?.description || fallbackDesc || '';
             if (typeof injectDiceChips === 'function') {
-                cleanedBody = injectDiceChips(cleanedBody);
+                rawBody = injectDiceChips(rawBody);
             }
             
-            if (!cleanedBody && !metaHtml) {
+            if (!rawBody && !metaHtml) {
                 containerEl.innerHTML = fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<em>Could not find full text for ${spellName}</em>`;
             } else {
-                containerEl.innerHTML = metaHtml + cleanedBody;
+                containerEl.innerHTML = metaHtml + rawBody;
             }
         }
     });
@@ -2322,30 +2450,57 @@ export function initVttCreatureSheet(vtt) {
                 const card = document.createElement('div');
                 card.className = 'cs-edit-sc-card';
                 card.style.cssText = "display:flex; flex-direction:column; gap:6px; padding:10px; background:var(--color-bg-dark); border-radius:6px; border:1px solid rgba(212,175,55,0.3);";
+                
+                const currentType = sc.type || 'slot';
+                const rechargeRule = sc.rechargeRule || (currentType === 'innate' ? 'long_rest' : 'long_rest');
+                const abVal = (sc.ability || 'int').toLowerCase();
+
                 card.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                        <input type="text" class="vtt-input sc-edit-name" value="${sc.name || 'Spellcasting'}" placeholder="Block Name (e.g. Innate Spellcasting)" style="flex:1; font-weight:600; color:var(--color-gold-base);">
+                        <input type="text" class="vtt-input sc-edit-name" value="${sc.name || 'Spellcasting'}" placeholder="Block Name (e.g. Innate Spellcasting, Fey Heritage)" style="flex:1; font-weight:600; color:var(--color-gold-base);">
                         <button class="btn btn-xxs btn-danger sc-edit-del"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                        <div style="flex:1; min-width:80px;">
-                            <label style="font-size:0.75rem; color:var(--color-text-muted);">Ability</label>
-                            <select class="vtt-input sc-edit-ability" style="width:100%;">
-                                ${['int','wis','cha','str','dex','con'].map(ab => `<option value="${ab}" ${sc.ability === ab ? 'selected' : ''}>${ab.toUpperCase()}</option>`).join('')}
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap:8px;">
+                        <div>
+                            <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Block Type</label>
+                            <select class="vtt-input sc-edit-type" style="width:100%;">
+                                <option value="innate" ${currentType === 'innate' ? 'selected' : ''}>Innate / Usage-Based</option>
+                                <option value="slot" ${currentType === 'slot' ? 'selected' : ''}>Class / Slot-Based</option>
+                                <option value="pact" ${currentType === 'pact' ? 'selected' : ''}>Pact Magic</option>
+                                <option value="custom" ${currentType === 'custom' ? 'selected' : ''}>Custom</option>
                             </select>
                         </div>
-                        <div style="flex:1; min-width:70px;">
-                            <label style="font-size:0.75rem; color:var(--color-text-muted);">Save DC</label>
-                            <input type="number" class="vtt-input sc-edit-dc" value="${sc.dc || ''}" placeholder="Auto" style="width:100%;">
+                        <div>
+                            <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Default Rest Rule</label>
+                            <select class="vtt-input sc-edit-recharge" style="width:100%;">
+                                <option value="long_rest" ${rechargeRule === 'long_rest' ? 'selected' : ''}>Long Rest (Daily)</option>
+                                <option value="short_rest" ${rechargeRule === 'short_rest' ? 'selected' : ''}>Short Rest</option>
+                                <option value="short_long" ${rechargeRule === 'short_long' ? 'selected' : ''}>Short/Long Rest</option>
+                                <option value="at_will" ${rechargeRule === 'at_will' ? 'selected' : ''}>At Will</option>
+                            </select>
                         </div>
-                        <div style="flex:1; min-width:70px;">
-                            <label style="font-size:0.75rem; color:var(--color-text-muted);">Atk Bonus</label>
+                        <div>
+                            <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Ability</label>
+                            <select class="vtt-input sc-edit-ability" style="width:100%;">
+                                ${['int','wis','cha','str','dex','con'].map(ab => `<option value="${ab}" ${abVal === ab ? 'selected' : ''}>${ab.toUpperCase()}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Save DC</label>
+                            <input type="number" class="vtt-input sc-edit-dc" value="${sc.dc !== undefined ? sc.dc : ''}" placeholder="Auto" style="width:100%;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Atk Bonus</label>
                             <input type="number" class="vtt-input sc-edit-atk" value="${sc.atkMod !== undefined ? sc.atkMod : ''}" placeholder="Auto" style="width:100%;">
                         </div>
+                        <div>
+                            <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Caster Lvl</label>
+                            <input type="number" class="vtt-input sc-edit-caster-level" value="${sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0)}" placeholder="0" min="0" max="20" style="width:100%;">
+                        </div>
                     </div>
-                    <div>
-                        <label style="font-size:0.75rem; color:var(--color-text-muted);">Description / Header Notes</label>
-                        <textarea class="vtt-input sc-edit-desc" style="width:100%; height:40px; font-size:0.8rem;" placeholder="e.g. The creature is a 5th-level spellcaster...">${sc.headerEntries ? sc.headerEntries.join('\\n') : ''}</textarea>
+                    <div style="margin-top:4px;">
+                        <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Description / Header Notes</label>
+                        <textarea class="vtt-input sc-edit-desc" style="width:100%; height:40px; font-size:0.8rem;" placeholder="e.g. The creature is a 5th-level spellcaster...">${sc.headerEntries ? sc.headerEntries.join('\n') : ''}</textarea>
                     </div>
                 `;
                 card.querySelector('.sc-edit-del').addEventListener('click', () => card.remove());
@@ -2356,7 +2511,7 @@ export function initVttCreatureSheet(vtt) {
 
         content.querySelector('#cs-edit-add-spellcasting-block').addEventListener('click', () => {
             m.spellcasting = m.spellcasting || [];
-            m.spellcasting.push({ name: 'Spellcasting', ability: 'int', headerEntries: [] });
+            m.spellcasting.push({ name: 'Spellcasting', type: 'slot', ability: 'int', headerEntries: [] });
             renderModalSpellcastingBlocks();
         });
 
@@ -2691,28 +2846,75 @@ export function initVttCreatureSheet(vtt) {
         // Save back to char
         // Extract Spellcasting Blocks
         const scCards = content.querySelectorAll('#cs-edit-spellcasting-blocks-list .cs-edit-sc-card');
-        if (scCards.length > 0) {
-            const newSpellcasting = [];
-            scCards.forEach((card, idx) => {
-                const scName = card.querySelector('.sc-edit-name').value.trim() || 'Spellcasting';
-                const ability = card.querySelector('.sc-edit-ability').value;
-                const dcRaw = card.querySelector('.sc-edit-dc').value.trim();
-                const atkRaw = card.querySelector('.sc-edit-atk').value.trim();
-                const descRaw = card.querySelector('.sc-edit-desc').value.trim();
+        const newSpellcasting = [];
+        scCards.forEach((card, idx) => {
+            const scName = card.querySelector('.sc-edit-name').value.trim() || 'Spellcasting';
+            const scType = card.querySelector('.sc-edit-type')?.value || 'slot';
+            const scRecharge = card.querySelector('.sc-edit-recharge')?.value || 'long_rest';
+            const ability = card.querySelector('.sc-edit-ability').value;
+            const dcRaw = card.querySelector('.sc-edit-dc').value.trim();
+            const atkRaw = card.querySelector('.sc-edit-atk').value.trim();
+            const clRaw = card.querySelector('.sc-edit-caster-level')?.value.trim();
+            const descRaw = card.querySelector('.sc-edit-desc').value.trim();
 
-                const existingBlock = (m.spellcasting && m.spellcasting[idx]) ? m.spellcasting[idx] : {};
-                const block = {
-                    ...existingBlock,
-                    name: scName,
-                    ability: ability,
-                    headerEntries: descRaw ? descRaw.split('\n') : []
-                };
-                if (dcRaw !== '') block.dc = parseInt(dcRaw) || undefined;
-                if (atkRaw !== '') block.atkMod = parseInt(atkRaw) || undefined;
-                newSpellcasting.push(block);
-            });
-            m.spellcasting = newSpellcasting;
-        }
+            const existingBlock = (m.spellcasting && m.spellcasting[idx]) ? m.spellcasting[idx] : {};
+            const casterLvlVal = clRaw !== undefined && clRaw !== '' ? (parseInt(clRaw) || 0) : 0;
+            const block = {
+                ...existingBlock,
+                name: scName,
+                type: scType,
+                rechargeRule: scRecharge,
+                ability: ability,
+                casterLevel: casterLvlVal,
+                headerEntries: descRaw ? descRaw.split('\n') : []
+            };
+
+            // If switching from innate to slot or slot to innate, restructure internal fields
+            if (scType === 'slot' || scType === 'pact') {
+                block.spells = block.spells || {};
+                if (block.will && Array.isArray(block.will) && block.will.length > 0) {
+                    block.spells['0'] = block.spells['0'] || { spells: [] };
+                    block.will.forEach(sp => {
+                        const sList = Array.isArray(block.spells['0']) ? block.spells['0'] : block.spells['0'].spells;
+                        if (sList && !sList.includes(sp)) sList.push(sp);
+                    });
+                    delete block.will;
+                }
+                if (block.daily && typeof block.daily === 'object') {
+                    for (let dKey in block.daily) {
+                        const dList = block.daily[dKey] || [];
+                        block.spells['1'] = block.spells['1'] || { spells: [] };
+                        const sList = Array.isArray(block.spells['1']) ? block.spells['1'] : block.spells['1'].spells;
+                        dList.forEach(sp => {
+                            if (sList && !sList.includes(sp)) sList.push(sp);
+                        });
+                    }
+                    delete block.daily;
+                }
+            } else if (scType === 'innate') {
+                if (block.spells && typeof block.spells === 'object') {
+                    block.will = block.will || [];
+                    block.daily = block.daily || { '1e': [] };
+                    for (let lvl in block.spells) {
+                        const rawList = Array.isArray(block.spells[lvl]) ? block.spells[lvl] : (block.spells[lvl]?.spells || []);
+                        if (lvl === '0') {
+                            rawList.forEach(sp => { if (!block.will.includes(sp)) block.will.push(sp); });
+                        } else {
+                            block.daily['1e'] = block.daily['1e'] || [];
+                            rawList.forEach(sp => { if (!block.daily['1e'].includes(sp)) block.daily['1e'].push(sp); });
+                        }
+                    }
+                    delete block.spells;
+                }
+            }
+
+            if (dcRaw !== '') block.dc = parseInt(dcRaw) || undefined; else delete block.dc;
+            if (atkRaw !== '') block.atkMod = parseInt(atkRaw) || undefined; else delete block.atkMod;
+            if (idx === 0) m.casterLevel = casterLvlVal;
+            newSpellcasting.push(block);
+        });
+        m.spellcasting = newSpellcasting;
+        m.spells = null;
 
         char.monsterData = m;
 
@@ -3181,23 +3383,8 @@ export function initVttCreatureSheet(vtt) {
             const m = currentMonster;
             if (!m || !m.spells || !m.spells[level] || !m.spells[level][idx]) return null;
             const sp = m.spells[level][idx];
-            if (sp.macroPopulated) return sp;
-            
-            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.getSpellCache && window.vttPlayerSheetAPI.parseSpellToMacro) {
-                let spellCache = window.vttPlayerSheetAPI.getSpellCache();
-                if (!spellCache && window.DataUtil && window.DataUtil.spell) {
-                    spellCache = await window.DataUtil.spell.pLoadAll();
-                    if (window.vttPlayerSheetAPI.setSpellCache) {
-                        window.vttPlayerSheetAPI.setSpellCache(spellCache);
-                    }
-                }
-                if (spellCache) {
-                    const spData = spellCache.find(s => s.name.toLowerCase() === sp.name.toLowerCase());
-                    if (spData) {
-                        window.vttPlayerSheetAPI.parseSpellToMacro(spData, sp, true);
-                        sp.macroPopulated = true;
-                    }
-                }
+            if (window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
+                return await window.VTTSpellManager.ensureSpellIsParsed(sp);
             }
             return sp;
         }
@@ -3209,7 +3396,16 @@ export function initVttCreatureSheet(vtt) {
             const level = e.currentTarget.dataset.level;
             const idx = parseInt(e.currentTarget.dataset.idx);
             await ensureSpellIsParsed(level, idx);
-            rollNpcSpell(level, idx, 'roll');
+            const sp = currentMonster?.spells?.[level]?.[idx];
+            const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
+            if (sp && level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+                const baseLvl = parseInt(level.replace('level', '')) || 1;
+                upcastFn(baseLvl, (lvl) => {
+                    if (lvl) rollNpcSpell(level, idx, 'roll', lvl);
+                });
+            } else {
+                rollNpcSpell(level, idx, 'roll');
+            }
         }));
         contentEl.querySelectorAll('.cs-spell-macro-attack').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
@@ -3219,49 +3415,64 @@ export function initVttCreatureSheet(vtt) {
             await ensureSpellIsParsed(level, idx);
             rollNpcSpell(level, idx, 'attack');
         }));
+        contentEl.querySelectorAll('.cs-spell-macro-save').forEach(btn => btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const level = e.currentTarget.dataset.level;
+            const idx = parseInt(e.currentTarget.dataset.idx);
+            await ensureSpellIsParsed(level, idx);
+            rollNpcSpell(level, idx, 'save');
+        }));
         contentEl.querySelectorAll('.cs-spell-macro-damage').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
             const level = e.currentTarget.dataset.level;
             const idx = parseInt(e.currentTarget.dataset.idx);
             await ensureSpellIsParsed(level, idx);
-            rollNpcSpell(level, idx, 'damage');
+            const sp = currentMonster?.spells?.[level]?.[idx];
+            const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
+            if (sp && level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+                const baseLvl = parseInt(level.replace('level', '')) || 1;
+                upcastFn(baseLvl, (lvl) => {
+                    if (lvl) rollNpcSpell(level, idx, 'damage', lvl);
+                });
+            } else {
+                rollNpcSpell(level, idx, 'damage');
+            }
         }));
-        contentEl.querySelectorAll('.cs-spell-post-chat').forEach(btn => btn.addEventListener('click', (e) => {
+        contentEl.querySelectorAll('.cs-spell-post-chat').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = currentMonster.spells[level][idx];
-            const item = e.currentTarget.closest('.cs-spell-item');
-            const descEl = item.querySelector('.cs-spell-desc');
-            
-            const postToChat = (html) => {
-                const meta = window.vttPlayerSheetAPI ? window.vttPlayerSheetAPI.getSpellMetaStrings(sp) : {};
-                vtt.socket.emit('chat:msg', { abilityCard: { creatureName: currentMonster.name, abilityName: sp.name, text: html, ...meta } });
-            };
-            
-            if (descEl.innerHTML.includes('Loading spell details...')) {
-                const nameEl = item.querySelector('.cs-spell-name');
-                const spellName = nameEl.textContent.trim();
-                const spellCache = window.vttPlayerSheetAPI ? window.vttPlayerSheetAPI.getSpellCache() : null;
-                
-                if (!spellCache && window.DataUtil && window.DataUtil.spell) {
-                    window.DataUtil.spell.pLoadAll().then(spells => {
-                        if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
-                            window.vttPlayerSheetAPI.setSpellCache(spells);
-                        }
-                        if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderAndInjectSpell) {
-                            window.vttPlayerSheetAPI.renderAndInjectSpell(spellName, descEl, sp.description || '', sp);
-                        }
-                        postToChat(descEl.innerHTML);
-                    }).catch(() => postToChat(sp.description || ''));
-                } else if (spellCache && window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderAndInjectSpell) {
-                    window.vttPlayerSheetAPI.renderAndInjectSpell(spellName, descEl, sp.description || '', sp);
-                    postToChat(descEl.innerHTML);
-                } else postToChat(sp.description || '');
+            const sp = currentMonster?.spells?.[level]?.[idx];
+            if (!sp) return;
+
+            await ensureSpellIsParsed(level, idx);
+
+            const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
+            if (window.VTTSpellManager && window.VTTSpellManager.postSpellToChat) {
+                window.VTTSpellManager.postSpellToChat(sp, level, currentMonster?.name || 'Creature', visibility);
             } else {
-                postToChat(descEl.innerHTML);
+                const meta = window.vttPlayerSheetAPI ? window.vttPlayerSheetAPI.getSpellMetaStrings(sp, level) : {};
+                let bodyText = sp.description || '';
+                if (typeof injectDiceChips === 'function') bodyText = injectDiceChips(bodyText);
+                const msgObj = { text: `pings ${sp.name}`, abilityCard: { creatureName: currentMonster?.name || 'Creature', abilityName: sp.name, text: bodyText, ...meta } };
+                if (visibility === 'private' || visibility === 'gm') { msgObj.to = vtt.username; vtt.socket.emit('chat:whisper', msgObj); }
+                else { vtt.socket.emit('chat:msg', msgObj); }
+            }
+        }));
+
+        contentEl.querySelectorAll('.cs-btn-add-spell, .btn-add-spell').forEach(btn => btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!currentMonster) return;
+            const level = e.currentTarget.dataset.level || 'cantrip';
+            if (window.VTTSpellManager) {
+                window.VTTSpellManager.openModal(level, -1, currentMonster, (updatedMonster) => {
+                    currentMonster = updatedMonster;
+                    saveAndRenderNpcSpells(currentMonster);
+                });
             }
         }));
 
@@ -3277,6 +3488,7 @@ export function initVttCreatureSheet(vtt) {
             
             if (char && window.VTTSpellManager) {
                 window.VTTSpellManager.openModal(level, idx, currentMonster, (updatedMonster) => {
+                    currentMonster = updatedMonster;
                     char.monsterData = updatedMonster;
                     window.VTT.socket.emit('character:update', { character: char });
                     const spellHtml = buildSpellcastingHtml(currentMonster);
@@ -3376,138 +3588,39 @@ export function initVttCreatureSheet(vtt) {
                 window.VTT.socket.emit('token:update', { token: window.VTT.currentToken });
             }
         }));
+
+        // Reset Slots & Daily Usages Button
+        contentEl.querySelector('#cs-reset-slots-btn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!currentMonster) return;
+            currentMonster.dailyUsages = {};
+
+            contentEl.querySelectorAll('.cs-spell-slot-input[data-type="current"]').forEach(input => {
+                const level = input.dataset.level;
+                const maxInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="max"][data-level="${level}"]`);
+                const maxVal = maxInput ? (parseInt(maxInput.value) || 0) : (parseInt(input.dataset.max) || 0);
+                input.value = maxVal;
+                syncSlotsState(level, maxVal, maxVal);
+            });
+
+            saveAndRenderNpcSpells(currentMonster);
+        });
     }
 
-    function rollNpcSpell(level, idx, type) {
+    function rollNpcSpell(level, idx, type, customCastLvl = null) {
         const m = currentMonster;
         if (!m || !m.spells || !m.spells[level] || !m.spells[level][idx]) return;
         const sp = m.spells[level][idx];
+        const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
 
-        const getAbilityMod = (ab) => {
-            const score = m[ab] || 10;
-            return Math.floor((score - 10) / 2);
-        };
-        const pb = getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0');
-        const spellCastingMod = m.spellcasting && m.spellcasting[0] && m.spellcasting[0].ability ? getAbilityMod(m.spellcasting[0].ability) : getAbilityMod('int');
-
-        let castLvl = level === 'cantrip' || level === 'legacy' ? 0 : parseInt(level.replace('level', ''));
-        const baseLvl = castLvl;
-        
-        const emitSpell = (actualCastLvl) => {
-            let atkRoll = null;
-            let saveInfo = null;
-            let dmgRolls = [];
-
-            if ((type === 'roll' || type === 'attack') && ((sp.attackStat && sp.attackStat !== 'none') || sp.attackBonus)) {
-                let formula = "1d20";
-                if (sp.attackBonus) {
-                    const bonusStr = String(sp.attackBonus).trim();
-                    formula += bonusStr.startsWith('+') || bonusStr.startsWith('-') ? bonusStr : ` + ${bonusStr}`;
-                } else {
-                    const mod = sp.attackStat === 'spell' ? spellCastingMod : getAbilityMod(sp.attackStat);
-                    formula += ` + ${mod}`;
-                    if (sp.attackProf) formula += ` + ${pb}`;
-                    if (sp.attackExtra) formula += ` + ${sp.attackExtra}`;
-                }
-                const res = window.vttPlayerSheetAPI.simulateRoll(formula);
-                atkRoll = res;
-            }
-
-            if ((type === 'roll' || type === 'save') && sp.saveAbility) {
-                let dc = 10;
-                if (sp.saveDcCustom) {
-                    dc = sp.saveDcCustom;
-                } else {
-                    const stat = sp.saveDcStat === 'spell' ? spellCastingMod : getAbilityMod(sp.saveDcStat || 'int');
-                    const prof = sp.saveDcProf !== false ? pb : 0;
-                    dc = 8 + prof + stat + (sp.saveDcExtra || 0);
-                }
-                saveInfo = { ability: sp.saveAbility, dc: dc };
-            }
-
-            if ((type === 'roll' || type === 'damage') && sp.damageList && sp.damageList.length > 0) {
-                let dList = JSON.parse(JSON.stringify(sp.damageList));
-                
-                if (baseLvl === 0 && sp.cantripScale) {
-                    const casterLvl = 1; 
-                    let cCount = casterLvl >= 17 ? 4 : casterLvl >= 11 ? 3 : casterLvl >= 5 ? 2 : 1;
-                    for (let d of dList) {
-                        if (d.formula.match(/(?:\d+\s*)?[dD]\s*\d+/)) {
-                            d.formula = d.formula.replace(/(?:\d+\s*)?([dD]\s*\d+)/, `${cCount}$1`);
-                        }
-                    }
-                } 
-                else if (actualCastLvl > baseLvl && sp.upcastBonus) {
-                    const extra = actualCastLvl - baseLvl;
-                    const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                    if (upcastMatch) {
-                        const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                        const uSize = "d" + upcastMatch[2];
-                        let merged = false;
-                        for (let d of dList) {
-                            const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                            let mMatch = d.formula.match(diceRegex);
-                            if (mMatch) {
-                                const baseCount = mMatch[1] ? parseInt(mMatch[1]) : 1;
-                                d.formula = d.formula.replace(diceRegex, `${baseCount + (diceCount * extra)}${uSize}`);
-                                merged = true;
-                                break;
-                            }
-                        }
-                        if (!merged) {
-
-                            dList[0].formula += ` + ${diceCount * extra}${uSize}`;
-                        }
-                    } else if (!isNaN(parseInt(sp.upcastBonus))) {
-                        dList[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
-                    }
-                }
-
-                let isCrit = atkRoll && atkRoll.isCritSuccess;
-                dList.forEach(d => {
-                    let dform = d.formula;
-                    if (isCrit) {
-                        dform = dform.replace(/(?:(\d+)\s*)?[dD]\s*(\d+)/gi, (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`);
-                    }
-                    if (d.stat && d.stat !== 'none' && d.stat !== '') {
-                        const mod = d.stat === 'spell' ? spellCastingMod : getAbilityMod(d.stat);
-                        dform += ` ${mod >= 0 ? '+' : ''}${mod}[${d.stat.toUpperCase()}]`;
-                    }
-                    if (d.custom && d.custom.trim() !== '') {
-                        let c = d.custom.trim();
-                        let cleanC = c.startsWith('+') || c.startsWith('-') ? c : '+' + c;
-                        dform += ` ${cleanC}[Custom]`;
-                    }
-                    if (d.prof) dform += ` + ${pb}[Prof]`;
-                    if (d.extra) dform += ` + ${d.extra}[Extra]`;
-                    const res = window.vttPlayerSheetAPI.simulateRoll(dform);
-                    dmgRolls.push({ formula: dform, type: d.type || '', roll: res });
-                });
-            }
-
-            const meta = window.vttPlayerSheetAPI ? window.vttPlayerSheetAPI.getSpellMetaStrings(sp) : {};
-            const card = {
-                charName: m.name,
-                macroName: sp.name,
-                description: sp.macroDescription || '',
-                atkRoll,
-                saveInfo,
-                dmgRolls,
-                ...meta
-            };
-
-            if (saveInfo) card.target = `${saveInfo.ability} Save DC ${saveInfo.dc}`;
-            
-            window.VTT.socket.emit('chat:msg', { macroCard: card });
-        };
-
-        if (type !== 'attack' && type !== 'damage' && type !== 'save' && level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus) {
-            const rawLvl = parseInt(level.replace('level', ''));
-            const upcastLvl = prompt(`Upcast ${sp.name}? Enter level (${rawLvl}-9) or leave empty for base.`, "");
-            if (upcastLvl === null) return; 
-            emitSpell(upcastLvl ? parseInt(upcastLvl) : rawLvl);
-        } else {
-            emitSpell(baseLvl);
+        if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
+            window.VTTSpellManager.rollSpell(sp, level, m, {
+                type: type,
+                castLvl: customCastLvl,
+                visibility: visibility
+            });
+            return;
         }
     }
 

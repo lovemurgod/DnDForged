@@ -675,7 +675,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Claugiyliamatar casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -702,7 +702,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 19,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"damageTagsLegendary": [],
@@ -1391,7 +1394,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no material components:"
 					],
@@ -1405,7 +1408,10 @@
 							"{@spell time stop}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 10,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"senseTags": [
@@ -1790,7 +1796,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Elister is a 5th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Elister has the following cleric spells prepared:"
 					],
@@ -1825,7 +1831,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"senseTags": [
@@ -1970,7 +1979,7 @@
 				{
 					"name": "Roleplaying Information",
 					"entries": [
-						"The blacksmith Ghelryn has a good heart, but he hates orcs and giants\u2014hates them with a fiery passion. He considers it the solemn duty of all dwarves to cave in their skulls!",
+						"The blacksmith Ghelryn has a good heart, but he hates orcs and giants—hates them with a fiery passion. He considers it the solemn duty of all dwarves to cave in their skulls!",
 						"Ideal: \"It is incumbent upon every dwarf to forge a legacy.\"",
 						"Bond: \"I stand for Clan Foehammer and all dwarvenkind.\"",
 						"Flaw: \"I never run from a fight, especially if it involves killing orcs or giants.\""
@@ -2573,7 +2582,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Iymrith casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -2590,7 +2599,10 @@
 						"When she casts her {@spell stone shape} spell, Iymrith can shape the targeted stone into a living {@creature gargoyle} instead of altering the stone as described in the spell's description. This transformation is permanent and can't be reversed or dispelled."
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2793,7 +2805,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Storvald casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability:"
 					],
@@ -2807,7 +2819,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -3118,7 +3133,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant's innate spellcasting ability is Charisma (spell save {@dc 17}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3134,7 +3149,10 @@
 							"{@spell water breathing}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3280,7 +3298,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Klauth casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 22}):"
 					],
@@ -3312,7 +3330,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 22,
+					"atkMod": 14,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3704,12 +3725,15 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Maegera casts {@spell fireball} (spell save {@dc 19}), requiring no material components and using Charisma as the spellcasting ability."
 					],
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4291,7 +4315,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Naxene casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 13}; {@hit 5} to hit with spell attacks):"
 					],
@@ -4308,7 +4332,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4399,7 +4426,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant casts one of the following spells, requiring no material spell components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -4415,7 +4442,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"damageTags": [
@@ -4685,7 +4715,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant casts one of the following spells, requiring no material spell components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -4701,7 +4731,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"damageTags": [
@@ -4820,7 +4853,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Othovir casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 13}; {@hit 5} to hit with spell attacks):"
 					],
@@ -4836,7 +4869,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4968,7 +5004,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Pow is a 9th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). Pow has the following wizard spells prepared:"
 					],
@@ -5019,7 +5055,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 9
 				}
 			],
 			"languageTags": [
@@ -5296,7 +5335,7 @@
 							"name": "Roleplaying Information",
 							"entries": [
 								"A skilled rider of rocs and whales, Shaldoor believes that Annam the All-Father shattered the ordning to push giants into war against the dragons. She is thrilled to be on the front lines in this great conflict!",
-								"Ideal: \"Giants are made for war\u2014storm giants most of all!\"",
+								"Ideal: \"Giants are made for war—storm giants most of all!\"",
 								"Bond: \"Ostoria is gone, yet I long for the return of a mighty giant empire.\"",
 								"Flaw: \"I like to rain destruction down upon my enemies, and I never show them mercy.\""
 							]
@@ -5316,7 +5355,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant casts one of the following spells, requiring no material spell components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -5332,7 +5371,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"damageTags": [
@@ -5958,7 +6000,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Slarkrethel casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 22}):"
 					],
@@ -5989,7 +6031,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 22,
+					"atkMod": 14,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6324,7 +6369,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no material components:"
 					],
@@ -6338,7 +6383,10 @@
 							"{@spell time stop}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6764,7 +6812,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Turlang casts one of the following spells, requiring no material spell components and using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -6791,7 +6839,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"spellcastingTags": [
@@ -6870,7 +6921,7 @@
 						"A retired adventurer, Urgala owns a respectable inn, the North shield House, and she doesn't want to see it or her neighbors' homes destroyed. She has no tolerance for monsters or bullies.",
 						"Ideal: \"We live in a violent world, and sometimes violence is necessary for survival.\"",
 						"Bond: \"My home is my life. Threaten it, and I'll hurt you.\"",
-						"Flaw: \"I know how treacherous and greedy adventurers can be. I don't trust them\u2014any of them.\""
+						"Flaw: \"I know how treacherous and greedy adventurers can be. I don't trust them—any of them.\""
 					]
 				}
 			],
@@ -7033,7 +7084,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Requires a Sacred Bundle)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The shaman casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 12}; {@hit 4} to hit with spell attacks):"
 					],
@@ -7054,7 +7105,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -7336,7 +7390,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant casts one of the following spells, requiring no material spell components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -7352,7 +7406,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"damageTags": [
@@ -7535,7 +7592,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The yakfolk is a 7th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The priest has the following cleric spells prepared:"
 					],
@@ -7580,7 +7637,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 7
 				}
 			],
 			"trait": [
@@ -7916,7 +7976,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Zephyros's innate spellcasting ability is Charisma. He can innately cast the following spells, requiring no material components:"
 					],
@@ -7937,11 +7997,14 @@
 							"{@spell gaseous form}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Zephyros casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 17}, {@hit 11} to hit with spell attacks):"
 					],
@@ -7968,7 +8031,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

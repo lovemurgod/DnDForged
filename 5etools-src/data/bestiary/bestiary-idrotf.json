@@ -150,7 +150,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Auril's innate spellcasting ability is Charisma (spell save {@dc 21}, {@hit 13} to hit with spell attacks). She can innately cast the following spells, requiring no material components:"
 					],
@@ -166,7 +166,10 @@
 							"{@spell ice storm}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -736,7 +739,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Avarice is a 10th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}; {@hit 6} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -789,7 +792,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -1826,7 +1832,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Dzaan is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -1890,7 +1896,10 @@
 					"footerEntries": [
 						"*See \"Actions\" below."
 					],
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 9
 				}
 			],
 			"savingThrowForcedSpell": [
@@ -1953,7 +1962,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The simulacrum is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -1986,7 +1995,10 @@
 					"footerEntries": [
 						"*See \"Actions\" below."
 					],
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 9
 				}
 			],
 			"action": [
@@ -2226,7 +2238,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Humanoid Form Only)",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The druid is a 9th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 14}; {@hit 6} to hit with spell attacks). It has the following druid spells prepared:"
 					],
@@ -2276,7 +2288,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 9
 				}
 			],
 			"action": [
@@ -2301,7 +2316,7 @@
 				{
 					"name": "Change Shape",
 					"entries": [
-						"The druid magically polymorphs into a beast form\u2014fox, mountain goat, owl, or wolf\u2014or back into its humanoid form. Any equipment it is wearing or carrying is absorbed or borne by the beast form (the druid's choice). It reverts to its humanoid form when it dies. The druid's statistics are the same in each form, except where noted in this stat block."
+						"The druid magically polymorphs into a beast form—fox, mountain goat, owl, or wolf—or back into its humanoid form. Any equipment it is wearing or carrying is absorbed or borne by the beast form (the druid's choice). It reverts to its humanoid form when it dies. The druid's statistics are the same in each form, except where noted in this stat block."
 					]
 				}
 			],
@@ -2917,7 +2932,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The ceremorph's innate spellcasting ability is Intelligence (spell save {@dc 15}). It can innately cast the following spells, requiring no components:"
 					],
@@ -2931,7 +2946,10 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3058,7 +3076,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The squidling's innate spellcasting ability is Intelligence (spell save {@dc 7}). It can innately cast {@spell levitate} at will, requiring no components."
 					],
@@ -3068,7 +3086,10 @@
 					"ability": "int",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 7,
+					"atkMod": -1,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3475,7 +3496,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Grandolpha's innate spellcasting ability is Wisdom (spell save {@dc 13}). She can innately cast the following spells, requiring no material components:"
 					],
@@ -3494,7 +3515,10 @@
 							"{@spell stoneskin} (self only)"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5399,7 +5423,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The ghost is a 6th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}). The ghost has the following wizard spells prepared:"
 					],
@@ -5430,7 +5454,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 6
 				}
 			],
 			"trait": [
@@ -5569,7 +5596,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Prisoner 237 is a 5th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 13}; {@hit 5} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -5609,7 +5636,10 @@
 					"footerEntries": [
 						"*Prisoner 237 needs material components to cast these spells."
 					],
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -5922,7 +5952,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Sephek can innately cast {@spell misty step} up to three times per day, requiring no components. His innate spellcasting ability is Charisma."
 					],
@@ -5932,7 +5962,10 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6191,7 +6224,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Spellix's spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -6213,7 +6246,10 @@
 					"footerEntries": [
 						"*See \"Actions\" below."
 					],
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6787,7 +6823,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Vellynne is an 8th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -6834,7 +6870,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 8
 				}
 			],
 			"trait": [
@@ -6948,7 +6987,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The verbeeg's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no components:"
 					],
@@ -6962,7 +7001,10 @@
 							"{@spell water walk}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -7247,7 +7289,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Xardorok's innate spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -7261,7 +7303,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

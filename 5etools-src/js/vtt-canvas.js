@@ -817,6 +817,7 @@ let lastBroadcastedTokens = {};
         selectedTokenIds.clear();
         selectedShapeIds.clear();
         selectedWallIdxs.clear();
+        otherMeasurements = {};
         activeDragTokenId = null;
         hoverTokenId = null;
         hoverTokenTimeout = null;
@@ -2003,8 +2004,8 @@ let lastBroadcastedTokens = {};
         }
         if (typeof otherMeasurements !== 'undefined') {
             Object.values(otherMeasurements).forEach(m => {
-                if (m.start && m.end) {
-                    drawMeasurementTemplate(ctxInteraction, m.start, m.end, m.shape || 'line', m.squareAnchor || 'center', m.beamWidth || 5, m.color || '#00ffff', m.username, null, null, true);
+                if (m.start && m.end && m.mapId === currentMapId) {
+                    drawMeasurementTemplate(ctxInteraction, m.start, m.end, m.shape || 'line', m.squareAnchor || 'center', m.beamWidth || 5, m.color || '#00ffff', m.username, null, m.points || null, true);
                 }
             });
         }
@@ -7660,6 +7661,12 @@ window.emitTokenUpdates = function(currentTokens) {
                 });
             }
         });
+
+        document.getElementById('measure-broadcast')?.addEventListener('change', (e) => {
+            if (!e.target.checked && localIsMeasuring) {
+                vtt.socket.emit('measure:clear', { mapId: currentMapId, username: vtt.username });
+            }
+        });
     }
 
     function setupLayersControls() {
@@ -8950,7 +8957,10 @@ window.emitTokenUpdates = function(currentTokens) {
                         const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
                         const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
                         const points = (measureAnchorPoints.length > 0) ? [...measureAnchorPoints, localMeasureEnd] : null;
-                        vtt.socket.emit('measure:updated', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
+                        const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
+                        if (broadcast) {
+                            vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
+                        }
                     }
                     renderAll();
                 }
@@ -8962,7 +8972,10 @@ window.emitTokenUpdates = function(currentTokens) {
                 const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
                 const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
                 const points = (rawShape === 'line' && measureAnchorPoints.length > 0) ? [...measureAnchorPoints, localMeasureEnd] : null;
-                vtt.socket.emit('measure:updated', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: rawShape, color, squareAnchor: anchor, beamWidth: beamW, points });
+                const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
+                if (broadcast) {
+                    vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: rawShape, color, squareAnchor: anchor, beamWidth: beamW, points });
+                }
                 renderAll();
             } else if (localIsShaping && activeTool === 'shape') {
                 const mouse = getCanvasMouseCoords(e);
@@ -9134,14 +9147,14 @@ window.emitTokenUpdates = function(currentTokens) {
                     isTokenMeasuring = false;
                     localIsMeasuring = false;
                     measureAnchorPoints = [];
-                    vtt.socket.emit('measure:cleared', { mapId: currentMapId, username: vtt.username });
+                    vtt.socket.emit('measure:clear', { mapId: currentMapId, username: vtt.username });
                     localMeasureStart = null;
                     localMeasureEnd = null;
                 }
             } else if (localIsMeasuring && activeTool === 'measure') {
                 localIsMeasuring = false;
                 measureAnchorPoints = [];
-                vtt.socket.emit('measure:cleared', { mapId: currentMapId, username: vtt.username });
+                vtt.socket.emit('measure:clear', { mapId: currentMapId, username: vtt.username });
                 localMeasureStart = null;
                 localMeasureEnd = null;
                 renderAll();
@@ -9460,7 +9473,7 @@ window.emitTokenUpdates = function(currentTokens) {
                     }
                     if (localIsMeasuring) {
                         localIsMeasuring = false;
-                        vtt.socket.emit('measure:cleared', { mapId: currentMapId, username: vtt.username });
+                        vtt.socket.emit('measure:clear', { mapId: currentMapId, username: vtt.username });
                         localMeasureStart = null;
                         localMeasureEnd = null;
                     }

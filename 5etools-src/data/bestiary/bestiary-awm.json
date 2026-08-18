@@ -305,7 +305,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The hag's spellcasting ability is Charisma (spell save {@dc 12}). It can innately cast the following spells:"
 					],
@@ -313,7 +313,11 @@
 						"{@spell dancing lights}",
 						"{@spell minor illusion}",
 						"{@spell vicious mockery}"
-					]
+					],
+					"dc": 12,
+					"atkMod": 3,
+					"casterLevel": 0,
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -793,7 +797,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The couatl's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring only verbal components:"
 					],
@@ -818,7 +822,10 @@
 							"{@spell scrying}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

@@ -467,7 +467,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The eye of fear and flame's innate spellcasting ability is Intelligence (spell save {@dc 16}). It can innately cast the following spells, requiring no components:"
 					],
@@ -481,7 +481,10 @@
 							"{@spell true seeing}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -620,7 +623,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant's innate spellcasting ability is Charisma. It can innately cast the following spells, requiring no material components:"
 					],
@@ -635,7 +638,10 @@
 							"{@spell misty step}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -761,7 +767,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The forlarren's innate spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -783,7 +789,10 @@
 							"{@spell mirror image}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1921,7 +1930,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Ygorl's innate spellcasting ability is Charisma (spell save {@dc 23}, {@hit 15} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -1954,7 +1963,10 @@
 					"footerEntries": [
 						"* Spell from Xanathar's Guide to Everything"
 					],
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 23,
+					"atkMod": 15,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

@@ -427,7 +427,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Arcturia is an 18th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). Arcturia can cast {@spell alter self} at will and has the following wizard spells prepared:"
 					],
@@ -514,7 +514,10 @@
 					"ability": "int",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 18
 				}
 			],
 			"damageTagsLegendary": [],
@@ -610,7 +613,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Ashtyrranthor's spellcasting ability is Charisma. She can innately cast the following spells, requiring no material components:"
 					],
@@ -624,7 +627,10 @@
 							"{@spell see invisibility}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 10,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"damageTagsLegendary": [],
@@ -743,7 +749,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Berlain is an 18th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). Berlain can cast {@spell disguise self} and invisibility at will and has the following wizard spells prepared:"
 					],
@@ -826,7 +832,10 @@
 					"footerEntries": [
 						"*Berlain casts these spells on herself before combat."
 					],
-					"ability": "int"
+					"ability": "int",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 18
 				}
 			],
 			"tokenCustom": true,
@@ -1184,7 +1193,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Cassiok is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 19}, {@hit 11} to hit with spell attacks). Cassiok can cast {@spell disguise self} and invisibility at will and has the following wizard spells prepared:"
 					],
@@ -1267,7 +1276,10 @@
 					"footerEntries": [
 						"*Cassiok casts these spells on himself before combat."
 					],
-					"ability": "int"
+					"ability": "int",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 18
 				}
 			],
 			"tokenCustom": true,
@@ -1515,7 +1527,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Dezmyr is a 19th-level spellcaster. Her spellcasting ability is Charisma (spell save {@dc 18}, {@hit 10} to hit with spell attacks). She has the following paladin spells prepared:"
 					],
@@ -1556,7 +1568,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 19
 				}
 			],
 			"languageTags": [
@@ -1721,7 +1736,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Ezzat is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -1802,7 +1817,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 18
 				}
 			],
 			"languageTags": [
@@ -2111,7 +2129,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mummy lord is a 10th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The mummy lord has the following cleric spells prepared:"
 					],
@@ -2166,7 +2184,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 10
 				}
 			],
 			"languageTags": [
@@ -2256,7 +2277,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Halaster is a 20th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 22}, {@hit 14} to hit with spell attacks). He can cast {@spell disguise self} and {@spell invisibility} at will. He can cast {@spell fly} and {@spell lightning bolt} once each without expending a spell slot, but can't do so again until he finishes a short or long rest. Halaster has the following wizard spells prepared:"
 					],
@@ -2357,7 +2378,10 @@
 					"hidden": [
 						"will",
 						"daily"
-					]
+					],
+					"dc": 22,
+					"atkMod": 14,
+					"casterLevel": 20
 				}
 			],
 			"trait": [
@@ -2766,7 +2790,7 @@
 				{
 					"name": "Pseudopod",
 					"entries": [
-						"{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}21 ({@damage 6d6}) acid damage, or 42 ({@damage 12d6}) acid damage while the ooze is enlarged. If the target is wearing nonmagical metal armor, its armor is partly corroded and takes a permanent and cumulative \u22121 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
+						"{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}21 ({@damage 6d6}) acid damage, or 42 ({@damage 12d6}) acid damage while the ooze is enlarged. If the target is wearing nonmagical metal armor, its armor is partly corroded and takes a permanent and cumulative −1 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
 					]
 				},
 				{
@@ -2810,7 +2834,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The pudding's spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It can cast the following spells, requiring no components:"
 					],
@@ -2828,7 +2852,10 @@
 							"{@spell shield}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"languageTags": [
@@ -3036,7 +3063,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Keresta is a 9th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 15}, {@hit 7} to hit with spell attacks). She has the following cleric spells prepared:"
 					],
@@ -3091,7 +3118,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 9
 				}
 			],
 			"legendaryGroup": {
@@ -3786,7 +3816,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Muiral is a 13th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -3854,7 +3884,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 13
 				}
 			],
 			"trait": [
@@ -4006,7 +4039,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow's innate spellcasting ability is Charisma (spell save {@dc 15}). The drow can innately cast the following spells, requiring no material components:"
 					],
@@ -4019,7 +4052,10 @@
 							"{@spell faerie fire}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"tokenCustom": true,
@@ -4565,7 +4601,7 @@
 			"spellcasting": [
 				{
 					"name": "Lesser Magic",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The behir casts {@spell color spray} or {@spell sleep}, requiring no components. Its spellcasting ability is Charisma (spell save {@dc 13})."
 					],
@@ -4579,11 +4615,14 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					]
+					],
+					"dc": 13,
+					"atkMod": 2,
+					"casterLevel": 0
 				},
 				{
 					"name": "Greater Magic (Costs 2 Actions)",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The behir casts {@spell invisibility} or {@spell misty step}, requiring no components."
 					],
@@ -4597,7 +4636,10 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					]
+					],
+					"dc": 10,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"hasToken": true
@@ -5422,7 +5464,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Trenzia is a 5th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). She requires no somatic or material components to cast its spells. Trenzia has the following wizard spells prepared:"
 					],
@@ -5453,7 +5495,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -5507,7 +5552,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Trobriand is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -5588,7 +5633,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 18
 				}
 			],
 			"damageTagsSpell": [

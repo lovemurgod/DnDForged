@@ -395,7 +395,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"will": [
 						"{@spell acid splash}",
 						"{@spell dancing lights}",
@@ -403,7 +403,11 @@
 					],
 					"footerEntries": [
 						"The hag's innate spellcasting ability is Charisma (spell save {@dc 12}). She can innately cast the following spells, requiring no material components. "
-					]
+					],
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0,
+					"ability": "int"
 				}
 			],
 			"trait": [

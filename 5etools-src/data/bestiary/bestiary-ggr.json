@@ -167,7 +167,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The archon's innate spellcasting ability is Wisdom (spell save {@dc 18}, {@hit 10} to hit with spell attacks). The archon can innately cast the following spells, requiring no material components:"
 					],
@@ -176,7 +176,10 @@
 						"{@spell command}",
 						"{@spell compelled duel}"
 					],
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -762,7 +765,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The biomancer is a 16th-level Simic spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The biomancer has the following wizard spells prepared:"
 					],
@@ -838,7 +841,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1220,7 +1226,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The witch's innate spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). The witch can innately cast the following spells, requiring no material components:"
 					],
@@ -1244,7 +1250,10 @@
 							"{@spell scorching ray} (at 3rd level)"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1668,7 +1677,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The cackler's innate spellcasting ability is Charisma (spell save {@dc 11}, {@hit 3} to hit with spell attacks). The cackler can innately cast the following spells, requiring no material components:"
 					],
@@ -1680,7 +1689,10 @@
 							"{@spell Tasha's hideous laughter}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2054,7 +2066,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dryad's innate spellcasting ability is Charisma (spell save {@dc 17}). The dryad can innately cast the following spells, requiring no material components:"
 					],
@@ -2074,7 +2086,10 @@
 							"{@spell wall of thorns}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2231,7 +2246,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The blastseeker's innate spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The blastseeker can innately cast the following spells, requiring no components other than its Izzet gear, which doesn't function for others:"
 					],
@@ -2245,7 +2260,10 @@
 							"{@spell thunderwave}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2352,7 +2370,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The blastseeker's innate spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The blastseeker can innately cast the following spells, requiring no components other than its Izzet gear, which doesn't function for others:"
 					],
@@ -2368,7 +2386,10 @@
 							"{@spell protection from energy}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2382,12 +2403,12 @@
 							"items": [
 								{
 									"type": "item",
-									"name": "1\u20133.",
+									"name": "1–3.",
 									"entry": "The blastseeker creates a 15-foot-radius {@condition invisible} sphere centered on itself that lasts until the end of its next turn. Creatures in the sphere have disadvantage on saving throws against spells and other magical effects."
 								},
 								{
 									"type": "item",
-									"name": "4\u20136.",
+									"name": "4–6.",
 									"entry": "The blastseeker creates a 15-foot-radius {@condition invisible} sphere centered on itself that lasts until the end of its next turn. Creatures in the sphere have advantage on saving throws against spells and other magical effects."
 								}
 							]
@@ -2505,7 +2526,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The angel's innate spellcasting ability is Charisma (spell save {@dc 19}, {@hit 11} to hit with spell attacks). The angel can innately cast the following spells, requiring no material components:"
 					],
@@ -2523,7 +2544,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2685,7 +2709,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The lich is a 14th-level Golgari spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The lich has the following wizard spells prepared:"
 					],
@@ -2753,7 +2777,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2922,7 +2949,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The druid is a 12th-level Gruul spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 16}, {@hit 8} to hit with spell attacks). It has the following druid spells prepared:"
 					],
@@ -2983,7 +3010,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3239,7 +3269,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The firefist is a 9th-level Boros spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It has the following cleric spells prepared:"
 					],
@@ -3290,7 +3320,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -3420,7 +3453,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The angel's innate spellcasting ability is Charisma (spell save {@dc 18}, {@hit 10} to hit with spell attacks). The angel can innately cast the following spells, requiring no material components:"
 					],
@@ -3434,7 +3467,10 @@
 							"{@spell fireball} (as a 6th-level spell)"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3565,7 +3601,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The blastseeker's innate spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). The blastseeker can innately cast the following spells, requiring no components other than its Izzet gear, which doesn't function for others:"
 					],
@@ -3582,7 +3618,10 @@
 							"{@spell ice storm}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3914,7 +3953,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The medic is a 3rd-level Boros spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 11}). The medic has the following cleric spells prepared:"
 					],
@@ -3941,7 +3980,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -4031,7 +4073,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The blastseeker's innate spellcasting ability is Intelligence (spell save {@dc 15}, {@hit 7} to hit with spell attacks). The blastseeker can innately cast the following spells, requiring no components other than its Izzet gear, which doesn't function for others:"
 					],
@@ -4045,7 +4087,10 @@
 							"{@spell thunderwave}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4407,7 +4452,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The shaman is an 8th-level Golgari spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The shaman has the following druid spells prepared:"
 					],
@@ -4451,7 +4496,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -4684,7 +4732,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The horncaller's innate spellcasting ability is Wisdom (spell save {@dc 14}). The horncaller can innately cast the following spells, requiring no material components:"
 					],
@@ -4694,7 +4742,10 @@
 							"{@spell conjure animals}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5394,7 +5445,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Isperia's innate spellcasting ability is Wisdom (spell save {@dc 23}). Isperia can innately cast {@spell imprisonment} twice per day, requiring no material components."
 					],
@@ -5406,11 +5457,14 @@
 					"ability": "wis",
 					"hidden": [
 						"daily"
-					]
+					],
+					"dc": 23,
+					"atkMod": 15,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Isperia is a 15th-level Azorius spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 23}, {@hit 14} to hit with spell attacks). Isperia has the following cleric spells prepared:"
 					],
@@ -5488,7 +5542,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 23,
+					"atkMod": 14,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5674,7 +5731,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Jarad is a 14th-level Golgari spellcaster. His spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). Jarad has the following wizard spells prepared:"
 					],
@@ -5743,7 +5800,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -5942,7 +6002,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The kraul's innate spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The kraul can innately cast the following spells, requiring no material components:"
 					],
@@ -5961,7 +6021,10 @@
 							"{@spell vampiric touch}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6227,7 +6290,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The lawmage is an 8th-level Azorius spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The lawmage has the following wizard spells prepared:"
 					],
@@ -6272,7 +6335,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -6385,7 +6451,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Lazav's innate spellcasting ability is Intelligence (spell save {@dc 20}). He can innately cast the following spells, requiring no material components:"
 					],
@@ -6406,7 +6472,10 @@
 							"{@spell Rary's telepathic bond}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6597,7 +6666,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The master's innate spellcasting ability is Charisma (spell save {@dc 17}). The master can innately cast the following spells, requiring no material components:"
 					],
@@ -6610,7 +6679,10 @@
 							"{@spell dominate person}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6758,7 +6830,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The vampire's innate spellcasting ability is Intelligence (spell save {@dc 14}). It can innately cast the following spells, requiring no components:"
 					],
@@ -6777,7 +6849,10 @@
 							"{@spell major image}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -6917,7 +6992,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mage's spellcasting ability is Intelligence (spell save {@dc 16}). It can innately cast the following spells, requiring no components:"
 					],
@@ -6939,7 +7014,10 @@
 							"{@spell modify memory}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -7190,7 +7268,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Niv-Mizzet is a 20th-level Izzet spellcaster. His spellcasting ability is Intelligence (spell save {@dc 26}, {@hit 18} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -7281,7 +7359,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 26,
+					"atkMod": 18,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -7629,7 +7710,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The ghost's innate spellcasting ability is Wisdom (spell save {@dc 16}, {@hit 8} to hit with spell attacks). It can innately cast the following spells, requiring no components:"
 					],
@@ -7642,7 +7723,10 @@
 							"{@spell spirit guardians} (at 4th level)"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -7929,7 +8013,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mage's innate spellcasting ability is Intelligence (spell save {@dc 14}). It can cast the following spells, requiring no material components:"
 					],
@@ -7943,7 +8027,10 @@
 							"{@spell locate object}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -8087,7 +8174,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Rakdos's spellcasting ability is Charisma (spell save {@dc 25}). He can innately cast {@spell hellish rebuke} (at 5th level) at will, requiring no material components."
 					],
@@ -8097,7 +8184,10 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 25,
+					"atkMod": 17,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -8267,7 +8357,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The lampooner is a 4th-level Rakdos spellcaster. Its spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It knows the following bard spells:"
 					],
@@ -8298,7 +8388,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -8669,7 +8762,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The reckoner is a 5th-level Boros spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The reckoner has the following wizard spells prepared:"
 					],
@@ -8705,7 +8798,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -9272,7 +9368,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The sire's innate spellcasting ability is Charisma (spell save {@dc 18}, {@hit 10} to hit with spell attacks). The sire can innately cast the following spells, requiring no material components:"
 					],
@@ -9288,7 +9384,10 @@
 							"{@spell mass suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -9765,7 +9864,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The sphinx is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). It requires no material components to cast its spells. The sphinx has the following wizard spells prepared:"
 					],
@@ -9815,7 +9914,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 9
 				}
 			],
 			"damageTagsLegendary": [],
@@ -10011,7 +10113,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The thought spy's innate spellcasting ability is Intelligence (spell save {@dc 13}). The thought spy can innately cast the following spells, requiring no components:"
 					],
@@ -10027,7 +10129,10 @@
 							"{@spell gaseous form}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -10155,7 +10260,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Trostani's innate spellcasting ability is Wisdom (spell save {@dc 24}). She can innately cast the following spells, requiring no material components:"
 					],
@@ -10178,7 +10283,10 @@
 							"{@spell mass cure wounds}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 24,
+					"atkMod": 16,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -10371,7 +10479,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The medusa's innate spellcasting ability is Intelligence (spell save {@dc 14}). The medusa can innately cast the following spells, requiring no material components:"
 					],
@@ -10382,7 +10490,10 @@
 							"{@spell misty step}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -10708,7 +10819,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Zegana is a 15th-level Simic spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 18}, {@hit 10} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -10782,7 +10893,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

@@ -249,7 +249,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Healer)",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The spellcaster's spellcasting ability is Wisdom (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The spellcaster has following cleric spells prepared:"
 					],
@@ -291,7 +291,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -386,7 +389,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Mage)",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The spellcaster's spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The spellcaster has following wizard spells prepared:"
 					],
@@ -428,7 +431,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

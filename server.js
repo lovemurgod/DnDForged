@@ -6,6 +6,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import https from 'https';
 import crypto from 'crypto';
+import zlib from 'zlib';
 
 import multer from 'multer';
 import cors from 'cors';
@@ -200,6 +201,39 @@ app.get('/api/proxy-discord', (req, res) => {
   }).on('error', (err) => {
     res.status(500).send('Proxy error: ' + err.message);
   });
+});
+
+// Pre-compressed GZIP cache for spells-normalized.json
+let gzippedSpellsBuf = null;
+let spellsEtag = null;
+
+function loadGzippedSpells() {
+  try {
+    const normPath = path.join(__dirname, '5etools-src', 'data', 'spells-normalized.json');
+    if (fs.existsSync(normPath)) {
+      const raw = fs.readFileSync(normPath);
+      gzippedSpellsBuf = zlib.gzipSync(raw, { level: 9 });
+      spellsEtag = `W/"${gzippedSpellsBuf.length}-${fs.statSync(normPath).mtimeMs}"`;
+    }
+  } catch (e) {
+    console.error('Error loading gzipped spells cache:', e);
+  }
+}
+loadGzippedSpells();
+
+app.get(['/data/spells-normalized.json', '/5etools-src/data/spells-normalized.json'], (req, res) => {
+  if (!gzippedSpellsBuf) loadGzippedSpells();
+  if (!gzippedSpellsBuf) return res.status(404).send('Spells database not found');
+
+  if (req.headers['if-none-match'] === spellsEtag) {
+    return res.status(304).end();
+  }
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Content-Encoding', 'gzip');
+  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=3600');
+  res.setHeader('ETag', spellsEtag);
+  res.send(gzippedSpellsBuf);
 });
 
 // Disable JS/CSS caching during development so browsers always load the latest files
@@ -748,15 +782,12 @@ io.on('connection', (socket) => {
     }
     const activeCampId = targetCampaignId;
 
-    // Auto-GM logic: first person to join the campaign becomes GM
+    // Auto-GM logic: first GM to join the campaign sets gmUsername
     if (!campaigns[activeCampId].gmUsername) {
-        if (role !== 'GM') {
-            socket.emit('join_rejected', { reason: "The first person to join a new campaign must be the Game Master." });
-            socket.disconnect(true);
-            return;
+        if (role === 'GM') {
+            campaigns[activeCampId].gmUsername = username;
+            saveCampaigns();
         }
-        campaigns[activeCampId].gmUsername = username;
-        saveCampaigns();
     }
 
     if (role === 'GM' && campaigns[activeCampId].gmUsername && username !== campaigns[activeCampId].gmUsername) {

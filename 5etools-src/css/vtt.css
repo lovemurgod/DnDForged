@@ -2412,8 +2412,18 @@ select option {
 }
 
 /* ── Initiative Tracker Vertical Layout ── */
+/* ── Initiative Tracker Layout Modes & Styling ── */
 #vtt-initiative-carousel-container {
     position: fixed;
+    z-index: 100;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), top 0.3s cubic-bezier(0.4, 0, 0.2, 1), bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+/* Default / Right Aligned */
+#vtt-initiative-carousel-container.pos-right {
     right: 350px;
     top: 60px;
     bottom: 0;
@@ -2421,14 +2431,66 @@ select option {
     transform: none;
     width: auto;
     max-height: calc(100vh - 60px);
-    z-index: 100;
-    padding: 10px 0;
-    display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 10px;
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    padding: 10px 0;
+}
+
+/* Top Aligned Horizontal Ribbon (Flush & Transparent) */
+#vtt-initiative-carousel-container.pos-top {
+    top: 0;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100vw - 320px);
+    max-height: 80px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Bottom Aligned Horizontal Ribbon (Flush & Transparent) */
+#vtt-initiative-carousel-container.pos-bottom {
+    bottom: 0;
+    top: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100vw - 320px);
+    max-height: 80px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Free Dragged Custom Position (Transparent Container) */
+#vtt-initiative-carousel-container.pos-custom {
+    right: auto;
+    bottom: auto;
+    transform: none;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    flex-direction: row;
+    align-items: center;
 }
 
 /* Floating tracker drop shadows for contrast */
@@ -2441,10 +2503,44 @@ select option {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-shrink: 0;
-    width: 85px; /* Match collapsed card width */
-    margin-right: 16px; /* Offset for scrollbar and padding to keep centered over cards */
+    width: 85px; /* Match collapsed card width in vertical mode */
+    margin-right: 16px;
+}
+
+/* Controls layout in Top/Bottom Horizontal modes */
+#vtt-initiative-carousel-container.pos-top .init-controls-top,
+#vtt-initiative-carousel-container.pos-top .init-controls-bottom,
+#vtt-initiative-carousel-container.pos-bottom .init-controls-top,
+#vtt-initiative-carousel-container.pos-bottom .init-controls-bottom,
+#vtt-initiative-carousel-container.pos-custom .init-controls-top,
+#vtt-initiative-carousel-container.pos-custom .init-controls-bottom {
+    flex-direction: row;
+    width: auto;
+    margin-right: 0;
+    gap: 6px;
+}
+
+.init-drag-handle {
+    cursor: grab;
+    touch-action: none;
+    padding: 4px 6px;
+    font-size: 0.85rem;
+}
+.init-drag-handle:active {
+    cursor: grabbing;
+}
+
+.hud-init-pos-select {
+    background: rgba(14, 18, 27, 0.8);
+    color: var(--color-gold-light, #f0c040);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    padding: 3px 5px;
+    cursor: pointer;
+    font-family: var(--font-body);
 }
 
 .init-controls-top .current-round {
@@ -2462,12 +2558,6 @@ select option {
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
 }
 
-#vtt-initiative-carousel-container.pos-top,
-#vtt-initiative-carousel-container.pos-bottom {
-    top: 50%;
-    bottom: auto;
-}
-
 .init-carousel-list {
     flex: 1; /* Stretch to fill available vertical space */
     display: flex;
@@ -2476,14 +2566,28 @@ select option {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 10px 10px;
-    align-items: flex-end; /* Cards expand to the left */
+    align-items: flex-end; /* Cards expand to the left in vertical */
     scroll-behavior: smooth;
     max-height: none;
 }
 
-/* Custom vertical scrollbar styles */
+/* Horizontal list layout for pos-top, pos-bottom, pos-custom */
+#vtt-initiative-carousel-container.pos-top .init-carousel-list,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-list,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-list {
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: 80px;
+    padding: 4px 8px;
+    gap: 10px;
+}
+
+/* Custom scrollbar styles */
 .init-carousel-list::-webkit-scrollbar {
     width: 6px;
+    height: 6px;
 }
 .init-carousel-list::-webkit-scrollbar-track {
     background: transparent;
@@ -2497,6 +2601,7 @@ select option {
     background: rgba(212, 175, 55, 0.5); /* Gold scrollbar appears on hover */
 }
 
+/* Standard Vertical Cards (pos-right) */
 .init-carousel-card {
     flex: 0 0 auto;
     width: 85px; /* Collapsed width: icon + score */
@@ -2512,14 +2617,14 @@ select option {
     overflow: hidden;
     transform: scale(0.85); /* Normal scale */
     transform-origin: right center; /* Grow towards the left */
-    transition: width 0.3s ease 1s, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, border-color 0.4s;
+    transition: width 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, border-color 0.4s;
 }
 
 .init-card-details {
     opacity: 0;
     width: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease 1s, width 0.3s ease 1s;
+    transition: opacity 0.3s ease 0.1s, width 0.3s ease 0.1s;
 }
 
 .init-carousel-card:hover {
@@ -2550,6 +2655,7 @@ select option {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 10;
 }
 
 .init-carousel-card:hover .init-card-del-btn {
@@ -2563,7 +2669,7 @@ select option {
     background: rgba(20, 24, 34, 0.8);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
     width: 180px; /* Always expanded when active */
-    transition-delay: 0s; /* Expand immediately */
+    transition-delay: 0s;
 }
 
 .init-carousel-card.init-carousel-card--active .init-card-details {
@@ -2571,6 +2677,104 @@ select option {
     width: 100%;
     visibility: visible;
     transition-delay: 0s;
+}
+
+/* 🌟 Compact Token Cards & Capsule Expansion for Horizontal Modes (pos-top, pos-bottom, pos-custom) */
+#vtt-initiative-carousel-container.pos-top .init-carousel-card,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card {
+    width: 52px;
+    height: 62px;
+    border-radius: 12px;
+    padding: 4px;
+    transform-origin: center center;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#vtt-initiative-carousel-container.pos-top .init-carousel-card:hover,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card:hover,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card:hover,
+#vtt-initiative-carousel-container.pos-top .init-carousel-card.init-carousel-card--active,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card.init-carousel-card--active,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card.init-carousel-card--active {
+    width: 175px;
+    height: 52px;
+    border-radius: 26px;
+    padding: 4px 10px;
+    background: rgba(20, 24, 34, 0.9);
+}
+
+#vtt-initiative-carousel-container.pos-top .init-carousel-card.init-carousel-card--active,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card.init-carousel-card--active,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card.init-carousel-card--active {
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.8), inset 0 0 4px rgba(212, 175, 55, 0.5);
+    border-color: var(--color-gold-base, #d4af37);
+}
+
+/* 🏆 Initiative Score Centered Directly Below Token Art in Collapsed Mode */
+#vtt-initiative-carousel-container.pos-top .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-content,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-content,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 2px !important;
+    width: 100%;
+    height: 100%;
+}
+
+#vtt-initiative-carousel-container.pos-top .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img {
+    margin-right: 0 !important;
+}
+
+#vtt-initiative-carousel-container.pos-top .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img img,
+#vtt-initiative-carousel-container.pos-top .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img video,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img img,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img video,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img img,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-img video {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+#vtt-initiative-carousel-container.pos-top .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-score,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-score,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card:not(:hover):not(.init-carousel-card--active) .init-card-score {
+    position: static;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    width: 100%;
+    height: auto;
+    font-size: 0.85rem;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--color-gold-light, #f0c040);
+    box-shadow: none;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#vtt-initiative-carousel-container.pos-top .init-carousel-card:hover .init-card-score,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card:hover .init-card-score,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card:hover .init-card-score,
+#vtt-initiative-carousel-container.pos-top .init-carousel-card.init-carousel-card--active .init-card-score,
+#vtt-initiative-carousel-container.pos-bottom .init-carousel-card.init-carousel-card--active .init-card-score,
+#vtt-initiative-carousel-container.pos-custom .init-carousel-card.init-carousel-card--active .init-card-score {
+    position: static;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    font-size: 1.1rem;
+    box-shadow: none;
+    margin-left: auto;
 }
 
 .init-card-hp-pill {

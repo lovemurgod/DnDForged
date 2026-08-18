@@ -159,7 +159,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mage is a 4th-level spellcaster that uses Intelligence as its spellcasting ability (spell save {@dc 13}; {@hit 5} to hit with spell attacks). The mage knows the following spells from the wizard's spell list:"
 					],
@@ -186,7 +186,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 4
 				}
 			],
 			"action": [
@@ -437,7 +440,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Nezznar can innately cast the following spells, requiring no material components:"
 					],
@@ -449,11 +452,15 @@
 							"{@spell darkness}",
 							"{@spell faerie fire} (save {@dc 12})"
 						]
-					}
+					},
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0,
+					"ability": "int"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Nezznar is a 4th-level spellcaster that uses Intelligence as his spellcasting ability (spell save {@dc 13}; {@hit 5} to hit with spell attacks). Nezznar has the following spells prepared from the wizard's spell list:"
 					],
@@ -481,7 +488,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 4
 				}
 			],
 			"trait": [

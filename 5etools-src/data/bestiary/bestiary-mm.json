@@ -526,7 +526,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The acolyte is a 1st-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The acolyte has following cleric spells prepared:"
 					],
@@ -547,7 +547,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 1
 				}
 			],
 			"action": [
@@ -7185,7 +7188,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The sphinx is a 12th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 18}, {@hit 10} to hit with spell attacks). It requires no material components to cast its spells. The sphinx has the following cleric spells prepared:"
 					],
@@ -7240,7 +7243,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 12
 				}
 			],
 			"trait": [
@@ -7891,7 +7897,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The arcanaloth's innate spellcasting ability is Charisma (spell save {@dc 15}). The arcanaloth can innately cast the following spells, requiring no material components:"
 					],
@@ -7902,11 +7908,14 @@
 						"{@spell invisibility} (self only)",
 						"{@spell magic missile}"
 					],
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The arcanaloth is a 16th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The arcanaloth has the following wizard spells prepared:"
 					],
@@ -7978,7 +7987,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 16
 				}
 			],
 			"trait": [
@@ -8190,7 +8202,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The archmage is an 18th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The archmage can cast {@spell disguise self} and {@spell invisibility} at will and has the following wizard spells prepared:"
 					],
@@ -8280,7 +8292,10 @@
 					"ability": "int",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 18
 				}
 			],
 			"trait": [
@@ -10022,7 +10037,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The barlgura's spellcasting ability is Wisdom (spell save {@dc 13}). The barlgura can innately cast the following spells, requiring no material components:"
 					],
@@ -10036,7 +10051,10 @@
 							"{@spell invisibility} (self only)"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -10839,7 +10857,7 @@
 					"type": "inset",
 					"name": "Variant Abilities",
 					"entries": [
-						"When a beholder's dream-imagination runs wild, the result can be an offspring that has an unusual or unique set of abilities. Rather than the standard powers of a beholder's central eye and eyestalks, the creature has one or more variant abilities\u2014guaranteed to surprise any enemies who thought they knew what they were getting themselves into.",
+						"When a beholder's dream-imagination runs wild, the result can be an offspring that has an unusual or unique set of abilities. Rather than the standard powers of a beholder's central eye and eyestalks, the creature has one or more variant abilities—guaranteed to surprise any enemies who thought they knew what they were getting themselves into.",
 						"This section provides several alternative spell effects for a beholder's eye. Each of these effects is designed to be of the same power level as the one it replaces, enabling you to create a custom beholder without altering the monster's challenge rating. As another option, you can switch any of the damaging eye rays in the {@book Monster Manual|MM} to an effect with a different damage type, such as replacing the enervation ray with a combustion ray that deals fire damage instead of necrotic damage.",
 						"Unless otherwise indicated, an alternative ability has the same range as the eye ray it is replacing, and it affects only one creature per use (even if the ability is based on a spell that normally affects an area or multiple targets). The saving throw for an alternative ability uses the same DC and the same ability score as the spell the eye ray is based on.",
 						{
@@ -11635,7 +11653,7 @@
 				{
 					"name": "Corrosive Form",
 					"entries": [
-						"A creature that touches the pudding or hits it with a melee attack while within 5 feet of it takes 4 ({@damage 1d8}) acid damage. Any nonmagical weapon made of metal or wood that hits the pudding corrodes. After dealing damage, the weapon takes a permanent and cumulative \u22121 penalty to damage rolls. If its penalty drops to \u22125, the weapon is destroyed. Nonmagical ammunition made of metal or wood that hits the pudding is destroyed after dealing damage. The pudding can eat through 2-inch-thick, nonmagical wood or metal in 1 round."
+						"A creature that touches the pudding or hits it with a melee attack while within 5 feet of it takes 4 ({@damage 1d8}) acid damage. Any nonmagical weapon made of metal or wood that hits the pudding corrodes. After dealing damage, the weapon takes a permanent and cumulative −1 penalty to damage rolls. If its penalty drops to −5, the weapon is destroyed. Nonmagical ammunition made of metal or wood that hits the pudding is destroyed after dealing damage. The pudding can eat through 2-inch-thick, nonmagical wood or metal in 1 round."
 					]
 				},
 				{
@@ -11649,7 +11667,7 @@
 				{
 					"name": "Pseudopod",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) bludgeoning damage plus 18 ({@damage 4d8}) acid damage. In addition, nonmagical armor worn by the target is partly dissolved and takes a permanent and cumulative \u22121 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
+						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) bludgeoning damage plus 18 ({@damage 4d8}) acid damage. In addition, nonmagical armor worn by the target is partly dissolved and takes a permanent and cumulative −1 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
 					]
 				}
 			],
@@ -12599,7 +12617,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The naga is a 5th-level spellcaster (spell save {@dc 12}, {@hit 4} to hit with spell attacks) that needs only verbal components to cast its spells. Its spellcasting ability is Wisdom, and it has the following cleric spells prepared:"
 					],
@@ -12632,7 +12650,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -12743,7 +12764,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The naga is a 5th-level spellcaster (spell save {@dc 12}, {@hit 4} to hit with spell attacks) that needs only verbal components to cast its spells. Its spellcasting ability is Intelligence, and it has the following wizard spells prepared:"
 					],
@@ -12776,7 +12797,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 5
 				}
 			],
 			"action": [
@@ -14007,7 +14031,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The cambion's spellcasting ability is Charisma (spell save {@dc 14}). The cambion can innately cast the following spells, requiring no material components:"
 					],
@@ -14021,7 +14045,10 @@
 							"{@spell detect magic}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -15741,7 +15768,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant's innate spellcasting ability is Charisma. It can innately cast the following spells, requiring no material components:"
 					],
@@ -15762,7 +15789,10 @@
 							"{@spell gaseous form}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -16472,7 +16502,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The couatl's spellcasting ability is Charisma (spell save {@dc 14}). It can innately cast the following spells, requiring only verbal components:"
 					],
@@ -16497,7 +16527,10 @@
 							"{@spell scrying}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -16978,7 +17011,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The fanatic is a 4th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 11}, {@hit 3} to hit with spell attacks). The fanatic has the following cleric spells prepared:"
 					],
@@ -17006,7 +17039,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 4
 				}
 			],
 			"trait": [
@@ -17415,7 +17451,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dao's innate spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -17439,7 +17475,10 @@
 							"{@spell wall of stone}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -17899,7 +17938,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The death knight is a 19th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 18}, {@hit 10} to hit with spell attacks). It has the following paladin spells prepared:"
 					],
@@ -17940,7 +17979,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 19
 				}
 			],
 			"trait": [
@@ -18125,7 +18167,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The slaad's innate spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). The slaad can innately cast the following spells, requiring no material components:"
 					],
@@ -18148,7 +18190,10 @@
 							"{@spell plane shift}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -18569,7 +18614,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The gnome's innate spellcasting ability is Intelligence (spell save {@dc 11}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -18583,7 +18628,10 @@
 							"{@spell disguise self}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -18904,7 +18952,7 @@
 					"type": "inset",
 					"name": "Acererak and His Disciples",
 					"entries": [
-						"The transformation into a demilich isn't a bitter end for all liches that experience it. Made as a conscious choice, the path of the demilich becomes the next step in a dark evolution. The lich Acererak\u2014a powerful wizard and demonologist and the infamous master of the Tomb of Horrors\u2014anticipated his own transformation, preparing for it by setting enchanted gemstones into his skull's eye sockets and teeth. Each of these soul gems possessed the power to capture the souls on which his phylactery would feed.",
+						"The transformation into a demilich isn't a bitter end for all liches that experience it. Made as a conscious choice, the path of the demilich becomes the next step in a dark evolution. The lich Acererak—a powerful wizard and demonologist and the infamous master of the Tomb of Horrors—anticipated his own transformation, preparing for it by setting enchanted gemstones into his skull's eye sockets and teeth. Each of these soul gems possessed the power to capture the souls on which his phylactery would feed.",
 						"Acererak abandoned his physical body, accepting that it would molder and dissolve to dust while he traveled the planes as a disembodied consciousness. If the skull that was his last physical remains was ever disturbed, its gems would claim the souls of the insolent intruders to his tomb, magically transferring them to his phylactery.",
 						"Liches who follow Acererak's path believe that by becoming free of their bodies, they can continue their quest for power beyond the mortal world. As their patron did, they secure their remains within well-guarded vaults, using soul gems to maintain their phylacteries and destroy the adventurers who disturb their lairs.",
 						"Acererak or another demilich like him has a challenge rating of 21 (33,000 XP), or 23 (50,000 XP) in its lair, and gains the following additional action option.",
@@ -19080,7 +19128,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The deva's spellcasting ability is Charisma (spell save {@dc 17}). The deva can innately cast the following spells, requiring only verbal components:"
 					],
@@ -19093,7 +19141,10 @@
 							"{@spell raise dead}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -19460,7 +19511,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The djinni's innate spellcasting ability is Charisma (spell save {@dc 17}, {@hit 9} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -19484,7 +19535,10 @@
 							"{@spell plane shift}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -20206,7 +20260,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drider's innate spellcasting ability is Wisdom (spell save {@dc 13}). The drider can innately cast the following spells, requiring no material components:"
 					],
@@ -20219,7 +20273,10 @@
 							"{@spell faerie fire}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -20476,7 +20533,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow's spellcasting ability is Charisma (spell save {@dc 11}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -20489,7 +20546,10 @@
 							"{@spell faerie fire}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -20700,7 +20760,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow's spellcasting ability is Charisma (spell save {@dc 12}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -20714,7 +20774,10 @@
 							"{@spell levitate} (self only)"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -20945,7 +21008,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow's spellcasting ability is Charisma (spell save {@dc 12}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -20959,11 +21022,14 @@
 							"{@spell levitate} (self only)"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The drow is a 10th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The drow has the following wizard spells prepared:"
 					],
@@ -21014,7 +21080,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -21171,7 +21240,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The drow's spellcasting ability is Charisma (spell save {@dc 15}). She can innately cast the following spells, requiring no material components:"
 					],
@@ -21185,11 +21254,14 @@
 							"{@spell levitate} (self only)"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The drow is a 10th-level spellcaster. Her spellcasting ability is Wisdom (save {@dc 14}, {@hit 6} to hit with spell attacks). The drow has the following cleric spells prepared:"
 					],
@@ -21242,7 +21314,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -21458,7 +21533,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The druid is a 4th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has the following druid spells prepared:"
 					],
@@ -21487,7 +21562,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 4
 				}
 			],
 			"action": [
@@ -21622,7 +21700,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dryad's innate spellcasting ability is Charisma (spell save {@dc 14}). The dryad can innately cast the following spells, requiring no material components:"
 					],
@@ -21640,7 +21718,10 @@
 							"{@spell shillelagh}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -22086,7 +22167,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (1/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mephit can innately cast {@spell sleep}, requiring no material components. Its innate spellcasting ability is Charisma."
 					],
@@ -22096,7 +22177,10 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 10,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -22484,7 +22568,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The efreeti's innate spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -22505,7 +22589,10 @@
 							"{@spell wall of fire}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -22933,7 +23020,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The empyrean's innate spellcasting ability is Charisma (spell save {@dc 23}, {@hit 15} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -22952,7 +23039,10 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 23,
+					"atkMod": 15,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -23625,7 +23715,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components:"
 					],
@@ -23640,7 +23730,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -23648,13 +23741,13 @@
 					"name": "The Colors of Age",
 					"entries": [
 						"A faerie dragon's scales change hue as it ages, moving through all the colors of the rainbow. All faerie dragons have innate spellcasting ability, gaining new spells as they mature.",
-						"Red\u20145 years or less",
-						"Orange\u20146\u201310 years",
-						"Yellow\u201411\u201320 years",
-						"Green\u201421\u201330 years",
-						"Blue\u201431\u201340 years",
-						"Indigo\u201441\u201350 years",
-						"Violet\u201451 years or more",
+						"Red—5 years or less",
+						"Orange—6–10 years",
+						"Yellow—11–20 years",
+						"Green—21–30 years",
+						"Blue—31–40 years",
+						"Indigo—41–50 years",
+						"Violet—51 years or more",
 						"A green or older faerie dragon's CR increases to 2."
 					]
 				},
@@ -23688,8 +23781,8 @@
 					"name": "Euphoria Breath {@recharge 5}",
 					"entries": [
 						"The dragon exhales a puff of euphoria gas at one creature within 5 feet of it. The target must succeed on a {@dc 11} Wisdom saving throw, or for 1 minute, the target can't take reactions and must roll a {@dice d6} at the start of each of its turns to determine its behavior during the turn:",
-						"1\u20134. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
-						"5\u20136. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
+						"1–4. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
+						"5–6. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
 					]
 				}
 			],
@@ -23797,7 +23890,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components:"
 					],
@@ -23811,7 +23904,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -23819,13 +23915,13 @@
 					"name": "The Colors of Age",
 					"entries": [
 						"A faerie dragon's scales change hue as it ages, moving through all the colors of the rainbow. All faerie dragons have innate spellcasting ability, gaining new spells as they mature.",
-						"Red\u20145 years or less",
-						"Orange\u20146\u201310 years",
-						"Yellow\u201411\u201320 years",
-						"Green\u201421\u201330 years",
-						"Blue\u201431\u201340 years",
-						"Indigo\u201441\u201350 years",
-						"Violet\u201451 years or more",
+						"Red—5 years or less",
+						"Orange—6–10 years",
+						"Yellow—11–20 years",
+						"Green—21–30 years",
+						"Blue—31–40 years",
+						"Indigo—41–50 years",
+						"Violet—51 years or more",
 						"A green or older faerie dragon's CR increases to 2."
 					]
 				},
@@ -23859,8 +23955,8 @@
 					"name": "Euphoria Breath {@recharge 5}",
 					"entries": [
 						"The dragon exhales a puff of euphoria gas at one creature within 5 feet of it. The target must succeed on a {@dc 11} Wisdom saving throw, or for 1 minute, the target can't take reactions and must roll a {@dice d6} at the start of each of its turns to determine its behavior during the turn:",
-						"1\u20134. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
-						"5\u20136. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
+						"1–4. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
+						"5–6. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
 					]
 				}
 			],
@@ -23965,7 +24061,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components:"
 					],
@@ -23981,7 +24077,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -23989,13 +24088,13 @@
 					"name": "The Colors of Age",
 					"entries": [
 						"A faerie dragon's scales change hue as it ages, moving through all the colors of the rainbow. All faerie dragons have innate spellcasting ability, gaining new spells as they mature.",
-						"Red\u20145 years or less",
-						"Orange\u20146\u201310 years",
-						"Yellow\u201411\u201320 years",
-						"Green\u201421\u201330 years",
-						"Blue\u201431\u201340 years",
-						"Indigo\u201441\u201350 years",
-						"Violet\u201451 years or more",
+						"Red—5 years or less",
+						"Orange—6–10 years",
+						"Yellow—11–20 years",
+						"Green—21–30 years",
+						"Blue—31–40 years",
+						"Indigo—41–50 years",
+						"Violet—51 years or more",
 						"A green or older faerie dragon's CR increases to 2."
 					]
 				},
@@ -24029,8 +24128,8 @@
 					"name": "Euphoria Breath {@recharge 5}",
 					"entries": [
 						"The dragon exhales a puff of euphoria gas at one creature within 5 feet of it. The target must succeed on a {@dc 11} Wisdom saving throw, or for 1 minute, the target can't take reactions and must roll a {@dice d6} at the start of each of its turns to determine its behavior during the turn:",
-						"1\u20134. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
-						"5\u20136. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
+						"1–4. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
+						"5–6. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
 					]
 				}
 			],
@@ -24138,7 +24237,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components:"
 					],
@@ -24150,7 +24249,10 @@
 							"{@spell minor illusion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -24158,13 +24260,13 @@
 					"name": "The Colors of Age",
 					"entries": [
 						"A faerie dragon's scales change hue as it ages, moving through all the colors of the rainbow. All faerie dragons have innate spellcasting ability, gaining new spells as they mature.",
-						"Red\u20145 years or less",
-						"Orange\u20146\u201310 years",
-						"Yellow\u201411\u201320 years",
-						"Green\u201421\u201330 years",
-						"Blue\u201431\u201340 years",
-						"Indigo\u201441\u201350 years",
-						"Violet\u201451 years or more",
+						"Red—5 years or less",
+						"Orange—6–10 years",
+						"Yellow—11–20 years",
+						"Green—21–30 years",
+						"Blue—31–40 years",
+						"Indigo—41–50 years",
+						"Violet—51 years or more",
 						"A green or older faerie dragon's CR increases to 2."
 					]
 				},
@@ -24198,8 +24300,8 @@
 					"name": "Euphoria Breath {@recharge 5}",
 					"entries": [
 						"The dragon exhales a puff of euphoria gas at one creature within 5 feet of it. The target must succeed on a {@dc 11} Wisdom saving throw, or for 1 minute, the target can't take reactions and must roll a {@dice d6} at the start of each of its turns to determine its behavior during the turn:",
-						"1\u20134. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
-						"5\u20136. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
+						"1–4. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
+						"5–6. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
 					]
 				}
 			],
@@ -24298,7 +24400,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components:"
 					],
@@ -24309,7 +24411,10 @@
 							"{@spell minor illusion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -24317,13 +24422,13 @@
 					"name": "The Colors of Age",
 					"entries": [
 						"A faerie dragon's scales change hue as it ages, moving through all the colors of the rainbow. All faerie dragons have innate spellcasting ability, gaining new spells as they mature.",
-						"Red\u20145 years or less",
-						"Orange\u20146\u201310 years",
-						"Yellow\u201411\u201320 years",
-						"Green\u201421\u201330 years",
-						"Blue\u201431\u201340 years",
-						"Indigo\u201441\u201350 years",
-						"Violet\u201451 years or more",
+						"Red—5 years or less",
+						"Orange—6–10 years",
+						"Yellow—11–20 years",
+						"Green—21–30 years",
+						"Blue—31–40 years",
+						"Indigo—41–50 years",
+						"Violet—51 years or more",
 						"A green or older faerie dragon's CR increases to 2."
 					]
 				},
@@ -24357,8 +24462,8 @@
 					"name": "Euphoria Breath {@recharge 5}",
 					"entries": [
 						"The dragon exhales a puff of euphoria gas at one creature within 5 feet of it. The target must succeed on a {@dc 11} Wisdom saving throw, or for 1 minute, the target can't take reactions and must roll a {@dice d6} at the start of each of its turns to determine its behavior during the turn:",
-						"1\u20134. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
-						"5\u20136. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
+						"1–4. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
+						"5–6. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
 					]
 				}
 			],
@@ -24458,7 +24563,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components:"
 					],
@@ -24475,7 +24580,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -24483,13 +24591,13 @@
 					"name": "The Colors of Age",
 					"entries": [
 						"A faerie dragon's scales change hue as it ages, moving through all the colors of the rainbow. All faerie dragons have innate spellcasting ability, gaining new spells as they mature.",
-						"Red\u20145 years or less",
-						"Orange\u20146\u201310 years",
-						"Yellow\u201411\u201320 years",
-						"Green\u201421\u201330 years",
-						"Blue\u201431\u201340 years",
-						"Indigo\u201441\u201350 years",
-						"Violet\u201451 years or more",
+						"Red—5 years or less",
+						"Orange—6–10 years",
+						"Yellow—11–20 years",
+						"Green—21–30 years",
+						"Blue—31–40 years",
+						"Indigo—41–50 years",
+						"Violet—51 years or more",
 						"A green or older faerie dragon's CR increases to 2."
 					]
 				},
@@ -24523,8 +24631,8 @@
 					"name": "Euphoria Breath {@recharge 5}",
 					"entries": [
 						"The dragon exhales a puff of euphoria gas at one creature within 5 feet of it. The target must succeed on a {@dc 11} Wisdom saving throw, or for 1 minute, the target can't take reactions and must roll a {@dice d6} at the start of each of its turns to determine its behavior during the turn:",
-						"1\u20134. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
-						"5\u20136. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
+						"1–4. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
+						"5–6. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
 					]
 				}
 			],
@@ -24629,7 +24737,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The dragon's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast a number of spells, requiring no material components:"
 					],
@@ -24642,7 +24750,10 @@
 							"{@spell mirror image}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -24650,13 +24761,13 @@
 					"name": "The Colors of Age",
 					"entries": [
 						"A faerie dragon's scales change hue as it ages, moving through all the colors of the rainbow. All faerie dragons have innate spellcasting ability, gaining new spells as they mature.",
-						"Red\u20145 years or less",
-						"Orange\u20146\u201310 years",
-						"Yellow\u201411\u201320 years",
-						"Green\u201421\u201330 years",
-						"Blue\u201431\u201340 years",
-						"Indigo\u201441\u201350 years",
-						"Violet\u201451 years or more",
+						"Red—5 years or less",
+						"Orange—6–10 years",
+						"Yellow—11–20 years",
+						"Green—21–30 years",
+						"Blue—31–40 years",
+						"Indigo—41–50 years",
+						"Violet—51 years or more",
 						"A green or older faerie dragon's CR increases to 2."
 					]
 				},
@@ -24690,8 +24801,8 @@
 					"name": "Euphoria Breath {@recharge 5}",
 					"entries": [
 						"The dragon exhales a puff of euphoria gas at one creature within 5 feet of it. The target must succeed on a {@dc 11} Wisdom saving throw, or for 1 minute, the target can't take reactions and must roll a {@dice d6} at the start of each of its turns to determine its behavior during the turn:",
-						"1\u20134. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
-						"5\u20136. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
+						"1–4. The target takes no action or bonus action and uses all of its movement to move in a random direction.",
+						"5–6. The target doesn't move, and the only thing it can do on its turn is make a {@dc 11} Wisdom saving throw, ending the effect on itself on a success."
 					]
 				}
 			],
@@ -25268,7 +25379,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The flameskull is a 5th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It requires no somatic or material components to cast its spells. The flameskull has the following wizard spells prepared:"
 					],
@@ -25299,7 +25410,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -30391,7 +30505,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The githyanki's innate spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It can innately cast the following spells, requiring no components:"
 					],
@@ -30410,7 +30524,10 @@
 							"{@spell telekinesis}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -30520,7 +30637,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The githyanki's innate spellcasting ability is Intelligence. It can innately cast the following spells, requiring no components:"
 					],
@@ -30534,7 +30651,10 @@
 							"{@spell nondetection} (self only)"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -30637,7 +30757,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The githzerai's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no components:"
 					],
@@ -30652,7 +30772,10 @@
 							"{@spell shield}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -30762,7 +30885,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The githzerai's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no components:"
 					],
@@ -30781,7 +30904,10 @@
 							"{@spell plane shift}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -30932,7 +31058,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The glabrezu's spellcasting ability is Intelligence (spell save {@dc 16}). The glabrezu can innately cast the following spells, requiring no material components:"
 					],
@@ -30948,7 +31074,10 @@
 							"{@spell power word stun}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -32596,7 +32725,7 @@
 				{
 					"name": "Corrode Metal",
 					"entries": [
-						"Any nonmagical weapon made of metal that hits the ooze corrodes. After dealing damage, the weapon takes a permanent and cumulative \u22121 penalty to damage rolls. If its penalty drops to \u22125, the weapon is destroyed. Nonmagical ammunition made of metal that hits the ooze is destroyed after dealing damage.",
+						"Any nonmagical weapon made of metal that hits the ooze corrodes. After dealing damage, the weapon takes a permanent and cumulative −1 penalty to damage rolls. If its penalty drops to −5, the weapon is destroyed. Nonmagical ammunition made of metal that hits the ooze is destroyed after dealing damage.",
 						"The ooze can eat through 2-inch-thick, nonmagical metal in 1 round."
 					]
 				},
@@ -32611,7 +32740,7 @@
 				{
 					"name": "Pseudopod",
 					"entries": [
-						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage plus 7 ({@damage 2d6}) acid damage, and if the target is wearing nonmagical metal armor, its armor is partly corroded and takes a permanent and cumulative \u22121 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
+						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage plus 7 ({@damage 2d6}) acid damage, and if the target is wearing nonmagical metal armor, its armor is partly corroded and takes a permanent and cumulative −1 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
 					]
 				}
 			],
@@ -32756,7 +32885,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The slaad's innate spellcasting ability is Charisma (spell save {@dc 14}). The slaad can innately cast the following spells, requiring no material components:"
 					],
@@ -32778,7 +32907,10 @@
 							"{@spell tongues}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -33180,7 +33312,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The hag's innate spellcasting ability is Charisma (spell save {@dc 12}). She can innately cast the following spells, requiring no material components:"
 					],
@@ -33189,7 +33321,10 @@
 						"{@spell minor illusion}",
 						"{@spell vicious mockery}"
 					],
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -33497,7 +33632,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The slaad's innate spellcasting ability is Charisma (spell save {@dc 12}). The slaad can innately cast the following spells, requiring no material components:"
 					],
@@ -33515,7 +33650,10 @@
 							"{@spell invisibility} (self only)"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -34452,7 +34590,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The naga is an 11th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 16}, {@hit 8} to hit with spell attacks), and it needs only verbal components to cast its spells. It has the following cleric spells prepared:"
 					],
@@ -34507,7 +34645,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 11
 				}
 			],
 			"trait": [
@@ -34666,7 +34807,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The sphinx is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). It requires no material components to cast its spells. The sphinx has the following wizard spells prepared:"
 					],
@@ -34716,7 +34857,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 9
 				}
 			],
 			"trait": [
@@ -37380,7 +37524,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (1/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mephit can innately cast {@spell fog cloud}, requiring no material components. Its innate spellcasting ability is Charisma."
 					],
@@ -37390,7 +37534,10 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -39484,7 +39631,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The kuo-toa is a 10th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The kuo-toa has the following cleric spells prepared:"
 					],
@@ -39533,7 +39680,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -39839,7 +39989,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The kuo-toa is a 2nd-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The kuo-toa has the following cleric spells prepared:"
 					],
@@ -39858,7 +40008,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 2
 				}
 			],
 			"trait": [
@@ -40012,7 +40165,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The lamia's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast the following spells, requiring no material components."
 					],
@@ -40031,7 +40184,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -40316,7 +40472,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The lich is an 18th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). The lich has the following wizard spells prepared:"
 					],
@@ -40397,7 +40553,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 18
 				}
 			],
 			"trait": [
@@ -41196,7 +41355,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Lizardfolk Form Only)",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The lizardfolk is a 5th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The lizardfolk has the following druid spells prepared:"
 					],
@@ -41230,7 +41389,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -41416,7 +41578,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mage is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The mage has the following wizard spells prepared:"
 					],
@@ -41467,7 +41629,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 9
 				}
 			],
 			"action": [
@@ -41613,7 +41778,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (1/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mephit can innately cast {@spell heat metal} (spell save {@dc 10}), requiring no material components. Its innate spellcasting ability is Charisma."
 					],
@@ -41623,7 +41788,10 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 10,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -42234,7 +42402,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The marid's innate spellcasting ability is Charisma (spell save {@dc 16}, {@hit 8} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -42259,7 +42427,10 @@
 							"{@spell plane shift}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -42805,7 +42976,7 @@
 				{
 					"name": "Multiattack",
 					"entries": [
-						"The medusa makes either three melee attacks\u2014one with its snake hair and two with its shortsword\u2014or two ranged attacks with its longbow."
+						"The medusa makes either three melee attacks—one with its snake hair and two with its shortsword—or two ranged attacks with its longbow."
 					]
 				},
 				{
@@ -43186,7 +43357,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mezzoloth's innate spellcasting ability is Charisma (spell save {@dc 11}). The mezzoloth can innately cast the following spells, requiring no material components:"
 					],
@@ -43199,7 +43370,10 @@
 							"{@spell dispel magic}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -43548,7 +43722,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mind flayer's innate spellcasting ability is Intelligence (spell save {@dc 15}). It can innately cast the following spells, requiring no components:"
 					],
@@ -43562,7 +43736,10 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -43715,7 +43892,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mind flayer's innate spellcasting ability is Intelligence (spell save {@dc 15}). It can innately cast the following spells, requiring no components:"
 					],
@@ -43729,11 +43906,14 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				},
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mind flayer is a 10th-level spellcaster. Its spellcasting ability is Intelligence (save {@dc 15}, {@hit 7} to hit with spell attacks). The mind flayer has the following wizard spells prepared:"
 					],
@@ -43786,7 +43966,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -44754,7 +44937,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mummy lord is a 10th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The mummy lord has the following cleric spells prepared:"
 					],
@@ -44809,7 +44992,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -45752,7 +45938,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The hag's innate spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). She can innately cast the following spells, requiring no material components:"
 					],
@@ -45767,7 +45953,10 @@
 							"{@spell sleep}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -46497,7 +46686,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The nycaloth's innate spellcasting ability is Charisma. The nycaloth can innately cast the following spells, requiring no material components:"
 					],
@@ -46508,7 +46697,10 @@
 						"{@spell invisibility} (self only)",
 						"{@spell mirror image}"
 					],
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -47181,7 +47373,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The oni's innate spellcasting ability is Charisma (spell save {@dc 13}). The oni can innately cast the following spells, requiring no material components:"
 					],
@@ -47197,7 +47389,10 @@
 							"{@spell sleep}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -47501,7 +47696,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The orc is a 3rd-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 11}, {@hit 3} to hit with spell attacks). The orc has the following cleric spells prepared:"
 					],
@@ -47528,7 +47723,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 3
 				}
 			],
 			"trait": [
@@ -49046,7 +49244,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The pit fiend's spellcasting ability is Charisma (spell save {@dc 21}). The pit fiend can innately cast the following spells, requiring no material components:"
 					],
@@ -49060,7 +49258,10 @@
 							"{@spell wall of fire}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -49244,7 +49445,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The pixie's innate spellcasting ability is Charisma (spell save {@dc 12}). It can innately cast the following spells, requiring only its pixie dust as a component:"
 					],
@@ -49265,7 +49466,10 @@
 							"{@spell sleep}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -49406,7 +49610,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The planetar's spellcasting ability is Charisma (spell save {@dc 20}). The planetar can innately cast the following spells, requiring no material components:"
 					],
@@ -49427,7 +49631,10 @@
 							"{@spell insect plague}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -50113,7 +50320,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The priest is a 5th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). The priest has the following cleric spells prepared:"
 					],
@@ -50148,7 +50355,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"trait": [
@@ -50999,7 +51209,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The quaggoth's innate spellcasting ability is Wisdom (spell save {@dc 11}). The quaggoth can innately cast the following spells, requiring no components:"
 					],
@@ -51015,7 +51225,10 @@
 							"{@spell mirror image}"
 						]
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -51431,7 +51644,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The rakshasa's innate spellcasting ability is Charisma (spell save {@dc 18}, {@hit 10} to hit with spell attacks). The rakshasa can innately cast the following spells, requiring no material components:"
 					],
@@ -51456,7 +51669,10 @@
 							"{@spell true seeing}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -51990,7 +52206,7 @@
 				{
 					"name": "Claw",
 					"entries": [
-						"{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 14} Constitution saving throw or be infected with a disease\u2014a minuscule slaad egg.",
+						"{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 14} Constitution saving throw or be infected with a disease—a minuscule slaad egg.",
 						"A humanoid host can carry only one slaad egg to term at a time. Over three months, the egg moves to the chest cavity, gestates, and forms a {@creature slaad tadpole}. In the 24-hour period before giving birth, the host starts to feel unwell, its speed is halved, and it has disadvantage on attack rolls, ability checks, and saving throws. At birth, the tadpole chews its way through vital organs and out of the host's chest in 1 round, killing the host in the process.",
 						"If the disease is cured before the tadpole's emergence, the unborn slaad is disintegrated."
 					]
@@ -53057,7 +53273,7 @@
 				{
 					"name": "Rust Metal",
 					"entries": [
-						"Any nonmagical weapon made of metal that hits the rust monster corrodes. After dealing damage, the weapon takes a permanent and cumulative \u22121 penalty to damage rolls. If its penalty drops to \u22125, the weapon is destroyed. Non magical ammunition made of metal that hits the rust monster is destroyed after dealing damage."
+						"Any nonmagical weapon made of metal that hits the rust monster corrodes. After dealing damage, the weapon takes a permanent and cumulative −1 penalty to damage rolls. If its penalty drops to −5, the weapon is destroyed. Non magical ammunition made of metal that hits the rust monster is destroyed after dealing damage."
 					]
 				}
 			],
@@ -53072,7 +53288,7 @@
 					"name": "Antennae",
 					"entries": [
 						"The rust monster corrodes a nonmagical ferrous metal object it can see within 5 feet of it. If the object isn't being worn or carried, the touch destroys a 1-foot cube of it. If the object is being worn or carried by a creature, the creature can make a {@dc 11} Dexterity saving throw to avoid the rust monster's touch.",
-						"If the object touched is either metal armor or a metal shield being worn or carried, it takes a permanent and cumulative \u22121 penalty to the AC it offers. Armor reduced to an AC of 10 or a shield that drops to a +0 bonus is destroyed. If the object touched is a held metal weapon, it rusts as described in the Rust Metal trait."
+						"If the object touched is either metal armor or a metal shield being worn or carried, it takes a permanent and cumulative −1 penalty to the AC it offers. Armor reduced to an AC of 10 or a shield that drops to a +0 bonus is destroyed. If the object touched is a held metal weapon, it rusts as described in the Rust Metal trait."
 					]
 				}
 			],
@@ -53560,7 +53776,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The sahuagin is a 6th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). She has the following cleric spells prepared:"
 					],
@@ -53594,7 +53810,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 6
 				}
 			],
 			"trait": [
@@ -55934,7 +56153,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (1/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mephit can innately cast {@spell dancing lights}, requiring no material components. Its innate spellcasting ability is Charisma."
 					],
@@ -55944,7 +56163,10 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 10,
+					"atkMod": 2,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -56115,7 +56337,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The solar's spellcasting ability is Charisma (spell save {@dc 25}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -56134,7 +56356,10 @@
 							"{@spell control weather}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 25,
+					"atkMod": 17,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -56945,7 +57170,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The naga is a 10th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks), and it needs only verbal components to cast its spells. It has the following wizard spells prepared:"
 					],
@@ -56993,7 +57218,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -57403,7 +57631,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (1/Day)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The mephit can innately cast {@spell blur}, requiring no material components. Its innate spellcasting ability is Charisma."
 					],
@@ -57413,7 +57641,10 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -58009,7 +58240,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The giant's innate spellcasting ability is Charisma (spell save {@dc 17}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -58025,7 +58256,10 @@
 							"{@spell water breathing}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -60940,22 +61174,22 @@
 									"items": [
 										{
 											"type": "item",
-											"name": "1\u201310:",
+											"name": "1–10:",
 											"entry": "Nothing else happens."
 										},
 										{
 											"type": "item",
-											"name": "11\u201314:",
+											"name": "11–14:",
 											"entry": "One leg is severed from the troll if it has any legs left."
 										},
 										{
 											"type": "item",
-											"name": "15\u201318:",
+											"name": "15–18:",
 											"entry": "One arm is severed from the troll if it has any arms left."
 										},
 										{
 											"type": "item",
-											"name": "19\u201320:",
+											"name": "19–20:",
 											"entry": "The troll is decapitated, but the troll dies only if it can't regenerate. If it dies, so does the severed head."
 										}
 									]
@@ -61415,7 +61649,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The ultroloth's innate spellcasting ability is Charisma (spell save {@dc 17}). The ultroloth can innately cast the following spells, requiring no material components:"
 					],
@@ -61440,7 +61674,10 @@
 							"{@spell mass suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -61761,7 +61998,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The unicorn's innate spellcasting ability is Charisma (spell save {@dc 14}). The unicorn can innately cast the following spells, requiring no components:"
 					],
@@ -61777,7 +62014,10 @@
 							"{@spell entangle}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -62429,7 +62669,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The vampire is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). The vampire has the following wizard spells prepared:"
 					],
@@ -62479,7 +62719,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 9
 				}
 			],
 			"trait": [
@@ -66853,7 +67096,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The yochlol's spellcasting ability is Charisma (spell save {@dc 14}). The yochlol can innately cast the following spells, requiring no material components:"
 					],
@@ -66866,7 +67109,10 @@
 							"{@spell dominate person}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -69758,7 +70004,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Abomination Form Only)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 15}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -69773,7 +70019,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -69949,7 +70198,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -69961,7 +70210,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -70146,7 +70398,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -70158,7 +70410,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -70325,7 +70580,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -70337,7 +70592,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -70541,7 +70799,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The yuan-ti's spellcasting ability is Charisma (spell save {@dc 12}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -70554,7 +70812,10 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [

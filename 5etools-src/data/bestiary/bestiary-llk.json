@@ -70,7 +70,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The brain in a jar's innate spellcasting ability is Intelligence (spell save {@dc 15}). It can innately cast the following spells, requiring no components:"
 					],
@@ -92,7 +92,10 @@
 							"{@spell Tasha's hideous laughter}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -425,7 +428,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Garret is a 2nd-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He has the following bard spells prepared:"
 					],
@@ -447,7 +450,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 2
 				}
 			],
 			"trait": [
@@ -557,7 +563,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Gearbox can cast the {@spell light} cantrip at will."
 					],
@@ -570,7 +576,11 @@
 					},
 					"hidden": [
 						"spells"
-					]
+					],
+					"dc": 10,
+					"atkMod": 2,
+					"casterLevel": 0,
+					"ability": "int"
 				}
 			],
 			"spellcastingTags": [
@@ -692,7 +702,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Mary is a 5th-level spellcaster. Her spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). She regains her expended spell slots when she finishes a short or long rest. She knows the following warlock spells:"
 					],
@@ -717,7 +727,10 @@
 							]
 						}
 					},
-					"ability": "cha"
+					"ability": "cha",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 5
 				}
 			],
 			"trait": [

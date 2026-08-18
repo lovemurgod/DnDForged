@@ -228,7 +228,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Baba Lysaga is a 16th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). Baba Lysaga has the following wizard spells prepared:"
 					],
@@ -304,7 +304,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 16
 				}
 			],
 			"trait": [
@@ -633,7 +636,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The witch is a 3rd-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The witch has the following wizard spells prepared:"
 					],
@@ -661,7 +664,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 3
 				}
 			],
 			"action": [
@@ -1223,7 +1229,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The lich is an 18th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). The lich has the following wizard spells prepared:"
 					],
@@ -1236,7 +1242,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 18
 				}
 			],
 			"damageTagsLegendary": [],
@@ -1309,7 +1318,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Ezmerelda is a 7th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). Ezmerelda has the following wizard spells prepared:"
 					],
@@ -1353,7 +1362,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 7
 				}
 			],
 			"trait": [
@@ -1551,7 +1563,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The portrait's innate spellcasting ability is Intelligence (spell save {@dc 12}). The portrait can innately cast the following spells, requiring no material components:"
 					],
@@ -1563,7 +1575,10 @@
 							"{@spell telekinesis}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1910,7 +1925,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Kasimir is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). Kasimir has the following wizard spells prepared:"
 					],
@@ -1961,7 +1976,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 9
 				}
 			],
 			"traitTags": [
@@ -2093,7 +2111,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Fiona is a 5th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Fiona has the following cleric spells prepared:"
 					],
@@ -2129,7 +2147,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 13,
+					"atkMod": 5,
+					"casterLevel": 5
 				}
 			],
 			"damageTagsSpell": [],
@@ -2322,7 +2343,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Madam Eva is a 16th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). Madam Eva has the following cleric spells prepared:"
 					],
@@ -2397,7 +2418,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 16
 				}
 			],
 			"action": [
@@ -2641,12 +2665,12 @@
 					"name": "Extraordinary Feature",
 					"entries": [
 						"The mongrelfolk has one of the following extraordinary features, determined randomly by rolling a {@dice d20} or chosen by the DM:",
-						"1\u20133: Amphibious. The mongrelfolk can breathe air and water.",
-						"4\u20139: Darkvision. The mongrelfolk has darkvision out to a range of 60 feet.",
+						"1–3: Amphibious. The mongrelfolk can breathe air and water.",
+						"4–9: Darkvision. The mongrelfolk has darkvision out to a range of 60 feet.",
 						"10: Flight. The mongrelfolk has leathery wings and a flying speed of 40 feet.",
-						"11\u201315: Keen Hearing and Smell. The mongrelfolk has advantage on Wisdom ({@skill Perception}) checks that rely on hearing or smell.",
-						"16\u201317: Spider Climb. The mongrelfolk can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.",
-						"18\u201319: Standing Leap. The mongrelfolk's long jump is up to 20 feet and its high jump up to 10 feet, with or without a running start.",
+						"11–15: Keen Hearing and Smell. The mongrelfolk has advantage on Wisdom ({@skill Perception}) checks that rely on hearing or smell.",
+						"16–17: Spider Climb. The mongrelfolk can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.",
+						"18–19: Standing Leap. The mongrelfolk's long jump is up to 20 feet and its high jump up to 10 feet, with or without a running start.",
 						"20: Two-Headed. The mongrelfolk has advantage on Wisdom ({@skill Perception}) checks and on saving throws against being {@condition blinded}, {@condition charmed}, {@condition deafened}, {@condition frightened}, {@condition stunned}, or knocked {@condition unconscious}."
 					]
 				},
@@ -3214,7 +3238,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Rahadin's innate spellcasting ability is Intelligence. He can innately cast the following spells, requiring no components:"
 					],
@@ -3228,7 +3252,10 @@
 							"{@spell phantom steed}"
 						]
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3375,7 +3402,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Rictavio is a 9th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Rictavio has the following cleric spells prepared:"
 					],
@@ -3427,7 +3454,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 9
 				}
 			],
 			"trait": [
@@ -3620,7 +3650,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Sir Godfrey is a 16th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 14}, {@hit 6} to hit with spell attacks). He has the following paladin spells prepared:"
 					],
@@ -3654,7 +3684,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 16
 				}
 			],
 			"damageTagsSpell": [
@@ -3742,7 +3775,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mage is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The mage has the following wizard spells prepared:"
 					],
@@ -3793,7 +3826,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 9
 				}
 			],
 			"damageTagsSpell": [
@@ -3906,7 +3942,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Strahd is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 18}, {@hit 10} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -3958,7 +3994,10 @@
 							]
 						}
 					},
-					"ability": "int"
+					"ability": "int",
+					"dc": 18,
+					"atkMod": 10,
+					"casterLevel": 9
 				}
 			],
 			"trait": [
@@ -4198,9 +4237,9 @@
 					"name": "Loathsome Limbs",
 					"entries": [
 						"Whenever the zombie takes at least 5 bludgeoning or slashing damage at one time, roll a {@dice d20} to determine what else happens to it:",
-						"1\u20138: One leg is severed from the zombie if it has any legs left.",
-						"9\u201316: One arm is severed from the zombie if it has any arms left.",
-						"17\u201320: The zombie is decapitated.",
+						"1–8: One leg is severed from the zombie if it has any legs left.",
+						"9–16: One arm is severed from the zombie if it has any arms left.",
+						"17–20: The zombie is decapitated.",
 						"If the zombie is reduced to 0 hit points, all parts of it die. Until then, a severed part acts on the zombie's initiative and has its own action and movement. A severed part has AC 8. Any damage it takes is subtracted from the zombie's hit points.",
 						"A severed leg is unable to attack and has a speed of 5 feet.",
 						"A severed arm has a speed of 5 feet and can make one claw attack on its turn, with disadvantage on the attack roll. Each time the zombie loses an arm, it loses a claw attack.",
@@ -4468,7 +4507,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The mad mage is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). He can cast {@spell disguise self} and {@spell invisibility} at will and has the following wizard spells prepared:"
 					],
@@ -4555,7 +4594,10 @@
 					"ability": "int",
 					"hidden": [
 						"will"
-					]
+					],
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 18
 				}
 			],
 			"damageTagsSpell": [

@@ -269,7 +269,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Quill casts one of the following spells using Charisma as the spellcasting ability (save {@dc 17}):"
 					],
@@ -291,7 +291,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -731,7 +734,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The ghost casts one of the following spells, using Charisma as the spellcasting ability and requiring no material components:"
 					],
@@ -747,7 +750,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 15,
+					"atkMod": 7,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -1226,7 +1232,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"The fungal servant is a 10th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). The fungal servant has the following cleric spells prepared:"
 					],
@@ -1281,7 +1287,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 10
 				}
 			],
 			"trait": [
@@ -1473,7 +1482,7 @@
 				{
 					"name": "Change Shape",
 					"entries": [
-						"The gingwatzim changes from its true form\u2014a 3-foot-diameter sphere of luminous ectoplasm\u2014into one of its two alternate forms, or from one of those forms back into its true form. In object form, it can't move or make attacks but otherwise retains its statistics, and it is indistinguishable from the thing it is imitating. In beast form, it retains its hit points but otherwise uses the stat block of the beast it is imitating. When it dies, the gingwatzim reverts to its true form and then vanishes."
+						"The gingwatzim changes from its true form—a 3-foot-diameter sphere of luminous ectoplasm—into one of its two alternate forms, or from one of those forms back into its true form. In object form, it can't move or make attacks but otherwise retains its statistics, and it is indistinguishable from the thing it is imitating. In beast form, it retains its hit points but otherwise uses the stat block of the beast it is imitating. When it dies, the gingwatzim reverts to its true form and then vanishes."
 					]
 				}
 			],
@@ -1988,7 +1997,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"K'Tulah is a 4th-level spellcaster. K'Tulah's spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). K'Tulah has the following druid spells prepared:"
 					],
@@ -2017,7 +2026,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 12,
+					"atkMod": 4,
+					"casterLevel": 4
 				}
 			],
 			"trait": [
@@ -2293,7 +2305,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The lich casts one of the following spells using Wisdom as the spellcasting ability (save {@dc 19}):"
 					],
@@ -2318,7 +2330,10 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 19,
+					"atkMod": 11,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -2609,7 +2624,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The sage casts one of the following spells, using Intelligence as the spellcasting ability (save {@dc 16}, {@hit 8} to hit with spell attacks):"
 					],
@@ -2653,7 +2668,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 16,
+					"atkMod": 8,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -2790,7 +2808,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Miirym casts one of the following spells, using Charisma as the spellcasting ability (save {@dc 21}) and requiring no material components:"
 					],
@@ -2811,7 +2829,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 21,
+					"atkMod": 13,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3129,7 +3150,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"Nintra casts one of the following spells, using Charisma as the spellcasting ability (save {@dc 20}) and requiring no material components:"
 					],
@@ -3141,7 +3162,10 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 20,
+					"atkMod": 12,
+					"casterLevel": 0
 				}
 			],
 			"trait": [
@@ -3447,7 +3471,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Ram Sugar is a 4th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 11}, {@hit 3} to hit with spell attacks). Ram Sugar has the following cleric spells prepared:"
 					],
@@ -3475,7 +3499,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 11,
+					"atkMod": 3,
+					"casterLevel": 4
 				}
 			],
 			"trait": [
@@ -3595,7 +3622,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "innate",
 					"headerEntries": [
 						"The sage casts one of the following spells, using Intelligence as the spellcasting ability (save {@dc 14}, {@hit 6} to hit with spell attacks):"
 					],
@@ -3629,7 +3656,10 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action"
+					"displayAs": "action",
+					"dc": 14,
+					"atkMod": 6,
+					"casterLevel": 0
 				}
 			],
 			"action": [
@@ -4469,7 +4499,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "spellcasting",
+					"type": "slot",
 					"headerEntries": [
 						"Valin Sarnaster is a 10th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). Valin has the following cleric spells prepared:"
 					],
@@ -4524,7 +4554,10 @@
 							]
 						}
 					},
-					"ability": "wis"
+					"ability": "wis",
+					"dc": 17,
+					"atkMod": 9,
+					"casterLevel": 10
 				}
 			],
 			"trait": [

@@ -23,8 +23,14 @@ export function initVttDataBridge(vtt) {
             
             const fetchPromises = Object.values(indexData).map(filename => 
                 fetch(`data/bestiary/${filename}`)
-                    .then(res => res.ok ? res.json() : { monster: [] })
-                    .catch(() => ({ monster: [] }))
+                    .then(res => {
+                        if (!res.ok) return null;
+                        return res.json();
+                    })
+                    .catch(err => {
+                        console.warn(`Failed to fetch bestiary file ${filename}:`, err);
+                        return null;
+                    })
             );
             
             const results = await Promise.all(fetchPromises);
