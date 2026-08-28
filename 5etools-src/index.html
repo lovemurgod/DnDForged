@@ -3,27 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForgeD VTT — Tabletop Freedom | Self-Hosted VTT & 5e Compendium</title>
-    <meta name="description" content="ForgeD VTT provides total Tabletop Freedom: a self-hosted, high-performance Virtual Tabletop with real-time multiplayer map canvas, 3D dice rolling, dynamic fog of war, and integrated 5e rules.">
-    
-    <!-- Fonts & FontAwesome Icons -->
+    <title>ForgeD VTT — Tabletop Freedom | Self-Hosted VTT & 5e Manual</title>
+    <meta name="description" content="ForgeD VTT is a lightweight, high-performance self-hosted Virtual Tabletop for D&D 5e with 3D physics dice, dynamic fog of war, and zero-config multiplayer.">
+
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Consolas&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- VTT Master Website Stylesheet -->
-    <link rel="stylesheet" href="css/website.css?v=3">
+
+    <!-- Master Website Theme Stylesheet -->
+    <link rel="stylesheet" href="css/website.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon-32x32.png">
 </head>
 <body>
 
-    <!-- Animated Canvas Grid & Ambient Glowing Background -->
+    <!-- Ambient Visual Canvas Elements -->
     <div class="bg-tactical-grid"></div>
     <div class="bg-ambient-lights"></div>
 
-    <!-- Sticky VTT Navigation Header Bar -->
+    <!-- Navigation Header -->
     <nav class="navbar-vtt">
-        <a href="index.html" class="nav-brand">
+        <a href="index.html" class="nav-brand" style="text-decoration: none;">
             <img src="img/logo.png" alt="ForgeD VTT Logo" class="nav-brand-logo">
             <span class="nav-brand-text">
                 <span class="brand-forge">Forge</span><span class="brand-d">D</span> <span class="brand-vtt">VTT</span>
@@ -33,13 +36,10 @@
         <!-- Desktop Navigation Tabs -->
         <div class="nav-tabs">
             <button class="nav-tab-btn active" onclick="switchTab('connect')">
-                <i class="fa-solid fa-gamepad"></i> Sessions
-            </button>
-            <button class="nav-tab-btn" onclick="switchTab('compendium')">
-                <i class="fa-solid fa-book-bookmark"></i> 5e Compendium
+                <i class="fa-solid fa-house"></i> Home
             </button>
             <button class="nav-tab-btn" onclick="switchTab('guide')">
-                <i class="fa-solid fa-graduation-cap"></i> User Guide
+                <i class="fa-solid fa-book-open-reader"></i> User Guide
             </button>
             <button class="nav-tab-btn" onclick="switchTab('features')">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> VTT Features
@@ -82,13 +82,10 @@
 
         <div class="mobile-drawer-links">
             <button class="mobile-nav-btn active" onclick="switchTabAndClose('connect')">
-                <i class="fa-solid fa-gamepad"></i> Sessions & Join
-            </button>
-            <button class="mobile-nav-btn" onclick="switchTabAndClose('compendium')">
-                <i class="fa-solid fa-book-bookmark"></i> 5e Compendium
+                <i class="fa-solid fa-house"></i> Home
             </button>
             <button class="mobile-nav-btn" onclick="switchTabAndClose('guide')">
-                <i class="fa-solid fa-graduation-cap"></i> User Guide
+                <i class="fa-solid fa-book-open-reader"></i> User Guide
             </button>
             <button class="mobile-nav-btn" onclick="switchTabAndClose('features')">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> VTT Features
@@ -111,7 +108,7 @@
     <!-- Main Container -->
     <main class="main-wrapper">
 
-        <!-- TAB 1: SESSION CONNECT & HOST HUB -->
+        <!-- TAB 1: HOME & SESSION HUB -->
         <section id="tab-connect" class="tab-content active">
             <!-- Hero Header with High-Res Logo Centerpiece -->
             <div class="glass-panel hero-card">
@@ -127,9 +124,6 @@
                     <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold" style="font-size: 1.05rem; padding: 12px 28px; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);">
                         <i class="fa-solid fa-download"></i> Download ForgeD VTT Desktop App (.exe)
                     </a>
-                    <a href="https://github.com/lovemurgod/DnDForged/releases" target="_blank" class="btn-vtt-outline" style="font-size: 0.9rem; padding: 10px 18px;">
-                        <i class="fa-solid fa-box-archive"></i> All Releases
-                    </a>
                 </div>
 
                 <!-- Subdomain Session Joiner Form -->
@@ -139,464 +133,898 @@
                     </label>
                     <form id="session-join-form">
                         <div class="subdomain-input-group">
-                            <input type="text" id="subdomain-input" placeholder="e.g. dragonheist or cosmic" autocomplete="off" required>
-                            <div class="subdomain-suffix" id="domain-suffix-display">.forgedvtt.com</div>
+                            <input 
+                                type="text" 
+                                id="subdomain-input" 
+                                placeholder="e.g. julz, curse-of-strahd, tavern" 
+                                autocomplete="off" 
+                                required 
+                                pattern="[a-zA-Z0-9-]+" 
+                                title="Letters, numbers and hyphens only"
+                            >
+                            <span class="subdomain-suffix" id="domain-suffix-display">.forgedvtt.com</span>
                         </div>
-                        <button type="submit" class="btn-vtt-gold btn-connect">
-                            <i class="fa-solid fa-shield-halved"></i> JOIN VTT SESSION
+                        <button type="submit" class="btn-connect">
+                            <i class="fa-solid fa-dice-d20"></i> Launch Game Session
                         </button>
                     </form>
                 </div>
+            </div>
 
-                <!-- Active Campaigns Feed -->
-                <div class="active-sessions-section">
-                    <h3 class="section-title">
-                        <i class="fa-solid fa-tower-cell"></i> Active Hosted Campaigns
-                    </h3>
-                    <div id="sessions-container" class="sessions-grid">
-                        <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 20px;">
-                            <i class="fa-solid fa-spinner fa-spin"></i> Checking for active campaign servers...
-                        </div>
+            <!-- Active Sessions List Section -->
+            <div class="sessions-section">
+                <h3 class="section-title">
+                    <i class="fa-solid fa-tower-broadcast"></i> Active Local Campaigns
+                </h3>
+                <div class="sessions-grid" id="sessions-container">
+                    <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 20px;">
+                        <i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Checking for active campaign servers...
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- TAB 2: 5E COMPENDIUM SEARCH -->
-        <section id="tab-compendium" class="tab-content">
-            <div class="glass-panel hero-card" style="text-align: left;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px; margin-bottom: 8px;">
-                    <div>
-                        <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 6px;">
-                            <i class="fa-solid fa-book-open-reader"></i> 5e Rules & Compendium
-                        </h2>
-                        <p style="color: var(--text-secondary);">
-                            Direct access to the complete 5e ruleset, spells, monsters, magic items, and character options styled in ForgeD VTT dark glassmorphism.
-                        </p>
-                    </div>
-                    <span class="guide-badge"><i class="fa-solid fa-shield-halved"></i> Complete 5e System</span>
-                </div>
-
-                <div class="compendium-search-box" style="margin-top: 20px;">
-                    <input type="text" id="comp-search-input" class="compendium-input" placeholder="Search spells, creatures, items, rules... (e.g. Fireball, Beholder, Longsword)" onkeyup="filterCompendium()">
-                </div>
-
-                <div class="compendium-results" id="comp-results-grid">
-                    <a href="spells.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Spell Compendium</div>
-                        <div class="comp-name">Spells & Magic</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Browse complete 5e spell lists, casting filters, damage calculators, and spell slot levels.</p>
-                    </a>
-                    <a href="bestiary.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Bestiary</div>
-                        <div class="comp-name">Monsters & Statblocks</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Full monster statblocks with integrated VTT token roll support and trait parsing.</p>
-                    </a>
-                    <a href="items.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Equipment</div>
-                        <div class="comp-name">Items & Artifacts</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Weapons, armor, adventuring gear, potions, and legendary magic items.</p>
-                    </a>
-                    <a href="classes.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Rules</div>
-                        <div class="comp-name">Classes & Subclasses</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Class progression tables, features, archetype traits, and spellcasting progression.</p>
-                    </a>
-                    <a href="races.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Character Creation</div>
-                        <div class="comp-name">Species & Races</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Racial traits, lineages, speed modifiers, darkvision, and racial spellcasting.</p>
-                    </a>
-                    <a href="feats.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Feats</div>
-                        <div class="comp-name">Feats & Talents</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Feat prerequisites, ability score boosts, combat bonuses, and special proficiencies.</p>
-                    </a>
-                    <a href="backgrounds.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Character Creation</div>
-                        <div class="comp-name">Backgrounds & Origins</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Background features, proficiencies, starting equipment, and personality tables.</p>
-                    </a>
-                    <a href="dmscreen.html" class="comp-card" target="_blank">
-                        <div class="comp-category">DM Toolkit</div>
-                        <div class="comp-name">DM Screen & Dashboard</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Customizable panels for initiative tracking, condition cheat sheets, and quick rules.</p>
-                    </a>
-                    <a href="quickreference.html" class="comp-card" target="_blank">
-                        <div class="comp-category">Quick Reference</div>
-                        <div class="comp-name">Combat & Conditions</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Combat actions, cover rules, conditions, exhaustion, and environmental hazards.</p>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: USER GUIDE (NEW INTERACTIVE HUB) -->
+        <!-- TAB 2: MASTER INTERACTIVE USER GUIDE -->
         <section id="tab-guide" class="tab-content">
-            <div class="guide-header-box">
+            <div class="guide-header-box" style="margin-bottom: 25px;">
                 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-gold-bright); margin-bottom: 8px;">
-                    <i class="fa-solid fa-graduation-cap"></i> ForgeD VTT User Guide
+                    <i class="fa-solid fa-book-open-reader"></i> ForgeD VTT Master Manual
                 </h2>
-                <p style="color: var(--text-secondary); max-width: 650px; margin: 0 auto;">
-                    Everything you need to master ForgeD VTT as a Game Master or Player. Select a topic below for detailed instructions and pro tips.
+                <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 15px auto;">
+                    Comprehensive per-button guide, canvas controls, character sheet mechanics, and complete chat dice formula manual. Everything in ForgeD VTT documented in full.
                 </p>
-
-                <!-- Guide Category Filter Bar -->
-                <div class="guide-filter-bar">
-                    <button class="guide-filter-btn active" onclick="filterGuideTopics('all')">
-                        <i class="fa-solid fa-border-all"></i> All Guides
-                    </button>
-                    <button class="guide-filter-btn" onclick="filterGuideTopics('gm')">
-                        <i class="fa-solid fa-crown"></i> Game Master
-                    </button>
-                    <button class="guide-filter-btn" onclick="filterGuideTopics('player')">
-                        <i class="fa-solid fa-user-shield"></i> Players
-                    </button>
-                    <button class="guide-filter-btn" onclick="filterGuideTopics('maps')">
-                        <i class="fa-solid fa-map-location-dot"></i> Maps & Fog
-                    </button>
-                    <button class="guide-filter-btn" onclick="filterGuideTopics('dice')">
-                        <i class="fa-solid fa-dice-d20"></i> 3D Dice Box
-                    </button>
-                    <button class="guide-filter-btn" onclick="filterGuideTopics('app')">
-                        <i class="fa-solid fa-desktop"></i> Desktop App
-                    </button>
-                </div>
             </div>
 
-            <!-- Guide Topics Cards Grid -->
-            <div class="guide-grid" id="guide-topics-container">
-                
-                <!-- Topic 1: GM Setup -->
-                <div class="guide-topic-card" data-category="gm app" onclick="scrollToGuideSection('guide-gm-setup')">
-                    <div class="guide-card-top">
-                        <div class="guide-card-icon"><i class="fa-solid fa-crown"></i></div>
-                        <span class="guide-badge">Host & Setup</span>
-                    </div>
-                    <h3 class="guide-card-title">Game Master Setup & Hosting</h3>
-                    <p class="guide-card-desc">Learn how to launch ForgeD VTT locally, create campaign subdomains with Cloudflare tunnels, and invite your players without port-forwarding.</p>
-                    <div class="guide-card-action">Read Setup Guide <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
+            <!-- 2-Column Master Manual Layout -->
+            <div class="manual-layout">
 
-                <!-- Topic 2: Player Quickstart -->
-                <div class="guide-topic-card" data-category="player" onclick="scrollToGuideSection('guide-player-quickstart')">
-                    <div class="guide-card-top">
-                        <div class="guide-card-icon"><i class="fa-solid fa-user-shield"></i></div>
-                        <span class="guide-badge">Player Hub</span>
+                <!-- Left Sticky Sidebar Table of Contents -->
+                <aside class="manual-sidebar">
+                    <div class="manual-search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="manual-search-input" placeholder="Search buttons, shortcuts, dice..." oninput="filterManualTopics()">
                     </div>
-                    <h3 class="guide-card-title">Player Quickstart & Joining</h3>
-                    <p class="guide-card-desc">How to connect to your GM's campaign URL, choose your character avatar, manage token movement, and interact with the tabletop.</p>
-                    <div class="guide-card-action">Read Player Guide <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
 
-                <!-- Topic 3: Tactical Maps & Tokens -->
-                <div class="guide-topic-card" data-category="maps gm" onclick="scrollToGuideSection('guide-maps-tokens')">
-                    <div class="guide-card-top">
-                        <div class="guide-card-icon"><i class="fa-solid fa-map-location-dot"></i></div>
-                        <span class="guide-badge">Canvas</span>
-                    </div>
-                    <h3 class="guide-card-title">Tactical Maps & Token Controls</h3>
-                    <p class="guide-card-desc">Uploading battlemaps, grid snapping & alignment, multi-token selection, rotation, elevation badges, and status effect markers.</p>
-                    <div class="guide-card-action">Read Canvas Guide <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-
-                <!-- Topic 4: Fog of War & Vision -->
-                <div class="guide-topic-card" data-category="maps gm" onclick="scrollToGuideSection('guide-fog-vision')">
-                    <div class="guide-card-top">
-                        <div class="guide-card-icon"><i class="fa-solid fa-eye-slash"></i></div>
-                        <span class="guide-badge">Dynamic Lighting</span>
-                    </div>
-                    <h3 class="guide-card-title">Dynamic Fog of War & Vision</h3>
-                    <p class="guide-card-desc">Line-of-sight occlusion, GM manual fog reveal brush, torch/darkvision radius settings, and hidden GM layer tokens.</p>
-                    <div class="guide-card-action">Read Fog Guide <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-
-                <!-- Topic 5: 3D Physics Dice Box -->
-                <div class="guide-topic-card" data-category="dice player gm" onclick="scrollToGuideSection('guide-3d-dice')">
-                    <div class="guide-card-top">
-                        <div class="guide-card-icon"><i class="fa-solid fa-dice-d20"></i></div>
-                        <span class="guide-badge">WebGL Physics</span>
-                    </div>
-                    <h3 class="guide-card-title">3D Physics Dice & Roll Commands</h3>
-                    <p class="guide-card-desc">Using the WebGL physics dice tray, roll syntax (<code>/r 2d20kh1+5</code>), GM secret rolls, and 1-click rolls directly from statblocks.</p>
-                    <div class="guide-card-action">Read Dice Guide <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-
-                <!-- Topic 6: Compendium & Character Sheets -->
-                <div class="guide-topic-card" data-category="gm player" onclick="scrollToGuideSection('guide-compendium-sheets')">
-                    <div class="guide-card-top">
-                        <div class="guide-card-icon"><i class="fa-solid fa-book-sparkles"></i></div>
-                        <span class="guide-badge">5e Integration</span>
-                    </div>
-                    <h3 class="guide-card-title">Compendium & Sheet Integration</h3>
-                    <p class="guide-card-desc">Instant monster search, drag-and-drop token spawning from the 5e compendium, HP tracking, and automated spell slot management.</p>
-                    <div class="guide-card-action">Read Integration Guide <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-            </div>
-
-            <!-- Deep-Dive Detailed Guide Sections -->
-            <div id="guide-detail-container">
-                
-                <!-- Section 1: GM Setup -->
-                <div class="guide-detail-card" id="guide-gm-setup">
-                    <div class="guide-detail-header">
-                        <i class="fa-solid fa-crown guide-detail-icon"></i>
-                        <div>
-                            <h3 class="guide-detail-title">Game Master Setup & Hosting Walkthrough</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Host your private campaigns directly on your computer with complete data sovereignty.</p>
+                    <nav class="manual-toc" id="manual-toc-list">
+                        <div class="manual-toc-group">
+                            <div class="manual-toc-title">1. Canvas Controls</div>
+                            <a href="#guide-toolbar" class="manual-toc-link active"><i class="fa-solid fa-toolbox"></i> Left Toolbar Buttons</a>
+                            <a href="#guide-canvas-tokens" class="manual-toc-link"><i class="fa-solid fa-gamepad"></i> Token Movement & Radial Menu</a>
+                            <a href="#guide-hud" class="manual-toc-link"><i class="fa-solid fa-compass"></i> Canvas HUD & GM Preview</a>
                         </div>
-                    </div>
 
-                    <div class="guide-steps-list">
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">1</div>
-                            <div class="guide-step-body">
-                                <h4>Launch ForgeD VTT Desktop App or CLI</h4>
-                                <p>Download the Windows Desktop Setup installer (or run <code>node launcher.js</code> in terminal). The application automatically spins up your local WebSocket server and connects a secure Cloudflare Tunnel.</p>
+                        <div class="manual-toc-group">
+                            <div class="manual-toc-title">2. Combat & Sidebar</div>
+                            <a href="#guide-initiative" class="manual-toc-link"><i class="fa-solid fa-list-ol"></i> Combat Initiative Tracker</a>
+                            <a href="#guide-chat-dice" class="manual-toc-link"><i class="fa-solid fa-comments"></i> Chat & Fast Dice Bar</a>
+                            <a href="#guide-player-sheets" class="manual-toc-link"><i class="fa-solid fa-user-shield"></i> Player Sheets & Inventory</a>
+                            <a href="#guide-bestiary-assets" class="manual-toc-link"><i class="fa-solid fa-book-skull"></i> Bestiary & Asset Gallery</a>
+                            <a href="#guide-config-settings" class="manual-toc-link"><i class="fa-solid fa-gears"></i> GM Settings & Allowlist</a>
+                        </div>
+
+                        <div class="manual-toc-group">
+                            <div class="manual-toc-title">3. Modals & Dice Engine</div>
+                            <a href="#guide-modals" class="manual-toc-link"><i class="fa-solid fa-map-location-dot"></i> Map Manager & Modals</a>
+                            <a href="#guide-dice-engine" class="manual-toc-link"><i class="fa-solid fa-dice-d20"></i> Complete Dice Syntax Manual</a>
+                            <a href="#guide-shortcuts" class="manual-toc-link"><i class="fa-solid fa-keyboard"></i> All Keyboard & Mouse Hotkeys</a>
+                        </div>
+                    </nav>
+                </aside>
+
+                <!-- Right Detailed Manual Content -->
+                <div class="manual-content" id="manual-content-container">
+
+                    <!-- SECTION 1: LEFT FLOATING TOOLBAR -->
+                    <section class="manual-section" id="guide-toolbar">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-toolbox"></i></div>
+                                <h3 class="manual-section-title">Left Floating Toolbar</h3>
                             </div>
+                            <span class="manual-section-badge">Canvas Tools</span>
                         </div>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                            The vertical toolbar on the left edge provides quick access to active tabletop manipulation tools, measurement rulers, persistent spell templates, and layer controls.
+                        </p>
 
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">2</div>
-                            <div class="guide-step-body">
-                                <h4>Choose Your Campaign Subdomain</h4>
-                                <p>When prompted, enter a unique subdomain slug for your campaign (e.g. <code>curseofstrahd</code> or <code>tombofannihilation</code>). This provides an isolated world directory for your maps, tokens, and chat history.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">3</div>
-                            <div class="guide-step-body">
-                                <h4>Share URL with Players</h4>
-                                <p>Send your players your session link (e.g. <code>https://curseofstrahd.forgedvtt.com</code>). They can connect instantly from any modern web browser or mobile tablet without installing software or registering accounts.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="guide-tip-box">
-                        <i class="fa-solid fa-lightbulb"></i>
-                        <p><strong>GM Pro Tip:</strong> You can run ForgeD VTT completely offline on a local LAN! Just connect players to your local IP address (e.g. <code>http://192.168.1.100:3000</code>).</p>
-                    </div>
-                </div>
-
-                <!-- Section 2: Player Quickstart -->
-                <div class="guide-detail-card" id="guide-player-quickstart">
-                    <div class="guide-detail-header">
-                        <i class="fa-solid fa-user-shield guide-detail-icon"></i>
-                        <div>
-                            <h3 class="guide-detail-title">Player Quickstart Guide</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Joining a campaign session, moving tokens, and rolling dice.</p>
-                        </div>
-                    </div>
-
-                    <div class="guide-steps-list">
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">1</div>
-                            <div class="guide-step-body">
-                                <h4>Join Campaign via Subdomain</h4>
-                                <p>Enter your GM's campaign subdomain in the <strong>Sessions</strong> tab above or open the direct campaign link provided by your GM.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">2</div>
-                            <div class="guide-step-body">
-                                <h4>Set Your Character Name & Token</h4>
-                                <p>On the tabletop canvas, click your player avatar in the bottom toolbar to assign your character name, color outline, and token portrait.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">3</div>
-                            <div class="guide-step-body">
-                                <h4>Moving & Waypointing</h4>
-                                <p>Click and drag your token across the map grid. Hold <kbd style="background: #1e293b; padding: 2px 6px; border-radius: 4px; border: 1px solid #475569;">Space</kbd> while dragging to measure exact movement distance in feet.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 3: Maps & Tokens -->
-                <div class="guide-detail-card" id="guide-maps-tokens">
-                    <div class="guide-detail-header">
-                        <i class="fa-solid fa-map-location-dot guide-detail-icon"></i>
-                        <div>
-                            <h3 class="guide-detail-title">Tactical Maps & Token Controls</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Mastering the battlemap canvas, grid snapping, and creature token management.</p>
-                        </div>
-                    </div>
-
-                    <div class="guide-steps-list">
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">1</div>
-                            <div class="guide-step-body">
-                                <h4>Upload Battlemaps (PNG, JPG, WebP, SVG)</h4>
-                                <p>As GM, open the <strong>Map Manager</strong> panel on the top-left to upload high-resolution maps. ForgeD VTT automatically caches map assets for instantaneous party loading.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">2</div>
-                            <div class="guide-step-body">
-                                <h4>Grid Alignment & Snapping</h4>
-                                <p>Use the grid tool to adjust grid square sizes (e.g. 50px, 70px, 100px) and align with your map's drawn artwork. Toggle snapping on/off with <kbd style="background: #1e293b; padding: 2px 6px; border-radius: 4px; border: 1px solid #475569;">Shift</kbd>.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">3</div>
-                            <div class="guide-step-body">
-                                <h4>Token Radial Menu & Conditions</h4>
-                                <p>Right-click any token on canvas to access the radial menu: set HP, adjust elevation (flying/swimming), apply conditions (Poisoned, Stunned, Blinded), or duplicate tokens.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 4: Dynamic Fog & Vision -->
-                <div class="guide-detail-card" id="guide-fog-vision">
-                    <div class="guide-detail-header">
-                        <i class="fa-solid fa-eye-slash guide-detail-icon"></i>
-                        <div>
-                            <h3 class="guide-detail-title">Dynamic Fog of War & Vision Modes</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Immersive dungeon exploration with real-time darkness occlusion.</p>
-                        </div>
-                    </div>
-
-                    <div class="guide-steps-list">
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">1</div>
-                            <div class="guide-step-body">
-                                <h4>Enable Fog Layer</h4>
-                                <p>Toggle <strong>Enable Fog of War</strong> in the GM Toolbar. The entire canvas shrouds in darkness for players until revealed.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">2</div>
-                            <div class="guide-step-body">
-                                <h4>Reveal & Hide Brushes</h4>
-                                <p>Use the circular or polygon reveal tool to unmask dungeon rooms as players explore. Hold <kbd style="background: #1e293b; padding: 2px 6px; border-radius: 4px; border: 1px solid #475569;">Alt</kbd> to re-shroud areas in darkness.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">3</div>
-                            <div class="guide-step-body">
-                                <h4>Token Vision Radii</h4>
-                                <p>Assign darkvision (60 ft / 120 ft) or torchlight (20 ft bright / 20 ft dim) directly to character tokens. The fog automatically parts around moving tokens in real time.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 5: 3D Physics Dice -->
-                <div class="guide-detail-card" id="guide-3d-dice">
-                    <div class="guide-detail-header">
-                        <i class="fa-solid fa-dice-d20 guide-detail-icon"></i>
-                        <div>
-                            <h3 class="guide-detail-title">3D Physics Dice Box & Roll Commands</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.95rem;">WebGL simulated 3D dice with synchronized physics and roll macros.</p>
-                        </div>
-                    </div>
-
-                    <div class="guide-steps-list">
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">1</div>
-                            <div class="guide-step-body">
-                                <h4>Chat Dice Commands</h4>
-                                <p>Type standard dice notation into the chat box:</p>
-                                <div class="code-block">
-/r 1d20+7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Standard attack roll<br>
-/r 2d20kh1+5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Advantage (Keep Highest 1)<br>
-/r 2d20kl1+3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Disadvantage (Keep Lowest 1)<br>
-/gmroll 1d20+9 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Secret GM Roll (hidden from players)<br>
-/r 8d6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Fireball damage
+                        <div class="btn-inspector-grid">
+                            <!-- Select Tool -->
+                            <div class="btn-inspector-card" data-keywords="select move token drag box shortcut s pointer">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-mouse-pointer"></i></div>
+                                        <span class="btn-inspector-name">Select & Move Tool</span>
+                                    </div>
+                                    <span class="kbd-badge">S</span>
                                 </div>
+                                <p class="btn-inspector-desc">Default interaction mode. Click any token to select it, drag across the canvas for a rubber-band box multi-select, or drag tokens to move across grid cells with collision and waypoint measurement.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-circle-check"></i> Left-Click / Drag / Multi-Select</div>
+                            </div>
+
+                            <!-- Lighting Tool -->
+                            <div class="btn-inspector-card" data-keywords="lighting torch lightbulb lantern radius angle darkness gm only shortcut l">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                                        <span class="btn-inspector-name">Add Lighting Object</span>
+                                    </div>
+                                    <span class="kbd-badge">L (GM)</span>
+                                </div>
+                                <p class="btn-inspector-desc">GM tool to place light sources on the map (Torches, Lanterns, Campfires, Magical Darkness). Click on the canvas to place a light node, then customize its bright/dim radius, color tint, and emission angle.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> GM Only / Dynamic Occlusion</div>
+                            </div>
+
+                            <!-- Measure Tool -->
+                            <div class="btn-inspector-card" data-keywords="measure ruler distance line circle radius cone box square shortcut m">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-ruler"></i></div>
+                                        <span class="btn-inspector-name">Ruler Measure Tool</span>
+                                    </div>
+                                    <span class="kbd-badge">M</span>
+                                </div>
+                                <p class="btn-inspector-desc">Measure precise distances in feet across the grid. Supports Line, Radius Circle, 53.13° / 90° Cones, and Squares. Tap <span class="kbd-badge">Spacebar</span> during measurement to place multi-segment waypoints.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-circle-check"></i> Multi-Point Measurement Ruler</div>
+                            </div>
+
+                            <!-- Persistent Shapes Tool -->
+                            <div class="btn-inspector-card" data-keywords="shape spell template persistent aoe circle cone cube line shortcut c">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-shapes"></i></div>
+                                        <span class="btn-inspector-name">Persistent Spell Templates</span>
+                                    </div>
+                                    <span class="kbd-badge">C</span>
+                                </div>
+                                <p class="btn-inspector-desc">Place persistent spell templates (Fireball circles, Spirit Guardians, Darkness spheres, Wall of Fire lines) that stay rendered on the canvas until deleted. Select and tap <span class="kbd-badge">Del</span> to remove.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-circle-check"></i> Persistent AoE Overlays</div>
+                            </div>
+
+                            <!-- Ping Tool -->
+                            <div class="btn-inspector-card" data-keywords="ping beacon bullseye signal attention shortcut p">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-bullseye"></i></div>
+                                        <span class="btn-inspector-name">Ping Location Tool</span>
+                                    </div>
+                                    <span class="kbd-badge">P</span>
+                                </div>
+                                <p class="btn-inspector-desc">Broadcast an animated pulsing beacon on the canvas to draw all players' and GM's attention to a specific tile, trap, secret door, or tactical encounter zone.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-circle-check"></i> Synchronized Animated Radar Ping</div>
+                            </div>
+
+                            <!-- Map Manager Button -->
+                            <div class="btn-inspector-card" data-keywords="map manager upload change background 5etools adventure gm only">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-map-location-dot"></i></div>
+                                        <span class="btn-inspector-name">Campaign Map Manager</span>
+                                    </div>
+                                    <span class="kbd-badge">GM Only</span>
+                                </div>
+                                <p class="btn-inspector-desc">Opens the Campaign Map Manager modal. Create blank tactical grids, upload custom map files (JPG/PNG/WEBP), import official 5eTools adventure maps, or calibrate grid dimensions.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Campaign Map Library Modal</div>
+                            </div>
+
+                            <!-- Initiative Tracker Toggle -->
+                            <div class="btn-inspector-card" data-keywords="initiative tracker combat carousel round gm only">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-list-ol"></i></div>
+                                        <span class="btn-inspector-name">Toggle Initiative Tracker</span>
+                                    </div>
+                                    <span class="kbd-badge">GM Only</span>
+                                </div>
+                                <p class="btn-inspector-desc">Opens or minimizes the floating Combat Initiative Tracker carousel on the screen. Synchronizes round counters, turn order highlights, and Dex tiebreakers across all connected players.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Floating Combat HUD</div>
+                            </div>
+
+                            <!-- Layers Switcher Button -->
+                            <div class="btn-inspector-card" data-keywords="layers switch gm token lighting notes map background shortcut ~+1 ~+2 ~+3 ~+4 ~+5">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-layer-group"></i></div>
+                                        <span class="btn-inspector-name">Canvas Layer Switcher</span>
+                                    </div>
+                                    <span class="kbd-badge">~ + 1..5</span>
+                                </div>
+                                <p class="btn-inspector-desc">Quickly isolate canvas layers: <span class="kbd-badge">~+1</span> Token Layer, <span class="kbd-badge">~+2</span> GM Secret Layer (invisible to players), <span class="kbd-badge">~+3</span> Lighting Layer, <span class="kbd-badge">~+4</span> Notes Layer, <span class="kbd-badge">~+5</span> Map Background Layer.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> 5-Layer Canvas Isolation</div>
+                            </div>
+
+                            <!-- Exit Game Button -->
+                            <div class="btn-inspector-card" data-keywords="logout exit leave return portal disconnect">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon red"><i class="fa-solid fa-right-from-bracket"></i></div>
+                                        <span class="btn-inspector-name">Exit Game / Logout</span>
+                                    </div>
+                                    <span class="kbd-badge">Click</span>
+                                </div>
+                                <p class="btn-inspector-desc">Safely disconnects your WebSocket connection from the active campaign room and redirects back to the ForgeD VTT web portal homepage.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-right-from-bracket"></i> Return to Portal</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 2: CANVAS VIEWPORT & TOKEN CONTROLS -->
+                    <section class="manual-section" id="guide-canvas-tokens">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-gamepad"></i></div>
+                                <h3 class="manual-section-title">Token Controls, Rotation & Radial Menu</h3>
+                            </div>
+                            <span class="manual-section-badge">Interaction</span>
+                        </div>
+
+                        <div class="manual-subgrid">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-arrows-up-down-left-right"></i> Token Movement & Waypoints</h4>
+                                <p>Click and drag your token across the map. While dragging, tap <span class="kbd-badge">Spacebar</span> at any corner to drop a movement waypoint! The measuring ruler automatically calculates total movement cost across obstacles.</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Snap to Grid:</strong> Automatically snaps to square or hex cell centers.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Multi-Token Drag:</strong> Shift+Click or drag a selection box to move whole parties.</li>
+                                </ul>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-arrows-rotate"></i> Token Rotation & Flipping</h4>
+                                <p>Rotate or mirror tokens facing direction with instant hotkeys:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <span class="kbd-badge">Q</span> / <span class="kbd-badge">E</span>: Rotate token by 45° counter-clockwise / clockwise.</li>
+                                    <li><i class="fa-solid fa-check"></i> <span class="kbd-badge">Shift + Q/E</span>: Fine rotation step by 5°.</li>
+                                    <li><i class="fa-solid fa-check"></i> <span class="kbd-badge">W</span> / <span class="kbd-badge">S</span>: Flip token vertically.</li>
+                                    <li><i class="fa-solid fa-check"></i> <span class="kbd-badge">A</span> / <span class="kbd-badge">D</span>: Flip token horizontally (mirror facing).</li>
+                                    <li><i class="fa-solid fa-check"></i> <span class="kbd-badge">Del</span> / <span class="kbd-badge">Backspace</span>: Delete selected token(s).</li>
+                                </ul>
                             </div>
                         </div>
 
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">2</div>
-                            <div class="guide-step-body">
-                                <h4>1-Click Compendium Rolling</h4>
-                                <p>Click any highlighted attack modifier (e.g. <em>+8 to hit</em>) or damage formula in monster statblocks to automatically throw 3D dice across the tabletop.</p>
+                        <div class="manual-subcard" style="margin-top: 16px;">
+                            <h4><i class="fa-solid fa-circle-dot"></i> Token Radial Context Menu (Right-Click)</h4>
+                            <p>Right-clicking any token opens the rich circular context menu with instant creature controls:</p>
+                            <div class="manual-table-wrap">
+                                <table class="manual-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Menu Item</th>
+                                            <th>Icon</th>
+                                            <th>Function & Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>HP Quick Adjust</strong></td>
+                                            <td><i class="fa-solid fa-heart-pulse text-danger"></i></td>
+                                            <td>Adjust current HP, Max HP, or add temporary HP directly from canvas without opening sheets.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>AC & Defense</strong></td>
+                                            <td><i class="fa-solid fa-shield-halved text-info"></i></td>
+                                            <td>View and modify base Armor Class and active defensive bonuses.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Condition Markers</strong></td>
+                                            <td><i class="fa-solid fa-skull-crossbones text-warning"></i></td>
+                                            <td>Toggle 5e condition overlays (Blinded, Charmed, Deafened, Frightened, Grappled, Incapacitated, Invisible, Paralyzed, Poisoned, Prone, Restrained, Stunned, Unconscious).</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Token Scale / Size</strong></td>
+                                            <td><i class="fa-solid fa-expand text-success"></i></td>
+                                            <td>Change size from Tiny (0.5×), Medium (1×), Large (2×2), Huge (3×3), to Gargantuan (4×4).</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Dynamic Torch / Sight</strong></td>
+                                            <td><i class="fa-solid fa-lightbulb" style="color: #f5c453;"></i></td>
+                                            <td>Equip token with a 30ft/60ft torch light emission or darkvision radius that pierces Fog of War.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Open Creature Sheet</strong></td>
+                                            <td><i class="fa-solid fa-file-lines"></i></td>
+                                            <td>Opens full 5e statblock or character sheet in the left sliding inspector panel.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </div>
+                    </section>
+
+                    <!-- SECTION 3: CANVAS HUD & GM PREVIEW -->
+                    <section class="manual-section" id="guide-hud">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-compass"></i></div>
+                                <h3 class="manual-section-title">Canvas HUD, Navigation & GM View Broadcast</h3>
+                            </div>
+                            <span class="manual-section-badge">Navigation</span>
+                        </div>
+
+                        <div class="btn-inspector-grid">
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+                                        <span class="btn-inspector-name">Zoom Controls & Badge</span>
+                                    </div>
+                                    <span class="kbd-badge">Numpad + / -</span>
+                                </div>
+                                <p class="btn-inspector-desc">Bottom-left HUD badge showing current zoom percentage (10% to 500%). Click the badge to type an exact percentage value, use the zoom slider, or tap <span class="kbd-badge">+</span> / <span class="kbd-badge">-</span> on your keyboard.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-magnifying-glass"></i> Smooth Scaled Viewport</div>
+                            </div>
+
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                                        <span class="btn-inspector-name">Coordinates Indicator</span>
+                                    </div>
+                                    <span class="kbd-badge">Live HUD</span>
+                                </div>
+                                <p class="btn-inspector-desc">Displays the exact global map grid coordinates <code>X: [val] Y: [val]</code> of your mouse cursor in real-time, assisting GMs in tile alignment and trigger placements.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-compass"></i> Real-time Position Tracking</div>
+                            </div>
+
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-tower-broadcast"></i></div>
+                                        <span class="btn-inspector-name">Broadcast View to Players</span>
+                                    </div>
+                                    <span class="kbd-badge">Shift + Numpad 5</span>
+                                </div>
+                                <p class="btn-inspector-desc">GM exclusive command. Instantly synchronizes your exact screen coordinates and zoom magnification to all connected players' screens, bringing everyone's focus to the battle.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Party Viewport Sync</div>
+                            </div>
+
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-eye-slash"></i></div>
+                                        <span class="btn-inspector-name">Secret Map Preview Banner</span>
+                                    </div>
+                                    <span class="kbd-badge">GM Banner</span>
+                                </div>
+                                <p class="btn-inspector-desc">When previewing maps in secret without players, a top banner alerts the GM with a quick-action <strong>"Push to Players"</strong> button to reveal the battlemap to the party.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-bullhorn"></i> Push Players Modal</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4: COMBAT INITIATIVE CAROUSEL -->
+                    <section class="manual-section" id="guide-initiative">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-list-ol"></i></div>
+                                <h3 class="manual-section-title">Combat Initiative Carousel Tracker</h3>
+                            </div>
+                            <span class="manual-section-badge">Combat Engine</span>
+                        </div>
+
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                            The floating combat carousel displays the synchronized initiative order for party members, companions, summoned familiars, and monsters.
+                        </p>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Button / Control</th>
+                                        <th>Visual Icon</th>
+                                        <th>Action & Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Drag Handle</strong></td>
+                                        <td><i class="fa-solid fa-grip-vertical"></i></td>
+                                        <td>Click and drag to reposition the tracker freely across any area of your screen.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Round Counter</strong></td>
+                                        <td><i class="fa-solid fa-hourglass-half text-warning"></i></td>
+                                        <td>Displays current combat round number. Automatically increments after the last combatant's turn.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Position Selector</strong></td>
+                                        <td><i class="fa-solid fa-table-columns"></i></td>
+                                        <td>Docking style dropdown: <code>Right Aligned</code>, <code>Top Aligned</code>, or <code>Bottom Aligned</code>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Minimize Tracker</strong></td>
+                                        <td><i class="fa-solid fa-compress"></i></td>
+                                        <td>Collapses tracker into a compact turn pill showing only the current active creature.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Next Turn (GM)</strong></td>
+                                        <td><i class="fa-solid fa-chevron-down text-primary"></i></td>
+                                        <td>Advances combat to the next character in turn order and pulses their token on the canvas.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Previous Turn (GM)</strong></td>
+                                        <td><i class="fa-solid fa-chevron-up"></i></td>
+                                        <td>Steps back to the previous character's turn if an action was rewound.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Add Creature (GM)</strong></td>
+                                        <td><i class="fa-solid fa-plus text-success"></i></td>
+                                        <td>Opens quick modal to add custom initiative rolls for homebrew monsters or NPCs.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Clear Tracker (GM)</strong></td>
+                                        <td><i class="fa-solid fa-trash text-danger"></i></td>
+                                        <td>Ends the encounter, clears all combatants, and resets round count back to Round 1.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 5: RIGHT SIDEBAR PANELS -->
+                    <section class="manual-section" id="guide-chat-dice">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-comments"></i></div>
+                                <h3 class="manual-section-title">Right Sidebar: Chat, Dice & Character Sheets</h3>
+                            </div>
+                            <span class="manual-section-badge">Panels</span>
+                        </div>
+
+                        <div class="btn-inspector-grid">
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-dice-d20"></i></div>
+                                        <span class="btn-inspector-name">Fast Dice Quick Bar</span>
+                                    </div>
+                                    <span class="kbd-badge">d4..d100</span>
+                                </div>
+                                <p class="btn-inspector-desc">1-click buttons to instantly roll standard polyhedral dice (<code>d4</code>, <code>d6</code>, <code>d8</code>, <code>d10</code>, <code>d12</code>, <code>d20</code>, <code>d100</code>). Right-click any die button to enter a custom quantity (e.g. 4d6, 8d6).</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-dice"></i> 1-Click Fast Polyhedral Bar</div>
+                            </div>
+
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-scale-balanced"></i></div>
+                                        <span class="btn-inspector-name">Adv / Norm / Dis / GM Toggles</span>
+                                    </div>
+                                    <span class="kbd-badge">Adv / Dis</span>
+                                </div>
+                                <p class="btn-inspector-desc">Toggle roll modes: <strong>Adv</strong> (Advantage, keeps highest of 2d20), <strong>Norm</strong> (Standard), <strong>Dis</strong> (Disadvantage, keeps lowest of 2d20), and <strong>GM</strong> (Whisper roll secretly to GM only).</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-eye-slash"></i> Roll Mode & Whisper Toggles</div>
+                            </div>
+
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-cubes"></i></div>
+                                        <span class="btn-inspector-name">3D Physics Dice Box</span>
+                                    </div>
+                                    <span class="kbd-badge">WebGL 3D</span>
+                                </div>
+                                <p class="btn-inspector-desc">Integrated 3D dice physics canvas renderer. Every roll triggers smooth 3D dice tumbling across the screen with authentic material reflections and synced results.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-cube"></i> Real-time Physics Simulation</div>
+                            </div>
+
+                            <div class="btn-inspector-card" id="guide-player-sheets">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-users"></i></div>
+                                        <span class="btn-inspector-name">Player Character Sheets</span>
+                                    </div>
+                                    <span class="kbd-badge">5 Tabs</span>
+                                </div>
+                                <p class="btn-inspector-desc">Full 5-tab Character Sheet: <strong>Primary</strong> (HP, AC, Stats, Saves, Skills), <strong>Equipment</strong> (Weapons, Armor, Encumbrance), <strong>Spells</strong> (Slots, DC, Cast), <strong>Abilities</strong>, and <strong>Build</strong> (Class, Subclass).</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-user-shield"></i> Complete Character Engine</div>
+                            </div>
+
+                            <div class="btn-inspector-card" id="guide-bestiary-assets">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-book-skull"></i></div>
+                                        <span class="btn-inspector-name">Bestiary Monster Drawer</span>
+                                    </div>
+                                    <span class="kbd-badge">GM Only</span>
+                                </div>
+                                <p class="btn-inspector-desc">Search thousands of official 5e monsters or create custom NPCs. Drag any monster directly onto the battlemap to instantly spawn its token and load its stat block!</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-dragon"></i> Drag-and-Drop Token Spawner</div>
+                            </div>
+
+                            <div class="btn-inspector-card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-photo-film"></i></div>
+                                        <span class="btn-inspector-name">Asset Gallery & Media</span>
+                                    </div>
+                                    <span class="kbd-badge">GM Only</span>
+                                </div>
+                                <p class="btn-inspector-desc">Upload local images (PNG/JPG/WEBP), animated GIFs, or videos (MP4/WebM). Create folders, search assets, and drag items onto the map as tactical props or tiles.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-folder-plus"></i> Folder Hierarchy & Media Manager</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 6: GM SETTINGS & CONFIG -->
+                    <section class="manual-section" id="guide-config-settings">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-gears"></i></div>
+                                <h3 class="manual-section-title">GM Connection, Setup & Campaign Rules</h3>
+                            </div>
+                            <span class="manual-section-badge gm">GM Setup</span>
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Setting Card</th>
+                                        <th>Option / Control</th>
+                                        <th>Function & Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Server Connection URLs</strong></td>
+                                        <td><code>Copy Remote / Local URL</code></td>
+                                        <td>1-click copy buttons for your HTTPS Cloudflare subdomain URL or local network IP address.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Player Allowlist</strong></td>
+                                        <td><code>Add / Remove Usernames</code></td>
+                                        <td>Restrict campaign access strictly to specified usernames. If list is empty, any player can join.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>GM Roll Visibility</strong></td>
+                                        <td><code>Public / Private (GM Only)</code></td>
+                                        <td>Choose whether monster attack and damage rolls are shown to everyone or hidden in secret.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>HP Bar Global Rules</strong></td>
+                                        <td><code>Always / Hover / Never</code></td>
+                                        <td>Configure monster and player HP bar and name visibility rules separately for GM and Players.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Temp HP Bar Style</strong></td>
+                                        <td><code>Stacked / Layered / Split</code></td>
+                                        <td>Choose how temporary hit points display visually above creature tokens on the map.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Encumbrance Rules</strong></td>
+                                        <td><code>Standard / Variant</code></td>
+                                        <td>Switch between standard (STR × 15) or variant encumbrance rules (STR × 5 encumbered, STR × 10 heavy).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Initiative Dex Tiebreaker</strong></td>
+                                        <td><code>Checkbox (Checked by default)</code></td>
+                                        <td>Appends character Dexterity as decimal tiebreaker (e.g. roll 14 with 16 DEX becomes 14.16).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Dynamic Sight Radius</strong></td>
+                                        <td><code>5ft to 120ft (Default 60ft)</code></td>
+                                        <td>Controls global player line-of-sight distance through the dynamic Fog of War overlay.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 7: MODALS & CAMPAIGN MANAGERS -->
+                    <section class="manual-section" id="guide-modals">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                                <h3 class="manual-section-title">Campaign Map Manager & Modals</h3>
+                            </div>
+                            <span class="manual-section-badge gm">GM Tool</span>
+                        </div>
+
+                        <div class="manual-subgrid">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-map"></i> Campaign Map Manager Modal</h4>
+                                <p>Click the map button on the left toolbar to open the Map Manager:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Blank Tactical Grid:</strong> Create a battlemap with customizable width, height, and cell size.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Import 5eTools Maps:</strong> Select any official D&D 5e adventure (e.g. Curse of Strahd, Phandelver) and import hi-res dungeon maps with 1 click.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Upload File:</strong> Upload local JPG/PNG/WEBP files directly to your server.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>External URL:</strong> Paste any web link, GIF, or video stream.</li>
+                                </ul>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-sliders"></i> Map Grid Calibration</h4>
+                                <p>Edit any map to calibrate its grid parameters:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Grid Type:</strong> Choose Square, Hex (Vertical), or Hex (Horizontal).</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Cell Size:</strong> Adjust pixels per grid square (20px to 200px).</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Grid Shift X & Y:</strong> Fine-tune grid alignment to align with artwork.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 8: MASTER CHAT DICE FORMULA MANUAL -->
+                    <section class="manual-section" id="guide-dice-engine">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-dice-d20"></i></div>
+                                <h3 class="manual-section-title">Master Chat Dice Commands & Syntax Reference</h3>
+                            </div>
+                            <span class="manual-section-badge">Full Reference</span>
+                        </div>
+
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                            ForgeD VTT features a powerful mathematical dice engine supporting standard D&D rolls, advantage/disadvantage, exploding dice, rerolls, math functions, and target success counting. Type <span class="syntax-badge">/roll [formula]</span> or <span class="syntax-badge">/r [formula]</span> in chat:
+                        </p>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Roll Category</th>
+                                        <th>Syntax / Operator</th>
+                                        <th>Example Command</th>
+                                        <th>Explanation & System Effect</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Basic Dice Roll</strong></td>
+                                        <td><span class="syntax-badge">XdY + Z</span></td>
+                                        <td><span class="syntax-example">/r 1d20 + 7</span></td>
+                                        <td>Rolls one 20-sided die and adds +7 modifier.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Multiple Dice</strong></td>
+                                        <td><span class="syntax-badge">XdY + NdM</span></td>
+                                        <td><span class="syntax-example">/r 8d6 + 2d8 + 4</span></td>
+                                        <td>Rolls multiple dice pools (e.g. Fireball + Divine Smite).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Keep Highest (Advantage)</strong></td>
+                                        <td><span class="syntax-badge">khN</span> or <span class="syntax-badge">kN</span></td>
+                                        <td><span class="syntax-example">/r 2d20kh1 + 5</span></td>
+                                        <td>Rolls 2d20 with Advantage, keeping highest 1 die.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Keep Lowest (Disadvantage)</strong></td>
+                                        <td><span class="syntax-badge">klN</span></td>
+                                        <td><span class="syntax-example">/r 2d20kl1 + 3</span></td>
+                                        <td>Rolls 2d20 with Disadvantage, keeping lowest 1 die.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Drop Lowest</strong></td>
+                                        <td><span class="syntax-badge">dlN</span></td>
+                                        <td><span class="syntax-example">/r 4d6dl1</span></td>
+                                        <td>Ability Score Generation: Rolls 4d6 and drops lowest 1.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Drop Highest</strong></td>
+                                        <td><span class="syntax-badge">dhN</span></td>
+                                        <td><span class="syntax-example">/r 4d6dh1</span></td>
+                                        <td>Rolls 4d6 and drops the highest 1 die.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Reroll Exact Value</strong></td>
+                                        <td><span class="syntax-badge">rN</span></td>
+                                        <td><span class="syntax-example">/r 1d20r1</span></td>
+                                        <td>Halfling Luck: Rerolls any 1 rolled indefinitely until != 1.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Reroll Comparison</strong></td>
+                                        <td><span class="syntax-badge">r&lt;=N</span> or <span class="syntax-badge">r&gt;=N</span></td>
+                                        <td><span class="syntax-example">/r 2d6r&lt;=2</span></td>
+                                        <td>Great Weapon Fighting: Rerolls 1s and 2s on damage dice.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Reroll Once</strong></td>
+                                        <td><span class="syntax-badge">roN</span> or <span class="syntax-badge">ro&lt;=N</span></td>
+                                        <td><span class="syntax-example">/r 1d20ro1</span></td>
+                                        <td>Rerolls a 1 exactly once, keeping the new result.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Exploding Dice</strong></td>
+                                        <td><span class="syntax-badge">!</span> or <span class="syntax-badge">x</span></td>
+                                        <td><span class="syntax-example">/r 1d6!</span></td>
+                                        <td>Rolls max value (6) and automatically rolls an extra die.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Exploding Threshold</strong></td>
+                                        <td><span class="syntax-badge">!&gt;N</span> or <span class="syntax-badge">!&gt;=N</span></td>
+                                        <td><span class="syntax-example">/r 1d10!&gt;=8</span></td>
+                                        <td>Explodes whenever die result is 8, 9, or 10.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Compounding Explode</strong></td>
+                                        <td><span class="syntax-badge">!!</span></td>
+                                        <td><span class="syntax-example">/r 1d6!!</span></td>
+                                        <td>Exploding dice that adds all bonus rolls into a single number.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Penetrating Explode</strong></td>
+                                        <td><span class="syntax-badge">!p</span></td>
+                                        <td><span class="syntax-example">/r 1d6!p</span></td>
+                                        <td>Exploding die with -1 penalty on each subsequent roll.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Expanded Critical Hit</strong></td>
+                                        <td><span class="syntax-badge">cs&gt;=N</span></td>
+                                        <td><span class="syntax-example">/r 1d20cs&gt;=19 + 6</span></td>
+                                        <td>Champion Fighter: Triggers Critical Success on 19 or 20.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Expanded Critical Fumble</strong></td>
+                                        <td><span class="syntax-badge">cf&lt;=N</span></td>
+                                        <td><span class="syntax-example">/r 1d20cf&lt;=2</span></td>
+                                        <td>Triggers Critical Fumble on rolls of 1 or 2.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Target Success Counting</strong></td>
+                                        <td><span class="syntax-badge">&gt;N</span> or <span class="syntax-badge">ts&gt;=N</span></td>
+                                        <td><span class="syntax-example">/r 8d10&gt;7</span></td>
+                                        <td>Counts number of dice that meet or exceed target DC 8.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Math & Rounding</strong></td>
+                                        <td><span class="syntax-math">floor() / ceil()</span></td>
+                                        <td><span class="syntax-example">/r floor((1d20+4)/2)</span></td>
+                                        <td>Rounds result down or up according to 5e rules.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Average & Max Functions</strong></td>
+                                        <td><span class="syntax-math">avg() / dmax()</span></td>
+                                        <td><span class="syntax-example">/r avg(8d6)</span></td>
+                                        <td>Calculates fixed average or maximum possible roll value.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Proficiency Variable</strong></td>
+                                        <td><span class="syntax-math">pb</span></td>
+                                        <td><span class="syntax-example">/r 1d20 + pb + 3</span></td>
+                                        <td>Injects character proficiency bonus automatically.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Secret GM Whisper</strong></td>
+                                        <td><span class="syntax-badge">GM Toggle / /w GM</span></td>
+                                        <td><span class="syntax-example">/r 1d20+9 (with GM toggle)</span></td>
+                                        <td>Sends dice breakdown secretly to the Game Master only.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 9: COMPLETE KEYBOARD & MOUSE SHORTCUTS -->
+                    <section class="manual-section" id="guide-shortcuts">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-keyboard"></i></div>
+                                <h3 class="manual-section-title">Master Keyboard & Mouse Shortcuts Cheat Sheet</h3>
+                            </div>
+                            <span class="manual-section-badge">Hotkeys</span>
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Action Category</th>
+                                        <th>Shortcut Key / Mouse Action</th>
+                                        <th>Target Scope</th>
+                                        <th>Effect</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Canvas Navigation</strong></td>
+                                        <td><span class="kbd-badge">Right Click + Drag</span> / <span class="kbd-badge">Middle Click</span></td>
+                                        <td>Canvas</td>
+                                        <td>Pans the camera smoothly across the battlemap.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Canvas Zoom</strong></td>
+                                        <td><span class="kbd-badge">Mouse Wheel</span> / <span class="kbd-badge">Numpad + / -</span></td>
+                                        <td>Canvas</td>
+                                        <td>Zooms in / out centered at cursor position.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Center on Token / Map</strong></td>
+                                        <td><span class="kbd-badge">Numpad 5</span> or <span class="kbd-badge">5</span></td>
+                                        <td>Canvas</td>
+                                        <td>Centers camera on selected token or active character.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Broadcast View (GM)</strong></td>
+                                        <td><span class="kbd-badge">Shift + Numpad 5</span></td>
+                                        <td>Canvas (GM)</td>
+                                        <td>Broadcasts GM viewport pan and zoom to all players.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Keyboard Panning</strong></td>
+                                        <td><span class="kbd-badge">Numpad 4, 8, 6, 2</span> (and diagonals 7, 9, 1, 3)</td>
+                                        <td>Canvas</td>
+                                        <td>Step-pan camera Left, Up, Right, Down, and Diagonals.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Token Movement Waypoint</strong></td>
+                                        <td><span class="kbd-badge">Spacebar</span> (while dragging)</td>
+                                        <td>Tokens</td>
+                                        <td>Places a waypoint segment on path measurement ruler.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Token Rotation (45°)</strong></td>
+                                        <td><span class="kbd-badge">Q</span> / <span class="kbd-badge">E</span></td>
+                                        <td>Selected Token(s)</td>
+                                        <td>Rotates token facing 45° CCW / CW.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Token Rotation (5° Fine)</strong></td>
+                                        <td><span class="kbd-badge">Shift + Q</span> / <span class="kbd-badge">Shift + E</span></td>
+                                        <td>Selected Token(s)</td>
+                                        <td>Fine angle rotation step by 5°.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Flip Token Facing</strong></td>
+                                        <td><span class="kbd-badge">A</span> / <span class="kbd-badge">D</span> (Horizontal) | <span class="kbd-badge">W</span> / <span class="kbd-badge">S</span> (Vertical)</td>
+                                        <td>Selected Token(s)</td>
+                                        <td>Mirrors token sprite along horizontal or vertical axis.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Delete Token / Shape</strong></td>
+                                        <td><span class="kbd-badge">Delete</span> / <span class="kbd-badge">Backspace</span></td>
+                                        <td>Selection</td>
+                                        <td>Removes selected token(s) or spell template shape.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Canvas Layer Switcher (GM)</strong></td>
+                                        <td><span class="kbd-badge">~ + 1</span> to <span class="kbd-badge">~ + 5</span></td>
+                                        <td>Layers (GM)</td>
+                                        <td>1: Tokens, 2: GM Layer, 3: Lighting, 4: Notes, 5: Map.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Dismiss Menus</strong></td>
+                                        <td><span class="kbd-badge">Escape</span></td>
+                                        <td>UI Modals</td>
+                                        <td>Closes token radial context menus and mobile drawers.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
                 </div>
-
-                <!-- Section 6: Compendium Integration -->
-                <div class="guide-detail-card" id="guide-compendium-sheets">
-                    <div class="guide-detail-header">
-                        <i class="fa-solid fa-book-sparkles guide-detail-icon"></i>
-                        <div>
-                            <h3 class="guide-detail-title">5e Compendium & Character Sheet Integration</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Drag-and-drop bestiary tokens, instant spell lookups, and automated calculations.</p>
-                        </div>
-                    </div>
-
-                    <div class="guide-steps-list">
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">1</div>
-                            <div class="guide-step-body">
-                                <h4>Drag & Drop Monsters onto Canvas</h4>
-                                <p>Open the in-game Bestiary drawer, search for any creature (e.g. <em>Adult Red Dragon</em>), and drag its card directly onto the canvas to instantly spawn an active monster token with full statblocks attached.</p>
-                            </div>
-                        </div>
-
-                        <div class="guide-step-card">
-                            <div class="guide-step-num">2</div>
-                            <div class="guide-step-body">
-                                <h4>Character Sheet Linking</h4>
-                                <p>Link character sheets to player tokens for real-time HP bar updates, condition synchronization, and spell slot expenditure tracking.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- TAB 4: VTT FEATURES SHOWCASE -->
+        <!-- TAB 3: VTT FEATURES -->
         <section id="tab-features" class="tab-content">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-gold-bright);">
-                    Built for Ultimate Tabletop Freedom
-                </h2>
-                <p style="color: var(--text-secondary); max-width: 600px; margin: 8px auto 0;">
-                    No subscriptions, no cloud data limits, complete self-hosted control.
-                </p>
-            </div>
-
             <div class="features-grid">
                 <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-dice-d20 feature-icon"></i>
-                    <h3 class="feature-title">3D Physics Dice Rolling</h3>
-                    <p class="feature-desc">Full 3D physics-simulated dice box powered by WebGL. Custom colors, themes, and instant chat roll synchronization.</p>
+                    <i class="fa-solid fa-cube feature-icon"></i>
+                    <h3 class="feature-title">3D Physics Dice Box</h3>
+                    <p class="feature-desc">Authentic 3D physics dice simulation with custom animations, synchronized dice trays, sound effects, and multi-dice formula parsing.</p>
                 </div>
 
                 <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-map-location-dot feature-icon"></i>
-                    <h3 class="feature-title">Real-time Token Canvas</h3>
-                    <p class="feature-desc">Multiplayer interactive map canvas with grid snapping, token scaling, elevation control, and GM vision overlays.</p>
-                </div>
-
-                <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-lightbulb feature-icon"></i>
+                    <i class="fa-solid fa-eye-slash feature-icon"></i>
                     <h3 class="feature-title">Dynamic Fog of War</h3>
-                    <p class="feature-desc">Line-of-sight vision occlusion, darkness layers, and customizable lighting sources for immersive tactical exploration.</p>
+                    <p class="feature-desc">Dynamic lighting, line-of-sight occlusion, GM secret layers, torch emission, and fog reveal tools for immersive dungeon exploration.</p>
                 </div>
 
                 <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-id-card feature-icon"></i>
-                    <h3 class="feature-title">Integrated Character Sheets</h3>
-                    <p class="feature-desc">Interactive 5e player sheets with automated skill check calculations, spell slot tracking, and inventory management.</p>
+                    <i class="fa-solid fa-address-card feature-icon"></i>
+                    <h3 class="feature-title">Complete 5-Tab Character Sheets</h3>
+                    <p class="feature-desc">Interactive character sheets with automatic modifier calculation, click-to-roll skills and saves, spell slot trackers, and inventory management.</p>
                 </div>
 
                 <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-network-wired feature-icon"></i>
-                    <h3 class="feature-title">Subdomain Isolated Campaigns</h3>
+                    <i class="fa-solid fa-skull feature-icon"></i>
+                    <h3 class="feature-title">Drag & Drop Bestiary</h3>
+                    <p class="feature-desc">Search thousands of monsters from the 5e SRD and drag them directly onto the canvas to spawn tokens with full statblocks in seconds.</p>
+                </div>
+
+                <div class="glass-panel feature-card">
+                    <i class="fa-solid fa-shield-halved feature-icon"></i>
+                    <h3 class="feature-title">Subdomain Campaign Isolation</h3>
                     <p class="feature-desc">Each campaign operates on its own dedicated subdomain with isolated map uploads, chat histories, and campaign states.</p>
                 </div>
 
@@ -608,7 +1036,7 @@
             </div>
         </section>
 
-        <!-- TAB 5: HOST SETUP & SERVER GUIDE -->
+        <!-- TAB 4: HOST SETUP & SERVER GUIDE -->
         <section id="tab-hosting" class="tab-content">
             <div class="glass-panel hero-card" style="text-align: left;">
                 <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 8px;">
@@ -654,7 +1082,7 @@
 
     <!-- Footer -->
     <footer class="footer-vtt">
-        <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Powered by 5e Compendium integration.</p>
+        <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Designed for Tabletop Freedom.</p>
     </footer>
 
     <!-- Interactive Logic Script -->
@@ -792,48 +1220,62 @@
                     </div>`;
             });
 
-        // Compendium Live Search Filter
-        function filterCompendium() {
-            const query = document.getElementById('comp-search-input').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('#comp-results-grid .comp-card');
+        // Master Manual Live Search Filter
+        function filterManualTopics() {
+            const query = document.getElementById('manual-search-input').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.btn-inspector-card');
+            const sections = document.querySelectorAll('.manual-section');
+
+            if (!query) {
+                cards.forEach(c => c.style.display = 'flex');
+                sections.forEach(s => s.style.display = 'block');
+                return;
+            }
+
             cards.forEach(card => {
                 const text = card.textContent.toLowerCase();
-                if (!query || text.includes(query)) {
+                const keywords = card.getAttribute('data-keywords') || '';
+                if (text.includes(query) || keywords.includes(query)) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
             });
-        }
 
-        // User Guide Category Filter & Scroll Helper
-        function filterGuideTopics(category) {
-            document.querySelectorAll('.guide-filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            // If a section has no matching cards and text doesn't match query, hide section
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                const visibleCards = section.querySelectorAll('.btn-inspector-card[style*="display: flex"]');
+                const hasMatchingCards = visibleCards.length > 0;
+                const hasMatchingTable = section.querySelector('table') && text.includes(query);
 
-            const cards = document.querySelectorAll('.guide-topic-card');
-            cards.forEach(card => {
-                const cats = card.getAttribute('data-category') || '';
-                if (category === 'all' || cats.includes(category)) {
-                    card.style.display = 'flex';
+                if (hasMatchingCards || hasMatchingTable || text.includes(query)) {
+                    section.style.display = 'block';
                 } else {
-                    card.style.display = 'none';
+                    section.style.display = 'none';
                 }
             });
         }
 
-        function scrollToGuideSection(sectionId) {
-            const target = document.getElementById(sectionId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                target.style.borderColor = 'var(--color-gold-bright)';
-                target.style.boxShadow = '0 0 25px rgba(245, 196, 83, 0.4)';
-                setTimeout(() => {
-                    target.style.borderColor = '';
-                    target.style.boxShadow = '';
-                }, 1800);
-            }
-        }
+        // Active TOC link highlighting on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.manual-section');
+            const scrollPos = window.scrollY + 120;
+
+            sections.forEach(sec => {
+                const top = sec.offsetTop;
+                const height = sec.offsetHeight;
+                const id = sec.getAttribute('id');
+                if (scrollPos >= top && scrollPos < top + height) {
+                    document.querySelectorAll('.manual-toc-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
