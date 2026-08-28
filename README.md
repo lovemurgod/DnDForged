@@ -16,7 +16,7 @@
 ForgeDVTT is packaged as a **single-download Windows desktop app**. No Node.js installation or terminal commands required!
 
 1. **Download & Run**: Get the latest `ForgeDVTT Setup 1.0.0.exe` or portable binary from **[ForgeDVTT Releases](https://github.com/lovemurgod/DnDForged/releases)**.
-2. **Choose Subdomain**: Launch the app, enter your desired game subdomain slug (e.g. `julz` or `cosmic`), and click **🚀 Start Online Tunnel**.
+2. **Choose Subdomain**: Launch the app, enter your desired game subdomain slug (e.g. `mygame` or `tavern`), and click **🚀 Start Online Tunnel**.
 3. **Play & Share**: 
    - Click **⚔️ Open VTT Window** to play directly inside the desktop app.
    - Click **📋 Copy Link** to share your secure game URL (`https://<subdomain>.forgedvtt.com/vtt.html`) with your players.
@@ -43,7 +43,7 @@ For hosting on a dedicated home server, Linux VM, or command-line environment:
 4. **Launch zero-config online tunnel:**
    ```bash
    npm run online
-   # Prompted for custom subdomain (e.g. julz.forgedvtt.com)
+   # Prompted for custom subdomain (e.g. mygame.forgedvtt.com)
    ```
 
 ---
@@ -53,7 +53,7 @@ For hosting on a dedicated home server, Linux VM, or command-line environment:
 ### 💻 Desktop Control Center & Cloudflare Tunneling
 - **Zero-Terminal Launcher**: Single-click local Node server initialization with integrated system tray background execution.
 - **Built-in Cloudflare Tunnel**: Expose your game securely over HTTPS without port forwarding or router modifications.
-- **Subdomain Campaign Isolation**: Host multiple independent campaigns (`julz.forgedvtt.com`, `cosmic.forgedvtt.com`) running seamlessly off your local server.
+- **Subdomain Campaign Isolation**: Host multiple independent campaigns (`mygame.forgedvtt.com`, `tavern.forgedvtt.com`) running seamlessly off your local server.
 - **1-Click Data Management**: Direct buttons to open local data folders and create instant campaign zip backups.
 
 ### 🎨 Interactive Canvas & Token Controls

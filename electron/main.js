@@ -60,7 +60,7 @@ let tunnelProcess = null;
 
 let isServerRunning = false;
 let isTunnelRunning = false;
-let currentSubdomain = 'julz';
+let currentSubdomain = 'mygame';
 let currentTunnelToken = '';
 let registeredUrl = 'http://localhost:5050';
 let consoleLogs = [];
@@ -145,8 +145,8 @@ function stopServer() {
 async function startTunnel(subdomainInput, tokenInput) {
   if (isTunnelRunning) stopTunnel();
 
-  currentSubdomain = (subdomainInput || 'julz').toLowerCase().replace(/[^a-z0-9-]/g, '');
-  if (!currentSubdomain) currentSubdomain = 'julz';
+  currentSubdomain = (subdomainInput || 'mygame').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  if (!currentSubdomain) currentSubdomain = 'mygame';
   currentTunnelToken = tokenInput ? tokenInput.trim() : '';
 
   const cloudflared = getCloudflaredPath();

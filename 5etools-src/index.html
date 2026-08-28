@@ -39,13 +39,7 @@
                 <i class="fa-solid fa-house"></i> Home
             </button>
             <button class="nav-tab-btn" onclick="switchTab('guide')">
-                <i class="fa-solid fa-book-open-reader"></i> User Guide
-            </button>
-            <button class="nav-tab-btn" onclick="switchTab('features')">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> VTT Features
-            </button>
-            <button class="nav-tab-btn" onclick="switchTab('hosting')">
-                <i class="fa-solid fa-server"></i> Host Setup
+                <i class="fa-solid fa-book-open-reader"></i> Guide
             </button>
         </div>
 
@@ -85,13 +79,7 @@
                 <i class="fa-solid fa-house"></i> Home
             </button>
             <button class="mobile-nav-btn" onclick="switchTabAndClose('guide')">
-                <i class="fa-solid fa-book-open-reader"></i> User Guide
-            </button>
-            <button class="mobile-nav-btn" onclick="switchTabAndClose('features')">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> VTT Features
-            </button>
-            <button class="mobile-nav-btn" onclick="switchTabAndClose('hosting')">
-                <i class="fa-solid fa-server"></i> Host Setup
+                <i class="fa-solid fa-book-open-reader"></i> Guide
             </button>
         </div>
 
@@ -136,7 +124,7 @@
                             <input 
                                 type="text" 
                                 id="subdomain-input" 
-                                placeholder="e.g. julz, curse-of-strahd, tavern" 
+                                placeholder="e.g. mygame, campaign, tavern" 
                                 autocomplete="off" 
                                 required 
                                 pattern="[a-zA-Z0-9-]+" 
@@ -164,14 +152,14 @@
             </div>
         </section>
 
-        <!-- TAB 2: MASTER INTERACTIVE USER GUIDE -->
+        <!-- TAB 2: MASTER INTERACTIVE GUIDE -->
         <section id="tab-guide" class="tab-content">
             <div class="guide-header-box" style="margin-bottom: 25px;">
                 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-gold-bright); margin-bottom: 8px;">
-                    <i class="fa-solid fa-book-open-reader"></i> ForgeD VTT Master Manual
+                    <i class="fa-solid fa-book-open-reader"></i> ForgeD VTT Guide
                 </h2>
                 <p style="color: var(--text-secondary); max-width: 750px; margin: 0 auto 15px auto;">
-                    Comprehensive per-button guide, canvas controls, character sheet mechanics, and complete chat dice formula manual. Everything in ForgeD VTT documented in full.
+                    Comprehensive per-button guide, GM hosting instructions, canvas controls, character sheet mechanics, and complete chat dice formula manual. Everything in ForgeD VTT documented in full.
                 </p>
             </div>
 
@@ -187,8 +175,9 @@
 
                     <nav class="manual-toc" id="manual-toc-list">
                         <div class="manual-toc-group">
-                            <div class="manual-toc-title">1. Canvas Controls</div>
-                            <a href="#guide-toolbar" class="manual-toc-link active"><i class="fa-solid fa-toolbox"></i> Left Toolbar Buttons</a>
+                            <div class="manual-toc-title">1. Getting Started</div>
+                            <a href="#guide-hosting-setup" class="manual-toc-link active"><i class="fa-solid fa-server"></i> GM Setup & Hosting</a>
+                            <a href="#guide-toolbar" class="manual-toc-link"><i class="fa-solid fa-toolbox"></i> Left Toolbar Buttons</a>
                             <a href="#guide-canvas-tokens" class="manual-toc-link"><i class="fa-solid fa-gamepad"></i> Token Movement & Radial Menu</a>
                             <a href="#guide-hud" class="manual-toc-link"><i class="fa-solid fa-compass"></i> Canvas HUD & GM Preview</a>
                         </div>
@@ -214,7 +203,51 @@
                 <!-- Right Detailed Manual Content -->
                 <div class="manual-content" id="manual-content-container">
 
-                    <!-- SECTION 1: LEFT FLOATING TOOLBAR -->
+                    <!-- SECTION 1: GM HOSTING & TUNNEL SETUP -->
+                    <section class="manual-section" id="guide-hosting-setup">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-server"></i></div>
+                                <h3 class="manual-section-title">Game Master Setup & Hosting Guide</h3>
+                            </div>
+                            <span class="manual-section-badge gm">Host Setup</span>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            ForgeD VTT runs directly from your personal computer. You can host multiplayer campaigns securely over HTTPS with zero port-forwarding or router configuration using built-in Cloudflare Tunnels.
+                        </p>
+
+                        <div class="guide-step" style="margin-bottom: 16px;">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>Download & Launch Desktop App</h3>
+                                <p style="color: var(--text-secondary);">Download and run the 1-click Windows Desktop Setup installer:</p>
+                                <div style="margin: 10px 0;">
+                                    <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold" style="font-size: 0.9rem; padding: 8px 18px; display: inline-flex; align-items: center; gap: 8px;">
+                                        <i class="fa-solid fa-download"></i> Download ForgeD VTT Setup (.exe)
+                                    </a>
+                                </div>
+                                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Or for Node.js / CLI self-hosting, open your terminal in the project directory and run: <code>node launcher.js</code></p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step" style="margin-bottom: 16px;">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>Choose Campaign Subdomain</h3>
+                                <p style="color: var(--text-secondary);">Enter your session's unique subdomain slug (e.g. <code>mygame</code> or <code>tavern</code>) in the launcher and click <strong>🚀 Start Online Tunnel</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step" style="margin-bottom: 16px;">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3>Share Player URL</h3>
+                                <p style="color: var(--text-secondary);">Share your unique campaign URL with your party (e.g. <code>https://mygame.forgedvtt.com/vtt.html</code>) so they can connect directly in any web browser with no downloads required!</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 2: LEFT FLOATING TOOLBAR -->
                     <section class="manual-section" id="guide-toolbar">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -347,7 +380,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 2: CANVAS VIEWPORT & TOKEN CONTROLS -->
+                    <!-- SECTION 3: CANVAS VIEWPORT & TOKEN CONTROLS -->
                     <section class="manual-section" id="guide-canvas-tokens">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -429,7 +462,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 3: CANVAS HUD & GM PREVIEW -->
+                    <!-- SECTION 4: CANVAS HUD & GM PREVIEW -->
                     <section class="manual-section" id="guide-hud">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -490,7 +523,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 4: COMBAT INITIATIVE CAROUSEL -->
+                    <!-- SECTION 5: COMBAT INITIATIVE CAROUSEL -->
                     <section class="manual-section" id="guide-initiative">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -559,7 +592,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 5: RIGHT SIDEBAR PANELS -->
+                    <!-- SECTION 6: RIGHT SIDEBAR PANELS -->
                     <section class="manual-section" id="guide-chat-dice">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -595,15 +628,17 @@
                             </div>
 
                             <div class="btn-inspector-card">
-                                <div class="btn-inspector-header">
-                                    <div class="btn-inspector-title-wrap">
-                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-cubes"></i></div>
-                                        <span class="btn-inspector-name">3D Physics Dice Box</span>
+                                <div class="btn-inspector-card-body">
+                                    <div class="btn-inspector-header">
+                                        <div class="btn-inspector-title-wrap">
+                                            <div class="btn-inspector-icon green"><i class="fa-solid fa-cubes"></i></div>
+                                            <span class="btn-inspector-name">3D Physics Dice Box</span>
+                                        </div>
+                                        <span class="kbd-badge">WebGL 3D</span>
                                     </div>
-                                    <span class="kbd-badge">WebGL 3D</span>
+                                    <p class="btn-inspector-desc">Integrated 3D dice physics canvas renderer. Every roll triggers smooth 3D dice tumbling across the screen with authentic material reflections and synced results.</p>
+                                    <div class="btn-inspector-action"><i class="fa-solid fa-cube"></i> Real-time Physics Simulation</div>
                                 </div>
-                                <p class="btn-inspector-desc">Integrated 3D dice physics canvas renderer. Every roll triggers smooth 3D dice tumbling across the screen with authentic material reflections and synced results.</p>
-                                <div class="btn-inspector-action"><i class="fa-solid fa-cube"></i> Real-time Physics Simulation</div>
                             </div>
 
                             <div class="btn-inspector-card" id="guide-player-sheets">
@@ -644,7 +679,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 6: GM SETTINGS & CONFIG -->
+                    <!-- SECTION 7: GM SETTINGS & CONFIG -->
                     <section class="manual-section" id="guide-config-settings">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -709,7 +744,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 7: MODALS & CAMPAIGN MANAGERS -->
+                    <!-- SECTION 8: MODALS & CAMPAIGN MANAGERS -->
                     <section class="manual-section" id="guide-modals">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -743,7 +778,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 8: MASTER CHAT DICE FORMULA MANUAL -->
+                    <!-- SECTION 9: MASTER CHAT DICE FORMULA MANUAL -->
                     <section class="manual-section" id="guide-dice-engine">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -893,7 +928,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 9: COMPLETE KEYBOARD & MOUSE SHORTCUTS -->
+                    <!-- SECTION 10: COMPLETE KEYBOARD & MOUSE SHORTCUTS -->
                     <section class="manual-section" id="guide-shortcuts">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -991,89 +1026,6 @@
                         </div>
                     </section>
 
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: VTT FEATURES -->
-        <section id="tab-features" class="tab-content">
-            <div class="features-grid">
-                <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-cube feature-icon"></i>
-                    <h3 class="feature-title">3D Physics Dice Box</h3>
-                    <p class="feature-desc">Authentic 3D physics dice simulation with custom animations, synchronized dice trays, sound effects, and multi-dice formula parsing.</p>
-                </div>
-
-                <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-eye-slash feature-icon"></i>
-                    <h3 class="feature-title">Dynamic Fog of War</h3>
-                    <p class="feature-desc">Dynamic lighting, line-of-sight occlusion, GM secret layers, torch emission, and fog reveal tools for immersive dungeon exploration.</p>
-                </div>
-
-                <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-address-card feature-icon"></i>
-                    <h3 class="feature-title">Complete 5-Tab Character Sheets</h3>
-                    <p class="feature-desc">Interactive character sheets with automatic modifier calculation, click-to-roll skills and saves, spell slot trackers, and inventory management.</p>
-                </div>
-
-                <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-skull feature-icon"></i>
-                    <h3 class="feature-title">Drag & Drop Bestiary</h3>
-                    <p class="feature-desc">Search thousands of monsters from the 5e SRD and drag them directly onto the canvas to spawn tokens with full statblocks in seconds.</p>
-                </div>
-
-                <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-shield-halved feature-icon"></i>
-                    <h3 class="feature-title">Subdomain Campaign Isolation</h3>
-                    <p class="feature-desc">Each campaign operates on its own dedicated subdomain with isolated map uploads, chat histories, and campaign states.</p>
-                </div>
-
-                <div class="glass-panel feature-card">
-                    <i class="fa-solid fa-bolt feature-icon"></i>
-                    <h3 class="feature-title">Zero Subscription Hosting</h3>
-                    <p class="feature-desc">Run directly on your local desktop using our launcher script and share with your party via instant Cloudflare Tunnels.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: HOST SETUP & SERVER GUIDE -->
-        <section id="tab-hosting" class="tab-content">
-            <div class="glass-panel hero-card" style="text-align: left;">
-                <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 8px;">
-                    <i class="fa-solid fa-server"></i> How to Host a ForgeD VTT Session
-                </h2>
-                <p style="color: var(--text-secondary); margin-bottom: 30px;">
-                    Game Masters can host campaigns directly from their computer with zero port-forwarding using Cloudflare Tunnels.
-                </p>
-
-                <div class="guide-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Download & Launch Desktop App</h3>
-                        <p style="color: var(--text-secondary);">Download and run the 1-click Windows Desktop Setup installer:</p>
-                        <div style="margin: 10px 0;">
-                            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold" style="font-size: 0.9rem; padding: 8px 18px; display: inline-flex; align-items: center; gap: 8px;">
-                                <i class="fa-solid fa-download"></i> Download ForgeD VTT Setup (.exe)
-                            </a>
-                        </div>
-                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Or for Node.js / CLI self-hosting, run: <code>node launcher.js</code></p>
-                    </div>
-                </div>
-
-                <div class="guide-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Set Campaign Subdomain</h3>
-                        <p style="color: var(--text-secondary);">Choose your session's unique subdomain slug (e.g. <code>julz</code> or <code>cosmic</code>) when prompted by the launcher.</p>
-                    </div>
-                </div>
-
-                <div class="guide-step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Invite Players</h3>
-                        <p style="color: var(--text-secondary);">Share your unique campaign URL with your players (e.g. <code>https://julz.forgedvtt.com</code>) to jump straight into the VTT tabletop!</p>
-                    </div>
                 </div>
             </div>
         </section>

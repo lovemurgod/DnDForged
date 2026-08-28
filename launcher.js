@@ -109,7 +109,7 @@ async function main() {
 
   let subdomain = '';
   while (!subdomain) {
-    const input = await prompt('👉 Enter subdomain slug for this session (e.g. julz or cosmic): ');
+    const input = await prompt('👉 Enter subdomain slug for this session (e.g. mygame or tavern): ');
     if (!input) {
       subdomain = '@';
       break;
@@ -164,7 +164,7 @@ async function main() {
   console.log(`   💻  Local Access:      http://localhost:${DEFAULT_PORT}/`);
   console.log('   🔒  Subdomain Isolation: ACTIVE');
   console.log('======================================================');
-  console.log('\n💡 Tip: Any subdomain (e.g. julz.forgedvtt.com) automatically loads');
+  console.log('\n💡 Tip: Any subdomain (e.g. mygame.forgedvtt.com) automatically loads');
   console.log('   its own isolated campaign data from your local server.');
   console.log('\n(Press Ctrl+C at any time to shut down the server and tunnel)\n');
 
