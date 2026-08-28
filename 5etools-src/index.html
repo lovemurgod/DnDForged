@@ -45,12 +45,9 @@
 
         <!-- Desktop Action Buttons -->
         <div class="nav-actions">
-            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-blue">
+            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold">
                 <i class="fa-solid fa-download"></i> Download App
             </a>
-            <button onclick="switchTab('connect')" class="btn-vtt-gold">
-                <i class="fa-solid fa-right-to-bracket"></i> Enter Tabletop
-            </button>
         </div>
 
         <!-- Mobile Hamburger Toggle Button -->
@@ -84,12 +81,9 @@
         </div>
 
         <div class="mobile-drawer-actions">
-            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-blue">
+            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold">
                 <i class="fa-solid fa-download"></i> Download Windows App (.exe)
             </a>
-            <button onclick="switchTabAndClose('connect')" class="btn-vtt-gold">
-                <i class="fa-solid fa-right-to-bracket"></i> Enter Tabletop
-            </button>
         </div>
     </aside>
 
@@ -136,18 +130,6 @@
                             <i class="fa-solid fa-dice-d20"></i> Launch Game Session
                         </button>
                     </form>
-                </div>
-            </div>
-
-            <!-- Active Sessions List Section -->
-            <div class="sessions-section">
-                <h3 class="section-title">
-                    <i class="fa-solid fa-tower-broadcast"></i> Active Local Campaigns
-                </h3>
-                <div class="sessions-grid" id="sessions-container">
-                    <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 20px;">
-                        <i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Checking for active campaign servers...
-                    </div>
                 </div>
             </div>
         </section>
@@ -493,7 +475,7 @@
                                     </div>
                                     <span class="kbd-badge">Live HUD</span>
                                 </div>
-                                <p class="btn-inspector-desc">Displays the exact global map grid coordinates <code>X: [val] Y: [val]</code> of your mouse cursor in real-time, assisting GMs in tile alignment and trigger placements.</p>
+                                <p class="btn-inspector-desc">Displays the exact global map grid coordinates <code>X: [val] Y: [val]</code> of your mouse cursor in real-time, assisting GY in tile alignment and trigger placements.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-compass"></i> Real-time Position Tracking</div>
                             </div>
 
@@ -1104,7 +1086,6 @@
         const domainSuffixDisplay = document.getElementById('domain-suffix-display');
         const subdomainInput = document.getElementById('subdomain-input');
         const joinForm = document.getElementById('session-join-form');
-        const sessionsContainer = document.getElementById('sessions-container');
 
         const currentHost = window.location.hostname;
         const currentPort = window.location.port;
@@ -1136,41 +1117,6 @@
                 window.location.href = `https://${cleaned}.${baseDomain}/vtt.html`;
             }
         });
-
-        // Fetch active campaign sessions from API
-        fetch('/api/campaigns')
-            .then(res => res.json())
-            .then(data => {
-                const campaigns = Array.isArray(data) ? data : (data.campaigns || []);
-                sessionsContainer.innerHTML = '';
-                if (!campaigns || campaigns.length === 0) {
-                    sessionsContainer.innerHTML = `
-                        <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 15px;">
-                            No active campaign servers detected right now. Enter your GM's subdomain above to join!
-                        </div>`;
-                    return;
-                }
-
-                campaigns.forEach(c => {
-                    const card = document.createElement('a');
-                    card.className = 'session-card';
-                    card.href = isLocalhost 
-                        ? `${window.location.protocol}//${c.id}.${currentHost}${currentPort ? ':' + currentPort : ''}/vtt.html`
-                        : `https://${c.id}.forgedvtt.com/vtt.html`;
-
-                    card.innerHTML = `
-                        <span class="session-name"><i class="fa-solid fa-dice-d20" style="color: var(--color-gold); margin-right: 8px;"></i> ${c.name}</span>
-                        <span class="session-badge">${c.id}</span>
-                    `;
-                    sessionsContainer.appendChild(card);
-                });
-            })
-            .catch(err => {
-                sessionsContainer.innerHTML = `
-                    <div style="text-align: center; color: var(--text-muted); grid-column: 1/-1; padding: 15px;">
-                        Enter a campaign subdomain above to jump into your tabletop session.
-                    </div>`;
-            });
 
         // Master Manual Live Search Filter
         function filterManualTopics() {
