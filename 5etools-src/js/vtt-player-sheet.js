@@ -1635,7 +1635,8 @@ function simulateRoll(formula, critRange = 20) {
                         t.size = currentChar.tokenSize;
                         t.sightRange = currentChar.tokenSight;
                         const _cleanActiveUrl = activeImageUrl.split('?')[0].toLowerCase();
-                        t.isVideo = _cleanActiveUrl.endsWith('.gif') || _cleanActiveUrl.endsWith('.mp4') || _cleanActiveUrl.endsWith('.webm') || activeImageUrl.includes('youtube.com');
+                        t.isGif = _cleanActiveUrl.endsWith('.gif');
+                        t.isVideo = !t.isGif && (_cleanActiveUrl.endsWith('.mp4') || _cleanActiveUrl.endsWith('.webm') || _cleanActiveUrl.endsWith('.ogg') || activeImageUrl.includes('youtube.com'));
 
                         t.auras = JSON.parse(JSON.stringify(currentChar.tokenAuras || []));
                         // Backward compatibility attributes for aura
@@ -2665,6 +2666,7 @@ function simulateRoll(formula, critRange = 20) {
 
     if (btnCharAdd) {
         btnCharAdd.addEventListener('click', () => {
+            const assigned = (vtt.role !== 'GM' && vtt.username) ? [vtt.username] : [];
             const newChar = {
                 id: 'char_' + Date.now(),
                 name: "New Character",
@@ -2692,7 +2694,7 @@ function simulateRoll(formula, critRange = 20) {
                 tools: {},
                 tokenImages: [],
                 activeTokenIndex: 0,
-                assignedPlayers: []
+                assignedPlayers: assigned
             };
             vtt.socket.emit('character:update', { character: newChar });
 
@@ -3295,6 +3297,59 @@ function simulateRoll(formula, critRange = 20) {
                         }
                     }
                 });
+            }
+
+            // Warlock Pact Magic Slot Recovery on Short Rest
+            const classesList = (char.classes && char.classes.length > 0)
+                ? char.classes
+                : [{ name: char.class || '', level: char.level || 1 }];
+
+            const validClasses = classesList.filter(c => (c.name || '').trim() !== '');
+            const warlockClass = validClasses.find(c => (c.name || '').trim().toLowerCase() === 'warlock');
+
+            if (warlockClass && char.spellSlots) {
+                const isPureWarlock = validClasses.length === 1;
+                let slotsRestored = false;
+
+                if (isPureWarlock) {
+                    // Pure Warlock: Restore all active spell slot levels
+                    Object.keys(char.spellSlots).forEach(lvl => {
+                        if (char.spellSlots[lvl] && char.spellSlots[lvl].max > 0) {
+                            if (char.spellSlots[lvl].current < char.spellSlots[lvl].max) {
+                                slotsRestored = true;
+                                char.spellSlots[lvl].current = char.spellSlots[lvl].max;
+                            }
+                        }
+                    });
+                } else {
+                    // Multiclassed Warlock: Restore up to Pact Magic slots for the Warlock level
+                    const wLvl = parseInt(warlockClass.level) || 1;
+                    let slotLevelNum = 1;
+                    let slotCount = 1;
+                    if (wLvl >= 17) { slotLevelNum = 5; slotCount = 4; }
+                    else if (wLvl >= 11) { slotLevelNum = 5; slotCount = 3; }
+                    else if (wLvl >= 9) { slotLevelNum = 5; slotCount = 2; }
+                    else if (wLvl >= 7) { slotLevelNum = 4; slotCount = 2; }
+                    else if (wLvl >= 5) { slotLevelNum = 3; slotCount = 2; }
+                    else if (wLvl >= 3) { slotLevelNum = 2; slotCount = 2; }
+                    else if (wLvl >= 2) { slotLevelNum = 1; slotCount = 2; }
+                    else { slotLevelNum = 1; slotCount = 1; }
+
+                    const targetLevelKey = `level${slotLevelNum}`;
+                    if (char.spellSlots[targetLevelKey]) {
+                        const cur = char.spellSlots[targetLevelKey].current || 0;
+                        const max = char.spellSlots[targetLevelKey].max || 0;
+                        const newCur = Math.min(max, cur + slotCount);
+                        if (newCur > cur) {
+                            char.spellSlots[targetLevelKey].current = newCur;
+                            slotsRestored = true;
+                        }
+                    }
+                }
+
+                if (slotsRestored) {
+                    restoredAbilities.push('Pact Spell Slots');
+                }
             }
             
             let msgText = `☕ **${char.name || 'Player'}** completed a **Short Rest**.`;
@@ -4403,7 +4458,8 @@ function simulateRoll(formula, critRange = 20) {
         });
 
         document.querySelector('.pc-roll-init')?.addEventListener('click', () => {
-            const dexMod = getMod(getTotalStat(char, 'dex'));
+            const dexScore = getTotalStat(char, 'dex') || 10;
+            const dexMod = getMod(dexScore);
             let toggleFormulaStr = '';
             if (char.skillToggles) {
                 char.skillToggles.filter(t => t.enabled).forEach(t => {
@@ -4426,6 +4482,19 @@ function simulateRoll(formula, critRange = 20) {
             const formula = `1d20${modStr}${toggleFormulaStr}`;
 
             const rollData = simulateRoll(formula);
+
+            let isTiebreaker = true;
+            if (window.VTT?.campaignState?.settings?.initDexTiebreaker !== undefined) {
+                isTiebreaker = !!window.VTT.campaignState.settings.initDexTiebreaker;
+            } else if (window.VTT?.canvasEngine?.getCampaignSettings) {
+                isTiebreaker = window.VTT.canvasEngine.getCampaignSettings().initDexTiebreaker !== false;
+            }
+
+            if (isTiebreaker && rollData && typeof rollData.total === 'number') {
+                const dexTiebreaker = Math.round(dexScore) / 100;
+                rollData.total = Math.round((rollData.total + dexTiebreaker) * 100) / 100;
+            }
+
             vtt.socket.emit('chat:msg', {
                 text: `[${char.name}] rolls **Initiative**`,
                 roll: rollData
@@ -6362,7 +6431,7 @@ function simulateRoll(formula, critRange = 20) {
 
         function getUpcastedDamage(sp, castLvl, baseLvl, charLvl) {
             let list = sp.damageList && sp.damageList.length > 0 ? JSON.parse(JSON.stringify(sp.damageList)) : [];
-            if (list.length === 0 && sp.damage) list.push({ formula: sp.damage, type: sp.damageType || '' });
+            if (list.length === 0 && sp.damage) list.push({ formula: sp.damage, type: sp.damageType || '', label: '' });
             
             if (baseLvl === 0 && sp.cantripScale && list.length > 0) {
                 let cCount = 1;
@@ -6370,9 +6439,9 @@ function simulateRoll(formula, critRange = 20) {
                 if (charLvl >= 11) cCount = 3;
                 if (charLvl >= 17) cCount = 4;
                 for (let d of list) {
-                    if (d.formula && d.formula.match(/(?:\d+\s*)?[dD]\s*\d+/)) {
-                        d.formula = d.formula.replace(/^(\d+)\s*([dD]\s*\d+)/, (m, countStr, die) => {
-                            const count = parseInt(countStr);
+                    if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
+                        d.formula = d.formula.replace(/^(?:(\d+)\s*)?([dD]\s*\d+)/, (m, countStr, die) => {
+                            const count = countStr !== undefined && countStr !== '' ? parseInt(countStr) : 1;
                             if (count === 0) {
                                 const extraDice = cCount - 1;
                                 return extraDice > 0 ? `${extraDice}${die}` : '0';
@@ -6381,32 +6450,58 @@ function simulateRoll(formula, critRange = 20) {
                         });
                     }
                 }
-            } else if (castLvl > baseLvl && sp.upcastBonus && list.length > 0) {
+            } else if (castLvl > baseLvl && (sp.upcastBonus || list.some(d => d.upcastBonus)) && list.length > 0) {
                 const step = sp.upcastScaleStep || 1;
                 const extra = Math.floor((castLvl - baseLvl) / step);
                 if (extra > 0) {
-                    const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                    if (upcastMatch) {
-                        const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                        const extraDice = diceCount * extra;
-                        const uSize = "d" + upcastMatch[2];
-                        
-                        let merged = false;
-                        for (let d of list) {
-                            const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                            let m = d.formula.match(diceRegex);
-                            if (m) {
-                                const baseCount = m[1] ? parseInt(m[1]) : 1;
-                                d.formula = d.formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
-                                merged = true;
-                                break;
+                    let rowSpecificScaled = false;
+                    for (let d of list) {
+                        if (d.upcastBonus) {
+                            const upcastMatch = d.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
+                            if (upcastMatch) {
+                                const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
+                                const extraDice = diceCount * extra;
+                                const uSize = "d" + upcastMatch[2];
+                                const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
+                                let m = d.formula.match(diceRegex);
+                                if (m) {
+                                    const baseCount = m[1] ? parseInt(m[1]) : 1;
+                                    d.formula = d.formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
+                                } else {
+                                    d.formula += ` + ${extraDice}${uSize}`;
+                                }
+                                rowSpecificScaled = true;
+                            } else if (!isNaN(parseInt(d.upcastBonus))) {
+                                d.formula += ` + ${parseInt(d.upcastBonus) * extra}`;
+                                rowSpecificScaled = true;
                             }
                         }
-                        if (!merged) {
-                            list[0].formula += ` + ${extraDice}${uSize}`;
+                    }
+
+                    if (!rowSpecificScaled && sp.upcastBonus) {
+                        const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
+                        if (upcastMatch) {
+                            const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
+                            const extraDice = diceCount * extra;
+                            const uSize = "d" + upcastMatch[2];
+                            
+                            let merged = false;
+                            for (let d of list) {
+                                const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
+                                let m = d.formula.match(diceRegex);
+                                if (m) {
+                                    const baseCount = m[1] ? parseInt(m[1]) : 1;
+                                    d.formula = d.formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
+                                    merged = true;
+                                    break;
+                                }
+                            }
+                            if (!merged && list[0]) {
+                                list[0].formula += ` + ${extraDice}${uSize}`;
+                            }
+                        } else if (!isNaN(parseInt(sp.upcastBonus)) && list[0]) {
+                            list[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
                         }
-                    } else if (!isNaN(parseInt(sp.upcastBonus))) {
-                        list[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
                     }
                 }
             }

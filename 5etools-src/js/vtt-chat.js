@@ -483,14 +483,14 @@ export function initVttChat(vtt, chatHistory) {
                 Fire: '#ff6b35', Cold: '#64b5f6', Lightning: '#ffd54f', Thunder: '#b39ddb',
                 Poison: '#81c784', Acid: '#aed581', Necrotic: '#9e9e9e', Radiant: '#fff176',
                 Force: '#ce93d8', Psychic: '#f48fb1', Slashing: '#ef9a9a', Piercing: '#ffcc80',
-                Bludgeoning: '#bcaaa4', Healing: '#a5d6a7'
+                Bludgeoning: '#bcaaa4', Healing: '#a5d6a7', 'Temp HP': '#80cbc4', 'Temporary Hit Points': '#80cbc4'
             };
 
             const dmgIcons = {
                 Fire: 'fa-solid fa-fire', Cold: 'fa-regular fa-snowflake', Lightning: 'fa-solid fa-bolt', Thunder: 'fa-solid fa-ear-deaf',
                 Poison: 'fa-solid fa-skull-crossbones', Acid: 'fa-solid fa-flask', Necrotic: 'fa-solid fa-skull', Radiant: 'fa-regular fa-sun',
                 Force: 'fa-regular fa-circle-dot', Psychic: 'fa-regular fa-eye', Slashing: 'fa-solid fa-droplet-slash', Piercing: 'fa-solid fa-trowel',
-                Bludgeoning: 'fa-solid fa-gavel', Healing: 'fa-regular fa-heart'
+                Bludgeoning: 'fa-solid fa-gavel', Healing: 'fa-regular fa-heart', 'Temp HP': 'fa-solid fa-shield-heart', 'Temporary Hit Points': 'fa-solid fa-shield-heart'
             };
 
             // Description section
@@ -545,11 +545,14 @@ export function initVttChat(vtt, chatHistory) {
                 const total = dr.roll ? dr.roll.total : 0;
                 const formulaText = (dr.formula || '').toUpperCase();
                 const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
+                const labelText = dr.label && dr.label.trim() && dr.label.trim().toLowerCase() !== (dr.type || '').trim().toLowerCase()
+                    ? ` <span style="font-size:0.75rem; opacity:0.8; font-weight:normal; margin-left:4px;">(${dr.label.trim()})</span>`
+                    : '';
                 return `
                     <div class="macro-card-row">
                         <div class="macro-row-label">
                             <i class="${icon} macro-row-icon" style="color:${color};"></i>
-                            <span>${dr.type || 'Damage'}</span>
+                            <span>${dr.type || 'Damage'}</span>${labelText}
                         </div>
                         <div class="macro-row-right">
                             <span class="macro-row-total" style="color:${color};" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${total}</span>
@@ -1365,6 +1368,14 @@ export function initVttChat(vtt, chatHistory) {
                 }
             });
 
+            row.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                if (token && window.VTT?.canvasEngine) {
+                    window.VTT.canvasEngine.panTo(token.x, token.y, null, 350);
+                    window.VTT.canvasEngine.selectToken(token.id);
+                }
+            });
+
             imgHtml = `<div style="width: 36px; height: 36px; border-radius: 50%; background: #333; margin: 0; border: 2px solid #555; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #aaa;">?</div>`;
             if (token) {
                 // If GM config hides HP, we don't set hpText.
@@ -1430,7 +1441,7 @@ export function initVttChat(vtt, chatHistory) {
                         if (scoreEl.querySelector('input')) return; // Already editing
 
                         const currentScore = c.score;
-                        scoreEl.innerHTML = `<input type="number" class="init-score-edit-input" value="${currentScore}" style="width: 44px; text-align: center; background: rgba(0,0,0,0.5); border: 1px solid var(--color-gold-base, #cca35a); color: var(--color-text-primary, white); border-radius: 4px; padding: 2px; font-weight: bold; outline: none;">`;
+                        scoreEl.innerHTML = `<input type="number" step="any" class="init-score-edit-input" value="${currentScore}" style="width: 52px; text-align: center; background: rgba(0,0,0,0.5); border: 1px solid var(--color-gold-base, #cca35a); color: var(--color-text-primary, white); border-radius: 4px; padding: 2px; font-weight: bold; outline: none;">`;
                         
                         const inputEl = scoreEl.querySelector('input');
                         inputEl.focus();
@@ -1441,7 +1452,7 @@ export function initVttChat(vtt, chatHistory) {
                         const saveEdit = () => {
                             if (isSaved) return;
                             isSaved = true;
-                            const newScore = parseInt(inputEl.value);
+                            const newScore = parseFloat(inputEl.value);
                             if (!isNaN(newScore) && newScore !== currentScore) {
                                 // Explicitly find and update in the master array to avoid stale closures
                                 const targetIdx = combatants.findIndex(cb => cb.tokenId === c.tokenId);

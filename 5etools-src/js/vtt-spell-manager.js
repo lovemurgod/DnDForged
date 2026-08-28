@@ -43,19 +43,23 @@ if (typeof window !== 'undefined') {
     };
 }
 
+export function setSpellCache(cache) { 
+    sharedSpellCache = cache; 
+}
+
 export async function loadSpells() {
     if (sharedSpellCache) return sharedSpellCache;
     if (pSpellPromise) return pSpellPromise;
-    pSpellPromise = fetch('/data/spells-normalized.json')
+    pSpellPromise = fetch(`/data/spells-normalized.json?v=${Date.now()}`)
         .then(res => res.json())
         .then(spells => {
             sharedSpellCache = spells;
-            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+            if (typeof window !== 'undefined' && window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
                 window.vttPlayerSheetAPI.setSpellCache(spells);
             }
             return spells;
         }).catch(async err => {
-            if (window.DataUtil && window.DataUtil.spell) {
+            if (typeof window !== 'undefined' && window.DataUtil && window.DataUtil.spell) {
                 const spells = await window.DataUtil.spell.pLoadAll();
                 sharedSpellCache = spells;
                 if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
@@ -71,6 +75,7 @@ export async function loadSpells() {
 
 export function cleanSpellBodyHtml(html) {
     if (!html) return '';
+    if (typeof document === 'undefined') return html;
 
     const temp = document.createElement('div');
     // Wrap in table/tbody if html contains <tr> so browser DOM parser preserves <tr> and <td> nodes
@@ -155,7 +160,9 @@ export function cleanSpellBodyHtml(html) {
     return cleanedHtml.trim();
 }
 
-window.cleanSpellBodyHtml = cleanSpellBodyHtml;
+if (typeof window !== 'undefined') {
+    window.cleanSpellBodyHtml = cleanSpellBodyHtml;
+}
 
 export function getSpellMetaStrings(sp, slKey) {
     if (!sp || typeof sp !== 'object') return {};
@@ -192,6 +199,27 @@ export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, s
     if (!containerEl) return;
     let meta = getSpellMetaStrings(sp || { name: spellName }, slKey);
     
+    let rawBody = sp?.description || fallbackDesc || '';
+    if (!rawBody && (sharedSpellCache || spellCache) && spellName) {
+        const cache = sharedSpellCache || spellCache;
+        const found = cache.find(s => s.name && s.name.toLowerCase().trim() === spellName.toLowerCase().trim());
+        if (found) {
+            rawBody = found.descriptionHtml || found.description || '';
+            if (found.higherLevelHtml && !rawBody.includes(found.higherLevelHtml)) {
+                rawBody += (rawBody ? '<br>' : '') + found.higherLevelHtml;
+            }
+            if (sp && typeof sp === 'object') {
+                sp.description = rawBody;
+                if (!sp.school && found.school) sp.school = found.school;
+                if (!sp.castingTime && found.castingTime) sp.castingTime = found.castingTime;
+                if (!sp.range && found.range) sp.range = found.range;
+                if (!sp.components && found.components) sp.components = found.components;
+                if (!sp.duration && found.duration) sp.duration = found.duration;
+            }
+            meta = getSpellMetaStrings(sp || found, slKey);
+        }
+    }
+
     let metaHtml = '<div class="spell-meta" style="margin-bottom: 8px;">';
     if (meta.level) metaHtml += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${meta.level}</div>`;
     if (meta.school) metaHtml += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${meta.school}</div>`;
@@ -201,11 +229,10 @@ export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, s
     if (meta.duration) metaHtml += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${meta.duration}</div>`;
     metaHtml += '</div>';
 
-    let rawBody = sp?.description || fallbackDesc || '';
     if (typeof cleanSpellBodyHtml === 'function') {
         rawBody = cleanSpellBodyHtml(rawBody);
     }
-    if (typeof window.injectDiceChips === 'function') {
+    if (typeof window !== 'undefined' && typeof window.injectDiceChips === 'function') {
         rawBody = window.injectDiceChips(rawBody);
     }
 
@@ -293,14 +320,16 @@ export function renderSpellRowHtml(sp, slKey, idx, options = {}) {
 
 export async function ensureSpellIsParsed(sp) {
     if (!sp || typeof sp !== 'object') return null;
-    if (sp.macroPopulated) return sp;
+    if (sp.macroPopulated && sp.description && sp.description.length > 0) return sp;
     
     const spells = await loadSpells();
     if (spells && sp.name) {
-        const spData = spells.find(s => s.name.toLowerCase().trim() === sp.name.toLowerCase().trim());
+        const spData = spells.find(s => s.name && s.name.toLowerCase().trim() === sp.name.toLowerCase().trim());
         if (spData) {
             if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.parseSpellToMacro) {
                 window.vttPlayerSheetAPI.parseSpellToMacro(spData, sp);
+            } else {
+                parseSpellToMacro(spData, sp);
             }
             sp.macroPopulated = true;
         }
@@ -402,8 +431,16 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
     const getAbilityMod = (ab) => {
         if (!ab) return 0;
         const key = ab.toLowerCase();
-        const score = casterObj[key] !== undefined ? casterObj[key] : (casterObj.stats ? casterObj.stats[key] : 10);
-        return Math.floor(((parseInt(score) || 10) - 10) / 2);
+        let score = 10;
+        if (casterObj.stats && casterObj.stats[key] !== undefined) {
+            score = parseInt(casterObj.stats[key]) || 10;
+            if (casterObj.statMods && casterObj.statMods[key] !== undefined) {
+                score += parseInt(casterObj.statMods[key]) || 0;
+            }
+        } else if (casterObj[key] !== undefined) {
+            score = parseInt(casterObj[key]) || 10;
+        }
+        return Math.floor((score - 10) / 2);
     };
 
     const getProfBonus = (crOrLvl) => {
@@ -422,13 +459,49 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
     const pb = casterObj.proficiencyBonus !== undefined ? casterObj.proficiencyBonus : getProfBonus(crOrLvl);
 
     // Spellcasting ability determination
-    let abilityToUse = sp.ability || (casterObj.spellcastingAbility ? casterObj.spellcastingAbility.toLowerCase() : null);
+    let abilityToUse = sp.ability || (casterObj.spellSettings && casterObj.spellSettings.ability ? casterObj.spellSettings.ability : null) || (casterObj.spellAbility ? casterObj.spellAbility : null) || (casterObj.spellcastingAbility ? casterObj.spellcastingAbility : null);
     if (!abilityToUse && casterObj.spellcasting && Array.isArray(casterObj.spellcasting) && casterObj.spellcasting.length > 0) {
         abilityToUse = casterObj.spellcasting[0].ability;
     }
     if (!abilityToUse) abilityToUse = 'int';
     abilityToUse = abilityToUse.toLowerCase();
     const spellCastingMod = getAbilityMod(abilityToUse);
+
+    // Global spell settings and toggles
+    let globalAtkMod = parseInt(casterObj.spellSettings?.atkMod || 0);
+    let globalDcMod = parseInt(casterObj.spellSettings?.dcMod || 0);
+    let globalDmgMod = parseInt(casterObj.spellSettings?.dmgMod || 0);
+
+    let atkToggleFormula = '';
+    let dmgToggleFormula = '';
+    let typedDmgToggles = [];
+
+    const toggles = casterObj.spellSettings?.toggles;
+    if (toggles && Array.isArray(toggles)) {
+        toggles.filter(t => t.enabled).forEach(t => {
+            if (t.target === 'atk' || t.target === 'both') {
+                let f = (t.formula || '').trim();
+                if (f) {
+                    let cleanF = f.startsWith('+') || f.startsWith('-') ? f : '+' + f;
+                    atkToggleFormula += `${cleanF}[${t.name || 'Toggle'}]`;
+                }
+            }
+            if (t.target === 'dc' || t.target === 'both') {
+                globalDcMod += parseInt(t.formula) || 0;
+            }
+            if (t.target === 'dmg' || t.target === 'both') {
+                if (t.dmgType && t.dmgType.trim() !== '') {
+                    typedDmgToggles.push(t);
+                } else {
+                    let f = (t.formula || '').trim();
+                    if (f) {
+                        let cleanF = f.startsWith('+') || f.startsWith('-') ? f : '+' + f;
+                        dmgToggleFormula += `${cleanF}[${t.name || 'Toggle'}]`;
+                    }
+                }
+            }
+        });
+    }
 
     const baseLvl = slKey === 'cantrip' || slKey === 'legacy' ? 0 : parseInt(String(slKey).replace('level', '')) || 0;
     const castLvl = customCastLvl !== null ? customCastLvl : baseLvl;
@@ -448,18 +521,28 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
         let formula = "1d20";
         if (sp.attackBonus) {
             const bonusStr = String(sp.attackBonus).trim();
-            formula += bonusStr.startsWith('+') || bonusStr.startsWith('-') ? bonusStr : ` + ${bonusStr}`;
+            const cleanBonus = bonusStr.startsWith('+') || bonusStr.startsWith('-') ? bonusStr : `+${bonusStr}`;
+            formula += cleanBonus.includes('d') ? cleanBonus : ` + ${cleanBonus}`;
         } else if (sp.atkMod !== undefined) {
             const sign = sp.atkMod >= 0 ? '+' : '';
             formula += ` ${sign}${sp.atkMod}`;
         } else {
-            const mod = sp.attackStat === 'spell' || !sp.attackStat ? spellCastingMod : getAbilityMod(sp.attackStat);
-            formula += ` + ${mod}`;
-            if (sp.attackProf !== false) formula += ` + ${pb}`;
-            if (sp.attackExtra) formula += ` + ${sp.attackExtra}`;
+            const isSpellStat = sp.attackStat === 'spell' || !sp.attackStat;
+            const statKey = isSpellStat ? abilityToUse : (sp.attackStat || 'int').toLowerCase();
+            const mod = getAbilityMod(statKey);
+            formula += ` ${mod >= 0 ? '+' : ''}${mod}[${(sp.attackStat || 'SPELL').toUpperCase()}]`;
+            if (sp.attackProf !== false) formula += ` + ${pb}[Prof]`;
+            if (sp.attackExtra) formula += ` ${sp.attackExtra >= 0 ? '+' : ''}${sp.attackExtra}`;
         }
+        if (globalAtkMod !== 0) {
+            formula += ` ${globalAtkMod >= 0 ? '+' : ''}${globalAtkMod}[Global]`;
+        }
+        formula += atkToggleFormula;
+
         if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
             atkRoll = window.vttPlayerSheetAPI.simulateRoll(formula);
+        } else if (typeof simulateRoll === 'function') {
+            atkRoll = simulateRoll(formula);
         } else {
             const r = Math.floor(Math.random() * 20) + 1;
             atkRoll = { total: r, rolls: [r], formula };
@@ -470,13 +553,15 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
     if ((type === 'roll' || type === 'save') && sp.saveAbility) {
         let dc = 10;
         if (sp.saveDcCustom) {
-            dc = sp.saveDcCustom;
+            dc = parseInt(sp.saveDcCustom) || 10;
         } else if (sp.dc !== undefined) {
-            dc = sp.dc;
+            dc = parseInt(sp.dc) || 10;
         } else {
-            const stat = sp.saveDcStat === 'spell' || !sp.saveDcStat ? spellCastingMod : getAbilityMod(sp.saveDcStat);
+            const isSpellStat = sp.saveDcStat === 'spell' || !sp.saveDcStat;
+            const statKey = isSpellStat ? abilityToUse : (sp.saveDcStat || 'int').toLowerCase();
+            const stat = getAbilityMod(statKey);
             const prof = sp.saveDcProf !== false ? pb : 0;
-            dc = 8 + prof + stat + (sp.saveDcExtra || 0);
+            dc = 8 + prof + stat + (parseInt(sp.saveDcExtra) || 0) + globalDcMod;
         }
         saveInfo = { ability: sp.saveAbility.toUpperCase(), dc: dc };
     }
@@ -489,9 +574,9 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
         if (baseLvl === 0 && sp.cantripScale) {
             let cCount = casterLvl >= 17 ? 4 : casterLvl >= 11 ? 3 : casterLvl >= 5 ? 2 : 1;
             for (let d of dList) {
-                if (d.formula && d.formula.match(/(?:\d+\s*)?[dD]\s*\d+/)) {
-                    d.formula = d.formula.replace(/^(\d+)\s*([dD]\s*\d+)/, (m, countStr, die) => {
-                        const count = parseInt(countStr);
+                if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
+                    d.formula = d.formula.replace(/^(?:(\d+)\s*)?([dD]\s*\d+)/, (m, countStr, die) => {
+                        const count = countStr !== undefined && countStr !== '' ? parseInt(countStr) : 1;
                         if (count === 0) {
                             const extraDice = cCount - 1;
                             return extraDice > 0 ? `${extraDice}${die}` : '0';
@@ -500,43 +585,72 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
                     });
                 }
             }
-        } else if (castLvl > baseLvl && sp.upcastBonus) {
+        } else if (castLvl > baseLvl && (sp.upcastBonus || dList.some(d => d.upcastBonus))) {
             const step = sp.upcastScaleStep || 1;
             const extra = Math.floor((castLvl - baseLvl) / step);
             if (extra > 0) {
-                const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                if (upcastMatch) {
-                    const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                    const uSize = "d" + upcastMatch[2];
-                    let merged = false;
-                    for (let d of dList) {
-                        const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                        let mMatch = d.formula.match(diceRegex);
-                        if (mMatch) {
-                            const baseCount = mMatch[1] ? parseInt(mMatch[1]) : 1;
-                            d.formula = d.formula.replace(diceRegex, `${baseCount + (diceCount * extra)}${uSize}`);
-                            merged = true;
-                            break;
+                let rowSpecificScaled = false;
+                for (let d of dList) {
+                    if (d.upcastBonus) {
+                        const upcastMatch = d.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
+                        if (upcastMatch) {
+                            const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
+                            const uSize = "d" + upcastMatch[2];
+                            const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
+                            let mMatch = d.formula.match(diceRegex);
+                            if (mMatch) {
+                                const baseCount = mMatch[1] ? parseInt(mMatch[1]) : 1;
+                                d.formula = d.formula.replace(diceRegex, `${baseCount + (diceCount * extra)}${uSize}`);
+                            } else {
+                                d.formula += ` + ${diceCount * extra}${uSize}`;
+                            }
+                            rowSpecificScaled = true;
+                        } else if (!isNaN(parseInt(d.upcastBonus))) {
+                            d.formula += ` + ${parseInt(d.upcastBonus) * extra}`;
+                            rowSpecificScaled = true;
                         }
                     }
-                    if (!merged) {
-                        dList[0].formula += ` + ${diceCount * extra}${uSize}`;
+                }
+
+                if (!rowSpecificScaled && sp.upcastBonus) {
+                    const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
+                    if (upcastMatch) {
+                        const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
+                        const uSize = "d" + upcastMatch[2];
+                        let merged = false;
+                        for (let d of dList) {
+                            const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
+                            let mMatch = d.formula.match(diceRegex);
+                            if (mMatch) {
+                                const baseCount = mMatch[1] ? parseInt(mMatch[1]) : 1;
+                                d.formula = d.formula.replace(diceRegex, `${baseCount + (diceCount * extra)}${uSize}`);
+                                merged = true;
+                                break;
+                            }
+                        }
+                        if (!merged && dList[0]) {
+                            dList[0].formula += ` + ${diceCount * extra}${uSize}`;
+                        }
+                    } else if (!isNaN(parseInt(sp.upcastBonus)) && dList[0]) {
+                        dList[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
                     }
-                } else if (!isNaN(parseInt(sp.upcastBonus))) {
-                    dList[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
                 }
             }
         }
 
         let isCrit = atkRoll && atkRoll.isCritSuccess;
+        const isHealingType = (typeStr) => /healing|temp\s*hp/i.test(typeStr || '');
+
         dList.forEach(d => {
             let dform = d.formula || '';
-            if (isCrit) {
+            if (isCrit && !isHealingType(d.type)) {
                 dform = dform.replace(/(?:(\d+)\s*)?[dD]\s*(\d+)/gi, (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`);
             }
             if (d.stat && d.stat !== 'none' && d.stat !== '') {
-                const mod = d.stat === 'spell' ? spellCastingMod : getAbilityMod(d.stat);
-                dform += ` ${mod >= 0 ? '+' : ''}${mod}[${d.stat.toUpperCase()}]`;
+                const isSpellStat = d.stat.toLowerCase() === 'spell';
+                const statKey = isSpellStat ? abilityToUse : d.stat.toLowerCase();
+                const mod = getAbilityMod(statKey);
+                dform += ` ${mod >= 0 ? '+' : ''}${mod}[${(d.stat || 'STAT').toUpperCase()}]`;
             }
             if (d.custom && d.custom.trim() !== '') {
                 let c = d.custom.trim();
@@ -545,12 +659,34 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
             }
             if (d.prof) dform += ` + ${pb}[Prof]`;
             if (d.extra) dform += ` + ${d.extra}[Extra]`;
+            if (globalDmgMod !== 0) {
+                dform += ` ${globalDmgMod >= 0 ? '+' : ''}${globalDmgMod}[Global]`;
+            }
+            dform += dmgToggleFormula;
             
             let res = null;
             if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
                 res = window.vttPlayerSheetAPI.simulateRoll(dform);
+            } else if (typeof simulateRoll === 'function') {
+                res = simulateRoll(dform);
             }
-            dmgRolls.push({ formula: dform, type: d.type || 'Damage', roll: res });
+            dmgRolls.push({ formula: dform, type: d.type || (isHealingType(d.type) ? 'Healing' : 'Damage'), label: d.label || '', roll: res });
+        });
+
+        // Add typed damage toggles
+        typedDmgToggles.forEach(t => {
+            let cleanF = t.formula.startsWith('+') || t.formula.startsWith('-') ? t.formula : '+' + t.formula;
+            let rollFormula = `${cleanF}[${t.name || 'Toggle'}]`;
+            if (isCrit && !isHealingType(t.dmgType)) {
+                rollFormula = rollFormula.replace(/(?:(\d+)\s*)?[dD]\s*(\d+)/gi, (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`);
+            }
+            let res = null;
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.simulateRoll) {
+                res = window.vttPlayerSheetAPI.simulateRoll(rollFormula);
+            } else if (typeof simulateRoll === 'function') {
+                res = simulateRoll(rollFormula);
+            }
+            dmgRolls.push({ formula: cleanF, type: t.dmgType, roll: res });
         });
     }
 
@@ -558,9 +694,10 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
     const meta = getSpellMetaStrings(sp, slKey);
     let cardTitle = sp.name;
     if (castLvl && castLvl > baseLvl) cardTitle += ` (Level ${castLvl})`;
+    const isAllHealing = sp.damageList && sp.damageList.length > 0 && sp.damageList.every(d => /healing|temp\s*hp/i.test(d.type || ''));
     if (type === 'attack') cardTitle += ' (Spell Attack)';
     else if (type === 'save') cardTitle += ' (Spell Save)';
-    else if (type === 'damage') cardTitle += ' (Damage)';
+    else if (type === 'damage') cardTitle += isAllHealing ? ' (Healing)' : ' (Damage)';
 
     const card = {
         charName: casterName,
@@ -612,16 +749,21 @@ export function initVttSpellManager(vtt) {
         newSpell.components = spData.components || newSpell.components || '';
         newSpell.duration = spData.duration || newSpell.duration || '';
 
+        newSpell.description = spData.descriptionHtml || spData.description || (Array.isArray(spData.entries) ? spData.entries.map(e => typeof e === 'string' ? e : JSON.stringify(e)).join('<br>') : '') || newSpell.description || '';
+        if (spData.higherLevelHtml && !newSpell.description.includes(spData.higherLevelHtml)) {
+            newSpell.description += (newSpell.description ? '<br>' : '') + spData.higherLevelHtml;
+        }
+
         if (spData.concentration !== undefined) newSpell.concentration = !!spData.concentration;
         else if (spData.duration && Array.isArray(spData.duration) && spData.duration.some(d => d.concentration)) newSpell.concentration = true;
         else if (spData.meta?.concentration) newSpell.concentration = true;
         else if (newSpell.concentration === undefined) newSpell.concentration = false;
 
         if (spData.ritual !== undefined) newSpell.ritual = !!spData.ritual;
-        else if (spData.meta?.ritual) newSpell.ritual = true;
-        else if (newSpell.ritual === undefined) newSpell.ritual = false;
-
-        newSpell.description = spData.descriptionHtml || spData.description || newSpell.description || '';
+        const isCantrip = spData.level === 0 || newSpell.level === 0 || newSpell.cantripScale;
+        if (isCantrip) {
+            newSpell.cantripScale = true;
+        }
 
         if (spData.damageList && Array.isArray(spData.damageList) && spData.damageList.length > 0) {
             newSpell.damageList = JSON.parse(JSON.stringify(spData.damageList));
@@ -644,11 +786,11 @@ export function initVttSpellManager(vtt) {
             newSpell.upcastScaleStep = spData.upcastScaleStep;
         }
 
-        if (!spData.entries) return;
+        if (!spData.entries && !spData.descriptionHtml && !spData.description) return;
 
-        const text = JSON.stringify(spData.entries).toLowerCase();
+        const rawEntriesText = JSON.stringify(spData.entries || spData.descriptionHtml || spData.description || '').toLowerCase();
 
-        if (text.includes("spell attack") || text.includes("{@atk ms}") || text.includes("{@atk rs}") || text.includes("{@atk ms,rs}")) {
+        if (rawEntriesText.includes("spell attack") || rawEntriesText.includes("{@atk ms}") || rawEntriesText.includes("{@atk rs}") || rawEntriesText.includes("{@atk ms,rs}")) {
             newSpell.attackStat = "spell";
             newSpell.attackProf = true;
             newSpell.attackExtra = 0;
@@ -658,7 +800,7 @@ export function initVttSpellManager(vtt) {
             newSpell.attackProf = false;
         }
 
-        const saveMatch = text.match(/(strength|dexterity|constitution|intelligence|wisdom|charisma) saving throw/);
+        const saveMatch = rawEntriesText.match(/(strength|dexterity|constitution|intelligence|wisdom|charisma) saving throw/);
         if (saveMatch && !newSpell.saveAbility) {
             newSpell.saveDcStat = "spell";
             newSpell.saveDcExtra = 0;
@@ -669,71 +811,115 @@ export function initVttSpellManager(vtt) {
             newSpell.saveAbility = "";
         }
 
+        // Parse damage / healing if not already set
         if (!newSpell.damageList || newSpell.damageList.length === 0) {
-            const dmgRegex = /\{@damage\s+(\d+)d(\d+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi;
-            let match;
-            const damageList = [];
-            while ((match = dmgRegex.exec(text)) !== null) {
-                let formula = "";
-                let type = match[3] ? match[3].charAt(0).toUpperCase() + match[3].slice(1) : "";
-                if (spData.level === 0) {
-                    formula = `1d${match[2]}`;
-                    newSpell.cantripScale = true;
-                    damageList.push({ formula, type, id: 'dmg_' + Date.now() + Math.random() });
-                    break;
-                } else {
-                    formula = match[1] + 'd' + match[2];
-                    damageList.push({ formula, type, id: 'dmg_' + Date.now() + Math.random() });
-                }
-            }
-            if (damageList.length > 0) newSpell.damageList = damageList;
-        }
+            const spName = (spData.name || '').toLowerCase();
+            const dmgInflict = Array.isArray(spData.damageInflict) ? spData.damageInflict : [];
 
-        if (!newSpell.damageList || newSpell.damageList.length === 0) {
-            const rawMatch = text.match(/(\d+)d(\d+)(?:[^a-z]*([a-z]+)\s+damage)?/i);
-            if (rawMatch) {
-                let formula = "";
-                let type = rawMatch[3] ? rawMatch[3].charAt(0).toUpperCase() + rawMatch[3].slice(1) : "";
-                if (spData.level === 0) {
-                    formula = `1d${rawMatch[2]}`;
-                    newSpell.cantripScale = true;
-                } else {
-                    formula = rawMatch[1] + 'd' + rawMatch[2];
-                }
-                newSpell.damageList = [{ formula, type, id: 'dmg_' + Date.now() + Math.random() }];
-            }
-        }
-
-        if (spData.level === 0) {
-            newSpell.cantripScale = true;
-            if (newSpell.damageList && newSpell.damageList.length > 0) {
-                const baseList = [];
-                const seenTypes = new Set();
-                for (let d of newSpell.damageList) {
-                    const normType = (d.type || '').toLowerCase();
-                    if (!seenTypes.has(normType)) {
-                        seenTypes.add(normType);
-                        let baseFormula = d.formula || '';
-                        baseFormula = baseFormula.replace(/(\d+)\s*([dD]\s*\d+)/, (m, count, die) => {
-                            const c = parseInt(count);
-                            return c > 1 ? `1${die}` : m;
-                        });
-                        baseList.push({ ...d, formula: baseFormula });
+            // 1. Check scalingLevelDice first (common for cantrips like Toll the Dead, Eldritch Blast, etc.)
+            if (isCantrip && Array.isArray(spData.scalingLevelDice) && spData.scalingLevelDice.length > 0) {
+                const parsedList = [];
+                spData.scalingLevelDice.forEach((sld, idx) => {
+                    const formula = sld.scaling?.['1'] || sld.scaling?.['cantrip'] || Object.values(sld.scaling || {})[0] || '1d8';
+                    let type = 'Damage';
+                    let label = '';
+                    const rawLabel = (sld.label || '').toLowerCase();
+                    
+                    const knownTypes = ["slashing", "piercing", "bludgeoning", "fire", "cold", "lightning", "thunder", "poison", "acid", "necrotic", "radiant", "force", "psychic", "healing"];
+                    for (const kt of knownTypes) {
+                        if (rawLabel.includes(kt)) {
+                            type = kt.charAt(0).toUpperCase() + kt.slice(1);
+                            break;
+                        }
                     }
+                    if (type === 'Damage' && dmgInflict.length > 0) {
+                        const matchedInflict = dmgInflict[idx] || dmgInflict[0];
+                        type = matchedInflict.charAt(0).toUpperCase() + matchedInflict.slice(1);
+                    }
+
+                    if (rawLabel.includes('wounded') || rawLabel.includes('missing')) {
+                        label = 'Wounded Target';
+                    } else if (spData.scalingLevelDice.length > 1) {
+                        label = idx === 0 ? 'Normal' : `Variant ${idx + 1}`;
+                    }
+
+                    parsedList.push({
+                        id: 'dmg_' + Date.now() + Math.random(),
+                        formula,
+                        type,
+                        label,
+                        stat: ''
+                    });
+                });
+                if (parsedList.length > 0) {
+                    newSpell.damageList = parsedList;
                 }
-                const spName = (spData.name || '').toLowerCase();
+            } else if (isCantrip) {
                 if (spName.includes('booming blade')) {
                     newSpell.damageList = [
-                        { formula: '0d8', type: 'Thunder', id: 'dmg_bb_hit', label: 'Hit Extra Damage' },
-                        { formula: '1d8', type: 'Thunder', id: 'dmg_bb_move', label: 'Movement Damage' }
+                        { formula: '0d8', type: 'Thunder', id: 'dmg_bb_hit', label: 'On Hit' },
+                        { formula: '1d8', type: 'Thunder', id: 'dmg_bb_move', label: 'On Move' }
                     ];
                 } else if (spName.includes('green-flame blade')) {
                     newSpell.damageList = [
-                        { formula: '0d8', type: 'Fire', id: 'dmg_gfb_hit', label: 'Hit Extra Damage' },
-                        { formula: '1d8', type: 'Fire', id: 'dmg_gfb_sec', label: 'Secondary Target Damage' }
+                        { formula: '0d8', type: 'Fire', id: 'dmg_gfb_hit', label: 'Primary Target' },
+                        { formula: '1d8', type: 'Fire', stat: 'spell', id: 'dmg_gfb_sec', label: 'Secondary Target' }
                     ];
-                } else if (baseList.length > 0) {
-                    newSpell.damageList = baseList;
+                } else {
+                    const dmgMatches = [...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
+                    if (dmgMatches.length > 0) {
+                        newSpell.damageList = dmgMatches.map((m, idx) => {
+                            const formula = m[1].trim();
+                            let type = m[2] ? m[2].charAt(0).toUpperCase() + m[2].slice(1) : (dmgInflict[idx] ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1) : (dmgInflict[0] ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : 'Damage'));
+                            let label = '';
+                            if (dmgMatches.length > 1) {
+                                label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
+                            }
+                            return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
+                        });
+                    } else {
+                        const fallbackM = rawEntriesText.match(/(\d+d\d+)/i);
+                        if (fallbackM) {
+                            let type = dmgInflict.length > 0 ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : 'Damage';
+                            newSpell.damageList = [{ formula: fallbackM[1], type, label: '', id: 'dmg_' + Date.now() + Math.random() }];
+                        }
+                    }
+                }
+            } else {
+                const isHealing = (spData.miscTags && spData.miscTags.includes('HL')) || /regain|restore/i.test(rawEntriesText);
+                const isTempHp = (spData.miscTags && spData.miscTags.includes('THP')) || /temporary hit point/i.test(rawEntriesText);
+                
+                if (isHealing || isTempHp) {
+                    const type = isHealing ? 'Healing' : 'Temp HP';
+                    const hasSpellMod = /plus your spellcasting ability modifier|\+\s*your spellcasting ability modifier/i.test(rawEntriesText);
+                    const stat = hasSpellMod ? 'spell' : 'none';
+                    const dm = rawEntriesText.match(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i) || rawEntriesText.match(/(\d+d\d+(?:\s*[+-]\s*\d+)?)/i);
+                    if (dm) {
+                        const formula = (dm[1] || dm[0]).replace(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i, '$1').trim();
+                        newSpell.damageList = [{ formula, type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }];
+                    } else {
+                        const flatMatch = rawEntriesText.match(/restoring\s+(\d+)/i) || rawEntriesText.match(/regains?\s+(\d+)/i);
+                        if (flatMatch) {
+                            newSpell.damageList = [{ formula: flatMatch[1], type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }];
+                        }
+                    }
+                } else {
+                    const dmgMatches = [...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
+                    if (dmgMatches.length > 0) {
+                        newSpell.damageList = dmgMatches.map((match, idx) => {
+                            let formula = match[1].trim();
+                            let type = match[2] ? match[2].charAt(0).toUpperCase() + match[2].slice(1) : (dmgInflict[idx] ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1) : (dmgInflict[0] ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : "Damage"));
+                            let label = '';
+                            if (dmgMatches.length > 1) {
+                                if (spName.includes('ice knife')) {
+                                    label = idx === 0 ? 'On Hit' : 'Burst';
+                                } else {
+                                    label = `Damage ${idx + 1}`;
+                                }
+                            }
+                            return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
+                        });
+                    }
                 }
             }
         }
@@ -746,20 +932,15 @@ export function initVttSpellManager(vtt) {
             } catch (e) { }
         }
 
-        if (spData.entriesHigherLevel) {
+        if (spData.entriesHigherLevel && !newSpell.upcastBonus) {
             const hl = JSON.stringify(spData.entriesHigherLevel).toLowerCase();
-            let hlMatch = hl.match(/\{@scaledamage [^|]+\|[^|]+\|([^}]+)\}/);
+            let hlMatch = hl.match(/\{@scale(?:damage|dice)\s+[^|]+\|[^|]+\|([^}]+)\}/i);
             if (hlMatch) {
                 newSpell.upcastBonus = hlMatch[1];
             } else {
-                hlMatch = hl.match(/increases by (?:\{@damage )?(\d+d\d+)/);
+                hlMatch = hl.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+|\d+)/i);
                 if (hlMatch) {
                     newSpell.upcastBonus = hlMatch[1];
-                } else {
-                    hlMatch = hl.match(/(\d+)d(\d+)/);
-                    if (hlMatch) {
-                        newSpell.upcastBonus = hlMatch[1] + 'd' + hlMatch[2];
-                    }
                 }
             }
         }
@@ -1768,23 +1949,38 @@ export function initVttSpellManager(vtt) {
 
         list.innerHTML = modalSpellDamageRows.map((d, i) => `
             <div style="display:flex; gap:4px; align-items:center; margin-bottom:4px;">
-                <input type="text" class="modal-spell-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="Formula (1d8)" style="width:26%; padding:4px; font-size:0.8rem;">
-                <select class="modal-spell-dmg-type" data-idx="${i}" style="width:22%; padding:4px; font-size:0.8rem;">
+                <input type="text" class="modal-spell-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="1d8" style="width:20%; padding:4px; font-size:0.8rem;" title="Damage / Healing Formula">
+                <select class="modal-spell-dmg-type" data-idx="${i}" style="width:20%; padding:4px; font-size:0.8rem;" title="Damage Type">
                     <option value="">Type</option>
                     ${dmgTypes.map(t => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('')}
                 </select>
-                <select class="modal-spell-dmg-stat" data-idx="${i}" style="width:26%; padding:4px; font-size:0.8rem;">
+                <input type="text" class="modal-spell-dmg-label" data-idx="${i}" value="${d.label || ''}" placeholder="Label (e.g. Normal)" style="width:22%; padding:4px; font-size:0.8rem;" title="Damage Roll Label">
+                <select class="modal-spell-dmg-stat" data-idx="${i}" style="width:18%; padding:4px; font-size:0.8rem;" title="Ability Modifier">
                     ${statOptions.map(s => `<option value="${s.val}" ${(d.stat || '').toLowerCase() === s.val.toLowerCase() ? 'selected' : ''}>${s.label}</option>`).join('')}
                 </select>
-                <input type="text" class="modal-spell-dmg-custom" data-idx="${i}" value="${d.custom || ''}" placeholder="Mod (+2)" style="width:18%; padding:4px; font-size:0.8rem;">
-                <button class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:8%; padding:4px 2px;" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
+                <input type="text" class="modal-spell-dmg-custom" data-idx="${i}" value="${d.custom || ''}" placeholder="Mod (+2)" style="width:13%; padding:4px; font-size:0.8rem;" title="Custom Modifier">
+                <button class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:7%; padding:4px 2px;" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
             </div>
         `).join('');
 
-        document.querySelectorAll('.modal-spell-dmg-formula').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].formula = e.target.value));
-        document.querySelectorAll('.modal-spell-dmg-type').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].type = e.target.value));
-        document.querySelectorAll('.modal-spell-dmg-stat').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].stat = e.target.value));
-        document.querySelectorAll('.modal-spell-dmg-custom').forEach(el => el.addEventListener('change', (e) => modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value));
+        document.querySelectorAll('.modal-spell-dmg-formula').forEach(el => {
+            el.addEventListener('input', (e) => { modalSpellDamageRows[e.target.dataset.idx].formula = e.target.value; });
+            el.addEventListener('change', (e) => { modalSpellDamageRows[e.target.dataset.idx].formula = e.target.value; });
+        });
+        document.querySelectorAll('.modal-spell-dmg-type').forEach(el => {
+            el.addEventListener('change', (e) => { modalSpellDamageRows[e.target.dataset.idx].type = e.target.value; });
+        });
+        document.querySelectorAll('.modal-spell-dmg-label').forEach(el => {
+            el.addEventListener('input', (e) => { modalSpellDamageRows[e.target.dataset.idx].label = e.target.value; });
+            el.addEventListener('change', (e) => { modalSpellDamageRows[e.target.dataset.idx].label = e.target.value; });
+        });
+        document.querySelectorAll('.modal-spell-dmg-stat').forEach(el => {
+            el.addEventListener('change', (e) => { modalSpellDamageRows[e.target.dataset.idx].stat = e.target.value; });
+        });
+        document.querySelectorAll('.modal-spell-dmg-custom').forEach(el => {
+            el.addEventListener('input', (e) => { modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value; });
+            el.addEventListener('change', (e) => { modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value; });
+        });
         document.querySelectorAll('.modal-spell-dmg-del').forEach(el => el.addEventListener('click', (e) => {
             modalSpellDamageRows.splice(e.currentTarget.dataset.idx, 1);
             renderModalSpellDamage();
@@ -1889,7 +2085,7 @@ export function initVttSpellManager(vtt) {
             if (!char.spells[levelKey]) char.spells[levelKey] = [];
 
             if (!char.spells[levelKey].find(s => s.name === activePreviewSpell.name)) {
-                const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: activePreviewSpell.name, description: '', prepared: false };
+                const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: activePreviewSpell.name, description: '', prepared: false, macroPopulated: true };
                 parseSpellToMacro(activePreviewSpell, newSpell);
                 char.spells[levelKey].push(newSpell);
 
@@ -1956,7 +2152,7 @@ export function initVttSpellManager(vtt) {
         });
 
         document.getElementById('btn-add-spell-damage')?.addEventListener('click', () => {
-            modalSpellDamageRows.push({ id: 'dmg_' + Date.now(), formula: '1d8', type: '', stat: '', custom: '' });
+            modalSpellDamageRows.push({ id: 'dmg_' + Date.now(), formula: '1d8', type: '', label: '', stat: '', custom: '' });
             renderModalSpellDamage();
         });
 
@@ -2001,9 +2197,9 @@ export function initVttSpellManager(vtt) {
                 if (!char.spells[level]) char.spells[level] = [];
 
                 if (idx >= 0) {
-                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining };
+                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
                 } else {
-                    char.spells[level].push({ id: 'sp_' + Date.now() + Math.random(), name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining });
+                    char.spells[level].push({ id: 'sp_' + Date.now() + Math.random(), name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true });
                 }
             } else {
                 if (spellBulkSelection.size === 0) return alert("No spells selected.");
@@ -2016,7 +2212,7 @@ export function initVttSpellManager(vtt) {
                         if (!char.spells) char.spells = {};
                         if (!char.spells[levelKey]) char.spells[levelKey] = [];
                         if (!char.spells[levelKey].find(s => s.name === spellName)) {
-                            const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: spellName, description: '', prepared: false };
+                            const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: spellName, description: '', prepared: false, macroPopulated: true };
                             parseSpellToMacro(spData, newSpell);
                             char.spells[levelKey].push(newSpell);
                         }
@@ -2248,7 +2444,9 @@ export function initVttSpellManager(vtt) {
         });
 
         document.getElementById('modal-settings-save')?.addEventListener('click', () => {
-            currentChar.spellSettings.ability = document.getElementById('modal-settings-ability').value;
+            const ab = document.getElementById('modal-settings-ability').value;
+            currentChar.spellSettings.ability = ab;
+            currentChar.spellAbility = ab;
             currentChar.spellSettings.atkMod = parseInt(document.getElementById('modal-settings-atk').value) || 0;
             currentChar.spellSettings.dcMod = parseInt(document.getElementById('modal-settings-dc').value) || 0;
             currentChar.spellSettings.dmgMod = parseInt(document.getElementById('modal-settings-dmg').value) || 0;

@@ -26,20 +26,29 @@ export function initVttCanvas(vtt) {
     }
 
     const CONDITION_ICONS = {
+        'Advantage': 'fa-circle-up',
         'Blinded': 'fa-eye-slash',
         'Charmed': 'fa-heart',
+        'Concentration': 'fa-brain',
+        'Dead': 'fa-skull-crossbones',
         'Deafened': 'fa-ear-deaf',
+        'Disadvantage': 'fa-circle-down',
+        'Dodge': 'fa-people-arrows',
         'Exhaustion': 'fa-battery-empty',
         'Frightened': 'fa-ghost',
         'Grappled': 'fa-hand-fist',
+        'Hidden': 'fa-user-ninja',
         'Incapacitated': 'fa-ban',
         'Invisible': 'fa-mask',
         'Paralyzed': 'fa-bolt',
         'Petrified': 'fa-gem',
-        'Poisoned': 'fa-skull-crossbones',
-        'Prone': 'fa-arrow-down',
+        'Poisoned': 'fa-biohazard',
+        'Prone': 'fa-person-falling',
+        'Raging': 'fa-face-angry',
         'Restrained': 'fa-link',
+        'Shielded': 'fa-user-shield',
         'Stunned': 'fa-star',
+        'Targeted': 'fa-crosshairs',
         'Unconscious': 'fa-skull'
     };
 
@@ -92,6 +101,7 @@ export function initVttCanvas(vtt) {
     let tokenDragOriginalPositions = {}; // { id: { x, y } }
     let tokenAnimations = {};
     let tokenAnimFrame = null;
+    let processedAnimKeys = new Set();
 
     let activeResizeTokenId = null;
     let hoveredResizeTokenId = null;
@@ -253,11 +263,24 @@ export function initVttCanvas(vtt) {
         if (!token || !token.isAsset) return null;
         const { drawW, drawH } = getTokenDrawDimensions(token);
         const renderPos = tokenAnimations[token.id]?.currentPos || { x: token.x, y: token.y };
+        const cx = renderPos.x + drawW / 2;
+        const cy = renderPos.y + drawH / 2;
+        if (token.rotation) {
+            const rad = ((token.rotation || 0) * Math.PI) / 180;
+            const rx = (drawW / 2) * Math.cos(rad) - (drawH / 2) * Math.sin(rad);
+            const ry = (drawW / 2) * Math.sin(rad) + (drawH / 2) * Math.cos(rad);
+            return {
+                x: cx + rx,
+                y: cy + ry,
+                cx,
+                cy
+            };
+        }
         return {
             x: renderPos.x + drawW,
             y: renderPos.y + drawH,
-            cx: renderPos.x + drawW / 2,
-            cy: renderPos.y + drawH / 2
+            cx,
+            cy
         };
     }
 
@@ -802,7 +825,8 @@ let lastBroadcastedTokens = {};
         gmPlayerNameVisible: 'always',
         gmTempHpBarVisible: 'always',
         gmTempHpNumVisible: true,
-        tempHpBarStyle: 'stacked'
+        tempHpBarStyle: 'stacked',
+        initDexTiebreaker: true
     };
 
     let currentMapId = null;
@@ -841,18 +865,52 @@ let lastBroadcastedTokens = {};
         const menu = document.getElementById('vtt-token-context-menu');
         if (menu) menu.remove();
 
-        // 1. Set background image
-        if (mapData.mapImage) {
-            setMapBackground(mapData.mapImage);
-        } else {
-            // Clear map background image and redraw grid
-            const container = document.getElementById('vtt-map-bg-container');
-            if(container) {
-                container.innerHTML = '';
-                container.classList.add('vtt-hidden');
+        // 1. Auto-migrate legacy mapImage maps to Freeform Assets on the fly if needed
+        if (mapData.mapImage && mapData.mapImage.trim() !== '') {
+            const imgUrl = mapData.mapImage.trim();
+            if (!mapData.tokens) mapData.tokens = {};
+            const alreadyHasAsset = Object.values(mapData.tokens).some(t => t.layer === 'map' && t.img === imgUrl);
+            if (!alreadyHasAsset) {
+                const isVideo = !!imgUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || imgUrl.includes('pinimg.com/videos');
+                const isYoutube = imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be');
+                const gSize = mapData.grid?.size || 50;
+                const gScale = mapData.grid?.scale || 1.0;
+                const gWidth = mapData.gridWidth ? Math.ceil(mapData.gridWidth) : 40;
+                const gHeight = mapData.gridHeight ? Math.ceil(mapData.gridHeight) : 30;
+                const pixelWidth = mapData.gridWidth ? mapData.gridWidth * gSize * gScale : 2000;
+                const pixelHeight = mapData.gridHeight ? mapData.gridHeight * gSize * gScale : 1500;
+
+                const assetId = `asset_${mapData.id}_bg`;
+                mapData.tokens[assetId] = {
+                    id: assetId,
+                    name: `${mapData.name || 'Map'} (Artwork)`,
+                    x: 0,
+                    y: 0,
+                    layer: 'map',
+                    isAsset: true,
+                    img: imgUrl,
+                    isVideo: isVideo || isYoutube,
+                    pixelWidth: pixelWidth,
+                    pixelHeight: pixelHeight,
+                    size: 1,
+                    zIndex: 0,
+                    isPlayer: false
+                };
+                if (!mapData.gridWidth) mapData.gridWidth = gWidth;
+                if (!mapData.gridHeight) mapData.gridHeight = gHeight;
             }
-            renderAll();
+            mapData.thumbnail = imgUrl;
+            mapData.mapImage = "";
         }
+
+        // Clear legacy background container
+        const container = document.getElementById('vtt-map-bg-container');
+        if (container) {
+            container.innerHTML = '';
+            container.classList.add('vtt-hidden');
+        }
+        const underGridOverlay = document.getElementById('vtt-map-html-overlays');
+        if (underGridOverlay) underGridOverlay.innerHTML = '';
 
         // 2. Load grid config
         grid = mapData.grid || { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
@@ -860,6 +918,11 @@ let lastBroadcastedTokens = {};
 
         // 3. Load tokens, walls, shapes
         tokens = mapData.tokens || {};
+        for (const id in tokens) {
+            if (tokens[id]?._animReq) delete tokens[id]._animReq;
+        }
+        tokenAnimations = {};
+        processedAnimKeys.clear();
         walls = mapData.walls || [];
         lights = mapData.lights || [];
         notes = mapData.notes || [];
@@ -875,9 +938,16 @@ let lastBroadcastedTokens = {};
         // 4. Update the preview indicator banner (GM Only)
         updatePreviewBanner();
 
-        // 5. Redraw everything
-        renderAll();
+        // 5. Center viewport on map and redraw everything
+        const mapW = (mapData.gridWidth || 40) * (grid.size || 50) * (grid.scale || 1.0);
+        const mapH = (mapData.gridHeight || 30) * (grid.size || 50) * (grid.scale || 1.0);
+        const w = viewport.clientWidth || 1000;
+        const h = viewport.clientHeight || 800;
+        panX = (w - mapW) / 2;
+        panY = (h - mapH) / 2;
+        zoom = 1.0;
         updateContainerTransform();
+        renderAll();
         updateCoordinateDisplay(currentMouseCoords);
     }
 
@@ -940,6 +1010,7 @@ let lastBroadcastedTokens = {};
 
     // Setup viewport mouse & wheel pan/zoom
     setupViewportControls();
+    setupZoomHudControls();
     
     // Setup toolbar tool listeners
     setupToolControls();
@@ -974,14 +1045,261 @@ let lastBroadcastedTokens = {};
     }
     syncHpSettingsInputs();
 
+    // Camera animation state
+    let cameraAnimFrame = null;
+
+    function cancelCameraAnimation() {
+        if (cameraAnimFrame) {
+            cancelAnimationFrame(cameraAnimFrame);
+            cameraAnimFrame = null;
+        }
+    }
+
+    function panTo(targetX, targetY, targetZoom = null, duration = 350) {
+        cancelCameraAnimation();
+        
+        const vr = viewport.getBoundingClientRect();
+        const viewCenterW = vr.width / 2;
+        const viewCenterH = vr.height / 2;
+
+        const startPanX = panX;
+        const startPanY = panY;
+        const startZoom = zoom;
+        const finalZoom = targetZoom !== null ? Math.min(5.0, Math.max(0.1, targetZoom)) : zoom;
+
+        const endPanX = viewCenterW - (targetX * finalZoom);
+        const endPanY = viewCenterH - (targetY * finalZoom);
+
+        if (duration <= 0) {
+            panX = endPanX;
+            panY = endPanY;
+            zoom = finalZoom;
+            updateContainerTransform();
+            renderAll();
+            return;
+        }
+
+        const startTime = performance.now();
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function step(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(1.0, elapsed / duration);
+            const ease = easeOutCubic(progress);
+
+            panX = startPanX + (endPanX - startPanX) * ease;
+            panY = startPanY + (endPanY - startPanY) * ease;
+            zoom = startZoom + (finalZoom - startZoom) * ease;
+
+            updateContainerTransform();
+            renderAll();
+
+            if (progress < 1.0) {
+                cameraAnimFrame = requestAnimationFrame(step);
+            } else {
+                cameraAnimFrame = null;
+            }
+        }
+
+        cameraAnimFrame = requestAnimationFrame(step);
+    }
+
+    function setZoom(targetZoom, anchorX = null, anchorY = null, animate = false) {
+        cancelCameraAnimation();
+        const clampedZoom = Math.min(5.0, Math.max(0.1, targetZoom));
+        if (Math.abs(zoom - clampedZoom) < 0.001) return;
+
+        const vr = viewport.getBoundingClientRect();
+        const mouseX = anchorX !== null ? anchorX : (vr.width / 2);
+        const mouseY = anchorY !== null ? anchorY : (vr.height / 2);
+
+        const canvasTargetX = (mouseX - panX) / zoom;
+        const canvasTargetY = (mouseY - panY) / zoom;
+
+        if (animate) {
+            panTo(canvasTargetX, canvasTargetY, clampedZoom, 200);
+        } else {
+            zoom = clampedZoom;
+            panX = mouseX - (canvasTargetX * zoom);
+            panY = mouseY - (canvasTargetY * zoom);
+            updateContainerTransform();
+            renderAll();
+        }
+    }
+
+    function stepZoom(deltaPercent) {
+        const nextZoom = Math.round((zoom + deltaPercent) * 100) / 100;
+        setZoom(nextZoom);
+    }
+
+    function centerOnTokenOrMap() {
+        let targetX = 0;
+        let targetY = 0;
+        let foundTarget = false;
+
+        // 1. Centroid of selected tokens
+        if (selectedTokenIds.size > 0) {
+            let sumX = 0;
+            let sumY = 0;
+            let count = 0;
+            selectedTokenIds.forEach(id => {
+                const t = tokens[id];
+                if (t) {
+                    const dims = getTokenDrawDimensions(t);
+                    sumX += (t.x + (dims.drawW || 50) / 2);
+                    sumY += (t.y + (dims.drawH || 50) / 2);
+                    count++;
+                }
+            });
+            if (count > 0) {
+                targetX = sumX / count;
+                targetY = sumY / count;
+                foundTarget = true;
+            }
+        }
+
+        // 2. Controlled player character token
+        if (!foundTarget && vtt.role !== 'GM') {
+            for (const id in tokens) {
+                const t = tokens[id];
+                if (t && isTokenControlledByPlayer(t)) {
+                    const dims = getTokenDrawDimensions(t);
+                    targetX = t.x + (dims.drawW || 50) / 2;
+                    targetY = t.y + (dims.drawH || 50) / 2;
+                    foundTarget = true;
+                    break;
+                }
+            }
+        }
+
+        // 3. Map center fallback
+        if (!foundTarget) {
+            const currentMap = vtt.campaignState?.maps?.[currentMapId];
+            const bgContainer = document.getElementById('vtt-map-bg-container');
+            const mapW = (currentMap?.gridWidth ? currentMap.gridWidth * (grid.size || 50) * (grid.scale || 1.0) : parseInt(bgContainer?.dataset?.naturalWidth) || 1000);
+            const mapH = (currentMap?.gridHeight ? currentMap.gridHeight * (grid.size || 50) * (grid.scale || 1.0) : parseInt(bgContainer?.dataset?.naturalHeight) || 800);
+            targetX = mapW / 2;
+            targetY = mapH / 2;
+        }
+
+        panTo(targetX, targetY, null, 350);
+    }
+
+    function broadcastViewToPlayers() {
+        if (vtt.role !== 'GM' || !vtt.socket) return;
+        const vr = viewport.getBoundingClientRect();
+        const centerCanvasX = ((vr.width / 2) - panX) / zoom;
+        const centerCanvasY = ((vr.height / 2) - panY) / zoom;
+
+        vtt.socket.emit('map:panTo', {
+            mapId: currentMapId,
+            x: centerCanvasX,
+            y: centerCanvasY,
+            zoom: zoom
+        });
+
+        if (window.VTT?.chatEngine?.appendSystemMessage) {
+            window.VTT.chatEngine.appendSystemMessage("Synced tabletop camera view to all players.");
+        }
+    }
+
+    function setupZoomHudControls() {
+        const btnZoomIn = document.getElementById('btn-zoom-in');
+        const btnZoomOut = document.getElementById('btn-zoom-out');
+        const zoomSlider = document.getElementById('vtt-zoom-slider');
+        const badgeContainer = document.getElementById('vtt-zoom-badge-container');
+        const zoomBadge = document.getElementById('vtt-zoom-badge');
+        const zoomInput = document.getElementById('vtt-zoom-input');
+        const btnGmBroadcast = document.getElementById('btn-gm-broadcast-view');
+
+        if (btnZoomIn) {
+            btnZoomIn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                stepZoom(0.10);
+            });
+        }
+
+        if (btnZoomOut) {
+            btnZoomOut.addEventListener('click', (e) => {
+                e.stopPropagation();
+                stepZoom(-0.10);
+            });
+        }
+
+        if (zoomSlider) {
+            zoomSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                if (!isNaN(val) && val > 0) {
+                    setZoom(val / 100);
+                }
+            });
+        }
+
+        if (badgeContainer && zoomBadge && zoomInput) {
+            badgeContainer.addEventListener('click', (e) => {
+                e.stopPropagation();
+                zoomBadge.classList.add('vtt-hidden');
+                zoomInput.classList.remove('vtt-hidden');
+                zoomInput.value = Math.round(zoom * 100);
+                zoomInput.focus();
+                zoomInput.select();
+            });
+
+            const commitInputZoom = () => {
+                if (zoomInput.classList.contains('vtt-hidden')) return;
+                let val = parseInt(zoomInput.value, 10);
+                if (isNaN(val)) val = Math.round(zoom * 100);
+                val = Math.min(500, Math.max(10, val));
+                setZoom(val / 100);
+                zoomInput.classList.add('vtt-hidden');
+                zoomBadge.classList.remove('vtt-hidden');
+                zoomBadge.textContent = `${val}%`;
+            };
+
+            zoomInput.addEventListener('blur', commitInputZoom);
+            zoomInput.addEventListener('keydown', (e) => {
+                e.stopPropagation();
+                if (e.key === 'Enter') {
+                    commitInputZoom();
+                } else if (e.key === 'Escape') {
+                    zoomInput.classList.add('vtt-hidden');
+                    zoomBadge.classList.remove('vtt-hidden');
+                }
+            });
+        }
+
+        if (btnGmBroadcast) {
+            btnGmBroadcast.addEventListener('click', (e) => {
+                e.stopPropagation();
+                broadcastViewToPlayers();
+            });
+        }
+    }
+
     // Rerender loop
     function updateContainerTransform() {
         if (container) {
             container.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
         }
+        const zoomPercent = Math.round(zoom * 100);
         const zoomEl = document.getElementById('val-zoom');
         if (zoomEl) {
-            zoomEl.textContent = `${Math.round(zoom * 100)}%`;
+            zoomEl.textContent = `${zoomPercent}%`;
+        }
+        const zoomBadge = document.getElementById('vtt-zoom-badge');
+        if (zoomBadge) {
+            zoomBadge.textContent = `${zoomPercent}%`;
+        }
+        const zoomSlider = document.getElementById('vtt-zoom-slider');
+        if (zoomSlider && document.activeElement !== zoomSlider) {
+            zoomSlider.value = zoomPercent;
+        }
+        const zoomInput = document.getElementById('vtt-zoom-input');
+        if (zoomInput && document.activeElement !== zoomInput) {
+            zoomInput.value = zoomPercent;
         }
     }
 
@@ -1003,77 +1321,64 @@ let lastBroadcastedTokens = {};
     }
     function renderAll() {
         const isGmViewing = vtt.role === 'GM';
-        let width = 1000;
-        let height = 800;
+        let width = 2000;
+        let height = 1500;
         const currentMap = vtt.campaignState?.maps?.[currentMapId];
 
-        if (!currentMap || !currentMap.mapImage) {
-            // No map selected yet, render a blank tactical blueprint
-            width = viewport.clientWidth || 1000;
-            height = viewport.clientHeight || 800;
-            
+        const bgContainer = document.getElementById('vtt-map-bg-container');
+        const underGridOverlay = document.getElementById('vtt-map-html-overlays');
+
+        if (currentMap?.gridWidth) {
+            width = currentMap.gridWidth * grid.size * (grid.scale || 1.0);
+        } else if (bgContainer?.dataset?.naturalWidth) {
+            width = parseInt(bgContainer.dataset.naturalWidth) || 2000;
+        } else if (currentMap?.tokens) {
+            const mapAsset = Object.values(currentMap.tokens).find(t => t.layer === 'map');
+            if (mapAsset && mapAsset.pixelWidth) width = mapAsset.pixelWidth;
+        }
+
+        if (currentMap?.gridHeight) {
+            height = currentMap.gridHeight * grid.size * (grid.scale || 1.0);
+        } else if (bgContainer?.dataset?.naturalHeight) {
+            height = parseInt(bgContainer.dataset.naturalHeight) || 1500;
+        } else if (currentMap?.tokens) {
+            const mapAsset = Object.values(currentMap.tokens).find(t => t.layer === 'map');
+            if (mapAsset && mapAsset.pixelHeight) height = mapAsset.pixelHeight;
+        }
+
+        if (bgContainer) {
+            bgContainer.style.width = `${width}px`;
+            bgContainer.style.height = `${height}px`;
+        }
+        if (underGridOverlay) {
+            underGridOverlay.style.width = `${width}px`;
+            underGridOverlay.style.height = `${height}px`;
+        }
+        
+        // Resize the main draggable #canvas-container so it doesn't clip the map bounds
+        if (container) {
+            container.style.width = `${width}px`;
+            container.style.height = `${height}px`;
+        }
+
+        // Size canvases to match map dimensions
+        if (canvasGrid.width !== width || canvasGrid.height !== height) {
             canvasGrid.width = width;
             canvasGrid.height = height;
+            canvasGrid.style.width = `${width}px`;
+            canvasGrid.style.height = `${height}px`;
             canvasInteraction.width = width;
             canvasInteraction.height = height;
+            canvasInteraction.style.width = `${width}px`;
+            canvasInteraction.style.height = `${height}px`;
             canvasFog.width = width;
             canvasFog.height = height;
-            
-            ctxGrid.fillStyle = '#0d0f16';
-            ctxGrid.fillRect(0, 0, width, height);
-            
-            ctxGrid.strokeStyle = 'rgba(212, 175, 55, 0.15)';
-            ctxGrid.lineWidth = 1;
-            
-            const size = grid.size * grid.scale;
-            for (let x = grid.offsetX; x < width; x += size) {
-                ctxGrid.beginPath(); ctxGrid.moveTo(x, 0); ctxGrid.lineTo(x, height); ctxGrid.stroke();
-            }
-            for (let y = grid.offsetY; y < height; y += size) {
-                ctxGrid.beginPath(); ctxGrid.moveTo(0, y); ctxGrid.lineTo(width, y); ctxGrid.stroke();
-            }
-        } else {
-            const bgContainer = document.getElementById('vtt-map-bg-container');
-            width = parseInt(bgContainer?.dataset?.naturalWidth) || 1000;
-            height = parseInt(bgContainer?.dataset?.naturalHeight) || 1000;
-
-            if (currentMap.gridWidth) {
-                width = currentMap.gridWidth * grid.size * (grid.scale || 1.0);
-            }
-            if (currentMap.gridHeight) {
-                height = currentMap.gridHeight * grid.size * (grid.scale || 1.0);
-            }
-
-            if(bgContainer) {
-                bgContainer.style.width = `${width}px`;
-                bgContainer.style.height = `${height}px`;
-            }
-            
-            // Resize the main draggable #canvas-container so it doesn't clip the map bounds
-            if(container) {
-                container.style.width = `${width}px`;
-                container.style.height = `${height}px`;
-            }
-
-            // Size canvases to match map dimensions
-            if (canvasGrid.width !== width || canvasGrid.height !== height) {
-                canvasGrid.width = width;
-                canvasGrid.height = height;
-                canvasGrid.style.width = `${width}px`;
-                canvasGrid.style.height = `${height}px`;
-                canvasInteraction.width = width;
-                canvasInteraction.height = height;
-                canvasInteraction.style.width = `${width}px`;
-                canvasInteraction.style.height = `${height}px`;
-                canvasFog.width = width;
-                canvasFog.height = height;
-                canvasFog.style.width = `${width}px`;
-                canvasFog.style.height = `${height}px`;
-            }
-
-            // 1. Render Grid
-            renderGridLayer(width, height);
+            canvasFog.style.width = `${width}px`;
+            canvasFog.style.height = `${height}px`;
         }
+
+        // 1. Render Grid (and map layer assets underneath)
+        renderGridLayer(width, height);
 
         // 2. Render Fog of War (Dynamic Raycasting)
         renderFogOfWarLayer(width, height);
@@ -1084,82 +1389,8 @@ let lastBroadcastedTokens = {};
 
     function renderGridLayer(width, height) {
         ctxGrid.clearRect(0, 0, width, height);
-        
-        // 1. Draw Map Layer Assets (Movable background items under grid/fog)
-        Object.entries(tokens)
-            .sort((a, b) => (a[1].zIndex || 0) - (b[1].zIndex || 0))
-            .forEach(([id, token]) => {
-            const tokenLayer = token.layer || 'token';
-            if (tokenLayer !== 'map') return; // Only render map layer assets here
 
-            const { drawW, drawH, tokenRadius } = getTokenDrawDimensions(token);
-            const tx = token.x + drawW / 2;
-            const ty = token.y + drawH / 2;
-
-            ctxGrid.save();
-            
-            // Draw map assets as rectangular tiles
-            if (token.img) {
-                if (!imageCache[token.img]) {
-                    const img = new Image();
-                    img.onload = () => renderAll();
-                    img.src = getSafeVttUrl(token.img);
-                    imageCache[token.img] = img;
-                }
-                
-                const cachedImg = imageCache[token.img];
-                if (cachedImg.complete && cachedImg.naturalWidth > 0) {
-                    if (vtt.role === 'GM' && activeLayer !== 'map') {
-                        ctxGrid.globalAlpha = 0.5; // Faintly dim inactive map assets for GM
-                    }
-                    if (token.rotation || token.flipX || token.flipY) {
-                        ctxGrid.save();
-                        const cx = token.x + drawW / 2;
-                        const cy = token.y + drawH / 2;
-                        ctxGrid.translate(cx, cy);
-                        if (token.rotation) ctxGrid.rotate((token.rotation * Math.PI) / 180);
-                        if (token.flipX || token.flipY) ctxGrid.scale(token.flipX ? -1 : 1, token.flipY ? -1 : 1);
-                        ctxGrid.drawImage(cachedImg, -drawW / 2, -drawH / 2, drawW, drawH);
-                        ctxGrid.restore();
-                    } else {
-                        ctxGrid.drawImage(cachedImg, token.x, token.y, drawW, drawH);
-                    }
-                } else {
-                    ctxGrid.fillStyle = 'rgba(100, 100, 100, 0.4)';
-                    ctxGrid.fillRect(token.x, token.y, drawW, drawH);
-                }
-            } else {
-                ctxGrid.fillStyle = 'rgba(100, 100, 100, 0.4)';
-                ctxGrid.fillRect(token.x, token.y, drawW, drawH);
-            }
-
-            // Draw a subtle border outline only when GM is actively editing the Map Layer
-            if (vtt.role === 'GM' && activeLayer === 'map') {
-                ctxGrid.save();
-                if (token.rotation) {
-                    ctxGrid.translate(tx, ty);
-                    ctxGrid.rotate((token.rotation * Math.PI) / 180);
-                    ctxGrid.translate(-tx, -ty);
-                }
-                ctxGrid.strokeStyle = 'var(--color-gold-base)';
-                ctxGrid.lineWidth = 2;
-                ctxGrid.strokeRect(token.x, token.y, drawW, drawH);
-
-                // Draw name tag if editing
-                ctxGrid.fillStyle = 'rgba(0,0,0,0.6)';
-                const tagW = ctxGrid.measureText(token.name).width + 12;
-                ctxGrid.fillRect(tx - tagW/2, token.y + drawH + 4, tagW, 16);
-                ctxGrid.fillStyle = '#ffffff';
-                ctxGrid.font = 'bold 10px Inter';
-                ctxGrid.textAlign = 'center';
-                ctxGrid.fillText(token.name, tx, token.y + drawH + 12);
-                ctxGrid.restore();
-            }
-
-            ctxGrid.restore();
-        });
-
-        // 2. Draw tactical grid lines on top of background & map assets
+        // Draw tactical grid lines on top of background & map assets
         const opacity = grid.opacity !== undefined ? parseFloat(grid.opacity) : 0.3;
         const strokeColor = grid.color || '#888888';
         
@@ -2346,31 +2577,48 @@ let lastBroadcastedTokens = {};
             .sort((a, b) => (a[1].zIndex || 0) - (b[1].zIndex || 0))
             .forEach(([id, token], sortedIndex) => {
             const tokenLayer = token.layer || 'token';
-            // Sync DOM Node for ALL tokens
+            const cleanImgUrl = token.img ? token.img.split('?')[0].toLowerCase() : '';
+            const isGif = token.isGif || cleanImgUrl.endsWith('.gif') || (token.img && token.img.includes('.gif'));
+            const isYoutube = token.img && (token.img.includes('youtube.com') || token.img.includes('youtu.be'));
+            const needsIframe = isYoutube || (token.img && token.img.trim().startsWith('<iframe'));
+            const isActuallyVideo = !isGif && !needsIframe && (
+                (token.isVideo && !isGif) ||
+                (cleanImgUrl && cleanImgUrl.match(/\.(mp4|webm|ogg|m4v|mov)$/i)) ||
+                (token.img && token.img.includes('pinimg.com/videos'))
+            );
+
             const htmlOverlayLayer = document.getElementById('vtt-html-overlays');
-            if (htmlOverlayLayer) {
+            const underGridOverlayLayer = document.getElementById('vtt-map-html-overlays');
+            
+            // Map layer assets ALWAYS go to under-grid container, other tokens go to main overlay
+            const targetOverlay = (tokenLayer === 'map') 
+                ? underGridOverlayLayer 
+                : htmlOverlayLayer;
+
+            if (targetOverlay) {
                 let node = document.getElementById('asset_node_' + id);
                 
-                // Determine what tag type we need
-                const cleanImgUrl = token.img ? token.img.split('?')[0].toLowerCase() : '';
-                const isActuallyVideo = token.isVideo || (cleanImgUrl && cleanImgUrl.match(/\.(mp4|webm|ogg)$/i));
-                const needsIframe = token.img && token.img.includes('youtube.com');
-                const needsImg = token.img && !needsIframe && (!isActuallyVideo || cleanImgUrl.endsWith('.gif'));
-                const needsVideo = token.img && !needsIframe && !needsImg && isActuallyVideo;
+                const needsImg = token.img && !needsIframe && !isActuallyVideo;
+                const needsVideo = token.img && !needsIframe && isActuallyVideo;
                 const needsDiv = !token.img;
-                
                 const neededTag = needsIframe ? 'IFRAME' : needsImg ? 'IMG' : needsVideo ? 'VIDEO' : 'DIV';
-                
-                // If node exists but is wrong element type (e.g. switched from image to video), destroy and recreate
-                if (node && node.tagName !== neededTag) {
+
+                // If node exists but is in wrong container or wrong tag, remove and recreate
+                if (node && (node.parentElement !== targetOverlay || node.tagName !== neededTag)) {
                     node.remove();
                     node = null;
                 }
-                
+
                 if (!node) {
                     if (needsIframe) {
                         node = document.createElement('iframe');
-                        node.setAttribute('src', getSafeVttUrl(token.img));
+                        let ytUrl = token.img;
+                        const ytMatch = token.img ? token.img.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) : null;
+                        if (ytMatch) {
+                            const videoId = ytMatch[1];
+                            ytUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&playlist=${videoId}`;
+                        }
+                        node.setAttribute('src', ytUrl);
                         node.frameBorder = "0";
                         node.setAttribute('allow', 'autoplay; encrypted-media');
                     } else if (needsImg) {
@@ -2380,30 +2628,40 @@ let lastBroadcastedTokens = {};
                     } else if (needsVideo) {
                         node = document.createElement('video');
                         node.setAttribute('src', getSafeVttUrl(token.img));
+                        node.muted = true;
                         node.autoplay = true;
                         node.loop = true;
-                        node.muted = true;
                         node.playsInline = true;
+                        node.setAttribute('muted', '');
+                        node.setAttribute('autoplay', '');
+                        node.setAttribute('loop', '');
+                        node.setAttribute('playsinline', '');
                     } else {
                         node = document.createElement('div');
                     }
                     node.id = 'asset_node_' + id;
                     node.style.position = 'absolute';
                     node.style.pointerEvents = 'none';
-                    htmlOverlayLayer.appendChild(node);
-                } else if (token.img && node.getAttribute('src') !== token.img) {
-                    // Update src if it changed (e.g. player swapped token artwork)
+                    targetOverlay.appendChild(node);
+                    if (needsVideo) node.play().catch(() => {});
+                } else if (token.img && node.getAttribute('src') !== getSafeVttUrl(token.img) && node.src !== getSafeVttUrl(token.img)) {
                     node.setAttribute('src', getSafeVttUrl(token.img));
-                    if (node.tagName === 'VIDEO') node.load();
+                    if (node.tagName === 'VIDEO') {
+                        node.muted = true;
+                        node.load();
+                        node.play().catch(() => {});
+                    }
                 }
-                
+                if (node && node.tagName === 'VIDEO' && node.paused) {
+                    node.play().catch(() => {});
+                }
+
                 if (needsDiv) {
                     node.style.backgroundColor = token.color || '#333333';
                 }
-                
+
                 // Determine size
                 const { drawW, drawH } = getTokenDrawDimensions(token);
-                
                 const renderPos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
 
                 // Sync position and size
@@ -2412,7 +2670,7 @@ let lastBroadcastedTokens = {};
                 node.style.width = `${drawW}px`;
                 node.style.height = `${drawH}px`;
                 node.style.zIndex = sortedIndex;
-                
+
                 // Apply circular clipping if it is a standard Token
                 if (!token.isAsset) {
                     node.style.borderRadius = '50%';
@@ -2429,6 +2687,7 @@ let lastBroadcastedTokens = {};
                     node.style.objectFit = 'fill';
                     node.style.border = 'none';
                 }
+
                 // Apply flip and rotation transform
                 let transformStr = '';
                 if (token.rotation) transformStr += `rotate(${token.rotation}deg) `;
@@ -2436,7 +2695,7 @@ let lastBroadcastedTokens = {};
                 if (token.flipY) transformStr += 'scaleY(-1)';
                 transformStr = transformStr.trim();
                 node.style.transform = transformStr || 'none';
-                
+
                 // Render customizable Floor Shadow via CSS
                 if (token.fxShadowEnabled) {
                     const sBlur = token.fxShadowBlur !== undefined ? token.fxShadowBlur : 12;
@@ -2455,7 +2714,7 @@ let lastBroadcastedTokens = {};
                 } else {
                     node.style.filter = 'none';
                 }
-                
+
                 // Hide if on wrong layer or explicitly hidden
                 if ((tokenLayer === 'gm' && vtt.role !== 'GM') || 
                     (token.isVisible === false && vtt.role !== 'GM')) {
@@ -2467,16 +2726,24 @@ let lastBroadcastedTokens = {};
             }
 
             // Skip rendering Map Layer assets on this canvas (drawn on Grid canvas)
-            // UNLESS the asset is hovered or dragged, in which case we draw the selection glow here.
+            // UNLESS the asset is hovered, dragged, or selected, in which case we draw the selection glow here.
             if (tokenLayer === 'map') {
-                if (vtt.role === 'GM' && activeLayer === 'map' && (id === activeDragTokenId || id === hoverTokenId)) {
+                if (vtt.role === 'GM' && activeLayer === 'map' && (id === activeDragTokenId || id === hoverTokenId || selectedTokenIds.has(id))) {
                     const { drawW, drawH } = getTokenDrawDimensions(token);
+                    ctxInteraction.save();
+                    if (token.rotation) {
+                        const cx = token.x + drawW / 2;
+                        const cy = token.y + drawH / 2;
+                        ctxInteraction.translate(cx, cy);
+                        ctxInteraction.rotate((token.rotation * Math.PI) / 180);
+                        ctxInteraction.translate(-cx, -cy);
+                    }
                     ctxInteraction.strokeStyle = 'var(--color-gold-base)';
-                    ctxInteraction.lineWidth = 4;
+                    ctxInteraction.lineWidth = 3;
                     ctxInteraction.shadowColor = 'var(--color-gold-light)';
-                    ctxInteraction.shadowBlur = 10;
+                    ctxInteraction.shadowBlur = 8;
                     ctxInteraction.strokeRect(token.x - 2, token.y - 2, drawW + 4, drawH + 4);
-                    ctxInteraction.shadowBlur = 0; // reset
+                    ctxInteraction.restore();
                 }
                 const uiNode = document.getElementById('token_ui_' + id);
                 if (uiNode) uiNode.style.display = 'none';
@@ -2683,7 +2950,7 @@ let lastBroadcastedTokens = {};
             ctxInteraction.restore(); // Restores context globalAlpha and clipping path
 
             // Render token border frame
-            if (!token.isVideo) {
+            if (!isActuallyVideo) {
                 ctxInteraction.strokeStyle = token.isPlayer ? 'rgba(0, 123, 255, 0.8)' : 'rgba(220, 53, 69, 0.8)';
                 if (token.isAsset || token.isBorderless) ctxInteraction.strokeStyle = 'transparent'; // No border for freeform image assets or borderless tokens
                 ctxInteraction.lineWidth = 2;
@@ -2917,19 +3184,12 @@ let lastBroadcastedTokens = {};
                     const condContainer = uiNode.querySelector('.token-condition-container');
                     const hasConditions = token.conditions && token.conditions.length > 0;
                     if (hasConditions) {
-                        const CONDITION_ICONS = {
-                            'Blinded': 'fa-eye-slash', 'Charmed': 'fa-heart', 'Deafened': 'fa-ear-deaf',
-                            'Exhaustion': 'fa-battery-empty', 'Frightened': 'fa-ghost', 'Grappled': 'fa-hand-fist',
-                            'Incapacitated': 'fa-ban', 'Invisible': 'fa-mask', 'Paralyzed': 'fa-bolt',
-                            'Petrified': 'fa-gem', 'Poisoned': 'fa-skull-crossbones', 'Prone': 'fa-arrow-down',
-                            'Restrained': 'fa-link', 'Stunned': 'fa-star', 'Unconscious': 'fa-skull'
-                        };
                         const iconsHtml = token.conditions.map(c => {
                             if (c.isCustom) {
                                 return `<div title="${c.name}" style="background: ${c.color || 'var(--color-gold-base)'}; border: 2px solid white; border-radius: 50%; width: 20px; height: 20px; min-width: 20px; min-height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 4px black; cursor: help; pointer-events: auto;">&nbsp;</div>`;
                             }
                             const iconClass = CONDITION_ICONS[c.name] || 'fa-circle-exclamation';
-                            return `<div style="background: rgba(0,0,0,0.8); border: 1px solid var(--color-gold-base); border-radius: 50%; width: 20px; height: 20px; min-width: 20px; min-height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; text-shadow: 1px 1px 2px black; pointer-events: auto;">
+                            return `<div title="${c.name}" style="background: rgba(0,0,0,0.8); border: 1px solid var(--color-gold-base); border-radius: 50%; width: 20px; height: 20px; min-width: 20px; min-height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; text-shadow: 1px 1px 2px black; pointer-events: auto; cursor: help;">
                                         <i class="fa-solid ${iconClass}"></i>
                                     </div>`;
                         }).join('');
@@ -3235,48 +3495,52 @@ let lastBroadcastedTokens = {};
         }
     }
 
-    function processTokenAnimReqs(tokensObj, retainReqs = false) {
+    function processTokenAnimReqs(tokensObj) {
         let startAnim = false;
         const now = Date.now();
         for (const id in tokensObj) {
-            if (tokensObj[id]._animReq) {
+            if (tokensObj[id]?._animReq) {
                 const req = tokensObj[id]._animReq;
-                if (now - req.timestamp < 2000) {
-                    if (tokenAnimations[id] && tokenAnimations[id].timestamp === req.timestamp) {
-                        if (!retainReqs) delete tokensObj[id]._animReq;
-                        continue;
-                    }
-                    let totalDist = 0;
-                    let segments = [];
-                    const t = tokensObj[id];
-                    let adjustedWaypoints = [];
-                    if (req.waypoints && req.waypoints.length > 0 && t) {
-                        const { drawW, drawH } = getTokenDrawDimensions(t);
-                        adjustedWaypoints = req.waypoints.map(wp => ({
-                            x: wp.x - drawW / 2,
-                            y: wp.y - drawH / 2
-                        }));
-                    }
-                    const points = [{x: req.startX, y: req.startY}, ...adjustedWaypoints, {x: req.endX, y: req.endY}];
-                    for (let i = 0; i < points.length - 1; i++) {
-                        const dx = points[i+1].x - points[i].x;
-                        const dy = points[i+1].y - points[i].y;
-                        const dist = Math.hypot(dx, dy);
-                        segments.push({ start: points[i], end: points[i+1], dist: dist });
-                        totalDist += dist;
-                    }
-                    tokenAnimations[id] = {
-                        ...req,
-                        startTime: now,
-                        segments,
-                        totalDist,
-                        currentPos: { x: req.startX, y: req.startY }
-                    };
-                    startAnim = true;
-                }
-                if (!retainReqs) {
+                const animKey = `${id}_${req.timestamp || 0}`;
+
+                if (processedAnimKeys.has(animKey) || (now - (req.timestamp || 0) > 1500)) {
                     delete tokensObj[id]._animReq;
+                    continue;
                 }
+
+                processedAnimKeys.add(animKey);
+                if (processedAnimKeys.size > 200) {
+                    processedAnimKeys = new Set(Array.from(processedAnimKeys).slice(-100));
+                }
+
+                let totalDist = 0;
+                let segments = [];
+                const t = tokensObj[id];
+                let adjustedWaypoints = [];
+                if (req.waypoints && req.waypoints.length > 0 && t) {
+                    const { drawW, drawH } = getTokenDrawDimensions(t);
+                    adjustedWaypoints = req.waypoints.map(wp => ({
+                        x: wp.x - drawW / 2,
+                        y: wp.y - drawH / 2
+                    }));
+                }
+                const points = [{x: req.startX, y: req.startY}, ...adjustedWaypoints, {x: req.endX, y: req.endY}];
+                for (let i = 0; i < points.length - 1; i++) {
+                    const dx = points[i+1].x - points[i].x;
+                    const dy = points[i+1].y - points[i].y;
+                    const dist = Math.hypot(dx, dy);
+                    segments.push({ start: points[i], end: points[i+1], dist: dist });
+                    totalDist += dist;
+                }
+                tokenAnimations[id] = {
+                    ...req,
+                    startTime: now,
+                    segments,
+                    totalDist,
+                    currentPos: { x: req.startX, y: req.startY }
+                };
+                startAnim = true;
+                delete tokensObj[id]._animReq;
             }
         }
         if (startAnim && !tokenAnimFrame) {
@@ -3468,8 +3732,13 @@ window.emitTokenUpdates = function(currentTokens) {
         }
     }
     
-    // Update snapshot
+    // Update snapshot (without lingering _animReq)
     lastBroadcastedTokens = JSON.parse(JSON.stringify(currentTokens));
+    for (const id in lastBroadcastedTokens) {
+        if (lastBroadcastedTokens[id]?._animReq) {
+            delete lastBroadcastedTokens[id]._animReq;
+        }
+    }
 };
 
 
@@ -3604,10 +3873,11 @@ window.emitTokenUpdates = function(currentTokens) {
         });
 
         socket.on('map:pannedTo', (data) => {
-            panX = (viewport.clientWidth / 2) - (data.x * zoom);
-            panY = (viewport.clientHeight / 2) - (data.y * zoom);
-            updateContainerTransform();
-            renderAll();
+            if (data.zoom) {
+                panTo(data.x, data.y, data.zoom, 400);
+            } else {
+                panTo(data.x, data.y, null, 400);
+            }
         });
 
         socket.on('measure:updated', (data) => {
@@ -3671,7 +3941,8 @@ window.emitTokenUpdates = function(currentTokens) {
                     if (token.img && typeof token.img === 'string') {
                         const lower = token.img.toLowerCase();
                         const _c = lower.split('?')[0];
-                        token.isVideo = _c.endsWith('.gif') || _c.endsWith('.mp4') || _c.endsWith('.webm') || lower.includes('youtube.com');
+                        token.isGif = _c.endsWith('.gif');
+                        token.isVideo = !token.isGif && (_c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg') || lower.includes('youtube.com'));
                     }
                     
                     changed = true;
@@ -3736,7 +4007,7 @@ window.emitTokenUpdates = function(currentTokens) {
             card.style.transition = 'var(--transition-smooth)';
             
             // Image preview
-            const thumbUrl = map.mapImage || '';
+            const thumbUrl = map.thumbnail || map.mapImage || (Object.values(map.tokens || {}).find(t => t.layer === 'map' && t.img)?.img) || '';
             const hasThumb = !!thumbUrl;
             
             card.innerHTML = `
@@ -3937,7 +4208,7 @@ window.emitTokenUpdates = function(currentTokens) {
     function openEditMapModal(map) {
         editingMapId = map.id;
         document.getElementById('edit-map-name').value = map.name || '';
-        document.getElementById('edit-map-url').value = map.mapImage || '';
+        document.getElementById('edit-map-url').value = map.thumbnail || map.mapImage || '';
         document.getElementById('edit-map-grid-width').value = map.gridWidth || '';
         document.getElementById('edit-map-grid-height').value = map.gridHeight || '';
         
@@ -4144,9 +4415,20 @@ window.emitTokenUpdates = function(currentTokens) {
 
             if (mapSelect.value === 'blank') {
                 console.log('[map:create] Emitting map:create for blank map...');
-                vtt.socket.emit('map:create', { name, mapImage: "" });
+                vtt.socket.emit('map:create', {
+                    name,
+                    mapImage: "",
+                    thumbnail: "",
+                    gridWidth: 40,
+                    gridHeight: 30,
+                    grid: { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square', color: '#888888', opacity: 0.3 },
+                    tokens: {},
+                    walls: [],
+                    notes: [],
+                    lights: [],
+                    shapes: {}
+                });
                 createPanel.classList.add('vtt-hidden');
-                // Optimistic placeholder render (server will follow with state-sync)
                 renderMapGrid();
             } else if (mapSelect.value === 'url') {
                 let url = urlInput.value.trim();
@@ -4160,16 +4442,59 @@ window.emitTokenUpdates = function(currentTokens) {
                             url = res.resolvedUrl;
                         }
                     }
+
+                    const img = new Image();
+                    await new Promise((resolve) => {
+                        img.onload = () => resolve();
+                        img.onerror = () => resolve();
+                        img.src = getSafeVttUrl(url);
+                        setTimeout(resolve, 3000);
+                    });
+
+                    const nw = img.naturalWidth || 2000;
+                    const nh = img.naturalHeight || 1500;
+                    const gSize = 50;
+                    const gWidth = Math.ceil(nw / gSize);
+                    const gHeight = Math.ceil(nh / gSize);
+                    const assetId = `asset_${Date.now()}_map`;
+                    const initialTokens = {
+                        [assetId]: {
+                            id: assetId,
+                            name: `${name} (Map Artwork)`,
+                            x: 0,
+                            y: 0,
+                            layer: 'map',
+                            isAsset: true,
+                            img: url,
+                            pixelWidth: nw,
+                            pixelHeight: nh,
+                            size: 1,
+                            zIndex: 0,
+                            isPlayer: false
+                        }
+                    };
+
+                    console.log('[map:create] Emitting map:create for URL map as Freeform Asset...', url);
+                    vtt.socket.emit('map:create', {
+                        name,
+                        mapImage: "",
+                        thumbnail: url,
+                        gridWidth: gWidth,
+                        gridHeight: gHeight,
+                        grid: { size: gSize, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' },
+                        tokens: initialTokens,
+                        walls: [],
+                        notes: [],
+                        lights: [],
+                        shapes: {}
+                    });
+                    createPanel.classList.add('vtt-hidden');
+                    renderMapGrid();
                 } catch (e) {
                     console.warn('[map:create] URL resolution warning:', e);
                 } finally {
                     btnCreateSubmit.innerHTML = 'Create Map';
                 }
-
-                console.log('[map:create] Emitting map:create for URL map...', url);
-                vtt.socket.emit('map:create', { name, mapImage: url });
-                createPanel.classList.add('vtt-hidden');
-                renderMapGrid();
             } else if (mapSelect.value === '5etools') {
                 const advId = advSelect.value;
                 const mapId = mapDropdown.value;
@@ -4203,7 +4528,52 @@ window.emitTokenUpdates = function(currentTokens) {
                     
                     if (res.ok) {
                         const data = await res.json();
-                        vtt.socket.emit('map:create', { name, mapImage: data.url });
+                        const uploadedUrl = data.url;
+
+                        const img = new Image();
+                        await new Promise((resolve) => {
+                            img.onload = () => resolve();
+                            img.onerror = () => resolve();
+                            img.src = getSafeVttUrl(uploadedUrl);
+                            setTimeout(resolve, 3000);
+                        });
+
+                        const nw = img.naturalWidth || 2000;
+                        const nh = img.naturalHeight || 1500;
+                        const gSize = 50;
+                        const gWidth = Math.ceil(nw / gSize);
+                        const gHeight = Math.ceil(nh / gSize);
+                        const assetId = `asset_${Date.now()}_map`;
+                        const initialTokens = {
+                            [assetId]: {
+                                id: assetId,
+                                name: `${name} (Map Artwork)`,
+                                x: 0,
+                                y: 0,
+                                layer: 'map',
+                                isAsset: true,
+                                img: uploadedUrl,
+                                pixelWidth: nw,
+                                pixelHeight: nh,
+                                size: 1,
+                                zIndex: 0,
+                                isPlayer: false
+                            }
+                        };
+
+                        vtt.socket.emit('map:create', {
+                            name,
+                            mapImage: "",
+                            thumbnail: uploadedUrl,
+                            gridWidth: gWidth,
+                            gridHeight: gHeight,
+                            grid: { size: gSize, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' },
+                            tokens: initialTokens,
+                            walls: [],
+                            notes: [],
+                            lights: [],
+                            shapes: {}
+                        });
                         createPanel.classList.add('vtt-hidden');
                         renderMapGrid();
                     } else {
@@ -4988,13 +5358,24 @@ window.emitTokenUpdates = function(currentTokens) {
             if (!token.layer) {
                 token.layer = token.isPlayer ? 'token' : activeLayer;
             }
+            if (token.zIndex === undefined) {
+                const existingZ = Object.values(tokens).map(t => t.zIndex || 0);
+                const maxZ = existingZ.length > 0 ? Math.max(...existingZ) : 0;
+                token.zIndex = maxZ + 1;
+            }
             tokens[token.id] = token;
             window.emitTokenUpdates(tokens);
             renderAll();
             if (window.VTT?.chatEngine?.refreshInitiative) {
                 window.VTT.chatEngine.refreshInitiative();
             }
-        }
+        },
+        panTo,
+        setZoom,
+        stepZoom,
+        centerOnToken: centerOnTokenOrMap,
+        broadcastViewToPlayers,
+        getCampaignSettings: () => campaignSettings
     };
 
     // =========================================================================
@@ -5247,50 +5628,54 @@ window.emitTokenUpdates = function(currentTokens) {
                 <span><i class="fa-solid fa-heart-pulse item-icon"></i> Conditions</span>
                 <i class="fa-solid fa-chevron-right chevron-icon"></i>
                 <div class="vtt-token-submenu">
-                    <div class="vtt-token-submenu-list scroll-styled" style="max-height: 280px;">
-                        <div class="vtt-submenu-item menu-add-custom-condition" style="cursor: pointer; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--color-gold-base); font-weight: bold; text-align: center; background: rgba(255,255,255,0.05); transition: background 0.2s;">
-                            <i class="fa-solid fa-plus"></i> Add Custom Condition...
-                        </div>
+                    <div class="vtt-condition-gallery-container">
+                        <div class="vtt-condition-gallery">
         `;
         
         const sortedConditions = Object.keys(CONDITION_ICONS).sort();
-        const activeConditionsMap = new Map();
-        if (token.conditions) {
-            token.conditions.forEach(c => activeConditionsMap.set(`${c.name}_${c.source}`, true));
-        }
+        const activeConditionsSet = new Set(
+            (token.conditions || []).map(c => c.name)
+        );
 
         sortedConditions.forEach(condName => {
             const iconClass = CONDITION_ICONS[condName];
-            const isPhbActive = activeConditionsMap.has(`${condName}_PHB`);
-            const isXphbActive = activeConditionsMap.has(`${condName}_XPHB`);
+            const isActive = activeConditionsSet.has(condName);
             
             html += `
-                <div class="vtt-submenu-item" style="cursor: default; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div style="font-weight: bold; color: var(--color-gold-base);"><i class="fa-solid ${iconClass}"></i> ${condName}</div>
-                    <div style="display: flex; gap: 8px; width: 100%;">
-                        <div class="menu-toggle-condition" data-cond="${condName}" data-source="PHB" style="flex: 1; text-align: center; cursor: pointer; padding: 2px 4px; border-radius: 4px; background: ${isPhbActive ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; color: ${isPhbActive ? '#000' : '#fff'}; transition: all 0.2s;">PHB</div>
-                        <div class="menu-toggle-condition" data-cond="${condName}" data-source="XPHB" style="flex: 1; text-align: center; cursor: pointer; padding: 2px 4px; border-radius: 4px; background: ${isXphbActive ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; color: ${isXphbActive ? '#000' : '#fff'}; transition: all 0.2s;">XPHB</div>
-                    </div>
-                </div>
+                <button type="button" class="vtt-cond-tile menu-toggle-condition${isActive ? ' is-active' : ''}" data-cond="${condName}" title="${condName}">
+                    <i class="fa-solid ${iconClass}"></i>
+                </button>
             `;
         });
         
-        if (token.conditions) {
+        html += `
+                        </div>
+                        <div class="vtt-cond-footer-actions">
+                            <button type="button" class="vtt-cond-action-btn btn-add-custom menu-add-custom-condition">
+                                <i class="fa-solid fa-plus"></i> Add Custom Condition...
+                            </button>
+                            <button type="button" class="vtt-cond-action-btn btn-clear-all menu-clear-all-conditions">
+                                <i class="fa-solid fa-trash-can"></i> Clear All Conditions
+                            </button>
+                        </div>
+        `;
+        
+        if (token.conditions && token.conditions.some(c => c.isCustom)) {
+            html += `<div class="vtt-cond-custom-list">`;
             token.conditions.forEach((c, idx) => {
                 if (c.isCustom) {
                     html += `
-                        <div class="vtt-submenu-item" style="cursor: default; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <div style="font-weight: bold; color: var(--color-gold-base); display: flex; align-items: center; gap: 6px;">
-                                <div style="width: 12px; height: 12px; border-radius: 50%; background: ${c.color}; border: 1px solid var(--color-gold-base);"></div>
-                                ${c.name}
-                            </div>
-                            <div style="display: flex; gap: 8px; width: 100%;">
-                                <div class="menu-toggle-custom-condition" data-custom-idx="${idx}" style="flex: 1; text-align: center; cursor: pointer; padding: 2px 4px; border-radius: 4px; background: var(--color-gold-base); color: #000; transition: all 0.2s;">Active (Click to Remove)</div>
-                            </div>
+                        <div class="vtt-cond-custom-chip menu-toggle-custom-condition" data-custom-idx="${idx}" title="Click to remove custom condition '${c.name}'">
+                            <span style="display: flex; align-items: center; gap: 6px;">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: ${c.color || 'var(--color-gold-base)'}; display: inline-block;"></span>
+                                <span>${c.name}</span>
+                            </span>
+                            <i class="fa-solid fa-xmark" style="font-size: 10px;"></i>
                         </div>
                     `;
                 }
             });
+            html += `</div>`;
         }
         
         html += `
@@ -5475,9 +5860,10 @@ window.emitTokenUpdates = function(currentTokens) {
         // Initiative
         menu.querySelector('#menu-roll-init').addEventListener('click', () => {
             let formula = '';
+            let dexScore = 10;
             if (monsterData) {
-                const score = monsterData.dex || 10;
-                let mod = Math.floor((score - 10) / 2);
+                dexScore = monsterData.dex || 10;
+                let mod = Math.floor((dexScore - 10) / 2);
                 if (monsterData.initiative !== undefined) {
                     if (typeof monsterData.initiative === 'number') mod = monsterData.initiative;
                     else if (typeof monsterData.initiative?.bonus === 'number') mod = monsterData.initiative.bonus;
@@ -5486,14 +5872,15 @@ window.emitTokenUpdates = function(currentTokens) {
             } else if (token.isPlayer && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
                 const char = window.VTT.campaignState.characters[token.characterId];
                 if (char.isCustomNpc || char.monsterData) {
-                    const score = char.monsterData?.dex || 10;
-                    let mod = Math.floor((score - 10) / 2);
+                    dexScore = char.monsterData?.dex || 10;
+                    let mod = Math.floor((dexScore - 10) / 2);
                     if (char.monsterData?.initiative !== undefined) {
                         if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
                         else if (typeof char.monsterData.initiative?.bonus === 'number') mod = char.monsterData.initiative.bonus;
                     }
                     formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
                 } else {
+                    dexScore = char.stats?.dex || 10;
                     formula = getPcRollFormula(char, 'initiative');
                 }
             } else {
@@ -5503,8 +5890,13 @@ window.emitTokenUpdates = function(currentTokens) {
                 formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
             }
 
+            let dexTiebreaker = 0;
+            if (campaignSettings.initDexTiebreaker !== false) {
+                dexTiebreaker = Math.round(dexScore) / 100;
+            }
+
             const label = `${token.name}: Initiative`;
-            const resultTotal = rollFromToken(formula, label, tokenId);
+            const resultTotal = rollFromToken(formula, label, tokenId, dexTiebreaker);
 
             // Automatically add to Turn Tracker!
             if (window.VTT?.chatEngine) {
@@ -5634,26 +6026,20 @@ window.emitTokenUpdates = function(currentTokens) {
 
         menu.querySelectorAll('.menu-toggle-condition').forEach(item => {
             item.addEventListener('click', (e) => {
-                e.stopPropagation(); // prevent closing the menu instantly if we want to toggle multiple
+                e.stopPropagation(); // keep menu open for multi-toggle
                 const activeToken = tokens[tokenId];
                 if (!activeToken) return;
                 
                 const condName = item.dataset.cond;
-                const source = item.dataset.source;
-                
                 if (!activeToken.conditions) activeToken.conditions = [];
-                const existingIdx = activeToken.conditions.findIndex(c => c.name === condName && c.source === source);
+                const existingIdx = activeToken.conditions.findIndex(c => c.name === condName);
                 
                 if (existingIdx !== -1) {
-                    // Remove condition
                     activeToken.conditions.splice(existingIdx, 1);
-                    item.style.background = 'rgba(255,255,255,0.1)';
-                    item.style.color = '#fff';
+                    item.classList.remove('is-active');
                 } else {
-                    // Add condition
-                    activeToken.conditions.push({ name: condName, source: source });
-                    item.style.background = 'var(--color-gold-base)';
-                    item.style.color = '#000';
+                    activeToken.conditions.push({ name: condName });
+                    item.classList.add('is-active');
                 }
                 
                 window.emitTokenUpdates(tokens);
@@ -5661,10 +6047,23 @@ window.emitTokenUpdates = function(currentTokens) {
             });
         });
 
+        const btnClearAll = menu.querySelector('.menu-clear-all-conditions');
+        if (btnClearAll) {
+            btnClearAll.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const activeToken = tokens[tokenId];
+                if (!activeToken) return;
+                activeToken.conditions = [];
+                menu.querySelectorAll('.menu-toggle-condition').forEach(t => t.classList.remove('is-active'));
+                const customList = menu.querySelector('.vtt-cond-custom-list');
+                if (customList) customList.remove();
+                window.emitTokenUpdates(tokens);
+                renderAll();
+            });
+        }
+
         const btnAddCustom = menu.querySelector('.menu-add-custom-condition');
         if (btnAddCustom) {
-            btnAddCustom.addEventListener('mouseenter', () => btnAddCustom.style.background = 'rgba(255,255,255,0.1)');
-            btnAddCustom.addEventListener('mouseleave', () => btnAddCustom.style.background = 'rgba(255,255,255,0.05)');
             btnAddCustom.addEventListener('click', (e) => {
                 e.stopPropagation();
                 menu.remove();
@@ -5680,12 +6079,8 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (!activeToken || !activeToken.conditions) return;
                 const idx = parseInt(item.dataset.customIdx);
                 activeToken.conditions.splice(idx, 1);
+                item.remove();
                 window.emitTokenUpdates(tokens);
-                
-                // Keep the menu open and just re-render everything
-                // Alternatively, close menu. We will close it for simplicity.
-                menu.remove();
-                contextMenuTargetId = null;
                 renderAll();
             });
         });
@@ -6058,31 +6453,32 @@ window.emitTokenUpdates = function(currentTokens) {
                 <span><i class="fa-solid fa-heart-pulse item-icon"></i> Conditions</span>
                 <i class="fa-solid fa-chevron-right chevron-icon"></i>
                 <div class="vtt-token-submenu">
-                    <div class="vtt-token-submenu-list scroll-styled" style="max-height: 280px;">
-                        <div class="vtt-submenu-item menu-add-custom-condition" style="cursor: pointer; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--color-gold-base); font-weight: bold; text-align: center; background: rgba(255,255,255,0.05); transition: background 0.2s;">
-                            <i class="fa-solid fa-plus"></i> Add Custom Condition...
-                        </div>
+                    <div class="vtt-condition-gallery-container">
+                        <div class="vtt-condition-gallery">
         `;
 
         const sortedConditions = Object.keys(CONDITION_ICONS).sort();
         sortedConditions.forEach(condName => {
             const iconClass = CONDITION_ICONS[condName];
-            
-            const allHavePhb = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName && c.source === 'PHB'));
-            const allHaveXphb = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName && c.source === 'XPHB'));
+            const allHaveIt = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName));
 
             html += `
-                <div class="vtt-submenu-item" style="cursor: default; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 6px 12px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <div style="font-weight: bold; color: var(--color-gold-base);"><i class="fa-solid ${iconClass}"></i> ${condName}</div>
-                    <div style="display: flex; gap: 8px; width: 100%;">
-                        <div class="menu-toggle-mass-condition" data-cond="${condName}" data-source="PHB" style="flex: 1; text-align: center; cursor: pointer; padding: 2px 4px; border-radius: 4px; background: ${allHavePhb ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; color: ${allHavePhb ? '#000' : '#fff'}; transition: all 0.2s;">PHB</div>
-                        <div class="menu-toggle-mass-condition" data-cond="${condName}" data-source="XPHB" style="flex: 1; text-align: center; cursor: pointer; padding: 2px 4px; border-radius: 4px; background: ${allHaveXphb ? 'var(--color-gold-base)' : 'rgba(255,255,255,0.1)'}; color: ${allHaveXphb ? '#000' : '#fff'}; transition: all 0.2s;">XPHB</div>
-                    </div>
-                </div>
+                <button type="button" class="vtt-cond-tile menu-toggle-mass-condition${allHaveIt ? ' is-active' : ''}" data-cond="${condName}" title="${condName}">
+                    <i class="fa-solid ${iconClass}"></i>
+                </button>
             `;
         });
 
         html += `
+                        </div>
+                        <div class="vtt-cond-footer-actions">
+                            <button type="button" class="vtt-cond-action-btn btn-add-custom menu-add-custom-condition">
+                                <i class="fa-solid fa-plus"></i> Add Custom Condition...
+                            </button>
+                            <button type="button" class="vtt-cond-action-btn btn-clear-all menu-clear-all-conditions">
+                                <i class="fa-solid fa-trash-can"></i> Clear All Conditions
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -6209,10 +6605,11 @@ window.emitTokenUpdates = function(currentTokens) {
 
             targetTokens.forEach(t => {
                 let formula = '';
+                let dexScore = 10;
                 const mData = getResolvedMonsterData(t);
                 if (mData) {
-                    const score = mData.dex || 10;
-                    let mod = Math.floor((score - 10) / 2);
+                    dexScore = mData.dex || 10;
+                    let mod = Math.floor((dexScore - 10) / 2);
                     if (mData.initiative !== undefined) {
                         if (typeof mData.initiative === 'number') mod = mData.initiative;
                         else if (typeof mData.initiative?.bonus === 'number') mod = mData.initiative.bonus;
@@ -6221,22 +6618,29 @@ window.emitTokenUpdates = function(currentTokens) {
                 } else if (t.isPlayer && t.characterId && window.VTT?.campaignState?.characters?.[t.characterId]) {
                     const char = window.VTT.campaignState.characters[t.characterId];
                     if (char.isCustomNpc || char.monsterData) {
-                        const score = char.monsterData?.dex || 10;
-                        let mod = Math.floor((score - 10) / 2);
+                        dexScore = char.monsterData?.dex || 10;
+                        let mod = Math.floor((dexScore - 10) / 2);
                         if (char.monsterData?.initiative !== undefined) {
                             if (typeof char.monsterData.initiative === 'number') mod = char.monsterData.initiative;
                             else if (typeof char.monsterData.initiative?.bonus === 'number') mod = char.monsterData.initiative.bonus;
                         }
                         formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
                     } else {
+                        dexScore = char.stats?.dex || 10;
                         formula = getPcRollFormula(char, 'initiative');
                     }
                 } else {
                     let mod = fallbackMod;
                     formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
                 }
+
+                let dexTiebreaker = 0;
+                if (campaignSettings.initDexTiebreaker !== false) {
+                    dexTiebreaker = Math.round(dexScore) / 100;
+                }
+
                 const label = `${t.name}: Initiative`;
-                const resultTotal = rollFromToken(formula, label, t.id);
+                const resultTotal = rollFromToken(formula, label, t.id, dexTiebreaker);
 
                 if (window.VTT?.chatEngine) {
                     window.VTT.chatEngine.addToInitiative(t.name, resultTotal, t.id);
@@ -6386,26 +6790,23 @@ window.emitTokenUpdates = function(currentTokens) {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const condName = item.dataset.cond;
-                const source = item.dataset.source;
 
-                const allHaveIt = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName && c.source === source));
+                const allHaveIt = targetTokens.every(t => t.conditions && t.conditions.some(c => c.name === condName));
 
                 targetTokens.forEach(t => {
                     if (!t.conditions) t.conditions = [];
-                    const existingIdx = t.conditions.findIndex(c => c.name === condName && c.source === source);
+                    const existingIdx = t.conditions.findIndex(c => c.name === condName);
                     if (allHaveIt) {
                         if (existingIdx !== -1) t.conditions.splice(existingIdx, 1);
                     } else {
-                        if (existingIdx === -1) t.conditions.push({ name: condName, source: source });
+                        if (existingIdx === -1) t.conditions.push({ name: condName });
                     }
                 });
 
                 if (allHaveIt) {
-                    item.style.background = 'rgba(255,255,255,0.1)';
-                    item.style.color = '#fff';
+                    item.classList.remove('is-active');
                 } else {
-                    item.style.background = 'var(--color-gold-base)';
-                    item.style.color = '#000';
+                    item.classList.add('is-active');
                 }
 
                 if (vtt.socket) window.emitTokenUpdates(tokens);
@@ -6413,11 +6814,23 @@ window.emitTokenUpdates = function(currentTokens) {
             });
         });
 
+        // Mass Clear All Conditions
+        const btnMassClearAll = menu.querySelector('.menu-clear-all-conditions');
+        if (btnMassClearAll) {
+            btnMassClearAll.addEventListener('click', (e) => {
+                e.stopPropagation();
+                targetTokens.forEach(t => {
+                    t.conditions = [];
+                });
+                menu.querySelectorAll('.menu-toggle-mass-condition').forEach(t => t.classList.remove('is-active'));
+                if (vtt.socket) window.emitTokenUpdates(tokens);
+                renderAll();
+            });
+        }
+
         // Add Custom Condition Modal
         const btnAddCustom = menu.querySelector('.menu-add-custom-condition');
         if (btnAddCustom) {
-            btnAddCustom.addEventListener('mouseenter', () => btnAddCustom.style.background = 'rgba(255,255,255,0.1)');
-            btnAddCustom.addEventListener('mouseleave', () => btnAddCustom.style.background = 'rgba(255,255,255,0.05)');
             btnAddCustom.addEventListener('click', (e) => {
                 e.stopPropagation();
                 menu.remove();
@@ -6861,7 +7274,7 @@ window.emitTokenUpdates = function(currentTokens) {
         }
     }
 
-    function rollFromToken(formula, label, tokenId) {
+    function rollFromToken(formula, label, tokenId, extraModifier = 0) {
         if (!vtt.socket) return 0;
 
         const regex = /(\d+)\s*d\s*(\d+)(?:\s*([+-])\s*(\d+))?/i;
@@ -6885,6 +7298,10 @@ window.emitTokenUpdates = function(currentTokens) {
 
             finalModifier = sign === '-' ? -modifier : modifier;
             total = subtotal + finalModifier;
+        }
+
+        if (extraModifier) {
+            total = Math.round((total + extraModifier) * 100) / 100;
         }
 
         const rollResult = {
@@ -7043,7 +7460,8 @@ window.emitTokenUpdates = function(currentTokens) {
             { id: 'config-gm-player-name-visible', key: 'gmPlayerNameVisible', type: 'select' },
             { id: 'config-gm-temp-hp-visible', key: 'gmTempHpBarVisible', type: 'select' },
             { id: 'config-gm-temp-hp-num-visible', key: 'gmTempHpNumVisible', type: 'checkbox' },
-            { id: 'config-temp-hp-style', key: 'tempHpBarStyle', type: 'select' }
+            { id: 'config-temp-hp-style', key: 'tempHpBarStyle', type: 'select' },
+            { id: 'config-init-dex-tiebreaker', key: 'initDexTiebreaker', type: 'checkbox' }
         ];
         
         controls.forEach(c => {
@@ -7077,7 +7495,8 @@ window.emitTokenUpdates = function(currentTokens) {
             { id: 'config-gm-player-name-visible', key: 'gmPlayerNameVisible', type: 'select' },
             { id: 'config-gm-temp-hp-visible', key: 'gmTempHpBarVisible', type: 'select' },
             { id: 'config-gm-temp-hp-num-visible', key: 'gmTempHpNumVisible', type: 'checkbox' },
-            { id: 'config-temp-hp-style', key: 'tempHpBarStyle', type: 'select' }
+            { id: 'config-temp-hp-style', key: 'tempHpBarStyle', type: 'select' },
+            { id: 'config-init-dex-tiebreaker', key: 'initDexTiebreaker', type: 'checkbox' }
         ];
         
         controls.forEach(c => {
@@ -7392,6 +7811,7 @@ window.emitTokenUpdates = function(currentTokens) {
         
         canvasInteraction.addEventListener('wheel', e => {
             e.preventDefault();
+            cancelCameraAnimation();
             const delta = e.deltaY > 0 ? 0.9 : 1.1;
             
             // Use viewport rect so mouse coords are viewport-relative.
@@ -7404,7 +7824,8 @@ window.emitTokenUpdates = function(currentTokens) {
             const targetX = (mouseX - panX) / zoom;
             const targetY = (mouseY - panY) / zoom;
             
-            zoom *= delta;
+            const nextZoom = Math.min(5.0, Math.max(0.1, zoom * delta));
+            zoom = nextZoom;
             
             panX = mouseX - targetX * zoom;
             panY = mouseY - targetY * zoom;
@@ -7456,10 +7877,17 @@ window.emitTokenUpdates = function(currentTokens) {
     }
 
     function getTokenAtPoint(mouse, requireControl = true) {
-        const sortedTokens = Object.values(tokens || {})
-            .sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+        if (!tokens || !mouse) return null;
 
-        for (const token of sortedTokens) {
+        const tokenEntries = Object.entries(tokens).map(([id, t], idx) => ({ id, token: t, originalIndex: idx }));
+        // Sort descending by zIndex, then descending by original insertion index (topmost visual element first)
+        tokenEntries.sort((a, b) => {
+            const zDiff = (b.token.zIndex || 0) - (a.token.zIndex || 0);
+            if (zDiff !== 0) return zDiff;
+            return b.originalIndex - a.originalIndex;
+        });
+
+        for (const { token } of tokenEntries) {
             if (!token) continue;
             if (token.layer !== activeLayer && activeLayer !== 'gm') continue;
             if (token.layer === 'gm' && vtt.role !== 'GM') continue;
@@ -7470,8 +7898,23 @@ window.emitTokenUpdates = function(currentTokens) {
             const ty = token.y + drawH / 2;
             if (vtt.role === 'Player' && !isPointVisible(tx, ty)) continue;
 
-            if (mouse.x >= token.x && mouse.x <= token.x + drawW && mouse.y >= token.y && mouse.y <= token.y + drawH) {
-                return token;
+            if (token.rotation) {
+                const cx = token.x + drawW / 2;
+                const cy = token.y + drawH / 2;
+                const rad = (-token.rotation * Math.PI) / 180;
+                const cos = Math.cos(rad);
+                const sin = Math.sin(rad);
+                const dx = mouse.x - cx;
+                const dy = mouse.y - cy;
+                const localX = cos * dx - sin * dy + drawW / 2;
+                const localY = sin * dx + cos * dy + drawH / 2;
+                if (localX >= 0 && localX <= drawW && localY >= 0 && localY <= drawH) {
+                    return token;
+                }
+            } else {
+                if (mouse.x >= token.x && mouse.x <= token.x + drawW && mouse.y >= token.y && mouse.y <= token.y + drawH) {
+                    return token;
+                }
             }
         }
         return null;
@@ -8289,6 +8732,7 @@ window.emitTokenUpdates = function(currentTokens) {
                     }
                 }
 
+                cancelCameraAnimation();
                 isPanning = true;
                 hasPanned = false;
                 startPanX = e.clientX - panX;
@@ -9139,8 +9583,8 @@ window.emitTokenUpdates = function(currentTokens) {
                         };
                     }
                 }
-                processTokenAnimReqs(tokens, true);
                 window.emitTokenUpdates(tokens);
+                processTokenAnimReqs(tokens);
                 dragTargetId = null;
                 tokenDragOriginalPositions = {};
                 if (isTokenMeasuring) {
@@ -9402,6 +9846,9 @@ window.emitTokenUpdates = function(currentTokens) {
                         t.layer = activeLayer; // Paste to current layer
                         t.x += dx;
                         t.y += dy;
+                        const existingZ = Object.values(tokens).map(tk => tk.zIndex || 0);
+                        const maxZ = existingZ.length > 0 ? Math.max(...existingZ) : 0;
+                        t.zIndex = maxZ + 1;
                         const newId = 'token_' + Date.now() + Math.random().toString(36).substr(2,5);
                         t.id = newId;
                         tokens[newId] = t;
@@ -9430,10 +9877,72 @@ window.emitTokenUpdates = function(currentTokens) {
         }
 
         window.addEventListener('keydown', e => {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            const isInputActive = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) ||
+                                  ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName) ||
+                                  document.activeElement?.isContentEditable ||
+                                  e.target?.isContentEditable;
+            if (isInputActive) return;
 
             const isCtrl = e.ctrlKey || e.metaKey;
             const key = e.key ? e.key.toLowerCase() : '';
+            const code = e.code || '';
+
+            // Numpad 5: Center view to token / centroid / player character / map center
+            // (or Shift+Numpad 5: GM broadcast view to players)
+            if (code === 'Numpad5' || (e.key === '5' && !isCtrl && !e.altKey && !isLayerShortcutModifierDown)) {
+                e.preventDefault();
+                if (e.shiftKey && vtt.role === 'GM') {
+                    broadcastViewToPlayers();
+                } else {
+                    centerOnTokenOrMap();
+                }
+                return;
+            }
+
+            // Numpad Zoom (+ / -) and standard +/- keys
+            if (code === 'NumpadAdd' || (e.key === '+' && !isCtrl && !e.altKey) || (e.key === '=' && !isCtrl && !e.altKey)) {
+                e.preventDefault();
+                stepZoom(0.10);
+                return;
+            }
+            if (code === 'NumpadSubtract' || (e.key === '-' && !isCtrl && !e.altKey) || (e.key === '_' && !isCtrl && !e.altKey)) {
+                e.preventDefault();
+                stepZoom(-0.10);
+                return;
+            }
+
+            // Numpad Panning: 4 (left), 8 (up), 6 (right), 2 (down) + diagonals 7, 9, 1, 3
+            const isNumpad4 = code === 'Numpad4' || (e.key === '4' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad8 = code === 'Numpad8' || (e.key === '8' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad6 = code === 'Numpad6' || (e.key === '6' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad2 = code === 'Numpad2' || (e.key === '2' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad7 = code === 'Numpad7' || (e.key === '7' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad9 = code === 'Numpad9' || (e.key === '9' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad1 = code === 'Numpad1' || (e.key === '1' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad3 = code === 'Numpad3' || (e.key === '3' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+
+            if (isNumpad4 || isNumpad8 || isNumpad6 || isNumpad2 || isNumpad7 || isNumpad9 || isNumpad1 || isNumpad3) {
+                e.preventDefault();
+                cancelCameraAnimation();
+                const step = e.repeat ? 180 : 120;
+                let dx = 0;
+                let dy = 0;
+
+                if (isNumpad4) dx += step;
+                if (isNumpad6) dx -= step;
+                if (isNumpad8) dy += step;
+                if (isNumpad2) dy -= step;
+                if (isNumpad7) { dx += step * 0.707; dy += step * 0.707; }
+                if (isNumpad9) { dx -= step * 0.707; dy += step * 0.707; }
+                if (isNumpad1) { dx += step * 0.707; dy += step * 0.707; }
+                if (isNumpad3) { dx += step * 0.707; dy += step * 0.707; }
+
+                panX += dx;
+                panY += dy;
+                updateContainerTransform();
+                renderAll();
+                return;
+            }
 
             if (e.key === ' ' && (isTokenMeasuring || localIsMeasuring || localIsShaping)) {
                 const rawShapeMeasure = document.getElementById('measure-shape')?.value || 'line';
@@ -9652,8 +10161,8 @@ window.emitTokenUpdates = function(currentTokens) {
                     }
 
                     if (changedTokens) {
-                        processTokenAnimReqs(tokens, true);
                         window.emitTokenUpdates(tokens);
+                        processTokenAnimReqs(tokens);
                     }
                     if (changedShapes) vtt.socket.emit('shapes:update', { mapId: currentMapId, shapes });
                     if (changedTokens || changedShapes) renderAll();

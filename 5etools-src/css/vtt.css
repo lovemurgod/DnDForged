@@ -1,4 +1,4 @@
-/* DnDForged Premium Design Style Sheet */
+/* ForgeD VTT Premium Design Style Sheet */
 
 /* Design Tokens & Theme Variables */
 :root {
@@ -448,6 +448,17 @@ select option {
     top: 0;
     left: 0;
     transform-origin: 0 0;
+    background-color: #0d0f16;
+}
+#vtt-map-html-overlays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform-origin: 0 0;
+    z-index: 1;
 }
 #vtt-map-bg {
     user-select: none;
@@ -459,29 +470,157 @@ select option {
     left: 0;
     pointer-events: none; /* Let clicks pass to the active canvas logic */
 }
+#vtt-canvas-grid {
+    z-index: 2;
+}
+#vtt-html-overlays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform-origin: 0 0;
+    z-index: 5;
+}
 #vtt-canvas-fog {
     z-index: 15;
 }
 #vtt-canvas-interaction {
-    z-index: 10;
+    z-index: 20;
     pointer-events: auto !important; /* The top canvas receives mouse inputs */
 }
 
-/* Zoom / Coordinates display */
+/* Unified Bottom-Left Canvas HUD (Zoom & Coordinates) */
 #vtt-coordinates-indicator {
     position: absolute;
     bottom: 16px;
     left: 16px;
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: 5px 10px;
+    border-radius: 8px;
     font-size: 0.75rem;
     color: var(--color-text-secondary);
     display: flex;
-    gap: 8px;
+    gap: 7px;
     align-items: center;
+    z-index: 25;
+    background: rgba(14, 18, 27, 0.88);
+    border: 1px solid var(--color-border-subtle);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    user-select: none;
+    backdrop-filter: blur(10px);
 }
+
+#vtt-coordinates-indicator .btn-xxs {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    border-radius: 4px;
+}
+
+#vtt-zoom-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    transition: background var(--transition-smooth, 0.2s ease);
+}
+
+#vtt-zoom-slider:hover {
+    background: rgba(212, 175, 55, 0.35);
+}
+
+#vtt-zoom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-gold-light, #f1d789);
+    border: 1px solid var(--color-gold-base, #d4af37);
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+#vtt-zoom-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+#vtt-zoom-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-gold-light, #f1d789);
+    border: 1px solid var(--color-gold-base, #d4af37);
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
+    cursor: pointer;
+}
+
+#vtt-zoom-badge-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 22px;
+    padding: 0 5px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-smooth, 0.2s ease);
+}
+
+#vtt-zoom-badge-container:hover {
+    border-color: var(--color-gold-base, #d4af37);
+    background: rgba(212, 175, 55, 0.12);
+}
+
+#vtt-zoom-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-gold-light, #f1d789);
+    pointer-events: none;
+}
+
+#vtt-zoom-input {
+    width: 38px;
+    height: 18px;
+    padding: 0;
+    font-size: 0.75rem;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--color-gold-light, #f1d789);
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+#vtt-zoom-input::-webkit-outer-spin-button,
+#vtt-zoom-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .coord-divider {
     color: var(--color-text-muted);
+    opacity: 0.6;
+}
+
+.vtt-coords-display {
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    white-space: nowrap;
 }
 
 /* Right Panels Sidebar */
@@ -2250,6 +2389,144 @@ select option {
 .vtt-submenu-item:hover span.modifier-badge {
     color: var(--color-gold-light);
     border-color: rgba(212, 175, 55, 0.2);
+}
+
+/* Token Condition Gallery Styles */
+.vtt-condition-gallery-container {
+    width: 220px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.vtt-condition-gallery {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+}
+
+.vtt-cond-tile {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: var(--color-text-secondary, #ccc);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.vtt-cond-tile:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: var(--color-gold-base, #e69a28);
+    color: #fff;
+    transform: scale(1.08);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+    z-index: 2;
+}
+
+.vtt-cond-tile.is-active {
+    background: var(--color-gold-base, #e69a28);
+    border-color: #ffd700;
+    color: #121621;
+    box-shadow: 0 0 10px rgba(230, 154, 40, 0.7);
+    font-weight: bold;
+}
+
+.vtt-cond-tile.is-active:hover {
+    background: var(--color-gold-light, #f5b942);
+    color: #000;
+    transform: scale(1.08);
+}
+
+.vtt-cond-footer-actions {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.vtt-cond-action-btn {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-secondary, #bbb);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+}
+
+.vtt-cond-action-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.vtt-cond-action-btn.btn-add-custom {
+    color: var(--color-gold-base, #e69a28);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.vtt-cond-action-btn.btn-add-custom:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: var(--color-gold-base, #e69a28);
+    color: var(--color-gold-light, #ffd700);
+}
+
+.vtt-cond-action-btn.btn-clear-all {
+    color: #ff6b6b;
+    border-color: rgba(255, 107, 107, 0.25);
+}
+
+.vtt-cond-action-btn.btn-clear-all:hover {
+    background: rgba(255, 107, 107, 0.15);
+    border-color: #ff6b6b;
+    color: #ff8787;
+}
+
+.vtt-cond-custom-list {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.vtt-cond-custom-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    font-size: 0.72rem;
+    color: var(--color-gold-light, #ffd700);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.vtt-cond-custom-chip:hover {
+    background: rgba(255, 107, 107, 0.15);
+    border-color: #ff6b6b;
+    color: #ff8787;
 }
 
 /* Aura Settings Styles */

@@ -296,7 +296,8 @@ export function initVttDataBridge(vtt) {
                     fxShadowOffset: data.fxShadowOffset !== undefined ? data.fxShadowOffset : (charRef ? charRef.fxShadowOffset : 4),
                     fxShadowColor: data.fxShadowColor || (charRef ? charRef.fxShadowColor : '#000000'),
                     fxShadowOpacity: data.fxShadowOpacity !== undefined ? data.fxShadowOpacity : (charRef ? charRef.fxShadowOpacity : 0.7),
-                    isVideo: tokenImg && typeof tokenImg === 'string' && (() => { const _c = tokenImg.split('?')[0].toLowerCase(); return _c.endsWith('.gif') || _c.endsWith('.mp4') || _c.endsWith('.webm'); })() || (tokenImg && typeof tokenImg === 'string' && tokenImg.includes('youtube.com'))
+                    isGif: tokenImg && typeof tokenImg === 'string' && tokenImg.split('?')[0].toLowerCase().endsWith('.gif'),
+                    isVideo: tokenImg && typeof tokenImg === 'string' && ((() => { const _c = tokenImg.split('?')[0].toLowerCase(); return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg'); })() || tokenImg.includes('youtube.com'))
                 };
 
                 // Backward compatibility for aura
@@ -356,7 +357,8 @@ export function initVttDataBridge(vtt) {
                         maxHp: 0,
                         size: 1,
                         img: finalUrl,
-                        isVideo: data.assetType === 'video' || finalUrl.includes('youtube.com') || finalUrl.split('?')[0].toLowerCase().endsWith('.gif'),
+                        isGif: typeof finalUrl === 'string' && finalUrl.split('?')[0].toLowerCase().endsWith('.gif'),
+                        isVideo: data.assetType === 'video' || (typeof finalUrl === 'string' && (finalUrl.includes('youtube.com') || (() => { const _c = finalUrl.split('?')[0].toLowerCase(); return _c.endsWith('.mp4') || _c.endsWith('.webm') || _c.endsWith('.ogg'); })())),
                         isAsset: true,
                         pixelWidth: pixelWidth,
                         pixelHeight: pixelHeight,
@@ -502,9 +504,11 @@ export function initVttDataBridge(vtt) {
         if (!name) return;
         const initiativeRoll = prompt("Enter initiative roll (or leave blank for random 1d20):");
         
-        let score = parseInt(initiativeRoll);
+        let score = parseFloat(initiativeRoll);
         if (isNaN(score)) {
-            score = Math.floor(Math.random() * 20) + 1;
+            let base = Math.floor(Math.random() * 20) + 1;
+            const isTiebreaker = window.VTT?.campaignState?.settings?.initDexTiebreaker ?? window.VTT?.canvasEngine?.getCampaignSettings?.()?.initDexTiebreaker ?? true;
+            score = isTiebreaker ? Math.round((base + 0.10) * 100) / 100 : base;
         }
 
         const canvasEngine = window.VTT.canvasEngine;
@@ -1095,21 +1099,41 @@ export function initVttDataBridge(vtt) {
         let gWidth = undefined;
         let gHeight = undefined;
         if (targetMap.width && mapGrid.size) {
-            gWidth = targetMap.width / mapGrid.size;
+            gWidth = Math.ceil(targetMap.width / mapGrid.size);
         }
         if (targetMap.height && mapGrid.size) {
-            gHeight = targetMap.height / mapGrid.size;
+            gHeight = Math.ceil(targetMap.height / mapGrid.size);
+        }
+
+        const mapAssetId = `asset_${Date.now()}_map`;
+        const initialTokens = {};
+        if (mapUrl) {
+            initialTokens[mapAssetId] = {
+                id: mapAssetId,
+                name: targetMap.title || "Map Artwork",
+                x: 0,
+                y: 0,
+                layer: 'map',
+                isAsset: true,
+                img: mapUrl,
+                pixelWidth: targetMap.width || (gWidth ? gWidth * mapGrid.size : 2000),
+                pixelHeight: targetMap.height || (gHeight ? gHeight * mapGrid.size : 1500),
+                size: 1,
+                zIndex: 0,
+                isPlayer: false
+            };
         }
 
         return {
             name: targetMap.title || "Imported Map",
-            mapImage: mapUrl,
-            gridWidth: gWidth,
-            gridHeight: gHeight,
+            mapImage: "",
+            thumbnail: mapUrl,
+            gridWidth: gWidth || 40,
+            gridHeight: gHeight || 30,
             grid: mapGrid,
             walls: walls,
             notes: notes,
-            tokens: {},
+            tokens: initialTokens,
             shapes: {},
             lights: []
         };

@@ -225,6 +225,12 @@ function extractUpcastInfo(spell) {
                 upcastBonus = vals[0];
             }
         }
+    } else if (spell.entriesHigherLevel) {
+        const hlText = JSON.stringify(spell.entriesHigherLevel);
+        const diceM = hlText.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+|\d+)/i);
+        if (diceM) {
+            upcastBonus = diceM[1];
+        }
     }
 
     return { upcastBonus, upcastScaleStep };
@@ -232,17 +238,148 @@ function extractUpcastInfo(spell) {
 
 function extractDamageList(spell) {
     const list = [];
-    if (spell.damageInflict) {
-        const descText = JSON.stringify(spell.entries || []);
-        const diceMatches = descText.match(/{@damage ([^}]+)}/g) || [];
-        diceMatches.forEach(m => {
-            const formula = m.replace(/{@damage ([^}|]+)[^}]*}/, '$1');
-            const type = spell.damageInflict[0] ? (spell.damageInflict[0].charAt(0).toUpperCase() + spell.damageInflict[0].slice(1)) : '';
-            if (!list.some(d => d.formula === formula)) {
-                list.push({ formula, type, stat: 'none' });
-            }
-        });
+    const spName = (spell.name || '').toLowerCase();
+    const isCantrip = spell.level === 0;
+
+    // Special case cantrips
+    if (isCantrip) {
+        if (spName.includes('booming blade')) {
+            return [
+                { formula: '0d8', type: 'Thunder', stat: 'none' },
+                { formula: '1d8', type: 'Thunder', stat: 'none' }
+            ];
+        }
+        if (spName.includes('green-flame blade')) {
+            return [
+                { formula: '0d8', type: 'Fire', stat: 'none' },
+                { formula: '1d8', type: 'Fire', stat: 'spell' }
+            ];
+        }
     }
+
+    const isHealing = (spell.miscTags && spell.miscTags.includes('HL')) ||
+                      /regains?\s+(?:{@(?:dice|damage)|an additional|\d+|\w+\s+Hit Point)/i.test(JSON.stringify(spell.entries || [])) ||
+                      /restores?\s+(?:{@(?:dice|damage)|\d+)/i.test(JSON.stringify(spell.entries || []));
+    const isTempHp = (spell.miscTags && spell.miscTags.includes('THP')) ||
+                     /temporary hit points?/i.test(JSON.stringify(spell.entries || []));
+
+    // Base entries text (exclude scaling paragraphs for cantrips)
+    let entries = spell.entries || [];
+    let baseEntries = entries;
+    if (isCantrip && Array.isArray(entries) && entries.length > 1) {
+        baseEntries = entries.filter(e => {
+            const str = typeof e === 'string' ? e : JSON.stringify(e);
+            return !/(?:damage increases by|creates more than one beam|increases to {@damage)/i.test(str);
+        });
+        if (baseEntries.length === 0) baseEntries = [entries[0]];
+    }
+    const baseText = JSON.stringify(baseEntries);
+
+    // 1. Damage spells
+    if (isCantrip && Array.isArray(spell.scalingLevelDice) && spell.scalingLevelDice.length > 0) {
+        spell.scalingLevelDice.forEach((sld, idx) => {
+            const formula = sld.scaling?.['1'] || sld.scaling?.['cantrip'] || Object.values(sld.scaling || {})[0] || '1d8';
+            let type = 'Damage';
+            let label = '';
+            const rawLabel = (sld.label || '').toLowerCase();
+            
+            const knownTypes = ["slashing", "piercing", "bludgeoning", "fire", "cold", "lightning", "thunder", "poison", "acid", "necrotic", "radiant", "force", "psychic", "healing"];
+            for (const kt of knownTypes) {
+                if (rawLabel.includes(kt)) {
+                    type = kt.charAt(0).toUpperCase() + kt.slice(1);
+                    break;
+                }
+            }
+            if (type === 'Damage' && spell.damageInflict && spell.damageInflict.length > 0) {
+                const matchedInflict = spell.damageInflict[idx] || spell.damageInflict[0];
+                type = matchedInflict.charAt(0).toUpperCase() + matchedInflict.slice(1);
+            }
+
+            if (rawLabel.includes('wounded') || rawLabel.includes('missing')) {
+                label = 'Wounded Target';
+            } else if (spell.scalingLevelDice.length > 1) {
+                label = idx === 0 ? 'Normal' : `Variant ${idx + 1}`;
+            }
+
+            list.push({ formula, type, label, stat: 'none' });
+        });
+    } else if (spell.damageInflict && spell.damageInflict.length > 0) {
+        const types = spell.damageInflict.map(t => t.charAt(0).toUpperCase() + t.slice(1));
+        
+        if (isCantrip) {
+            const dmgMatches = [...baseText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
+            if (dmgMatches.length > 0) {
+                dmgMatches.forEach((m, idx) => {
+                    const formula = m[1].trim();
+                    let type = m[2] ? m[2].charAt(0).toUpperCase() + m[2].slice(1) : (types[idx] || types[0] || 'Damage');
+                    let label = '';
+                    if (dmgMatches.length > 1) {
+                        label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
+                    }
+                    list.push({ formula, type, label, stat: 'none' });
+                });
+            } else {
+                const m = baseText.match(/\{@damage\s+([^}|]+)[^}]*\}/i) || baseText.match(/(\d+d\d+)/i);
+                if (m) {
+                    const formula = (m[1] || m[0]).replace(/{@damage ([^}|]+)[^}]*}/, '$1').trim();
+                    list.push({ formula, type: types[0] || 'Damage', stat: 'none' });
+                }
+            }
+        } else {
+            // For multi-damage-type spells (e.g. Ice Storm: 2d8 bludgeoning and 4d6 cold)
+            if (types.length > 1) {
+                types.forEach(t => {
+                    const typeRegex = new RegExp(`\\{@damage\\s+([^}|]+)[^}]*\\}[^.]*?${t.toLowerCase()}`, 'i');
+                    const tm = baseText.match(typeRegex);
+                    if (tm) {
+                        const formula = tm[1].trim();
+                        if (!list.some(d => d.type === t)) {
+                            list.push({ formula, type: t, stat: 'none' });
+                        }
+                    }
+                });
+            }
+            // If list is still empty or single type, grab first primary damage formula
+            if (list.length === 0) {
+                const dmgMatches = [...baseText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
+                if (dmgMatches.length > 0) {
+                    dmgMatches.forEach((match, idx) => {
+                        let formula = match[1].trim();
+                        let type = match[2] ? match[2].charAt(0).toUpperCase() + match[2].slice(1) : (types[idx] || types[0] || "Damage");
+                        let label = dmgMatches.length > 1 ? `Damage ${idx + 1}` : '';
+                        list.push({ formula, type, label, stat: 'none' });
+                    });
+                } else {
+                    const m = baseText.match(/\{@damage\s+([^}|]+)[^}]*\}/i) || baseText.match(/(\d+d\d+)/i);
+                    if (m) {
+                        const formula = (m[1] || m[0]).replace(/{@damage ([^}|]+)[^}]*}/, '$1').trim();
+                        list.push({ formula, type: types[0] || 'Damage', stat: 'none' });
+                    }
+                }
+            }
+        }
+    }
+
+    // 2. Healing & Temp HP spells
+    if (list.length === 0 && (isHealing || isTempHp)) {
+        const type = isHealing ? 'Healing' : 'Temp HP';
+        const hasSpellMod = /plus your spellcasting ability modifier|\+\s*your spellcasting ability modifier/i.test(baseText);
+        const stat = hasSpellMod ? 'spell' : 'none';
+
+        // Check for dice matches like {@dice 2d6}, {@damage 1d8}, {@dice 2d4 + 4}
+        const diceMatches = baseText.match(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/gi);
+        if (diceMatches && diceMatches.length > 0) {
+            const firstFormula = diceMatches[0].replace(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i, '$1').trim();
+            list.push({ formula: firstFormula, type, stat });
+        } else {
+            // Check for flat number healing like Heal (70 hit points) or Power Word Heal
+            const flatMatch = baseText.match(/restoring\s+(\d+)/i) || baseText.match(/regains?\s+(\d+)/i);
+            if (flatMatch) {
+                list.push({ formula: flatMatch[1], type, stat });
+            }
+        }
+    }
+
     return list;
 }
 

@@ -26,6 +26,7 @@
       {
         "formula": "12d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -127,21 +128,7 @@
       {
         "formula": "1d6",
         "type": "Acid",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Acid",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Acid",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -205,6 +192,7 @@
       {
         "formula": "1d6",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -257,6 +245,7 @@
       {
         "formula": "3d8",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -706,6 +695,16 @@
         "formula": "1d6",
         "type": "Bludgeoning",
         "stat": "none"
+      },
+      {
+        "formula": "1d6",
+        "type": "Piercing",
+        "stat": "none"
+      },
+      {
+        "formula": "1d6",
+        "type": "Slashing",
+        "stat": "none"
       }
     ],
     "saveAbility": "",
@@ -773,6 +772,7 @@
       {
         "formula": "1d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -811,7 +811,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "4d10",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -1331,26 +1337,31 @@
       {
         "formula": "1d4 + 4",
         "type": "Bludgeoning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "1d8 + 2",
-        "type": "Bludgeoning",
+        "type": "Piercing",
+        "label": "Damage 2",
         "stat": "none"
       },
       {
         "formula": "2d6 + 1",
-        "type": "Bludgeoning",
+        "type": "Slashing",
+        "label": "Damage 3",
         "stat": "none"
       },
       {
         "formula": "2d10 + 2",
         "type": "Bludgeoning",
+        "label": "Damage 4",
         "stat": "none"
       },
       {
         "formula": "2d12 + 4",
         "type": "Bludgeoning",
+        "label": "Damage 5",
         "stat": "none"
       }
     ],
@@ -1454,6 +1465,7 @@
       {
         "formula": "4d4",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -2353,6 +2365,7 @@
       {
         "formula": "2d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -2409,6 +2422,7 @@
       {
         "formula": "2d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -2453,6 +2467,7 @@
       {
         "formula": "1d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -2750,7 +2765,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -2838,7 +2859,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -3075,7 +3102,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -3161,7 +3194,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -3311,6 +3350,7 @@
       {
         "formula": "4d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -3546,6 +3586,7 @@
       {
         "formula": "5d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -3618,6 +3659,7 @@
       {
         "formula": "5d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -4321,6 +4363,7 @@
       {
         "formula": "10d12",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -4393,6 +4436,7 @@
       {
         "formula": "1d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -4465,6 +4509,7 @@
       {
         "formula": "1d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -4522,12 +4567,7 @@
     "damageList": [
       {
         "formula": "4d8",
-        "type": "Bludgeoning",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Bludgeoning",
+        "type": "Force",
         "stat": "none"
       }
     ],
@@ -4587,12 +4627,7 @@
     "damageList": [
       {
         "formula": "5d8",
-        "type": "Bludgeoning",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Bludgeoning",
+        "type": "Force",
         "stat": "none"
       }
     ],
@@ -4640,6 +4675,7 @@
       {
         "formula": "6d10",
         "type": "Slashing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -4683,6 +4719,7 @@
       {
         "formula": "6d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -4728,6 +4765,7 @@
       {
         "formula": "10d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -4774,16 +4812,19 @@
       {
         "formula": "4d12",
         "type": "Force",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "8d12",
         "type": "Force",
+        "label": "Damage 2",
         "stat": "none"
       },
       {
         "formula": "12d12",
         "type": "Force",
+        "label": "Damage 3",
         "stat": "none"
       }
     ],
@@ -5112,6 +5153,7 @@
       {
         "formula": "8d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -5230,6 +5272,7 @@
       {
         "formula": "8d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -5278,6 +5321,7 @@
       {
         "formula": "3d8",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -5326,6 +5370,7 @@
       {
         "formula": "3d8",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -5853,6 +5898,7 @@
       {
         "formula": "6d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -5900,22 +5946,12 @@
     "feats": [],
     "damageList": [
       {
+        "formula": "0d8",
+        "type": "Thunder",
+        "stat": "none"
+      },
+      {
         "formula": "1d8",
-        "type": "Thunder",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Thunder",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Thunder",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
         "type": "Thunder",
         "stat": "none"
       }
@@ -6035,6 +6071,7 @@
       {
         "formula": "2d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -6150,6 +6187,7 @@
       {
         "formula": "3d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -6266,6 +6304,7 @@
       {
         "formula": "3d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -6311,6 +6350,7 @@
       {
         "formula": "3d6",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -6381,11 +6421,13 @@
       {
         "formula": "3d10",
         "type": "Lightning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "1d10",
         "type": "Lightning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -6457,11 +6499,13 @@
       {
         "formula": "3d10",
         "type": "Lightning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "1d10",
         "type": "Lightning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -6700,6 +6744,7 @@
       {
         "formula": "3d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -6881,6 +6926,7 @@
       {
         "formula": "10d8",
         "type": "Lightning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -6928,6 +6974,7 @@
       {
         "formula": "10d8",
         "type": "Lightning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -6979,6 +7026,7 @@
       {
         "formula": "2d8 + 1d6",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -7325,21 +7373,7 @@
       {
         "formula": "1d8",
         "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -7406,6 +7440,7 @@
       {
         "formula": "1d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -7483,6 +7518,7 @@
       {
         "formula": "3d8",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -7552,6 +7588,7 @@
       {
         "formula": "3d8",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -7597,6 +7634,7 @@
       {
         "formula": "8d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -7640,6 +7678,7 @@
       {
         "formula": "8d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -8053,6 +8092,7 @@
       {
         "formula": "4d4",
         "type": "Slashing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -8097,6 +8137,7 @@
       {
         "formula": "4d4",
         "type": "Slashing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -8194,6 +8235,7 @@
       {
         "formula": "5d8",
         "type": "Poison",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -8293,6 +8335,7 @@
       {
         "formula": "5d8",
         "type": "Poison",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -9484,6 +9527,7 @@
       {
         "formula": "8d8",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -9589,6 +9633,7 @@
       {
         "formula": "8d8",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -9926,6 +9971,7 @@
       {
         "formula": "3d10",
         "type": "Slashing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10055,6 +10101,7 @@
       {
         "formula": "5d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10134,6 +10181,7 @@
       {
         "formula": "6d12",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10178,6 +10226,7 @@
       {
         "formula": "3d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10318,11 +10367,13 @@
       {
         "formula": "8d8",
         "type": "Lightning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "4d8",
-        "type": "Lightning",
+        "type": "Thunder",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -10403,6 +10454,7 @@
       {
         "formula": "3d12",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10529,6 +10581,7 @@
       {
         "formula": "2d8",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10608,6 +10661,7 @@
       {
         "formula": "8d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10689,6 +10743,7 @@
       {
         "formula": "5d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10740,6 +10795,7 @@
       {
         "formula": "6d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10788,6 +10844,7 @@
       {
         "formula": "6d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -10912,6 +10969,7 @@
       {
         "formula": "11d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -11197,6 +11255,13 @@
       {
         "formula": "2d8",
         "type": "Bludgeoning",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "2d8",
+        "type": "Bludgeoning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -11289,6 +11354,7 @@
       {
         "formula": "2d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -11454,6 +11520,7 @@
       {
         "formula": "1d6",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -11495,6 +11562,7 @@
       {
         "formula": "2d4",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -11692,21 +11760,7 @@
       {
         "formula": "1d8",
         "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -12396,6 +12450,7 @@
       {
         "formula": "4d12",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -12463,6 +12518,7 @@
       {
         "formula": "1d4",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -12528,6 +12584,7 @@
       {
         "formula": "1d4",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -12643,7 +12700,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1d8",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d8",
@@ -12769,7 +12832,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "2d8",
@@ -12934,6 +13003,7 @@
       {
         "formula": "8d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -13274,6 +13344,7 @@
       {
         "formula": "4d10",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -13496,6 +13567,7 @@
       {
         "formula": "2d4",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -13791,11 +13863,13 @@
       {
         "formula": "12d6",
         "type": "Fire",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "1d6",
         "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -13840,11 +13914,13 @@
       {
         "formula": "12d6",
         "type": "Fire",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "1d6",
         "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -14040,6 +14116,16 @@
         "formula": "5d6",
         "type": "Necrotic",
         "stat": "none"
+      },
+      {
+        "formula": "5d6",
+        "type": "Radiant",
+        "stat": "none"
+      },
+      {
+        "formula": "5d6",
+        "type": "Thunder",
+        "stat": "none"
       }
     ],
     "saveAbility": "constitution",
@@ -14110,6 +14196,16 @@
       {
         "formula": "5d6",
         "type": "Necrotic",
+        "stat": "none"
+      },
+      {
+        "formula": "5d6",
+        "type": "Radiant",
+        "stat": "none"
+      },
+      {
+        "formula": "5d6",
+        "type": "Thunder",
         "stat": "none"
       }
     ],
@@ -14771,6 +14867,7 @@
       {
         "formula": "4d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -14870,6 +14967,7 @@
       {
         "formula": "4d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -14912,6 +15010,7 @@
       {
         "formula": "3d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -15192,6 +15291,7 @@
       {
         "formula": "10d6 + 40",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -15237,6 +15337,7 @@
       {
         "formula": "10d6 + 40",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -15665,6 +15766,7 @@
       {
         "formula": "3d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -15749,6 +15851,7 @@
       {
         "formula": "3d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -15965,6 +16068,7 @@
       {
         "formula": "1d4",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -16021,6 +16125,7 @@
       {
         "formula": "1d4",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -16062,11 +16167,13 @@
       {
         "formula": "2d8",
         "type": "Radiant",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "1d8",
         "type": "Radiant",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -16706,6 +16813,7 @@
       {
         "formula": "5d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -16749,6 +16857,7 @@
       {
         "formula": "6d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -16800,6 +16909,7 @@
       {
         "formula": "3d6",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -16852,6 +16962,7 @@
       {
         "formula": "3d6",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -16979,6 +17090,7 @@
       {
         "formula": "3d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17035,6 +17147,7 @@
       {
         "formula": "3d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17236,6 +17349,7 @@
       {
         "formula": "1d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17282,6 +17396,7 @@
       {
         "formula": "1d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17369,6 +17484,7 @@
       {
         "formula": "5d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17417,6 +17533,7 @@
       {
         "formula": "12d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17463,6 +17580,7 @@
       {
         "formula": "1d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17507,6 +17625,7 @@
       {
         "formula": "1d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17554,6 +17673,7 @@
       {
         "formula": "2d6",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17626,6 +17746,7 @@
       {
         "formula": "1d4",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17695,6 +17816,7 @@
       {
         "formula": "1d4",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -17794,6 +17916,26 @@
       {
         "formula": "3d6",
         "type": "Acid",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Thunder",
         "stat": "none"
       }
     ],
@@ -17952,11 +18094,19 @@
       {
         "formula": "2d8",
         "type": "Necrotic",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "4d8",
         "type": "Necrotic",
+        "label": "Damage 2",
+        "stat": "none"
+      },
+      {
+        "formula": "4d8",
+        "type": "Necrotic",
+        "label": "Damage 3",
         "stat": "none"
       }
     ],
@@ -18035,7 +18185,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Temp HP",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -18304,6 +18460,7 @@
       {
         "formula": "1d6",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -18365,6 +18522,7 @@
       {
         "formula": "1d6",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -18608,6 +18766,7 @@
       {
         "formula": "3d12",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -18761,6 +18920,13 @@
       {
         "formula": "3d6",
         "type": "Bludgeoning",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Bludgeoning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -18835,6 +19001,7 @@
       {
         "formula": "3d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -19430,10 +19597,16 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1d4 + 4",
+        "type": "Temp HP",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
-    "upcastBonus": "",
+    "upcastBonus": "5",
     "upcastScaleStep": 1,
     "scalingLevelDice": null,
     "conditionInflict": [],
@@ -19510,10 +19683,16 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d4 + 4",
+        "type": "Temp HP",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
-    "upcastBonus": "",
+    "upcastBonus": "5",
     "upcastScaleStep": 1,
     "scalingLevelDice": null,
     "conditionInflict": [],
@@ -19878,6 +20057,7 @@
       {
         "formula": "4d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -20391,6 +20571,7 @@
       {
         "formula": "7d8 + 30",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -20438,6 +20619,7 @@
       {
         "formula": "7d8 + 30",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -20498,21 +20680,7 @@
       {
         "formula": "1d10",
         "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "2d10",
-        "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "3d10",
-        "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "4d10",
-        "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -20580,6 +20748,7 @@
       {
         "formula": "1d10",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -20713,6 +20882,11 @@
         "formula": "2d8",
         "type": "Cold",
         "stat": "none"
+      },
+      {
+        "formula": "2d8",
+        "type": "Fire",
+        "stat": "none"
       }
     ],
     "saveAbility": "",
@@ -20834,6 +21008,11 @@
         "formula": "2d8",
         "type": "Cold",
         "stat": "none"
+      },
+      {
+        "formula": "2d8",
+        "type": "Fire",
+        "stat": "none"
       }
     ],
     "saveAbility": "",
@@ -20876,6 +21055,7 @@
       {
         "formula": "7d10",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -20921,6 +21101,7 @@
       {
         "formula": "7d10",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -21029,6 +21210,7 @@
       {
         "formula": "8d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -21137,6 +21319,7 @@
       {
         "formula": "8d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -21220,6 +21403,7 @@
       {
         "formula": "1d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -21271,6 +21455,7 @@
       {
         "formula": "3d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -21325,6 +21510,7 @@
       {
         "formula": "3d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -21464,6 +21650,11 @@
         "formula": "4d6",
         "type": "Fire",
         "stat": "none"
+      },
+      {
+        "formula": "4d6",
+        "type": "Radiant",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -21599,6 +21790,11 @@
         "formula": "5d6",
         "type": "Fire",
         "stat": "none"
+      },
+      {
+        "formula": "5d6",
+        "type": "Radiant",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -21686,6 +21882,7 @@
       {
         "formula": "2d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -21778,6 +21975,7 @@
       {
         "formula": "2d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -22239,6 +22437,11 @@
         "formula": "5d10",
         "type": "Necrotic",
         "stat": "none"
+      },
+      {
+        "formula": "5d10",
+        "type": "Radiant",
+        "stat": "none"
       }
     ],
     "saveAbility": "",
@@ -22286,6 +22489,11 @@
       {
         "formula": "5d10",
         "type": "Necrotic",
+        "stat": "none"
+      },
+      {
+        "formula": "5d10",
+        "type": "Radiant",
         "stat": "none"
       }
     ],
@@ -22534,6 +22742,7 @@
       {
         "formula": "2d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -22941,6 +23150,7 @@
       {
         "formula": "2d8",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -22986,21 +23196,7 @@
       {
         "formula": "1d6",
         "type": "Cold",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Cold",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Cold",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -23460,6 +23656,7 @@
       {
         "formula": "5d10",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -23530,6 +23727,7 @@
       {
         "formula": "5d10",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -23991,6 +24189,26 @@
         "formula": "5d8",
         "type": "Acid",
         "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Thunder",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -24044,6 +24262,26 @@
       {
         "formula": "5d8",
         "type": "Acid",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Thunder",
         "stat": "none"
       }
     ],
@@ -24242,6 +24480,7 @@
       {
         "formula": "4d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -24287,6 +24526,13 @@
       {
         "formula": "8d8",
         "type": "Force",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "8d8",
+        "type": "Force",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -24326,6 +24572,7 @@
       {
         "formula": "5d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -24881,19 +25128,14 @@
     "feats": [],
     "damageList": [
       {
+        "formula": "0d8",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
         "formula": "1d8",
         "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Fire",
-        "stat": "none"
+        "stat": "spell"
       }
     ],
     "saveAbility": "",
@@ -25152,6 +25394,7 @@
       {
         "formula": "1d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -25446,6 +25689,7 @@
       {
         "formula": "4d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -25569,6 +25813,7 @@
       {
         "formula": "4d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -25829,6 +26074,7 @@
       {
         "formula": "1d10",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -25870,6 +26116,7 @@
       {
         "formula": "1d10",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -26132,6 +26379,7 @@
       {
         "formula": "14d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -26175,6 +26423,7 @@
       {
         "formula": "14d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -26439,7 +26688,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "70",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -26491,7 +26746,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "70",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "10",
@@ -26530,7 +26791,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d6",
@@ -26611,7 +26878,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1d4",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d4",
@@ -26691,7 +26964,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "2d4",
@@ -26748,6 +27027,7 @@
       {
         "formula": "2d8",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -26808,6 +27088,7 @@
       {
         "formula": "2d8",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -26871,6 +27152,7 @@
       {
         "formula": "2d10",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -26932,6 +27214,7 @@
       {
         "formula": "2d10",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -26978,7 +27261,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d10",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -27023,7 +27312,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d10",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -27271,6 +27566,7 @@
       {
         "formula": "1d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -27337,6 +27633,7 @@
       {
         "formula": "1d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -27957,11 +28254,13 @@
       {
         "formula": "2d8",
         "type": "Radiant",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "4d8",
         "type": "Radiant",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -28069,6 +28368,11 @@
         "formula": "2d6",
         "type": "Acid",
         "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Cold",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -28136,6 +28440,11 @@
       {
         "formula": "2d6",
         "type": "Acid",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Cold",
         "stat": "none"
       }
     ],
@@ -28262,6 +28571,7 @@
       {
         "formula": "1d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -28461,13 +28771,13 @@
     "feats": [],
     "damageList": [
       {
-        "formula": "1d10",
+        "formula": "2d6",
         "type": "Cold",
         "stat": "none"
       },
       {
-        "formula": "2d6",
-        "type": "Cold",
+        "formula": "1d10",
+        "type": "Piercing",
         "stat": "none"
       }
     ],
@@ -28522,13 +28832,13 @@
     "feats": [],
     "damageList": [
       {
-        "formula": "1d10",
+        "formula": "2d6",
         "type": "Cold",
         "stat": "none"
       },
       {
-        "formula": "2d6",
-        "type": "Cold",
+        "formula": "1d10",
+        "type": "Piercing",
         "stat": "none"
       }
     ],
@@ -28639,8 +28949,8 @@
         "stat": "none"
       },
       {
-        "formula": "4d6",
-        "type": "Bludgeoning",
+        "formula": "2d8",
+        "type": "Cold",
         "stat": "none"
       }
     ],
@@ -28751,8 +29061,8 @@
         "stat": "none"
       },
       {
-        "formula": "4d6",
-        "type": "Bludgeoning",
+        "formula": "2d10",
+        "type": "Cold",
         "stat": "none"
       }
     ],
@@ -28960,6 +29270,7 @@
       {
         "formula": "7d6",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29097,11 +29408,13 @@
       {
         "formula": "8d6",
         "type": "Fire",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "4d6",
         "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -29266,6 +29579,7 @@
       {
         "formula": "10d8",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29311,6 +29625,7 @@
       {
         "formula": "10d8",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29435,21 +29750,7 @@
       {
         "formula": "1d6",
         "type": "Poison",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Poison",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Poison",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Poison",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29528,6 +29829,7 @@
       {
         "formula": "3d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29594,6 +29896,7 @@
       {
         "formula": "2d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29692,6 +29995,7 @@
       {
         "formula": "4d10",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29793,6 +30097,7 @@
       {
         "formula": "4d10",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -29881,11 +30186,13 @@
       {
         "formula": "1d10",
         "type": "Fire",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "4d8",
         "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -29932,6 +30239,7 @@
       {
         "formula": "4d6",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -30020,6 +30328,7 @@
       {
         "formula": "2d10",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -30251,6 +30560,11 @@
         "formula": "2d10",
         "type": "Radiant",
         "stat": "none"
+      },
+      {
+        "formula": "2d10",
+        "type": "Thunder",
+        "stat": "none"
       }
     ],
     "saveAbility": "constitution",
@@ -30333,11 +30647,13 @@
       {
         "formula": "2d4",
         "type": "Force",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d4",
         "type": "Force",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -30500,6 +30816,7 @@
       {
         "formula": "1d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -30627,6 +30944,7 @@
       {
         "formula": "3d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -31411,6 +31729,7 @@
       {
         "formula": "4d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -31571,11 +31890,13 @@
       {
         "formula": "4d8",
         "type": "Lightning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "2d8",
         "type": "Lightning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -31617,11 +31938,13 @@
       {
         "formula": "4d8",
         "type": "Lightning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "2d8",
         "type": "Lightning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -31707,6 +32030,7 @@
       {
         "formula": "8d6",
         "type": "Lightning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -31794,6 +32118,7 @@
       {
         "formula": "8d6",
         "type": "Lightning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -31840,21 +32165,7 @@
       {
         "formula": "1d8",
         "type": "Lightning",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Lightning",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Lightning",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Lightning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -32407,6 +32718,7 @@
       {
         "formula": "8d8",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -32450,6 +32762,7 @@
       {
         "formula": "6d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -32914,6 +33227,7 @@
       {
         "formula": "1d4 + 1",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -32981,6 +33295,7 @@
       {
         "formula": "1d4 + 1",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -33113,6 +33428,7 @@
       {
         "formula": "1d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -33338,6 +33654,7 @@
       {
         "formula": "2d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -33518,7 +33835,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "3d8",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d8",
@@ -33621,7 +33944,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "5d8",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d8",
@@ -33783,7 +34112,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1d4",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d4",
@@ -33869,7 +34204,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d4",
@@ -34033,6 +34374,13 @@
       {
         "formula": "2d6",
         "type": "Bludgeoning",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Bludgeoning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -34184,6 +34532,7 @@
       {
         "formula": "6d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -34247,6 +34596,7 @@
       {
         "formula": "6d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -34310,11 +34660,13 @@
       {
         "formula": "4d4",
         "type": "Acid",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "2d4",
         "type": "Acid",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -34378,11 +34730,13 @@
       {
         "formula": "4d4",
         "type": "Acid",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "2d4",
         "type": "Acid",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -34425,6 +34779,7 @@
       {
         "formula": "2d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -34559,11 +34914,19 @@
       {
         "formula": "5d10",
         "type": "Psychic",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "5d10",
+        "type": "Psychic",
+        "label": "Damage 2",
         "stat": "none"
       },
       {
         "formula": "10d10",
         "type": "Psychic",
+        "label": "Damage 3",
         "stat": "none"
       }
     ],
@@ -34696,6 +35059,11 @@
         "formula": "20d6",
         "type": "Bludgeoning",
         "stat": "none"
+      },
+      {
+        "formula": "20d6",
+        "type": "Fire",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -34740,6 +35108,11 @@
       {
         "formula": "20d6",
         "type": "Bludgeoning",
+        "stat": "none"
+      },
+      {
+        "formula": "20d6",
+        "type": "Fire",
         "stat": "none"
       }
     ],
@@ -34920,21 +35293,7 @@
       {
         "formula": "1d6",
         "type": "Psychic",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Psychic",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Psychic",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -35004,6 +35363,7 @@
       {
         "formula": "1d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -35078,6 +35438,7 @@
       {
         "formula": "3d8",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -35143,6 +35504,7 @@
       {
         "formula": "3d8",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -36218,6 +36580,7 @@
       {
         "formula": "2d10",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -36304,6 +36667,7 @@
       {
         "formula": "2d10",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -36353,6 +36717,7 @@
       {
         "formula": "4d8",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -36400,6 +36765,7 @@
       {
         "formula": "4d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -36602,6 +36968,7 @@
       {
         "formula": "3d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -36647,6 +37014,7 @@
       {
         "formula": "4d12",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -36844,6 +37212,7 @@
       {
         "formula": "5d12",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -37190,6 +37559,7 @@
       {
         "formula": "10d6",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -37232,6 +37602,7 @@
       {
         "formula": "10d6",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -37831,6 +38202,7 @@
       {
         "formula": "1d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -37937,6 +38309,7 @@
       {
         "formula": "2d8",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -37994,6 +38367,7 @@
       {
         "formula": "4d10",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -38055,6 +38429,7 @@
       {
         "formula": "4d10",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -38680,21 +39055,7 @@
       {
         "formula": "1d12",
         "type": "Poison",
-        "stat": "none"
-      },
-      {
-        "formula": "2d12",
-        "type": "Poison",
-        "stat": "none"
-      },
-      {
-        "formula": "3d12",
-        "type": "Poison",
-        "stat": "none"
-      },
-      {
-        "formula": "4d12",
-        "type": "Poison",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -38756,6 +39117,7 @@
       {
         "formula": "1d12",
         "type": "Poison",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -39098,6 +39460,7 @@
       {
         "formula": "12d12",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -39266,7 +39629,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d8",
@@ -39323,7 +39692,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d8",
@@ -39442,21 +39817,7 @@
       {
         "formula": "1d10",
         "type": "Acid",
-        "stat": "none"
-      },
-      {
-        "formula": "2d10",
-        "type": "Acid",
-        "stat": "none"
-      },
-      {
-        "formula": "3d10",
-        "type": "Acid",
-        "stat": "none"
-      },
-      {
-        "formula": "4d10",
-        "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -39544,6 +39905,26 @@
         "formula": "10d6",
         "type": "Acid",
         "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Poison",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -39593,6 +39974,26 @@
         "formula": "12d6",
         "type": "Acid",
         "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Poison",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -39640,6 +40041,26 @@
       {
         "formula": "10d6",
         "type": "Acid",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Poison",
         "stat": "none"
       }
     ],
@@ -39690,6 +40111,26 @@
       {
         "formula": "12d6",
         "type": "Acid",
+        "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "12d6",
+        "type": "Poison",
         "stat": "none"
       }
     ],
@@ -39743,21 +40184,7 @@
       {
         "formula": "1d8",
         "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Fire",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -39815,6 +40242,7 @@
       {
         "formula": "1d8",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -40585,6 +41013,7 @@
       {
         "formula": "14d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -40628,6 +41057,7 @@
       {
         "formula": "6d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -41105,6 +41535,7 @@
       {
         "formula": "7d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -41148,6 +41579,7 @@
       {
         "formula": "5d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -41365,21 +41797,7 @@
       {
         "formula": "1d8",
         "type": "Cold",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Cold",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Cold",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -41458,6 +41876,7 @@
       {
         "formula": "1d8",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -41568,6 +41987,7 @@
       {
         "formula": "2d8",
         "type": "Poison",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -41670,6 +42090,7 @@
       {
         "formula": "2d8",
         "type": "Poison",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -41715,12 +42136,12 @@
       },
       {
         "formula": "8d12",
-        "type": "Psychic",
+        "type": "Force",
         "stat": "none"
       },
       {
         "formula": "10d12",
-        "type": "Psychic",
+        "type": "Cold",
         "stat": "none"
       }
     ],
@@ -41772,7 +42193,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "4d8 + 15",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -41816,7 +42243,13 @@
         "source": "EFA"
       }
     ],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "4d8 + 15",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -41853,7 +42286,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "d100",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -41891,7 +42330,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1d10",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -42460,6 +42905,7 @@
       {
         "formula": "3d8",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -42622,21 +43068,7 @@
       {
         "formula": "1d8",
         "type": "Radiant",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Radiant",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Radiant",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -42702,6 +43134,7 @@
       {
         "formula": "1d8",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -42914,21 +43347,7 @@
       {
         "formula": "1d4",
         "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "2d4",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "3d4",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "4d4",
-        "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -43093,6 +43512,7 @@
       {
         "formula": "2d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -43205,6 +43625,7 @@
       {
         "formula": "2d6",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -43479,6 +43900,13 @@
       {
         "formula": "1d6",
         "type": "Fire",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "1d6",
+        "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -43535,6 +43963,13 @@
       {
         "formula": "1d6",
         "type": "Fire",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "1d6",
+        "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -44086,6 +44521,7 @@
       {
         "formula": "2d8",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -44127,6 +44563,7 @@
       {
         "formula": "2d8",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -44342,6 +44779,7 @@
       {
         "formula": "3d8",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -44447,6 +44885,7 @@
       {
         "formula": "3d8",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -44907,6 +45346,7 @@
       {
         "formula": "2d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -44962,21 +45402,7 @@
       {
         "formula": "1d8",
         "type": "Lightning",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Lightning",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Lightning",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Lightning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -45038,6 +45464,7 @@
       {
         "formula": "1d8",
         "type": "Lightning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -45091,6 +45518,7 @@
       {
         "formula": "4d10",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -46112,6 +46540,7 @@
       {
         "formula": "3d6",
         "type": "Cold",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -46156,6 +46585,26 @@
         "formula": "2d6",
         "type": "Acid",
         "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Thunder",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -46198,6 +46647,7 @@
       {
         "formula": "1d8",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -46247,7 +46697,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -46830,6 +47286,7 @@
       {
         "formula": "2d10",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -46872,6 +47329,7 @@
       {
         "formula": "4d10",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47048,6 +47506,7 @@
       {
         "formula": "2d4",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47114,6 +47573,7 @@
       {
         "formula": "2d4",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47189,6 +47649,11 @@
         "formula": "3d8",
         "type": "Necrotic",
         "stat": "none"
+      },
+      {
+        "formula": "3d8",
+        "type": "Radiant",
+        "stat": "none"
       }
     ],
     "saveAbility": "wisdom",
@@ -47262,6 +47727,11 @@
       {
         "formula": "3d8",
         "type": "Necrotic",
+        "stat": "none"
+      },
+      {
+        "formula": "3d8",
+        "type": "Radiant",
         "stat": "none"
       }
     ],
@@ -47343,7 +47813,8 @@
     "damageList": [
       {
         "formula": "1d8",
-        "type": "Radiant",
+        "type": "Extra",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47420,6 +47891,7 @@
       {
         "formula": "1d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47497,6 +47969,7 @@
       {
         "formula": "1d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47543,6 +48016,7 @@
       {
         "formula": "2d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47592,6 +48066,7 @@
       {
         "formula": "4d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47641,6 +48116,7 @@
       {
         "formula": "4d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47698,6 +48174,7 @@
       {
         "formula": "1d8",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47760,6 +48237,7 @@
       {
         "formula": "6d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -47813,6 +48291,7 @@
       {
         "formula": "6d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -48307,18 +48786,28 @@
     "feats": [],
     "damageList": [
       {
-        "formula": "2d6",
-        "type": "Acid",
-        "stat": "none"
-      },
-      {
         "formula": "1d6",
         "type": "Acid",
         "stat": "none"
       },
       {
+        "formula": "2d6",
+        "type": "Bludgeoning",
+        "stat": "none"
+      },
+      {
+        "formula": "1d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
         "formula": "10d6",
-        "type": "Acid",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Thunder",
         "stat": "none"
       }
     ],
@@ -48365,23 +48854,28 @@
     "feats": [],
     "damageList": [
       {
-        "formula": "2d6",
-        "type": "Acid",
-        "stat": "none"
-      },
-      {
         "formula": "4d6",
         "type": "Acid",
         "stat": "none"
       },
       {
-        "formula": "10d6",
-        "type": "Acid",
+        "formula": "2d6",
+        "type": "Bludgeoning",
         "stat": "none"
       },
       {
         "formula": "1d6",
-        "type": "Acid",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "10d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Thunder",
         "stat": "none"
       }
     ],
@@ -48434,7 +48928,7 @@
       },
       {
         "formula": "4d6",
-        "type": "Bludgeoning",
+        "type": "Lightning",
         "stat": "none"
       }
     ],
@@ -49585,6 +50079,7 @@
       {
         "formula": "6d8",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -49633,6 +50128,7 @@
       {
         "formula": "6d8",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -49681,6 +50177,7 @@
       {
         "formula": "12d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -49730,6 +50227,7 @@
       {
         "formula": "12d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -49849,21 +50347,7 @@
       {
         "formula": "1d6",
         "type": "Force",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Force",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Force",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -49916,6 +50400,7 @@
       {
         "formula": "1d6",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -49970,6 +50455,7 @@
       {
         "formula": "10d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50027,6 +50513,7 @@
       {
         "formula": "10d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50087,6 +50574,7 @@
       {
         "formula": "8d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50139,6 +50627,7 @@
       {
         "formula": "8d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50227,6 +50716,7 @@
       {
         "formula": "2d4",
         "type": "Acid",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50381,6 +50871,7 @@
       {
         "formula": "3d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50709,6 +51200,7 @@
       {
         "formula": "3d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50762,6 +51254,7 @@
       {
         "formula": "3d10",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -50938,7 +51431,13 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "d4",
+        "type": "Healing",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "charisma",
     "attackStat": "none",
     "upcastBonus": "",
@@ -51102,6 +51601,7 @@
       {
         "formula": "2d12",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51261,21 +51761,7 @@
       {
         "formula": "1d6",
         "type": "Piercing",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Piercing",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Piercing",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51329,6 +51815,7 @@
       {
         "formula": "1d6",
         "type": "Piercing",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51383,6 +51870,7 @@
       {
         "formula": "3d10",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51437,21 +51925,7 @@
       {
         "formula": "1d6",
         "type": "Thunder",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Thunder",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Thunder",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51513,6 +51987,7 @@
       {
         "formula": "1d6",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51579,6 +52054,7 @@
       {
         "formula": "2d6",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51638,6 +52114,7 @@
       {
         "formula": "2d6",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51756,6 +52233,7 @@
       {
         "formula": "2d8",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51874,6 +52352,7 @@
       {
         "formula": "2d8",
         "type": "Thunder",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51920,6 +52399,7 @@
       {
         "formula": "4d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -51961,6 +52441,7 @@
       {
         "formula": "10d12",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -52112,41 +52593,13 @@
       {
         "formula": "1d8",
         "type": "Necrotic",
+        "label": "Normal",
         "stat": "none"
       },
       {
         "formula": "1d12",
         "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "2d8",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "2d12",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "3d8",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "3d12",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "4d8",
-        "type": "Necrotic",
-        "stat": "none"
-      },
-      {
-        "formula": "4d12",
-        "type": "Necrotic",
+        "label": "Wounded Target",
         "stat": "none"
       }
     ],
@@ -52212,11 +52665,13 @@
       {
         "formula": "1d8",
         "type": "Necrotic",
+        "label": "Normal",
         "stat": "none"
       },
       {
         "formula": "1d12",
         "type": "Necrotic",
+        "label": "Wounded Target",
         "stat": "none"
       }
     ],
@@ -52394,6 +52849,7 @@
       {
         "formula": "4d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -52938,7 +53394,14 @@
     "races": [],
     "backgrounds": [],
     "feats": [],
-    "damageList": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none"
+      }
+    ],
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -52988,11 +53451,13 @@
       {
         "formula": "6d10",
         "type": "Bludgeoning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d10",
         "type": "Bludgeoning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -53034,11 +53499,13 @@
       {
         "formula": "6d10",
         "type": "Bludgeoning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d10",
         "type": "Bludgeoning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -53212,6 +53679,7 @@
       {
         "formula": "3d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -53291,6 +53759,7 @@
       {
         "formula": "3d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -53334,21 +53803,7 @@
       {
         "formula": "1d4",
         "type": "Psychic",
-        "stat": "none"
-      },
-      {
-        "formula": "2d4",
-        "type": "Psychic",
-        "stat": "none"
-      },
-      {
-        "formula": "3d4",
-        "type": "Psychic",
-        "stat": "none"
-      },
-      {
-        "formula": "4d4",
-        "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -53401,6 +53856,7 @@
       {
         "formula": "1d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -53462,11 +53918,13 @@
       {
         "formula": "10d4",
         "type": "Acid",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d4",
         "type": "Acid",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -53517,11 +53975,13 @@
       {
         "formula": "10d4",
         "type": "Acid",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d4",
         "type": "Acid",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -53692,6 +54152,13 @@
       {
         "formula": "5d8",
         "type": "Fire",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -53819,6 +54286,13 @@
       {
         "formula": "5d8",
         "type": "Fire",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "5d8",
+        "type": "Fire",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -54030,11 +54504,13 @@
       {
         "formula": "10d6",
         "type": "Cold",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d6",
         "type": "Cold",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -54076,11 +54552,13 @@
       {
         "formula": "10d6",
         "type": "Cold",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d6",
         "type": "Cold",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -54124,6 +54602,19 @@
       {
         "formula": "4d8",
         "type": "Radiant",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "4d8",
+        "type": "Radiant",
+        "label": "Damage 2",
+        "stat": "none"
+      },
+      {
+        "formula": "4d8",
+        "type": "Radiant",
+        "label": "Damage 3",
         "stat": "none"
       }
     ],
@@ -54337,6 +54828,11 @@
         "formula": "7d8",
         "type": "Piercing",
         "stat": "none"
+      },
+      {
+        "formula": "7d8",
+        "type": "Slashing",
+        "stat": "none"
       }
     ],
     "saveAbility": "dexterity",
@@ -54377,6 +54873,11 @@
       {
         "formula": "7d8",
         "type": "Piercing",
+        "stat": "none"
+      },
+      {
+        "formula": "7d8",
+        "type": "Slashing",
         "stat": "none"
       }
     ],
@@ -54466,6 +54967,7 @@
       {
         "formula": "2d4",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55052,6 +55554,7 @@
       {
         "formula": "2d4",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55121,6 +55624,7 @@
       {
         "formula": "2d4",
         "type": "Fire",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55168,6 +55672,7 @@
       {
         "formula": "4d10",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55212,11 +55717,13 @@
       {
         "formula": "10d10",
         "type": "Psychic",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "5d10",
         "type": "Psychic",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -55262,6 +55769,7 @@
       {
         "formula": "10d6",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55424,6 +55932,7 @@
       {
         "formula": "3d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55505,6 +56014,7 @@
       {
         "formula": "4d8",
         "type": "Bludgeoning",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55555,6 +56065,7 @@
       {
         "formula": "1d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55607,6 +56118,7 @@
       {
         "formula": "1d10",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55652,6 +56164,13 @@
       {
         "formula": "1d12",
         "type": "Lightning",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "1d12",
+        "type": "Lightning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -55695,11 +56214,13 @@
       {
         "formula": "2d12",
         "type": "Lightning",
+        "label": "Damage 1",
         "stat": "none"
       },
       {
         "formula": "1d12",
         "type": "Lightning",
+        "label": "Damage 2",
         "stat": "none"
       }
     ],
@@ -55750,6 +56271,7 @@
       {
         "formula": "2d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55791,21 +56313,7 @@
       {
         "formula": "1d6",
         "type": "Radiant",
-        "stat": "none"
-      },
-      {
-        "formula": "2d6",
-        "type": "Radiant",
-        "stat": "none"
-      },
-      {
-        "formula": "3d6",
-        "type": "Radiant",
-        "stat": "none"
-      },
-      {
-        "formula": "4d6",
-        "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55858,6 +56366,7 @@
       {
         "formula": "1d6",
         "type": "Radiant",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -55981,13 +56490,13 @@
     "feats": [],
     "damageList": [
       {
-        "formula": "4d6",
+        "formula": "3d8",
         "type": "Bludgeoning",
         "stat": "none"
       },
       {
-        "formula": "3d8",
-        "type": "Bludgeoning",
+        "formula": "4d6",
+        "type": "Slashing",
         "stat": "none"
       }
     ],
@@ -56045,6 +56554,7 @@
       {
         "formula": "1d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -56096,6 +56606,7 @@
       {
         "formula": "1d6",
         "type": "Necrotic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -56181,6 +56692,7 @@
       {
         "formula": "4d6",
         "type": "Psychic",
+        "label": "",
         "stat": "none"
       }
     ],
@@ -56227,6 +56739,7 @@
       {
         "formula": "1d8",
         "type": "Force",
+        "label": "",
         "stat": "none"
       }
     ],

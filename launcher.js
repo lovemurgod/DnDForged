@@ -169,7 +169,7 @@ async function main() {
   console.log('\n(Press Ctrl+C at any time to shut down the server and tunnel)\n');
 
   function shutdown() {
-    console.log('\n\nShutting down DnDForged online tunnel...');
+    console.log('\n\nShutting down ForgeD VTT online tunnel...');
     try {
       if (serverProcess && !serverProcess.killed) serverProcess.kill();
       if (tunnelProcess && !tunnelProcess.killed) tunnelProcess.kill();

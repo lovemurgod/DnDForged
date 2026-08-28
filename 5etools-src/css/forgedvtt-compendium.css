@@ -1,0 +1,263 @@
+/* ForgeD VTT - 5e Compendium Master Theme Overrides */
+/* Unifies 5etools compendium pages with ForgeD VTT dark glassmorphism & brand styling */
+
+:root {
+    --f-gold: #dfa01e;
+    --f-gold-bright: #f5c453;
+    --f-blue: #38bdf8;
+    --f-bg-dark: #090d16;
+    --f-bg-panel: rgba(14, 19, 32, 0.88);
+    --f-border-subtle: rgba(255, 255, 255, 0.1);
+    --f-border-gold: rgba(223, 160, 30, 0.4);
+    --f-border-blue: rgba(56, 189, 248, 0.4);
+}
+
+/* ForgeD VTT Compendium Universal Top Bar */
+.forgedvtt-comp-header {
+    background: rgba(9, 13, 22, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--f-border-gold);
+    padding: 10px 4%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.forgedvtt-comp-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.forgedvtt-comp-brand img {
+    height: 32px;
+    width: auto;
+    filter: drop-shadow(0 0 6px rgba(223, 160, 30, 0.4));
+}
+
+.forgedvtt-comp-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.forgedvtt-comp-title .brand-forge {
+    color: var(--f-gold-bright);
+    text-shadow: 0 0 10px rgba(245, 196, 83, 0.4);
+}
+
+.forgedvtt-comp-title .brand-d {
+    color: #ffffff;
+    margin-right: 3px;
+}
+
+.forgedvtt-comp-title .brand-vtt {
+    color: var(--f-blue);
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.forgedvtt-comp-title .comp-label {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-left: 6px;
+    padding-left: 8px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.forgedvtt-comp-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.forgedvtt-btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--f-border-subtle);
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.forgedvtt-btn-back:hover {
+    background: rgba(223, 160, 30, 0.15);
+    border-color: var(--f-gold);
+    color: var(--f-gold-bright);
+    text-decoration: none;
+}
+
+.forgedvtt-btn-tabletop {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--f-gold) 0%, #b87c12 100%);
+    color: #090d16;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(223, 160, 30, 0.3);
+}
+
+.forgedvtt-btn-tabletop:hover {
+    background: linear-gradient(135deg, var(--f-gold-bright) 0%, var(--f-gold) 100%);
+    color: #000;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+/* Page Background & Dark Fantasy Palette */
+body {
+    background-color: var(--f-bg-dark) !important;
+    color: #e2e8f0 !important;
+}
+
+.viewport-wrapper {
+    background-color: transparent !important;
+}
+
+/* Nav Pills & Submenus */
+#navbar.nav-pills > li > a {
+    color: #94a3b8 !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 6px !important;
+    margin: 2px 3px !important;
+    transition: all 0.2s ease !important;
+}
+
+#navbar.nav-pills > li > a:hover,
+#navbar.nav-pills > li.open > a {
+    color: #ffffff !important;
+    background: rgba(223, 160, 30, 0.15) !important;
+    border-color: var(--f-gold) !important;
+}
+
+#navbar.nav-pills > li.active > a {
+    color: #090d16 !important;
+    background: linear-gradient(135deg, var(--f-gold-bright) 0%, var(--f-gold) 100%) !important;
+    font-weight: 700 !important;
+    border-color: var(--f-gold) !important;
+    box-shadow: 0 2px 10px rgba(223, 160, 30, 0.35) !important;
+}
+
+.dropdown-menu {
+    background-color: #0c111e !important;
+    border: 1px solid var(--f-border-gold) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+    border-radius: 8px !important;
+    padding: 6px !important;
+}
+
+.dropdown-menu > li > a {
+    color: #cbd5e1 !important;
+    border-radius: 4px !important;
+    padding: 6px 12px !important;
+    transition: all 0.15s ease !important;
+}
+
+.dropdown-menu > li > a:hover {
+    background: rgba(223, 160, 30, 0.15) !important;
+    color: var(--f-gold-bright) !important;
+}
+
+/* Search Bars & Form Inputs */
+.ve-form-control,
+input[type="search"],
+input[type="text"],
+select.ve-form-control {
+    background: rgba(6, 9, 16, 0.85) !important;
+    border: 1px solid rgba(223, 160, 30, 0.3) !important;
+    color: #f1f5f9 !important;
+    border-radius: 6px !important;
+}
+
+.ve-form-control:focus,
+input[type="search"]:focus,
+input[type="text"]:focus {
+    border-color: var(--f-gold-bright) !important;
+    box-shadow: 0 0 12px rgba(245, 196, 83, 0.3) !important;
+    outline: none !important;
+}
+
+/* Statblocks, Cards & List Columns */
+.view-col {
+    background: var(--f-bg-panel) !important;
+    border: 1px solid var(--f-border-subtle) !important;
+    border-radius: 10px !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Buttons */
+.ve-btn-default {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--f-border-subtle) !important;
+    color: #e2e8f0 !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+}
+
+.ve-btn-default:hover,
+.ve-btn-default:focus {
+    background: rgba(56, 189, 248, 0.12) !important;
+    border-color: var(--f-blue) !important;
+    color: var(--f-blue) !important;
+}
+
+.ve-btn-primary {
+    background: linear-gradient(135deg, var(--f-gold) 0%, #b87c12 100%) !important;
+    border: none !important;
+    color: #090d16 !important;
+    font-weight: 700 !important;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+    border: 1px solid rgba(223, 160, 30, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(223, 160, 30, 0.5);
+}
+
+@media (max-width: 768px) {
+    .forgedvtt-comp-header {
+        padding: 8px 12px;
+    }
+    .forgedvtt-comp-title .comp-label {
+        display: none;
+    }
+    .forgedvtt-btn-back span,
+    .forgedvtt-btn-tabletop span {
+        display: none;
+    }
+}

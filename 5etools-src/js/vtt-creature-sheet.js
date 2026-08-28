@@ -231,6 +231,7 @@ export function initVttCreatureSheet(vtt) {
         const acValue = typeof ac === 'object' ? ac.ac : (ac || '—');
         const acFrom = (typeof ac === 'object' && ac.from) ? ` (${ac.from.join(', ')})` : '';
         const speed = buildSpeedString(m.speed);
+        const profBonus = getProfBonus(crStr);
 
         const dexScore = m.dex || 10;
         let initMod = Math.floor((dexScore - 10) / 2);
@@ -269,14 +270,13 @@ export function initVttCreatureSheet(vtt) {
         const reactions = buildAbilitySection('Reactions', m.reaction);
         const legendary = buildLegendarySection(m);
 
-        const profBonus = getProfBonus(crStr);
-
+        const isEditableCreature = Boolean(linkedCharacterId || m.isCustomNpc || m.isCompanion);
         ensureSpellcastingFromTraits(m);
-        const hasSpells = (m.spellcasting && m.spellcasting.length > 0) || 
+        const hasSpells = isEditableCreature ||
+                          (m.spellcasting && m.spellcasting.length > 0) || 
                           (m.spells && Object.values(m.spells).some(arr => Array.isArray(arr) && arr.length > 0)) ||
                           (m.slots && Object.keys(m.slots).length > 0) ||
-                          (m.spellSlots && Object.keys(m.spellSlots).length > 0) ||
-                          Boolean(linkedCharacterId);
+                          (m.spellSlots && Object.keys(m.spellSlots).length > 0);
         let tabsHtml = '';
         let spellsHtml = '';
 
@@ -457,6 +457,18 @@ export function initVttCreatureSheet(vtt) {
                 } else {
                     const r = Math.floor(Math.random() * 20) + 1;
                     rollData = { total: r + initMod, rolls: [r], modifier: initMod, formula };
+                }
+
+                let isTiebreaker = true;
+                if (window.VTT?.campaignState?.settings?.initDexTiebreaker !== undefined) {
+                    isTiebreaker = !!window.VTT.campaignState.settings.initDexTiebreaker;
+                } else if (window.VTT?.canvasEngine?.getCampaignSettings) {
+                    isTiebreaker = window.VTT.canvasEngine.getCampaignSettings().initDexTiebreaker !== false;
+                }
+
+                if (isTiebreaker && rollData && typeof rollData.total === 'number') {
+                    const dexTiebreaker = Math.round(dexScore) / 100;
+                    rollData.total = Math.round((rollData.total + dexTiebreaker) * 100) / 100;
                 }
 
                 if (window.VTT && window.VTT.socket) {
@@ -1129,8 +1141,45 @@ export function initVttCreatureSheet(vtt) {
                 sc.spellsObj = scSpells;
                 sc.innateObj = scInnate;
             });
-        } else if (m.spells && typeof m.spells === 'object') {
-            spells = m.spells;
+        }
+
+        // Merge any spells already in m.spells (ensures user-added custom spells are preserved)
+        if (m.spells && typeof m.spells === 'object') {
+            for (let lk in m.spells) {
+                if (Array.isArray(m.spells[lk])) {
+                    m.spells[lk].forEach(spObj => {
+                        if (!spells[lk]) spells[lk] = [];
+                        if (!spells[lk].some(s => s.name === spObj.name || (s.id && spObj.id && s.id === spObj.id))) {
+                            spells[lk].push(spObj);
+                        }
+                    });
+                }
+            }
+        }
+
+        // If no spellcasting block exists yet on an editable creature, create a default one
+        if (!m.spellcasting || !Array.isArray(m.spellcasting) || m.spellcasting.length === 0) {
+            const isEditableCreature = Boolean(linkedCharacterId || m.isCustomNpc || m.isCompanion);
+            if (isEditableCreature || Object.values(spells).some(arr => arr.length > 0)) {
+                const ab = (m.spellcastingAbility || 'int').toLowerCase();
+                const pb = getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0');
+                const abScore = m[ab] || 10;
+                const abMod = Math.floor((abScore - 10) / 2);
+                m.spellcasting = [{
+                    id: 'sc_default',
+                    name: 'Spellcasting',
+                    ability: ab,
+                    dc: 8 + pb + abMod,
+                    atkMod: pb + abMod,
+                    spells: {}
+                }];
+                m.spellcasting[0].spellsObj = spells;
+            }
+        } else {
+            const standardBlock = m.spellcasting.find(b => b.type !== 'innate') || m.spellcasting[0];
+            if (standardBlock) {
+                standardBlock.spellsObj = spells;
+            }
         }
 
         if (window.VTTSpellManager && window.VTTSpellManager.getSpellCache) {
@@ -2004,9 +2053,11 @@ export function initVttCreatureSheet(vtt) {
             const sp = (level && idx !== null && idx >= 0 && currentMonster?.spells?.[level]) ? currentMonster.spells[level][idx] : null;
 
             if (details) {
+                const chevron = btnEl ? btnEl.querySelector('.fa-chevron-right') : null;
                 if (details.style.display === 'none') {
                     details.style.display = 'block';
                     if (btnEl) btnEl.classList.add('expanded');
+                    if (chevron) chevron.style.transform = 'rotate(90deg)';
                     
                     if (sp && window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
                         await window.VTTSpellManager.ensureSpellIsParsed(sp);
@@ -2017,6 +2068,7 @@ export function initVttCreatureSheet(vtt) {
                 } else {
                     details.style.display = 'none';
                     if (btnEl) btnEl.classList.remove('expanded');
+                    if (chevron) chevron.style.transform = 'rotate(0deg)';
                 }
             }
         }
@@ -3348,10 +3400,30 @@ export function initVttCreatureSheet(vtt) {
     }
     function saveAndRenderNpcSpells(m) {
         if (!m) m = currentMonster;
+        currentMonster = m;
+
+        // Ensure spells dictionary and spellcasting blocks are synchronized
+        ensureNpcSpells(m);
+
+        // Persist monster spells to linked character, active token, or custom bestiary
+        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+            const char = window.VTT.campaignState.characters[linkedCharacterId];
+            if (char) {
+                char.monsterData = m;
+                char.spells = m.spells;
+                window.VTT.socket.emit('character:update', { character: char });
+            }
+        } else if (window.VTT?.currentToken) {
+            window.VTT.currentToken.monsterData = m;
+            window.VTT.currentToken.spells = m.spells;
+            window.VTT.socket.emit('token:update', { token: window.VTT.currentToken });
+        }
+
         const spellsHtml = buildSpellcastingHtml(m);
         const tabSpells = document.getElementById('cs-tab-spells');
         if (tabSpells) {
             tabSpells.innerHTML = spellsHtml;
+            wireSpellSlots();
             setupCsSpellListeners();
         }
     }
@@ -3359,25 +3431,6 @@ export function initVttCreatureSheet(vtt) {
     function setupCsSpellListeners() {
         const contentEl = document.getElementById('vtt-creature-sheet-panel');
         if (!contentEl) return;
-
-        // Add
-        contentEl.querySelectorAll('.cs-btn-add-spell').forEach(btn => btn.addEventListener('click', (e) => {
-            if (!linkedCharacterId) return;
-            const level = e.currentTarget.dataset.level;
-            const char = window.VTT.campaignState.characters[linkedCharacterId];
-            if (char && window.VTTSpellManager) {
-                window.VTTSpellManager.openModal(level, -1, currentMonster, (updatedMonster) => {
-                    char.monsterData = updatedMonster;
-                    window.VTT.socket.emit('character:update', { character: char });
-                    const spellHtml = buildSpellcastingHtml(currentMonster);
-                    const spellContainer = document.querySelector('.cs-spell-page')?.parentElement;
-                    if (spellContainer) {
-                        spellContainer.innerHTML = spellHtml;
-                        setupCsSpellListeners();
-                    }
-                });
-            }
-        }));
 
         async function ensureSpellIsParsed(level, idx) {
             const m = currentMonster;
@@ -3463,6 +3516,7 @@ export function initVttCreatureSheet(vtt) {
             }
         }));
 
+        // Add Spell Modal
         contentEl.querySelectorAll('.cs-btn-add-spell, .btn-add-spell').forEach(btn => btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -3476,27 +3530,20 @@ export function initVttCreatureSheet(vtt) {
             }
         }));
 
+        // Edit Spell Modal
         contentEl.querySelectorAll('.cs-spell-edit').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (!linkedCharacterId) return; // Only Companions/Custom NPCs have editable spells
+            if (!currentMonster) return;
             
             const level = e.currentTarget.dataset.level;
             const idx = parseInt(e.currentTarget.dataset.idx);
             await ensureSpellIsParsed(level, idx);
-            const char = window.VTT.campaignState.characters[linkedCharacterId];
             
-            if (char && window.VTTSpellManager) {
+            if (window.VTTSpellManager) {
                 window.VTTSpellManager.openModal(level, idx, currentMonster, (updatedMonster) => {
                     currentMonster = updatedMonster;
-                    char.monsterData = updatedMonster;
-                    window.VTT.socket.emit('character:update', { character: char });
-                    const spellHtml = buildSpellcastingHtml(currentMonster);
-                    const spellContainer = document.querySelector('.cs-spell-page')?.parentElement;
-                    if (spellContainer) {
-                        spellContainer.innerHTML = spellHtml;
-                        setupCsSpellListeners(); // Rebind listeners
-                    }
+                    saveAndRenderNpcSpells(currentMonster);
                 });
             }
         }));

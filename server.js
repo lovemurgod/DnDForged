@@ -222,16 +222,14 @@ function loadGzippedSpells() {
 loadGzippedSpells();
 
 app.get(['/data/spells-normalized.json', '/5etools-src/data/spells-normalized.json'], (req, res) => {
-  if (!gzippedSpellsBuf) loadGzippedSpells();
+  loadGzippedSpells();
   if (!gzippedSpellsBuf) return res.status(404).send('Spells database not found');
-
-  if (req.headers['if-none-match'] === spellsEtag) {
-    return res.status(304).end();
-  }
 
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Content-Encoding', 'gzip');
-  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=3600');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.setHeader('ETag', spellsEtag);
   res.send(gzippedSpellsBuf);
 });
@@ -320,6 +318,61 @@ function loadDatabase() {
         c.activeGMMapId = c.activeMapId;
         migrated = true;
       }
+      // Auto-migrate legacy mapImage maps into Freeform Assets on the map layer and clean _animReq
+      if (c.maps) {
+        Object.keys(c.maps).forEach(mId => {
+          const map = c.maps[mId];
+          if (map.tokens) {
+            Object.values(map.tokens).forEach(t => {
+              if (t && t._animReq) {
+                delete t._animReq;
+                migrated = true;
+              }
+            });
+          }
+          if (map.mapImage && map.mapImage.trim() !== '') {
+            const imgUrl = map.mapImage.trim();
+            if (!map.tokens) map.tokens = {};
+            
+            // Check if map-layer token already exists
+            const alreadyHasAsset = Object.values(map.tokens).some(t => t.layer === 'map' && t.img === imgUrl);
+            if (!alreadyHasAsset) {
+              const isVideo = !!imgUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || imgUrl.includes('pinimg.com/videos');
+              const isYoutube = imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be');
+              const gSize = map.grid?.size || 50;
+              const gScale = map.grid?.scale || 1.0;
+              const gWidth = map.gridWidth ? Math.ceil(map.gridWidth) : 40;
+              const gHeight = map.gridHeight ? Math.ceil(map.gridHeight) : 30;
+              const pixelWidth = map.gridWidth ? map.gridWidth * gSize * gScale : 2000;
+              const pixelHeight = map.gridHeight ? map.gridHeight * gSize * gScale : 1500;
+
+              const assetId = `asset_${map.id}_bg`;
+              map.tokens[assetId] = {
+                id: assetId,
+                name: `${map.name || 'Map'} (Artwork)`,
+                x: 0,
+                y: 0,
+                layer: 'map',
+                isAsset: true,
+                img: imgUrl,
+                isVideo: isVideo || isYoutube,
+                pixelWidth: pixelWidth,
+                pixelHeight: pixelHeight,
+                size: 1,
+                zIndex: 0,
+                isPlayer: false
+              };
+              if (!map.gridWidth) map.gridWidth = gWidth;
+              if (!map.gridHeight) map.gridHeight = gHeight;
+            }
+
+            map.thumbnail = imgUrl;
+            map.mapImage = ""; // migrated to freeform asset!
+            migrated = true;
+            console.log(`[Database] Migrated map "${map.name}" (${map.id}) to Freeform Asset.`);
+          }
+        });
+      }
       // Ensure characters object exists
       if (!c.characters) {
         c.characters = {};
@@ -335,7 +388,7 @@ function loadDatabase() {
       }
     });
     if (migrated) {
-      saveCampaigns();
+      saveCampaigns(true);
     }
 
     if (fs.existsSync(CHAT_FILE)) {
@@ -880,7 +933,11 @@ io.on('connection', (socket) => {
     
     const mapId = data.mapId || campaigns[campaignId].activeMapId;
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
-      campaigns[campaignId].maps[mapId].tokens = data.tokens;
+      const cloned = JSON.parse(JSON.stringify(data.tokens || {}));
+      for (const id in cloned) {
+        if (cloned[id]?._animReq) delete cloned[id]._animReq;
+      }
+      campaigns[campaignId].maps[mapId].tokens = cloned;
       saveCampaigns();
     }
 
@@ -895,7 +952,9 @@ io.on('connection', (socket) => {
     
     const mapId = data.mapId || campaigns[campaignId].activeMapId;
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
-      campaigns[campaignId].maps[mapId].tokens[data.tokenId] = data.token;
+      const cloned = JSON.parse(JSON.stringify(data.token || {}));
+      if (cloned._animReq) delete cloned._animReq;
+      campaigns[campaignId].maps[mapId].tokens[data.tokenId] = cloned;
       saveCampaigns();
     }
 
@@ -912,6 +971,7 @@ io.on('connection', (socket) => {
       const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
       if (existingToken) {
         Object.assign(existingToken, data.changes);
+        if (existingToken._animReq) delete existingToken._animReq;
         saveCampaigns();
       }
     }
@@ -1083,14 +1143,15 @@ io.on('connection', (socket) => {
       id: mapId,
       name: data.name || "Unnamed Map",
       mapImage: data.mapImage || "",
+      thumbnail: data.thumbnail || data.mapImage || "",
       gridWidth: data.gridWidth,
       gridHeight: data.gridHeight,
-      grid: data.grid || { size: 50, offsetX: 0, offsetY: 0, scale: 1, feetPerSquare: 5 },
-      tokens: {},
+      grid: data.grid || { size: 50, offsetX: 0, offsetY: 0, scale: 1, feetPerSquare: 5, type: 'square' },
+      tokens: data.tokens || {},
       walls: data.walls || [],
       notes: data.notes || [],
-      lights: [],
-      shapes: {}
+      lights: data.lights || [],
+      shapes: data.shapes || {}
     };
 
     if (!campaigns[campaignId].maps) campaigns[campaignId].maps = {};
@@ -1307,7 +1368,7 @@ io.on('connection', (socket) => {
 const PORT = 5050;
 httpServer.listen(PORT, async () => {
   console.log(`\n======================================================`);
-  console.log(`  DnDForged VTT Local Server running on port ${PORT}`);
+  console.log(`  ForgeD VTT Local Server running on port ${PORT}`);
   console.log(`  Access Local Host: http://localhost:${PORT}/vtt.html`);
   console.log(`======================================================\n`);
 

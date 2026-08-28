@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DnDForged — Tabletop Freedom | Self-Hosted VTT & 5e Compendium</title>
-    <meta name="description" content="DnDForged provides total Tabletop Freedom: a self-hosted, high-performance Virtual Tabletop with real-time multiplayer map canvas, 3D dice rolling, dynamic fog of war, and integrated 5e rules.">
+    <title>ForgeD VTT — Tabletop Freedom | Self-Hosted VTT & 5e Compendium</title>
+    <meta name="description" content="ForgeD VTT provides total Tabletop Freedom: a self-hosted, high-performance Virtual Tabletop with real-time multiplayer map canvas, 3D dice rolling, dynamic fog of war, and integrated 5e rules.">
     
     <!-- Fonts & FontAwesome Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- VTT Master Website Stylesheet -->
-    <link rel="stylesheet" href="css/website.css?v=2">
+    <link rel="stylesheet" href="css/website.css?v=3">
 </head>
 <body>
 
@@ -24,16 +24,22 @@
     <!-- Sticky VTT Navigation Header Bar -->
     <nav class="navbar-vtt">
         <a href="index.html" class="nav-brand">
-            <img src="img/logo.png" alt="DnDForged Logo" class="nav-brand-logo">
-            <span class="nav-brand-text">DnD<span>Forged</span></span>
+            <img src="img/logo.png" alt="ForgeD VTT Logo" class="nav-brand-logo">
+            <span class="nav-brand-text">
+                <span class="brand-forge">Forge</span><span class="brand-d">D</span> <span class="brand-vtt">VTT</span>
+            </span>
         </a>
 
+        <!-- Desktop Navigation Tabs -->
         <div class="nav-tabs">
             <button class="nav-tab-btn active" onclick="switchTab('connect')">
                 <i class="fa-solid fa-gamepad"></i> Sessions
             </button>
             <button class="nav-tab-btn" onclick="switchTab('compendium')">
                 <i class="fa-solid fa-book-bookmark"></i> 5e Compendium
+            </button>
+            <button class="nav-tab-btn" onclick="switchTab('guide')">
+                <i class="fa-solid fa-graduation-cap"></i> User Guide
             </button>
             <button class="nav-tab-btn" onclick="switchTab('features')">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> VTT Features
@@ -43,12 +49,64 @@
             </button>
         </div>
 
+        <!-- Desktop Action Buttons -->
         <div class="nav-actions">
+            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-blue">
+                <i class="fa-solid fa-download"></i> Download App
+            </a>
             <button onclick="switchTab('connect')" class="btn-vtt-gold">
                 <i class="fa-solid fa-right-to-bracket"></i> Enter Tabletop
             </button>
         </div>
+
+        <!-- Mobile Hamburger Toggle Button -->
+        <button class="navbar-mobile-toggle" id="mobile-drawer-toggle" aria-label="Open Navigation Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </nav>
+
+    <!-- Mobile Slide-Out Drawer & Overlay -->
+    <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+    <aside class="mobile-drawer" id="mobile-drawer">
+        <div class="mobile-drawer-header">
+            <div class="nav-brand">
+                <img src="img/logo.png" alt="ForgeD VTT Logo" style="height: 34px;">
+                <span class="nav-brand-text" style="font-size: 1.15rem;">
+                    <span class="brand-forge">Forge</span><span class="brand-d">D</span> <span class="brand-vtt">VTT</span>
+                </span>
+            </div>
+            <button class="mobile-drawer-close" id="mobile-drawer-close" aria-label="Close Menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="mobile-drawer-links">
+            <button class="mobile-nav-btn active" onclick="switchTabAndClose('connect')">
+                <i class="fa-solid fa-gamepad"></i> Sessions & Join
+            </button>
+            <button class="mobile-nav-btn" onclick="switchTabAndClose('compendium')">
+                <i class="fa-solid fa-book-bookmark"></i> 5e Compendium
+            </button>
+            <button class="mobile-nav-btn" onclick="switchTabAndClose('guide')">
+                <i class="fa-solid fa-graduation-cap"></i> User Guide
+            </button>
+            <button class="mobile-nav-btn" onclick="switchTabAndClose('features')">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> VTT Features
+            </button>
+            <button class="mobile-nav-btn" onclick="switchTabAndClose('hosting')">
+                <i class="fa-solid fa-server"></i> Host Setup
+            </button>
+        </div>
+
+        <div class="mobile-drawer-actions">
+            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-blue">
+                <i class="fa-solid fa-download"></i> Download Windows App (.exe)
+            </a>
+            <button onclick="switchTabAndClose('connect')" class="btn-vtt-gold">
+                <i class="fa-solid fa-right-to-bracket"></i> Enter Tabletop
+            </button>
+        </div>
+    </aside>
 
     <!-- Main Container -->
     <main class="main-wrapper">
@@ -58,11 +116,21 @@
             <!-- Hero Header with High-Res Logo Centerpiece -->
             <div class="glass-panel hero-card">
                 <div class="hero-logo-wrapper">
-                    <img src="img/logo.png" alt="FORGED VTT - Tabletop Freedom" class="hero-logo-img">
+                    <img src="img/logo.png" alt="ForgeD VTT - Tabletop Freedom" class="hero-logo-img">
                 </div>
                 <p class="hero-subtitle">
-                    Self-hosted, high-performance Virtual Tabletop with real-time multiplayer token controls, 3D physics dice, dynamic fog of war, and native 5etools integration.
+                    Self-hosted, high-performance Virtual Tabletop with real-time multiplayer token controls, 3D physics dice, dynamic fog of war, and native 5e compendium integration.
                 </p>
+
+                <!-- Desktop App Download CTA -->
+                <div style="margin: 15px 0 25px 0; display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                    <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold" style="font-size: 1.05rem; padding: 12px 28px; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);">
+                        <i class="fa-solid fa-download"></i> Download ForgeD VTT Desktop App (.exe)
+                    </a>
+                    <a href="https://github.com/lovemurgod/DnDForged/releases" target="_blank" class="btn-vtt-outline" style="font-size: 0.9rem; padding: 10px 18px;">
+                        <i class="fa-solid fa-box-archive"></i> All Releases
+                    </a>
+                </div>
 
                 <!-- Subdomain Session Joiner Form -->
                 <div class="connect-box">
@@ -97,14 +165,19 @@
         <!-- TAB 2: 5E COMPENDIUM SEARCH -->
         <section id="tab-compendium" class="tab-content">
             <div class="glass-panel hero-card" style="text-align: left;">
-                <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 8px;">
-                    <i class="fa-solid fa-book-open-reader"></i> 5e Rules & Compendium Reference
-                </h2>
-                <p style="color: var(--text-secondary); margin-bottom: 25px;">
-                    Direct access to the complete integrated 5e ruleset, spells, monsters, magic items, and character options.
-                </p>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px; margin-bottom: 8px;">
+                    <div>
+                        <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 6px;">
+                            <i class="fa-solid fa-book-open-reader"></i> 5e Rules & Compendium
+                        </h2>
+                        <p style="color: var(--text-secondary);">
+                            Direct access to the complete 5e ruleset, spells, monsters, magic items, and character options styled in ForgeD VTT dark glassmorphism.
+                        </p>
+                    </div>
+                    <span class="guide-badge"><i class="fa-solid fa-shield-halved"></i> Complete 5e System</span>
+                </div>
 
-                <div class="compendium-search-box">
+                <div class="compendium-search-box" style="margin-top: 20px;">
                     <input type="text" id="comp-search-input" class="compendium-input" placeholder="Search spells, creatures, items, rules... (e.g. Fireball, Beholder, Longsword)" onkeyup="filterCompendium()">
                 </div>
 
@@ -112,38 +185,380 @@
                     <a href="spells.html" class="comp-card" target="_blank">
                         <div class="comp-category">Spell Compendium</div>
                         <div class="comp-name">Spells & Magic</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Browse complete 5e spell lists, casting filters, and damage calculators.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Browse complete 5e spell lists, casting filters, damage calculators, and spell slot levels.</p>
                     </a>
                     <a href="bestiary.html" class="comp-card" target="_blank">
                         <div class="comp-category">Bestiary</div>
                         <div class="comp-name">Monsters & Statblocks</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Full monster statblocks with integrated VTT token roll support.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Full monster statblocks with integrated VTT token roll support and trait parsing.</p>
                     </a>
                     <a href="items.html" class="comp-card" target="_blank">
                         <div class="comp-category">Equipment</div>
                         <div class="comp-name">Items & Artifacts</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Weapons, armor, potions, and legendary magic items.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Weapons, armor, adventuring gear, potions, and legendary magic items.</p>
                     </a>
                     <a href="classes.html" class="comp-card" target="_blank">
                         <div class="comp-category">Rules</div>
                         <div class="comp-name">Classes & Subclasses</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Class progression tables, features, and spellcasting traits.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Class progression tables, features, archetype traits, and spellcasting progression.</p>
                     </a>
                     <a href="races.html" class="comp-card" target="_blank">
                         <div class="comp-category">Character Creation</div>
-                        <div class="comp-name">Races & Species</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Racial traits, lineages, speed, and vision rules.</p>
+                        <div class="comp-name">Species & Races</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Racial traits, lineages, speed modifiers, darkvision, and racial spellcasting.</p>
+                    </a>
+                    <a href="feats.html" class="comp-card" target="_blank">
+                        <div class="comp-category">Feats</div>
+                        <div class="comp-name">Feats & Talents</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Feat prerequisites, ability score boosts, combat bonuses, and special proficiencies.</p>
+                    </a>
+                    <a href="backgrounds.html" class="comp-card" target="_blank">
+                        <div class="comp-category">Character Creation</div>
+                        <div class="comp-name">Backgrounds & Origins</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Background features, proficiencies, starting equipment, and personality tables.</p>
+                    </a>
+                    <a href="dmscreen.html" class="comp-card" target="_blank">
+                        <div class="comp-category">DM Toolkit</div>
+                        <div class="comp-name">DM Screen & Dashboard</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Customizable panels for initiative tracking, condition cheat sheets, and quick rules.</p>
                     </a>
                     <a href="quickreference.html" class="comp-card" target="_blank">
-                        <div class="comp-category">DM Tools</div>
-                        <div class="comp-name">Quick Reference Rules</div>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Combat actions, cover, conditions, and environment rules.</p>
+                        <div class="comp-category">Quick Reference</div>
+                        <div class="comp-name">Combat & Conditions</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Combat actions, cover rules, conditions, exhaustion, and environmental hazards.</p>
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- TAB 3: VTT FEATURES SHOWCASE -->
+        <!-- TAB 3: USER GUIDE (NEW INTERACTIVE HUB) -->
+        <section id="tab-guide" class="tab-content">
+            <div class="guide-header-box">
+                <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-gold-bright); margin-bottom: 8px;">
+                    <i class="fa-solid fa-graduation-cap"></i> ForgeD VTT User Guide
+                </h2>
+                <p style="color: var(--text-secondary); max-width: 650px; margin: 0 auto;">
+                    Everything you need to master ForgeD VTT as a Game Master or Player. Select a topic below for detailed instructions and pro tips.
+                </p>
+
+                <!-- Guide Category Filter Bar -->
+                <div class="guide-filter-bar">
+                    <button class="guide-filter-btn active" onclick="filterGuideTopics('all')">
+                        <i class="fa-solid fa-border-all"></i> All Guides
+                    </button>
+                    <button class="guide-filter-btn" onclick="filterGuideTopics('gm')">
+                        <i class="fa-solid fa-crown"></i> Game Master
+                    </button>
+                    <button class="guide-filter-btn" onclick="filterGuideTopics('player')">
+                        <i class="fa-solid fa-user-shield"></i> Players
+                    </button>
+                    <button class="guide-filter-btn" onclick="filterGuideTopics('maps')">
+                        <i class="fa-solid fa-map-location-dot"></i> Maps & Fog
+                    </button>
+                    <button class="guide-filter-btn" onclick="filterGuideTopics('dice')">
+                        <i class="fa-solid fa-dice-d20"></i> 3D Dice Box
+                    </button>
+                    <button class="guide-filter-btn" onclick="filterGuideTopics('app')">
+                        <i class="fa-solid fa-desktop"></i> Desktop App
+                    </button>
+                </div>
+            </div>
+
+            <!-- Guide Topics Cards Grid -->
+            <div class="guide-grid" id="guide-topics-container">
+                
+                <!-- Topic 1: GM Setup -->
+                <div class="guide-topic-card" data-category="gm app" onclick="scrollToGuideSection('guide-gm-setup')">
+                    <div class="guide-card-top">
+                        <div class="guide-card-icon"><i class="fa-solid fa-crown"></i></div>
+                        <span class="guide-badge">Host & Setup</span>
+                    </div>
+                    <h3 class="guide-card-title">Game Master Setup & Hosting</h3>
+                    <p class="guide-card-desc">Learn how to launch ForgeD VTT locally, create campaign subdomains with Cloudflare tunnels, and invite your players without port-forwarding.</p>
+                    <div class="guide-card-action">Read Setup Guide <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <!-- Topic 2: Player Quickstart -->
+                <div class="guide-topic-card" data-category="player" onclick="scrollToGuideSection('guide-player-quickstart')">
+                    <div class="guide-card-top">
+                        <div class="guide-card-icon"><i class="fa-solid fa-user-shield"></i></div>
+                        <span class="guide-badge">Player Hub</span>
+                    </div>
+                    <h3 class="guide-card-title">Player Quickstart & Joining</h3>
+                    <p class="guide-card-desc">How to connect to your GM's campaign URL, choose your character avatar, manage token movement, and interact with the tabletop.</p>
+                    <div class="guide-card-action">Read Player Guide <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <!-- Topic 3: Tactical Maps & Tokens -->
+                <div class="guide-topic-card" data-category="maps gm" onclick="scrollToGuideSection('guide-maps-tokens')">
+                    <div class="guide-card-top">
+                        <div class="guide-card-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <span class="guide-badge">Canvas</span>
+                    </div>
+                    <h3 class="guide-card-title">Tactical Maps & Token Controls</h3>
+                    <p class="guide-card-desc">Uploading battlemaps, grid snapping & alignment, multi-token selection, rotation, elevation badges, and status effect markers.</p>
+                    <div class="guide-card-action">Read Canvas Guide <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <!-- Topic 4: Fog of War & Vision -->
+                <div class="guide-topic-card" data-category="maps gm" onclick="scrollToGuideSection('guide-fog-vision')">
+                    <div class="guide-card-top">
+                        <div class="guide-card-icon"><i class="fa-solid fa-eye-slash"></i></div>
+                        <span class="guide-badge">Dynamic Lighting</span>
+                    </div>
+                    <h3 class="guide-card-title">Dynamic Fog of War & Vision</h3>
+                    <p class="guide-card-desc">Line-of-sight occlusion, GM manual fog reveal brush, torch/darkvision radius settings, and hidden GM layer tokens.</p>
+                    <div class="guide-card-action">Read Fog Guide <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <!-- Topic 5: 3D Physics Dice Box -->
+                <div class="guide-topic-card" data-category="dice player gm" onclick="scrollToGuideSection('guide-3d-dice')">
+                    <div class="guide-card-top">
+                        <div class="guide-card-icon"><i class="fa-solid fa-dice-d20"></i></div>
+                        <span class="guide-badge">WebGL Physics</span>
+                    </div>
+                    <h3 class="guide-card-title">3D Physics Dice & Roll Commands</h3>
+                    <p class="guide-card-desc">Using the WebGL physics dice tray, roll syntax (<code>/r 2d20kh1+5</code>), GM secret rolls, and 1-click rolls directly from statblocks.</p>
+                    <div class="guide-card-action">Read Dice Guide <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+
+                <!-- Topic 6: Compendium & Character Sheets -->
+                <div class="guide-topic-card" data-category="gm player" onclick="scrollToGuideSection('guide-compendium-sheets')">
+                    <div class="guide-card-top">
+                        <div class="guide-card-icon"><i class="fa-solid fa-book-sparkles"></i></div>
+                        <span class="guide-badge">5e Integration</span>
+                    </div>
+                    <h3 class="guide-card-title">Compendium & Sheet Integration</h3>
+                    <p class="guide-card-desc">Instant monster search, drag-and-drop token spawning from the 5e compendium, HP tracking, and automated spell slot management.</p>
+                    <div class="guide-card-action">Read Integration Guide <i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+            </div>
+
+            <!-- Deep-Dive Detailed Guide Sections -->
+            <div id="guide-detail-container">
+                
+                <!-- Section 1: GM Setup -->
+                <div class="guide-detail-card" id="guide-gm-setup">
+                    <div class="guide-detail-header">
+                        <i class="fa-solid fa-crown guide-detail-icon"></i>
+                        <div>
+                            <h3 class="guide-detail-title">Game Master Setup & Hosting Walkthrough</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Host your private campaigns directly on your computer with complete data sovereignty.</p>
+                        </div>
+                    </div>
+
+                    <div class="guide-steps-list">
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">1</div>
+                            <div class="guide-step-body">
+                                <h4>Launch ForgeD VTT Desktop App or CLI</h4>
+                                <p>Download the Windows Desktop Setup installer (or run <code>node launcher.js</code> in terminal). The application automatically spins up your local WebSocket server and connects a secure Cloudflare Tunnel.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">2</div>
+                            <div class="guide-step-body">
+                                <h4>Choose Your Campaign Subdomain</h4>
+                                <p>When prompted, enter a unique subdomain slug for your campaign (e.g. <code>curseofstrahd</code> or <code>tombofannihilation</code>). This provides an isolated world directory for your maps, tokens, and chat history.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">3</div>
+                            <div class="guide-step-body">
+                                <h4>Share URL with Players</h4>
+                                <p>Send your players your session link (e.g. <code>https://curseofstrahd.forgedvtt.com</code>). They can connect instantly from any modern web browser or mobile tablet without installing software or registering accounts.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-tip-box">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <p><strong>GM Pro Tip:</strong> You can run ForgeD VTT completely offline on a local LAN! Just connect players to your local IP address (e.g. <code>http://192.168.1.100:3000</code>).</p>
+                    </div>
+                </div>
+
+                <!-- Section 2: Player Quickstart -->
+                <div class="guide-detail-card" id="guide-player-quickstart">
+                    <div class="guide-detail-header">
+                        <i class="fa-solid fa-user-shield guide-detail-icon"></i>
+                        <div>
+                            <h3 class="guide-detail-title">Player Quickstart Guide</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Joining a campaign session, moving tokens, and rolling dice.</p>
+                        </div>
+                    </div>
+
+                    <div class="guide-steps-list">
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">1</div>
+                            <div class="guide-step-body">
+                                <h4>Join Campaign via Subdomain</h4>
+                                <p>Enter your GM's campaign subdomain in the <strong>Sessions</strong> tab above or open the direct campaign link provided by your GM.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">2</div>
+                            <div class="guide-step-body">
+                                <h4>Set Your Character Name & Token</h4>
+                                <p>On the tabletop canvas, click your player avatar in the bottom toolbar to assign your character name, color outline, and token portrait.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">3</div>
+                            <div class="guide-step-body">
+                                <h4>Moving & Waypointing</h4>
+                                <p>Click and drag your token across the map grid. Hold <kbd style="background: #1e293b; padding: 2px 6px; border-radius: 4px; border: 1px solid #475569;">Space</kbd> while dragging to measure exact movement distance in feet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Maps & Tokens -->
+                <div class="guide-detail-card" id="guide-maps-tokens">
+                    <div class="guide-detail-header">
+                        <i class="fa-solid fa-map-location-dot guide-detail-icon"></i>
+                        <div>
+                            <h3 class="guide-detail-title">Tactical Maps & Token Controls</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Mastering the battlemap canvas, grid snapping, and creature token management.</p>
+                        </div>
+                    </div>
+
+                    <div class="guide-steps-list">
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">1</div>
+                            <div class="guide-step-body">
+                                <h4>Upload Battlemaps (PNG, JPG, WebP, SVG)</h4>
+                                <p>As GM, open the <strong>Map Manager</strong> panel on the top-left to upload high-resolution maps. ForgeD VTT automatically caches map assets for instantaneous party loading.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">2</div>
+                            <div class="guide-step-body">
+                                <h4>Grid Alignment & Snapping</h4>
+                                <p>Use the grid tool to adjust grid square sizes (e.g. 50px, 70px, 100px) and align with your map's drawn artwork. Toggle snapping on/off with <kbd style="background: #1e293b; padding: 2px 6px; border-radius: 4px; border: 1px solid #475569;">Shift</kbd>.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">3</div>
+                            <div class="guide-step-body">
+                                <h4>Token Radial Menu & Conditions</h4>
+                                <p>Right-click any token on canvas to access the radial menu: set HP, adjust elevation (flying/swimming), apply conditions (Poisoned, Stunned, Blinded), or duplicate tokens.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Dynamic Fog & Vision -->
+                <div class="guide-detail-card" id="guide-fog-vision">
+                    <div class="guide-detail-header">
+                        <i class="fa-solid fa-eye-slash guide-detail-icon"></i>
+                        <div>
+                            <h3 class="guide-detail-title">Dynamic Fog of War & Vision Modes</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Immersive dungeon exploration with real-time darkness occlusion.</p>
+                        </div>
+                    </div>
+
+                    <div class="guide-steps-list">
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">1</div>
+                            <div class="guide-step-body">
+                                <h4>Enable Fog Layer</h4>
+                                <p>Toggle <strong>Enable Fog of War</strong> in the GM Toolbar. The entire canvas shrouds in darkness for players until revealed.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">2</div>
+                            <div class="guide-step-body">
+                                <h4>Reveal & Hide Brushes</h4>
+                                <p>Use the circular or polygon reveal tool to unmask dungeon rooms as players explore. Hold <kbd style="background: #1e293b; padding: 2px 6px; border-radius: 4px; border: 1px solid #475569;">Alt</kbd> to re-shroud areas in darkness.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">3</div>
+                            <div class="guide-step-body">
+                                <h4>Token Vision Radii</h4>
+                                <p>Assign darkvision (60 ft / 120 ft) or torchlight (20 ft bright / 20 ft dim) directly to character tokens. The fog automatically parts around moving tokens in real time.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: 3D Physics Dice -->
+                <div class="guide-detail-card" id="guide-3d-dice">
+                    <div class="guide-detail-header">
+                        <i class="fa-solid fa-dice-d20 guide-detail-icon"></i>
+                        <div>
+                            <h3 class="guide-detail-title">3D Physics Dice Box & Roll Commands</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem;">WebGL simulated 3D dice with synchronized physics and roll macros.</p>
+                        </div>
+                    </div>
+
+                    <div class="guide-steps-list">
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">1</div>
+                            <div class="guide-step-body">
+                                <h4>Chat Dice Commands</h4>
+                                <p>Type standard dice notation into the chat box:</p>
+                                <div class="code-block">
+/r 1d20+7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Standard attack roll<br>
+/r 2d20kh1+5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Advantage (Keep Highest 1)<br>
+/r 2d20kl1+3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Disadvantage (Keep Lowest 1)<br>
+/gmroll 1d20+9 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Secret GM Roll (hidden from players)<br>
+/r 8d6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Fireball damage
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">2</div>
+                            <div class="guide-step-body">
+                                <h4>1-Click Compendium Rolling</h4>
+                                <p>Click any highlighted attack modifier (e.g. <em>+8 to hit</em>) or damage formula in monster statblocks to automatically throw 3D dice across the tabletop.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Compendium Integration -->
+                <div class="guide-detail-card" id="guide-compendium-sheets">
+                    <div class="guide-detail-header">
+                        <i class="fa-solid fa-book-sparkles guide-detail-icon"></i>
+                        <div>
+                            <h3 class="guide-detail-title">5e Compendium & Character Sheet Integration</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem;">Drag-and-drop bestiary tokens, instant spell lookups, and automated calculations.</p>
+                        </div>
+                    </div>
+
+                    <div class="guide-steps-list">
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">1</div>
+                            <div class="guide-step-body">
+                                <h4>Drag & Drop Monsters onto Canvas</h4>
+                                <p>Open the in-game Bestiary drawer, search for any creature (e.g. <em>Adult Red Dragon</em>), and drag its card directly onto the canvas to instantly spawn an active monster token with full statblocks attached.</p>
+                            </div>
+                        </div>
+
+                        <div class="guide-step-card">
+                            <div class="guide-step-num">2</div>
+                            <div class="guide-step-body">
+                                <h4>Character Sheet Linking</h4>
+                                <p>Link character sheets to player tokens for real-time HP bar updates, condition synchronization, and spell slot expenditure tracking.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 4: VTT FEATURES SHOWCASE -->
         <section id="tab-features" class="tab-content">
             <div style="text-align: center; margin-bottom: 30px;">
                 <h2 style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-gold-bright);">
@@ -193,11 +608,11 @@
             </div>
         </section>
 
-        <!-- TAB 4: HOST SETUP & SERVER GUIDE -->
+        <!-- TAB 5: HOST SETUP & SERVER GUIDE -->
         <section id="tab-hosting" class="tab-content">
             <div class="glass-panel hero-card" style="text-align: left;">
                 <h2 style="font-family: var(--font-heading); color: var(--color-gold-bright); margin-bottom: 8px;">
-                    <i class="fa-solid fa-server"></i> How to Host a DnDForged Session
+                    <i class="fa-solid fa-server"></i> How to Host a ForgeD VTT Session
                 </h2>
                 <p style="color: var(--text-secondary); margin-bottom: 30px;">
                     Game Masters can host campaigns directly from their computer with zero port-forwarding using Cloudflare Tunnels.
@@ -206,9 +621,14 @@
                 <div class="guide-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>Run Local Launcher</h3>
-                        <p style="color: var(--text-secondary);">Start the DnDForged server launcher script on your host machine:</p>
-                        <div class="code-block">node launcher.js</div>
+                        <h3>Download & Launch Desktop App</h3>
+                        <p style="color: var(--text-secondary);">Download and run the 1-click Windows Desktop Setup installer:</p>
+                        <div style="margin: 10px 0;">
+                            <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold" style="font-size: 0.9rem; padding: 8px 18px; display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-download"></i> Download ForgeD VTT Setup (.exe)
+                            </a>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Or for Node.js / CLI self-hosting, run: <code>node launcher.js</code></p>
                     </div>
                 </div>
 
@@ -234,11 +654,72 @@
 
     <!-- Footer -->
     <footer class="footer-vtt">
-        <p>© 2026 DnDForged — Self-Hosted Virtual Tabletop System. Powered by 5etools integration.</p>
+        <p>© 2026 ForgeD VTT — Self-Hosted Virtual Tabletop System. Powered by 5e Compendium integration.</p>
     </footer>
 
     <!-- Interactive Logic Script -->
     <script>
+        // Mobile Navigation Drawer Toggle Logic
+        const mobileToggle = document.getElementById('mobile-drawer-toggle');
+        const mobileDrawer = document.getElementById('mobile-drawer');
+        const mobileOverlay = document.getElementById('mobile-drawer-overlay');
+        const mobileClose = document.getElementById('mobile-drawer-close');
+
+        function openMobileDrawer() {
+            mobileDrawer.classList.add('active');
+            mobileOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileDrawer() {
+            mobileDrawer.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileToggle) mobileToggle.addEventListener('click', openMobileDrawer);
+        if (mobileClose) mobileClose.addEventListener('click', closeMobileDrawer);
+        if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileDrawer);
+
+        // Escape key closes drawer
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileDrawer.classList.contains('active')) {
+                closeMobileDrawer();
+            }
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            const targetTab = document.getElementById(`tab-${tabId}`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Sync Desktop buttons
+            const activeDesktopBtn = Array.from(document.querySelectorAll('.nav-tab-btn')).find(btn => {
+                const clickAttr = btn.getAttribute('onclick') || '';
+                return clickAttr.includes(`'${tabId}'`);
+            });
+            if (activeDesktopBtn) activeDesktopBtn.classList.add('active');
+
+            // Sync Mobile drawer buttons
+            const activeMobileBtn = Array.from(document.querySelectorAll('.mobile-nav-btn')).find(btn => {
+                const clickAttr = btn.getAttribute('onclick') || '';
+                return clickAttr.includes(`'${tabId}'`);
+            });
+            if (activeMobileBtn) activeMobileBtn.classList.add('active');
+        }
+
+        function switchTabAndClose(tabId) {
+            switchTab(tabId);
+            closeMobileDrawer();
+        }
+
         // Subdomain URL detection
         const domainSuffixDisplay = document.getElementById('domain-suffix-display');
         const subdomainInput = document.getElementById('subdomain-input');
@@ -247,7 +728,6 @@
 
         const currentHost = window.location.hostname;
         const currentPort = window.location.port;
-
         const isLocalhost = currentHost === 'localhost' || currentHost === '127.0.0.1' || currentHost.startsWith('192.168.');
         
         if (isLocalhost) {
@@ -276,18 +756,6 @@
                 window.location.href = `https://${cleaned}.${baseDomain}/vtt.html`;
             }
         });
-
-        // Tab Switching Logic
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
-
-            const targetTab = document.getElementById(`tab-${tabId}`);
-            if (targetTab) targetTab.classList.add('active');
-
-            const activeBtn = Array.from(document.querySelectorAll('.nav-tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
-            if (activeBtn) activeBtn.classList.add('active');
-        }
 
         // Fetch active campaign sessions from API
         fetch('/api/campaigns')
@@ -327,15 +795,44 @@
         // Compendium Live Search Filter
         function filterCompendium() {
             const query = document.getElementById('comp-search-input').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.comp-card');
+            const cards = document.querySelectorAll('#comp-results-grid .comp-card');
             cards.forEach(card => {
                 const text = card.textContent.toLowerCase();
                 if (!query || text.includes(query)) {
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
             });
+        }
+
+        // User Guide Category Filter & Scroll Helper
+        function filterGuideTopics(category) {
+            document.querySelectorAll('.guide-filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const cards = document.querySelectorAll('.guide-topic-card');
+            cards.forEach(card => {
+                const cats = card.getAttribute('data-category') || '';
+                if (category === 'all' || cats.includes(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function scrollToGuideSection(sectionId) {
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                target.style.borderColor = 'var(--color-gold-bright)';
+                target.style.boxShadow = '0 0 25px rgba(245, 196, 83, 0.4)';
+                setTimeout(() => {
+                    target.style.borderColor = '';
+                    target.style.boxShadow = '';
+                }, 1800);
+            }
         }
     </script>
 </body>

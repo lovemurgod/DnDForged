@@ -1,5 +1,5 @@
 @echo off
-title DnDForged Online Game Launcher
-echo Starting DnDForged Online Game Launcher...
+title ForgeD VTT Online Game Launcher
+echo Starting ForgeD VTT Online Game Launcher...
 node launcher.js
 pause
