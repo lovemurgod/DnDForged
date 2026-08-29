@@ -154,6 +154,7 @@ export function initVttChat(vtt, chatHistory) {
 
         // 3D Dice Settings Controls Bindings
         const cfg3dEnable = document.getElementById('config-3d-dice-enable');
+        const cfg3dSkin = document.getElementById('config-3d-dice-skin');
         const cfg3dSfx = document.getElementById('config-3d-dice-sfx');
         const cfg3dVol = document.getElementById('config-3d-dice-volume');
 
@@ -161,6 +162,14 @@ export function initVttChat(vtt, chatHistory) {
             cfg3dEnable.checked = window.Dice3D.isEnabled();
             cfg3dEnable.addEventListener('change', (e) => {
                 window.Dice3D.setEnabled(e.target.checked);
+            });
+        }
+
+        if (cfg3dSkin && window.Dice3D) {
+            const savedSkin = localStorage.getItem('vtt_3d_dice_skin') || 'obsidian_gold';
+            cfg3dSkin.value = savedSkin;
+            cfg3dSkin.addEventListener('change', (e) => {
+                window.Dice3D.setSkin(e.target.value);
             });
         }
 

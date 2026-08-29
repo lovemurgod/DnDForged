@@ -20,8 +20,9 @@
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
     
-    <!-- Three.js & 3D WebGL Dice Engine -->
+    <!-- Three.js, Cannon.js & 3D WebGL Dice Engine -->
     <script src="lib/three.min.js"></script>
+    <script src="lib/cannon.min.js"></script>
     <script src="js/dice-3d.js"></script>
     
     <!-- 5etools Parsers & Common Utilities -->
@@ -520,6 +521,16 @@
                             <div class="config-setting">
                                 <label for="config-3d-dice-enable">3D Dice Overlay</label>
                                 <input type="checkbox" id="config-3d-dice-enable" checked style="cursor: pointer; width: 16px; height: 16px;">
+                            </div>
+                            <div class="config-setting">
+                                <label for="config-3d-dice-skin">Dice Skin Theme</label>
+                                <select id="config-3d-dice-skin" style="width: 140px; padding: 4px 8px; font-size: 0.8rem; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-gold); border-radius: 4px;">
+                                    <option value="obsidian_gold">Obsidian & Gold</option>
+                                    <option value="ruby_ember">Ruby Ember</option>
+                                    <option value="sapphire_frost">Sapphire Frost</option>
+                                    <option value="amethyst_void">Amethyst Void</option>
+                                    <option value="classic_ivory">Classic Ivory</option>
+                                </select>
                             </div>
                             <div class="config-setting">
                                 <label for="config-3d-dice-sfx">Dice Sound Effects</label>
