@@ -1,8 +1,8 @@
 /**
- * DnDForged Professional 3D WebGL Dice Engine
- * Architecture: Three.js + Cannon.js Physics with Planar UV-Mapped Polyhedra,
- * Order-Preserving Collision Barrier Lanes, Multi-Skin Themes,
- * Zero-Distortion Planar Face Texturing, and Web Audio SFX.
+ * DnDForged 3D WebGL Dice Engine (Powered by Sarah Rosanna Busch / Teal Dice Architecture)
+ * Full Cannon.js rigid-body physics, chamfered polyhedral geometries,
+ * polar UV-mapped face textures, order-preserving barrier lanes, multi-skin themes,
+ * predetermined outcome shifting, and Web Audio SFX.
  */
 
 (function (root, factory) {
@@ -23,7 +23,7 @@
     const STORAGE_KEY_SKIN = 'vtt_3d_dice_skin';
 
     // Global Scale Multiplier (15% reduction for optimal tabletop ergonomics)
-    const SCALE = 0.85;
+    const SCALE_FACTOR = 0.85;
 
     // State
     let isInitialized = false;
@@ -39,65 +39,55 @@
     let activeBadges = [];
     let activeWalls = [];
 
-    // Dice Skin Presets
+    // Skin Theme Presets
     const SKINS = {
         obsidian_gold: {
             name: 'Obsidian & Gold',
-            bg: '#121214',
-            bgLight: '#26262b',
-            border: '#ffd700',
-            text: '#fff8e7',
-            shadow: 'rgba(0, 0, 0, 0.95)',
+            bg: '#141416',
+            border: '#d4af37',
+            text: '#fff5d0',
             emissive: 0x221a00,
-            roughness: 0.2,
-            metalness: 0.7,
+            roughness: 0.25,
+            metalness: 0.6,
             particleColor: '#ffd700'
         },
         ruby_ember: {
             name: 'Ruby Ember',
             bg: '#2b0305',
-            bgLight: '#54080c',
             border: '#ff5252',
             text: '#ffffff',
-            shadow: 'rgba(0, 0, 0, 0.95)',
             emissive: 0x330000,
-            roughness: 0.25,
+            roughness: 0.3,
             metalness: 0.4,
             particleColor: '#ff5252'
         },
         sapphire_frost: {
             name: 'Sapphire Frost',
             bg: '#04162e',
-            bgLight: '#0a2e5c',
             border: '#00e5ff',
             text: '#ffffff',
-            shadow: 'rgba(0, 0, 0, 0.95)',
             emissive: 0x002233,
-            roughness: 0.15,
-            metalness: 0.8,
+            roughness: 0.2,
+            metalness: 0.7,
             particleColor: '#80d8ff'
         },
         amethyst_void: {
             name: 'Amethyst Void',
             bg: '#1c052e',
-            bgLight: '#390b5e',
             border: '#d500f9',
             text: '#ffffff',
-            shadow: 'rgba(0, 0, 0, 0.95)',
             emissive: 0x220033,
-            roughness: 0.2,
-            metalness: 0.6,
+            roughness: 0.25,
+            metalness: 0.5,
             particleColor: '#ea80fc'
         },
         classic_ivory: {
             name: 'Classic Ivory',
             bg: '#eae5d9',
-            bgLight: '#f7f4ec',
-            border: '#c2b8a3',
+            border: '#8c8270',
             text: '#1a1a1a',
-            shadow: 'rgba(0, 0, 0, 0.25)',
             emissive: 0x111111,
-            roughness: 0.45,
+            roughness: 0.4,
             metalness: 0.1,
             particleColor: '#d7ccc8'
         }
@@ -108,7 +98,7 @@
         return SKINS[key] || SKINS.obsidian_gold;
     }
 
-    // Web Audio Synthesizer (Zero-Asset Dependencies)
+    // Audio Engine
     const AudioEngine = (function () {
         let audioCtx = null;
 
@@ -208,7 +198,7 @@
             if (vol <= 0.001) return;
 
             const now = ctx.currentTime;
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 (Major Arpeggio)
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
 
             notes.forEach((freq, idx) => {
                 const noteTime = now + (idx * 0.07);
@@ -264,476 +254,466 @@
         };
     })();
 
-    // Planar Face Texture Generator with Zero-Distortion UV Coordinates
-    const TextureFactory = (function () {
-        const cache = new Map();
+    // Constants from Sarah Rosanna Busch / Teal Dice
+    const CONSTS = {
+        dice_face_range: {
+            'd4': [1, 4],
+            'd6': [1, 6],
+            'd8': [1, 8],
+            'd10': [0, 9],
+            'd12': [1, 12],
+            'd20': [1, 20],
+            'd100': [0, 9]
+        },
+        dice_mass: {
+            'd4': 300,
+            'd6': 300,
+            'd8': 340,
+            'd10': 350,
+            'd12': 350,
+            'd20': 400,
+            'd100': 350
+        },
+        dice_inertia: {
+            'd4': 5,
+            'd6': 13,
+            'd8': 10,
+            'd10': 9,
+            'd12': 8,
+            'd20': 6,
+            'd100': 9
+        },
+        standard_d20_labels: [' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+        standard_d100_labels: [' ', '00', '10', '20', '30', '40', '50', '60', '70', '80', '90'],
+        d4_labels: [
+            [[], [0, 0, 0], [2, 4, 3], [1, 3, 4], [2, 1, 4], [1, 2, 3]],
+            [[], [0, 0, 0], [2, 3, 4], [3, 1, 4], [2, 4, 1], [3, 2, 1]],
+            [[], [0, 0, 0], [4, 3, 2], [3, 4, 1], [4, 2, 1], [3, 1, 2]],
+            [[], [0, 0, 0], [4, 2, 3], [1, 4, 3], [4, 1, 2], [1, 3, 2]]
+        ]
+    };
 
-        function createFaceMaterial(val, skin, shapeType = 'tri', isCrit = false, isDropped = false) {
-            const cacheKey = `${val}_${skin.name}_${shapeType}_${isCrit}_${isDropped}`;
-            if (cache.has(cacheKey)) {
-                return cache.get(cacheKey);
-            }
+    // Material and Texture Manager
+    const MaterialManager = (function () {
+        const materialCache = new Map();
 
+        function createFaceTexture(label, skin, isD4 = false) {
             const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 256;
+            const size = 256;
+            canvas.width = size;
+            canvas.height = size;
             const ctx = canvas.getContext('2d');
 
-            // Draw Background with Specular Vignette
-            const bgGrad = ctx.createRadialGradient(128, 128, 20, 128, 128, 140);
-            bgGrad.addColorStop(0, skin.bgLight);
-            bgGrad.addColorStop(1, skin.bg);
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, 256, 256);
+            // Draw Background
+            ctx.fillStyle = skin.bg;
+            ctx.fillRect(0, 0, size, size);
 
-            // Shape-specific Bevel Border Outline
-            ctx.strokeStyle = skin.border;
-            ctx.lineWidth = 10;
-
-            if (shapeType === 'quad') {
-                // d6 square
-                ctx.strokeRect(10, 10, 236, 236);
-                ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-                ctx.lineWidth = 6;
-                ctx.strokeRect(16, 16, 224, 224);
-            } else if (shapeType === 'pentagon') {
-                // d12 pentagon border
-                drawPolygonBorder(ctx, 5, 128, 128, 115);
-            } else if (shapeType === 'kite') {
-                // d10/d100 kite border
-                drawKiteBorder(ctx, 128, 128, 115);
-            } else {
-                // Triangle border (d4, d8, d20)
-                drawTriangleBorder(ctx, 128, 128, 115);
+            if (!label || (Array.isArray(label) && label.length === 0)) {
+                const tex = new THREE.CanvasTexture(canvas);
+                tex.generateMipmaps = true;
+                return tex;
             }
 
-            // Engraved Typography
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            const str = String(val);
-            const fontSize = str.length > 2 ? 80 : (str.length === 2 ? 96 : 120);
-            ctx.font = `900 ${fontSize}px "Outfit", "Cinzel", "Segoe UI", sans-serif`;
 
-            // Deep engraved drop shadow
-            ctx.fillStyle = skin.shadow;
-            ctx.fillText(str, 128, 134);
-
-            // Core Inked Face Text
-            ctx.fillStyle = skin.text;
-            if (isCrit) {
-                ctx.shadowColor = '#ffd700';
-                ctx.shadowBlur = 14;
-            }
-            ctx.fillText(str, 128, 128);
-
-            // Underline for 6 and 9 to distinguish orientation
-            if (str === '6' || str === '9') {
+            if (isD4 && Array.isArray(label)) {
+                // d4 3-number triangle orientation
                 ctx.fillStyle = skin.text;
-                ctx.fillRect(96, 186, 64, 8);
+                ctx.font = 'bold 58px "Outfit", "Segoe UI", sans-serif';
+                for (let i = 0; i < label.length; i++) {
+                    ctx.fillText(String(label[i]), size / 2, size / 2 - size * 0.3);
+                    ctx.translate(size / 2, size / 2);
+                    ctx.rotate((Math.PI * 2) / 3);
+                    ctx.translate(-size / 2, -size / 2);
+                }
+            } else {
+                // Standard Die Numeral
+                const str = String(label);
+                const fontSize = str.length > 2 ? 80 : (str.length === 2 ? 100 : 124);
+                ctx.font = `900 ${fontSize}px "Outfit", "Segoe UI", sans-serif`;
+
+                // Subtle Drop Shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+                ctx.fillText(str, size / 2, size / 2 + 4);
+
+                // Core Numeral
+                ctx.fillStyle = skin.text;
+                ctx.fillText(str, size / 2, size / 2);
+
+                // Orientation dot/line for 6 and 9
+                if (str === '6' || str === '9') {
+                    ctx.fillStyle = skin.text;
+                    ctx.fillRect(size / 2 - 24, size / 2 + 52, 48, 6);
+                }
             }
 
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.generateMipmaps = true;
-            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.generateMipmaps = true;
+            tex.minFilter = THREE.LinearMipmapLinearFilter;
+            return tex;
+        }
 
-            const material = new THREE.MeshStandardMaterial({
-                map: texture,
-                color: 0xffffff,
-                emissive: isCrit ? (skin.emissive || 0xffb300) : 0x000000,
-                emissiveIntensity: isCrit ? 0.45 : 0.0,
-                roughness: skin.roughness || 0.2,
-                metalness: skin.metalness || 0.6,
-                transparent: true,
-                opacity: isDropped ? 0.45 : 1.0
+        function getMaterialsForType(type, skin, d4Shift = 0) {
+            const cacheKey = `${type}_${skin.name}_${d4Shift}`;
+            if (materialCache.has(cacheKey)) {
+                return materialCache.get(cacheKey);
+            }
+
+            let labels;
+            let isD4 = false;
+
+            if (type === 'd4') {
+                labels = CONSTS.d4_labels[d4Shift % 4];
+                isD4 = true;
+            } else if (type === 'd100') {
+                labels = CONSTS.standard_d100_labels;
+            } else {
+                labels = CONSTS.standard_d20_labels;
+            }
+
+            const mats = labels.map(lbl => {
+                const tex = createFaceTexture(lbl, skin, isD4);
+                return new THREE.MeshStandardMaterial({
+                    map: tex,
+                    color: 0xffffff,
+                    emissive: skin.emissive || 0x111111,
+                    emissiveIntensity: 0.15,
+                    roughness: skin.roughness || 0.25,
+                    metalness: skin.metalness || 0.5,
+                    transparent: true,
+                    opacity: 1.0
+                });
             });
 
-            cache.set(cacheKey, material);
-            return material;
-        }
-
-        function drawTriangleBorder(ctx, cx, cy, r) {
-            ctx.beginPath();
-            for (let i = 0; i < 3; i++) {
-                const angle = (i * 2 * Math.PI) / 3 - Math.PI / 2;
-                const x = cx + Math.cos(angle) * r;
-                const y = cy + Math.sin(angle) * r;
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.closePath();
-            ctx.stroke();
-        }
-
-        function drawPolygonBorder(ctx, sides, cx, cy, r) {
-            ctx.beginPath();
-            for (let i = 0; i < sides; i++) {
-                const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
-                const x = cx + Math.cos(angle) * r;
-                const y = cy + Math.sin(angle) * r;
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.closePath();
-            ctx.stroke();
-        }
-
-        function drawKiteBorder(ctx, cx, cy, r) {
-            ctx.beginPath();
-            ctx.moveTo(cx, cy - r * 0.95);      // Top apex
-            ctx.lineTo(cx + r * 0.85, cy);      // Right wing
-            ctx.lineTo(cx, cy + r * 0.95);      // Bottom apex
-            ctx.lineTo(cx - r * 0.85, cy);      // Left wing
-            ctx.closePath();
-            ctx.stroke();
+            materialCache.set(cacheKey, mats);
+            return mats;
         }
 
         return {
-            createFaceMaterial
+            getMaterialsForType
         };
     })();
 
-    // Authentic Polyhedral Geometries with Mathematically Mapped Planar UVs
+    // Chamfered Polyhedral Geometry Factory (Sarah Rosanna Busch / Teal Algorithm)
     const GeometryFactory = (function () {
+        const geomCache = new Map();
 
-        // d4: Tetrahedron (4 triangular faces with planar UV coordinates)
-        function buildD4(skin, isCrit, isDropped) {
-            const r = 1.35 * SCALE;
-            const v = [
-                new THREE.Vector3(1, 1, 1).normalize().multiplyScalar(r),
-                new THREE.Vector3(-1, -1, 1).normalize().multiplyScalar(r),
-                new THREE.Vector3(-1, 1, -1).normalize().multiplyScalar(r),
-                new THREE.Vector3(1, -1, -1).normalize().multiplyScalar(r)
-            ];
+        function chamferVectorsAndFaces(vectors, faces, chamfer) {
+            const chamferVectors = [];
+            const chamferFaces = [];
+            const cornerFaces = new Array(vectors.length);
+            for (let i = 0; i < vectors.length; ++i) cornerFaces[i] = [];
 
-            const faceIndices = [
-                [0, 1, 2], // Face 1
-                [0, 2, 3], // Face 2
-                [0, 3, 1], // Face 3
-                [1, 3, 2]  // Face 4
-            ];
+            for (let i = 0; i < faces.length; ++i) {
+                const ii = faces[i];
+                const fl = ii.length - 1;
+                const centerPoint = new THREE.Vector3();
+                const face = new Array(fl);
 
-            const faceValues = [1, 2, 3, 4];
-            return assemblePolyhedron(v, faceIndices, faceValues, 'tri', skin, isCrit, isDropped);
-        }
-
-        // d6: Cube (6 quad faces with standard opposite sum = 7)
-        function buildD6(skin, isCrit, isDropped) {
-            const s = 1.45 * SCALE;
-            const h = s / 2;
-
-            // 6 faces * 4 vertices = 24 vertices
-            const vertices = [];
-            const uvs = [];
-            const normals = [];
-            const faceValues = [1, 6, 2, 5, 3, 4]; // +X, -X, +Y, -Y, +Z, -Z
-            const faceNormals = [
-                new THREE.Vector3(1, 0, 0),
-                new THREE.Vector3(-1, 0, 0),
-                new THREE.Vector3(0, 1, 0),
-                new THREE.Vector3(0, -1, 0),
-                new THREE.Vector3(0, 0, 1),
-                new THREE.Vector3(0, 0, -1)
-            ];
-
-            const faceQuads = [
-                // +X: (h, -h, -h) -> (h, h, -h) -> (h, h, h) -> (h, -h, h)
-                [[h, -h, -h], [h, h, -h], [h, h, h], [h, -h, h]],
-                // -X: (-h, -h, h) -> (-h, h, h) -> (-h, h, -h) -> (-h, -h, -h)
-                [[-h, -h, h], [-h, h, h], [-h, h, -h], [-h, -h, -h]],
-                // +Y: (-h, h, -h) -> (h, h, -h) -> (h, h, h) -> (-h, h, h)
-                [[-h, h, -h], [h, h, -h], [h, h, h], [-h, h, h]],
-                // -Y: (-h, -h, h) -> (h, -h, h) -> (h, -h, -h) -> (-h, -h, -h)
-                [[-h, -h, h], [h, -h, h], [h, -h, -h], [-h, -h, -h]],
-                // +Z: (-h, -h, h) -> (h, -h, h) -> (h, h, h) -> (-h, h, h)
-                [[-h, -h, h], [h, -h, h], [h, h, h], [-h, h, h]],
-                // -Z: (h, -h, -h) -> (-h, -h, -h) -> (-h, h, -h) -> (h, h, -h)
-                [[h, -h, -h], [-h, -h, -h], [-h, h, -h], [h, h, -h]]
-            ];
-
-            const geom = new THREE.BufferGeometry();
-            const posArr = [];
-            const uvArr = [];
-            const groupMaterials = [];
-
-            faceQuads.forEach((quad, idx) => {
-                // Triangle 1: 0, 1, 2
-                posArr.push(...quad[0], ...quad[1], ...quad[2]);
-                uvArr.push(0, 0, 1, 0, 1, 1);
-                // Triangle 2: 0, 2, 3
-                posArr.push(...quad[0], ...quad[2], ...quad[3]);
-                uvArr.push(0, 0, 1, 1, 0, 1);
-
-                geom.addGroup(idx * 6, 6, idx);
-                groupMaterials.push(TextureFactory.createFaceMaterial(faceValues[idx], skin, 'quad', isCrit, isDropped));
-            });
-
-            geom.setAttribute('position', new THREE.Float32BufferAttribute(posArr, 3));
-            geom.setAttribute('uv', new THREE.Float32BufferAttribute(uvArr, 2));
-            geom.computeVertexNormals();
-
-            return {
-                mesh: new THREE.Mesh(geom, groupMaterials),
-                faceValues: faceValues,
-                normals: faceNormals
-            };
-        }
-
-        // d8: Octahedron (8 triangular faces with opposite sum = 9)
-        function buildD8(skin, isCrit, isDropped) {
-            const r = 1.35 * SCALE;
-            const v = [
-                new THREE.Vector3(0, r, 0),  // 0: +Y
-                new THREE.Vector3(0, -r, 0), // 1: -Y
-                new THREE.Vector3(r, 0, 0),  // 2: +X
-                new THREE.Vector3(-r, 0, 0), // 3: -X
-                new THREE.Vector3(0, 0, r),  // 4: +Z
-                new THREE.Vector3(0, 0, -r)  // 5: -Z
-            ];
-
-            const faceIndices = [
-                [0, 2, 4], [1, 4, 2], // 1 & 8
-                [0, 4, 3], [1, 3, 4], // 2 & 7
-                [0, 3, 5], [1, 5, 3], // 3 & 6
-                [0, 5, 2], [1, 2, 5]  // 4 & 5
-            ];
-
-            const faceValues = [1, 8, 2, 7, 3, 6, 4, 5];
-            return assemblePolyhedron(v, faceIndices, faceValues, 'tri', skin, isCrit, isDropped);
-        }
-
-        // d10 & d100: True Pentagonal Trapezohedron with 10 Kite Faces
-        function buildD10(skin, isPercentile = false, isCrit = false, isDropped = false) {
-            const r = 1.35 * SCALE;
-            const H = r * 1.2;
-            const R = r * 0.95;
-            const rMid = r * 0.85;
-
-            const topApex = new THREE.Vector3(0, H, 0);
-            const botApex = new THREE.Vector3(0, -H, 0);
-            const ring = [];
-
-            for (let i = 0; i < 10; i++) {
-                const angle = (i * Math.PI) / 5;
-                const y = (i % 2 === 0) ? (H * 0.15) : (-H * 0.15);
-                const curR = (i % 2 === 0) ? R : rMid;
-                ring.push(new THREE.Vector3(Math.cos(angle) * curR, y, Math.sin(angle) * curR));
+                for (let j = 0; j < fl; ++j) {
+                    const vv = vectors[ii[j]].clone();
+                    centerPoint.add(vv);
+                    cornerFaces[ii[j]].push(face[j] = chamferVectors.push(vv) - 1);
+                }
+                centerPoint.divideScalar(fl);
+                for (let j = 0; j < fl; ++j) {
+                    const vv = chamferVectors[face[j]];
+                    vv.subVectors(vv, centerPoint).multiplyScalar(chamfer).addVectors(vv, centerPoint);
+                }
+                face.push(ii[fl]);
+                chamferFaces.push(face);
             }
 
-            const posArr = [];
-            const uvArr = [];
-            const normals = [];
-            const geom = new THREE.BufferGeometry();
-            const groupMaterials = [];
-
-            const faceValues = isPercentile
-                ? ['00', '50', '10', '60', '20', '70', '30', '80', '40', '90']
-                : [1, 6, 2, 7, 3, 8, 4, 9, 5, 10];
-
-            for (let i = 0; i < 10; i++) {
-                const next = (i + 1) % 10;
-                const nextNext = (i + 2) % 10;
-
-                let tri1, tri2;
-                if (i % 2 === 0) {
-                    // Top Kite: topApex -> ring[i] -> ring[next] -> ring[nextNext]
-                    tri1 = [topApex, ring[i], ring[next]];
-                    tri2 = [topApex, ring[next], ring[nextNext]];
-                } else {
-                    // Bottom Kite: botApex -> ring[next] -> ring[i] -> ring[nextNext]
-                    tri1 = [botApex, ring[next], ring[i]];
-                    tri2 = [botApex, ring[nextNext], ring[next]];
+            for (let i = 0; i < faces.length - 1; ++i) {
+                for (let j = i + 1; j < faces.length; ++j) {
+                    const pairs = [];
+                    let lastm = -1;
+                    for (let m = 0; m < faces[i].length - 1; ++m) {
+                        const n = faces[j].indexOf(faces[i][m]);
+                        if (n >= 0 && n < faces[j].length - 1) {
+                            if (lastm >= 0 && m !== lastm + 1) pairs.unshift([i, m], [j, n]);
+                            else pairs.push([i, m], [j, n]);
+                            lastm = m;
+                        }
+                    }
+                    if (pairs.length !== 4) continue;
+                    chamferFaces.push([
+                        chamferFaces[pairs[0][0]][pairs[0][1]],
+                        chamferFaces[pairs[1][0]][pairs[1][1]],
+                        chamferFaces[pairs[3][0]][pairs[3][1]],
+                        chamferFaces[pairs[2][0]][pairs[2][1]],
+                        -1
+                    ]);
                 }
-
-                posArr.push(tri1[0].x, tri1[0].y, tri1[0].z, tri1[1].x, tri1[1].y, tri1[1].z, tri1[2].x, tri1[2].y, tri1[2].z);
-                uvArr.push(0.5, 0.95, 0.05, 0.35, 0.5, 0.05);
-
-                posArr.push(tri2[0].x, tri2[0].y, tri2[0].z, tri2[1].x, tri2[1].y, tri2[1].z, tri2[2].x, tri2[2].y, tri2[2].z);
-                uvArr.push(0.5, 0.95, 0.5, 0.05, 0.95, 0.35);
-
-                // Compute normal of the kite
-                const n1 = new THREE.Vector3().crossVectors(
-                    new THREE.Vector3().subVectors(tri1[1], tri1[0]),
-                    new THREE.Vector3().subVectors(tri1[2], tri1[0])
-                ).normalize();
-                normals.push(n1);
-
-                geom.addGroup(i * 6, 6, i);
-                groupMaterials.push(TextureFactory.createFaceMaterial(faceValues[i], skin, 'kite', isCrit, isDropped));
             }
 
-            geom.setAttribute('position', new THREE.Float32BufferAttribute(posArr, 3));
-            geom.setAttribute('uv', new THREE.Float32BufferAttribute(uvArr, 2));
-            geom.computeVertexNormals();
+            for (let i = 0; i < cornerFaces.length; ++i) {
+                const cf = cornerFaces[i];
+                const face = [cf[0]];
+                let count = cf.length - 1;
+                while (count) {
+                    for (let m = faces.length; m < chamferFaces.length; ++m) {
+                        let index = chamferFaces[m].indexOf(face[face.length - 1]);
+                        if (index >= 0 && index < 4) {
+                            if (--index === -1) index = 3;
+                            const nextVertex = chamferFaces[m][index];
+                            if (cf.indexOf(nextVertex) >= 0) {
+                                face.push(nextVertex);
+                                break;
+                            }
+                        }
+                    }
+                    --count;
+                }
+                face.push(-1);
+                chamferFaces.push(face);
+            }
 
-            return {
-                mesh: new THREE.Mesh(geom, groupMaterials),
-                faceValues: faceValues,
-                normals: normals
-            };
+            return { vectors: chamferVectors, faces: chamferFaces };
         }
 
-        // d12: Dodecahedron (12 regular pentagons with opposite sum = 13)
-        function buildD12(skin, isCrit, isDropped) {
-            const r = 1.25 * SCALE;
-            const phi = (1 + Math.sqrt(5)) / 2; // Golden ratio
-            const a = 1 / Math.sqrt(3);
-            const b = a / phi;
-            const c = a * phi;
+        function createCannonShape(vertices, faces, radius) {
+            const cv = new Array(vertices.length);
+            const cf = new Array(faces.length);
+            for (let i = 0; i < vertices.length; ++i) {
+                const v = vertices[i];
+                cv[i] = new CANNON.Vec3(v.x * radius, v.y * radius, v.z * radius);
+            }
+            for (let i = 0; i < faces.length; ++i) {
+                cf[i] = faces[i].slice(0, faces[i].length - 1);
+            }
+            return new CANNON.ConvexPolyhedron(cv, cf);
+        }
 
-            // 20 vertices
-            const rawV = [
-                [-a, -a, -a], [-a, -a, a], [-a, a, -a], [-a, a, a],
-                [a, -a, -a], [a, -a, a], [a, a, -a], [a, a, a],
-                [0, -b, -c], [0, -b, c], [0, b, -c], [0, b, c],
-                [-b, -c, 0], [-b, c, 0], [b, -c, 0], [b, c, 0],
-                [-c, 0, -b], [-c, 0, b], [c, 0, -b], [c, 0, b]
-            ].map(p => new THREE.Vector3(p[0] * r, p[1] * r, p[2] * r));
-
-            // 12 pentagons (5 vertices each)
-            const pentagonIndices = [
-                [3, 11, 7, 15, 13],  [0, 8, 4, 14, 12],  // 1 & 12
-                [1, 9, 5, 14, 12],   [2, 10, 6, 15, 13], // 2 & 11
-                [7, 19, 5, 9, 11],   [0, 16, 2, 10, 8],  // 3 & 10
-                [3, 17, 1, 9, 11],   [4, 18, 6, 10, 8],  // 4 & 9
-                [2, 16, 0, 12, 13],  [5, 19, 7, 15, 14], // 5 & 8
-                [6, 18, 4, 14, 15],  [1, 17, 3, 13, 12]  // 6 & 7
-            ];
-
-            const faceValues = [1, 12, 2, 11, 3, 10, 4, 9, 5, 8, 6, 7];
+        function buildBufferGeometry(vertices, faces, radius, tab, af) {
             const posArr = [];
             const uvArr = [];
-            const normals = [];
-            const geom = new THREE.BufferGeometry();
-            const groupMaterials = [];
+            const groups = [];
+            const faceNormals = [];
+            let vertOffset = 0;
 
-            pentagonIndices.forEach((pIdxs, fIdx) => {
-                const center = new THREE.Vector3();
-                pIdxs.forEach(idx => center.add(rawV[idx]));
-                center.divideScalar(5);
+            for (let i = 0; i < faces.length; ++i) {
+                const ii = faces[i];
+                const fl = ii.length - 1;
+                const aa = (Math.PI * 2) / fl;
+                const matIndex = ii[fl] + 1; // 0 is default/chamfer, 1..N are numbered faces
 
-                const norm = center.clone().normalize();
-                normals.push(norm);
+                const startIdx = vertOffset;
 
-                // 5 triangles radiating from pentagon center
-                for (let i = 0; i < 5; i++) {
-                    const next = (i + 1) % 5;
-                    const v1 = rawV[pIdxs[i]];
-                    const v2 = rawV[pIdxs[next]];
+                for (let j = 0; j < fl - 2; ++j) {
+                    const v0 = vertices[ii[0]].clone().multiplyScalar(radius);
+                    const v1 = vertices[ii[j + 1]].clone().multiplyScalar(radius);
+                    const v2 = vertices[ii[j + 2]].clone().multiplyScalar(radius);
 
-                    posArr.push(center.x, center.y, center.z, v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+                    posArr.push(v0.x, v0.y, v0.z, v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
-                    const a1 = (i * 2 * Math.PI) / 5 - Math.PI / 2;
-                    const a2 = (next * 2 * Math.PI) / 5 - Math.PI / 2;
-                    uvArr.push(0.5, 0.5, 0.5 + Math.cos(a1) * 0.45, 0.5 + Math.sin(a1) * 0.45, 0.5 + Math.cos(a2) * 0.45, 0.5 + Math.sin(a2) * 0.45);
+                    // Polar UV Mapping
+                    const u0 = (Math.cos(af) + 1 + tab) / 2 / (1 + tab);
+                    const v0_uv = (Math.sin(af) + 1 + tab) / 2 / (1 + tab);
+                    const u1 = (Math.cos(aa * (j + 1) + af) + 1 + tab) / 2 / (1 + tab);
+                    const v1_uv = (Math.sin(aa * (j + 1) + af) + 1 + tab) / 2 / (1 + tab);
+                    const u2 = (Math.cos(aa * (j + 2) + af) + 1 + tab) / 2 / (1 + tab);
+                    const v2_uv = (Math.sin(aa * (j + 2) + af) + 1 + tab) / 2 / (1 + tab);
+
+                    uvArr.push(u0, v0_uv, u1, v1_uv, u2, v2_uv);
+                    vertOffset += 3;
+
+                    // Face Normal
+                    const norm = new THREE.Vector3().crossVectors(
+                        new THREE.Vector3().subVectors(v1, v0),
+                        new THREE.Vector3().subVectors(v2, v0)
+                    ).normalize();
+                    faceNormals.push({ normal: norm, materialIndex: matIndex, groupIdx: groups.length });
                 }
 
-                geom.addGroup(fIdx * 15, 15, fIdx);
-                groupMaterials.push(TextureFactory.createFaceMaterial(faceValues[fIdx], skin, 'pentagon', isCrit, isDropped));
-            });
+                const count = vertOffset - startIdx;
+                groups.push({ start: startIdx, count: count, materialIndex: Math.max(0, matIndex) });
+            }
 
-            geom.setAttribute('position', new THREE.Float32BufferAttribute(posArr, 3));
-            geom.setAttribute('uv', new THREE.Float32BufferAttribute(uvArr, 2));
-            geom.computeVertexNormals();
-
-            return {
-                mesh: new THREE.Mesh(geom, groupMaterials),
-                faceValues: faceValues,
-                normals: normals
-            };
-        }
-
-        // d20: Icosahedron (20 equilateral triangular faces with opposite sum = 21)
-        function buildD20(skin, isCrit, isDropped) {
-            const r = 1.35 * SCALE;
-            const t = (1 + Math.sqrt(5)) / 2;
-
-            // 12 vertices
-            const v = [
-                [-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0],
-                [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t],
-                [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]
-            ].map(p => new THREE.Vector3(p[0], p[1], p[2]).normalize().multiplyScalar(r));
-
-            // 20 faces organized in standard opposite pairs summing to 21
-            const faceIndices = [
-                [0, 11, 5], [3, 9, 4],   // 1 & 20
-                [0, 5, 1],  [3, 6, 2],   // 2 & 19
-                [0, 1, 7],  [3, 2, 4],   // 3 & 18
-                [0, 7, 10], [3, 8, 9],   // 4 & 17
-                [0, 10, 11],[3, 4, 8],   // 5 & 16
-                [1, 5, 9],  [2, 6, 10],  // 6 & 15
-                [5, 11, 4], [7, 8, 6],   // 7 & 14
-                [11, 10, 2],[1, 9, 8],   // 8 & 13
-                [10, 7, 6], [5, 4, 9],   // 9 & 12
-                [7, 1, 8],  [11, 2, 4]   // 10 & 11
-            ];
-
-            const faceValues = [
-                1, 20, 2, 19, 3, 18, 4, 17, 5, 16,
-                6, 15, 7, 14, 8, 13, 9, 12, 10, 11
-            ];
-
-            return assemblePolyhedron(v, faceIndices, faceValues, 'tri', skin, isCrit, isDropped);
-        }
-
-        function assemblePolyhedron(vertices, faceIndices, faceValues, shapeType, skin, isCrit, isDropped) {
-            const posArr = [];
-            const uvArr = [];
-            const normals = [];
             const geom = new THREE.BufferGeometry();
-            const groupMaterials = [];
-
-            faceIndices.forEach((f, idx) => {
-                const v0 = vertices[f[0]];
-                const v1 = vertices[f[1]];
-                const v2 = vertices[f[2]];
-
-                posArr.push(v0.x, v0.y, v0.z, v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
-                uvArr.push(0.5, 0.95, 0.05, 0.1, 0.95, 0.1);
-
-                const norm = new THREE.Vector3().crossVectors(
-                    new THREE.Vector3().subVectors(v1, v0),
-                    new THREE.Vector3().subVectors(v2, v0)
-                ).normalize();
-                normals.push(norm);
-
-                geom.addGroup(idx * 3, 3, idx);
-                groupMaterials.push(TextureFactory.createFaceMaterial(faceValues[idx], skin, shapeType, isCrit, isDropped));
-            });
-
             geom.setAttribute('position', new THREE.Float32BufferAttribute(posArr, 3));
             geom.setAttribute('uv', new THREE.Float32BufferAttribute(uvArr, 2));
             geom.computeVertexNormals();
 
-            return {
-                mesh: new THREE.Mesh(geom, groupMaterials),
-                faceValues: faceValues,
-                normals: normals
+            groups.forEach(g => {
+                geom.addGroup(g.start, g.count, g.materialIndex);
+            });
+
+            geom.userData = {
+                faceNormals: faceNormals,
+                originalGroups: groups.map(g => ({ ...g }))
             };
+
+            return geom;
         }
 
-        function createDie(faces, skin, isPercentile = false, isCrit = false, isDropped = false) {
-            const f = parseInt(faces, 10);
-            if (f === 4) return buildD4(skin, isCrit, isDropped);
-            if (f === 6) return buildD6(skin, isCrit, isDropped);
-            if (f === 8) return buildD8(skin, isCrit, isDropped);
-            if (f === 10) return buildD10(skin, false, isCrit, isDropped);
-            if (f === 100) return buildD10(skin, true, isCrit, isDropped);
-            if (f === 12) return buildD12(skin, isCrit, isDropped);
-            return buildD20(skin, isCrit, isDropped);
+        function createGeom(verticesRaw, facesRaw, radius, tab, af, chamfer) {
+            const vectors = verticesRaw.map(v => new THREE.Vector3(...v).normalize());
+            const cg = chamferVectorsAndFaces(vectors, facesRaw, chamfer);
+            const geom = buildBufferGeometry(cg.vectors, cg.faces, radius, tab, af);
+            geom.userData.cannonShape = createCannonShape(vectors, facesRaw, radius);
+            return geom;
+        }
+
+        function getGeometry(type) {
+            if (geomCache.has(type)) {
+                return geomCache.get(type);
+            }
+
+            const scale = 2.4 * SCALE_FACTOR;
+            let geom;
+
+            if (type === 'd4') {
+                const vertices = [[1, 1, 1], [-1, -1, 1], [-1, 1, -1], [1, -1, -1]];
+                const faces = [[1, 0, 2, 1], [0, 1, 3, 2], [0, 3, 2, 3], [1, 2, 3, 4]];
+                geom = createGeom(vertices, faces, scale * 1.2, -0.1, (Math.PI * 7) / 6, 0.96);
+            } else if (type === 'd6') {
+                const vertices = [[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1], [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]];
+                const faces = [[0, 3, 2, 1, 1], [1, 2, 6, 5, 2], [0, 1, 5, 4, 3], [3, 7, 6, 2, 4], [0, 4, 7, 3, 5], [4, 5, 6, 7, 6]];
+                geom = createGeom(vertices, faces, scale * 1.1, 0.1, Math.PI / 4, 0.96);
+            } else if (type === 'd8') {
+                const vertices = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+                const faces = [[0, 2, 4, 1], [0, 4, 3, 2], [0, 3, 5, 3], [0, 5, 2, 4], [1, 3, 4, 5], [1, 4, 2, 6], [1, 2, 5, 7], [1, 5, 3, 8]];
+                geom = createGeom(vertices, faces, scale, 0, -Math.PI / 8, 0.965);
+            } else if (type === 'd10' || type === 'd100') {
+                const a = (Math.PI * 2) / 10;
+                const h = 0.105;
+                const v = -1;
+                const vertices = [];
+                for (let i = 0, b = 0; i < 10; ++i, b += a) {
+                    vertices.push([Math.cos(b), Math.sin(b), h * (i % 2 ? 1 : -1)]);
+                }
+                vertices.push([0, 0, -1], [0, 0, 1]);
+                const faces = [
+                    [5, 7, 11, 0], [4, 2, 10, 1], [1, 3, 11, 2], [0, 8, 10, 3], [7, 9, 11, 4],
+                    [8, 6, 10, 5], [9, 1, 11, 6], [2, 0, 10, 7], [3, 5, 11, 8], [6, 4, 10, 9],
+                    [1, 0, 2, v], [1, 2, 3, v], [3, 2, 4, v], [3, 4, 5, v], [5, 4, 6, v],
+                    [5, 6, 7, v], [7, 6, 8, v], [7, 8, 9, v], [9, 8, 0, v], [9, 0, 1, v]
+                ];
+                geom = createGeom(vertices, faces, scale * 0.9, 0, (Math.PI * 6) / 5, 0.945);
+            } else if (type === 'd12') {
+                const p = (1 + Math.sqrt(5)) / 2;
+                const q = 1 / p;
+                const vertices = [
+                    [0, q, p], [0, q, -p], [0, -q, p], [0, -q, -p], [p, 0, q],
+                    [p, 0, -q], [-p, 0, q], [-p, 0, -q], [q, p, 0], [q, -p, 0], [-q, p, 0],
+                    [-q, -p, 0], [1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1], [-1, 1, 1],
+                    [-1, 1, -1], [-1, -1, 1], [-1, -1, -1]
+                ];
+                const faces = [
+                    [2, 14, 4, 12, 0, 1], [15, 9, 11, 19, 3, 2], [16, 10, 17, 7, 6, 3], [6, 7, 19, 11, 18, 4],
+                    [6, 18, 2, 0, 16, 5], [18, 11, 9, 14, 2, 6], [1, 17, 10, 8, 13, 7], [1, 13, 5, 15, 3, 8],
+                    [13, 8, 12, 4, 5, 9], [5, 4, 14, 9, 15, 10], [0, 12, 8, 10, 16, 11], [3, 19, 7, 17, 1, 12]
+                ];
+                geom = createGeom(vertices, faces, scale * 0.9, 0.2, -Math.PI / 8, 0.968);
+            } else {
+                // d20
+                const t = (1 + Math.sqrt(5)) / 2;
+                const vertices = [
+                    [-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0],
+                    [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t],
+                    [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]
+                ];
+                const faces = [
+                    [0, 11, 5, 1], [0, 5, 1, 2], [0, 1, 7, 3], [0, 7, 10, 4], [0, 10, 11, 5],
+                    [1, 5, 9, 6], [5, 11, 4, 7], [11, 10, 2, 8], [10, 7, 6, 9], [7, 1, 8, 10],
+                    [3, 9, 4, 11], [3, 4, 2, 12], [3, 2, 6, 13], [3, 6, 8, 14], [3, 8, 9, 15],
+                    [4, 9, 5, 16], [2, 4, 11, 17], [6, 2, 10, 18], [8, 6, 7, 19], [9, 8, 1, 20]
+                ];
+                geom = createGeom(vertices, faces, scale, -0.2, -Math.PI / 8, 0.955);
+            }
+
+            geomCache.set(type, geom);
+            return geom;
         }
 
         return {
-            createDie
+            getGeometry
         };
     })();
 
-    // Initialize Global Three.js Scene, Cannon.js Physics & Overlay
+    // Physics Entity Creator
+    function createDiceMesh(type, skin, d4Shift = 0) {
+        const baseGeom = GeometryFactory.getGeometry(type);
+        const geom = baseGeom.clone();
+        geom.userData = {
+            cannonShape: baseGeom.userData.cannonShape,
+            faceNormals: baseGeom.userData.faceNormals.map(fn => ({ ...fn })),
+            originalGroups: baseGeom.userData.originalGroups.map(g => ({ ...g }))
+        };
+
+        const mats = MaterialManager.getMaterialsForType(type, skin, d4Shift);
+        const mesh = new THREE.Mesh(geom, mats);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        mesh.diceType = type;
+        return mesh;
+    }
+
+    // Predetermined Result Shifter (Sarah Rosanna Busch / Teal Algorithm)
+    function shiftDiceFaces(mesh, targetVal, landedVal) {
+        const type = mesh.diceType;
+        const r = CONSTS.dice_face_range[type];
+        if (!r) return;
+
+        let val = targetVal;
+        if (type === 'd10' && val === 10) val = 0;
+        if (type === 'd100') val = Math.floor(val / 10);
+
+        if (val < r[0] || val > r[1]) return;
+
+        const num = val - landedVal;
+        const geom = mesh.geometry;
+        geom.clearGroups();
+
+        geom.userData.originalGroups.forEach(g => {
+            let matIndex = g.materialIndex;
+            if (matIndex > 0) {
+                matIndex += num - 1;
+                while (matIndex > r[1]) matIndex -= (r[1] - r[0] + 1);
+                while (matIndex < r[0]) matIndex += (r[1] - r[0] + 1);
+                matIndex += 1;
+            }
+            geom.addGroup(g.start, g.count, matIndex);
+        });
+
+        if (type === 'd4' && num !== 0) {
+            let shift = num;
+            if (shift < 0) shift += 4;
+            mesh.material = MaterialManager.getMaterialsForType('d4', getActiveSkin(), shift);
+        }
+    }
+
+    function getLandedValue(mesh, body) {
+        const type = mesh.diceType;
+        const targetVector = new THREE.Vector3(0, 0, type === 'd4' ? -1 : 1);
+        let closestAngle = Math.PI * 2;
+        let closestMatIndex = 1;
+
+        const normals = mesh.geometry.userData.faceNormals;
+        for (let i = 0; i < normals.length; i++) {
+            const fn = normals[i];
+            if (fn.materialIndex === 0) continue;
+            const worldNorm = fn.normal.clone().applyQuaternion(body.quaternion);
+            const angle = worldNorm.angleTo(targetVector);
+            if (angle < closestAngle) {
+                closestAngle = angle;
+                closestMatIndex = fn.materialIndex - 1;
+            }
+        }
+
+        if (type === 'd100') closestMatIndex *= 10;
+        if (type === 'd10' && closestMatIndex === 0) closestMatIndex = 10;
+        return closestMatIndex;
+    }
+
+    // Initialize 3D Scene and Cannon.js Physics
     function init(options = {}) {
         if (isInitialized) return true;
 
-        if (typeof THREE === 'undefined') {
-            console.warn('[Dice3D] THREE is not loaded. 3D Dice will be disabled.');
+        if (typeof THREE === 'undefined' || typeof CANNON === 'undefined') {
+            console.warn('[Dice3D] THREE or CANNON is not loaded.');
             return false;
         }
 
@@ -755,13 +735,13 @@
         containerEl.style.zIndex = '99999';
         containerEl.style.overflow = 'hidden';
 
-        // Scene
+        // Three.js Scene
         scene = new THREE.Scene();
 
-        // Camera (Perspective looking at dice playfield)
+        // Perspective Camera
         const aspect = window.innerWidth / window.innerHeight;
-        camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
-        camera.position.set(0, 0, 24);
+        camera = new THREE.PerspectiveCamera(40, aspect, 1, 1000);
+        camera.position.set(0, 0, 32);
         camera.lookAt(0, 0, 0);
 
         // WebGL Renderer
@@ -780,20 +760,34 @@
         canvasEl.style.height = '100%';
         containerEl.appendChild(canvasEl);
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
         scene.add(ambientLight);
 
-        const dirLight = new THREE.DirectionalLight(0xfffdf0, 1.3);
-        dirLight.position.set(12, 28, 22);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
+        const spotLight = new THREE.SpotLight(0xfffdf0, 1.4);
+        spotLight.position.set(16, 28, 30);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
 
-        const fillLight = new THREE.DirectionalLight(0x90caf9, 0.5);
-        fillLight.position.set(-16, -10, 12);
+        const fillLight = new THREE.DirectionalLight(0x90caf9, 0.45);
+        fillLight.position.set(-16, -14, 16);
         scene.add(fillLight);
 
-        // Window resize listener
+        // Cannon.js Physics World
+        physicsWorld = new CANNON.World();
+        physicsWorld.gravity.set(0, 0, -9.8 * 80);
+        physicsWorld.broadphase = new CANNON.NaiveBroadphase();
+        physicsWorld.solver.iterations = 16;
+
+        // Ground Floor Plane
+        const groundMaterial = new CANNON.Material();
+        const diceMaterial = new CANNON.Material();
+        const contactMat = new CANNON.ContactMaterial(groundMaterial, diceMaterial, 0.3, 0.45);
+        physicsWorld.addContactMaterial(contactMat);
+
+        const groundBody = new CANNON.RigidBody(0, new CANNON.Plane(), groundMaterial);
+        physicsWorld.add(groundBody);
+
         window.addEventListener('resize', onWindowResize);
 
         isInitialized = true;
@@ -832,10 +826,9 @@
         }
     }
 
-    // Particle Burst System (for Nat 20 / Nat 1)
     function spawnParticleBurst(x, y, z, color = '#ffd700', count = 28) {
         for (let i = 0; i < count; i++) {
-            const geom = new THREE.SphereGeometry(0.1 + Math.random() * 0.07, 6, 6);
+            const geom = new THREE.SphereGeometry(0.12 + Math.random() * 0.08, 6, 6);
             const mat = new THREE.MeshBasicMaterial({
                 color: new THREE.Color(color),
                 transparent: true,
@@ -845,7 +838,7 @@
             pMesh.position.set(x, y, z);
 
             const angle = Math.random() * Math.PI * 2;
-            const speed = 2.2 + Math.random() * 5.8;
+            const speed = 2.4 + Math.random() * 5.5;
             const elevation = (Math.random() - 0.2) * 4.5;
 
             activeParticles.push({
@@ -861,8 +854,7 @@
         }
     }
 
-    // 2D Billboard Banner Overlays (Nat 20 / Nat 1)
-    function spawnBannerBadge(die, text, isSuccess) {
+    function spawnBannerBadge(mesh, text, isSuccess) {
         const badge = document.createElement('div');
         badge.className = `dice3d-floating-badge ${isSuccess ? 'badge-nat20' : 'badge-nat1'} animated-pop-in`;
         badge.innerHTML = `<span>${text}</span>`;
@@ -870,12 +862,13 @@
 
         activeBadges.push({
             el: badge,
-            die: die,
-            alpha: 1.0
+            mesh: mesh,
+            alpha: 1.0,
+            isDone: false
         });
     }
 
-    // Roll Trigger with Order-Preserving Physics Barrier Lanes & Dual Percentile Support
+    // Roll with Order-Preserving Physics Barrier Lanes & Dual-Dice Percentile
     function roll(diceList, options = {}) {
         if (!isEnabled()) return false;
         if (!isInitialized) {
@@ -885,132 +878,165 @@
 
         if (!Array.isArray(diceList) || diceList.length === 0) return false;
 
-        // Automatically expand any d100 rolls into a dual-dice pair: (Percentile tens + Units d10)
+        // Clear existing dice
+        clear();
+
+        // Expand any d100 rolls into dual-dice pair: (Percentile tens + Units d10)
         const expandedDiceList = [];
         diceList.forEach(d => {
             const faces = extractFaces(d);
             const val = extractVal(d);
 
             if (faces === 100) {
-                // Tens: 00-90, Units: 1-10 (or 0)
                 const tensNum = Math.floor(((val - 1) % 100) / 10) * 10;
                 const unitsNum = ((val - 1) % 10) + 1;
 
                 expandedDiceList.push({
                     ...d,
+                    type: 'd100',
                     faces: 100,
-                    val: tensNum === 0 ? '00' : String(tensNum),
+                    val: tensNum === 0 ? 0 : tensNum,
                     isPercentileTens: true
                 });
                 expandedDiceList.push({
                     ...d,
+                    type: 'd10',
                     faces: 10,
                     val: unitsNum,
                     isPercentileUnits: true
                 });
             } else {
-                expandedDiceList.push(d);
+                expandedDiceList.push({
+                    ...d,
+                    type: `d${faces}`,
+                    faces: faces,
+                    val: val
+                });
             }
         });
 
         const totalDice = expandedDiceList.length;
 
-        // Calculate 3D viewport boundaries at Z = 0
+        // Calculate 3D viewport bounds
         const vFOV = (camera.fov * Math.PI) / 180;
         const visibleHeight = 2 * Math.tan(vFOV / 2) * camera.position.z;
         const visibleWidth = visibleHeight * camera.aspect;
 
-        const activeAreaWidth = Math.min(visibleWidth * 0.82, 34);
-        const laneWidth = activeAreaWidth / totalDice;
-        const startX = -activeAreaWidth / 2 + laneWidth / 2;
-        const floorY = -visibleHeight * 0.32; // Lower third of screen
+        const activeWidth = Math.min(visibleWidth * 0.85, 34);
+        const laneWidth = activeWidth / totalDice;
+        const startX = -activeWidth / 2 + laneWidth / 2;
 
         const skin = getActiveSkin();
 
-        // Initial Audio Clatter
+        // Audio Clatter
         AudioEngine.playDiceClatter(1.0);
 
+        // Build Barrier Walls
+        activeWalls.forEach(w => physicsWorld.remove(w));
+        activeWalls = [];
+
+        const barrierMaterial = new CANNON.Material();
+
+        for (let i = 0; i <= totalDice; i++) {
+            const wallX = -activeWidth / 2 + (i * laneWidth);
+            const wallBody = new CANNON.RigidBody(0, new CANNON.Plane(), barrierMaterial);
+            wallBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), i === 0 ? Math.PI / 2 : -Math.PI / 2);
+            wallBody.position.set(wallX, 0, 0);
+            physicsWorld.add(wallBody);
+            activeWalls.push(wallBody);
+        }
+
+        // Spawn Dice Entities
+        const spawnedEntities = [];
+
         expandedDiceList.forEach((dice, idx) => {
-            const faces = extractFaces(dice);
-            const val = dice.val !== undefined ? dice.val : extractVal(dice);
-            const isDropped = Boolean(dice && typeof dice === 'object' && (dice.dropped || dice.isDropped || dice.discarded));
+            const type = dice.type;
+            const targetVal = dice.val;
+            const mesh = createDiceMesh(type, skin);
 
-            let critType = null;
-            if (faces === 20 || (dice && typeof dice === 'object' && (dice.isCritSuccess || dice.isCritFail))) {
-                if (val === 20 || (dice && typeof dice === 'object' && dice.isCritSuccess)) {
-                    critType = 'Nat20';
-                } else if (val === 1 || (dice && typeof dice === 'object' && dice.isCritFail)) {
-                    critType = 'Nat1';
-                }
-            }
-
-            const built = GeometryFactory.createDie(faces, skin, faces === 100, critType === 'Nat20', isDropped);
-            const mesh = built.mesh;
-
-            // Compute Lane Boundaries to strictly preserve left-to-right order
             const laneCenter = startX + (idx * laneWidth);
-            const laneHalfWidth = (laneWidth * 0.42);
-            const minX = laneCenter - laneHalfWidth;
-            const maxX = laneCenter + laneHalfWidth;
+            const spawnX = laneCenter + (Math.random() - 0.5) * 0.4;
+            const spawnY = (Math.random() - 0.5) * 1.5;
+            const spawnZ = 12.0 + Math.random() * 3.0;
 
-            // Spawn Position
-            const spawnX = laneCenter + (Math.random() - 0.5) * 0.35;
-            const spawnY = visibleHeight * 0.55 + Math.random() * 2.0;
-            const spawnZ = (Math.random() - 0.5) * 2.5;
-            mesh.position.set(spawnX, spawnY, spawnZ);
+            const mass = CONSTS.dice_mass[type] || 350;
+            const shape = mesh.geometry.userData.cannonShape;
+            const body = new CANNON.RigidBody(mass, shape, new CANNON.Material());
 
-            // Initial tumbling rotation
-            mesh.rotation.set(
-                Math.random() * Math.PI * 2,
-                Math.random() * Math.PI * 2,
-                Math.random() * Math.PI * 2
+            body.position.set(spawnX, spawnY, spawnZ);
+            body.velocity.set((Math.random() - 0.5) * 4.0, (Math.random() - 0.5) * 4.0, -18.0 - Math.random() * 6.0);
+
+            const inertia = CONSTS.dice_inertia[type] || 8;
+            body.angularVelocity.set(
+                (Math.random() - 0.5) * inertia * 4.0,
+                (Math.random() - 0.5) * inertia * 4.0,
+                (Math.random() - 0.5) * inertia * 4.0
             );
 
-            // Compute Target Landing Quaternion for the predetermined rolled value
-            const targetValStr = String(val);
-            let targetFaceIdx = built.faceValues.findIndex(fv => String(fv) === targetValStr);
-            if (targetFaceIdx === -1) targetFaceIdx = 0;
-
-            const targetLocalNormal = built.normals[targetFaceIdx] || new THREE.Vector3(0, 1, 0);
-
-            // Target camera vector (slightly tilted upward toward camera for optimal readability)
-            const targetWorldDir = new THREE.Vector3(0, 0.45, 0.89).normalize();
-            const targetQuaternion = new THREE.Quaternion().setFromUnitVectors(targetLocalNormal, targetWorldDir);
+            body.linearDamping = 0.15;
+            body.angularDamping = 0.15;
 
             scene.add(mesh);
+            physicsWorld.add(body);
 
-            // Physics Die Entity
-            const dieEntity = {
+            let critType = null;
+            if (type === 'd20' || dice.isCritSuccess || dice.isCritFail) {
+                if (targetVal === 20 || dice.isCritSuccess) critType = 'Nat20';
+                else if (targetVal === 1 || dice.isCritFail) critType = 'Nat1';
+            }
+
+            const entity = {
                 mesh: mesh,
-                faces: faces,
-                val: val,
+                body: body,
+                type: type,
+                targetVal: targetVal,
                 critType: critType,
                 laneCenter: laneCenter,
-                minX: minX,
-                maxX: maxX,
-                floorY: floorY,
-                vx: (Math.random() - 0.5) * 2.0,
-                vy: -(12.0 + Math.random() * 5.0),
-                vz: (Math.random() - 0.5) * 2.5,
-                rx: (Math.random() - 0.5) * 22.0,
-                ry: (Math.random() - 0.5) * 22.0,
-                rz: (Math.random() - 0.5) * 22.0,
-                targetQuaternion: targetQuaternion,
-                preSettleQuaternion: new THREE.Quaternion(),
-                settleProgress: 0,
-                isSettling: false,
-                bounceCount: 0,
                 isResting: false,
-                fadeTimerStarted: false,
                 fade: false,
-                alpha: isDropped ? 0.45 : 1.0,
+                alpha: 1.0,
                 isDone: false
             };
 
-            activeDice.push(dieEntity);
+            spawnedEntities.push(entity);
+            activeDice.push(entity);
         });
 
+        // Run fast-forward physics emulation to find naturally landed face and shift geometry
+        emulateAndShiftOutcome(spawnedEntities);
         return true;
+    }
+
+    function emulateAndShiftOutcome(entities) {
+        // Save initial positions
+        const savedStates = entities.map(e => ({
+            pos: e.body.position.clone(),
+            quat: e.body.quaternion.clone(),
+            vel: e.body.velocity.clone(),
+            angVel: e.body.angularVelocity.clone()
+        }));
+
+        // Emulate forward 180 physics steps
+        for (let step = 0; step < 180; step++) {
+            physicsWorld.step(1 / 60);
+        }
+
+        // Determine landed value and shift face groups to match target value
+        entities.forEach(e => {
+            const landedVal = getLandedValue(e.mesh, e.body);
+            shiftDiceFaces(e.mesh, e.targetVal, landedVal);
+        });
+
+        // Restore initial physics state for real-time visual rolling
+        entities.forEach((e, idx) => {
+            const s = savedStates[idx];
+            e.body.position.copy(s.pos);
+            e.body.quaternion.copy(s.quat);
+            e.body.velocity.copy(s.vel);
+            e.body.angularVelocity.copy(s.angVel);
+            e.mesh.position.copy(s.pos);
+            e.mesh.quaternion.copy(s.quat);
+        });
     }
 
     function extractFaces(dice) {
@@ -1031,7 +1057,7 @@
         return match ? parseInt(match[0], 10) : 1;
     }
 
-    // Animation & Physics Loop with Smooth Slerp Settling
+    // Animation & Physics Loop
     function startAnimationLoop() {
         if (animFrameId) return;
 
@@ -1056,132 +1082,60 @@
     }
 
     function updatePhysics(dt) {
-        const gravity = -36.0;
+        if (!physicsWorld) return;
+
+        // Step Cannon.js Physics
+        physicsWorld.step(1 / 60);
 
         activeDice.forEach(d => {
             if (d.isDone) return;
 
+            // Sync Three.js Mesh with Cannon.js Body
+            d.mesh.position.copy(d.body.position);
+            d.mesh.quaternion.copy(d.body.quaternion);
+
+            const velSq = d.body.velocity.lengthSquared();
+            const angSq = d.body.angularVelocity.lengthSquared();
+
             if (!d.isResting) {
-                if (!d.isSettling) {
-                    // Apply Gravity & Velocities
-                    d.vy += gravity * dt;
-                    d.mesh.position.x += d.vx * dt;
-                    d.mesh.position.y += d.vy * dt;
-                    d.mesh.position.z += d.vz * dt;
+                // Check if die has settled
+                if (velSq < 0.15 && angSq < 0.15 && d.body.position.z < 2.0) {
+                    d.isResting = true;
+                    AudioEngine.playFloorThump(0.6);
 
-                    // Rotational Spin
-                    d.mesh.rotation.x += d.rx * dt;
-                    d.mesh.rotation.y += d.ry * dt;
-                    d.mesh.rotation.z += d.rz * dt;
-
-                    // Floor Collision & Bounce
-                    if (d.mesh.position.y <= d.floorY) {
-                        d.mesh.position.y = d.floorY;
-                        d.vy = -d.vy * 0.48; // Floor restitution
-                        d.vx *= 0.75;
-                        d.vz *= 0.75;
-                        d.rx *= 0.72;
-                        d.ry *= 0.72;
-                        d.rz *= 0.72;
-                        d.bounceCount++;
-
-                        AudioEngine.playFloorThump(Math.abs(d.vy) / 10.0);
-
-                        // Trigger smooth face-up slerp settling
-                        if (d.bounceCount >= 2 || Math.abs(d.vy) < 1.8) {
-                            d.isSettling = true;
-                            d.preSettleQuaternion.copy(d.mesh.quaternion);
-                            d.settleProgress = 0;
-                            d.vx = 0;
-                            d.vz = 0;
-                            d.rx = 0;
-                            d.ry = 0;
-                            d.rz = 0;
-                        }
+                    // Critical Fanfare & VFX
+                    if (d.critType === 'Nat20') {
+                        AudioEngine.playNat20Fanfare();
+                        spawnParticleBurst(d.mesh.position.x, d.mesh.position.y, d.mesh.position.z, '#ffd700', 36);
+                        spawnBannerBadge(d.mesh, '★ NAT 20! ★', true);
+                    } else if (d.critType === 'Nat1') {
+                        AudioEngine.playNat1Fail();
+                        spawnParticleBurst(d.mesh.position.x, d.mesh.position.y, d.mesh.position.z, '#ff1744', 24);
+                        spawnBannerBadge(d.mesh, '⚠ NAT 1! ⚠', false);
                     }
 
-                    // Invisible Left & Right Vertical Physics Lane Barriers
-                    if (d.mesh.position.x <= d.minX) {
-                        d.mesh.position.x = d.minX;
-                        d.vx = Math.abs(d.vx) * 0.65;
-                        AudioEngine.playDiceClatter(0.3);
-                    } else if (d.mesh.position.x >= d.maxX) {
-                        d.mesh.position.x = d.maxX;
-                        d.vx = -Math.abs(d.vx) * 0.65;
-                        AudioEngine.playDiceClatter(0.3);
-                    }
-
-                    // Front & Back Screen Bounds
-                    if (d.mesh.position.z < -3.5) {
-                        d.mesh.position.z = -3.5;
-                        d.vz = Math.abs(d.vz) * 0.6;
-                    } else if (d.mesh.position.z > 3.5) {
-                        d.mesh.position.z = 3.5;
-                        d.vz = -Math.abs(d.vz) * 0.6;
-                    }
-                } else {
-                    // Smooth Slerp Settling Phase (0.42 seconds cubic ease-out)
-                    d.settleProgress = Math.min(1.0, d.settleProgress + (dt / 0.42));
-                    const t = 1 - Math.pow(1 - d.settleProgress, 3);
-
-                    d.mesh.quaternion.slerpQuaternions(d.preSettleQuaternion, d.targetQuaternion, t);
-                    d.mesh.position.y = d.floorY + Math.sin(t * Math.PI) * 0.22;
-
-                    if (d.settleProgress >= 1.0) {
-                        d.isResting = true;
-                        d.mesh.quaternion.copy(d.targetQuaternion);
-                        d.mesh.position.y = d.floorY;
-
-                        // Trigger Critical Fanfare & VFX
-                        if (d.critType === 'Nat20') {
-                            AudioEngine.playNat20Fanfare();
-                            spawnParticleBurst(d.mesh.position.x, d.mesh.position.y, d.mesh.position.z, '#ffd700', 36);
-                            spawnBannerBadge(d, '★ NAT 20! ★', true);
-                        } else if (d.critType === 'Nat1') {
-                            AudioEngine.playNat1Fail();
-                            spawnParticleBurst(d.mesh.position.x, d.mesh.position.y, d.mesh.position.z, '#ff1744', 24);
-                            spawnBannerBadge(d, '⚠ NAT 1! ⚠', false);
-                        }
-
-                        // Auto fade-out timer (2.5s resting visibility)
-                        if (!d.fadeTimerStarted) {
-                            d.fadeTimerStarted = true;
-                            setTimeout(() => { d.fade = true; }, 2500);
-                        }
-                    }
-                }
-            } else {
-                // Resting die gentle hover if critical hit
-                if (d.critType === 'Nat20') {
-                    d.mesh.position.y = d.floorY + Math.sin(Date.now() * 0.005) * 0.06;
+                    // Schedule fadeout after 2.5s
+                    setTimeout(() => {
+                        d.fade = true;
+                    }, 2500);
                 }
             }
 
-            // Fadeout handling
+            // Fadeout handling without disposing shared materials
             if (d.fade) {
                 d.alpha -= dt * 1.8;
-                if (Array.isArray(d.mesh.material)) {
-                    d.mesh.material.forEach(mat => {
-                        mat.opacity = Math.max(0, d.alpha);
-                    });
-                } else if (d.mesh.material) {
-                    d.mesh.material.opacity = Math.max(0, d.alpha);
+                if (d.mesh) {
+                    d.mesh.position.z -= dt * 4.0; // Gentle drop
                 }
 
                 if (d.alpha <= 0) {
                     d.isDone = true;
                     scene.remove(d.mesh);
-                    if (d.mesh.geometry) d.mesh.geometry.dispose();
-                    if (Array.isArray(d.mesh.material)) {
-                        d.mesh.material.forEach(mat => mat.dispose());
-                    } else if (d.mesh.material) {
-                        d.mesh.material.dispose();
-                    }
+                    if (d.body) physicsWorld.remove(d.body);
                 }
             }
         });
 
-        // Filter out finished dice
         activeDice = activeDice.filter(d => !d.isDone);
     }
 
@@ -1214,14 +1168,13 @@
         const halfH = window.innerHeight / 2;
 
         activeBadges.forEach(b => {
-            if (!b.die || b.die.isDone || b.die.alpha <= 0) {
+            if (!b.mesh || b.isDone) {
                 b.el.remove();
                 b.isDone = true;
                 return;
             }
 
-            // Project 3D coordinate to 2D screen coordinate
-            const pos = b.die.mesh.position.clone();
+            const pos = b.mesh.position.clone();
             pos.y += 2.0;
             pos.project(camera);
 
@@ -1230,7 +1183,6 @@
 
             b.el.style.left = `${screenX}px`;
             b.el.style.top = `${screenY}px`;
-            b.el.style.opacity = String(b.die.alpha);
         });
 
         activeBadges = activeBadges.filter(b => !b.isDone);
@@ -1239,12 +1191,7 @@
     function clear() {
         activeDice.forEach(d => {
             scene.remove(d.mesh);
-            if (d.mesh.geometry) d.mesh.geometry.dispose();
-            if (Array.isArray(d.mesh.material)) {
-                d.mesh.material.forEach(mat => mat.dispose());
-            } else if (d.mesh.material) {
-                d.mesh.material.dispose();
-            }
+            if (d.body && physicsWorld) physicsWorld.remove(d.body);
         });
         activeDice = [];
 
