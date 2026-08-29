@@ -1,0 +1,90 @@
+/* 3D WebGL Dice Roller Overlay & Floating Badges */
+
+#dice-box-canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 99999;
+    overflow: hidden;
+}
+
+#dice-box-canvas-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Floating Critical Banners */
+.dice3d-floating-badge {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    pointer-events: none;
+    z-index: 100000;
+    font-family: 'Outfit', 'Cinzel', sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+    letter-spacing: 1.5px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
+    transition: opacity 0.2s ease-out;
+}
+
+.dice3d-floating-badge.badge-nat20 {
+    background: linear-gradient(135deg, #ffd700, #ff8f00);
+    color: #1a0f00;
+    border: 2px solid #fff59d;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 8px 20px rgba(0, 0, 0, 0.8);
+    animation: pulse-glow-gold 1.2s infinite alternate ease-in-out;
+}
+
+.dice3d-floating-badge.badge-nat1 {
+    background: linear-gradient(135deg, #d50000, #5f0000);
+    color: #ffffff;
+    border: 2px solid #ff8a80;
+    box-shadow: 0 0 25px rgba(244, 67, 54, 0.8), 0 8px 20px rgba(0, 0, 0, 0.8);
+    animation: pulse-glow-red 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-glow-gold {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 6px 15px rgba(0, 0, 0, 0.7);
+        transform: translate(-50%, -100%) scale(1);
+    }
+    100% {
+        box-shadow: 0 0 35px rgba(255, 215, 0, 1), 0 10px 25px rgba(0, 0, 0, 0.9);
+        transform: translate(-50%, -100%) scale(1.08);
+    }
+}
+
+@keyframes pulse-glow-red {
+    0% {
+        box-shadow: 0 0 15px rgba(244, 67, 54, 0.6), 0 6px 15px rgba(0, 0, 0, 0.7);
+        transform: translate(-50%, -100%) scale(1);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(244, 67, 54, 0.95), 0 10px 25px rgba(0, 0, 0, 0.9);
+        transform: translate(-50%, -100%) scale(1.06);
+    }
+}
+
+.animated-pop-in {
+    animation: pop-in 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes pop-in {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -80%) scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -100%) scale(1);
+    }
+}

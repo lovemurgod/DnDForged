@@ -261,6 +261,14 @@ app.get('/vtt.html', (req, res, next) => {
   return next();
 });
 
+app.get(['/sheet', '/sheet.html'], (req, res) => {
+  const sub = extractSubdomain(req.headers.host);
+  if (sub) {
+    getOrCreateCampaign(sub);
+  }
+  return res.sendFile(path.join(__dirname, '5etools-src', 'sheet.html'));
+});
+
 // Serve 5etools-src statically
 app.use(express.static(path.join(__dirname, '5etools-src')));
 
@@ -827,7 +835,7 @@ io.on('connection', (socket) => {
   const socketSubdomain = extractSubdomain(socket.handshake.headers.host);
 
   // Handle player/GM registration to a campaign room
-  socket.on('join', ({ campaignId, username, role }) => {
+  socket.on('join', ({ campaignId, username, role, isSubWindow }) => {
     let targetCampaignId = campaignId || socketSubdomain || 'default';
 
     if (!campaigns[targetCampaignId]) {
@@ -870,6 +878,7 @@ io.on('connection', (socket) => {
     socket.campaignId = activeCampId;
     socket.username = username;
     socket.role = finalRole;
+    socket.isSubWindow = !!isSubWindow;
     
     if (!campaigns[activeCampId].knownPlayers) {
         campaigns[activeCampId].knownPlayers = [];
@@ -879,7 +888,7 @@ io.on('connection', (socket) => {
         saveCampaigns();
     }
     
-    console.log(`${username} joined campaign ${activeCampId} as ${finalRole}`);
+    console.log(`${username} joined campaign ${activeCampId} as ${finalRole}${socket.isSubWindow ? ' (Sub-Window)' : ''}`);
 
     // Welcome user and send current state
     socket.emit('joined', {
@@ -887,11 +896,13 @@ io.on('connection', (socket) => {
       chatHistory: (chatLogs[activeCampId] || []).slice(-50)
     });
 
-    // Notify others
-    socket.to(activeCampId).emit('sys_message', {
-      text: `${username} has joined the game.`,
-      timestamp: Date.now()
-    });
+    // Notify others only if it is a primary window connection
+    if (!socket.isSubWindow) {
+      socket.to(activeCampId).emit('sys_message', {
+        text: `${username} has joined the game.`,
+        timestamp: Date.now()
+      });
+    }
   });
 
   socket.on('allowlist:update', (data) => {
@@ -924,6 +935,15 @@ io.on('connection', (socket) => {
     if (socket.role !== 'GM') return;
 
     io.to(campaignId).emit('handouts:force_show', data);
+  });
+
+  // Forward splash:show to all clients in campaign
+  socket.on('splash:show', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId) return;
+    if (socket.role !== 'GM') return;
+
+    io.to(campaignId).emit('splash:show', data);
   });
 
   // Sync token state changes (legacy - full state)
@@ -1354,8 +1374,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`User disconnected: ${socket.id}`);
-    if (socket.campaignId && socket.username) {
+    console.log(`User disconnected: ${socket.id}${socket.isSubWindow ? ' (Sub-Window)' : ''}`);
+    if (socket.campaignId && socket.username && !socket.isSubWindow) {
       socket.to(socket.campaignId).emit('sys_message', {
         text: `${socket.username} has left the game.`,
         timestamp: Date.now()

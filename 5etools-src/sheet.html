@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForgeD VTT - Sheet</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ForgeD VTT Custom Stylesheet -->
+    <link rel="stylesheet" href="css/vtt.css?v=10">
+    
+    <!-- 3D WebGL Dice Engine Stylesheet -->
+    <link rel="stylesheet" href="css/dice-3d.css">
+    
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Three.js & 3D WebGL Dice Engine -->
+    <script src="lib/three.min.js"></script>
+    <script src="js/dice-3d.js"></script>
+    
+    <!-- 5etools Parsers & Common Utilities -->
+    <script type="text/javascript" src="lib/localforage.js"></script>
+    <script type="text/javascript" src="js/parser.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/utils-ui.js"></script>
+    <script type="module" src="js/utils-brew.js"></script>
+    <script type="module" src="js/utils-config.js"></script>
+    <script type="module" src="js/utils-dataloader.js"></script>
+    <script type="text/javascript" src="js/hist.js"></script>
+    <script type="text/javascript" src="js/render.js"></script>
+    <script type="text/javascript" src="js/render-dice.js"></script>
+    <script type="text/javascript" src="js/render-markdown.js"></script>
+</head>
+<body class="standalone-sheet-body">
+
+    <!-- 3D Dice Roller Canvas Overlay -->
+    <div id="dice-box-canvas-container"></div>
+
+    <!-- Standalone Sheet Top Bar -->
+    <header id="standalone-sheet-header" class="standalone-header glassmorphism">
+        <div class="standalone-header-left">
+            <img src="img/logo.png" alt="ForgeD VTT" class="standalone-logo" onerror="this.style.display='none'">
+            <div class="standalone-title-wrap">
+                <span class="standalone-campaign-badge" id="header-campaign-badge">Campaign: Default</span>
+                <h1 class="standalone-sheet-title" id="header-sheet-title">Loading Sheet...</h1>
+            </div>
+        </div>
+        <div class="standalone-header-right">
+            <button id="btn-dock-sheet" class="btn btn-secondary btn-sm standalone-btn-dock" title="Dock into Tabletop (Close Tab)">
+                <i class="fa-solid fa-arrow-down-left-and-arrow-up-right-to-center"></i>
+                <span>Dock to VTT</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Sheet Mount Container -->
+    <main id="standalone-sheet-container" class="standalone-container">
+        
+        <!-- Creature / NPC / Companion Sheet Mount -->
+        <div id="creature-sheet-panel" class="standalone-panel vtt-hidden">
+            <button id="creature-sheet-minimize-btn" class="cs-minimize-btn vtt-hidden" style="display:none;"></button>
+            <div id="vtt-creature-sheet-panel" class="scroll-styled standalone-content">
+                <div class="cs-placeholder">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading Creature Stat Block...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Sheet Mount -->
+        <div id="player-sheet-panel" class="standalone-panel vtt-hidden">
+            <button id="player-sheet-minimize-btn" class="cs-minimize-btn vtt-hidden" style="display:none;"></button>
+            <div id="player-sheet-content" class="scroll-styled standalone-content" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="cs-placeholder" id="player-sheet-placeholder">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading Character Sheet...</p>
+                </div>
+                <div id="player-sheet-active" class="vtt-hidden" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                    <!-- Inner Tabs Header -->
+                    <div class="ps-tabs-header" style="display: flex; flex-shrink: 0; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--color-border-subtle);">
+                        <button class="ps-tab-btn active" data-tab="ps-primary" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-primary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Primary</button>
+                        <button class="ps-tab-btn" data-tab="ps-equipment" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Equipment</button>
+                        <button class="ps-tab-btn" data-tab="ps-spells" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Spells</button>
+                        <button class="ps-tab-btn" data-tab="ps-info" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Abilities</button>
+                        <button class="ps-tab-btn" data-tab="ps-build" style="flex:1; padding:10px 0; background:transparent; border:none; color:var(--color-text-secondary); cursor:pointer; font-weight:600; border-bottom: 2px solid transparent;">Build</button>
+                    </div>
+                    <!-- Inner Tabs Content Area -->
+                    <div class="ps-tabs-body scroll-styled" style="flex: 1; position: relative; overflow-y: auto;">
+                        <div id="ps-primary" class="ps-tab-content active" style="padding: 16px;"></div>
+                        <div id="ps-equipment" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                        <div id="ps-spells" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                        <div id="ps-info" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                        <div id="ps-build" class="ps-tab-content vtt-hidden" style="padding: 16px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Standalone Bootstrap Script -->
+    <script type="module">
+        import { SheetWindowManager } from './js/vtt-sheet-popout.js';
+        import { initVttCreatureSheet } from './js/vtt-creature-sheet.js';
+        import { initVttSpellManager } from './js/vtt-spell-manager.js';
+        import { initVttPlayerSheet } from './js/vtt-player-sheet.js';
+
+        // Parse query params
+        const urlParams = new URLSearchParams(window.location.search);
+        const sheetType = urlParams.get('type') || 'player';
+        const sheetId = urlParams.get('id');
+        const tokenId = urlParams.get('tokenId');
+        const characterId = urlParams.get('characterId');
+        const monsterName = urlParams.get('name');
+        const monsterSource = urlParams.get('source');
+        const dataKey = urlParams.get('dataKey');
+
+        // Extract session credentials from URL, opener, or storage
+        const savedCampaign = urlParams.get('campaign') || (window.opener && window.opener.VTT && window.opener.VTT.campaignId) || localStorage.getItem('vtt_campaign') || 'default';
+        const savedUser = urlParams.get('username') || (window.opener && window.opener.VTT && window.opener.VTT.username) || localStorage.getItem('vtt_username') || 'Game Master';
+        const savedRole = urlParams.get('role') || (window.opener && window.opener.VTT && window.opener.VTT.role) || localStorage.getItem('vtt_role') || 'GM';
+
+        const keyId = sheetId || tokenId || characterId || (monsterName ? `${monsterName}_${monsterSource || ''}` : Date.now());
+        const sheetKey = SheetWindowManager.getSheetKey(sheetType, keyId);
+
+        // Global VTT Context for standalone sheet
+        window.VTT = {
+            socket: null,
+            campaignId: savedCampaign,
+            username: savedUser,
+            role: savedRole,
+            campaignState: null,
+            creatureSheet: null,
+            playerSheet: null,
+            isStandaloneSheet: true,
+            sheetWindowManager: SheetWindowManager
+        };
+
+        const titleEl = document.getElementById('header-sheet-title');
+        const campBadge = document.getElementById('header-campaign-badge');
+        const dockBtn = document.getElementById('btn-dock-sheet');
+
+        if (campBadge) campBadge.textContent = `Campaign: ${savedCampaign}`;
+
+        // Initialize 3D Dice Renderer
+        if (window.Dice3D) {
+            window.Dice3D.init({ containerId: 'dice-box-canvas-container' });
+        }
+
+        // Initialize Socket.io Connection
+        const socket = io({
+            query: {
+                campaignId: savedCampaign,
+                username: savedUser,
+                role: savedRole
+            }
+        });
+        window.VTT.socket = socket;
+
+        socket.on('connect', () => {
+            console.log(`[Standalone Sheet] Connected to campaign "${savedCampaign}"`);
+            socket.emit('join', {
+                campaignId: savedCampaign,
+                username: savedUser,
+                role: savedRole,
+                isSubWindow: true
+            });
+        });
+
+        // Initialize Modules
+        window.VTT.creatureSheet = initVttCreatureSheet(window.VTT);
+        window.VTT.spellManager = initVttSpellManager(window.VTT);
+        window.VTT.playerSheet = initVttPlayerSheet(window.VTT);
+
+        // Attempt early render for creatures if data is available immediately
+        bootEarly();
+
+        // Setup Player Sheet Tab switching
+        document.querySelectorAll('.ps-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ps-tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.color = 'var(--color-text-secondary)';
+                    b.style.borderBottom = '2px solid transparent';
+                });
+                document.querySelectorAll('.ps-tab-content').forEach(c => c.classList.add('vtt-hidden'));
+                
+                btn.classList.add('active');
+                btn.style.color = 'var(--color-text-primary)';
+                btn.style.borderBottom = '2px solid var(--color-gold-base)';
+                
+                const tabId = btn.dataset.tab;
+                const tabEl = document.getElementById(tabId);
+                if (tabEl) tabEl.classList.remove('vtt-hidden');
+            });
+        });
+
+        // Handle joined event from server
+        socket.on('joined', async ({ campaignState }) => {
+            console.log('[Standalone Sheet] Joined campaign successfully');
+            window.VTT.campaignState = campaignState;
+            await bootSheet();
+        });
+
+        // Fallback for campaign:loaded event
+        socket.on('campaign:loaded', async (data) => {
+            window.VTT.campaignState = data;
+            await bootSheet();
+        });
+
+        socket.on('character:update', (data) => {
+            const char = data.character || data;
+            if (!char || !window.VTT.campaignState) return;
+            window.VTT.campaignState.characters = window.VTT.campaignState.characters || {};
+            window.VTT.campaignState.characters[char.id] = char;
+
+            if (sheetType === 'player' && (char.id === sheetId || char.id === characterId)) {
+                window.VTT.playerSheet.renderSheetData(char);
+                document.title = `${char.name} - ForgeD VTT`;
+                if (titleEl) titleEl.textContent = char.name;
+            } else if ((sheetType === 'creature' || sheetType === 'npc' || sheetType === 'companion') && char.id === characterId) {
+                if (char.monsterData) {
+                    window.VTT.creatureSheet.openSheet(char.monsterData, tokenId, char.id);
+                    document.title = `${char.name} - ForgeD VTT`;
+                    if (titleEl) titleEl.textContent = char.name;
+                }
+            }
+        });
+
+        socket.on('character:updated', (char) => {
+            if (!window.VTT.campaignState) return;
+            window.VTT.campaignState.characters = window.VTT.campaignState.characters || {};
+            window.VTT.campaignState.characters[char.id] = char;
+
+            if (sheetType === 'player' && (char.id === sheetId || char.id === characterId)) {
+                window.VTT.playerSheet.renderSheetData(char);
+                document.title = `${char.name} - ForgeD VTT`;
+                if (titleEl) titleEl.textContent = char.name;
+            } else if ((sheetType === 'creature' || sheetType === 'npc' || sheetType === 'companion') && char.id === characterId) {
+                if (char.monsterData) {
+                    window.VTT.creatureSheet.openSheet(char.monsterData, tokenId, char.id);
+                    document.title = `${char.name} - ForgeD VTT`;
+                    if (titleEl) titleEl.textContent = char.name;
+                }
+            }
+        });
+
+        socket.on('token:updated', (tokenData) => {
+            if (tokenId && tokenData.id === tokenId && window.VTT.creatureSheet) {
+                // If token HP changed, update HP bar
+                const currentHpEl = document.getElementById('cs-hp-current');
+                if (currentHpEl && tokenData.hp !== undefined) {
+                    currentHpEl.textContent = tokenData.hp;
+                }
+            }
+        });
+
+        // 3D Dice roll events on tabletop and standalone sheet
+        socket.on('chat:msg', (msg) => {
+            if (msg.hidden && window.VTT.role !== 'GM') return;
+            if (msg.whisperToGM && window.VTT.role !== 'GM' && msg.username !== window.VTT.username) return;
+
+            if (window.Dice3D && window.Dice3D.isEnabled()) {
+                if (msg.macroCard) {
+                    const allDice = [];
+                    if (msg.macroCard.atkRoll && msg.macroCard.atkRoll.diceList) {
+                        msg.macroCard.atkRoll.diceList.forEach(d => allDice.push({ ...d, damageType: null, isCritSuccess: msg.macroCard.atkRoll.isCritSuccess, isCritFail: msg.macroCard.atkRoll.isCritFail }));
+                    }
+                    (msg.macroCard.dmgRolls || []).forEach(dr => {
+                        if (dr.roll && dr.roll.diceList) {
+                            dr.roll.diceList.forEach(d => allDice.push({ ...d, damageType: dr.type || null }));
+                        }
+                    });
+                    if (allDice.length > 0) window.Dice3D.roll(allDice);
+                } else if (msg.roll && msg.roll.diceList) {
+                    window.Dice3D.roll(msg.roll.diceList);
+                }
+            }
+        });
+
+        async function bootEarly() {
+            if (sheetType !== 'player') {
+                let monster = null;
+                const storageKey = dataKey || `forgedvtt_popout_data_${sheetKey}`;
+                try {
+                    const raw = localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey);
+                    if (raw) monster = JSON.parse(raw);
+                } catch (e) {}
+
+                if (!monster && monsterName) {
+                    monster = await loadBestiaryMonster(monsterName, monsterSource);
+                }
+                if (monster) {
+                    const cPanel = document.getElementById('creature-sheet-panel');
+                    if (cPanel) cPanel.classList.remove('vtt-hidden');
+                    const displayName = monster.name || monsterName || 'Creature';
+                    document.title = `${displayName} - ForgeD VTT`;
+                    if (titleEl) titleEl.textContent = displayName;
+                    window.VTT.creatureSheet.openSheet(monster, tokenId, characterId);
+                    SheetWindowManager.registerStandalone(sheetKey, {
+                        type: sheetType,
+                        monsterData: monster,
+                        tokenId: tokenId,
+                        characterId: characterId,
+                        name: monster.name,
+                        source: monster.source
+                    });
+                }
+            }
+        }
+
+        async function bootSheet() {
+            let loadedData = null;
+            let displayName = 'Sheet';
+
+            if (sheetType === 'player') {
+                const pPanel = document.getElementById('player-sheet-panel');
+                if (pPanel) pPanel.classList.remove('vtt-hidden');
+                
+                const char = window.VTT.campaignState?.characters?.[sheetId || characterId];
+                if (char) {
+                    displayName = char.name;
+                    loadedData = { type: 'player', id: char.id };
+                    window.VTT.playerSheet.openSheet(char.id);
+                } else {
+                    if (titleEl) titleEl.textContent = 'Character not found';
+                    return;
+                }
+            } else {
+                const cPanel = document.getElementById('creature-sheet-panel');
+                if (cPanel) cPanel.classList.remove('vtt-hidden');
+
+                // 1. Check storage key
+                let monster = null;
+                const storageKey = dataKey || `forgedvtt_popout_data_${sheetKey}`;
+                try {
+                    const raw = localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey);
+                    if (raw) monster = JSON.parse(raw);
+                } catch (e) {}
+
+                // 2. Check if linked character exists in campaign
+                if (!monster && characterId && window.VTT.campaignState?.characters?.[characterId]) {
+                    const char = window.VTT.campaignState.characters[characterId];
+                    monster = char.monsterData;
+                    displayName = char.name;
+                }
+
+                // 3. Check bestiary by name/source
+                if (!monster && monsterName) {
+                    displayName = monsterName;
+                    monster = await loadBestiaryMonster(monsterName, monsterSource);
+                }
+
+                if (monster) {
+                    displayName = monster.name || displayName;
+                    loadedData = {
+                        type: sheetType,
+                        monsterData: monster,
+                        tokenId: tokenId,
+                        characterId: characterId,
+                        name: monster.name,
+                        source: monster.source
+                    };
+                    window.VTT.creatureSheet.openSheet(monster, tokenId, characterId);
+                } else {
+                    if (titleEl) titleEl.textContent = 'Creature stat block not found';
+                    return;
+                }
+            }
+
+            document.title = `${displayName} - ForgeD VTT`;
+            if (titleEl) titleEl.textContent = displayName;
+
+            // Register with SheetWindowManager
+            SheetWindowManager.registerStandalone(sheetKey, loadedData);
+        }
+
+        async function loadBestiaryMonster(name, source) {
+            try {
+                const indexRes = await fetch('data/bestiary/index.json');
+                if (!indexRes.ok) return null;
+                const indexData = await indexRes.json();
+                
+                const qName = name.toLowerCase().trim();
+                const qSource = source ? source.toLowerCase().trim() : null;
+
+                // 1. Direct source lookup if source is specified
+                if (qSource && indexData[qSource]) {
+                    try {
+                        const directRes = await fetch(`data/bestiary/${indexData[qSource]}`);
+                        if (directRes.ok) {
+                            const directData = await directRes.json();
+                            if (directData && directData.monster) {
+                                const found = directData.monster.find(m => 
+                                    m.name.toLowerCase() === qName &&
+                                    (!qSource || (m.source && m.source.toLowerCase() === qSource))
+                                );
+                                if (found) return found;
+                            }
+                        }
+                    } catch (e) {}
+                }
+
+                // 2. Parallel search across all bestiary files
+                const fetchPromises = Object.values(indexData).map(filename =>
+                    fetch(`data/bestiary/${filename}`)
+                        .then(r => r.ok ? r.json() : null)
+                        .catch(() => null)
+                );
+                const results = await Promise.all(fetchPromises);
+                for (const d of results) {
+                    if (d && d.monster) {
+                        const found = d.monster.find(m =>
+                            m.name.toLowerCase() === qName &&
+                            (!qSource || (m.source && m.source.toLowerCase() === qSource))
+                        );
+                        if (found) return found;
+                    }
+                }
+            } catch (err) {
+                console.warn("[Standalone Sheet] Failed to load from bestiary:", err);
+            }
+            return null;
+        }
+
+        // Dock button handler
+        if (dockBtn) {
+            dockBtn.addEventListener('click', () => {
+                SheetWindowManager.dockBackToMain();
+            });
+        }
+    </script>
+</body>
+</html>

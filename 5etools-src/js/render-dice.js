@@ -791,6 +791,36 @@ Renderer.dice = class {
 				label: [lbl, message].filter(Boolean).join(" \u2013 "),
 			});
 
+			if (window.Dice3D && window.Dice3D.isEnabled() && !opts.isHidden) {
+				try {
+					const strTree = tree.toString();
+					const diceMatches = strTree.match(/(\d*)d(\d+)/gi);
+					if (diceMatches && diceMatches.length) {
+						const diceList = [];
+						diceMatches.forEach(m => {
+							const parts = m.toLowerCase().split('d');
+							const count = parseInt(parts[0], 10) || 1;
+							const faces = parseInt(parts[1], 10) || 20;
+							for (let c = 0; c < Math.min(count, 12); c++) {
+								diceList.push({
+									faces: faces,
+									val: (faces === 20 && allMax) ? 20 : (faces === 20 && allMin) ? 1 : Math.max(1, Math.min(faces, Math.round(result / count) || Math.floor(Math.random() * faces) + 1)),
+									isCritSuccess: allMax && faces === 20,
+									isCritFail: allMin && faces === 20
+								});
+							}
+						});
+						if (diceList.length > 0) {
+							window.Dice3D.roll(diceList, {
+								isCrit: allMax
+							});
+						}
+					}
+				} catch (e) {
+					console.warn("[RenderDice] 3D dice roll error:", e);
+				}
+			}
+
 			if (!opts.isHidden) {
 				const btnCopyToInput = ee`<button title="Copy to Input" class="ve-btn ve-btn-default ve-btn-xs ve-btn-copy-roll"><span class="glyphicon glyphicon-pencil"></span></button>`
 					.onn("click", () => {

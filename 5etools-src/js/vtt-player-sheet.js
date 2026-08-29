@@ -2742,6 +2742,13 @@ function simulateRoll(formula, critRange = 20) {
             return; // Not assigned to this player
         }
 
+        // Check if this player sheet is already open in a popped-out tab/window
+        const sheetKey = window.SheetWindowManager ? window.SheetWindowManager.getSheetKey('player', id) : null;
+        if (!vtt.isStandaloneSheet && sheetKey && window.SheetWindowManager && window.SheetWindowManager.isSheetPoppedOut(sheetKey)) {
+            window.SheetWindowManager.focusPoppedOut(sheetKey);
+            return;
+        }
+
         if ((char.isCompanion || char.isCustomNpc || char.monsterData) && vtt.creatureSheet) {
             vtt.creatureSheet.openSheet(char.monsterData, null, char.id);
             return;
@@ -2980,6 +2987,7 @@ function simulateRoll(formula, critRange = 20) {
                     </div>
                     <input type="text" id="pc-name" value="${char.name}" style="font-size:1.4rem; font-family:var(--font-heading); font-weight:700; width:100%; background:transparent; border:none; border-bottom:1px solid var(--color-border-subtle); padding:4px 0;">
                     ${vtt.role === 'GM' ? '<button class="btn btn-secondary btn-sm" id="pc-assign-players-btn" style="flex-shrink:0; padding:6px 12px; margin-left:8px;" title="Assign Players to this Sheet"><i class="fa-solid fa-users"></i></button>' : ''}
+                    ${!vtt.isStandaloneSheet ? '<button class="btn btn-secondary btn-sm pc-popout-btn" id="pc-btn-popout" style="flex-shrink:0; padding:6px 12px; margin-left:8px;" title="Open Sheet in New Tab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>' : ''}
                 </div>
             </div>
             
@@ -4406,6 +4414,22 @@ function simulateRoll(formula, critRange = 20) {
         if (assignBtn) {
             assignBtn.addEventListener('click', () => {
                 openAssignPlayersModal(char);
+            });
+        }
+
+        const popoutBtn = document.getElementById('pc-btn-popout');
+        if (popoutBtn) {
+            popoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.SheetWindowManager && currentChar) {
+                    window.SheetWindowManager.openPopout({
+                        type: 'player',
+                        id: currentChar.id,
+                        name: currentChar.name
+                    });
+                    minimizePanel();
+                }
             });
         }
 

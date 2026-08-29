@@ -115,6 +115,31 @@ export function initVttCanvas(vtt) {
     let dragTargetId = null;
     let currentMouseCoords = { x: 0, y: 0 };
 
+    function clearAllSelections() {
+        selectedTokenIds.clear();
+        if (typeof selectedShapeIds !== 'undefined') selectedShapeIds.clear();
+        if (typeof selectedWallIdxs !== 'undefined') selectedWallIdxs.clear();
+        selectedShapeId = null;
+        selectedShapeComponent = null;
+        selectedLightId = null;
+        hoveredLightId = null;
+        hoveredWallIdx = -1;
+        hoveredWallVertex = null;
+        selectedWallIdx = -1;
+        selectedNoteId = null;
+        hoveredNoteId = null;
+        hoverTokenId = null;
+        activeDragTokenId = null;
+        activeResizeTokenId = null;
+        activeRotateTokenId = null;
+        activeDragShapeId = null;
+        activeDragShapeComponent = null;
+        activeDragLightId = null;
+        activeDragWallVertex = null;
+        activeDragWallSegmentIdx = -1;
+        if (vtt.role === 'GM') hideGmTokenTooltip();
+    }
+
     function getDistanceToSegment(x, y, x1, y1, x2, y2) {
         const A = x - x1;
         const B = y - y1;
@@ -2450,10 +2475,14 @@ let lastBroadcastedTokens = {};
 
         // 1.5 Draw Persistent Shapes/Effects Layer (Underneath Tokens)
         Object.values(shapes).forEach(s => {
-            if (s.layer !== activeLayer && !isGmViewing) return;
+            const shapeLayer = s.layer || 'token';
+            if (shapeLayer !== activeLayer && !isGmViewing) return;
             const isSelected = selectedShapeId === s.id || selectedShapeIds.has(s.id);
             
             ctxInteraction.save();
+            if (vtt.role === 'GM' && activeLayer !== shapeLayer) {
+                ctxInteraction.globalAlpha = 0.45;
+            }
             if (isSelected) {
                 ctxInteraction.shadowColor = 'var(--color-gold-light)';
                 ctxInteraction.shadowBlur = 8;
@@ -5450,6 +5479,187 @@ window.emitTokenUpdates = function(currentTokens) {
         return `1d20${modStr}${toggleFormulaStr}`;
     }
 
+    // =========================================================================
+    // CINEMATIC SPLASH ART OVERLAY (Shift+X)
+    // =========================================================================
+
+    function isSplashOverlayOpen() {
+        const overlay = document.getElementById('vtt-splash-overlay');
+        return overlay && !overlay.classList.contains('vtt-hidden');
+    }
+
+    function closeSplashOverlay() {
+        const overlay = document.getElementById('vtt-splash-overlay');
+        if (!overlay) return;
+        overlay.classList.add('vtt-hidden');
+        const content = document.getElementById('vtt-splash-content');
+        if (content) content.innerHTML = '';
+    }
+
+    function showSplashOverlay(items) {
+        if (!items || !Array.isArray(items) || items.length === 0) return;
+
+        const overlay = document.getElementById('vtt-splash-overlay');
+        const content = document.getElementById('vtt-splash-content');
+        if (!overlay || !content) return;
+
+        content.innerHTML = '';
+
+        if (items.length === 1) {
+            const item = items[0];
+            const card = document.createElement('div');
+            card.className = 'vtt-splash-card';
+
+            const mediaWrap = document.createElement('div');
+            mediaWrap.className = `vtt-splash-media-wrap ${item.isCircle ? 'is-token-circle' : ''}`;
+
+            const url = item.img || '';
+            const isVideo = url.match(/\.(mp4|webm|ogg)($|\?)/i) || item.assetType === 'video';
+            const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+
+            if (ytMatch) {
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&mute=0&controls=1`;
+                iframe.allow = 'autoplay; encrypted-media; fullscreen';
+                mediaWrap.appendChild(iframe);
+            } else if (isVideo) {
+                const video = document.createElement('video');
+                video.src = getSafeVttUrl(url);
+                video.autoplay = true;
+                video.controls = true;
+                video.loop = true;
+                video.playsInline = true;
+                mediaWrap.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.src = getSafeVttUrl(url);
+                img.alt = item.name || 'Token Art';
+                mediaWrap.appendChild(img);
+            }
+            card.appendChild(mediaWrap);
+
+            if (item.name) {
+                const badge = document.createElement('div');
+                badge.className = 'vtt-splash-badge';
+                const tagLabel = item.isPlayer ? 'Player' : item.isAsset ? 'Asset' : 'Token';
+                badge.innerHTML = `
+                    <i class="fa-solid fa-sparkles splash-badge-icon"></i>
+                    <span class="splash-badge-title">${item.name}</span>
+                    <span class="splash-badge-tag">${tagLabel}</span>
+                `;
+                card.appendChild(badge);
+            }
+
+            content.appendChild(card);
+        } else {
+            const gallery = document.createElement('div');
+            gallery.className = 'vtt-splash-gallery';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'vtt-splash-card';
+
+                const mediaWrap = document.createElement('div');
+                mediaWrap.className = `vtt-splash-media-wrap ${item.isCircle ? 'is-token-circle' : ''}`;
+
+                const url = item.img || '';
+                const isVideo = url.match(/\.(mp4|webm|ogg)($|\?)/i) || item.assetType === 'video';
+
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.src = getSafeVttUrl(url);
+                    video.autoplay = true;
+                    video.muted = true;
+                    video.loop = true;
+                    video.playsInline = true;
+                    mediaWrap.appendChild(video);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = getSafeVttUrl(url);
+                    img.alt = item.name || 'Token Art';
+                    mediaWrap.appendChild(img);
+                }
+                card.appendChild(mediaWrap);
+
+                if (item.name) {
+                    const badge = document.createElement('div');
+                    badge.className = 'vtt-splash-badge';
+                    badge.innerHTML = `
+                        <span class="splash-badge-title">${item.name}</span>
+                    `;
+                    card.appendChild(badge);
+                }
+
+                gallery.appendChild(card);
+            });
+
+            content.appendChild(gallery);
+        }
+
+        overlay.classList.remove('vtt-hidden');
+    }
+
+    function triggerSplashForSelection(specificTokenId = null) {
+        let targetList = [];
+
+        if (specificTokenId && tokens[specificTokenId]) {
+            targetList = [tokens[specificTokenId]];
+        } else if (selectedTokenIds.size > 0) {
+            selectedTokenIds.forEach(id => {
+                if (tokens[id]) targetList.push(tokens[id]);
+            });
+        } else if (hoverTokenId && tokens[hoverTokenId]) {
+            targetList = [tokens[hoverTokenId]];
+        }
+
+        if (targetList.length === 0) return;
+
+        const items = [];
+        targetList.forEach(t => {
+            if (!t || !t.img) return;
+            const displayName = t.name || (t.isAsset ? 'Asset' : 'Token');
+            const isCircle = !t.isAsset && !t.isBorderless;
+            items.push({
+                id: t.id,
+                name: displayName,
+                img: t.img,
+                isAsset: !!t.isAsset,
+                isPlayer: !!t.isPlayer,
+                isCircle: isCircle,
+                assetType: t.assetType || null
+            });
+        });
+
+        if (items.length === 0) return;
+
+        // GM broadcasts to all connected players; players preview locally
+        if (vtt.role === 'GM') {
+            if (vtt.dataBridge && vtt.dataBridge.emitSplashShow) {
+                vtt.dataBridge.emitSplashShow({ items });
+            }
+        }
+
+        showSplashOverlay(items);
+    }
+
+    // Attach static close events for splash overlay
+    const splashOverlayEl = document.getElementById('vtt-splash-overlay');
+    if (splashOverlayEl) {
+        const backdrop = splashOverlayEl.querySelector('.vtt-splash-backdrop');
+        if (backdrop) {
+            backdrop.addEventListener('click', () => closeSplashOverlay());
+        }
+        const btnClose = document.getElementById('btn-vtt-splash-close');
+        if (btnClose) {
+            btnClose.addEventListener('click', () => closeSplashOverlay());
+        }
+    }
+
+    if (window.VTT) {
+        window.VTT.showSplashModal = showSplashOverlay;
+        window.VTT.closeSplashModal = closeSplashOverlay;
+    }
+
     function showTokenContextMenu(tokenId, clientX, clientY) {
         // Remove any existing menu first
         const oldMenu = document.getElementById('vtt-token-context-menu');
@@ -5509,6 +5719,10 @@ window.emitTokenUpdates = function(currentTokens) {
         let html = `
             <div class="vtt-token-menu-header">
                 <i class="fa-solid fa-dice-d20"></i> ${token.name}
+            </div>
+            <div class="vtt-token-menu-item" id="menu-ctx-splash-art">
+                <span><i class="fa-solid fa-expand item-icon"></i> Splash Art</span>
+                <span style="font-size: 0.7rem; opacity: 0.7; font-family: monospace; background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 3px; margin-left: auto;">Shift+X</span>
             </div>
             <div class="vtt-token-menu-item" id="menu-apply-damage">
                 <span><i class="fa-solid fa-heart-crack item-icon"></i> Apply Damage</span>
@@ -5848,6 +6062,15 @@ window.emitTokenUpdates = function(currentTokens) {
         menu.style.top = `${adjustedY}px`;
 
         // Wire click handlers
+        // Splash Art
+        const btnSplash = menu.querySelector('#menu-ctx-splash-art');
+        if (btnSplash) {
+            btnSplash.addEventListener('click', () => {
+                triggerSplashForSelection(tokenId);
+                menu.remove();
+            });
+        }
+
         // Apply Damage
         const btnApplyDamage = menu.querySelector('#menu-apply-damage');
         if (btnApplyDamage) {
@@ -6201,8 +6424,15 @@ window.emitTokenUpdates = function(currentTokens) {
             });
             menu.querySelectorAll('.menu-ctx-move-layer').forEach(item => {
                 item.addEventListener('click', () => {
-                    token.layer = item.dataset.layer;
-                    window.emitTokenUpdates(tokens);
+                    const targetLayer = item.dataset.layer;
+                    const targetIds = selectedTokenIds.has(tokenId) ? Array.from(selectedTokenIds) : [tokenId];
+                    targetIds.forEach(id => {
+                        if (tokens[id]) {
+                            tokens[id].layer = targetLayer;
+                            selectedTokenIds.delete(id);
+                        }
+                    });
+                    if (vtt.socket) window.emitTokenUpdates(tokens);
                     renderAll();
                     menu.remove();
                 });
@@ -6361,6 +6591,10 @@ window.emitTokenUpdates = function(currentTokens) {
         let html = `
             <div class="vtt-token-menu-header">
                 <i class="fa-solid fa-users"></i> ${tokenIds.length} Tokens Selected
+            </div>
+            <div class="vtt-token-menu-item" id="menu-ctx-splash-art">
+                <span><i class="fa-solid fa-expand item-icon"></i> Splash Art (${tokenIds.length})</span>
+                <span style="font-size: 0.7rem; opacity: 0.7; font-family: monospace; background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 3px; margin-left: auto;">Shift+X</span>
             </div>
             <div class="vtt-token-menu-item" id="menu-apply-damage">
                 <span><i class="fa-solid fa-heart-crack item-icon"></i> Apply Damage</span>
@@ -6588,6 +6822,14 @@ window.emitTokenUpdates = function(currentTokens) {
         };
 
         // Wire click handlers
+        // Splash Art
+        const btnSplashMulti = menu.querySelector('#menu-ctx-splash-art');
+        if (btnSplashMulti) {
+            btnSplashMulti.addEventListener('click', () => {
+                triggerSplashForSelection();
+                menu.remove();
+            });
+        }
 
         // Apply Damage
         const btnApplyDamage = menu.querySelector('#menu-apply-damage');
@@ -7374,8 +7616,22 @@ window.emitTokenUpdates = function(currentTokens) {
         }
 
         if (e.key === 'Escape') {
+            if (isSplashOverlayOpen()) {
+                closeSplashOverlay();
+            }
             const menu = document.getElementById('vtt-token-context-menu');
             if (menu) menu.remove();
+        }
+
+        // Shift+X / Shift+x: Cinematic Splash Art Zoom Shortcut
+        if (e.shiftKey && (e.key === 'X' || e.key === 'x') && !isInputActive) {
+            e.preventDefault();
+            if (isSplashOverlayOpen()) {
+                closeSplashOverlay();
+            } else {
+                triggerSplashForSelection();
+            }
+            return;
         }
         if ((e.key === 'Delete' || e.key === 'Backspace') && selectedTokenIds.size > 0 && !isInputActive) {
             selectedTokenIds.forEach(id => delete tokens[id]);
@@ -7889,8 +8145,9 @@ window.emitTokenUpdates = function(currentTokens) {
 
         for (const { token } of tokenEntries) {
             if (!token) continue;
-            if (token.layer !== activeLayer && activeLayer !== 'gm') continue;
-            if (token.layer === 'gm' && vtt.role !== 'GM') continue;
+            const tokenLayer = token.layer || 'token';
+            if (tokenLayer !== activeLayer) continue;
+            if (tokenLayer === 'gm' && vtt.role !== 'GM') continue;
             if (requireControl && !isTokenControlledByPlayer(token)) continue;
 
             const { drawW, drawH } = getTokenDrawDimensions(token);
@@ -8156,6 +8413,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         layerBtns.forEach(b => b.classList.remove('active'));
                         lb.classList.add('active');
                         activeLayer = layer;
+                        clearAllSelections();
                         updateLayerButtonIcon(layer);
                         // vtt.socket.emit('chat:msg', { text: `[System] Switched to ${activeLayer.toUpperCase()} layer.` });
                         renderAll();
@@ -8836,7 +9094,8 @@ window.emitTokenUpdates = function(currentTokens) {
                 } else {
                     if (hoveredShapeComponent) {
                         const shape = shapes[hoveredShapeComponent.shapeId];
-                        if (shape && (shape.layer === activeLayer || activeLayer === 'gm')) {
+                        const shapeLayer = shape?.layer || 'token';
+                        if (shape && shapeLayer === activeLayer) {
                             selectedTokenIds.clear();
                             selectedShapeId = hoveredShapeComponent.shapeId;
                             selectedShapeComponent = hoveredShapeComponent;
@@ -8863,7 +9122,8 @@ window.emitTokenUpdates = function(currentTokens) {
                     if (e.button === 0) {
                         selectedTokenIds.forEach(id => {
                             const t = tokens[id];
-                            if (t && isTokenControlledByPlayer(t) && (t.layer === activeLayer || activeLayer === 'gm')) {
+                            const tokenLayer = t?.layer || 'token';
+                            if (t && isTokenControlledByPlayer(t) && tokenLayer === activeLayer) {
                                 if (t.isAsset) {
                                     const rh = getTokenResizeHandlePos(t);
                                     if (rh) {
@@ -9133,7 +9393,8 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (activeTool === 'select' && !dragTargetId && !activeRotateTokenId && !activeResizeTokenId) {
                     selectedTokenIds.forEach(id => {
                         const token = tokens[id];
-                        if (token && isTokenControlledByPlayer(token) && (token.layer === activeLayer || activeLayer === 'gm')) {
+                        const tokenLayer = token?.layer || 'token';
+                        if (token && isTokenControlledByPlayer(token) && tokenLayer === activeLayer) {
                             if (token.isAsset) {
                                 const rh = getTokenResizeHandlePos(token);
                                 if (rh) {
@@ -9222,7 +9483,8 @@ window.emitTokenUpdates = function(currentTokens) {
                         const component = getShapeComponentAtCoord(mouse.x, mouse.y);
                         if (component) {
                             const shape = shapes[component.shapeId];
-                            if (shape && (shape.layer === activeLayer || activeLayer === 'gm')) {
+                            const shapeLayer = shape?.layer || 'token';
+                            if (shape && shapeLayer === activeLayer) {
                                 hoveredShapeComponent = component;
                             }
                         }
@@ -9528,8 +9790,9 @@ window.emitTokenUpdates = function(currentTokens) {
                         tokenIds.forEach(id => {
                             const t = tokens[id];
                             if (!t) return;
-                            if (t.layer !== activeLayer && activeLayer !== 'gm') return;
-                            if (t.layer === 'gm' && vtt.role !== 'GM') return;
+                            const tokenLayer = t.layer || 'token';
+                            if (tokenLayer !== activeLayer) return;
+                            if (tokenLayer === 'gm' && vtt.role !== 'GM') return;
                             if (!isTokenControlledByPlayer(t)) return;
 
                             if (isTokenWithinSelection(t, bounds)) {
@@ -10032,7 +10295,8 @@ window.emitTokenUpdates = function(currentTokens) {
                     if (typeof tokens !== 'undefined') {
                         Object.keys(tokens).forEach(id => {
                             const t = tokens[id];
-                            if (t && (t.layer === activeLayer || (activeLayer === 'gm' && t.layer === 'gm'))) {
+                            const tokenLayer = t?.layer || 'token';
+                            if (t && tokenLayer === activeLayer) {
                                 selectedTokenIds.add(id);
                             }
                         });
@@ -10040,7 +10304,8 @@ window.emitTokenUpdates = function(currentTokens) {
                     if (typeof shapes !== 'undefined') {
                         Object.keys(shapes).forEach(id => {
                             const s = shapes[id];
-                            if (s && s.layer === activeLayer) {
+                            const shapeLayer = s?.layer || 'token';
+                            if (s && shapeLayer === activeLayer) {
                                 selectedShapeIds.add(id);
                             }
                         });

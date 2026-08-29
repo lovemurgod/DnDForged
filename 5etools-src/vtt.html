@@ -14,11 +14,15 @@
     <!-- ForgeD VTT Custom Premium Stylesheet -->
     <link rel="stylesheet" href="css/vtt.css?v=8">
     
+    <!-- 3D WebGL Dice Engine Stylesheet -->
+    <link rel="stylesheet" href="css/dice-3d.css">
+    
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
     
-    <!-- Dice Box CDN for 3D Dice -->
-    <script src="https://cdn.jsdelivr.net/npm/@dice-box/canvas-renderer@1.2.1/dist/index.min.js"></script>
+    <!-- Three.js & 3D WebGL Dice Engine -->
+    <script src="lib/three.min.js"></script>
+    <script src="js/dice-3d.js"></script>
     
     <!-- 5etools Parsers & Common Utilities -->
     <script type="text/javascript" src="lib/localforage.js"></script>
@@ -508,6 +512,25 @@
                             </div>
                         </div>
                         
+                        <!-- 3D Dice & Audio Settings Card -->
+                        <div class="config-card">
+                            <h4><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> 3D WebGL Dice & Audio</h4>
+                            <p class="config-desc text-muted">Configure 3D physics-based dice rolling animations, damage themes, and sound effects.</p>
+                            
+                            <div class="config-setting">
+                                <label for="config-3d-dice-enable">3D Dice Overlay</label>
+                                <input type="checkbox" id="config-3d-dice-enable" checked style="cursor: pointer; width: 16px; height: 16px;">
+                            </div>
+                            <div class="config-setting">
+                                <label for="config-3d-dice-sfx">Dice Sound Effects</label>
+                                <input type="checkbox" id="config-3d-dice-sfx" checked style="cursor: pointer; width: 16px; height: 16px;">
+                            </div>
+                            <div class="config-setting">
+                                <label for="config-3d-dice-volume">SFX Volume</label>
+                                <input type="range" id="config-3d-dice-volume" min="0" max="100" value="60" style="flex: 1; max-width: 140px; cursor: pointer;">
+                            </div>
+                        </div>
+
                         <!-- Roll Visibility Setting Card (GM Only) -->
                         <div class="config-card gm-only">
                             <h4><i class="fa-solid fa-eye text-gradient-gold"></i> GM Roll Visibility</h4>
@@ -1340,6 +1363,22 @@
         </div>
     </div>
 
+    <!-- Cinematic Splash Art Zoom Overlay -->
+    <div id="vtt-splash-overlay" class="vtt-splash-overlay vtt-hidden" tabindex="-1">
+        <div class="vtt-splash-backdrop"></div>
+        <div class="vtt-splash-container">
+            <button id="btn-vtt-splash-close" class="vtt-splash-close-btn" title="Close (Esc or Shift+X)">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="vtt-splash-content" class="vtt-splash-content">
+                <!-- Injected dynamically: Single art showcase or Multi-art gallery -->
+            </div>
+            <div class="vtt-splash-hint">
+                <span><kbd>Esc</kbd> or <kbd>Shift+X</kbd> or Click backdrop to dismiss</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Front-End Code scripts bundle -->
     <script type="module">
         // Keep globally accessible configurations
@@ -1360,14 +1399,15 @@
         const moduleInitPromise = (async () => {
             try {
                 const _v = Date.now(); // cache-bust: forces fresh module load on every page load
-                const [canvasMod, creatureMod, spellMod, playerMod, chatMod, dataMod, handoutsMod] = await Promise.all([
+                const [canvasMod, creatureMod, spellMod, playerMod, chatMod, dataMod, handoutsMod, popoutMod] = await Promise.all([
                     import(`./js/vtt-canvas.js?v=${_v}`),
                     import(`./js/vtt-creature-sheet.js?v=${_v}`),
                     import(`./js/vtt-spell-manager.js?v=${_v}`),
                     import(`./js/vtt-player-sheet.js?v=${_v}`),
                     import(`./js/vtt-chat.js?v=${_v}`),
                     import(`./js/vtt-data-bridge.js?v=${_v}`),
-                    import(`./js/vtt-handouts.js?v=${_v}`)
+                    import(`./js/vtt-handouts.js?v=${_v}`),
+                    import(`./js/vtt-sheet-popout.js?v=${_v}`)
                 ]);
                 
                 return {
@@ -1377,7 +1417,8 @@
                     initVttPlayerSheet: playerMod.initVttPlayerSheet,
                     initVttChat: chatMod.initVttChat,
                     initVttDataBridge: dataMod.initVttDataBridge,
-                    initVttHandouts: handoutsMod.initVttHandouts
+                    initVttHandouts: handoutsMod.initVttHandouts,
+                    SheetWindowManager: popoutMod.SheetWindowManager
                 };
             } catch (err) {
                 console.error("VTT Module Import Error:", err);
@@ -1672,6 +1713,20 @@
                         if (mods.initVttCreatureSheet) window.VTT.creatureSheet = mods.initVttCreatureSheet(window.VTT);
                         if (mods.initVttHandouts) window.VTT.handoutsEngine = mods.initVttHandouts(window.VTT);
                         if (mods.initVttDataBridge) window.VTT.dataBridge = mods.initVttDataBridge(window.VTT);
+                        if (mods.SheetWindowManager) window.VTT.sheetWindowManager = mods.SheetWindowManager;
+
+                        // Setup dock callback: when an external tab asks to dock back into tabletop
+                        if (window.SheetWindowManager) {
+                            window.SheetWindowManager.onDock((sheetData) => {
+                                console.log('[vtt.html] Docking sheet into main VTT:', sheetData);
+                                if (!sheetData) return;
+                                if (sheetData.type === 'player' && sheetData.id && window.VTT.playerSheet) {
+                                    window.VTT.playerSheet.openSheet(sheetData.id);
+                                } else if (window.VTT.creatureSheet) {
+                                    window.VTT.creatureSheet.openSheet(sheetData.monsterData, sheetData.tokenId, sheetData.characterId);
+                                }
+                            });
+                        }
                         
                         console.log("Joined and VTT loaded!");
                     } catch (err) {

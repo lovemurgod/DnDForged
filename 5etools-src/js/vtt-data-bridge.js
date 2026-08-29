@@ -878,6 +878,12 @@ export function initVttDataBridge(vtt) {
                 vtt.handoutsEngine.handleForceShow(id);
             }
         });
+
+        vtt.socket.on('splash:show', (data) => {
+            if (window.VTT?.showSplashModal) {
+                window.VTT.showSplashModal(data?.items || []);
+            }
+        });
     }
 
     async function load5eToolsMapCatalog(advSelect, mapSelect) {
@@ -1151,11 +1157,18 @@ export function initVttDataBridge(vtt) {
         }
     }
 
+    function emitSplashShow(payload) {
+        if (vtt.socket) {
+            vtt.socket.emit('splash:show', payload);
+        }
+    }
+
     return {
         loadBestiaryData,
         renderCustomNpcList,
         pushStateUpdate,
         emitForceShowHandout,
+        emitSplashShow,
         load5eToolsMapCatalog,
         import5etoolsMap,
         resolveMediaUrl

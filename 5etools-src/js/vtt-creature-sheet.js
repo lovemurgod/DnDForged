@@ -135,6 +135,21 @@ export function initVttCreatureSheet(vtt) {
     async function openSheet(monsterData, tokenId, characterId) {
         console.log('[vtt-creature-sheet] openSheet called', { monsterData, tokenId, characterId });
         if (!monsterData) return;
+
+        // Check if this sheet is already popped out into a separate window/tab
+        const keyId = tokenId || characterId || (monsterData ? `${monsterData.name}_${monsterData.source || ''}` : null);
+        let checkType = 'creature';
+        if (characterId && window.VTT?.campaignState?.characters?.[characterId]) {
+            const c = window.VTT.campaignState.characters[characterId];
+            if (c.isCompanion) checkType = 'companion';
+            else if (c.isCustomNpc) checkType = 'npc';
+        }
+        const sheetKey = window.SheetWindowManager ? window.SheetWindowManager.getSheetKey(checkType, keyId) : null;
+        if (!vtt.isStandaloneSheet && sheetKey && window.SheetWindowManager && window.SheetWindowManager.isSheetPoppedOut(sheetKey)) {
+            window.SheetWindowManager.focusPoppedOut(sheetKey);
+            return;
+        }
+
         currentMonster = monsterData;
         linkedTokenId = tokenId || null;
         linkedCharacterId = characterId || null;
@@ -335,6 +350,7 @@ export function initVttCreatureSheet(vtt) {
                     <div class="cs-header-meta">
                         <div class="cs-cr-badge">CR ${crStr}</div>
                         ${editBtnHtml}
+                        ${!vtt.isStandaloneSheet ? `<button class="cs-popout-btn btn btn-icon btn-secondary btn-xs" id="cs-btn-popout" title="Open Sheet in New Tab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>` : ''}
                     </div>
                 </div>
             </div>
@@ -432,6 +448,32 @@ export function initVttCreatureSheet(vtt) {
         if (editBtn) {
             editBtn.addEventListener('click', () => {
                 openEditModal(m, linkedCharacterId);
+            });
+        }
+
+        // Wire Pop-Out Button
+        const popoutBtn = contentEl.querySelector('#cs-btn-popout');
+        if (popoutBtn) {
+            popoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.SheetWindowManager) {
+                    let sheetType = 'creature';
+                    if (linkedCharacterId && window.VTT?.campaignState?.characters?.[linkedCharacterId]) {
+                        const c = window.VTT.campaignState.characters[linkedCharacterId];
+                        if (c.isCompanion) sheetType = 'companion';
+                        else if (c.isCustomNpc) sheetType = 'npc';
+                    }
+                    window.SheetWindowManager.openPopout({
+                        type: sheetType,
+                        tokenId: linkedTokenId,
+                        characterId: linkedCharacterId,
+                        name: currentMonster.name,
+                        source: currentMonster.source,
+                        monsterData: currentMonster
+                    });
+                    minimizePanel();
+                }
             });
         }
 
