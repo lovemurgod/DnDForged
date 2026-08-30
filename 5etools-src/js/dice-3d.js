@@ -22,8 +22,8 @@
     const STORAGE_KEY_VOLUME = 'vtt_3d_dice_volume';
     const STORAGE_KEY_SKIN = 'vtt_3d_dice_skin';
 
-    // Global Scale Multiplier (Reduced by 20% for balanced tabletop ergonomics)
-    const SCALE_FACTOR = 0.68;
+    // Global Scale Multiplier (Reduced by an additional 20% for balanced tabletop proportions)
+    const SCALE_FACTOR = 0.54;
 
     // State
     let isInitialized = false;
@@ -776,9 +776,9 @@
         fillLight.position.set(-16, -14, 16);
         scene.add(fillLight);
 
-        // Cannon.js Physics World
+        // Cannon.js Physics World (Sloped Felt Tabletop Gravity)
         physicsWorld = new CANNON.World();
-        physicsWorld.gravity.set(0, -9.8 * 4.0, -9.8 * 22.0);
+        physicsWorld.gravity.set(0, -9.8 * 1.8, -9.8 * 24.0);
         physicsWorld.broadphase = new CANNON.NaiveBroadphase();
         physicsWorld.solver.iterations = 16;
 
@@ -949,10 +949,11 @@
         // Audio Clatter
         AudioEngine.playDiceClatter(1.0);
 
-        // Build Solid Barrier Box Walls to prevent horizontal drift & maintain strict left-to-right order
+        // Build Solid Barrier Box Walls & Boundary Containment Rails
         activeWalls.forEach(w => physicsWorld.remove(w));
         activeWalls = [];
 
+        // Vertical Lane Dividers (Enforces left-to-right order)
         for (let i = 0; i <= totalDice; i++) {
             const wallX = -activeWidth / 2 + (i * laneWidth);
             const wallBody = new (CANNON.Body || CANNON.RigidBody)({
@@ -965,6 +966,28 @@
             activeWalls.push(wallBody);
         }
 
+        // Bottom Bumper Cushion Rail (Prevents dice from rolling down off-screen)
+        const bottomRailY = -visibleHeight * 0.38;
+        const bottomRail = new (CANNON.Body || CANNON.RigidBody)({
+            mass: 0,
+            shape: new CANNON.Box(new CANNON.Vec3(visibleWidth * 0.8, 0.25, 40)),
+            material: barrierMaterial
+        });
+        bottomRail.position.set(0, bottomRailY, 0);
+        physicsWorld.add(bottomRail);
+        activeWalls.push(bottomRail);
+
+        // Top Safety Rail
+        const topRailY = visibleHeight * 0.45;
+        const topRail = new (CANNON.Body || CANNON.RigidBody)({
+            mass: 0,
+            shape: new CANNON.Box(new CANNON.Vec3(visibleWidth * 0.8, 0.25, 40)),
+            material: barrierMaterial
+        });
+        topRail.position.set(0, topRailY, 0);
+        physicsWorld.add(topRail);
+        activeWalls.push(topRail);
+
         // Spawn Dice Entities
         const spawnedEntities = [];
 
@@ -974,8 +997,8 @@
             const mesh = createDiceMesh(type, skin);
 
             const laneCenter = startX + (idx * laneWidth);
-            const spawnX = laneCenter + (Math.random() - 0.5) * 0.15;
-            const spawnY = -visibleHeight * 0.28 + Math.random() * 0.6;
+            const spawnX = laneCenter + (Math.random() - 0.5) * 0.12;
+            const spawnY = -visibleHeight * 0.15 + Math.random() * 0.4;
             const spawnZ = 12.0 + Math.random() * 2.0;
 
             const mass = CONSTS.dice_mass[type] || 350;
@@ -988,9 +1011,9 @@
 
             body.position.set(spawnX, spawnY, spawnZ);
             body.velocity.set(
-                (Math.random() - 0.5) * 1.5,
-                6.0 + Math.random() * 3.5,
-                -11.0 - Math.random() * 3.0
+                (Math.random() - 0.5) * 1.2,
+                3.5 + Math.random() * 3.0,
+                -11.0 - Math.random() * 2.5
             );
 
             const inertia = CONSTS.dice_inertia[type] || 8;
@@ -1000,8 +1023,8 @@
                 (Math.random() - 0.5) * inertia * 3.2
             );
 
-            body.linearDamping = 0.08;
-            body.angularDamping = 0.08;
+            body.linearDamping = 0.09;
+            body.angularDamping = 0.09;
 
             scene.add(mesh);
             physicsWorld.add(body);
