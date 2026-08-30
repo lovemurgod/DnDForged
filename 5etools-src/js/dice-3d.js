@@ -782,10 +782,25 @@
         // Ground Floor Plane
         const groundMaterial = new CANNON.Material();
         const diceMaterial = new CANNON.Material();
-        const contactMat = new CANNON.ContactMaterial(groundMaterial, diceMaterial, 0.3, 0.45);
+        const barrierMaterial = new CANNON.Material();
+
+        const contactMat = new CANNON.ContactMaterial(groundMaterial, diceMaterial, {
+            friction: 0.3,
+            restitution: 0.45
+        });
         physicsWorld.addContactMaterial(contactMat);
 
-        const groundBody = new CANNON.RigidBody(0, new CANNON.Plane(), groundMaterial);
+        const barrierContactMat = new CANNON.ContactMaterial(barrierMaterial, diceMaterial, {
+            friction: 0.0,
+            restitution: 0.95
+        });
+        physicsWorld.addContactMaterial(barrierContactMat);
+
+        const groundBody = new (CANNON.Body || CANNON.RigidBody)({
+            mass: 0,
+            shape: new CANNON.Plane(),
+            material: groundMaterial
+        });
         physicsWorld.add(groundBody);
 
         window.addEventListener('resize', onWindowResize);
@@ -939,7 +954,11 @@
 
         for (let i = 0; i <= totalDice; i++) {
             const wallX = -activeWidth / 2 + (i * laneWidth);
-            const wallBody = new CANNON.RigidBody(0, new CANNON.Plane(), barrierMaterial);
+            const wallBody = new (CANNON.Body || CANNON.RigidBody)({
+                mass: 0,
+                shape: new CANNON.Plane(),
+                material: barrierMaterial
+            });
             wallBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), i === 0 ? Math.PI / 2 : -Math.PI / 2);
             wallBody.position.set(wallX, 0, 0);
             physicsWorld.add(wallBody);
@@ -961,7 +980,12 @@
 
             const mass = CONSTS.dice_mass[type] || 350;
             const shape = mesh.geometry.userData.cannonShape;
-            const body = new CANNON.RigidBody(mass, shape, new CANNON.Material());
+            const diceMat = new CANNON.Material();
+            const body = new (CANNON.Body || CANNON.RigidBody)({
+                mass: mass,
+                shape: shape,
+                material: diceMat
+            });
 
             body.position.set(spawnX, spawnY, spawnZ);
             body.velocity.set((Math.random() - 0.5) * 4.0, (Math.random() - 0.5) * 4.0, -18.0 - Math.random() * 6.0);
