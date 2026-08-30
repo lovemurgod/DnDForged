@@ -33,6 +33,9 @@
     let scene = null;
     let camera = null;
     let physicsWorld = null;
+    let groundMaterial = null;
+    let diceMaterial = null;
+    let barrierMaterial = null;
     let animFrameId = null;
     let activeDice = [];
     let activeParticles = [];
@@ -780,9 +783,9 @@
         physicsWorld.solver.iterations = 16;
 
         // Ground Floor Plane
-        const groundMaterial = new CANNON.Material();
-        const diceMaterial = new CANNON.Material();
-        const barrierMaterial = new CANNON.Material();
+        groundMaterial = new CANNON.Material();
+        diceMaterial = new CANNON.Material();
+        barrierMaterial = new CANNON.Material();
 
         const contactMat = new CANNON.ContactMaterial(groundMaterial, diceMaterial, {
             friction: 0.3,
@@ -791,8 +794,8 @@
         physicsWorld.addContactMaterial(contactMat);
 
         const barrierContactMat = new CANNON.ContactMaterial(barrierMaterial, diceMaterial, {
-            friction: 0.0,
-            restitution: 0.95
+            friction: 0.05,
+            restitution: 0.7
         });
         physicsWorld.addContactMaterial(barrierContactMat);
 
@@ -950,13 +953,6 @@
         activeWalls.forEach(w => physicsWorld.remove(w));
         activeWalls = [];
 
-        const barrierMaterial = new CANNON.Material();
-        const barrierContactMat = new CANNON.ContactMaterial(barrierMaterial, diceMaterial, {
-            friction: 0.05,
-            restitution: 0.7
-        });
-        physicsWorld.addContactMaterial(barrierContactMat);
-
         for (let i = 0; i <= totalDice; i++) {
             const wallX = -activeWidth / 2 + (i * laneWidth);
             const wallBody = new (CANNON.Body || CANNON.RigidBody)({
@@ -984,11 +980,10 @@
 
             const mass = CONSTS.dice_mass[type] || 350;
             const shape = mesh.geometry.userData.cannonShape;
-            const diceMat = new CANNON.Material();
             const body = new (CANNON.Body || CANNON.RigidBody)({
                 mass: mass,
                 shape: shape,
-                material: diceMat
+                material: diceMaterial
             });
 
             body.position.set(spawnX, spawnY, spawnZ);
