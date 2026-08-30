@@ -655,36 +655,77 @@
     }
 
     // Predetermined Result Shifter (Sarah Rosanna Busch / Teal Algorithm)
-    function shiftDiceFaces(mesh, targetVal, landedVal) {
+    function shiftDiceFaces(mesh, targetVal, landedMatIndex) {
         const type = mesh.diceType;
         const r = CONSTS.dice_face_range[type];
         if (!r) return;
 
-        let val = targetVal;
-        if (type === 'd10' && val === 10) val = 0;
-        if (type === 'd100') val = Math.floor(val / 10);
-
-        if (val < r[0] || val > r[1]) return;
-
-        const num = val - landedVal;
         const geom = mesh.geometry;
         geom.clearGroups();
 
-        geom.userData.originalGroups.forEach(g => {
-            let matIndex = g.materialIndex;
-            if (matIndex > 0) {
-                matIndex += num - 1;
-                while (matIndex > r[1]) matIndex -= (r[1] - r[0] + 1);
-                while (matIndex < r[0]) matIndex += (r[1] - r[0] + 1);
-                matIndex += 1;
-            }
-            geom.addGroup(g.start, g.count, matIndex);
-        });
+        if (type === 'd100') {
+            // Percentile Tens Die ('00', '10', '20', ..., '90')
+            const targetDigit = Math.floor((targetVal % 100) / 10);
+            const landedDigit = landedMatIndex - 1; // 0..9
+            let delta = (targetDigit - landedDigit) % 10;
+            if (delta < 0) delta += 10;
 
-        if (type === 'd4' && num !== 0) {
-            let shift = num;
-            if (shift < 0) shift += 4;
-            mesh.material = MaterialManager.getMaterialsForType('d4', getActiveSkin(), shift);
+            geom.userData.originalGroups.forEach(g => {
+                let matIndex = g.materialIndex;
+                if (matIndex > 0) {
+                    const digit = matIndex - 1;
+                    const shiftedDigit = (digit + delta) % 10;
+                    matIndex = shiftedDigit + 1;
+                }
+                geom.addGroup(g.start, g.count, matIndex);
+            });
+        } else if (type === 'd10') {
+            // Single Digit Units Die ('0', '1', '2', ..., '9')
+            const targetDigit = targetVal % 10;
+            const landedDigit = (landedMatIndex - 1) % 10;
+            let delta = (targetDigit - landedDigit) % 10;
+            if (delta < 0) delta += 10;
+
+            geom.userData.originalGroups.forEach(g => {
+                let matIndex = g.materialIndex;
+                if (matIndex > 0) {
+                    const digit = (matIndex - 1) % 10;
+                    const shiftedDigit = (digit + delta) % 10;
+                    matIndex = shiftedDigit + 1;
+                }
+                geom.addGroup(g.start, g.count, matIndex);
+            });
+        } else if (type === 'd4') {
+            // d4 uses 4 material sets
+            const landedVal = landedMatIndex;
+            let delta = (targetVal - landedVal) % 4;
+            if (delta < 0) delta += 4;
+
+            geom.userData.originalGroups.forEach(g => {
+                let matIndex = g.materialIndex;
+                if (matIndex > 0) {
+                    matIndex = ((matIndex - 1 + delta) % 4) + 1;
+                }
+                geom.addGroup(g.start, g.count, matIndex);
+            });
+
+            if (delta !== 0) {
+                mesh.material = MaterialManager.getMaterialsForType('d4', getActiveSkin(), delta);
+            }
+        } else {
+            // Standard polyhedral dice (d6, d8, d12, d20) with range [1, N]
+            const numFaces = r[1];
+            const landedVal = landedMatIndex - 1; // 1..N
+            let delta = (targetVal - landedVal) % numFaces;
+            if (delta < 0) delta += numFaces;
+
+            geom.userData.originalGroups.forEach(g => {
+                let matIndex = g.materialIndex;
+                if (matIndex > 0) {
+                    matIndex = (((matIndex - 2 + delta) % numFaces + numFaces) % numFaces) + 2;
+                }
+                geom.addGroup(g.start, g.count, matIndex);
+            });
         }
     }
 
@@ -702,12 +743,10 @@
             const angle = worldNorm.angleTo(targetVector);
             if (angle < closestAngle) {
                 closestAngle = angle;
-                closestMatIndex = fn.materialIndex - 1;
+                closestMatIndex = fn.materialIndex;
             }
         }
 
-        if (type === 'd100') closestMatIndex *= 10;
-        if (type === 'd10' && closestMatIndex === 0) closestMatIndex = 10;
         return closestMatIndex;
     }
 
@@ -906,21 +945,21 @@
             const val = extractVal(d);
 
             if (faces === 100) {
-                const tensNum = Math.floor(((val - 1) % 100) / 10) * 10;
-                const unitsNum = ((val - 1) % 10) + 1;
+                const tensVal = (val === 100) ? 0 : (Math.floor(val / 10) * 10);
+                const unitsVal = (val % 10 === 0) ? 0 : (val % 10);
 
                 expandedDiceList.push({
                     ...d,
                     type: 'd100',
                     faces: 100,
-                    val: tensNum === 0 ? 0 : tensNum,
+                    val: tensVal,
                     isPercentileTens: true
                 });
                 expandedDiceList.push({
                     ...d,
                     type: 'd10',
                     faces: 10,
-                    val: unitsNum,
+                    val: unitsVal,
                     isPercentileUnits: true
                 });
             } else {
