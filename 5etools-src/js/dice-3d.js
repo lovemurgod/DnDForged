@@ -22,8 +22,8 @@
     const STORAGE_KEY_VOLUME = 'vtt_3d_dice_volume';
     const STORAGE_KEY_SKIN = 'vtt_3d_dice_skin';
 
-    // Global Scale Multiplier (15% reduction for optimal tabletop ergonomics)
-    const SCALE_FACTOR = 0.85;
+    // Global Scale Multiplier (Reduced by 20% for balanced tabletop ergonomics)
+    const SCALE_FACTOR = 0.68;
 
     // State
     let isInitialized = false;
@@ -775,7 +775,7 @@
 
         // Cannon.js Physics World
         physicsWorld = new CANNON.World();
-        physicsWorld.gravity.set(0, 0, -9.8 * 80);
+        physicsWorld.gravity.set(0, -9.8 * 4.0, -9.8 * 22.0);
         physicsWorld.broadphase = new CANNON.NaiveBroadphase();
         physicsWorld.solver.iterations = 16;
 
@@ -932,12 +932,12 @@
 
         const totalDice = expandedDiceList.length;
 
-        // Calculate 3D viewport bounds
+        // Calculate 3D viewport bounds (central 62% field for balanced visibility)
         const vFOV = (camera.fov * Math.PI) / 180;
         const visibleHeight = 2 * Math.tan(vFOV / 2) * camera.position.z;
         const visibleWidth = visibleHeight * camera.aspect;
 
-        const activeWidth = Math.min(visibleWidth * 0.85, 34);
+        const activeWidth = Math.min(visibleWidth * 0.62, 26);
         const laneWidth = activeWidth / totalDice;
         const startX = -activeWidth / 2 + laneWidth / 2;
 
@@ -946,20 +946,24 @@
         // Audio Clatter
         AudioEngine.playDiceClatter(1.0);
 
-        // Build Barrier Walls
+        // Build Solid Barrier Box Walls to prevent horizontal drift & maintain strict left-to-right order
         activeWalls.forEach(w => physicsWorld.remove(w));
         activeWalls = [];
 
         const barrierMaterial = new CANNON.Material();
+        const barrierContactMat = new CANNON.ContactMaterial(barrierMaterial, diceMaterial, {
+            friction: 0.05,
+            restitution: 0.7
+        });
+        physicsWorld.addContactMaterial(barrierContactMat);
 
         for (let i = 0; i <= totalDice; i++) {
             const wallX = -activeWidth / 2 + (i * laneWidth);
             const wallBody = new (CANNON.Body || CANNON.RigidBody)({
                 mass: 0,
-                shape: new CANNON.Plane(),
+                shape: new CANNON.Box(new CANNON.Vec3(0.08, 40, 40)),
                 material: barrierMaterial
             });
-            wallBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), i === 0 ? Math.PI / 2 : -Math.PI / 2);
             wallBody.position.set(wallX, 0, 0);
             physicsWorld.add(wallBody);
             activeWalls.push(wallBody);
@@ -974,9 +978,9 @@
             const mesh = createDiceMesh(type, skin);
 
             const laneCenter = startX + (idx * laneWidth);
-            const spawnX = laneCenter + (Math.random() - 0.5) * 0.4;
-            const spawnY = (Math.random() - 0.5) * 1.5;
-            const spawnZ = 12.0 + Math.random() * 3.0;
+            const spawnX = laneCenter + (Math.random() - 0.5) * 0.15;
+            const spawnY = -visibleHeight * 0.28 + Math.random() * 0.6;
+            const spawnZ = 12.0 + Math.random() * 2.0;
 
             const mass = CONSTS.dice_mass[type] || 350;
             const shape = mesh.geometry.userData.cannonShape;
@@ -988,17 +992,21 @@
             });
 
             body.position.set(spawnX, spawnY, spawnZ);
-            body.velocity.set((Math.random() - 0.5) * 4.0, (Math.random() - 0.5) * 4.0, -18.0 - Math.random() * 6.0);
+            body.velocity.set(
+                (Math.random() - 0.5) * 1.5,
+                6.0 + Math.random() * 3.5,
+                -11.0 - Math.random() * 3.0
+            );
 
             const inertia = CONSTS.dice_inertia[type] || 8;
             body.angularVelocity.set(
-                (Math.random() - 0.5) * inertia * 4.0,
-                (Math.random() - 0.5) * inertia * 4.0,
-                (Math.random() - 0.5) * inertia * 4.0
+                (Math.random() - 0.5) * inertia * 3.2,
+                (Math.random() - 0.5) * inertia * 3.2,
+                (Math.random() - 0.5) * inertia * 3.2
             );
 
-            body.linearDamping = 0.15;
-            body.angularDamping = 0.15;
+            body.linearDamping = 0.08;
+            body.angularDamping = 0.08;
 
             scene.add(mesh);
             physicsWorld.add(body);
