@@ -23,7 +23,7 @@
     const STORAGE_KEY_SKIN = 'vtt_3d_dice_skin';
 
     // Global Scale Multiplier (Reduced by an additional 20% for balanced tabletop proportions)
-    const SCALE_FACTOR = 0.54;
+    const SCALE_FACTOR = 0.43;
 
     // State
     let isInitialized = false;
@@ -912,17 +912,21 @@
     }
 
     function spawnBannerBadge(mesh, text, isSuccess) {
+        if (!containerEl) return null;
         const badge = document.createElement('div');
         badge.className = `dice3d-floating-badge ${isSuccess ? 'badge-nat20' : 'badge-nat1'} animated-pop-in`;
         badge.innerHTML = `<span>${text}</span>`;
         containerEl.appendChild(badge);
 
-        activeBadges.push({
+        const badgeObj = {
             el: badge,
             mesh: mesh,
             alpha: 1.0,
             isDone: false
-        });
+        };
+
+        activeBadges.push(badgeObj);
+        return badgeObj;
     }
 
     // Roll with Order-Preserving Physics Barrier Lanes & Dual-Dice Percentile
@@ -1069,9 +1073,9 @@
             physicsWorld.add(body);
 
             let critType = null;
-            if (type === 'd20' || dice.isCritSuccess || dice.isCritFail) {
-                if (targetVal === 20 || dice.isCritSuccess) critType = 'Nat20';
-                else if (targetVal === 1 || dice.isCritFail) critType = 'Nat1';
+            if (type === 'd20') {
+                if (targetVal === 20) critType = 'Nat20';
+                else if (targetVal === 1) critType = 'Nat1';
             }
 
             const entity = {
@@ -1080,6 +1084,7 @@
                 type: type,
                 targetVal: targetVal,
                 critType: critType,
+                badge: null,
                 laneCenter: laneCenter,
                 isResting: false,
                 fade: false,
@@ -1196,11 +1201,11 @@
                     if (d.critType === 'Nat20') {
                         AudioEngine.playNat20Fanfare();
                         spawnParticleBurst(d.mesh.position.x, d.mesh.position.y, d.mesh.position.z, '#ffd700', 36);
-                        spawnBannerBadge(d.mesh, '★ NAT 20! ★', true);
+                        d.badge = spawnBannerBadge(d.mesh, '★ NAT 20! ★', true);
                     } else if (d.critType === 'Nat1') {
                         AudioEngine.playNat1Fail();
                         spawnParticleBurst(d.mesh.position.x, d.mesh.position.y, d.mesh.position.z, '#ff1744', 24);
-                        spawnBannerBadge(d.mesh, '⚠ NAT 1! ⚠', false);
+                        d.badge = spawnBannerBadge(d.mesh, '⚠ NAT 1! ⚠', false);
                     }
 
                     // Schedule fadeout after 2.5s
@@ -1216,11 +1221,18 @@
                 if (d.mesh) {
                     d.mesh.position.z -= dt * 4.0; // Gentle drop
                 }
+                if (d.badge && d.badge.el) {
+                    d.badge.el.style.opacity = Math.max(0, d.alpha);
+                }
 
                 if (d.alpha <= 0) {
                     d.isDone = true;
                     scene.remove(d.mesh);
                     if (d.body) physicsWorld.remove(d.body);
+                    if (d.badge) {
+                        if (d.badge.el) d.badge.el.remove();
+                        d.badge.isDone = true;
+                    }
                 }
             }
         });
@@ -1257,14 +1269,14 @@
         const halfH = window.innerHeight / 2;
 
         activeBadges.forEach(b => {
-            if (!b.mesh || b.isDone) {
-                b.el.remove();
+            if (b.isDone || !b.mesh || !b.el) {
+                if (b.el) b.el.remove();
                 b.isDone = true;
                 return;
             }
 
             const pos = b.mesh.position.clone();
-            pos.y += 2.0;
+            pos.y += 1.3;
             pos.project(camera);
 
             const screenX = (pos.x * halfW) + halfW;
