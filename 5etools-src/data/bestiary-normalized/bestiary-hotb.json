@@ -1,0 +1,1858 @@
+[
+  {
+    "id": "creature_curate_hotb",
+    "name": "Curate",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 15,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 97,
+      "formula": "15d8 + 30"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "int": "+5",
+      "wis": "+7",
+      "cha": "+5"
+    },
+    "skills": {
+      "persuasion": "+5",
+      "religion": "+5"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": ""
+    },
+    "languages": [
+      "Celestial",
+      "Common"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_magic_resistance_7kof",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The curate has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_raise_the_dead__1_day__1wpz",
+        "name": "Raise the Dead (1/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>In a ritual that takes 8 hours, the curate touches a creature that has died within the past 7 days. That creature returns to life with 1 Hit Points. The curate can't revive a creature that died of old age.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_mxbm",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The curate makes three Celestial Radiance attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_celestial_radiance_e9w1",
+        "name": "Celestial Radiance",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +7, reach 5 ft. or range 60 ft. {@h}18 (4d8) Radiant damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": "60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healer_s_touch__2_day__jzb6",
+        "name": "Healer's Touch (2/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The curate touches another creature. That creature regains 13 (2d8 + 4) Hit Points.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Curate.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Curate.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_gray_ooze_glob_hotb",
+    "name": "Gray Ooze Glob",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 18,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Ooze",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 9,
+        "condition": null
+      }
+    ],
+    "primaryAc": 9,
+    "acCondition": "",
+    "hp": {
+      "average": 19,
+      "formula": "3d6 + 9"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 0,
+      "swim": 0,
+      "climb": 10,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 6,
+        "mod": -2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 1,
+        "mod": -5
+      },
+      "wis": {
+        "score": 6,
+        "mod": -2
+      },
+      "cha": {
+        "score": 2,
+        "mod": -4
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "stealth": "+2"
+    },
+    "senses": {
+      "passivePerception": 8,
+      "sensesString": "Blindsight 60 ft."
+    },
+    "languages": [],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amorphous_baiy",
+        "name": "Amorphous",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The ooze can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_corrosive_form_covi",
+        "name": "Corrosive Form",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever a creature hits the ooze with a melee attack, that creature takes 2 Acid damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_pseudopod_1ogj",
+        "name": "Pseudopod",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +3, reach 5 ft. {@h}10 (2d8 + 1) Acid damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 1",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Gray Ooze Glob.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Gray Ooze Glob.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_ivlis_hotb",
+    "name": "Ivlis",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 26,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 49,
+      "formula": "10d8 + 10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "deception": "+4",
+      "persuasion": "+4"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_wjgo",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ivlis makes three Chaos Blast attacks. She can replace one attack with a use of Sinister Command if available.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_chaos_blast_uge2",
+        "name": "Chaos Blast",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +4, reach 5 ft. or range 60 ft. {@h}7 (2d6) damage. Roll 1d4 to determine the damage type: 1, Acid; 2, Cold; 3, Fire; 4, Lightning.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": "60 ft.",
+          "targets": "Acid; 2, Cold; 3, Fire; 4, Lightning",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sinister_command__recharge_5__67fa",
+        "name": "Sinister Command (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>wis DC 12, one creature Ivlis can see within 60 feet. {@actSaveFail} The target has the Charmed condition until the end of its next turn. While Charmed, the target has the Incapacitated condition.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Ivlis.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Ivlis.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_jacko_hotb",
+    "name": "Jacko",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 11,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "halfling",
+    "alignment": "C N",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 22,
+      "formula": "5d8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+6",
+      "stealth": "+5"
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Halfling"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_quick_disguise_izwz",
+        "name": "Quick Disguise",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Jacko spends 1 minute to disguise himself as a different Humanoid of approximately his height and weight. While Jacko is disguised, a creature that takes the Study action to inspect Jacko's appearance can make a DC 13 Intelligence (Investigation) check, discerning his disguise on a successful check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_y3sp",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Jacko makes two Poison Dagger attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_poison_dagger_7eq4",
+        "name": "Poison Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 20/60 ft. {@h}5 (1d4 + 3) Piercing damage plus 3 (1d6) Poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 3",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_cunning_action_vo63",
+        "name": "Cunning Action",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Jacko takes the Dash, Disengage, or Hide action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Jacko.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Jacko.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_kuo_toa_marauder_hotb",
+    "name": "Kuo-toa Marauder",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 8,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 22,
+      "formula": "4d8 + 4"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+4"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "Darkvision 120 ft., Truesight 30 ft."
+    },
+    "languages": [
+      "Common",
+      "Undercommon"
+    ],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_so8m",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The kuo-toa can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sunlight_sensitivity_36yq",
+        "name": "Sunlight Sensitivity",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in sunlight, the kuo-toa has Disadvantage on ability checks and attack rolls.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_brine_slicer_sh8l",
+        "name": "Brine Slicer",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}9 (2d6 + 2) Slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_slippery_fpkq",
+        "name": "Slippery",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The kuo-toa takes the Disengage action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Kuo-toa Marauder.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Kuo-toa Marauder.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_lizardfolk_warden_hotb",
+    "name": "Lizardfolk Warden",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 32,
+      "formula": "5d8 + 10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "stealth": "+5",
+      "survival": "+5"
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Draconic"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_hold_breath_etqd",
+        "name": "Hold Breath",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The lizardfolk can hold its breath for 15 minutes.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_drrq",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The lizardfolk makes one Bite attack and one Bone Pike attack.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_vnx1",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Piercing damage plus 3 (1d6) Poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bone_pike_o4fl",
+        "name": "Bone Pike",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +4, reach 10 ft. {@h}7 (1d10 + 2) Piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_poison_spit_onz9",
+        "name": "Poison Spit",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +4, range 60 ft. {@h}12 (3d6 + 2) Poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6 + 2",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Lizardfolk Warden.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Lizardfolk Warden.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_narthus_hotb",
+    "name": "Narthus",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 26,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 22,
+      "formula": "4d8 + 4"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "medicine": "+4",
+      "religion": "+2"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_1yme",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Narthus makes two attacks using Vile Mace or Fateful Bolt in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_vile_mace_0kv1",
+        "name": "Vile Mace",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Bludgeoning damage plus 3 (1d6) Necrotic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d6",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fateful_bolt_ubam",
+        "name": "Fateful Bolt",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +4, range 120 ft. {@h}8 (1d12 + 2) Necrotic damage, and the next attack roll made against the target before the end of Narthus's next turn has Advantage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": "and the next attack roll made against the target before the end of Narthus's next turn has {@variantrule Advantage|XPHB}",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d12 + 2",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Narthus.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Narthus.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_pral_hotb",
+    "name": "Pral",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 6,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 52,
+      "formula": "8d8 + 16"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+5"
+    },
+    "skills": {
+      "athletics": "+4",
+      "deception": "+4"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_rapier_xghc",
+        "name": "Rapier",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_light_crossbow_ev5a",
+        "name": "Light Crossbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +5, range 80/320 ft. {@h}7 (1d8 + 3) Piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": null,
+          "range": "80/320 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_parry_56t2",
+        "name": "Parry",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} Pral is hit with a melee attack roll while holding a weapon. {@actResponse} Pral adds 2 to his AC against that attack, potentially causing the attack to miss.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Pral.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Pral.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_sprite_skirmisher_hotb",
+    "name": "Sprite Skirmisher",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 9,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Fey",
+    "subtype": "",
+    "alignment": "N G",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "4d4"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 40,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 3,
+        "mod": -4
+      },
+      "dex": {
+        "score": 18,
+        "mod": 4
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+3",
+      "stealth": "+8"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Elvish",
+      "Sylvan"
+    ],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_needle_sword_bi1r",
+        "name": "Needle Sword",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}6 (1d4 + 4) Piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 4",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_enchanting_bow_7wfh",
+        "name": "Enchanting Bow",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +6, range 40/160 ft. {@h}1 Piercing damage, and the target has the Charmed condition until the start of the sprite's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "40/160 ft.",
+          "targets": "and the target has the {@condition Charmed|XPHB} condition until the start of the sprite's next turn",
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_heart_sight_1x32",
+        "name": "Heart Sight",
+        "actionType": "action",
+        "descriptionHtml": "<p>cha DC 10, one creature within 5 feet the sprite can see (Celestials, Fiends, Undead automatically fail the save). {@actSaveFail} The sprite knows the target's emotions.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 10,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_invisibility_p92g",
+        "name": "Invisibility",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sprite has the Invisible condition for 1 minute. This effect ends early immediately after the sprite makes an attack roll or deals damage, or if the sprite has the Incapacitated condition.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Sprite Skirmisher.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Sprite Skirmisher.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_vinx_hotb",
+    "name": "Vinx",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 12,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "dwarf",
+    "alignment": "C G",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 11,
+      "formula": "2d8 + 2"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+5",
+      "stealth": "+6",
+      "survival": "+5"
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Dwarvish"
+    ],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_y5ec",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Vinx makes two attacks, using Shortsword and Sling in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortsword_0ty7",
+        "name": "Shortsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sling_ztzg",
+        "name": "Sling",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +4, range 30/120 ft. {@h}4 (1d4 + 2) Bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "30/120 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Vinx.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Vinx.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_wight_lifedrinker_hotb",
+    "name": "Wight Lifedrinker",
+    "source": "HotB",
+    "edition": "2014",
+    "page": 19,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 82,
+      "formula": "11d8 + 33"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+3",
+      "stealth": "+4"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Common plus one other language"
+    ],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_sunlight_sensitivity_v4du",
+        "name": "Sunlight Sensitivity",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in sunlight, the wight has Disadvantage on ability checks and attack rolls.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_a1qf",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The wight makes two attacks, using Necrotic Sword or Necrotic Bow in any combination. It can replace one attack with a use of Drink Life.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_necrotic_sword_khqa",
+        "name": "Necrotic Sword",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}6 (1d8 + 2) Slashing damage plus 4 (1d8) Necrotic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_necrotic_bow_0xs9",
+        "name": "Necrotic Bow",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +4, range 150/600 ft. {@h}6 (1d8 + 2) Piercing damage plus 4 (1d8) Necrotic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "150/600 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_drink_life__recharge_5__lvj7",
+        "name": "Drink Life (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>con DC 13, one creature within 5 feet. {@actSaveFail} 6 (1d8 + 2) Necrotic damage, and the wight regains a number of Hit Points equal to the Necrotic damage taken.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HotB/Wight Lifedrinker.webp",
+    "tokenImg": "img/bestiary/tokens/HotB/Wight Lifedrinker.webp",
+    "fluff": null
+  }
+]

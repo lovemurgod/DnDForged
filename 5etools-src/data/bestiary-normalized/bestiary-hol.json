@@ -1,0 +1,781 @@
+[
+  {
+    "id": "creature_apprentice_hol",
+    "name": "Apprentice",
+    "source": "HoL",
+    "edition": "2014",
+    "page": 201,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 7,
+      "formula": "2d8 - 2"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 9,
+        "mod": -1
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 12,
+        "mod": 1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "int": "+3"
+    },
+    "skills": {
+      "arcana": "+3",
+      "history": "+3"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "any one language (usually Common)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_apprentice_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 1,
+        "casterLevel": 1,
+        "dc": 11,
+        "atkMod": 3,
+        "header": "You cast one of the following wizard spells (spell save DC 11), using Intelligence as the spellcasting ability:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_minor_illusion_xphb",
+            "name": "Minor Illusion",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a bit of fleece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_unknown_spell_unknown",
+            "name": "Unknown Spell",
+            "source": "PHB",
+            "level": 1,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "Self",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": null,
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2": [
+            {
+              "spellId": "sp_grease_xphb",
+              "name": "Grease",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "1 minute",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 11,
+              "damageList": [],
+              "components": "V, S, M (a bit of pork rind or butter)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2",
+              "type": "daily"
+            }
+          ],
+          "2e": [
+            {
+              "spellId": "sp_unknown_spell_unknown",
+              "name": "Unknown Spell",
+              "source": "PHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "Self",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": null,
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Minor Illusion",
+          "Unknown Spell"
+        ]
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_quarterstaff_kp8l",
+        "name": "Quarterstaff",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 1,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 - 1",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8 - 1",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_burning_hands__1st_level_spell__2_day__8zlv",
+        "name": "Burning Hands (1st-Level Spell; 2/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You shoot forth a 15-foot cone of fire. Each creature in that area must make a DC 11 Dexterity saving throw. A creature takes 10 (3d6) fire damage on a failed save, or half as much damage on a successful one The fire ignites any flammable objects in the area that aren't being worn or carried.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 11,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fire_bolt__cantrip__i2zq",
+        "name": "Fire Bolt (Cantrip)",
+        "actionType": "action",
+        "descriptionHtml": "<p>rs Ranged Spell Attack: +3 to hit, range 120 ft., one target. {@h}5 (1d10) fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": "rs",
+          "attackBonus": 3,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": "range 120 ft",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HoL/Apprentice.webp",
+    "tokenImg": "img/bestiary/tokens/HoL/Apprentice.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_disciple_hol",
+    "name": "Disciple",
+    "source": "HoL",
+    "edition": "2014",
+    "page": 201,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 9,
+      "formula": "2d8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 9,
+        "mod": -1
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "wis": "+3"
+    },
+    "skills": {
+      "perception": "+3",
+      "religion": "+2"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "any one language (usually Common)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_disciple_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 1,
+        "casterLevel": 1,
+        "dc": 11,
+        "atkMod": 3,
+        "header": "You cast one the following cleric spells (spell save DC 11), using Wisdom as the spellcasting ability:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_guidance_xphb",
+            "name": "Guidance",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_unknown_spell_unknown",
+            "name": "Unknown Spell",
+            "source": "PHB",
+            "level": 1,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "Self",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": null,
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2": [
+            {
+              "spellId": "sp_cure_wounds_xphb",
+              "name": "Cure Wounds",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Healing",
+                  "stat": "spell"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Guidance",
+          "Unknown Spell"
+        ]
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_mace_ujnf",
+        "name": "Mace",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sacred_flame__cantrip__w76q",
+        "name": "Sacred Flame (Cantrip)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You target one creature you can see within 60 feet of you. The target must succeed on a DC 11 Dexterity saving throw or take 4 (1d8) radiant damage. The target gains no benefit from cover for this saving throw.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 11,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HoL/Disciple.webp",
+    "tokenImg": "img/bestiary/tokens/HoL/Disciple.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_sneak_hol",
+    "name": "Sneak",
+    "source": "HoL",
+    "edition": "2014",
+    "page": 201,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 9,
+      "formula": "2d6 + 2"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+3"
+    },
+    "skills": {
+      "sleight of hand": "+3",
+      "stealth": "+3"
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [
+      "any one language (usually Common)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_dagger_j6de",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +3 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_disengage_6a71",
+        "name": "Disengage",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>You take the Disengage action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HoL/Sneak.webp",
+    "tokenImg": "img/bestiary/tokens/HoL/Sneak.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_squire_hol",
+    "name": "Squire",
+    "source": "HoL",
+    "edition": "2014",
+    "page": 201,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 11,
+      "formula": "2d8 + 2"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 13,
+        "mod": 1
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "str": "+3"
+    },
+    "skills": {
+      "athletics": "+3"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "any one language (usually Common)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_longsword_v9gl",
+        "name": "Longsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 1",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d10 + 1",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_shove_86xv",
+        "name": "Shove",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>While wielding a shield, you try to shove one creature within 5 feet of you.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HoL/Squire.webp",
+    "tokenImg": "img/bestiary/tokens/HoL/Squire.webp",
+    "fluff": null
+  }
+]

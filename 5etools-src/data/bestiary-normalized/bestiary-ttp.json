@@ -1,0 +1,902 @@
+[
+  {
+    "id": "creature_decapus_ttp",
+    "name": "Decapus",
+    "source": "TTP",
+    "edition": "2014",
+    "page": 21,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 75,
+      "formula": "10d10 + 20"
+    },
+    "speed": {
+      "walk": 15,
+      "fly": 0,
+      "swim": 0,
+      "climb": 30,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "athletics": "+4",
+      "perception": "+2",
+      "stealth": "+4"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_ywbv",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The decapus makes two attacks: one with its bite and one with its tentacles.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_8858",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature grappled by the decapus. {@h}7 (2d4 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one creature {@condition grappled} by the decapus",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tentacles_4t24",
+        "name": "Tentacles",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 10 ft., one target. {@h}24 (9d4 + 2) bludgeoning damage or 14 (5d4 + 2) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also grappled (escape DC 14) unless the decapus is already grappling a creature. Until this grapple ends, the target is restrained.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 14,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "9d4 + 2",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "5d4 + 2",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/TTP/Decapus.webp",
+    "tokenImg": "img/bestiary/tokens/TTP/Decapus.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_geonid_ttp",
+    "name": "Geonid",
+    "source": "TTP",
+    "edition": "2014",
+    "page": 22,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 26,
+      "formula": "4d6 + 12"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 9,
+        "mod": -1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+4",
+      "stealth": "+2"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft., tremorsense 30 ft."
+    },
+    "languages": [],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_boulder_guise_eooi",
+        "name": "Boulder Guise",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While fully withdrawn into its shell, the geonid can't see and is indistinguishable from a small boulder</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_club_51m2",
+        "name": "Club",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_stone_tell_uwnm",
+        "name": "Stone Tell",
+        "actionType": "action",
+        "descriptionHtml": "<p>The geonid touches a stone object or surface and knows what types of creatures have been within 10 feet of that stone in the past 24 hours. The geonid can also determine the number of creatures of each type, but not their identities.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/TTP/Geonid.webp",
+    "tokenImg": "img/bestiary/tokens/TTP/Geonid.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_giant_slug_ttp",
+    "name": "Giant Slug",
+    "source": "TTP",
+    "edition": "2014",
+    "page": 18,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 66,
+      "formula": "6d10 + 18"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 0,
+      "swim": 0,
+      "climb": 10,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 1,
+        "mod": -5
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+3"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Abyssal",
+      "Aquan",
+      "Common"
+    ],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_giant_slug_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 1,
+        "casterLevel": 0,
+        "dc": 11,
+        "atkMod": 3,
+        "header": "The slug's innate spellcasting ability is Wisdom (spell save DC 11, +3 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_guiding_bolt_xphb",
+              "name": "Guiding Bolt",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "1 round",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "spell",
+              "atkMod": 3,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Radiant",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_sanctuary_xphb",
+              "name": "Sanctuary",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 bonus action",
+              "range": "30 feet",
+              "duration": "1 minute",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 11,
+              "damageList": [],
+              "components": "V, S, M (a shard of glass from a mirror)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_spiritual_weapon_xphb",
+              "name": "Spiritual Weapon",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Evocation",
+              "castingTime": "1 bonus action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "spell",
+              "atkMod": 3,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "1d8",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_keen_smell_vgjf",
+        "name": "Keen Smell",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The slug has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spider_climb_6thv",
+        "name": "Spider Climb",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The slug can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_9lnm",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The slug makes two attacks: one with its tentacles and one with its bite.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tentacles_n1qg",
+        "name": "Tentacles",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one creature. {@h}4 (1d4 + 2) poison damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. Until this poison ends, the target is paralyzed. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 10,
+          "range": null,
+          "targets": "one creature",
+          "save": {
+            "dc": 13,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_qj7w",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_animate_tentacle_kcy3",
+        "name": "Animate Tentacle",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When the slug takes damage in this cave (Shrine of Umberlee), it can use its reaction to animate one of the tentacles of the kraken statue and cause it to   make a melee weapon attack (+3 to hit) against one creature within 20 feet of the statue that the slug can see. The tentacle deals 8 (1d8 + 4) bludgeoning damage on a hit.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": "mw",
+          "attackBonus": 3,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 4",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/TTP/Giant Slug.webp",
+    "tokenImg": "img/bestiary/tokens/TTP/Giant Slug.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_topi_ttp",
+    "name": "Topi",
+    "source": "TTP",
+    "edition": "2014",
+    "page": 22,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 13,
+      "formula": "3d6 + 3"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 7,
+        "mod": -2
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages it knew in life but can't speak"
+    ],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_turn_resistance_2zqx",
+        "name": "Turn Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The topi has advantage on saving throws against any effect that turns undead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_undead_fortitude_0jxn",
+        "name": "Undead Fortitude",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If damage reduces the topi to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the topi drops to 1 hit point instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_venomous_claws_vy8u",
+        "name": "Venomous Claws",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) slashing damage plus 2 (1d4) poison damage, and the target must succeed on a DC 11 Constitution saving throw or be poisoned until the end of the target's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 11,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d4",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/TTP/Topi.webp",
+    "tokenImg": "img/bestiary/tokens/TTP/Topi.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_two_headed_plesiosaurus_ttp",
+    "name": "Two-Headed Plesiosaurus",
+    "source": "TTP",
+    "edition": "2014",
+    "page": 18,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 100,
+      "formula": "8d10 + 24"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 40,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 2,
+        "mod": -4
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+3",
+      "stealth": "+4"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_hold_breath_976r",
+        "name": "Hold Breath",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The plesiosaurus can hold its breath for 1 hour.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_r03r",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one target. {@h}14 (3d6 + 4) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6 + 4",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/TTP/Two-Headed Plesiosaurus.webp",
+    "tokenImg": "img/bestiary/tokens/TTP/Two-Headed Plesiosaurus.webp",
+    "fluff": null
+  }
+]

@@ -1,0 +1,709 @@
+[
+  {
+    "id": "creature_expert_esk",
+    "name": "Expert",
+    "source": "ESK",
+    "edition": "2014",
+    "page": 63,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 11,
+      "formula": "2d8 + 2"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+4"
+    },
+    "skills": {
+      "acrobatics": "+4",
+      "performance": "+4",
+      "persuasion": "+4",
+      "sleight of hand": "+4",
+      "stealth": "+4"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "plus one of your choice"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_helpful_1nn0",
+        "name": "Helpful",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The expert can take the Help action as a bonus action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tools_9uqr",
+        "name": "Tools",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_shortsword_dkba",
+        "name": "Shortsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dagger_syoj",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortbow_0hyw",
+        "name": "Shortbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "80/320 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ESK/Expert.webp",
+    "tokenImg": "img/bestiary/tokens/ESK/Expert.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_spellcaster_esk",
+    "name": "Spellcaster",
+    "source": "ESK",
+    "edition": "2014",
+    "page": 63,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 9,
+      "formula": "2d8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 13,
+        "mod": 1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "wis": "+4"
+    },
+    "skills": {
+      "arcana": "+4",
+      "investigation": "+4",
+      "religion": "+4"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "plus one of your choice"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_spellcaster_0",
+        "name": "Spellcasting (Healer)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 2,
+        "casterLevel": 1,
+        "dc": 12,
+        "atkMod": 4,
+        "header": "The spellcaster's spellcasting ability is Wisdom (spell save DC 12, +4 to hit with spell attacks). The spellcaster has following cleric spells prepared:",
+        "footer": "",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_guidance_xphb",
+                "name": "Guidance",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Divination",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_sacred_flame_xphb",
+                "name": "Sacred Flame",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 12,
+                "damageList": [
+                  {
+                    "formula": "1d8",
+                    "type": "Radiant",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_cure_wounds_xphb",
+                "name": "Cure Wounds",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Healing",
+                    "stat": "spell"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      },
+      {
+        "id": "sc_spellcaster_1",
+        "name": "Spellcasting (Mage)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 2,
+        "casterLevel": 1,
+        "dc": 12,
+        "atkMod": 4,
+        "header": "The spellcaster's spellcasting ability is Intelligence (spell save DC 12, +4 to hit with spell attacks). The spellcaster has following wizard spells prepared:",
+        "footer": "",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_fire_bolt_xphb",
+                "name": "Fire Bolt",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 4,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d10",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_light_xphb",
+                "name": "Light",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, M (a firefly or phosphorescent moss)",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_sleep_xphb",
+                "name": "Sleep",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 12,
+                "damageList": [],
+                "components": "V, S, M (a pinch of sand or rose petals)",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_magical_role_mkpw",
+        "name": "Magical Role",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Choose a role for the spellcaster: healer or mage. Your choice determines which Spellcasting trait to use below.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_quarterstaff_g6ia",
+        "name": "Quarterstaff",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 2,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ESK/Spellcaster.webp",
+    "tokenImg": "img/bestiary/tokens/ESK/Spellcaster.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_warrior_esk",
+    "name": "Warrior",
+    "source": "ESK",
+    "edition": "2014",
+    "page": 63,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 13,
+      "formula": "2d8 + 4"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "con": "+4"
+    },
+    "skills": {
+      "athletics": "+4",
+      "perception": "+3",
+      "survival": "+3"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "plus one of your choice"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_martial_role_78x0",
+        "name": "Martial Role",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_longsword_mxpt",
+        "name": "Longsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d10 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longbow_jz8c",
+        "name": "Longbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +3 to hit, range 150/600 ft., one target. {@h}5 (1d8 + 1) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": null,
+          "range": "150/600 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_protection__defender_only__9h17",
+        "name": "Protection (Defender Only)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>The warrior imposes disadvantage on the attack roll of a creature within 5 feet of it whose target isn't the warrior. The warrior must be able to see the attacker.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ESK/Warrior.webp",
+    "tokenImg": "img/bestiary/tokens/ESK/Warrior.webp",
+    "fluff": null
+  }
+]

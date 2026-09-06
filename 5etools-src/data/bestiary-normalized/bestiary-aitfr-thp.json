@@ -1,0 +1,1136 @@
+[
+  {
+    "id": "creature_greater_shadow_horror_aitfr-thp",
+    "name": "Greater Shadow Horror",
+    "source": "AitFR-THP",
+    "edition": "2014",
+    "page": 12,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 170,
+      "formula": "20d12 + 40"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 2,
+        "mod": -4
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {},
+    "skills": {
+      "perception": "+7",
+      "stealth": "+11"
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [],
+    "cr": "12",
+    "crNumeric": 12,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_incorporeal_movement_lh0h",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The horror can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__2_day__sk8d",
+        "name": "Legendary Resistance (2/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the horror fails a saving throw, it can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shadow_stealth_36ps",
+        "name": "Shadow Stealth",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in dim light or darkness, the horror can take the Hide action as a bonus action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shadow_stride_srb6",
+        "name": "Shadow Stride",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As a bonus action, the horror can step into a shadow within 5 feet of it and magically appear in an unoccupied space within 5 feet of a second shadow that is up to 60 feet away. Both shadows must be cast by a Medium or larger creature or object.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sunlight_sensitivity_ugp4",
+        "name": "Sunlight Sensitivity",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in sunlight, the horror has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_nijb",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The horror makes three attacks: one with its bite and two with its claws.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_dly7",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}21 (4d8 + 3) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d8 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_03na",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}17 (4d6 + 3) slashing damage, and the target must succeed on a DC 16 Wisdom saving throw or be frightened of the horror until the end of the target's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 16,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "4d6 + 3",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lashing_shadows__recharge_5__druc",
+        "name": "Lashing Shadows (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Each creature within 60 feet of the horror, except other horrors, must succeed on a DC 16 Dexterity saving throw or take 36 (8d8) necrotic damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "8d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_claw_9nhu",
+          "name": "Claw",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The horror makes a weapon attack.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_glide_5d0u",
+          "name": "Glide",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The horror moves up to 20 feet without provoking opportunity attacks.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_frighten_foe__costs_2_actions__zmmk",
+          "name": "Frighten Foe (Costs 2 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The horror targets one enemy it can see within 30 feet of it. If the target can see and hear it, the target must succeed on a DC 16 Wisdom saving throw or be frightened until the end of horror's next turn.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 16,
+              "ability": "WIS"
+            },
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AitFR-THP/Greater Shadow Horror.webp",
+    "tokenImg": "img/bestiary/tokens/AitFR-THP/Greater Shadow Horror.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_morwena_veilmist_aitfr-thp",
+    "name": "Morwena Veilmist",
+    "source": "AitFR-THP",
+    "edition": "2014",
+    "page": 13,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 55,
+      "formula": "10d8 + 10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 9,
+        "mod": -1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "int": "+6",
+      "wis": "+4"
+    },
+    "skills": {
+      "arcana": "+6",
+      "history": "+6"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "any four languages"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_morwena_veilmist_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 3,
+        "casterLevel": 10,
+        "dc": 15,
+        "atkMod": 6,
+        "header": "Morwena is a 10th-level spellcaster. Her spellcasting ability is Intelligence (spell save DC 15, +6 to hit with spell attacks). She has the following wizard spells prepared:",
+        "footer": "*Enchantment spell of 1st level or higher",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_friends_xphb",
+                "name": "Friends",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "10 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [],
+                "components": "S, M (some makeup)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mage_hand_xphb",
+                "name": "Mage Hand",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mending_xphb",
+                "name": "Mending",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 minute",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (two lodestones)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_message_xphb",
+                "name": "Message",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "1 round",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "S, M (a copper wire)",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_charm_person_xphb",
+                "name": "Charm Person",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mage_armor_xphb",
+                "name": "Mage Armor",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a piece of cured leather)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_magic_missile_xphb",
+                "name": "Magic Missile",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d4 + 1",
+                    "type": "Force",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_hold_person_xphb",
+                "name": "Hold Person",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [],
+                "components": "V, S, M (a straight piece of iron)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_invisibility_xphb",
+                "name": "Invisibility",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (an eyelash in gum arabic)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_suggestion_xphb",
+                "name": "Suggestion",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Concentration, up to 8 hours",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [],
+                "components": "V, M (a drop of honey)",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_fireball_xphb",
+                "name": "Fireball",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "150 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [
+                  {
+                    "formula": "8d6",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a ball of bat guano and sulfur)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_haste_xphb",
+                "name": "Haste",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a shaving of licorice root)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_tongues_xphb",
+                "name": "Tongues",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Divination",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, M (a miniature ziggurat)",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_arcane_eye_xphb",
+                "name": "Arcane Eye",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Divination",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a bit of bat fur)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_phantasmal_killer_xphb",
+                "name": "Phantasmal Killer",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [
+                  {
+                    "formula": "4d10",
+                    "type": "Psychic",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "5": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_hold_monster_xphb",
+                "name": "Hold Monster",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "90 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [],
+                "components": "V, S, M (a straight piece of iron)",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_quarterstaff_in2r",
+        "name": "Quarterstaff",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d6-1) bludgeoning damage, or 3 (1d8-1) bludgeoning damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 2,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6-1",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8-1",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_instinctive_charm__recharges_after_morwena_casts_an_enchantment_spell_of_1st_level_or_higher__yqo5",
+        "name": "Instinctive Charm (Recharges after Morwena Casts an Enchantment Spell of 1st Level or Higher)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>Morwena tries to magically divert an attack made against her, provided that the attacker is within 30 feet of her and visible to her. She must decide to do so before the attack hits or misses.</p><p>The attacker must make a DC 15 Wisdom saving throw. On a failed save, the attacker targets the creature closest to it, other than Morwena or itself. If multiple creatures are closest, the attacker chooses which one to target.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AitFR-THP/Morwena Veilmist.webp",
+    "tokenImg": "img/bestiary/tokens/AitFR-THP/Morwena Veilmist.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_usagt_aitfr-thp",
+    "name": "Usagt",
+    "source": "AitFR-THP",
+    "edition": "2014",
+    "page": 14,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Aberration",
+    "subtype": "shapeshifter",
+    "alignment": "L N",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 97,
+      "formula": "13d8 + 39"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 20,
+        "mod": 5
+      },
+      "cha": {
+        "score": 12,
+        "mod": 1
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "int": "+5",
+      "wis": "+8",
+      "cha": "+4"
+    },
+    "skills": {
+      "history": "+5",
+      "insight": "+8",
+      "perception": "+8",
+      "performance": "+7",
+      "stealth": "+5"
+    },
+    "senses": {
+      "passivePerception": 18,
+      "sensesString": "darkvision 100 ft."
+    },
+    "languages": [
+      "all",
+      "telepathy 30 ft."
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_usagt_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 1,
+        "casterLevel": 0,
+        "dc": 15,
+        "atkMod": 4,
+        "header": "The usagt's innate spellcasting ability is Charisma (spell save DC 15). It can cast the following spells, requiring no spell components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_banishment_xphb",
+            "name": "Banishment",
+            "source": "XPHB",
+            "level": 4,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "charisma",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 15,
+            "damageList": [],
+            "components": "V, S, M (a pentacle)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_thoughts_xphb",
+            "name": "Detect Thoughts",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 15,
+            "damageList": [],
+            "components": "V, S, M (1 Copper Piece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_disguise_self_xphb",
+            "name": "Disguise Self",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Banishment",
+          "Detect Thoughts",
+          "Disguise Self"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_invisibility_eie0",
+        "name": "Invisibility",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The usagt's true form is invisible.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shapechanger_4vt4",
+        "name": "Shapechanger",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The usagt can use its action to polymorph into a Small, Medium, or Large humanoid it has seen in person or telepathically, or back into its true form. Its statistics, other than its size, are the same in each form. While polymorphed, the usagt is not invisible. Its new form appears to wear clothes, carry equipment, and even wield weapons, but these are all parts of the usagt itself; they vanish if dropped or removed from the creature. It can't activate, use, wield, or otherwise benefit from any of its apparent equipment. It reverts to its true form if it dies.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_dhj1",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The usagt makes two attacks with its claws.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claws_cvst",
+        "name": "Claws",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) slashing damage plus 11 (2d6 + 4) psychic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4 + 2",
+              "type": "Slashing"
+            },
+            {
+              "formula": "2d6 + 4",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_personal_insight_dtn2",
+        "name": "Personal Insight",
+        "actionType": "action",
+        "descriptionHtml": "<p>The usagt targets one creature it can see within 30 feet of it. The target must contest its Charisma (Deception) check against the usagt's Wisdom (Insight) check.</p><p>The target has advantage on the roll if it is immune to being charmed. A target can choose to fail this check.</p><p>If the usagt wins, it magically learns the identity of a creature from the target's past, someone the target wishes it could speak to again or with whom the target has left something unsaid. If somehow no such creature exists in the target's past, the usagt learns that instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_invisibility_response__recharges_when_the_usagt_uses_its_shapechanger_ability__4twr",
+        "name": "Invisibility Response (Recharges When the Usagt Uses Its Shapechanger Ability)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When the usagt takes damage, it can choose to revert to its default, invisible form and move up to 15 feet without provoking opportunity attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AitFR-THP/Usagt.webp",
+    "tokenImg": "img/bestiary/tokens/AitFR-THP/Usagt.webp",
+    "fluff": null
+  }
+]

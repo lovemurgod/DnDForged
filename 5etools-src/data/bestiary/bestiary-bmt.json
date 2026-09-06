@@ -414,7 +414,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Asteria casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -434,10 +434,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -623,7 +620,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Aurnozci casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -639,10 +636,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -840,7 +834,7 @@
 				{
 					"name": "Bite (Wolf or Hybrid Form Only)",
 					"entries": [
-						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}26 ({@damage 5d8 + 4}) piercing damage. If the target is a Humanoid, it must succeed on a {@dc 15} Constitution saving throw or be cursed with lycanthropy. While cursed in this way, the target retains its alignment, languages, and equipment but otherwise uses the werewolf stat block, excluding actions that require equipment the target doesn't have. During any night when there's a full moon in the sky, the target becomes an NPC under the DM's control and remains so until the night ends. A {@spell Remove Curse} spell or similar magic ends this curse."
+						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}26 ({@damage 5d8 + 4}) piercing damage. If the target is a Humanoid, it must succeed on a {@dc 15} Constitution saving throw or be cursed with {@variantrule Player Characters as Lycanthropes|MM|lycanthropy}. While cursed in this way, the target retains its alignment, languages, and equipment but otherwise uses the werewolf stat block, excluding actions that require equipment the target doesn't have. During any night when there's a full moon in the sky, the target becomes an NPC under the DM's control and remains so until the night ends. A {@spell Remove Curse} spell or similar magic ends this curse."
 					]
 				},
 				{
@@ -979,7 +973,7 @@
 				{
 					"name": "Bite (Rat or Hybrid Form Only)",
 					"entries": [
-						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}26 ({@damage 5d8 + 4}) piercing damage. If the target is a Humanoid, it must succeed on a {@dc 14} Constitution saving throw or be cursed with lycanthropy. While cursed in this way, the target retains its alignment, languages, and equipment but otherwise uses the wererat stat block, excluding actions that require equipment the target doesn't have. During any night when there's a full moon in the sky, the target becomes an NPC under the DM's control and remains so until the night ends. A {@spell Remove Curse} spell or similar magic ends this curse."
+						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}26 ({@damage 5d8 + 4}) piercing damage. If the target is a Humanoid, it must succeed on a {@dc 14} Constitution saving throw or be cursed with {@variantrule Player Characters as Lycanthropes|MM|lycanthropy}. While cursed in this way, the target retains its alignment, languages, and equipment but otherwise uses the wererat stat block, excluding actions that require equipment the target doesn't have. During any night when there's a full moon in the sky, the target becomes an NPC under the DM's control and remains so until the night ends. A {@spell Remove Curse} spell or similar magic ends this curse."
 					]
 				},
 				{
@@ -1265,7 +1259,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Brusipha casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -1281,10 +1275,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1773,7 +1764,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Medusa Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Euryale casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -1791,10 +1782,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1963,7 +1951,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"While holding its shears, the hag casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -1981,10 +1969,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2157,7 +2142,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Gremorly casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -2176,10 +2161,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2684,7 +2666,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The champion casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -2703,10 +2685,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3110,7 +3089,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The medusa casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -3130,10 +3109,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3330,7 +3306,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hierophant casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -3346,10 +3322,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3538,7 +3511,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Hulgaz casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -3555,10 +3528,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3715,7 +3685,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The initiate casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -3731,10 +3701,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3860,7 +3827,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The living portent casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability:"
 					],
@@ -3874,10 +3841,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4454,7 +4418,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Oddlewin casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -4463,10 +4427,7 @@
 						"{@spell Tasha's Hideous Laughter}"
 					],
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4798,7 +4759,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Pazrodine casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 23}):"
 					],
@@ -4817,10 +4778,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 23,
-					"atkMod": 15,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -5507,7 +5465,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The knight casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -5519,10 +5477,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [

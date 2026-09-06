@@ -216,7 +216,7 @@
 				{
 					"name": "Confounding Ray",
 					"entries": [
-						"{@atkr r} {@hit 5}, range 120 ft. {@h}13 ({@damage 2d12}) Psychic damage. If the target is a creature, it can't make Opportunity Attacks until the start of the devil's next turn."
+						"{@atkr r} {@hit 5}, range 120 ft. {@h}13 ({@damage 2d12}) Psychic damage. If the target is a creature, it can't make {@action Opportunity Attack|XPHB|Opportunity Attacks} until the start of the devil's next turn."
 					]
 				},
 				{
@@ -330,7 +330,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The devil casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -345,10 +345,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -517,7 +514,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The vampire casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -538,10 +535,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -764,7 +758,7 @@
 			"spellcasting": [
 				{
 					"name": "Guardian's Command",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The vampire casts {@spell Compulsion|XPHB}, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 15})."
 					],
@@ -775,10 +769,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [

@@ -1,0 +1,659 @@
+[
+  {
+    "id": "creature_emo_nrh-at",
+    "name": "Emo",
+    "source": "NRH-AT",
+    "edition": "2014",
+    "page": 9,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 180,
+      "formula": "19d10 + 76"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "int": "+8",
+      "wis": "+7",
+      "cha": "+8"
+    },
+    "skills": {
+      "perception": "+12"
+    },
+    "senses": {
+      "passivePerception": 22,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [
+      "Deep Speech",
+      "Undercommon"
+    ],
+    "cr": "13",
+    "crNumeric": 13,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_antimagic_cone_57ne",
+        "name": "Antimagic Cone",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The beholder's central eye creates an area of antimagic, as in the antimagic field spell, in a 150-foot cone. At the start of each of its turns, the beholder decides which way the cone faces and whether the cone is active. The area works against the beholder's own eye rays.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_x14i",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}14 (4d6) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_eye_rays_8lm1",
+        "name": "Eye Rays",
+        "actionType": "action",
+        "descriptionHtml": "<p>The beholder shoots three of the following magical eye rays at random (reroll duplicates), choosing one to three targets it can see within 120 feet of it:</p><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "STR"
+          },
+          "damages": [
+            {
+              "formula": "10d8",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The beholder can take 3 legendary actions, using the Eye Ray option below. It can take only one legendary action at a time and only at the end of another creature's turn. The beholder regains spent legendary actions at the start of its turn.",
+      "entries": [
+        {
+          "id": "act_eye_ray_gru7",
+          "name": "Eye Ray",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The beholder uses one random eye ray.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [
+      {
+        "id": "act_lair_action_sqhr",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>A 50-foot-square area of ground within 120 feet of the beholder becomes slimy; that area is difficult terrain until initiative count 20 on the next round.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_j2qj",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>Walls within 120 feet of the beholder sprout grasping appendages until initiative count 20 on the round after next. Each creature of the beholder's choice that starts its turn within 10 feet of such a wall must succeed on a DC 15 Dexterity saving throw or be grappled. Escaping requires a successful DC 15 Strength (Athletics) or Dexterity (Acrobatics) check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_243e",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>An eye opens on a solid surface within 60 feet of the beholder. One random eye ray of the beholder shoots from that eye at a target of the beholder's choice that it can see. The eye then closes and disappears.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_8781",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The beholder can't repeat an effect until they have all been used, and it can't use the same effect two rounds in a row.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-AT/Emo.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-AT/Emo.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_maude_nrh-at",
+    "name": "Maude",
+    "source": "NRH-AT",
+    "edition": "2014",
+    "page": 12,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "goblinoid",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 65,
+      "formula": "10d8 + 20"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 17,
+        "mod": 3
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "intimidation": "+2",
+      "stealth": "+6",
+      "survival": "+3"
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Goblin"
+    ],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_brute_c81n",
+        "name": "Brute",
+        "actionType": "trait",
+        "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when the bugbear hits with it (included in the attack).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_surprise_attack_h0ph",
+        "name": "Surprise Attack",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the bugbear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_heart_of_hruggek_yo0x",
+        "name": "Heart of Hruggek",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The bugbear has advantage on saving throws against being charmed, frightened, paralyzed, poisoned, stunned, or put to sleep.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_6f8d",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The bugbear makes two melee attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_morningstar_rsag",
+        "name": "Morningstar",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}11 (2d8 + 3) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_javelin_2nw1",
+        "name": "Javelin",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}9 (2d6 + 3) piercing damage in melee or 5 (1d6 + 3) piercing damage at range.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "30/120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 3",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d6 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-AT/Maude.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-AT/Maude.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_mr__greystone_nrh-at",
+    "name": "Mr. Greystone",
+    "source": "NRH-AT",
+    "edition": "2014",
+    "page": 13,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 112,
+      "formula": "15d8 + 45"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "str": "+7",
+      "dex": "+5",
+      "con": "+6"
+    },
+    "skills": {
+      "athletics": "+10",
+      "intimidation": "+5"
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Goblin"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_brave_j0cf",
+        "name": "Brave",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Mr. Greystone has advantage on saving throws against being frightened.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_brute_drgi",
+        "name": "Brute",
+        "actionType": "trait",
+        "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Mr. Greystone hits with it (included in the attack).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_hcqw",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Mr. Greystone makes two melee attacks or two ranged attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_club_5u6v",
+        "name": "Club",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hand_crossbow_v701",
+        "name": "Hand Crossbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +5 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": null,
+          "range": "30/120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-AT/Mr. Greystone.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-AT/Mr. Greystone.webp",
+    "fluff": null
+  }
+]

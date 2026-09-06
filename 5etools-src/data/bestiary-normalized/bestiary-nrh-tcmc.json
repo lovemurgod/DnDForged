@@ -1,0 +1,344 @@
+[
+  {
+    "id": "creature_mr__honeycutt_nrh-tcmc",
+    "name": "Mr. Honeycutt",
+    "source": "NRH-TCMC",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": true,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human, shapechanger",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 33,
+      "formula": "6d8 + 6"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+2",
+      "stealth": "+4"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 60 ft. (rat form only)"
+    },
+    "languages": [
+      "Common (can't speak in rat form)"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_shapechanger_6lhi",
+        "name": "Shapechanger",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The wererat can use its action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into its true form, which is humanoid. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_keen_smell_4v3d",
+        "name": "Keen Smell",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The wererat has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack__humanoid_or_hybrid_form_only__j500",
+        "name": "Multiattack (Humanoid or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The wererat makes two attacks, only one of which can be a bite.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite__rat_or_hybrid_form_only__6gvd",
+        "name": "Bite (Rat or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) piercing damage. If the target is a humanoid, it must succeed on a DC 11 Constitution saving throw or be cursed with wererat Player Characters as Lycanthropes.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 11,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortsword__humanoid_or_hybrid_form_only__tiyq",
+        "name": "Shortsword (Humanoid or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__d8qm",
+        "name": "Hand Crossbow (Humanoid or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "30/120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-TCMC/Mr. Honeycutt.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-TCMC/Mr. Honeycutt.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_slurmy_nrh-tcmc",
+    "name": "Slurmy",
+    "source": "NRH-TCMC",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "goblinoid",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 11,
+      "formula": "2d8 + 2"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+4"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "1/8",
+    "crNumeric": 0.125,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_nimble_escape_k5vl",
+        "name": "Nimble Escape",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Slurmy can take the Disengage or Hide action as a bonus action on each of their turns.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_claw_qhea",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-TCMC/Slurmy.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-TCMC/Slurmy.webp",
+    "fluff": null
+  }
+]

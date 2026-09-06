@@ -1,0 +1,303 @@
+[
+  {
+    "id": "creature_chimeric_fox_nrh-avitw",
+    "name": "Chimeric Fox",
+    "source": "NRH-AVitW",
+    "edition": "2014",
+    "page": 8,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 2,
+      "formula": "1d4"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 5,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 2,
+        "mod": -4
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 11,
+        "mod": 0
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+3",
+      "stealth": "+5"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_chimeric_creation_gg8x",
+        "name": "Chimeric Creation",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The fox has fur that changes color to match its surroundings, giving it advantage on Dexterity (Stealth) checks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_keen_hearing_fauz",
+        "name": "Keen Hearing",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The fox has advantage on Wisdom (Perception) checks that rely on hearing.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_2gdq",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}1 piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one creature",
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-AVitW/Chimeric Fox.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-AVitW/Chimeric Fox.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_scarlet_sentinel_nrh-avitw",
+    "name": "Scarlet Sentinel",
+    "source": "NRH-AVitW",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 8,
+        "condition": null
+      }
+    ],
+    "primaryAc": 8,
+    "acCondition": "",
+    "hp": {
+      "average": 39,
+      "formula": "6d8 + 12"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 6,
+        "mod": -2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 1,
+        "mod": -5
+      },
+      "wis": {
+        "score": 6,
+        "mod": -2
+      },
+      "cha": {
+        "score": 1,
+        "mod": -5
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 8,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_immutable_form_sj57",
+        "name": "Immutable Form",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Scarlet Sentinel is immune to any spell or effect that would alter its form.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_c82p",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Scarlet Sentinel has advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_weapons_b3ma",
+        "name": "Magic Weapons",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Scarlet Sentinel's weapon attacks are magical.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_slam_k4v3",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}11 (2d8 + 2) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 2",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-AVitW/Scarlet Sentinel.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-AVitW/Scarlet Sentinel.webp",
+    "fluff": null
+  }
+]

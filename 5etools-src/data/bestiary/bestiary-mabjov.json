@@ -186,7 +186,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Aribeth casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -203,10 +203,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -406,7 +403,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Baalzebul casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 24}):"
 					],
@@ -429,10 +426,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 24,
-					"atkMod": 16,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -751,6 +745,7 @@
 		{
 			"name": "Bhaal, Ravager",
 			"shortName": "ravager",
+			"isNamedCreature": true,
 			"source": "MaBJoV",
 			"page": 95,
 			"size": [
@@ -964,6 +959,7 @@
 		{
 			"name": "Bhaal, Slayer",
 			"shortName": "slayer",
+			"isNamedCreature": true,
 			"source": "MaBJoV",
 			"page": 93,
 			"size": [
@@ -1427,7 +1423,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Borivik casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -1444,10 +1440,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1607,7 +1600,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Doc Watson casts one of the following spells using Intelligence as his spellcasting ability (spell save {@dc 17}):"
 					],
@@ -1629,10 +1622,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1769,7 +1759,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Cryonax casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 21}, {@hit 13} to hit with spell attacks):"
 					],
@@ -1785,10 +1775,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1984,7 +1971,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Dagryn casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -2008,10 +1995,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2166,7 +2150,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Darien casts one of the following spells, requiring no material component and using Charisma as the spellcasting ability (spell save {@dc 16}, {@hit 8} to hit with spell attacks):"
 					],
@@ -2202,10 +2186,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2486,7 +2467,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dread doppelganger casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -2500,10 +2481,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2603,7 +2581,7 @@
 				13,
 				{
 					"ac": 18,
-					"condition": "with {@item staff of power} and  {@spell mage armor}",
+					"condition": "with {@item staff of power} and {@spell mage armor}",
 					"braces": true
 				}
 			],
@@ -2643,7 +2621,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Edwin casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -2670,22 +2648,15 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Staff Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"While holding the staff of power, Edwin casts one of the following spells (spell save {@dc 18}, {@hit 12} to hit with spell attacks). These spells require charges; the staff has 20 charges, and it regains {@dice 2d8 + 4} expended charges daily at dawn. 1 charge each: magic missile, ray of enfeeblement 2 charges: levitate 5 charges each: cone of cold, fireball (5th level), hold monster, lightning bolt (5th level), wall of force 6 charges: globe of invulnerability"
 					],
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 12,
-					"casterLevel": 0,
-					"ability": "int"
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2855,7 +2826,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Eo casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 17}, {@hit 9} to hit with spell attacks):"
 					],
@@ -2891,10 +2862,7 @@
 						"* Eo uses wish to ensure she has a simulacrum of herself at all times."
 					],
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3032,7 +3000,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Faldorn casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -3056,10 +3024,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3381,7 +3346,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Flimp casts one of the following spells using Intelligence as his spellcasting ability (spell save {@dc 16}):"
 					],
@@ -3403,10 +3368,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3648,7 +3610,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hamadryad casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -3663,10 +3625,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3947,7 +3906,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Jaheira casts ones of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -3972,10 +3931,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4147,7 +4103,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Jon Irenicus casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 21}, {@hit 13} to hit with spell attacks):"
 					],
@@ -4181,10 +4137,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4546,7 +4499,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The kelubar casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -4565,10 +4518,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4900,7 +4850,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Lothar casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 12}, {@hit 4} to hit with spell attacks):"
 					],
@@ -4921,10 +4871,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4951,7 +4898,7 @@
 				{
 					"name": "Beak (Raven or Hybrid Form Only)",
 					"entries": [
-						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}1 piercing damage in raven form, or 6 ({@damage 1d4 + 4}) piercing damage in hybrid form. If the target is Humanoid, it must succeed on a {@dc 15} Constitution saving throw or be cursed with wereraven lycanthropy."
+						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}1 piercing damage in raven form, or 6 ({@damage 1d4 + 4}) piercing damage in hybrid form. If the target is Humanoid, it must succeed on a {@dc 15} Constitution saving throw or be cursed with wereraven {@variantrule Player Characters as Lycanthropes|MM|lycanthropy}."
 					]
 				},
 				{
@@ -5102,7 +5049,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Mephistopheles casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 26}):"
 					],
@@ -5131,10 +5078,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 26,
-					"atkMod": 18,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -5643,7 +5587,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Naes casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -5663,10 +5607,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -5980,7 +5921,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Pazuzu casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 24}):"
 					],
@@ -6007,10 +5948,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 24,
-					"atkMod": 16,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -6226,7 +6164,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Pelyious casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 15}, {@hit 7} to hit with spell attacks):"
 					],
@@ -6251,10 +6189,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -6430,7 +6365,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The phaerimm casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -6462,10 +6397,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -6643,7 +6575,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Saemon casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -6669,10 +6601,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -6837,7 +6766,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Sarevok casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -6859,10 +6788,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -7052,7 +6978,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The shator casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -7073,10 +6999,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -7243,7 +7166,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sirene casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -7255,10 +7178,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -7696,7 +7616,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Ssendam casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save {@dc 23}):"
 					],
@@ -7721,10 +7641,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 23,
-					"atkMod": 15,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -7946,7 +7863,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Suldil casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -7965,10 +7882,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -8815,7 +8729,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Viconia casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -8839,10 +8753,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -8994,7 +8905,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Viktor casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -9017,10 +8928,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -9444,7 +9352,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Xan casts one of the following spells using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -9471,10 +9379,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -9630,7 +9535,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Xzar casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 17}, {@hit 9} to hit with spell attacks):"
 					],
@@ -9659,10 +9564,7 @@
 						"*Necromancy spell of 1st level or higher"
 					],
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [

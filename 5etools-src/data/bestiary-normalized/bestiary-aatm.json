@@ -1,0 +1,1122 @@
+[
+  {
+    "id": "creature_animated_coffin_aatm",
+    "name": "Animated Coffin",
+    "source": "AATM",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 60,
+      "formula": "8d10 + 16"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 30,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 3,
+        "mod": -4
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "blindsight 60 ft. (can't see beyond this radius)"
+    },
+    "languages": [
+      "understands the languages of its creator but can't speak"
+    ],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_false_appearance_8z4i",
+        "name": "False Appearance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the animated coffin is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the coffin move or act, that creature must succeed on a DC 18 Intelligence (Investigation) check to discern that the coffin is animate.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spider_climb_obe7",
+        "name": "Spider Climb",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The animated coffin can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ztmc",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The animated coffin makes two Slam attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_slam_mk5f",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}12 (2d8 + 3) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 3",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_entrap_sj6o",
+        "name": "Entrap",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one Large or smaller creature. {@h}The target has the grappled condition (escape DC 13). Until this grapple ends, if the target is not an Undead, the target has the restrained condition and takes 14 (4d6) piercing damage at the start of each of its turns. The animated coffin can grapple only one creature at a time.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one Large or smaller creature",
+          "save": {
+            "dc": 13,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "4d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AATM/Animated Coffin.webp",
+    "tokenImg": "img/bestiary/tokens/AATM/Animated Coffin.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_factol_skall_aatm",
+    "name": "Factol Skall",
+    "source": "AATM",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "wizard",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 210,
+      "formula": "28d8 + 84"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 6,
+    "saves": {
+      "con": "+9",
+      "int": "+11",
+      "wis": "+8"
+    },
+    "skills": {
+      "arcana": "+17",
+      "history": "+11",
+      "medicine": "+8",
+      "perception": "+8"
+    },
+    "senses": {
+      "passivePerception": 18,
+      "sensesString": "truesight 120 ft."
+    },
+    "languages": [
+      "all"
+    ],
+    "cr": "17",
+    "crNumeric": 17,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_factol_skall_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 19,
+        "atkMod": 11,
+        "header": "Skall casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save DC 19):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_animate_dead_xphb",
+              "name": "Animate Dead",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Necromancy",
+              "castingTime": "1 minute",
+              "range": "10 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a drop of blood, a piece of flesh, and a pinch of bone dust)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dispel_magic_xphb",
+              "name": "Dispel Magic",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_speak_with_dead_xphb",
+              "name": "Speak with Dead",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "10 feet",
+              "duration": "10 minutes",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (burning incense)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_finger_of_death_xphb",
+              "name": "Finger of Death",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 19,
+              "damageList": [
+                {
+                  "formula": "7d8 + 30",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_plane_shift_xphb",
+              "name": "Plane Shift",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a forked, metal rod worth 250+ GP and attuned to a plane of existence)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_project_image_xphb",
+              "name": "Project Image",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "500 miles",
+              "duration": "Concentration, up to 1 day",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a statuette of yourself worth 5+ GP)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic",
+          "Mage Hand",
+          "Prestidigitation"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_aura_of_death_2g1h",
+        "name": "Aura of Death",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Creatures within 30 feet of Skall have disadvantage on death saving throws.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_cosmic_annihilation_n6wt",
+        "name": "Cosmic Annihilation",
+        "actionType": "trait",
+        "descriptionHtml": "<p>A creature killed by Skall can be restored to life only by means of a true resurrection or wish spell.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__4_day__5458",
+        "name": "Legendary Resistance (4/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Skall fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rejuvenation_jlik",
+        "name": "Rejuvenation",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Skall dies, he turns to dust. If his orrery of souls hasn't been destroyed, Skall re-forms within the Mortuary in 1d10 days. He appears within 5 feet of the orrery.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_turn_resistance_001w",
+        "name": "Turn Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Skall has advantage on saving throws against any effect that turns Undead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_u5pg",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Skall makes one Withering Touch attack or uses Spellcasting. He also uses Death Knell twice.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_withering_touch_5ozd",
+        "name": "Withering Touch",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms +11 to hit, reach 5 ft., one target. {@h}32 (6d8 + 5) cold damage plus 31 (7d8) necrotic damage, and if the target is a creature, it can't regain hit points until the start of Skall's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "6d8 + 5",
+              "type": "Cold"
+            },
+            {
+              "formula": "7d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_death_knell_x3id",
+        "name": "Death Knell",
+        "actionType": "action",
+        "descriptionHtml": "<p>Skall points his finger at a creature he can see within 120 feet of himself, filling the target's mind with visions of death and the plangent toll of an iron bell. The target must succeed on a DC 19 Wisdom saving throw or take 14 (4d6) psychic damage and have the frightened condition until the start of Skall's next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 19,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "4d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fog_of_death__1_day__tzz2",
+        "name": "Fog of Death (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Skall exudes a killing fog in a 30-foot-radius sphere centered on himself. The sphere spreads around corners, and its area is Vision and Light. The fog lasts until the start of Skall's next turn, and it can't be dispersed by wind. It does not move with him.</p><p>Each creature that enters the fog for the first time on a turn or starts its turn there must make a DC 19 Constitution saving throw, taking 28 (8d6) necrotic damage and 28 (8d6) poison damage on a failed save, or half as much damage on a successful one. A Medium or smaller Humanoid killed by this damage becomes a zombie under Skall's control. The zombie acts on Skall's initiative but immediately after his turn. Absent any other command, the zombie tries to kill any non-Undead creature it encounters.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 19,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "8d6",
+              "type": "Necrotic"
+            },
+            {
+              "formula": "8d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_baleful_counterspell_vb3x",
+        "name": "Baleful Counterspell",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>Skall chatters his teeth to interrupt a creature he can see within 60 feet of himself that is casting a spell. If the spell is 4th level or lower, it fails and has no effect. If the spell is 5th level or higher, Skall makes an Intelligence check (DC 10 + the spell's level). On a successful check, the spell fails and has no effect. Whatever the spell's level, the caster takes 10 (3d6) necrotic damage if the spell fails.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 10,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_near_death_experience_ojvj",
+        "name": "Near-Death Experience",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>In response to being hit by an attack, Skall teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AATM/Factol Skall.webp",
+    "tokenImg": "img/bestiary/tokens/AATM/Factol Skall.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_heralds_of_dust_exorcist_aatm",
+    "name": "Heralds of Dust Exorcist",
+    "source": "AATM",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      },
+      {
+        "value": 16,
+        "condition": "with {@spell mage armor}"
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 112,
+      "formula": "15d8 + 45"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "int": "+6",
+      "wis": "+5",
+      "cha": "+3"
+    },
+    "skills": {
+      "arcana": "+6",
+      "perception": "+5",
+      "religion": "+6"
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": "truesight 60 ft."
+    },
+    "languages": [
+      "Common plus three more languages"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_heralds_of_dust_exorcist_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "The exorcist casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save DC 14, +6 to hit with spell attacks):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_evil_and_good_xphb",
+            "name": "Detect Evil and Good",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_armor_xphb",
+            "name": "Mage Armor",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "8 hours",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a piece of cured leather)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_protection_from_evil_and_good_xphb",
+              "name": "Protection from Evil and Good",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a flask of Holy Water worth 25+ GP, which the spell consumes)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_remove_curse_xphb",
+              "name": "Remove Curse",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_speak_with_dead_xphb",
+              "name": "Speak with Dead",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "10 feet",
+              "duration": "10 minutes",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (burning incense)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_banishment_xphb",
+              "name": "Banishment",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "charisma",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S, M (a pentacle)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dispel_evil_and_good_xphb",
+              "name": "Dispel Evil and Good",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "charisma",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S, M (powdered silver and iron)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Evil and Good",
+          "Mage Armor",
+          "Mage Hand"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_incorruptible_vessel_l3p3",
+        "name": "Incorruptible Vessel",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The exorcist can't be possessed by Celestials, Fiends, or Undead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_rciw",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The exorcist makes two Grave Burst attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_grave_burst_g4e3",
+        "name": "Grave Burst",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms,rs +6 to hit, reach 5 ft. or range 120 ft., one target. {@h}19 (3d10 + 3) necrotic or radiant damage (exorcist's choice).</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": "120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d10 + 3",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_admit_entity__recharge_5__cgow",
+        "name": "Admit Entity (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The exorcist thins the veil of death for a creature it can see within 60 feet of itself, exposing the target to malevolent entities. The target must make a DC 14 Charisma saving throw. On a failed save, the target takes 36 (8d8) psychic damage and has the incapacitated condition for 1 minute, during which time it retches and babbles incoherently in a voice that is not its own. On a successful save, the target takes half as much damage only. An incapacitated target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CHA"
+          },
+          "damages": [
+            {
+              "formula": "8d8",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AATM/Heralds of Dust Exorcist.webp",
+    "tokenImg": "img/bestiary/tokens/AATM/Heralds of Dust Exorcist.webp",
+    "fluff": null
+  }
+]

@@ -27,8 +27,30 @@ async function fetchAllRaces() {
     }
 }
 
+export function toSpellTitleCase(str) {
+    if (!str || typeof str !== 'string') return '';
+    const cleanStr = str.replace(/\{@spell ([^|}]+).*?\}/gi, '$1').trim();
+    if (!cleanStr) return '';
+    const minorWords = new Set(['of', 'the', 'in', 'on', 'at', 'to', 'for', 'with', 'and', 'or', 'from', 'by', 'a', 'an']);
+    const words = cleanStr.toLowerCase().split(/\s+/);
+    return words.map((word, idx) => {
+        if (word.includes('-')) {
+            return word.split('-').map((part, pIdx) => {
+                if (pIdx > 0 && minorWords.has(part)) return part;
+                return part.charAt(0).toUpperCase() + part.slice(1);
+            }).join('-');
+        }
+        if (idx > 0 && idx < words.length - 1 && minorWords.has(word)) {
+            return word;
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(' ');
+}
+
 if (typeof window !== 'undefined') {
+    window.toSpellTitleCase = toSpellTitleCase;
     window.VTTSpellManager = window.VTTSpellManager || {
+        toSpellTitleCase: toSpellTitleCase,
         loadSpells: () => loadSpells(),
         cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
         getSpellCache: () => sharedSpellCache,
@@ -50,8 +72,11 @@ export function setSpellCache(cache) {
 export async function loadSpells() {
     if (sharedSpellCache) return sharedSpellCache;
     if (pSpellPromise) return pSpellPromise;
-    pSpellPromise = fetch(`/data/spells-normalized.json?v=${Date.now()}`)
-        .then(res => res.json())
+    pSpellPromise = fetch(`/data/spells-catalog.json?v=${Date.now()}`)
+        .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+        })
         .then(spells => {
             sharedSpellCache = spells;
             if (typeof window !== 'undefined' && window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
@@ -59,6 +84,17 @@ export async function loadSpells() {
             }
             return spells;
         }).catch(async err => {
+            try {
+                const res = await fetch('/api/spells/catalog');
+                if (res.ok) {
+                    const spells = await res.json();
+                    sharedSpellCache = spells;
+                    if (typeof window !== 'undefined' && window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                        window.vttPlayerSheetAPI.setSpellCache(spells);
+                    }
+                    return spells;
+                }
+            } catch(e) {}
             if (typeof window !== 'undefined' && window.DataUtil && window.DataUtil.spell) {
                 const spells = await window.DataUtil.spell.pLoadAll();
                 sharedSpellCache = spells;
@@ -200,23 +236,41 @@ export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, s
     let meta = getSpellMetaStrings(sp || { name: spellName }, slKey);
     
     let rawBody = sp?.description || fallbackDesc || '';
-    if (!rawBody && (sharedSpellCache || spellCache) && spellName) {
+    if ((sharedSpellCache || spellCache) && spellName) {
         const cache = sharedSpellCache || spellCache;
         const found = cache.find(s => s.name && s.name.toLowerCase().trim() === spellName.toLowerCase().trim());
         if (found) {
-            rawBody = found.descriptionHtml || found.description || '';
-            if (found.higherLevelHtml && !rawBody.includes(found.higherLevelHtml)) {
-                rawBody += (rawBody ? '<br>' : '') + found.higherLevelHtml;
+            if (!rawBody) {
+                rawBody = found.descriptionHtml || found.description || '';
+                if (found.higherLevelHtml && !rawBody.includes(found.higherLevelHtml)) {
+                    rawBody += (rawBody ? '<br>' : '') + found.higherLevelHtml;
+                }
             }
             if (sp && typeof sp === 'object') {
-                sp.description = rawBody;
+                if (rawBody) sp.description = rawBody;
                 if (!sp.school && found.school) sp.school = found.school;
                 if (!sp.castingTime && found.castingTime) sp.castingTime = found.castingTime;
                 if (!sp.range && found.range) sp.range = found.range;
                 if (!sp.components && found.components) sp.components = found.components;
                 if (!sp.duration && found.duration) sp.duration = found.duration;
+                if (!sp.source && found.source) sp.source = found.source;
             }
             meta = getSpellMetaStrings(sp || found, slKey);
+
+            // If catalog item doesn't have full descriptionHtml yet, fetch asynchronously from source partition API
+            if ((!rawBody || rawBody === fallbackDesc) && found.source && found.id) {
+                fetch(`/api/spell/${encodeURIComponent(found.source)}/${encodeURIComponent(found.id)}`)
+                    .then(r => r.json())
+                    .then(full => {
+                        Object.assign(found, full);
+                        if (sp && typeof sp === 'object') {
+                            sp.description = full.descriptionHtml || full.description || '';
+                        }
+                        if (containerEl) {
+                            renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp || found, slKey);
+                        }
+                    }).catch(() => {});
+            }
         }
     }
 
@@ -281,7 +335,16 @@ export function renderSpellRowHtml(sp, slKey, idx, options = {}) {
         badges += `<span class="badge badge-r" style="background:#2196f3; color:#fff; border-radius:4px; padding:2px 4px; font-size:0.6rem; margin-left:4px;" title="Ritual">R</span>`;
     }
 
-    const attrName = spName.toLowerCase().replace(/"/g, '&quot;');
+    // Source edition badge (2024 vs 2014 vs Supplement)
+    const spSource = (typeof sp === 'object' && sp !== null && sp.source) ? String(sp.source).toUpperCase() : '';
+    if (spSource) {
+        const is2024 = spSource === 'XPHB' || spSource === 'XDMG' || spSource === 'XMM';
+        const badgeBg = is2024 ? '#059669' : (spSource === 'PHB' ? '#2563eb' : '#475569');
+        badges += `<span class="badge badge-src" style="background:${badgeBg}; color:#fff; border-radius:4px; padding:1px 4px; font-size:0.55rem; font-weight:700; margin-left:4px; vertical-align:middle;" title="Source: ${spSource}">${spSource}</span>`;
+    }
+
+    const cleanTitle = toSpellTitleCase(spName);
+    const attrName = cleanTitle.replace(/"/g, '&quot;');
     const editBtnHtml = allowEdit ? `<button class="btn btn-xxs btn-secondary ${prefix}edit" data-level="${slKey}" data-idx="${idx}"><i class="fa-solid fa-pen"></i></button>` : '';
 
     return `
@@ -303,7 +366,7 @@ export function renderSpellRowHtml(sp, slKey, idx, options = {}) {
                             <i class="fa-solid fa-wand-magic-sparkles text-gradient-gold"></i>
                         </div>
                         <div class="${prefix}ping-macro" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary);" title="Roll Spell">
-                            <span class="${prefix}name">${spName}</span>${badges}
+                            <span class="${prefix}name">${cleanTitle}</span>${badges}
                         </div>
                     </div>
                 </div>
@@ -324,8 +387,17 @@ export async function ensureSpellIsParsed(sp) {
     
     const spells = await loadSpells();
     if (spells && sp.name) {
-        const spData = spells.find(s => s.name && s.name.toLowerCase().trim() === sp.name.toLowerCase().trim());
+        let spData = spells.find(s => s.name && s.name.toLowerCase().trim() === sp.name.toLowerCase().trim());
         if (spData) {
+            if (!spData.descriptionHtml && spData.source && spData.id) {
+                try {
+                    const res = await fetch(`/api/spell/${encodeURIComponent(spData.source)}/${encodeURIComponent(spData.id)}`);
+                    if (res.ok) {
+                        const full = await res.json();
+                        Object.assign(spData, full);
+                    }
+                } catch(e) {}
+            }
             if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.parseSpellToMacro) {
                 window.vttPlayerSheetAPI.parseSpellToMacro(spData, sp);
             } else {
@@ -361,7 +433,7 @@ export function postSpellToChat(sp, slKey, creatureName = 'Creature', visibility
         bodyText = window.injectDiceChips(bodyText);
     }
 
-    const spName = sp.name || 'Spell';
+    const spName = toSpellTitleCase(sp.name || 'Spell');
     const msgObj = {
         text: `pings ${spName}`,
         abilityCard: {
@@ -503,7 +575,13 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
         });
     }
 
-    const baseLvl = slKey === 'cantrip' || slKey === 'legacy' ? 0 : parseInt(String(slKey).replace('level', '')) || 0;
+    let trueSpellLevel = sp.level !== undefined && sp.level !== null ? parseInt(sp.level) : null;
+    if (trueSpellLevel === null && (slKey === 'cantrip' || slKey === 'legacy')) {
+        trueSpellLevel = 0;
+    } else if (trueSpellLevel === null && String(slKey).startsWith('level')) {
+        trueSpellLevel = parseInt(String(slKey).replace('level', '')) || 1;
+    }
+    const baseLvl = trueSpellLevel !== null ? trueSpellLevel : (slKey === 'cantrip' || slKey === 'legacy' ? 0 : parseInt(String(slKey).replace('level', '')) || 0);
     const castLvl = customCastLvl !== null ? customCastLvl : baseLvl;
 
     let atkRoll = null;
@@ -569,9 +647,37 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
     // 4. Damage Calculation (Cantrip scaling & Upcasting)
     if ((type === 'roll' || type === 'damage') && sp.damageList && sp.damageList.length > 0) {
         let dList = JSON.parse(JSON.stringify(sp.damageList));
-        let casterLvl = casterObj.level || (casterObj.casterLevel !== undefined ? casterObj.casterLevel : (casterObj.spellcasterLevel || 1));
+        
+        // Determine effective caster level
+        let casterLvl = 1;
+        if (casterObj && (casterObj.classes || (casterObj.level !== undefined && !casterObj.cr))) {
+            // Player Character - always use character level
+            casterLvl = parseInt(casterObj.level) || 1;
+        } else {
+            // Creature / Monster / Companion
+            if (sp && sp.casterLevel && parseInt(sp.casterLevel) > 0) {
+                casterLvl = parseInt(sp.casterLevel);
+            } else if (casterObj && casterObj.casterLevel && parseInt(casterObj.casterLevel) > 0) {
+                casterLvl = parseInt(casterObj.casterLevel);
+            } else if (casterObj && casterObj.spellcasterLevel && parseInt(casterObj.spellcasterLevel) > 0) {
+                casterLvl = parseInt(casterObj.spellcasterLevel);
+            } else if (casterObj && casterObj.masterLevel && parseInt(casterObj.masterLevel) > 0) {
+                casterLvl = parseInt(casterObj.masterLevel);
+            } else if (casterObj && casterObj.cr !== undefined) {
+                // Monster CR fallback (e.g., CR 12 -> level 12)
+                let crRaw = typeof casterObj.cr === 'object' ? (casterObj.cr.cr || 0) : casterObj.cr;
+                if (crRaw === '1/8' || crRaw === '1/4' || crRaw === '1/2') {
+                    casterLvl = 1;
+                } else {
+                    casterLvl = Math.max(1, parseInt(crRaw) || 1);
+                }
+            } else {
+                casterLvl = parseInt(casterObj?.level) || 1;
+            }
+        }
 
-        if (baseLvl === 0 && sp.cantripScale) {
+        const isCantripRoll = (baseLvl === 0 && (sp.level === 0 || sp.level === undefined)) && Boolean(sp.cantripScale || sp.level === 0 || sp.isCantrip || (slKey === 'cantrip' && (sp.level === 0 || sp.level === undefined)));
+        if (isCantripRoll) {
             let cCount = casterLvl >= 17 ? 4 : casterLvl >= 11 ? 3 : casterLvl >= 5 ? 2 : 1;
             for (let d of dList) {
                 if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
@@ -692,7 +798,7 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
 
     // 5. Build standardized macroCard payload
     const meta = getSpellMetaStrings(sp, slKey);
-    let cardTitle = sp.name;
+    let cardTitle = toSpellTitleCase(sp.name || 'Spell');
     if (castLvl && castLvl > baseLvl) cardTitle += ` (Level ${castLvl})`;
     const isAllHealing = sp.damageList && sp.damageList.length > 0 && sp.damageList.every(d => /healing|temp\s*hp/i.test(d.type || ''));
     if (type === 'attack') cardTitle += ' (Spell Attack)';
@@ -743,6 +849,7 @@ export function initVttSpellManager(vtt) {
     function parseSpellToMacro(spData, newSpell) {
         if (!spData) return;
 
+        newSpell.source = spData.source || newSpell.source || '';
         newSpell.school = spData.school || newSpell.school || '';
         newSpell.castingTime = spData.castingTime || newSpell.castingTime || '';
         newSpell.range = spData.range || newSpell.range || '';
@@ -1525,12 +1632,17 @@ export function initVttSpellManager(vtt) {
         let dmgHtml = sp.damage ? `<span style="background:rgba(233,30,99,0.2); border:1px solid #f48fb1; color:#f48fb1; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;"><i class="fa-solid fa-burst"></i> ${sp.damage}</span>` : '';
         let upcastHtml = sp.upcastBonus ? `<span style="background:rgba(76,175,80,0.2); border:1px solid #81c784; color:#a5d6a7; padding:2px 8px; border-radius:4px; font-weight:bold; font-size:0.75rem;"><i class="fa-solid fa-circle-arrow-up"></i> Upcast: +${sp.upcastBonus} ${sp.upcastScaleStep && sp.upcastScaleStep > 1 ? `every ${sp.upcastScaleStep} lvls` : 'per lvl'}</span>` : '';
 
+        const spSource = (sp.source || '').toUpperCase();
+        const is2024 = spSource === 'XPHB' || spSource === 'XDMG' || spSource === 'XMM';
+        const badgeBg = is2024 ? '#059669' : (spSource === 'PHB' ? '#2563eb' : '#475569');
+        const badgeText = is2024 ? `${spSource} • 2024` : (spSource === 'PHB' ? `${spSource} • 2014` : spSource);
+
         contentEl.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:12px;">
                 <div style="border-bottom:1px solid var(--color-border-subtle); padding-bottom:8px;">
                     <div style="display:flex; justify-content:space-between; align-items:baseline;">
                         <h3 style="margin:0; color:var(--color-gold-base); font-size:1.15rem;">${sp.name}</h3>
-                        <span style="font-size:0.7rem; color:var(--color-text-muted); background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px;">${sp.source} p.${sp.page || 0}</span>
+                        <span style="font-size:0.7rem; color:#fff; background:${badgeBg}; padding:2px 6px; border-radius:4px; font-weight:600;">${badgeText}</span>
                     </div>
                     <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:2px;">
                         ${sp.level === 0 ? 'Cantrip' : `Level ${sp.level}`} • ${sp.school}
@@ -1551,10 +1663,24 @@ export function initVttSpellManager(vtt) {
                 ${(atkHtml || saveHtml || dmgHtml || upcastHtml) ? `<div style="display:flex; flex-wrap:wrap; gap:6px; margin:2px 0;">${atkHtml} ${saveHtml} ${dmgHtml} ${upcastHtml}</div>` : ''}
 
                 <div style="font-size:0.8rem; line-height:1.4; color:var(--color-text-primary); border-top:1px solid var(--color-border-subtle); padding-top:8px;" class="spell-preview-description">
-                    ${sp.descriptionHtml || sp.description || '<em>No description available.</em>'}
+                    ${sp.descriptionHtml || sp.description || '<em>Loading spell description...</em>'}
                 </div>
             </div>
         `;
+
+        if (!sp.descriptionHtml && sp.source && sp.id) {
+            fetch(`/api/spell/${encodeURIComponent(sp.source)}/${encodeURIComponent(sp.id)}`)
+                .then(r => r.json())
+                .then(full => {
+                    Object.assign(sp, full);
+                    if (activePreviewSpell && activePreviewSpell.id === sp.id) {
+                        const descEl = contentEl.querySelector('.spell-preview-description');
+                        if (descEl) {
+                            descEl.innerHTML = sp.descriptionHtml || sp.description || '<em>No description available.</em>';
+                        }
+                    }
+                }).catch(() => {});
+        }
     }
 
     function populateFilterDropdowns() {
@@ -1671,12 +1797,18 @@ export function initVttSpellManager(vtt) {
         displaySpells.forEach(sp => {
             const isSelected = spellBulkSelection.has(sp.name);
             const isPreviewActive = activePreviewSpell && activePreviewSpell.id === sp.id;
+            const spSrc = (sp.source || '').toUpperCase();
+            const is2024 = spSrc === 'XPHB' || spSrc === 'XDMG' || spSrc === 'XMM';
+            const badgeBg = is2024 ? '#059669' : (spSrc === 'PHB' ? '#2563eb' : '#475569');
             html += `
                 <div class="spell-result-row ${isPreviewActive ? 'active-preview' : ''}" data-id="${sp.id}" style="display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:pointer; background:${isPreviewActive ? 'rgba(212,175,55,0.15)' : 'transparent'}; border-left:${isPreviewActive ? '3px solid var(--color-gold-base)' : '3px solid transparent'}; font-size:0.8rem;">
                     <input type="checkbox" class="spell-bulk-cb" data-name="${sp.name.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} style="cursor:pointer; flex-shrink:0; width:16px; height:16px; margin:0 4px 0 0;">
                     <div class="spell-row-info" style="display:flex; flex-direction:column; flex:1; min-width:0;">
-                        <span style="font-weight:600; font-size:0.85rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${sp.name}</span>
-                        <span style="font-size:0.7rem; color:var(--color-text-muted);">${sp.level === 0 ? 'Cantrip' : 'Lvl ' + sp.level} • ${sp.school} • ${sp.source}</span>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-weight:600; font-size:0.85rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${sp.name}</span>
+                            <span style="background:${badgeBg}; color:#fff; border-radius:3px; padding:1px 4px; font-size:0.55rem; font-weight:700; text-transform:uppercase;">${sp.source}</span>
+                        </div>
+                        <span style="font-size:0.7rem; color:var(--color-text-muted);">${sp.level === 0 ? 'Cantrip' : 'Lvl ' + sp.level} • ${sp.school}</span>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="font-size:0.7rem; color:var(--color-text-muted); opacity:0.6; flex-shrink:0;"></i>
                 </div>
@@ -1715,9 +1847,20 @@ export function initVttSpellManager(vtt) {
         }));
     }
 
-    function openSpellModal(level, idx = -1, customChar = null, onSaveCallback = null) {
+    function openSpellModal(level, idx = -1, customChar = null, onSaveCallback = null, options = null) {
         ensureSpellModalsExist();
-        activeSpellEditContext = { char: customChar || currentChar, onSave: onSaveCallback };
+        const opts = (typeof onSaveCallback === 'object' && onSaveCallback !== null && !options) ? onSaveCallback : (options || {});
+        const saveCallback = typeof onSaveCallback === 'function' ? onSaveCallback : opts.onSave;
+        activeSpellEditContext = { 
+            char: customChar || currentChar, 
+            onSave: saveCallback,
+            options: opts,
+            targetSpell: opts.targetSpell || null,
+            blockId: opts.blockId || null,
+            sectionKey: opts.sectionKey || null,
+            spellId: opts.spellId || null,
+            onDelete: opts.onDelete || null
+        };
         const lvlInput = document.getElementById('modal-spell-level');
         const idxInput = document.getElementById('modal-spell-idx');
         if (lvlInput) lvlInput.value = level;
@@ -1729,12 +1872,15 @@ export function initVttSpellManager(vtt) {
         const btnCustom = document.querySelector('.pc-spell-modal-tab[data-tab="custom"]');
 
         const char = activeSpellEditContext.char;
-        if (idx >= 0 && char) {
-            const sp = char.spells[level][idx];
+        let sp = opts.targetSpell || null;
+        if (!sp && idx >= 0 && char && char.spells && char.spells[level]) {
+            sp = char.spells[level][idx];
+        }
+        if (sp) {
             const spData = spellCache ? spellCache.find(s => (s.name || '').toLowerCase().trim() === (sp.name || '').toLowerCase().trim()) : null;
 
             document.getElementById('pc-spell-modal-title').textContent = "Edit Spell";
-            document.getElementById('modal-spell-name').value = sp.name || '';
+            document.getElementById('modal-spell-name').value = toSpellTitleCase(sp.name || '');
             let desc = sp.description || (spData ? (spData.descriptionHtml || '') : '');
             if (desc.includes('<p>') || desc.includes('<div>')) {
                 const temp = document.createElement('div');
@@ -2073,7 +2219,7 @@ export function initVttSpellManager(vtt) {
         });
 
         // Single Add Spell Button from Live Preview Pane
-        document.getElementById('btn-import-single-spell')?.addEventListener('click', (e) => {
+        document.getElementById('btn-import-single-spell')?.addEventListener('click', async (e) => {
             if (!activePreviewSpell) return;
             const char = activeSpellEditContext && activeSpellEditContext.char ? activeSpellEditContext.char : currentChar;
             if (!char) return;
@@ -2085,9 +2231,62 @@ export function initVttSpellManager(vtt) {
             if (!char.spells[levelKey]) char.spells[levelKey] = [];
 
             if (!char.spells[levelKey].find(s => s.name === activePreviewSpell.name)) {
-                const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: activePreviewSpell.name, description: '', prepared: false, macroPopulated: true };
+                if (!activePreviewSpell.descriptionHtml && activePreviewSpell.source && activePreviewSpell.id) {
+                    try {
+                        const res = await fetch(`/api/spell/${encodeURIComponent(activePreviewSpell.source)}/${encodeURIComponent(activePreviewSpell.id)}`);
+                        if (res.ok) {
+                            const full = await res.json();
+                            Object.assign(activePreviewSpell, full);
+                        }
+                    } catch(err) {}
+                }
+                const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(activePreviewSpell.name), description: '', prepared: false, macroPopulated: true, level: activePreviewSpell.level, source: activePreviewSpell.source };
                 parseSpellToMacro(activePreviewSpell, newSpell);
+                newSpell.name = toSpellTitleCase(newSpell.name);
                 char.spells[levelKey].push(newSpell);
+
+                // If adding to a specific monster spellcasting block and innate/slot section
+                if (activeSpellEditContext && activeSpellEditContext.blockId && char.spellcasting) {
+                    const sc = char.spellcasting.find(b => b.id === activeSpellEditContext.blockId);
+                    if (sc) {
+                        if (activeSpellEditContext.sectionKey === 'will') {
+                            sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                            sc.innateObj.will = sc.innateObj.will || [];
+                            sc.will = sc.will || [];
+                            newSpell.uses = 'at_will';
+                            newSpell.innate = true;
+                            if (!sc.innateObj.will.some(s => s.name.toLowerCase() === newSpell.name.toLowerCase())) {
+                                sc.innateObj.will.push(newSpell);
+                            }
+                            if (!sc.will.some(s => (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) === newSpell.name.toLowerCase())) {
+                                sc.will.push(newSpell);
+                            }
+                        } else if (activeSpellEditContext.sectionKey) {
+                            const dayKey = activeSpellEditContext.sectionKey;
+                            const usesMax = parseInt(dayKey) || 1;
+                            sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                            sc.innateObj.daily = sc.innateObj.daily || {};
+                            sc.innateObj.daily[dayKey] = sc.innateObj.daily[dayKey] || [];
+                            sc.daily = sc.daily || {};
+                            sc.daily[dayKey] = sc.daily[dayKey] || [];
+                            newSpell.usesMax = usesMax;
+                            newSpell.usesRemaining = usesMax;
+                            newSpell.dailyKey = dayKey;
+                            newSpell.innate = true;
+                            if (!sc.innateObj.daily[dayKey].some(s => s.name.toLowerCase() === newSpell.name.toLowerCase())) {
+                                sc.innateObj.daily[dayKey].push(newSpell);
+                            }
+                            if (!sc.daily[dayKey].some(s => (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) === newSpell.name.toLowerCase())) {
+                                sc.daily[dayKey].push(newSpell);
+                            }
+                        } else if (sc.spellsObj) {
+                            sc.spellsObj[levelKey] = sc.spellsObj[levelKey] || [];
+                            if (!sc.spellsObj[levelKey].some(s => s.name.toLowerCase() === newSpell.name.toLowerCase())) {
+                                sc.spellsObj[levelKey].push(newSpell);
+                            }
+                        }
+                    }
+                }
 
                 if (activeSpellEditContext && activeSpellEditContext.onSave) {
                     activeSpellEditContext.onSave(char);
@@ -2134,6 +2333,13 @@ export function initVttSpellManager(vtt) {
         document.getElementById('delete-prompt-confirm')?.addEventListener('click', (e) => {
             const char = activeSpellEditContext && activeSpellEditContext.char ? activeSpellEditContext.char : currentChar;
             if (!char) return;
+            if (activeSpellEditContext && activeSpellEditContext.onDelete && activeSpellEditContext.targetSpell) {
+                activeSpellEditContext.onDelete(char, activeSpellEditContext.targetSpell);
+                document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
+                closeSpellModal();
+                if (activeSpellEditContext.onSave) activeSpellEditContext.onSave(char);
+                return;
+            }
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
             if (level && idx !== undefined) {
@@ -2156,7 +2362,7 @@ export function initVttSpellManager(vtt) {
             renderModalSpellDamage();
         });
 
-        document.getElementById('modal-spell-save')?.addEventListener('click', () => {
+        document.getElementById('modal-spell-save')?.addEventListener('click', async () => {
             const char = activeSpellEditContext && activeSpellEditContext.char ? activeSpellEditContext.char : currentChar;
             if (!char) return;
             const isCustomTab = !document.getElementById('pc-spell-tab-custom').classList.contains('vtt-hidden');
@@ -2165,7 +2371,8 @@ export function initVttSpellManager(vtt) {
             if (isCustomTab) {
                 const level = targetLevel;
                 const idx = parseInt(document.getElementById('modal-spell-idx').value);
-                const name = document.getElementById('modal-spell-name').value.trim();
+                const rawName = document.getElementById('modal-spell-name').value.trim();
+                const name = toSpellTitleCase(rawName);
                 const description = document.getElementById('modal-spell-desc').value;
                 const school = document.getElementById('modal-spell-school')?.value || '';
                 const castingTime = document.getElementById('modal-spell-time')?.value || '';
@@ -2193,31 +2400,147 @@ export function initVttSpellManager(vtt) {
                 const usesRemaining = usesMax !== undefined ? usesMax : undefined;
 
                 if (!name) return alert("Spell name is required.");
+
+                if (activeSpellEditContext && activeSpellEditContext.targetSpell) {
+                    const target = activeSpellEditContext.targetSpell;
+                    Object.assign(target, {
+                        name,
+                        description,
+                        school,
+                        castingTime,
+                        range,
+                        components,
+                        duration,
+                        concentration,
+                        ritual,
+                        macroDescription,
+                        attackStat,
+                        attackProf,
+                        attackExtra,
+                        attackBonus,
+                        saveDcStat,
+                        saveDcExtra,
+                        saveDcCustom,
+                        saveAbility,
+                        damageList,
+                        cantripScale,
+                        upcastBonus,
+                        upcastScaleStep,
+                        usesType,
+                        usesMax,
+                        usesRemaining,
+                        macroPopulated: true
+                    });
+                    closeSpellModal();
+                    if (activeSpellEditContext && activeSpellEditContext.onSave) {
+                        activeSpellEditContext.onSave(char, target);
+                    }
+                    return;
+                }
+
                 if (!char.spells) char.spells = {};
                 if (!char.spells[level]) char.spells[level] = [];
 
                 if (idx >= 0) {
                     char.spells[level][idx] = { ...char.spells[level][idx], name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
                 } else {
-                    char.spells[level].push({ id: 'sp_' + Date.now() + Math.random(), name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true });
+                    const newCustomSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(name), description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
+                    char.spells[level].push(newCustomSpell);
+
+                    if (activeSpellEditContext && activeSpellEditContext.blockId && char.spellcasting) {
+                        const sc = char.spellcasting.find(b => b.id === activeSpellEditContext.blockId);
+                        if (sc) {
+                            if (activeSpellEditContext.sectionKey === 'will') {
+                                sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                sc.innateObj.will = sc.innateObj.will || [];
+                                sc.will = sc.will || [];
+                                newCustomSpell.uses = 'at_will';
+                                newCustomSpell.innate = true;
+                                sc.innateObj.will.push(newCustomSpell);
+                                sc.will.push(newCustomSpell);
+                            } else if (activeSpellEditContext.sectionKey) {
+                                const dayKey = activeSpellEditContext.sectionKey;
+                                const usesMax = parseInt(dayKey) || 1;
+                                sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                sc.innateObj.daily = sc.innateObj.daily || {};
+                                sc.innateObj.daily[dayKey] = sc.innateObj.daily[dayKey] || [];
+                                sc.daily = sc.daily || {};
+                                sc.daily[dayKey] = sc.daily[dayKey] || [];
+                                newCustomSpell.usesMax = usesMax;
+                                newCustomSpell.usesRemaining = usesMax;
+                                newCustomSpell.dailyKey = dayKey;
+                                newCustomSpell.innate = true;
+                                sc.innateObj.daily[dayKey].push(newCustomSpell);
+                                sc.daily[dayKey].push(newCustomSpell);
+                            }
+                        }
+                    }
                 }
             } else {
                 if (spellBulkSelection.size === 0) return alert("No spells selected.");
                 const lvlMapInverse = { 0: 'cantrip', 1: 'level1', 2: 'level2', 3: 'level3', 4: 'level4', 5: 'level5', 6: 'level6', 7: 'level7', 8: 'level8', 9: 'level9' };
 
-                Array.from(spellBulkSelection).forEach(spellName => {
+                const selectedSpells = Array.from(spellBulkSelection);
+                for (const spellName of selectedSpells) {
                     const spData = spellCache.find(s => s.name === spellName);
                     if (spData) {
+                        if (!spData.descriptionHtml && spData.source && spData.id) {
+                            try {
+                                const res = await fetch(`/api/spell/${encodeURIComponent(spData.source)}/${encodeURIComponent(spData.id)}`);
+                                if (res.ok) {
+                                    const full = await res.json();
+                                    Object.assign(spData, full);
+                                }
+                            } catch(err) {}
+                        }
                         const levelKey = lvlMapInverse[spData.level] || targetLevel;
                         if (!char.spells) char.spells = {};
                         if (!char.spells[levelKey]) char.spells[levelKey] = [];
                         if (!char.spells[levelKey].find(s => s.name === spellName)) {
-                            const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: spellName, description: '', prepared: false, macroPopulated: true };
+                            const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(spellName), description: '', prepared: false, macroPopulated: true, level: spData.level, source: spData.source };
                             parseSpellToMacro(spData, newSpell);
+                            newSpell.name = toSpellTitleCase(newSpell.name);
                             char.spells[levelKey].push(newSpell);
+
+                            if (activeSpellEditContext && activeSpellEditContext.blockId && char.spellcasting) {
+                                const sc = char.spellcasting.find(b => b.id === activeSpellEditContext.blockId);
+                                if (sc) {
+                                    if (activeSpellEditContext.sectionKey === 'will') {
+                                        sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                        sc.innateObj.will = sc.innateObj.will || [];
+                                        sc.will = sc.will || [];
+                                        newSpell.uses = 'at_will';
+                                        newSpell.innate = true;
+                                        if (!sc.innateObj.will.some(s => s.name.toLowerCase() === newSpell.name.toLowerCase())) {
+                                            sc.innateObj.will.push(newSpell);
+                                        }
+                                        if (!sc.will.some(s => (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) === newSpell.name.toLowerCase())) {
+                                            sc.will.push(newSpell);
+                                        }
+                                    } else if (activeSpellEditContext.sectionKey) {
+                                        const dayKey = activeSpellEditContext.sectionKey;
+                                        const usesMax = parseInt(dayKey) || 1;
+                                        sc.innateObj = sc.innateObj || { will: [], daily: {} };
+                                        sc.innateObj.daily = sc.innateObj.daily || {};
+                                        sc.innateObj.daily[dayKey] = sc.innateObj.daily[dayKey] || [];
+                                        sc.daily = sc.daily || {};
+                                        sc.daily[dayKey] = sc.daily[dayKey] || [];
+                                        newSpell.usesMax = usesMax;
+                                        newSpell.usesRemaining = usesMax;
+                                        newSpell.dailyKey = dayKey;
+                                        newSpell.innate = true;
+                                        if (!sc.innateObj.daily[dayKey].some(s => s.name.toLowerCase() === newSpell.name.toLowerCase())) {
+                                            sc.innateObj.daily[dayKey].push(newSpell);
+                                        }
+                                        if (!sc.daily[dayKey].some(s => (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) === newSpell.name.toLowerCase())) {
+                                            sc.daily[dayKey].push(newSpell);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
-                });
+                }
             }
 
             closeSpellModal();
@@ -2466,11 +2789,11 @@ export function initVttSpellManager(vtt) {
             spellCache = ctx.spellCache;
             if (ctx.spellCache) sharedSpellCache = ctx.spellCache;
         },
-        openModal: (level, idx, customChar, onSaveCallback) => {
-            openSpellModal(level, idx, customChar, onSaveCallback);
+        openModal: (level, idx, customChar, onSaveCallback, options) => {
+            openSpellModal(level, idx, customChar, onSaveCallback, options);
         },
-        openSpellModal: (level, idx, customChar, onSaveCallback) => {
-            openSpellModal(level, idx, customChar, onSaveCallback);
+        openSpellModal: (level, idx, customChar, onSaveCallback, options) => {
+            openSpellModal(level, idx, customChar, onSaveCallback, options);
         },
         getSpellCache: () => sharedSpellCache || spellCache,
         setSpellCache: (cache) => { 

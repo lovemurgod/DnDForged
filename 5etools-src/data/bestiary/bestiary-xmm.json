@@ -49,7 +49,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The aarakocra casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -65,14 +65,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Feather Fall (1/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The aarakocra casts {@spell Feather Fall|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -85,10 +82,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -228,7 +222,8 @@
 			"page": 86,
 			"referenceSources": [
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -279,7 +274,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -288,14 +283,11 @@
 						"{@spell Minor Illusion|XPHB}"
 					],
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Counterspell (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts {@spell Counterspell|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -308,10 +300,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -385,6 +374,9 @@
 			"page": 12,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"L"
 			],
@@ -766,7 +758,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}, {@hit 9} to hit with spell attacks):"
 					],
@@ -782,10 +774,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -980,7 +969,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -997,10 +986,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1186,7 +1172,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -1194,7 +1180,7 @@
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Minor Illusion|XPHB}",
 						"{@spell Scorching Ray|XPHB}",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
 						"{@spell Speak with Animals|XPHB}"
 					],
 					"daily": {
@@ -1204,10 +1190,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1395,14 +1378,14 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}, {@hit 10} to hit with spell attacks):"
 					],
 					"will": [
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Guiding Bolt|XPHB} (level 2 version)",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
 						"{@spell Speak with Animals|XPHB}",
 						"{@spell Thaumaturgy|XPHB}"
 					],
@@ -1413,10 +1396,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1619,7 +1599,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -1627,7 +1607,7 @@
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Mind Spike|XPHB} (level 4 version)",
 						"{@spell Minor Illusion|XPHB}",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -1636,10 +1616,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -1832,14 +1809,14 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 21}, {@hit 13} to hit with spell attacks):"
 					],
 					"will": [
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Guiding Bolt|XPHB} (level 2 version)",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -1848,10 +1825,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2060,7 +2034,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -2074,10 +2048,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2270,7 +2241,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 20}, {@hit 12} to hit with spell attacks):"
 					],
@@ -2285,10 +2256,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2472,7 +2440,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 19}, {@hit 11} to hit with spell attacks):"
 					],
@@ -2480,7 +2448,7 @@
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Hold Monster|XPHB}",
 						"{@spell Ice Knife|XPHB}",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -2489,10 +2457,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -2693,7 +2658,7 @@
 			"spellcasting": [
 				{
 					"name": "Frightful Presence",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts {@spell Fear|XPHB}, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 14}). The dragon can't take this action again until the start of its next turn."
 					],
@@ -2706,10 +2671,7 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -3104,7 +3066,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 21}, {@hit 13} to hit with spell attacks):"
 					],
@@ -3121,10 +3083,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3320,7 +3279,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 22}):"
 					],
@@ -3337,10 +3296,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 22,
-					"atkMod": 14,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3526,7 +3482,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -3534,7 +3490,7 @@
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Minor Illusion|XPHB}",
 						"{@spell Scorching Ray|XPHB} (level 3 version)",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
 						"{@spell Speak with Animals|XPHB}"
 					],
 					"daily": {
@@ -3544,10 +3500,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3735,14 +3688,14 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 22}, {@hit 14} to hit with spell attacks):"
 					],
 					"will": [
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Guiding Bolt|XPHB} (level 2 version)",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)",
 						"{@spell Speak with Animals|XPHB}",
 						"{@spell Thaumaturgy|XPHB}"
 					],
@@ -3755,10 +3708,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 22,
-					"atkMod": 14,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -3961,7 +3911,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 21}):"
 					],
@@ -3969,7 +3919,7 @@
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Mind Spike|XPHB} (level 5 version)",
 						"{@spell Minor Illusion|XPHB}",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -3979,10 +3929,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4176,14 +4123,14 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 24}, {@hit 16} to hit with spell attacks):"
 					],
 					"will": [
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Guiding Bolt|XPHB} (level 4 version)",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -4193,10 +4140,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 24,
-					"atkMod": 16,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4402,7 +4346,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 21}):"
 					],
@@ -4417,10 +4361,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4614,7 +4555,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 23}, {@hit 15} to hit with spell attacks):"
 					],
@@ -4630,10 +4571,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 23,
-					"atkMod": 15,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -4817,7 +4755,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 23}, {@hit 15} to hit with spell attacks):"
 					],
@@ -4825,7 +4763,7 @@
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Hold Monster|XPHB}",
 						"{@spell Ice Knife|XPHB} (level 2 version)",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -4836,10 +4774,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 23,
-					"atkMod": 15,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -5036,7 +4971,7 @@
 			"spellcasting": [
 				{
 					"name": "Frightful Presence",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts {@spell Fear|XPHB}, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 18}). The dragon can't take this action again until the start of its next turn."
 					],
@@ -5049,10 +4984,7 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					],
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -5234,7 +5166,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The animal lord casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -5254,10 +5186,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -5540,7 +5469,8 @@
 			"referenceSources": [
 				"EFA",
 				"FRAiF",
-				"LFL"
+				"LFL",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -5684,7 +5614,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The broom doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The broom doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -5722,8 +5652,10 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"BQDD",
 				"EFA",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"S"
@@ -5811,7 +5743,8 @@
 				"DrDe",
 				"DrDe-BD",
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -6067,6 +6000,9 @@
 					"page": 346
 				}
 			],
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"M"
 			],
@@ -6145,6 +6081,10 @@
 			],
 			"source": "XMM",
 			"page": 19,
+			"referenceSources": [
+				"AUD",
+				"RHW"
+			],
 			"size": [
 				"M"
 			],
@@ -6218,7 +6158,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The arcanaloth casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -6238,14 +6178,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Counterspell",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The arcanaloth casts {@spell Counterspell|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -6256,10 +6193,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -6374,6 +6308,9 @@
 			"name": "Arch-hag",
 			"source": "XMM",
 			"page": 21,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"L"
 			],
@@ -6434,7 +6371,7 @@
 			"spellcasting": [
 				{
 					"name": "Coven Magic",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {@dc 19}): {@spell Augury|XPHB}, {@spell Find Familiar|XPHB}, {@spell Identify|XPHB}, {@spell Locate Object|XPHB}, {@spell Scrying|XPHB}, or {@spell Unseen Servant|XPHB}. The hag must finish a {@variantrule Long Rest|XPHB} before using this trait to cast that spell again."
 					],
@@ -6451,14 +6388,11 @@
 					"ability": "int",
 					"hidden": [
 						"restLong"
-					],
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hag casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 22}):"
 					],
@@ -6476,14 +6410,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 22,
-					"atkMod": 14,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Tongue Twister",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hag casts {@spell Counterspell|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting. If the target fails its saving throw, it is cursed until the end of its next turn. Until the curse ends, the target can't cast spells with a Verbal component, and when it speaks, it says the opposite of what it means."
 					],
@@ -6494,10 +6425,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					],
-					"dc": 22,
-					"atkMod": 14,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -6718,9 +6646,11 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"EFA",
 				"FRAiF",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -6786,7 +6716,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The archmage casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -6813,14 +6743,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Misty Step (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mage casts {@spell Misty Step|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -6833,14 +6760,11 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Protective Magic (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The archmage casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -6854,10 +6778,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -6934,11 +6855,13 @@
 			"source": "XMM",
 			"page": 248,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TFV",
 				"EFA",
 				"FRAiF",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -6996,7 +6919,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The archpriest casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -7013,14 +6936,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Divine Aid (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The priest casts {@spell Bless|XPHB}, {@spell Dispel Magic|XPHB}, {@spell Healing Word|XPHB}, or {@spell Lesser Restoration|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -7036,10 +6956,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -7112,12 +7029,14 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"ABH",
+				"AUD",
 				"DrDe",
 				"DrDe-BtS",
 				"DrDe-TDoN",
 				"EFA",
 				"FRAiF",
-				"LFL"
+				"LFL",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -7320,7 +7239,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -7502,7 +7422,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The azer casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -7516,14 +7436,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Hellish Rebuke (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The azer casts {@spell Hellish Rebuke|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -7536,10 +7453,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -7861,6 +7775,9 @@
 			"page": 26,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"AUD"
+			],
 			"size": [
 				"H"
 			],
@@ -8030,13 +7947,15 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"ABH",
+				"AUD",
 				"BQGT",
 				"DrDe",
 				"DrDe-BD",
 				"DrDe-DotSC",
 				"EFA",
 				"FRAiF",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -8236,6 +8155,7 @@
 			"source": "XMM",
 			"page": 28,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -8357,6 +8277,7 @@
 			"source": "XMM",
 			"page": 28,
 			"referenceSources": [
+				"AUD",
 				"EFA",
 				"FRAiF"
 			],
@@ -8412,7 +8333,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The bandit casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -8429,10 +8350,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -8504,7 +8422,8 @@
 			"source": "XMM",
 			"page": 29,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -8665,6 +8584,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -8884,7 +8804,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The barlgura casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -8899,10 +8819,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -9000,7 +8917,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-DotSC",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -9427,7 +9345,8 @@
 			"page": 36,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -9678,7 +9597,8 @@
 			"source": "XMM",
 			"page": 347,
 			"referenceSources": [
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -9848,6 +9768,7 @@
 				"EFA",
 				"FRAiF",
 				"FRHoF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -9929,6 +9850,7 @@
 			"source": "XMM",
 			"page": 37,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -10268,7 +10190,8 @@
 				"DrDe",
 				"DrDe-TWoO",
 				"FRAiF",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -10420,6 +10343,7 @@
 			],
 			"passive": 15,
 			"languages": [
+				"Blink Dog",
 				"understands Elvish and Sylvan but can't speak them"
 			],
 			"cr": "1/4",
@@ -10456,6 +10380,7 @@
 			"languageTags": [
 				"CS",
 				"E",
+				"OTH",
 				"S"
 			],
 			"damageTags": [
@@ -10477,7 +10402,8 @@
 			"page": 47,
 			"referenceSources": [
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"G"
@@ -10849,7 +10775,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-FWtVC",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -11046,6 +10973,9 @@
 			"page": 52,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"L"
 			],
@@ -11229,7 +11159,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The naga casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -11245,10 +11175,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -11943,6 +11870,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"BQDD",
 				"DrDe",
 				"DrDe-BD",
 				"FRAiF",
@@ -12287,7 +12215,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The bullywug casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks):"
 					],
@@ -12303,10 +12231,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -12549,7 +12474,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cambion casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -12565,10 +12490,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -12721,7 +12643,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -12916,6 +12839,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FRHoF"
 			],
 			"size": [
@@ -13073,7 +12997,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The centaur casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -13082,10 +13006,7 @@
 						"{@spell Speak with Animals|XPHB}"
 					],
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -13168,7 +13089,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -13469,7 +13391,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-TFV",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -13910,7 +13833,7 @@
 			"spellcasting": [
 				{
 					"name": "Phantasms (Recharge after a Short or Long Rest)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cloaker casts the {@spell Mirror Image|XPHB} spell, requiring no spell components and using Wisdom as the spellcasting ability. The spell ends early if the cloaker starts or ends its turn in {@variantrule Bright Light|XPHB}."
 					],
@@ -13921,10 +13844,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"will"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -14066,7 +13986,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The giant casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -14083,14 +14003,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Misty Step",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The giant casts the {@spell Misty Step|XPHB} spell, using the same spellcasting ability as Spellcasting."
 					],
@@ -14101,10 +14018,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"will"
-					],
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -14290,7 +14204,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The cockatrice doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The cockatrice doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -14538,6 +14452,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"ABH",
+				"AUD",
+				"BQDD",
 				"DrDe",
 				"DrDe-ACfaS",
 				"DrDe-BD",
@@ -14548,7 +14464,8 @@
 				"FRAiF",
 				"HotB",
 				"LFL",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -14897,7 +14814,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The couatl casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -14905,7 +14822,7 @@
 						"{@spell Detect Evil and Good|XPHB}",
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Detect Thoughts|XPHB}",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -14917,14 +14834,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Divine Aid (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The couatl casts {@spell Bless|XPHB}, {@spell Lesser Restoration|XPHB}, or {@spell Sanctuary|XPHB}, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -14939,10 +14853,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -15280,6 +15191,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"BQDD",
 				"FRAiF",
 				"FRHoF",
 				"HotB",
@@ -15366,10 +15278,12 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TWoO",
 				"FRAiF",
 				"FRHoF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -15416,7 +15330,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 12}, {@hit 4} to hit with spell attacks):"
 					],
@@ -15433,14 +15347,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Spiritual Weapon (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts the {@spell Spiritual Weapon|XPHB} spell, using the same spellcasting ability as Spellcasting."
 					],
@@ -15453,10 +15364,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -15506,7 +15414,9 @@
 			"source": "XMM",
 			"page": 85,
 			"referenceSources": [
-				"FRAiF"
+				"AUD",
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -15557,7 +15467,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -15571,10 +15481,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -15692,7 +15599,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cyclops casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -15707,10 +15614,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -15885,7 +15789,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-DotSC",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -15939,7 +15844,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dao casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -15960,10 +15865,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -16154,8 +16056,10 @@
 			"source": "XMM",
 			"page": 86,
 			"referenceSources": [
+				"AUD",
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -16205,7 +16109,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -16214,10 +16118,7 @@
 						"{@spell Thaumaturgy|XPHB}"
 					],
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -16291,7 +16192,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -16383,10 +16285,12 @@
 			"source": "XMM",
 			"page": 92,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TWoO",
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -16441,7 +16345,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The death knight casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -16456,10 +16360,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -16599,7 +16500,9 @@
 			"source": "XMM",
 			"page": 93,
 			"referenceSources": [
-				"FRAiF"
+				"AUD",
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -16654,7 +16557,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The aspirant casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -16668,10 +16571,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -16821,7 +16721,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The slaad casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -16842,10 +16742,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -16944,6 +16841,7 @@
 			"source": "XMM",
 			"page": 95,
 			"referenceSources": [
+				"AUD",
 				"FRAiF",
 				"FRHoF"
 			],
@@ -17245,7 +17143,7 @@
 				{
 					"name": "Agile",
 					"entries": [
-						"The deer doesn't provoke an Opportunity Attack when it moves out of an enemy's reach."
+						"The deer doesn't provoke an {@action Opportunity Attack|XPHB} when it moves out of an enemy's reach."
 					]
 				}
 			],
@@ -17284,6 +17182,7 @@
 			"source": "XMM",
 			"page": 96,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -17528,13 +17427,13 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The deva casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
 					"will": [
 						"{@spell Detect Evil and Good|XPHB}",
-						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no Concentration or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
+						"{@spell Shapechange|XPHB} (Beast or Humanoid form only, no {@variantrule Temporary Hit Points|XPHB} gained from the spell, and no {@status Concentration|XPHB} or {@variantrule Temporary Hit Points|XPHB} required to maintain the spell)"
 					],
 					"daily": {
 						"1e": [
@@ -17543,14 +17442,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Divine Aid (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The deva casts {@spell Cure Wounds|XPHB}, {@spell Lesser Restoration|XPHB}, or {@spell Remove Curse|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -17565,10 +17461,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -17650,7 +17543,8 @@
 				}
 			],
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -17857,7 +17751,8 @@
 			"page": 98,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -18027,7 +17922,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The djinni casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -18050,10 +17945,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -18166,7 +18058,8 @@
 				"DrDe-TDoN",
 				"FRAiF",
 				"FRHoF",
-				"HBTD"
+				"HBTD",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -18209,7 +18102,7 @@
 			"spellcasting": [
 				{
 					"name": "Read Thoughts",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The doppelganger casts {@spell Detect Thoughts|XPHB}, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 12})."
 					],
@@ -18220,10 +18113,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -18301,7 +18191,9 @@
 			"source": "XMM",
 			"page": 102,
 			"referenceSources": [
-				"FRAiF"
+				"AUD",
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H",
@@ -18368,7 +18260,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dracolich casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 19}, {@hit 11} to hit with spell attacks):"
 					],
@@ -18383,10 +18275,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -18588,6 +18477,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -18821,7 +18711,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -18864,7 +18755,7 @@
 			"spellcasting": [
 				{
 					"name": "Magic of the Spider Queen {@recharge 5}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The drider casts {@spell Darkness|XPHB}, {@spell Faerie Fire|XPHB}, or {@spell Web|XPHB}, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 14})."
 					],
@@ -18879,10 +18770,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -18987,7 +18875,8 @@
 				"DrDe-ACfaS",
 				"DrDe-TFV",
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -19031,7 +18920,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The druid casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -19051,10 +18940,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -19176,7 +19062,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dryad casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -19192,10 +19078,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -19346,7 +19229,7 @@
 			"spellcasting": [
 				{
 					"name": "Sleep (1/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mephit casts the {@spell Sleep|XPHB} spell, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 10})."
 					],
@@ -19359,10 +19242,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"daily"
-					],
-					"dc": 10,
-					"atkMod": 2,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -19638,7 +19518,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -19691,7 +19572,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The efreeti casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -19710,10 +19591,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -19890,7 +19768,7 @@
 			"spellcasting": [
 				{
 					"name": "Control Weather",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cataclysm casts the {@spell Control Weather|XPHB} spell, requiring no spell components and using Constitution as the spellcasting ability."
 					],
@@ -19901,10 +19779,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 23,
-					"atkMod": 15,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -20046,7 +19921,8 @@
 			"source": "XMM",
 			"page": 87,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -20097,7 +19973,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -20106,10 +19982,7 @@
 						"{@spell Mage Hand|XPHB}"
 					],
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -20414,7 +20287,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The empyrean casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 23}):"
 					],
@@ -20432,10 +20305,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 23,
-					"atkMod": 15,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -20614,7 +20484,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The empyrean casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability:"
 					],
@@ -20625,14 +20495,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Healing Word (1/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The empyrean casts {@spell Healing Word|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -20645,10 +20512,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -21161,7 +21025,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -21177,14 +21041,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Superior Invisibility",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts {@spell Greater Invisibility|XPHB} on itself, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -21195,10 +21056,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"will"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -21319,7 +21177,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -21329,14 +21187,11 @@
 						"{@spell Minor Illusion|XPHB}"
 					],
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Superior Invisibility",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The dragon casts {@spell Greater Invisibility|XPHB} on itself, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -21347,10 +21202,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"will"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -21423,7 +21275,8 @@
 			"source": "XMM",
 			"page": 87,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -21477,7 +21330,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts one of the following spells, using Wisdom as the spellcasting ability (spell save {@dc 15}, {@hit 7} to hit with spell attacks):"
 					],
@@ -21491,14 +21344,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Hellish Rebuke",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The cultist casts {@spell Hellish Rebuke|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -21509,10 +21359,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					],
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -21878,7 +21725,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The flameskull casts one of the following spells, requiring no Somatic or Material components and using Intelligence as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -21894,10 +21741,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -21985,6 +21829,7 @@
 			"source": "XMM",
 			"page": 283,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TFV",
 				"DrDe-TWoO",
@@ -22110,7 +21955,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -22407,7 +22253,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The snake doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The snake doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -22450,7 +22296,8 @@
 			"source": "XMM",
 			"page": 123,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -22861,7 +22708,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-DotSC",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -22914,7 +22762,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The gargoyle doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The gargoyle doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -23176,7 +23024,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-TWoO",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -23288,9 +23137,11 @@
 			"source": "XMM",
 			"page": 130,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TWoO",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -23341,7 +23192,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ghast casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability:"
 					],
@@ -23350,10 +23201,7 @@
 						"{@spell Thaumaturgy|XPHB}"
 					],
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -23437,7 +23285,8 @@
 				"DrDe-TWoO",
 				"FRAiF",
 				"FRHoF",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -23503,7 +23352,7 @@
 			"spellcasting": [
 				{
 					"name": "Etherealness",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ghost casts the {@spell Etherealness|XPHB} spell, requiring no spell components and using Charisma as the spellcasting ability. The ghost is visible on the Material Plane while on the Border Ethereal and vice versa, but it can't affect or be affected by anything on the other plane."
 					],
@@ -23514,10 +23363,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -23621,7 +23467,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-TWoO",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -23728,6 +23575,9 @@
 			"page": 354,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"H"
 			],
@@ -24381,7 +24231,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"DrDe",
-				"DrDe-BtS"
+				"DrDe-BtS",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -25237,7 +25088,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The owl casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability:"
 					],
@@ -25251,17 +25102,14 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
 				{
 					"name": "Flyby",
 					"entries": [
-						"The owl doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The owl doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -25403,7 +25251,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"EFA",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -25567,7 +25416,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -25667,7 +25517,8 @@
 			"referenceSources": [
 				"FRAiF",
 				"FRHoF",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -26171,7 +26022,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The wasp doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The wasp doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -26377,7 +26228,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -26555,12 +26407,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githyanki casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 18}, {@hit 10} to hit with spell attacks):"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"2e": [
@@ -26570,14 +26422,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Misty Step (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githyanki casts {@spell Misty Step|XPHB}, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -26590,10 +26439,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -26716,12 +26562,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githyanki casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 13}):"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"2e": [
@@ -26734,14 +26580,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Misty Step (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githyanki casts {@spell Misty Step|XPHB}, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -26754,10 +26597,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -26864,12 +26704,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githyanki casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability:"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"2": [
@@ -26877,14 +26717,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Misty Step (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githyanki casts {@spell Misty Step|XPHB}, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -26897,10 +26734,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -27003,12 +26837,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability:"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"1": [
@@ -27016,14 +26850,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Psi-Powered Leap (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts {@spell Jump|XPHB}, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -27036,14 +26867,11 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Psionic Defense (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts {@spell Feather Fall|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -27057,10 +26885,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -27170,12 +26995,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 16}):"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"1e": [
@@ -27184,14 +27009,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Psionic Defense",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts {@spell Feather Fall|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -27203,10 +27025,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					],
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -27307,12 +27126,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability (spell save {@dc 14}):"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"1e": [
@@ -27322,14 +27141,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Psi-Powered Leap (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts {@spell Jump|XPHB}, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -27342,14 +27158,11 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Psionic Defense (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The githzerai casts {@spell Feather Fall|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -27363,10 +27176,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -27430,6 +27240,9 @@
 			"page": 138,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"AUD"
+			],
 			"size": [
 				"L"
 			],
@@ -27494,7 +27307,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The glabrezu casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -27511,10 +27324,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -27609,6 +27419,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"EFA",
 				"FRAiF"
 			],
@@ -28390,7 +28201,8 @@
 			"source": "XMM",
 			"page": 143,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S"
@@ -28437,7 +28249,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The goblin casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -28452,10 +28264,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -28646,7 +28455,8 @@
 				"DrDe",
 				"DrDe-BD",
 				"FRAiF",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"S"
@@ -29004,6 +28814,7 @@
 			"source": "XMM",
 			"page": 150,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -29157,6 +28968,9 @@
 			"name": "Graveyard Revenant",
 			"source": "XMM",
 			"page": 260,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"H"
 			],
@@ -29437,7 +29251,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The slaad casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -29457,10 +29271,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -29698,7 +29509,8 @@
 				"DrDe",
 				"DrDe-BD",
 				"DrDe-TFV",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -29744,7 +29556,7 @@
 			"spellcasting": [
 				{
 					"name": "Coven Magic",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {@dc 11}): {@spell Augury|XPHB}, {@spell Find Familiar|XPHB}, {@spell Identify|XPHB}, {@spell Locate Object|XPHB}, {@spell Scrying|XPHB}, or {@spell Unseen Servant|XPHB}. The hag must finish a {@variantrule Long Rest|XPHB} before using this trait to cast that spell again."
 					],
@@ -29761,29 +29573,23 @@
 					"ability": "int",
 					"hidden": [
 						"restLong"
-					],
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hag casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 12}, {@hit 4} to hit with spell attacks):"
 					],
 					"will": [
 						"{@spell Dancing Lights|XPHB}",
 						"{@spell Disguise Self|XPHB} (24-hour duration)",
-						"{@spell Invisibility|XPHB} (self only, and the hag leaves no tracks while Invisible)",
+						"{@spell Invisibility|XPHB} (self only, and the hag leaves no tracks while {@condition Invisible|XPHB})",
 						"{@spell Minor Illusion|XPHB}",
 						"{@spell Ray of Sickness|XPHB} (level 3 version)"
 					],
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -29923,7 +29729,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The slaad casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 14}, {@hit 6} to hit with spell attacks):"
 					],
@@ -29939,10 +29745,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -30037,7 +29840,8 @@
 			"source": "XMM",
 			"page": 157,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -30511,6 +30315,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-DaS",
 				"DrDe-TFV",
@@ -30518,7 +30323,8 @@
 				"FRAiF",
 				"FRHoF",
 				"HotB",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -30599,11 +30405,13 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FFotR",
 				"FRAiF",
 				"HotB",
 				"LFL",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -30704,7 +30512,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -30765,7 +30574,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The naga casts one of the following spells, requiring no Somatic or Material components and using Wisdom as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -30782,10 +30591,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -30876,7 +30682,8 @@
 			"source": "XMM",
 			"page": 45,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"G"
@@ -31128,7 +30935,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -31212,7 +31020,8 @@
 			"source": "XMM",
 			"page": 260,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"G"
@@ -31675,6 +31484,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -31954,7 +31764,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The hippogriff doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The hippogriff doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -32477,6 +32287,9 @@
 			"page": 172,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"T"
 			],
@@ -32667,6 +32480,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FRHoF"
 			],
 			"size": [
@@ -32893,7 +32707,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-TFV",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -33157,7 +32972,7 @@
 			"spellcasting": [
 				{
 					"name": "Ice Wall {@recharge}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The devil casts {@spell Wall of Ice|XPHB} (level 8 version), requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 17})."
 					],
@@ -33170,10 +32985,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -33323,7 +33135,7 @@
 			"spellcasting": [
 				{
 					"name": "Fog Cloud (1/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mephit casts {@spell Fog Cloud|XPHB}, requiring no spell components and using Charisma as the spellcasting ability."
 					],
@@ -33336,10 +33148,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"daily"
-					],
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -33419,7 +33228,8 @@
 			],
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"T"
@@ -33478,7 +33288,7 @@
 			"spellcasting": [
 				{
 					"name": "Invisibility",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The imp casts {@spell Invisibility|XPHB} on itself, requiring no spell components and using Charisma as the spellcasting ability."
 					],
@@ -33489,10 +33299,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -33561,6 +33368,7 @@
 			"referenceSources": [
 				"FRAiF",
 				"FRHoF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -33614,7 +33422,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The incubus casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -33629,10 +33437,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -33724,7 +33529,8 @@
 			"source": "XMM",
 			"page": 179,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"T"
@@ -33846,7 +33652,8 @@
 				"DrDe",
 				"DrDe-FWtVC",
 				"LFL",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -33987,6 +33794,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FRAiF"
 			],
 			"size": [
@@ -34324,6 +34132,9 @@
 			"name": "Juvenile Shadow Dragon",
 			"source": "XMM",
 			"page": 275,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"M"
 			],
@@ -34505,7 +34316,7 @@
 			"spellcasting": [
 				{
 					"name": "Eldritch Lantern {@recharge 4}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The kenku casts {@spell Faerie Fire|XPHB}, using Intelligence as the spellcasting ability (spell save {@dc 10})."
 					],
@@ -34518,10 +34329,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 10,
-					"atkMod": 2,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -35101,7 +34909,8 @@
 			"page": 189,
 			"referenceSources": [
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -35228,7 +35037,8 @@
 			"source": "XMM",
 			"page": 191,
 			"referenceSources": [
-				"EFA"
+				"EFA",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -35271,7 +35081,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The kuo-toa casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -35289,14 +35099,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Shield of Faith (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The kuo-toa casts {@spell Shield of Faith|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -35309,10 +35116,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -35555,7 +35359,7 @@
 			"spellcasting": [
 				{
 					"name": "Shield of Faith (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The kuo-toa casts {@spell Shield of Faith|XPHB}, using Wisdom as the spellcasting ability."
 					],
@@ -35568,10 +35372,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -35806,7 +35607,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The lamia casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -35822,10 +35623,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -36075,10 +35873,12 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TWoO",
 				"FRAiF",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -36156,7 +35956,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The lich casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -36184,14 +35984,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Protective Magic",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The lich casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -36203,14 +36000,11 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"will"
-					],
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Frightening Gaze",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The lich casts {@spell Fear|XPHB}, using the same spellcasting ability as Spellcasting. The lich can't take this action again until the start of its next turn."
 					],
@@ -36223,10 +36017,7 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					],
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -36591,7 +36382,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The lizardfolk casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -36606,10 +36397,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -36680,7 +36468,9 @@
 			"source": "XMM",
 			"page": 197,
 			"referenceSources": [
-				"NF"
+				"AUD",
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -36795,6 +36585,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-BtS",
 				"DrDe-DotSC",
@@ -36803,6 +36594,7 @@
 				"FRHoF",
 				"LFL",
 				"NF",
+				"RHW",
 				"UtHftLH"
 			],
 			"size": [
@@ -36845,7 +36637,7 @@
 			},
 			"passive": 14,
 			"languages": [
-				"Common and any three languages"
+				"Common plus three other languages"
 			],
 			"cr": "6",
 			"gear": [
@@ -36854,7 +36646,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mage casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -36876,14 +36668,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Misty Step (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mage casts {@spell Misty Step|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -36896,14 +36685,11 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Protective Magic (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mage casts {@spell Counterspell|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -36917,10 +36703,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -36986,6 +36769,7 @@
 			"page": 198,
 			"referenceSources": [
 				"ABH",
+				"AUD",
 				"EFA",
 				"FRAiF",
 				"NF"
@@ -37038,7 +36822,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mage casts one of the following spells, using Intelligence as the spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks):"
 					],
@@ -37055,10 +36839,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -37778,7 +37559,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The marid casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -37798,14 +37579,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Misty Veil {@recharge 5}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The marid casts {@spell Fog Cloud|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -37818,10 +37596,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -37929,6 +37704,9 @@
 			"page": 204,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"AUD"
+			],
 			"size": [
 				"L"
 			],
@@ -38179,7 +37957,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -38435,7 +38214,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The merfolk casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -38450,10 +38229,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -38719,7 +38495,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mezzoloth casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -38731,10 +38507,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -38843,7 +38616,8 @@
 				"DrDe",
 				"DrDe-FWtVC",
 				"FRAiF",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -38897,7 +38671,7 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"{@atkr m} {@hit 5} (with {@variantrule Advantage|XPHB} if the target is {@condition Grappled|XPHB} by the mimic), reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Piercing damage—or 12 ({@damage 2d8 + 3}) Piercing damage if the target is {@condition Grappled|XPHB} by the mimic—plus 4 ({@damage 1d8}) Acid damage."
+						"{@atkr m} {@hit 5} (with {@variantrule Advantage|XPHB} if the target is {@condition Grappled|XPHB} by the mimic), reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Piercing damage\u2014or 12 ({@damage 2d8 + 3}) Piercing damage if the target is {@condition Grappled|XPHB} by the mimic\u2014plus 4 ({@damage 1d8}) Acid damage."
 					]
 				},
 				{
@@ -38951,7 +38725,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-TFV",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -39015,7 +38790,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mind flayer casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -39029,10 +38804,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -39185,7 +38957,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mind flayer casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -39193,7 +38965,7 @@
 						"{@spell Detect Magic|XPHB}",
 						"{@spell Detect Thoughts|XPHB}",
 						"{@spell Disguise Self|XPHB}",
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"1e": [
@@ -39206,14 +38978,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Shield (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mind flayer casts {@spell Shield|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -39226,10 +38995,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -39320,7 +39086,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -39407,6 +39174,9 @@
 			"page": 283,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"L"
 			],
@@ -40158,7 +39928,8 @@
 				"DrDe-BD",
 				"DrDe-DotSC",
 				"DrDe-TWoO",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -40277,9 +40048,11 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-DotSC",
-				"DrDe-TWoO"
+				"DrDe-TWoO",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -40351,7 +40124,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mummy casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 17}, {@hit 9} to hit with spell attacks):"
 					],
@@ -40367,14 +40140,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Dread Command",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mummy casts {@spell Command|XPHB} (level 2 version), using the same spellcasting ability as Spellcasting. The mummy can't take this action again until the start of its next turn."
 					],
@@ -40387,10 +40157,7 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -40535,7 +40302,8 @@
 			"page": 223,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -40929,6 +40697,9 @@
 			"page": 224,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"AUD"
+			],
 			"size": [
 				"L"
 			],
@@ -41170,7 +40941,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -41226,7 +40998,7 @@
 			"spellcasting": [
 				{
 					"name": "Coven Magic",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {@dc 14}): {@spell Augury|XPHB}, {@spell Find Familiar|XPHB}, {@spell Identify|XPHB}, {@spell Locate Object|XPHB}, {@spell Scrying|XPHB}, or {@spell Unseen Servant|XPHB}. The hag must finish a {@variantrule Long Rest|XPHB} before using this trait to cast that spell again."
 					],
@@ -41243,14 +41015,11 @@
 					"ability": "int",
 					"hidden": [
 						"restLong"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hag casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -41266,14 +41035,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Nightmare Haunting (1/Day; Requires Soul Bag)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"While on the Ethereal Plane, the hag casts {@spell Dream|XPHB}, using the same spellcasting ability as Spellcasting. Only the hag can serve as the spell's messenger, and the target must be a creature the hag can see on the Material Plane. The spell fails and is wasted if the target is under the effect of the {@spell Protection from Evil and Good|XPHB} spell or within a {@spell Magic Circle|XPHB} spell.",
 						"If the target takes damage from the {@spell Dream|XPHB} spell, the target's {@variantrule Hit Points|XPHB|Hit Point} maximum decreases by an amount equal to that damage. If the spell kills the target, its soul is trapped in the hag's soul bag, and the target can't be raised from the dead until its soul is released."
@@ -41289,10 +41055,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"daily"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -41387,7 +41150,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -41491,6 +41255,7 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-BtS",
 				"DrDe-DaS",
@@ -41500,7 +41265,8 @@
 				"FRAiF",
 				"HotB",
 				"LFL",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -41589,6 +41355,7 @@
 			"source": "XMM",
 			"page": 227,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TFV",
 				"EFA",
@@ -41640,7 +41407,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The noble casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -41659,14 +41426,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Shield (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The noble casts {@spell Shield|XPHB} in response to that spell's trigger, using the same spellcasting ability as Spellcasting."
 					],
@@ -41679,10 +41443,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -42314,7 +42075,8 @@
 				"DrDe",
 				"DrDe-TWoO",
 				"HBTD",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -42566,7 +42328,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The oni casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -42579,14 +42341,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Invisibility",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The oni casts {@spell Invisibility|XPHB} on itself, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -42597,10 +42356,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"will"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -42987,7 +42743,8 @@
 				}
 			],
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -43015,7 +42772,7 @@
 			"cha": 7,
 			"skill": {
 				"perception": "+4",
-				"stealth": "+6"
+				"stealth": "+7"
 			},
 			"senses": [
 				"Darkvision 60 ft."
@@ -43155,7 +42912,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-ACfaS",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -43240,6 +42998,10 @@
 			"name": "Performer Legend",
 			"source": "XMM",
 			"page": 237,
+			"referenceSources": [
+				"AUD",
+				"RHW"
+			],
 			"size": [
 				"S",
 				"M"
@@ -43288,7 +43050,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The performer casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -43304,10 +43066,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -43433,7 +43192,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The performer casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -43447,10 +43206,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -43566,7 +43322,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The peryton doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The peryton doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -43924,10 +43680,12 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"ABH",
+				"AUD",
 				"DrDe",
 				"DrDe-BtS",
 				"EFA",
 				"FRAiF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -44030,6 +43788,9 @@
 			"name": "Pirate Admiral",
 			"source": "XMM",
 			"page": 242,
+			"referenceSources": [
+				"AUD"
+			],
 			"size": [
 				"S",
 				"M"
@@ -44173,10 +43934,12 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-BtS",
 				"EFA",
 				"FRAiF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -44365,7 +44128,7 @@
 			"spellcasting": [
 				{
 					"name": "Hellfire Spellcasting {@recharge 4}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The pit fiend casts {@spell Fireball|XPHB} (level 5 version) twice, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 21}). It can replace one {@spell Fireball|XPHB} with {@spell Hold Monster|XPHB} (level 7 version) or {@spell Wall of Fire|XPHB}."
 					],
@@ -44380,10 +44143,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -44544,7 +44304,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The pixie casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -44561,10 +44321,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -44669,7 +44426,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The pixie casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -44686,14 +44443,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Burst of Wonder {@recharge 5}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The pixie casts {@spell Entangle|XPHB}, {@spell Polymorph|XPHB}, or {@spell Tasha's Hideous Laughter|XPHB}, requiring no Material components and using the same spellcasting ability as Spellcasting."
 					],
@@ -44708,10 +44462,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -44855,7 +44606,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The planetar casts one of the following spells, requiring no Material components and using Charisma as spellcasting ability (spell save {@dc 20}):"
 					],
@@ -44871,14 +44622,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Divine Aid (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The planetar casts {@spell Cure Wounds|XPHB}, {@spell Invisibility|XPHB}, {@spell Lesser Restoration|XPHB}, or {@spell Remove Curse|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -44894,10 +44642,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -44998,7 +44743,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -45161,7 +44907,8 @@
 			"source": "XMM",
 			"page": 246,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -45380,7 +45127,8 @@
 				"EFA",
 				"FRAiF",
 				"FRHoF",
-				"LFL"
+				"LFL",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -45429,7 +45177,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The priest casts one of the following spells, using Wisdom as the spellcasting ability:"
 					],
@@ -45443,14 +45191,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Divine Aid (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The priest casts {@spell Bless|XPHB}, {@spell Dispel Magic|XPHB}, {@spell Healing Word|XPHB}, or {@spell Lesser Restoration|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -45466,10 +45211,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -45591,7 +45333,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The priest casts one of the following spells, using Wisdom as the spellcasting ability:"
 					],
@@ -45600,14 +45342,11 @@
 						"{@spell Thaumaturgy|XPHB}"
 					],
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Divine Aid (1/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The priest casts {@spell Bless|XPHB}, {@spell Healing Word|XPHB}, or {@spell Sanctuary|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -45622,10 +45361,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -45676,7 +45412,8 @@
 			"source": "XMM",
 			"page": 234,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -45865,6 +45602,7 @@
 			"treasure": [
 				"arcana"
 			],
+			"familiar": true,
 			"soundClip": {
 				"type": "internal",
 				"path": "bestiary/pseudodragon.opus"
@@ -46017,6 +45755,9 @@
 			"page": 367,
 			"srd52": true,
 			"basicRules2024": true,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"M"
 			],
@@ -46055,7 +45796,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The pteranodon doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The pteranodon doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				}
 			],
@@ -46096,8 +45837,10 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
-				"DrDe-ACfaS"
+				"DrDe-ACfaS",
+				"RHW"
 			],
 			"size": [
 				"G"
@@ -46357,12 +46100,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The quaggoth casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability (spell save {@dc 12}):"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)",
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})",
 						"{@spell Minor Illusion|XPHB}"
 					],
 					"daily": {
@@ -46371,14 +46114,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Psionic Defense (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The quaggoth casts {@spell Feather Fall|XPHB} or {@spell Shield|XPHB} in response to the spell's trigger, requiring no spell components and using the same spellcasting ability as Spellcasting."
 					],
@@ -46392,10 +46132,7 @@
 					"displayAs": "reaction",
 					"hidden": [
 						"daily"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -46530,7 +46267,7 @@
 			"spellcasting": [
 				{
 					"name": "Invisibility",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The quasit casts {@spell Invisibility|XPHB} on itself, requiring no spell components and using Charisma as the spellcasting ability."
 					],
@@ -46541,10 +46278,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 10,
-					"atkMod": 2,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -46578,6 +46312,7 @@
 			"environment": [
 				"planar, abyss"
 			],
+			"familiar": true,
 			"soundClip": {
 				"type": "internal",
 				"path": "bestiary/quasit.opus"
@@ -46620,7 +46355,9 @@
 			"source": "XMM",
 			"page": 184,
 			"referenceSources": [
-				"FRAiF"
+				"AUD",
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -46677,7 +46414,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The knight casts one of the following spells, using Charisma as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -46690,10 +46427,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -46766,7 +46500,9 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"ABH"
+				"ABH",
+				"AUD",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -46809,7 +46545,7 @@
 					"vulnerable": [
 						"piercing"
 					],
-					"note": "damage from weapons wielded by creatures under the effect of a Bless spell",
+					"note": "damage from weapons wielded by creatures under the effect of a {@spell Bless|XPHB} spell",
 					"cond": true
 				}
 			],
@@ -46825,7 +46561,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The rakshasa casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -46845,10 +46581,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -47230,7 +46963,8 @@
 			"source": "XMM",
 			"page": 285,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -47547,7 +47281,8 @@
 			"source": "XMM",
 			"page": 259,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -47824,7 +47559,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-TFV",
-				"EFA"
+				"EFA",
+				"RHW"
 			],
 			"size": [
 				"G"
@@ -48048,7 +47784,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -48102,7 +47839,7 @@
 				{
 					"name": "Antennae",
 					"entries": [
-						"The rust monster targets one nonmagical metal object—armor or a weapon—worn or carried by a creature within 5 feet of itself. {@actSave dex} {@dc 11}, the creature with the object. {@actSaveFail} The object takes a -1 penalty to the AC it offers (armor) or to its attack rolls (weapon). Armor is destroyed if the penalty reduces its AC to 10, and a weapon is destroyed if its penalty reaches -5. The penalty can be removed by casting the {@spell Mending|XPHB} spell on the armor or weapon."
+						"The rust monster targets one nonmagical metal object\u2014armor or a weapon\u2014worn or carried by a creature within 5 feet of itself. {@actSave dex} {@dc 11}, the creature with the object. {@actSaveFail} The object takes a -1 penalty to the AC it offers (armor) or to its attack rolls (weapon). Armor is destroyed if the penalty reduces its AC to 10, and a weapon is destroyed if its penalty reaches -5. The penalty can be removed by casting the {@spell Mending|XPHB} spell on the armor or weapon."
 					]
 				},
 				{
@@ -48251,7 +47988,8 @@
 			"source": "XMM",
 			"page": 265,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -48437,7 +48175,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sahuagin casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -48451,14 +48189,11 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Fiendish Aid (2/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sahuagin casts {@spell Bless|XPHB} or {@spell Healing Word|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -48472,10 +48207,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -48556,7 +48288,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -49010,7 +48743,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -49244,7 +48978,8 @@
 			"page": 269,
 			"referenceSources": [
 				"EFA",
-				"LFL"
+				"LFL",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -49521,6 +49256,7 @@
 			"source": "XMM",
 			"page": 270,
 			"referenceSources": [
+				"AUD",
 				"EFA",
 				"FRAiF",
 				"LFL"
@@ -49682,7 +49418,7 @@
 			"spellcasting": [
 				{
 					"name": "Coven Magic",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {@dc 11}): {@spell Augury|XPHB}, {@spell Find Familiar|XPHB}, {@spell Identify|XPHB}, {@spell Locate Object|XPHB}, {@spell Scrying|XPHB}, or {@spell Unseen Servant|XPHB}. The hag must finish a {@variantrule Long Rest|XPHB} before using this trait to cast that spell again."
 					],
@@ -49699,14 +49435,11 @@
 					"ability": "int",
 					"hidden": [
 						"restLong"
-					],
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Illusory Appearance",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hag casts {@spell Disguise Self|XPHB}, using Constitution as the spellcasting ability (spell save {@dc 13}). The spell's duration is 24 hours."
 					],
@@ -49717,10 +49450,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -49872,7 +49602,8 @@
 			"referenceSources": [
 				"FRAiF",
 				"FRHoF",
-				"HBTD"
+				"HBTD",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -49995,7 +49726,8 @@
 			"page": 273,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -50142,7 +49874,8 @@
 			"source": "XMM",
 			"page": 275,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -50316,7 +50049,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-FWtVC",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -50435,7 +50169,8 @@
 				"DrDe-SD",
 				"EFA",
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -50762,12 +50497,14 @@
 				}
 			],
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TWoO",
 				"EFA",
 				"FRAiF",
 				"HBTD",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -50834,6 +50571,7 @@
 				"underdark",
 				"urban"
 			],
+			"familiar": true,
 			"soundClip": {
 				"type": "internal",
 				"path": "bestiary/skeleton.opus"
@@ -50869,6 +50607,9 @@
 					"source": "XPHB",
 					"page": 357
 				}
+			],
+			"referenceSources": [
+				"RHW"
 			],
 			"size": [
 				"T"
@@ -50935,6 +50676,7 @@
 			"treasure": [
 				"any"
 			],
+			"familiar": true,
 			"soundClip": {
 				"type": "internal",
 				"path": "bestiary/slaad-tadpole.opus"
@@ -51144,7 +50886,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The solar casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 25}):"
 					],
@@ -51160,14 +50902,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 25,
-					"atkMod": 17,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Divine Aid (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The solar casts {@spell Cure Wounds|XPHB} (level 2 version), {@spell Lesser Restoration|XPHB}, or {@spell Remove Curse|XPHB}, using the same spellcasting ability as Spellcasting."
 					],
@@ -51182,10 +50921,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 25,
-					"atkMod": 17,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -51475,7 +51211,8 @@
 				"DrDe",
 				"DrDe-TWoO",
 				"FRAiF",
-				"HBTD"
+				"HBTD",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -51665,7 +51402,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sphinx casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 16}):"
 					],
@@ -51687,10 +51424,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -51851,7 +51585,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sphinx casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -51867,10 +51601,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -51903,7 +51634,7 @@
 				{
 					"name": "Curse of the Riddle",
 					"entries": [
-						"{@actSave int} {@dc 15}, one creature the sphinx can see within 60 feet. {@actSaveFail} 21 ({@damage 6d6}) Psychic damage, and the target is cursed with a riddle. The cursed target has {@variantrule Disadvantage|XPHB} on ability checks and attack rolls. In addition, if it takes the Magic action, it must succeed on a {@dc 15} Intelligence saving throw or that action is wasted. The cursed target can take a Study action to make a {@dc 15} Intelligence check, solving the riddle and ending the curse on a success. The curse ends early if the sphinx curses another target."
+						"{@actSave int} {@dc 15}, one creature the sphinx can see within 60 feet. {@actSaveFail} 21 ({@damage 6d6}) Psychic damage, and the target is cursed with a riddle. The cursed target has {@variantrule Disadvantage|XPHB} on ability checks and attack rolls. In addition, if it takes the {@action Magic|XPHB} action, it must succeed on a {@dc 15} Intelligence saving throw or that action is wasted. The cursed target can take a {@action Study|XPHB} action to make a {@dc 15} Intelligence check, solving the riddle and ending the curse on a success. The curse ends early if the sphinx curses another target."
 					]
 				}
 			],
@@ -52017,7 +51748,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sphinx casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 20}):"
 					],
@@ -52035,10 +51766,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -52257,6 +51985,7 @@
 			"treasure": [
 				"arcana"
 			],
+			"familiar": true,
 			"traitTags": [
 				"Magic Resistance"
 			],
@@ -52436,7 +52165,7 @@
 				{
 					"name": "Flyby",
 					"entries": [
-						"The devil doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+						"The devil doesn't provoke an {@action Opportunity Attack|XPHB} when it flies out of an enemy's reach."
 					]
 				},
 				{
@@ -52508,7 +52237,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"DrDe",
-				"DrDe-TFV"
+				"DrDe-TFV",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -52559,7 +52289,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The naga casts one of the following spells, requiring no Somatic or Material components and using Intelligence as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -52578,10 +52308,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -52677,6 +52404,7 @@
 				"FRAiF",
 				"FRHoF",
 				"LFL",
+				"RHW",
 				"UtHftLH"
 			],
 			"size": [
@@ -52718,7 +52446,7 @@
 			"spellcasting": [
 				{
 					"name": "Invisibility",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sprite casts {@spell Invisibility|XPHB} on itself, requiring no spell components and using Charisma as the spellcasting ability."
 					],
@@ -52729,10 +52457,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"will"
-					],
-					"dc": 10,
-					"atkMod": 2,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -52762,6 +52487,7 @@
 			"treasure": [
 				"armaments"
 			],
+			"familiar": true,
 			"soundClip": {
 				"type": "internal",
 				"path": "bestiary/sprite.opus"
@@ -52805,7 +52531,8 @@
 				"FRAiF",
 				"FRHoF",
 				"LFL",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -52909,9 +52636,11 @@
 			"source": "XMM",
 			"page": 295,
 			"referenceSources": [
+				"AUD",
 				"EFA",
 				"FRAiF",
-				"LFL"
+				"LFL",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -53159,7 +52888,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"T"
@@ -53234,7 +52964,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -53355,8 +53086,10 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"FRAiF",
 				"FRHoF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -53408,7 +53141,7 @@
 			"spellcasting": [
 				{
 					"name": "Slow {@recharge 5}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The golem casts the {@spell Slow|XPHB} spell, requiring no spell components and using Constitution as the spellcasting ability (spell save {@dc 17})."
 					],
@@ -53421,10 +53154,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -53575,7 +53305,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The giant casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 18}):"
 					],
@@ -53589,10 +53319,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -53683,6 +53410,7 @@
 			"referenceSources": [
 				"FRAiF",
 				"FRHoF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -53917,7 +53645,8 @@
 				"DrDe",
 				"DrDe-TWoO",
 				"FRAiF",
-				"HBTD"
+				"HBTD",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -54932,7 +54661,7 @@
 				{
 					"name": "Bites",
 					"entries": [
-						"{@atkr m} {@hit 6}, reach 5 ft. {@h}8 ({@damage 1d8 + 4}) Piercing damage—or 6 ({@damage 1d4 + 4}) Piercing damage if the swarm is {@status Bloodied|XPHB}—plus 10 ({@damage 3d6}) Poison damage."
+						"{@atkr m} {@hit 6}, reach 5 ft. {@h}8 ({@damage 1d8 + 4}) Piercing damage\u2014or 6 ({@damage 1d4 + 4}) Piercing damage if the swarm is {@status Bloodied|XPHB}\u2014plus 10 ({@damage 3d6}) Poison damage."
 					]
 				}
 			],
@@ -55313,12 +55042,12 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The thri-kreen casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 15}):"
 					],
 					"will": [
-						"{@spell Mage Hand|XPHB} (the hand is Invisible)"
+						"{@spell Mage Hand|XPHB} (the hand is {@condition Invisible|XPHB})"
 					],
 					"daily": {
 						"1e": [
@@ -55328,10 +55057,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"action": [
@@ -55582,6 +55308,7 @@
 				"EFA",
 				"FRAiF",
 				"NF",
+				"RHW",
 				"ScoEE"
 			],
 			"size": [
@@ -55692,7 +55419,8 @@
 				"DrDe-TFV",
 				"FRAiF",
 				"FRHoF",
-				"LFL"
+				"LFL",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -55806,7 +55534,8 @@
 			"source": "XMM",
 			"page": 44,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -56094,7 +55823,8 @@
 				"DrDe-SD",
 				"DrDe-TFV",
 				"FRAiF",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -56387,7 +56117,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"H"
@@ -56483,6 +56214,9 @@
 			],
 			"source": "XMM",
 			"page": 311,
+			"referenceSources": [
+				"RHW"
+			],
 			"size": [
 				"M"
 			],
@@ -56551,7 +56285,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ultroloth casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save {@dc 17}):"
 					],
@@ -56568,14 +56302,11 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Fiendish Guile {@recharge 4}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ultroloth casts {@spell Dispel Magic|XPHB}, {@spell Invisibility|XPHB} (self only), {@spell Misty Step|XPHB}, or {@spell Suggestion|XPHB}, requiring no Material components and using the same spellcasting ability as Spellcasting."
 					],
@@ -56591,10 +56322,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -56697,7 +56425,8 @@
 			"source": "XMM",
 			"page": 312,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -56879,7 +56608,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The unicorn casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 14}):"
 					],
@@ -56897,14 +56626,11 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				},
 				{
 					"name": "Unicorn's Blessing (3/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The unicorn touches another creature with its horn and casts {@spell Cure Wounds|XPHB} or {@spell Lesser Restoration|XPHB} on that creature, using the same spellcasting ability as Spellcasting."
 					],
@@ -56918,10 +56644,7 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"daily"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -57033,7 +56756,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-TWoO",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -57091,9 +56815,9 @@
 			"spellcasting": [
 				{
 					"name": "Charm {@recharge 5}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
-						"The vampire casts {@spell Charm Person|XPHB}, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 17}), and the duration is 24 hours. The Charmed target is a willing recipient of the vampire's Bite, the damage of which doesn't end the spell. When the spell ends, the target is unaware it was Charmed by the vampire."
+						"The vampire casts {@spell Charm Person|XPHB}, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 17}), and the duration is 24 hours. The {@condition Charmed|XPHB} target is a willing recipient of the vampire's Bite, the damage of which doesn't end the spell. When the spell ends, the target is unaware it was {@condition Charmed|XPHB} by the vampire."
 					],
 					"recharge": {
 						"5": [
@@ -57104,14 +56828,11 @@
 					"displayAs": "bonus",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Beguile",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The vampire casts {@spell Command|XPHB}, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 17}). The vampire can't take this action again until the start of its next turn."
 					],
@@ -57124,10 +56845,7 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					],
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -57300,7 +57018,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"EFA"
+				"EFA",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -57437,7 +57156,8 @@
 			"page": 316,
 			"referenceSources": [
 				"ABH",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -57572,7 +57292,9 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"ABH",
-				"FRAiF"
+				"AUD",
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -57742,6 +57464,10 @@
 			"name": "Vampire Umbral Lord",
 			"source": "XMM",
 			"page": 318,
+			"referenceSources": [
+				"AUD",
+				"RHW"
+			],
 			"size": [
 				"S",
 				"M"
@@ -57809,7 +57535,7 @@
 			"spellcasting": [
 				{
 					"name": "Hunger of Hadar {@recharge 5}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The vampire casts {@spell Hunger of Hadar|XPHB} (level 5 version), requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 18})."
 					],
@@ -57822,14 +57548,11 @@
 					"displayAs": "action",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Beguile",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The vampire casts {@spell Command|XPHB}, requiring no spell components and using Charisma as the spellcasting ability (spell save {@dc 18}). The vampire can't take this action again until the start of its next turn."
 					],
@@ -57842,10 +57565,7 @@
 					"displayAs": "legendary",
 					"hidden": [
 						"legendary"
-					],
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -58061,6 +57781,7 @@
 				"hill",
 				"swamp"
 			],
+			"familiar": true,
 			"senseTags": [
 				"B"
 			],
@@ -58082,7 +57803,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-DaS",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -58125,7 +57847,7 @@
 			"spellcasting": [
 				{
 					"name": "Entangling Plants {@recharge 5}",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The blight casts the {@spell Entangle|XPHB} spell, using Constitution as the spellcasting ability (spell save {@dc 12})."
 					],
@@ -58138,10 +57860,7 @@
 					"displayAs": "action",
 					"hidden": [
 						"recharge"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				}
 			],
 			"action": [
@@ -58276,7 +57995,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-BtS",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -58761,8 +58481,10 @@
 			"source": "XMM",
 			"page": 321,
 			"referenceSources": [
+				"AUD",
 				"EFA",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -58903,7 +58625,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -58986,10 +58709,12 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-ACfaS",
 				"FFotR",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -59423,7 +59148,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -59711,7 +59437,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -59841,7 +59568,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -59984,7 +59712,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -60260,7 +59989,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -60401,7 +60131,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"T"
@@ -60660,7 +60391,8 @@
 				"DrDe",
 				"DrDe-SD",
 				"FRAiF",
-				"NF"
+				"NF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -60769,7 +60501,8 @@
 			],
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -60935,11 +60668,13 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
+				"AUD",
 				"DrDe",
 				"DrDe-TWoO",
 				"FRAiF",
 				"FRHoF",
-				"HBTD"
+				"HBTD",
+				"RHW"
 			],
 			"size": [
 				"S",
@@ -61413,7 +61148,8 @@
 			"page": 341,
 			"referenceSources": [
 				"FRAiF",
-				"FRHoF"
+				"FRHoF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -61482,7 +61218,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yochlol casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -61497,10 +61233,7 @@
 						]
 					},
 					"ability": "cha",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -61763,7 +61496,8 @@
 			"basicRules2024": true,
 			"referenceSources": [
 				"FFotR",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -62175,7 +61909,8 @@
 			"srd52": true,
 			"basicRules2024": true,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -63059,7 +62794,8 @@
 			"source": "XMM",
 			"page": 345,
 			"referenceSources": [
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"L"
@@ -63112,7 +62848,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 15}):"
 					],
@@ -63125,10 +62861,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -63283,7 +63016,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 12}):"
 					],
@@ -63296,10 +63029,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -63385,7 +63115,8 @@
 			"referenceSources": [
 				"DrDe",
 				"DrDe-DaS",
-				"FRAiF"
+				"FRAiF",
+				"RHW"
 			],
 			"size": [
 				"M"
@@ -63437,7 +63168,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -63450,10 +63181,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -63594,7 +63322,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -63607,10 +63335,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -63746,7 +63471,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save {@dc 13}):"
 					],
@@ -63759,10 +63484,7 @@
 						]
 					},
 					"ability": "wis",
-					"displayAs": "action",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -63869,13 +63591,16 @@
 				}
 			],
 			"referenceSources": [
+				"AUD",
+				"BQDD",
 				"DrDe",
 				"DrDe-DaS",
 				"DrDe-TWoO",
 				"EFA",
 				"FRAiF",
 				"HBTD",
-				"HotB"
+				"HotB",
+				"RHW"
 			],
 			"size": [
 				"M"

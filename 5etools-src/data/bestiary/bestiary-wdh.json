@@ -40,7 +40,7 @@
 				{
 					"ac": 18,
 					"from": [
-						"{@item plate armor|phb}"
+						"{@item plate armor|PHB|plate}"
 					]
 				}
 			],
@@ -97,12 +97,6 @@
 					"entries": [
 						"As a bonus action, Ahmaergo can regain 20 hit points."
 					]
-				},
-				{
-					"name": "Extra Damage",
-					"entries": [
-						"If Ahmaergo has more than half his hit points remaining he deals an extra 7 ({@damage 2d6}) slashing damage on every hit."
-					]
 				}
 			],
 			"action": [
@@ -115,7 +109,7 @@
 				{
 					"name": "Greataxe",
 					"entries": [
-						"{@atk mw} {@hit 9} to hit, reach 5 ft., one target. {@h}11 ({@damage 1d12 + 5}) slashing damage."
+						"{@atk mw} {@hit 9} to hit, reach 5 ft., one target. {@h}11 ({@damage 1d12 + 5}) slashing damage, plus 7 ({@damage 2d6}) slashing damage if Ahmaergo has more than half his hit points remaining."
 					]
 				},
 				{
@@ -221,7 +215,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Ammalia is a 9th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -272,10 +266,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"action": [
@@ -534,7 +525,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Barnibus is a 7th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks) He has the following wizard spells prepared:"
 					],
@@ -579,10 +570,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 7
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -923,7 +911,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Davil is a 12th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks) He has the following bard spells prepared:"
 					],
@@ -982,10 +970,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 12
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -1255,7 +1240,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The drow's spellcasting ability is Charisma (spell save {@dc 12}) It can innately cast the following spells, requiring no material components:"
 					],
@@ -1269,10 +1254,7 @@
 							"{@spell levitate} (self only)"
 						]
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -1523,17 +1505,14 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Embric's spellcasting ability is Constitution ({@hit 4} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
 					"will": [
 						"{@spell produce flame}"
 					],
-					"ability": "con",
-					"dc": 10,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "con"
 				}
 			],
 			"senseTags": [
@@ -2014,7 +1993,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Grum'shar is a 1st-level spellcaster. His spellcasting ability is Intelligence. He has the following wizard spells prepared:"
 					],
@@ -2035,10 +2014,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 1
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -2187,7 +2163,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Hlam is a 5th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 18}, {@hit 10} to hit with spell attacks) He has the following cleric spells prepared:"
 					],
@@ -2226,10 +2202,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 5
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -2431,12 +2404,6 @@
 					"entries": [
 						"When Hrabbaz is reduced to 0 hit points but not killed outright, he drops to 1 hit point instead."
 					]
-				},
-				{
-					"name": "Extra Damage",
-					"entries": [
-						"As long as Hrabbaz has more than half his hit points left he deals an extra 3 ({@damage 1d6}) damage on all hits."
-					]
 				}
 			],
 			"action": [
@@ -2449,7 +2416,7 @@
 				{
 					"name": "Morningstar",
 					"entries": [
-						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}9 ({@damage 1d8 + 5}) piercing damage."
+						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}9 ({@damage 1d8 + 5}) piercing damage, plus 3 ({@damage 1d6}) piercing damage if Hrabbaz has more than half his hit points remaining."
 					]
 				}
 			],
@@ -2540,7 +2507,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Istrid is a 9th-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 14}, {@hit 6} to hit with spell attacks) She has the following cleric spells prepared:"
 					],
@@ -2601,10 +2568,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -2858,21 +2822,18 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Jandar's spellcasting ability is Charisma. He can innately cast the following spells, requiring no material components:"
 					],
 					"will": [
 						"{@spell thaumaturgy}"
 					],
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Jandar is a 4th-level spellcaster. His spellcasting ability is Wisdom. Jandar has the following cleric spells prepared:"
 					],
@@ -2900,10 +2861,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 4
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -3037,7 +2995,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Jarlaxle's innate spellcasting ability is Charisma (spell save {@dc 17}, {@hit 9} to hit with spell attacks) He can innately cast the following spells, requiring no material components:"
 					],
@@ -3051,10 +3009,7 @@
 							"{@spell levitate} (self only)"
 						]
 					},
-					"ability": "cha",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -3324,7 +3279,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Kalain is a 4th-level spellcaster. Her spellcasting ability is Charisma. She has the following bard spells prepared:"
 					],
@@ -3354,10 +3309,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -3652,7 +3604,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Laeral is a 19th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 21}, {@hit 13} to hit with spell attacks). Laeral has the following wizard spells prepared:"
 					],
@@ -3734,10 +3686,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 19
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -3923,21 +3872,18 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Laiba's spellcasting ability is Charisma. She can innately cast the following spells, requiring no material components:"
 					],
 					"will": [
 						"{@spell thaumaturgy}"
 					],
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Laiba is a 4th-level spellcaster. Her spellcasting ability is Wisdom. Laiba has the following cleric spells prepared:"
 					],
@@ -3965,10 +3911,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 4
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -4312,7 +4255,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Manshoon is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 21}, {@hit 15} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -4396,10 +4339,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 21,
-					"atkMod": 15,
-					"casterLevel": 18
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -4531,7 +4471,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Manshoon is an 18th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 19}, {@hit 11} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -4587,10 +4527,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 18
+					"ability": "int"
 				}
 			],
 			"action": [
@@ -4829,7 +4766,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Melannor is a 4th-level spellcaster. His spellcasting ability is Wisdom. He has the following druid spells prepared:"
 					],
@@ -4858,10 +4795,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -5237,6 +5171,7 @@
 				}
 			},
 			"hasToken": true,
+			"hasFluff": true,
 			"hasFluffImages": true
 		},
 		{
@@ -5403,7 +5338,7 @@
 				]
 			},
 			"alignment": [
-				"L",
+				"N",
 				"E"
 			],
 			"ac": [
@@ -5843,7 +5778,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The Dwarf is a 1st-level spellcaster. Its spellcasting ability is Intelligence. It has the following wizard spells prepared:"
 					],
@@ -5864,10 +5799,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 1
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -5977,7 +5909,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Remallia is a 13th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -6044,10 +5976,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 13
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6232,7 +6161,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Rishaal is a 9th-level spellcaster. His spellcasting ability is Intelligence. Rishaal has the following wizard spells prepared:"
 					],
@@ -6283,10 +6212,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"action": [
@@ -6530,7 +6456,7 @@
 				{
 					"name": "Bite (Rat or Hybrid Form Only)",
 					"entries": [
-						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 11} Constitution saving throw or be cursed with wererat lycanthropy."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 11} Constitution saving throw or be cursed with wererat {@variantrule Player Characters as Lycanthropes|MM|lycanthropy}."
 					]
 				},
 				{
@@ -6645,7 +6571,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Skeemo is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks) He has the following wizard spells prepared:"
 					],
@@ -6696,10 +6622,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6817,7 +6740,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Soluun's spellcasting ability is Charisma. It can innately cast the following spells, requiring no material components:"
 					],
@@ -6831,10 +6754,7 @@
 							"{@spell levitate} (self only)"
 						]
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -7674,21 +7594,18 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Tissina's spellcasting ability is Charisma. She can innately cast the following spells, requiring no material components:"
 					],
 					"will": [
 						"{@spell thaumaturgy}"
 					],
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Tissina is a 4th-level spellcaster. Her spellcasting ability is Wisdom. Tissina has the following cleric spells prepared:"
 					],
@@ -7716,10 +7633,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 4
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -7895,7 +7809,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Vajra is an 18th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 18}, {@hit 12} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -7978,10 +7892,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 18,
-					"atkMod": 12,
-					"casterLevel": 18
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -8109,7 +8020,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Valetta is a 5th-level spellcaster. Her spellcasting ability is Wisdom. Valetta has the following cleric spells prepared:"
 					],
@@ -8144,10 +8055,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 5
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -8277,7 +8185,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Victoro is a 15th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Victoro has the following cleric spells prepared:"
 					],
@@ -8360,10 +8268,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 15
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -8662,6 +8567,15 @@
 						"replace": "the beholder",
 						"with": "Xanathar",
 						"flags": "i"
+					},
+					"resist": {
+						"mode": "appendArr",
+						"items": {
+							"resist": [
+								"force"
+							],
+							"preNote": "While attuned to the ring of force resistance:"
+						}
 					},
 					"trait": {
 						"mode": "prependArr",
@@ -9075,7 +8989,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Ziraj is a 10th-level spellcaster. His spellcasting ability is Charisma. He has the following paladin spells prepared:"
 					],
@@ -9103,10 +9017,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 10
+					"ability": "cha"
 				}
 			],
 			"action": [

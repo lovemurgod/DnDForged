@@ -6,61 +6,117 @@ export function initVttDataBridge(vtt) {
     const viewport = document.getElementById('vtt-canvas-viewport');
     
     let monsters = [];
+    let activeEditionFilter = 'all'; // 'all', '2024', '2014'
+    let filterSpellcastersOnly = false;
     
+    // In-memory cache for full creature statblocks
+    const creatureCache = new Map();
+
+    async function fetchFullCreature(source, idOrName) {
+        if (!source || !idOrName) return null;
+        const key = `${source.toLowerCase()}|${idOrName.toLowerCase()}`;
+        if (creatureCache.has(key)) return creatureCache.get(key);
+
+        try {
+            const res = await fetch(`/api/creature/${encodeURIComponent(source)}/${encodeURIComponent(idOrName)}`);
+            if (res.ok) {
+                const data = await res.json();
+                creatureCache.set(key, data);
+                if (data.id) creatureCache.set(`${source.toLowerCase()}|${data.id.toLowerCase()}`, data);
+                return data;
+            }
+        } catch (err) {
+            console.warn(`[vtt-data-bridge] Failed to fetch full creature ${idOrName}:`, err);
+        }
+        return null;
+    }
+    window.fetchFullCreature = fetchFullCreature;
+
     // Map importer cache
     let mapCatalog = null;
 
-    // Load D&D 5e Monster Manual data directly from 5etools' local static files
+    // Load normalized D&D 5e Bestiary Catalog
     loadBestiaryData();
 
     async function loadBestiaryData() {
         try {
-            listContainer.innerHTML = '<div class="text-muted p-3">Loading bestiary data...</div>';
+            listContainer.innerHTML = '<div class="text-muted p-3"><i class="fa-solid fa-spinner fa-spin"></i> Loading normalized bestiary catalog...</div>';
             
-            const indexRes = await fetch('data/bestiary/index.json');
-            if (!indexRes.ok) throw new Error('Could not load bestiary index.json');
-            const indexData = await indexRes.json();
-            
-            const fetchPromises = Object.values(indexData).map(filename => 
-                fetch(`data/bestiary/${filename}`)
-                    .then(res => {
-                        if (!res.ok) return null;
-                        return res.json();
-                    })
-                    .catch(err => {
-                        console.warn(`Failed to fetch bestiary file ${filename}:`, err);
-                        return null;
-                    })
-            );
-            
-            const results = await Promise.all(fetchPromises);
-            
-            monsters = [];
-            results.forEach(data => {
-                if (data && data.monster && Array.isArray(data.monster)) {
-                    data.monster.forEach(m => m.__prop = "monster");
-                    monsters.push(...data.monster);
-                }
-            });
-            
-            // Resolve 5etools _copy references so modified creatures (like Ireena Kolyana) have full stat blocks
-            if (typeof DataUtil !== "undefined" && DataUtil.monster && DataUtil.monster.pMergeCopy) {
-                for (let i = 0; i < monsters.length; i++) {
-                    if (monsters[i]._copy) {
-                        try {
-                            await DataUtil.monster.pMergeCopy(monsters, monsters[i]);
-                        } catch (err) {
-                            console.warn("Failed to merge copy for", monsters[i].name, err);
-                        }
-                    }
-                }
+            let catalogRes = await fetch('/api/bestiary/catalog');
+            if (!catalogRes.ok) {
+                catalogRes = await fetch('/data/bestiary-catalog.json');
             }
-
-            renderMonsterList(monsters);
+            if (!catalogRes.ok) throw new Error('Could not load bestiary catalog');
+            
+            monsters = await catalogRes.json();
+            setupFilterListeners();
+            applyMonsterFilters();
         } catch (e) {
-            console.error("Error fetching 5etools bestiary data:", e);
+            console.error("Error fetching normalized bestiary data:", e);
             listContainer.innerHTML = '<div class="text-danger p-3"><i class="fa-solid fa-triangle-exclamation"></i> Error accessing bestiary library.</div>';
         }
+    }
+
+    function setupFilterListeners() {
+        const editionBtns = document.querySelectorAll('.lib-filter-edition');
+        editionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                editionBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = 'transparent';
+                    b.style.color = 'var(--color-text-secondary)';
+                    b.style.fontWeight = 'normal';
+                });
+                btn.classList.add('active');
+                btn.style.background = 'var(--color-bg-tertiary)';
+                btn.style.color = 'var(--color-gold-light)';
+                btn.style.fontWeight = '600';
+                activeEditionFilter = btn.dataset.edition || 'all';
+                applyMonsterFilters();
+            });
+        });
+
+        const spellBtn = document.getElementById('lib-filter-spellcaster');
+        if (spellBtn) {
+            spellBtn.addEventListener('click', () => {
+                filterSpellcastersOnly = !filterSpellcastersOnly;
+                if (filterSpellcastersOnly) {
+                    spellBtn.classList.add('btn-primary');
+                    spellBtn.classList.remove('btn-secondary');
+                    spellBtn.style.background = 'var(--color-gold-base)';
+                    spellBtn.style.color = '#000';
+                } else {
+                    spellBtn.classList.remove('btn-primary');
+                    spellBtn.classList.add('btn-secondary');
+                    spellBtn.style.background = '';
+                    spellBtn.style.color = '';
+                }
+                applyMonsterFilters();
+            });
+        }
+    }
+
+    function applyMonsterFilters() {
+        const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        const filtered = monsters.filter(m => {
+            // Edition filter
+            if (activeEditionFilter !== 'all' && m.edition !== activeEditionFilter) {
+                return false;
+            }
+            // Spellcaster filter
+            if (filterSpellcastersOnly && !m.hasSpellcasting) {
+                return false;
+            }
+            // Query filter
+            if (!query) return true;
+            const nameMatch = m.name.toLowerCase().includes(query);
+            const typeMatch = (m.type || '').toLowerCase().includes(query) || (m.subtype || '').toLowerCase().includes(query);
+            const crStr = m.cr ? String(m.cr).toLowerCase() : '0';
+            const crMatch = crStr === query || crStr.includes(query) || `cr ${crStr}`.includes(query) || `cr${crStr}`.includes(query);
+            const srcMatch = (m.source || '').toLowerCase() === query;
+            return nameMatch || typeMatch || crMatch || srcMatch;
+        });
+        renderMonsterList(filtered);
     }
 
     function renderMonsterList(list) {
@@ -79,34 +135,50 @@ export function initVttDataBridge(vtt) {
             // Format challenge rating (CR)
             let crStr = monster.cr ? (typeof monster.cr === 'object' ? monster.cr.cr : monster.cr) : '0';
             
+            // Edition & Spellcaster Badges
+            const editionBadgeColor = monster.edition === '2024' ? 'var(--color-gold-light)' : 'var(--color-text-muted)';
+            const editionBadgeBg = monster.edition === '2024' ? 'rgba(212,175,55,0.15)' : 'rgba(255,255,255,0.06)';
+            const spellBadge = monster.hasSpellcasting 
+                ? `<span title="${monster.casterLevel ? monster.casterLevel + 'th-level ' : ''}${monster.spellAbility ? monster.spellAbility.toUpperCase() + ' ' : ''}Spellcaster" style="color:var(--color-gold-base); margin-left:4px;"><i class="fa-solid fa-wand-magic-sparkles"></i></span>`
+                : '';
+
             item.innerHTML = `
-                <span class="lib-item-name">${monster.name} <span style="font-size:0.75em; color:var(--color-text-muted);">[${monster.source || 'Unknown'}]</span></span>
+                <span class="lib-item-name">
+                    ${monster.name}
+                    ${spellBadge}
+                    <span style="font-size:0.7em; margin-left:4px; padding:1px 5px; border-radius:3px; background:${editionBadgeBg}; color:${editionBadgeColor}; border:1px solid rgba(255,255,255,0.08);">${monster.source} ${monster.edition || ''}</span>
+                </span>
                 <span class="lib-item-cr">CR ${crStr}</span>
             `;
 
             // Calculate VTT attributes
-            const hp = calculateMonsterHp(monster);
-            const size = translateSizeCategory(monster.size);
-            const imageUrl = getMonsterImageUrl(monster);
+            const hp = monster.hp || calculateMonsterHp(monster);
+            const size = translateSizeCategory(monster.sizeCategory || monster.size);
+            const imageUrl = monster.tokenImg || getMonsterImageUrl(monster);
 
             // Drag start handler - packages token payload
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('application/json', JSON.stringify({
                     type: 'bestiary',
+                    id: monster.id,
                     name: monster.name,
+                    source: monster.source,
+                    edition: monster.edition,
                     hp: hp,
                     maxHp: hp,
                     size: size,
                     img: imageUrl,
-                    monsterData: monster // Full stat block for creature sheet
+                    monsterData: monster // Has catalog summary; hydrated with full data on drop
                 }));
                 e.dataTransfer.effectAllowed = 'copy';
             });
 
-            // Clicking opens creature sheet (not spawning)
-            item.addEventListener('click', () => {
+            // Clicking opens creature sheet (fetches full statblock if needed)
+            item.addEventListener('click', async () => {
                 if (window.VTT?.creatureSheet) {
-                    window.VTT.creatureSheet.openSheet(monster, null);
+                    let fullMonster = await fetchFullCreature(monster.source, monster.id);
+                    if (!fullMonster) fullMonster = monster;
+                    window.VTT.creatureSheet.openSheet(fullMonster, null);
                 }
             });
 
@@ -116,14 +188,7 @@ export function initVttDataBridge(vtt) {
 
     // Live search filter
     searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase().trim();
-        const filtered = monsters.filter(m => {
-            const nameMatch = m.name.toLowerCase().includes(query);
-            const crStr = m.cr ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase() : '0';
-            const crMatch = crStr === query || crStr.includes(query) || `cr ${crStr}`.includes(query) || `cr${crStr}`.includes(query);
-            return nameMatch || crMatch;
-        });
-        renderMonsterList(filtered);
+        applyMonsterFilters();
     });
 
     // Translate 5etools sizes (S, M, L, H, G) to grid square sizes
@@ -168,19 +233,25 @@ export function initVttDataBridge(vtt) {
         return maxVision > 0 ? maxVision : 60;
     }
 
-    // Parse image location matching 5etools folder structure
+    // Parse image location matching local folder structure with offline generator fallback
     function getMonsterImageUrl(monster) {
-        if (monster && monster.hasToken) {
-            if (typeof Renderer !== 'undefined' && Renderer.monster && Renderer.monster.getTokenUrl) {
-                return Renderer.monster.getTokenUrl(monster);
-            }
-            // Fallback
-            const cleanName = typeof Parser !== 'undefined' ? Parser.nameToTokenName(monster.name) : monster.name.replace(/ /g, '-').toLowerCase();
-            const source = monster.source;
+        if (!monster) return (window.VTT?.generateArcaneToken ? window.VTT.generateArcaneToken('Creature', 'monster') : 'favicon.svg');
+        if (monster.tokenImg) return monster.tokenImg;
+        if (monster.tokenUrl) return monster.tokenUrl;
+        if (monster.imgUrl) return monster.imgUrl;
+        if (typeof Renderer !== 'undefined' && Renderer.monster && Renderer.monster.getTokenUrl) {
+            try {
+                const rUrl = Renderer.monster.getTokenUrl(monster);
+                if (rUrl) return rUrl;
+            } catch (e) {}
+        }
+        if (monster.hasToken || monster.source || monster.name) {
+            const cleanName = typeof Parser !== 'undefined' ? Parser.nameToTokenName(monster.name) : (monster.name || '').replace(/"/g, '').trim();
+            const source = monster.source || 'MM';
             return `img/bestiary/tokens/${source}/${cleanName}.webp`;
         }
-        // Fallback procedural token or generic dragon
-        return 'favicon.svg';
+        // Fallback to offline arcane token
+        return (window.VTT?.generateArcaneToken ? window.VTT.generateArcaneToken(monster.name, 'monster') : 'favicon.svg');
     }
 
     // Direct drag-and-drop landing handler on viewport canvas
@@ -229,6 +300,18 @@ export function initVttDataBridge(vtt) {
 
                 canvasEngine.addToken(token);
                 
+                // Asynchronously hydrate token.monsterData with full normalized creature if needed
+                if (data.source && (data.id || data.name)) {
+                    fetchFullCreature(data.source, data.id || data.name).then(fullMonster => {
+                        if (fullMonster) {
+                            token.monsterData = fullMonster;
+                            if (window.VTT?.socket) {
+                                window.VTT.socket.emit('token:update', { token });
+                            }
+                        }
+                    });
+                }
+                
                 // Log spawn message
                 // window.VTT.socket.emit('chat:msg', {
                 //     text: `GM spawned token: **${data.name}** (HP: ${data.hp}/${data.maxHp}, Size: ${data.size}x${data.size})`
@@ -249,13 +332,18 @@ export function initVttDataBridge(vtt) {
                 if (!tokenImg && charRef) {
                     if (charRef.tokenImages && charRef.tokenImages.length > 0 && charRef.activeTokenIndex !== -1) {
                         const idx = charRef.activeTokenIndex || 0;
-                        if (idx >= 0 && idx < charRef.tokenImages.length) {
+                        if (idx >= 0 && idx < charRef.tokenImages.length && charRef.tokenImages[idx]?.url) {
                             tokenImg = charRef.tokenImages[idx].url;
                         } else {
-                            tokenImg = 'favicon.svg';
+                            tokenImg = charRef.tokenImages[0]?.url || 'favicon.svg';
                         }
                     } else if (charRef.monsterData) {
                         tokenImg = getMonsterImageUrl(charRef.monsterData);
+                        if (tokenImg && tokenImg !== 'favicon.svg') {
+                            charRef.tokenImages = [{ url: tokenImg, name: 'Default Token', isDefault: true }];
+                            charRef.activeTokenIndex = 0;
+                            if (vtt.socket) vtt.socket.emit('character:update', { character: charRef });
+                        }
                     } else {
                         tokenImg = 'favicon.svg';
                     }
@@ -662,12 +750,22 @@ export function initVttDataBridge(vtt) {
         };
         
         modal.querySelector('#npc-import-cancel').addEventListener('click', closeModals);
-        modal.querySelector('#npc-import-save').addEventListener('click', () => {
+        modal.querySelector('#npc-import-save').addEventListener('click', async () => {
             const nickname = modal.querySelector('#npc-nickname').value.trim() || monster.name;
             
-            let hp = calculateMonsterHp(monster);
+            let hp = monster.hp || calculateMonsterHp(monster);
             
-            const customMonsterData = JSON.parse(JSON.stringify(monster));
+            // Hydrate full normalized creature before saving custom NPC
+            let fullMonster = null;
+            if (typeof fetchFullCreature === 'function') {
+                fullMonster = await fetchFullCreature(monster.source, monster.id || monster.name);
+            }
+            const customMonsterData = fullMonster ? JSON.parse(JSON.stringify(fullMonster)) : JSON.parse(JSON.stringify(monster));
+            
+            const defaultToken = getMonsterImageUrl(customMonsterData);
+            const initialTokens = (defaultToken && defaultToken !== 'favicon.svg') 
+                ? [{ url: defaultToken, name: 'Default Token', isDefault: true }] 
+                : [];
             
             const newId = 'npc_' + Date.now();
             const newNpc = {
@@ -678,8 +776,9 @@ export function initVttDataBridge(vtt) {
                 hpMax: hp,
                 hpCurrent: hp,
                 tempHp: 0,
-                ac: monster.ac ? (Array.isArray(monster.ac) ? (monster.ac[0].ac || monster.ac[0]) : monster.ac) : 10,
-                tokenImages: []
+                ac: monster.ac ? (Array.isArray(monster.ac) ? (monster.ac[0].ac || monster.ac[0]) : (typeof monster.ac === 'object' ? monster.ac.ac : monster.ac)) : 10,
+                tokenImages: initialTokens,
+                activeTokenIndex: 0
             };
             
             if (!vtt.campaignState.characters) vtt.campaignState.characters = {};
@@ -709,9 +808,15 @@ export function initVttDataBridge(vtt) {
         let html = '';
         customNpcs.forEach(npc => {
             let tokenImg = getMonsterImageUrl(npc.monsterData || {});
-            if (npc.tokenImages && npc.tokenImages.length > 0 && npc.activeTokenIndex !== -1) {
+            if (!npc.tokenImages || npc.tokenImages.length === 0) {
+                if (tokenImg && tokenImg !== 'favicon.svg') {
+                    npc.tokenImages = [{ url: tokenImg, name: 'Default Token', isDefault: true }];
+                    npc.activeTokenIndex = 0;
+                    if (vtt.socket) vtt.socket.emit('character:update', { character: npc });
+                }
+            } else if (npc.activeTokenIndex !== -1) {
                 const idx = npc.activeTokenIndex || 0;
-                if (idx >= 0 && idx < npc.tokenImages.length) {
+                if (idx >= 0 && idx < npc.tokenImages.length && npc.tokenImages[idx]?.url) {
                     tokenImg = npc.tokenImages[idx].url;
                 }
             }
@@ -976,8 +1081,8 @@ export function initVttDataBridge(vtt) {
         
         if (!targetMap) return null;
 
-        // Base 5eTools URL for images
-        const baseUrl = 'https://5e.tools/img/';
+        // Local image path
+        const baseUrl = '/img/';
         const mapUrl = baseUrl + targetMap.href.path;
 
         // Construct grid

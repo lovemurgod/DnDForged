@@ -208,7 +208,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The nullifier's innate spellcasting ability is Charisma (spell save {@dc 16}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -223,10 +223,7 @@
 							"{@spell antimagic field}"
 						]
 					},
-					"ability": "cha",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -623,7 +620,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (1/Day)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The blood hunter can innately cast {@spell hex}. Its innate spellcasting ability is Intelligence."
 					],
@@ -633,10 +630,7 @@
 					"ability": "int",
 					"hidden": [
 						"will"
-					],
-					"dc": 10,
-					"atkMod": 2,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -786,7 +780,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Bol'bara's innate spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). She can innately cast the following spells, requiring no material components:"
 					],
@@ -804,10 +798,7 @@
 							"{@spell invisibility}"
 						]
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -2695,7 +2686,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The merrow is a 6th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). The merrow has the following druid spells prepared:"
 					],
@@ -2732,10 +2723,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 6
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -2909,7 +2897,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Mossback Steward's innate spellcasting ability is Wisdom (spell save {@dc 15}). It can innately cast the following spells, requiring no material components."
 					],
@@ -2921,11 +2909,7 @@
 							"{@spell suggestion}",
 							"{@spell divination}"
 						]
-					},
-					"dc": 15,
-					"atkMod": 3,
-					"casterLevel": 0,
-					"ability": "int"
+					}
 				}
 			],
 			"languageTags": [
@@ -3192,7 +3176,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Pellinost is a 5th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Pellinost has the following cleric spells prepared:"
 					],
@@ -3227,10 +3211,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 5
+					"ability": "wis"
 				}
 			],
 			"tokenCustom": true,
@@ -3336,7 +3317,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The warlock's innate spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3354,10 +3335,7 @@
 							"{@spell hunger of Hadar}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -3577,7 +3555,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The sea fury's innate spellcasting ability is Charisma (spell save {@dc 16}, {@hit 8} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3591,10 +3569,7 @@
 							"{@spell thunderwave}"
 						]
 					},
-					"ability": "cha",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -3973,7 +3948,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Lizardfolk Form Only)",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Skr'a S'orsk is a 5th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). Skr'a S'orsk has the following druid spells prepared:"
 					],
@@ -4007,10 +3982,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 5
+					"ability": "wis"
 				}
 			],
 			"savingThrowForcedSpell": [

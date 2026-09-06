@@ -1,0 +1,176 @@
+[
+  {
+    "id": "creature_acidic_mist_apparition_gotsf",
+    "name": "Acidic Mist Apparition",
+    "source": "GotSF",
+    "edition": "2014",
+    "page": 6,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 90,
+      "formula": "12d10 + 24"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 20,
+        "mod": 5
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Auran"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_air_form_7vsp",
+        "name": "Air Form",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_1kjd",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The elemental makes two slam attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_slam_f2ya",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}14 (2d8 + 5) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 5",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_whirlwind__recharge_4__80wn",
+        "name": "Whirlwind (Recharge 4)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Each creature in the elemental's space must make a DC 13 Strength saving throw. On a failure, a target takes 15 (3d8 + 2) bludgeoning damage and is flung up 20 feet away from the elemental in a random direction and knocked prone. If a thrown target strikes an object, such as a wall or floor, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 13 Dexterity saving throw or take the same damage and be knocked prone.</p><p>If the saving throw is successful, the target takes half the bludgeoning damage and isn't flung away or knocked prone.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "STR"
+          },
+          "damages": [
+            {
+              "formula": "3d8 + 2",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d6",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": "4"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GotSF/Acidic Mist Apparition.webp",
+    "tokenImg": "img/bestiary/tokens/GotSF/Acidic Mist Apparition.webp",
+    "fluff": null
+  }
+]

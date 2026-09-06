@@ -1,0 +1,880 @@
+[
+  {
+    "id": "sp_alustriel_s_mooncloak_frhof",
+    "name": "Alustriel's Mooncloak",
+    "source": "FRHoF",
+    "page": 142,
+    "level": 5,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "Self (20 feet emanation)",
+    "components": "V, S, M (a moonstone worth 50+ GP)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>For the duration, moonlight fills a 20-foot Emanation [Area of Effect] originating from you with Dim Light. While in that area, you and your allies have Cover and Resistance to Cold, Lightning, and Radiant damage.</p><p>While the spell lasts, you can use one of the following options, ending the spell immediately:</p><ul><li><strong><em>Liberation.</em></strong> <p>When you fail a saving throw to avoid or end the Frightened, Grappled, or Restrained condition, you can take a Reaction to succeed on the save instead.</p></li><li><strong><em>Respite.</em></strong> <p>As a Magic action, you or an ally within the area regains Hit Points equal to 4d10 plus your spellcasting ability modifier.</p></li></ul>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Druid",
+      "Ranger",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d10",
+        "type": "Healing",
+        "stat": "spell"
+      }
+    ],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "Healing",
+      "LGT",
+      "UA"
+    ]
+  },
+  {
+    "id": "sp_backlash_frhof",
+    "name": "Backlash",
+    "source": "FRHoF",
+    "page": 142,
+    "level": 4,
+    "school": "Abjuration",
+    "castingTime": "1 reaction (which you take in response to taking damage)",
+    "range": "60 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You ward yourself against destructive energy, reducing the damage taken by 4d6 plus your spellcasting ability modifier.</p><p>If the triggering damage was from a creature within range, you can force the creature to make a Constitution saving throw. The creature takes 4d6 Force damage on a failed save or half as much damage on a successful one.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage reduction and Force damage from this spell both increase by 1d6 for every spell slot level above 4.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage reduction and Force damage from this spell both increase by 1d6 for every spell slot level above 4.</p></div>",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d6",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_blade_of_disaster_frhof",
+    "name": "Blade of Disaster",
+    "source": "FRHoF",
+    "page": 143,
+    "level": 9,
+    "school": "Conjuration",
+    "castingTime": "1 bonus action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a 3-foot-long blade-shaped planar rift that lasts for the duration. The rift appears within range in a space of your choice, and you can immediately make up to two melee spell attacks, each one against a creature or object within 5 feet of the rift. On a hit, the target takes 10d6 Force damage. This attack scores a Critical Hit if the number on the d20 is 18 or higher.</p><p>As a Bonus Action on your later turns, you can move the rift up to 60 feet and repeat the two attacks against a creature or an object within 5 feet of it. You can direct the attacks at the same target or at different ones.</p><p>The blade can harmlessly pass through any barrier, including ones created by spells like Wall of Force.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "10d6",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Multiple Targets"
+    ],
+    "miscTags": [
+      "OBJ",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_cacophonic_shield_frhof",
+    "name": "Cacophonic Shield",
+    "source": "FRHoF",
+    "page": 143,
+    "level": 3,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (10 feet emanation)",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>Thunderous reverberations fill a 10-foot Emanation [Area of Effect] originating from you for the duration. Whenever the Emanation [Area of Effect] enters a creature's space and whenever a creature enters the Emanation [Area of Effect] or ends its turn there, the creature makes a Constitution saving throw. On a failed save, the creature takes 3d6 Thunder damage and has the Deafened condition until the start of your next turn. On a successful save, the creature takes half as much damage only. A creature makes this save only once per turn. When you cast this spell, you can designate creatures to be unaffected by it.</p><p>In addition, you have Resistance to Thunder damage, and ranged attack rolls against you are made with Disadvantage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d6",
+        "type": "Thunder",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Deafened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_conjure_constructs_frhof",
+    "name": "Conjure Constructs",
+    "source": "FRHoF",
+    "page": 143,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a brass cog)",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You conjure a group of intangible, orderly spirits that appear as a Medium group of modrons or other Constructs in an unoccupied space you can see within range. The spirits last for the duration. When you cast this spell and as a Magic action on subsequent turns, you can command the spirits to target one creature or object you can see within 5 feet of the spirits and create one of the following effects:</p><ul><li><strong><em>Clockwork Force.</em></strong> <p>The target makes a Dexterity saving throw, taking 3d6 Force damage on a failed save or half as much damage on a successful one.</p></li><li><strong><em>Orderly Ward.</em></strong> <p>The target gains Temporary Hit Points equal to 1d6 plus your spellcasting ability modifier.</p></li></ul><p>When you move on your turn, you can also move the spirits up to 30 feet to an unoccupied space you can see.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage and Temporary Hit Points both increase by 1d6 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage and Temporary Hit Points both increase by 1d6 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d6",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Cone"
+    ],
+    "miscTags": [
+      "OBJ",
+      "Sight Required",
+      "Temp HP"
+    ]
+  },
+  {
+    "id": "sp_death_armor_frhof",
+    "name": "Death Armor",
+    "source": "FRHoF",
+    "page": 143,
+    "level": 2,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S, M (an onyx worth 50+ GP, which the spell consumes)",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>For the duration, an inky aura surrounds one creature you touch. The target has Advantage on Death Saving Throw, and once per turn, when a creature within 5 feet of the target hits it with a melee attack roll, the attacker takes 2d4 Necrotic damage.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere",
+      "Single Target"
+    ],
+    "miscTags": [
+      "ADV"
+    ]
+  },
+  {
+    "id": "sp_deryan_s_helpful_homunculi_frhof",
+    "name": "Deryan's Helpful Homunculi",
+    "source": "FRHoF",
+    "page": 143,
+    "level": 2,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S, M (powdered gemstones worth 100+ GP, which the spell consumes, and one set of Artisan's Tools with which you have proficiency)",
+    "duration": "8 hours",
+    "concentration": false,
+    "ritual": true,
+    "descriptionHtml": "<p>You summon a group of helpful spirits, which lasts for the duration. The spirits appear as homunculi or as another Construct of your choice but are intangible and invulnerable, and they are considered to have proficiency in the Arcana skill and with the set of Artisan's Tools used in the spell's casting.</p><p>If you are crafting an item, the spirits function as a single assistant for your crafting, halving the crafting time.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_dirge_frhof",
+    "name": "Dirge",
+    "source": "FRHoF",
+    "page": 144,
+    "level": 6,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "Self (60 feet emanation)",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>Deathly power fills a 60-foot Emanation [Area of Effect] originating from you for the duration.</p><p>When you cast this spell, you can designate creatures to be unaffected by it. Any other creature can't regain Hit Points while in the Emanation [Area of Effect]. Whenever the Emanation [Area of Effect] enters a creature's space and whenever a creature enters the Emanation [Area of Effect] or ends its turn there, the creature makes a Constitution saving throw. On a failed save, the creature takes 3d10 Necrotic damage and has the Prone condition. On a successful save, the creature takes half as much damage and its Speed is halved. A creature makes this save only once per turn.</p><div><strong><em>Casting as a Circle Spell.</em></strong> <p>Casting this as a Circle spell requires a minimum of two secondary casters. If the spell is cast as a Circle spell, its duration becomes Concentration, up to 10 minutes.</p><p>A creature that fails its save against the spell's effect also gains 1 Exhaustion level. While the creature has Exhaustion levels, finishing a Long Rest neither restores lost Hit Points nor reduces the creature's Exhaustion level.</p><p>When the spell is cast, each secondary caster must expend a level 4+ spell slot; otherwise, the spell fails.</p></div>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Cleric"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d10",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
+    "id": "sp_doomtide_frhof",
+    "name": "Doomtide",
+    "source": "FRHoF",
+    "page": 144,
+    "level": 4,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S, M (soot and a dried eel)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a 20-foot-radius Sphere [Area of Effect] of inky fog within range. The fog is magical Darkness and lasts for the duration or until a strong wind (such as the one created by the Gust of Wind spell) disperses it, ending the spell.</p><p>Each creature in the Sphere [Area of Effect] when it appears makes a Wisdom saving throw. On a failed save, a creature takes 5d6 Psychic damage and subtracts 1d6 from its saving throws until the end of its next turn. On a successful save, a creature takes half as much damage only. A creature also makes this save when the Sphere [Area of Effect] moves into its space, when it enters the Sphere [Area of Effect], or when it ends its turn inside the Sphere [Area of Effect]. A creature makes this save only once per turn.</p><p>The Sphere [Area of Effect] moves 10 feet away from you at the start of each of your turns.</p><div><strong><em>Casting as a Circle Spell.</em></strong> <p>Casting this as a Circle spell requires a minimum of five secondary casters. In addition to the spell's usual components, you must provide a special component (a string of three black pearls from Pandemonium), which the spell consumes. The spell's range increases to 1 mile, and its duration increases to until dispelled (no Concentration required). The spell ends early if any caster who participated in this casting contributes to another casting of Doomtide as a Circle spell.</p><p>When the spell is cast, each secondary caster must expend a level 3+ spell slot; otherwise, the spell fails.</p></div>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Cleric",
+      "Warlock"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_elminster_s_effulgent_spheres_frhof",
+    "name": "Elminster's Effulgent Spheres",
+    "source": "FRHoF",
+    "page": 144,
+    "level": 6,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S, M (an opal worth 1,000 GP+)",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Six chromatic spheres orbit you for the duration.</p><p>While the spheres are present, you can expend spheres to create the following effects:</p><ul><li><strong><em>Absorb Energy.</em></strong> <p>When you take Acid, Cold, Fire, Lightning, or Thunder damage, you can take a Reaction to expend one sphere and give yourself Resistance to the triggering damage type until the start of your next turn.</p></li><li><strong><em>Energy Blast.</em></strong> <p>As a Bonus Action, you send one sphere hurtling toward a target within 120 feet of yourself. Make a ranged spell attack. On a hit, the target takes 3d6 Acid, Cold, Fire, Lightning, or Thunder damage (your choice). Regardless of whether you hit, the sphere is expended.</p></li></ul><p>The spell ends early if you have no more spheres remaining.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The number of spheres increases by 1 for every spell slot level above 6.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The number of spheres increases by 1 for every spell slot level above 6.</p></div>",
+    "classes": [
+      "Druid",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d6",
+        "type": "Acid",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "3d6",
+        "type": "Thunder",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "UA",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_elminster_s_elusion_frhof",
+    "name": "Elminster's Elusion",
+    "source": "FRHoF",
+    "page": 144,
+    "level": 2,
+    "school": "Abjuration",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>Arcane wards protect you against magic for the duration. You have Advantage on saving throws against spells and magical effects. Additionally, if you succeed on a saving throw against a spell or magical effect and would normally take half as much damage, you instead take no damage.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "ADV"
+    ]
+  },
+  {
+    "id": "sp_holy_star_of_mystra_frhof",
+    "name": "Holy Star of Mystra",
+    "source": "FRHoF",
+    "page": 145,
+    "level": 8,
+    "school": "Evocation",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a glowing mote of energy that hovers above you for the duration. The mote sheds Bright Light in a 5-foot radius and Dim Light for an additional 5 feet.</p><p>When you cast this spell and as a Bonus Action on later turns, you can unleash a shining bolt from the mote, targeting one creature within 120 feet of yourself. Make a ranged spell attack. On a hit, the target takes Force or Radiant damage (your choice) equal to 4d10 plus your spellcasting ability modifier.</p><p>In addition, while the mote is present, you have Cover, and if you succeed on a saving throw against a spell of level 7 or lower that targeted only you and didn't create an area of effect, you can take a Reaction to deflect that spell back at the spell's caster; the caster makes a saving throw against that spell using that caster's own spell save DC.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "LGT",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_laeral_s_silver_lance_frhof",
+    "name": "Laeral's Silver Lance",
+    "source": "FRHoF",
+    "page": 145,
+    "level": 3,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (120 feet line)",
+    "components": "V, S, M (a silver pin worth 250+ GP)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Silver energy bursts out from you in a 120-foot-long, 5-foot-wide Line [Area of Effect]. Each creature of your choice in the Line [Area of Effect] makes a Strength saving throw. On a failed save, a creature takes 3d10 Force damage and has the Prone condition. On a successful save, a creature takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 for every spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 for every spell slot level above 3.</p></div>",
+    "classes": [
+      "Cleric",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "strength",
+    "attackStat": "none",
+    "upcastBonus": "1d10",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Line"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_simbul_s_synostodweomer_frhof",
+    "name": "Simbul's Synostodweomer",
+    "source": "FRHoF",
+    "page": 145,
+    "level": 7,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You imbue one creature you touch with magical healing energy for the duration. Whenever the target casts a spell using a spell slot, the target can immediately roll a number of unexpended Hit Point Dice equal to the spell slot's level and regain Hit Points equal to the roll's total plus your spellcasting ability modifier; those dice are then expended.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
+    "id": "sp_songal_s_elemental_suffusion_frhof",
+    "name": "Songal's Elemental Suffusion",
+    "source": "FRHoF",
+    "page": 145,
+    "level": 5,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S, M (a pearl worth 100+ GP)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You imbue yourself with the elemental power of genies. You gain the following benefits until the spell ends:</p><ul><li><strong><em>Elemental Immunity.</em></strong> <p>When you cast this spell, choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder. You have Resistance to the chosen damage type.</p></li><li><strong><em>Elemental Pulse.</em></strong> <p>When you cast this spell and at the start of each of your subsequent turns, you release a burst of elemental energy in a 15-foot Emanation [Area of Effect] originating from yourself. Each creature of your choice in that area makes a Dexterity saving throw. On a failed save, a creature takes 2d6 Acid, Cold, Fire, Lightning, or Thunder damage (your choice) and has the Prone condition. On a successful save, a creature takes half as much damage only.</p></li><li><strong><em>Flight.</em></strong> <p>You gain a Fly Speed of 30 feet and can hover.</p></li></ul><div><strong><em>Casting as a Circle Spell.</em></strong> <p>If the spell is cast as a Circle spell, its casting time increases to 1 minute, and its duration increases to Concentration, up to 10 minutes. For each secondary caster who participates in the casting, you can choose one additional creature, to a maximum of nine additional creatures. The chosen creatures also gain the benefits of the spell for its duration.</p><p>When the spell is cast, each secondary caster must expend a level 2+ spell slot; otherwise, the spell fails.</p></div>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Druid",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Acid",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Cold",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Fire",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Lightning",
+        "stat": "none"
+      },
+      {
+        "formula": "2d6",
+        "type": "Thunder",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_spellfire_flare_frhof",
+    "name": "Spellfire Flare",
+    "source": "FRHoF",
+    "page": 146,
+    "level": 1,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You unleash a blast of brilliant fire. Make a ranged spell attack against a target within range; a target gains no benefit from Cover or Cover for this attack roll. On a hit, the target takes 2d10 Radiant damage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>You create an additional blast for each spell slot level above 1. You can direct the blasts at the same target or at different ones. Make a separate attack roll for each blast.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>You create an additional blast for each spell slot level above 1. You can direct the blasts at the same target or at different ones. Make a separate attack roll for each blast.</p></div>",
+    "classes": [
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d10",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_spellfire_storm_frhof",
+    "name": "Spellfire Storm",
+    "source": "FRHoF",
+    "page": 146,
+    "level": 4,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You conjure a pillar of spellfire in a 20-foot-radius, 20-foot-high Cylinder [Area of Effect] centered on a point within range. The area of the Cylinder [Area of Effect] is Bright Light, and each creature in it when it appears makes a Constitution saving throw, taking 4d10 Radiant damage on a failed save or half as much damage on a successful one. A creature also makes this save when it enters the spell's area for the first time on a turn or ends its turn there. A creature makes this save only once per turn.</p><p>In addition, whenever a creature in the Cylinder [Area of Effect] casts a spell, that creature makes a Constitution saving throw. On a failed save, the spell dissipates with no effect, and the action, Bonus Action, or Reaction used to cast it is wasted. If that spell was cast with a spell slot, the slot isn't expended.</p><p>When you cast this spell, you can designate creatures to be unaffected by it.</p><div><strong><em>Casting as a Circle Spell.</em></strong> <p>In addition to the spell's usual components, you must provide a special component (a blue star sapphire worth 25,000+ GP), which the spell consumes. The spell's range increases to 1 mile, and it no longer requires Concentration. When the spell is cast, each secondary caster must expend a level 3+ spell slot; otherwise, the spell fails.</p></div><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 for every spell slot level above 4.</p><p>The number of secondary casters determines the spell's area of effect and duration, as shown in the table below. The spell ends early if any caster who participated in this casting contributes to another casting of Spellfire Storm as a Circle spell.</p><table style=\"width:100%; border-collapse:collapse; margin:8px 0;\"><thead><tr><th>Secondary Casters</th><th>Area of Effect</th><th>Duration</th></tr></thead><tbody><tr><td>1-3</td><td>40-foot-radius, 40-foot-high Cylinder [Area of Effect]</td><td>1 Hour</td></tr><tr><td>4-6</td><td>60-foot-radius, 60-foot-high Cylinder [Area of Effect]</td><td>8 Hours</td></tr><tr><td>7+</td><td>100-foot-radius, 100-foot-high Cylinder [Area of Effect]</td><td>24 Hours</td></tr></tbody></table></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 for every spell slot level above 4.</p><p>The number of secondary casters determines the spell's area of effect and duration, as shown in the table below. The spell ends early if any caster who participated in this casting contributes to another casting of Spellfire Storm as a Circle spell.</p><table style=\"width:100%; border-collapse:collapse; margin:8px 0;\"><thead><tr><th>Secondary Casters</th><th>Area of Effect</th><th>Duration</th></tr></thead><tbody><tr><td>1-3</td><td>40-foot-radius, 40-foot-high Cylinder [Area of Effect]</td><td>1 Hour</td></tr><tr><td>4-6</td><td>60-foot-radius, 60-foot-high Cylinder [Area of Effect]</td><td>8 Hours</td></tr><tr><td>7+</td><td>100-foot-radius, 100-foot-high Cylinder [Area of Effect]</td><td>24 Hours</td></tr></tbody></table></div>",
+    "classes": [
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d10",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d10",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Y"
+    ],
+    "miscTags": [
+      "LGT"
+    ]
+  },
+  {
+    "id": "sp_sylun__s_viper_frhof",
+    "name": "Syluné's Viper",
+    "source": "FRHoF",
+    "page": 147,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, S, M (a snake fang)",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>A shimmering, spectral snake encircles your body for the duration. You gain 15 Temporary Hit Points; the spell ends early if you have no Temporary Hit Points left.</p><p>While the spell is active, you gain the following benefits:</p><ul><li><strong><em>Climbing.</em></strong> <p>You gain a Climb Speed equal to your Speed.</p></li><li><strong><em>Venomous Bite.</em></strong> <p>As a Magic action, you can make a ranged spell attack using the snake against one creature within 50 feet. On a hit, the target takes 1d6 Force damage and has the Poisoned condition until the start of your next turn. While Poisoned, the target has the Incapacitated condition.</p></li></ul><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>For each spell slot level above 3, the number of Temporary Hit Points you gain from this spell increases by 5, and the damage of Venomous Bite increases by 1d6.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>For each spell slot level above 3, the number of Temporary Hit Points you gain from this spell increases by 5, and the damage of Venomous Bite increases by 1d6.</p></div>",
+    "classes": [
+      "Druid",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Incapacitated",
+      "Poisoned"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Temp HP",
+      "UA"
+    ]
+  },
+  {
+    "id": "sp_wardaway_frhof",
+    "name": "Wardaway",
+    "source": "FRHoF",
+    "page": 147,
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a miniature clay hand)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You hurl a disorienting magical force toward one creature within range. The target makes a Constitution saving throw; Constructs and Undead automatically succeed on this save.</p><p>On a failed save, the target takes 2d4 Force damage, its Speed is halved until the start of your next turn, and on its next turn, it can take only an action or a Bonus Action (but not both). On a successful save, the target takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 2d4 for every spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 2d4 for every spell slot level above 1.</p></div>",
+    "classes": [
+      "Bard",
+      "Cleric",
+      "Paladin",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "2d4",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
+  }
+]

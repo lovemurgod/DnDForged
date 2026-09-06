@@ -1,0 +1,1524 @@
+[
+  {
+    "id": "creature_fiendish_icon_abh",
+    "name": "Fiendish Icon",
+    "source": "ABH",
+    "edition": "2014",
+    "page": 14,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 22,
+      "formula": "5d6 + 5"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "stealth": "+5"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "Darkvision 60"
+    },
+    "languages": [
+      "understands Common and Infernal but can't speak"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_magic_resistance_ey3k",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The icon has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_6dl3",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The icon makes two Slam attacks and uses Fiery Eruption.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_slam_h8ax",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}4 (1d4 + 2) Bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fiery_eruption_zalq",
+        "name": "Fiery Eruption",
+        "actionType": "action",
+        "descriptionHtml": "<p>dex DC 11, each creature in a 5-foot Emanation [Area of Effect] originating from the icon. {@actSaveFail} 7 (2d6) Fire damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 11,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ABH/Fiendish Icon.webp",
+    "tokenImg": "img/bestiary/tokens/ABH/Fiendish Icon.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_harvester_devil_abh",
+    "name": "Harvester Devil",
+    "source": "ABH",
+    "edition": "2014",
+    "page": 15,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Fiend",
+    "subtype": "devil",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 65,
+      "formula": "10d8 + 20"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 19,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "con": "+4",
+      "wis": "+3"
+    },
+    "skills": {
+      "perception": "+3",
+      "persuasion": "+8",
+      "stealth": "+5"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "Darkvision 120 ft. (unimpeded by magical {@variantrule Darkness|XPHB})"
+    },
+    "languages": [
+      "Common",
+      "Infernal; telepathy 120 ft."
+    ],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_diabolic_ward_rqgp",
+        "name": "Diabolic Ward",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Attack rolls against the devil have Disadvantage. If the devil makes an attack roll, this trait is suppressed until the start of its next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_diabolical_restoration_qm4z",
+        "name": "Diabolical Restoration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_m5fz",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_mzty",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The devil makes two attacks, using Infernal Blade or Confounding Ray in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_infernal_blade_ev09",
+        "name": "Infernal Blade",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}6 (1d6 + 3) Slashing damage and 7 (2d6) Fire damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Slashing"
+            },
+            {
+              "formula": "2d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_confounding_ray_umj5",
+        "name": "Confounding Ray",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +5, range 120 ft. {@h}13 (2d12) Psychic damage. If the target is a creature, it can't make Opportunity Attack until the start of the devil's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": "it can't make {@action Opportunity Attack|XPHB|Opportunity Attacks} until the start of the devil's next turn",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d12",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_compelling_contract__1_day__r27b",
+        "name": "Compelling Contract (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>cha DC 14, one creature within 30 feet of the devil. {@actSaveFail} The target has the Charmed condition. While it is Charmed, it has the Stunned condition, except the target can speak. If the target agrees to the devil's contract, the effect ends. Otherwise, the target repeats the save whenever it takes damage and at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ABH/Harvester Devil.webp",
+    "tokenImg": "img/bestiary/tokens/ABH/Harvester Devil.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_speaker_devil_abh",
+    "name": "Speaker Devil",
+    "source": "ABH",
+    "edition": "2014",
+    "page": 17,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Fiend",
+    "subtype": "devil",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 189,
+      "formula": "18d10 + 90"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 30,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 19,
+        "mod": 4
+      },
+      "con": {
+        "score": 20,
+        "mod": 5
+      },
+      "int": {
+        "score": 22,
+        "mod": 6
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {
+      "con": "+9",
+      "int": "+10",
+      "wis": "+8",
+      "cha": "+7"
+    },
+    "skills": {
+      "arcana": "+10",
+      "history": "+10",
+      "perception": "+8"
+    },
+    "senses": {
+      "passivePerception": 18,
+      "sensesString": "Darkvision 120 ft."
+    },
+    "languages": [
+      "Infernal; telepathy 120 ft."
+    ],
+    "cr": "12",
+    "crNumeric": 12,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_speaker_devil_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 18,
+        "atkMod": 10,
+        "header": "The devil casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save DC 18):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_thoughts_xphb",
+            "name": "Detect Thoughts",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 18,
+            "damageList": [],
+            "components": "V, S, M (1 Copper Piece)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_dimension_door_xphb",
+              "name": "Dimension Door",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "500 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_modify_memory_xphb",
+              "name": "Modify Memory",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic",
+          "Detect Thoughts"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_diabolical_restoration_cawt",
+        "name": "Diabolical Restoration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_wpd8",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ducx",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The devil makes two Thundering Halberd attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thundering_halberd_1v2e",
+        "name": "Thundering Halberd",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +9, reach 10 ft. {@h}16 (2d10 + 5) Slashing damage plus 14 (4d6) Thunder damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 5",
+              "type": "Slashing"
+            },
+            {
+              "formula": "4d6",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_utterance_of_pain_k8ng",
+        "name": "Utterance of Pain",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>wis DC 18, each creature in a 20-foot Emanation [Area of Effect] originating from the devil. {@actSaveFail} The target has the Stunned condition until the end of the devil's next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_utterance_of_unmaking_2ej4",
+        "name": "Utterance of Unmaking",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>con DC 18, each creature in a 20-foot Emanation [Area of Effect] originating from the devil. {@actSaveFail} 22 (4d10) Force damage. {@actSaveSuccess} Half damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "4d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ABH/Speaker Devil.webp",
+    "tokenImg": "img/bestiary/tokens/ABH/Speaker Devil.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_vampire_infernalist_abh",
+    "name": "Vampire Infernalist",
+    "source": "ABH",
+    "edition": "2014",
+    "page": 18,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Undead",
+    "subtype": "wizard",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 172,
+      "formula": "23d8 + 69"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 40,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "con": "+8",
+      "int": "+10"
+    },
+    "skills": {
+      "arcana": "+10",
+      "perception": "+8",
+      "religion": "+10",
+      "stealth": "+8"
+    },
+    "senses": {
+      "passivePerception": 18,
+      "sensesString": "Darkvision 120 ft. (unimpeded by magical {@variantrule Darkness|XPHB})"
+    },
+    "languages": [
+      "Common",
+      "Infernal"
+    ],
+    "cr": "14",
+    "crNumeric": 14,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_vampire_infernalist_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 18,
+        "atkMod": 10,
+        "header": "The vampire casts one of the following spells, using Intelligence as the spellcasting ability (spell save DC 18):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_thoughts_xphb",
+            "name": "Detect Thoughts",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 18,
+            "damageList": [],
+            "components": "V, S, M (1 Copper Piece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_dispel_magic_xphb",
+            "name": "Dispel Magic",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_fireball_xphb",
+            "name": "Fireball",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "150 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 18,
+            "damageList": [
+              {
+                "formula": "8d6",
+                "type": "Fire",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S, M (a ball of bat guano and sulfur)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_wall_of_fire_xphb",
+              "name": "Wall of Fire",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [
+                {
+                  "formula": "5d8",
+                  "type": "Fire",
+                  "label": "Damage 1",
+                  "stat": "none"
+                },
+                {
+                  "formula": "5d8",
+                  "type": "Fire",
+                  "label": "Damage 2",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a piece of charcoal)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ],
+          "2": [
+            {
+              "spellId": "sp_scrying_xphb",
+              "name": "Scrying",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "self",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic",
+          "Detect Thoughts",
+          "Dispel Magic",
+          "Fireball",
+          "Mage Hand",
+          "Prestidigitation"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__p41g",
+        "name": "Legendary Resistance (3/Day, or 4/Day in Lair)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the vampire fails a saving throw, it can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_misty_escape_ex57",
+        "name": "Misty Escape",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the vampire drops to 0 Hit Points outside its resting place, the vampire uses Shape-Shift to become mist (no action required). If it can't use Shape-Shift, it is destroyed.</p><p>While it has 0 Hit Points in mist form, it can't return to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it returns to its vampire form and has the Paralyzed condition until it regains any Hit Points, and it regains 1 Hit Points after spending 1 hour there.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_vampire_weakness_g0ur",
+        "name": "Vampire Weakness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The vampire has these weaknesses:</p><ul><li></li><li></li><li></li><li></li></ul>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack__vampire_form_only__okfb",
+        "name": "Multiattack (Vampire Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The vampire makes two Hellfire Claw attacks and uses Bite.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hellfire_claw__vampire_form_only__phu0",
+        "name": "Hellfire Claw (Vampire Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +9, reach 5 ft. {@h}13 (2d8 + 4) Slashing damage plus 10 (3d6) Fire damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 17) from one of two claws.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 17}) from one of two claws",
+          "save": {
+            "dc": 17,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d8 + 4",
+              "type": "Slashing"
+            },
+            {
+              "formula": "3d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite__imp_or_vampire_form_only__zez6",
+        "name": "Bite (Imp or Vampire Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>con DC 18, one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition. {@actSaveFail} 6 (1d4 + 4) Piercing damage plus 16 (3d10) Necrotic damage and the creature loses its highest-level available spell slot (if any). The target's Hit Points maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount. A Humanoid reduced to 0 Hit Points by this damage and then buried rises the following sunset as a Vampire Spawn under the vampire's control.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 4",
+              "type": "Piercing"
+            },
+            {
+              "formula": "3d10",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_shape_shift_owws",
+        "name": "Shape-Shift",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>If the vampire isn't in sunlight or running water, it shape-shifts into a Tiny imp (Speed 20 ft., Fly Speed 40 ft.), or a Medium cloud of mist (Speed 5 ft., Fly Speed 20 ft. [hover]), or it returns to its vampire form. Anything it is wearing transforms with it.</p><p>While in imp form, the vampire's game statistics, other than its size and Speed, are unchanged.</p><p>While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless and can enter an enemy's space and stop there. If air can pass through a space, the mist can do so, but it can't pass through liquid. It has Resistance to all damage, except the damage it takes from sunlight.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_hellfire_strike_ktdx",
+          "name": "Hellfire Strike",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The vampire moves up to half its Speed, and it makes one Hellfire Claw attack.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_infernal_majesty_fw4q",
+          "name": "Infernal Majesty",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>cha DC 17, each creature in a 20-foot Emanation [Area of Effect] originating from the vampire. {@actSaveFail} 9 (2d8) Psychic damage, and the target has the Frightened condition until the start of its next turn. {@actSaveSuccess} Half damage only. {@actSaveSuccessOrFail} The vampire can't take this action again until the start of its next turn.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 17,
+              "ability": "Save"
+            },
+            "damages": [
+              {
+                "formula": "2d8",
+                "type": "Psychic"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_teleport_xf5r",
+          "name": "Teleport",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The vampire teleports up to 30 feet to an unoccupied space it can see.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ABH/Vampire Infernalist.webp",
+    "tokenImg": "img/bestiary/tokens/ABH/Vampire Infernalist.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_vampire_warden_abh",
+    "name": "Vampire Warden",
+    "source": "ABH",
+    "edition": "2014",
+    "page": 20,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 190,
+      "formula": "21d8 + 96"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {
+      "con": "+8",
+      "wis": "+6"
+    },
+    "skills": {
+      "athletics": "+9",
+      "perception": "+10"
+    },
+    "senses": {
+      "passivePerception": 20,
+      "sensesString": "Darkvision 120 ft."
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "10",
+    "crNumeric": 10,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_vampire_warden_0",
+        "name": "Guardian's Command",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "The vampire casts Compulsion, requiring no spell components and using Charisma as the spellcasting ability (spell save DC 15).",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_compulsion_xphb",
+            "name": "Compulsion",
+            "source": "XPHB",
+            "level": 4,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 15,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Compulsion"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_magic_resistance_hpjp",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The vampire has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_vampire_weakness_6onn",
+        "name": "Vampire Weakness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The vampire has these weaknesses:</p><ul><li></li><li></li><li></li><li></li><li></li></ul>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_yrft",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The vampire makes two Claw attacks and uses Bite or Guardian's Command.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_iced",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +9, reach 5 ft. {@h}14 (2d8 + 5) Slashing damage plus 7 (2d6) Necrotic damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 16) from one of two claws.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 16}) from one of two claws",
+          "save": {
+            "dc": 16,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d8 + 5",
+              "type": "Slashing"
+            },
+            {
+              "formula": "2d6",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_hetw",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>con DC 16, one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition. {@actSaveFail} 7 (1d4 + 5) Piercing damage plus 7 (2d6) Necrotic damage. The target's Hit Points maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 5",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d6",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_resilient_flesh_xfak",
+        "name": "Resilient Flesh",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} The vampire is hit by a melee attack roll from an attacker the vampire can see. {@actResponse} The vampire reduces the damage it takes from the attack by 11 (2d6 + 4).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ABH/Vampire Warden.webp",
+    "tokenImg": "img/bestiary/tokens/ABH/Vampire Warden.webp",
+    "fluff": null
+  }
+]

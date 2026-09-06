@@ -266,7 +266,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The druid is a 4th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has the following druid spells prepared:"
 					],
@@ -295,10 +295,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -1387,7 +1384,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The acolyte is a 1st-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The acolyte has following cleric spells prepared:"
 					],
@@ -1408,10 +1405,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 1
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -2577,7 +2571,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Grenl is a 1st-level spellcaster. Her spellcasting ability is Wisdom (spell save {@dc 11}, {@hit 3} to hit with spell attacks). She has the following cleric spells prepared:"
 					],
@@ -2596,10 +2590,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 1
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -3136,7 +3127,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Kaarghaz is a 4th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). He knows the following sorcerer spells:"
 					],
@@ -3166,10 +3157,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -4526,7 +4514,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The Ooze Master is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 15}, {@hit 7} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -4578,17 +4566,14 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"trait": [
 				{
 					"name": "Corrosive Form",
 					"entries": [
-						"A creature that touches the Ooze Master or hits it with a melee attack while within 5 feet of it takes 9 ({@damage 2d8}) acid damage. Any nonmagical weapon that hits the Ooze Master corrodes. After dealing damage, the weapon takes a permanent and cumulative −1 penalty to damage rolls. If its penalty drops to −5, the weapon is destroyed. Nonmagical ammunition that hits the Ooze Master is destroyed after dealing damage.",
+						"A creature that touches the Ooze Master or hits it with a melee attack while within 5 feet of it takes 9 ({@damage 2d8}) acid damage. Any nonmagical weapon that hits the Ooze Master corrodes. After dealing damage, the weapon takes a permanent and cumulative \u22121 penalty to damage rolls. If its penalty drops to \u22125, the weapon is destroyed. Nonmagical ammunition that hits the Ooze Master is destroyed after dealing damage.",
 						"The Ooze Master can eat through 2-inch-thick, nonmagical wood or metal in 1 round."
 					]
 				},
@@ -5602,7 +5587,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Sharwyn is a 1st-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -5624,10 +5609,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 1
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -5856,7 +5838,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Siren's innate spellcasting ability is Charisma (spell save {@dc 13}). She can innately cast the following spells, requiring no material components:"
 					],
@@ -5868,10 +5850,7 @@
 							"{@spell polymorph} (self only)"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -6021,7 +6000,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Snarla is a 6th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -6059,10 +6038,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 6
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6089,7 +6065,7 @@
 				{
 					"name": "Bite (Wolf or Hybrid Form Only)",
 					"entries": [
-						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d8 + 2}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 12} Constitution saving throw or be cursed with werewolf lycanthropy."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d8 + 2}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 12} Constitution saving throw or be cursed with werewolf {@variantrule Player Characters as Lycanthropes|MM|lycanthropy}."
 					]
 				},
 				{
@@ -6227,7 +6203,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Snurrevin is a 3rd-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -6256,10 +6232,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 3
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6478,7 +6451,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Var is a 12th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). He has the following wizard spells prepared:",
 						"*Conjuration spell of 1st level or higher"
@@ -6540,10 +6513,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 12
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6861,7 +6831,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The apprentice is a 4th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -6891,10 +6861,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -7314,7 +7281,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Tloques can cast {@spell hold person} ({@dc 14}) at will, requiring no components, but his target must be able to see him."
 					],
@@ -7323,11 +7290,7 @@
 					],
 					"hidden": [
 						"will"
-					],
-					"dc": 14,
-					"atkMod": 3,
-					"casterLevel": 0,
-					"ability": "int"
+					]
 				}
 			],
 			"trait": [
@@ -7579,7 +7542,7 @@
 				{
 					"name": "Corrode Metal",
 					"entries": [
-						"Any nonmagical weapon made of metal that hits White Maw corrodes. After dealing damage, the weapon takes a permanent and cumulative −1 penalty to damage rolls. if its penalty drops to −5, the weapon is destroyed. Nonmagical ammunition made of metal that hits White Maw is destroyed after dealing damage.",
+						"Any nonmagical weapon made of metal that hits White Maw corrodes. After dealing damage, the weapon takes a permanent and cumulative \u22121 penalty to damage rolls. if its penalty drops to \u22125, the weapon is destroyed. Nonmagical ammunition made of metal that hits White Maw is destroyed after dealing damage.",
 						"White Maw can eat through 2-inch-thick, nonmagical metal in 1 round."
 					]
 				},
@@ -7600,7 +7563,7 @@
 				{
 					"name": "Pseudopod",
 					"entries": [
-						"{@atk mw} {@hit 8} to hit, reach 10 ft., one target. {@h}22 ({@damage 4d8 + 4}) bludgeoning damage plus 9 ({@damage 2d8}) acid damage. If the target is wearing nonmagical metal armor, its armor is partly corroded and takes a permanent and cumulative −1 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
+						"{@atk mw} {@hit 8} to hit, reach 10 ft., one target. {@h}22 ({@damage 4d8 + 4}) bludgeoning damage plus 9 ({@damage 2d8}) acid damage. If the target is wearing nonmagical metal armor, its armor is partly corroded and takes a permanent and cumulative \u22121 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10."
 					]
 				}
 			],
@@ -7866,7 +7829,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Yusdrayl is a 2nd-level spellcaster. Her spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). She knows the following sorcerer spells:"
 					],
@@ -7888,10 +7851,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 2
+					"ability": "cha"
 				}
 			],
 			"trait": [

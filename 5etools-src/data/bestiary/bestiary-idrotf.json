@@ -150,7 +150,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Auril's innate spellcasting ability is Charisma (spell save {@dc 21}, {@hit 13} to hit with spell attacks). She can innately cast the following spells, requiring no material components:"
 					],
@@ -166,10 +166,7 @@
 							"{@spell ice storm}"
 						]
 					},
-					"ability": "cha",
-					"dc": 21,
-					"atkMod": 13,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -621,7 +618,7 @@
 				{
 					"name": "Blizzard Veil",
 					"entries": [
-						"Auril creates a magical blizzard in a 30-foot-radius sphere centered on herself. The area within the sphere is heavily obscured, and the sphere moves with Auril. The effect lasts until Auril drops to 0 hit points in this form, until she chooses to end the effect (no action required), or until her {@status concentration} is broken (as if {@status concentration||concentrating} on a spell)."
+						"Auril creates a magical blizzard in a 30-foot-radius sphere centered on herself. The area within the sphere is {@quickref Vision and Light||2||heavily obscured}, and the sphere moves with Auril. The effect lasts until Auril drops to 0 hit points in this form, until she chooses to end the effect (no action required), or until her {@status concentration} is broken (as if {@status concentration||concentrating} on a spell)."
 					]
 				}
 			],
@@ -739,7 +736,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Avarice is a 10th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}; {@hit 6} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -792,10 +789,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 10
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -1832,7 +1826,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Dzaan is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -1896,10 +1890,7 @@
 					"footerEntries": [
 						"*See \"Actions\" below."
 					],
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"savingThrowForcedSpell": [
@@ -1962,7 +1953,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The simulacrum is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -1995,10 +1986,7 @@
 					"footerEntries": [
 						"*See \"Actions\" below."
 					],
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"action": [
@@ -2238,7 +2226,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting (Humanoid Form Only)",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The druid is a 9th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 14}; {@hit 6} to hit with spell attacks). It has the following druid spells prepared:"
 					],
@@ -2288,10 +2276,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -2316,7 +2301,7 @@
 				{
 					"name": "Change Shape",
 					"entries": [
-						"The druid magically polymorphs into a beast form—fox, mountain goat, owl, or wolf—or back into its humanoid form. Any equipment it is wearing or carrying is absorbed or borne by the beast form (the druid's choice). It reverts to its humanoid form when it dies. The druid's statistics are the same in each form, except where noted in this stat block."
+						"The druid magically polymorphs into a beast form\u2014fox, mountain goat, owl, or wolf\u2014or back into its humanoid form. Any equipment it is wearing or carrying is absorbed or borne by the beast form (the druid's choice). It reverts to its humanoid form when it dies. The druid's statistics are the same in each form, except where noted in this stat block."
 					]
 				}
 			],
@@ -2932,7 +2917,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ceremorph's innate spellcasting ability is Intelligence (spell save {@dc 15}). It can innately cast the following spells, requiring no components:"
 					],
@@ -2946,10 +2931,7 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -3076,7 +3058,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The squidling's innate spellcasting ability is Intelligence (spell save {@dc 7}). It can innately cast {@spell levitate} at will, requiring no components."
 					],
@@ -3086,10 +3068,7 @@
 					"ability": "int",
 					"hidden": [
 						"will"
-					],
-					"dc": 7,
-					"atkMod": -1,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -3390,7 +3369,7 @@
 				{
 					"name": "Bite (Bear or Hybrid Form Only)",
 					"entries": [
-						"{@atk mw} {@hit 8} to hit, reach 5 ft., one creature. {@h}16 ({@damage 2d10 + 5}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 15} Constitution saving throw or be cursed with werebear lycanthropy, as described in the Monster Manual."
+						"{@atk mw} {@hit 8} to hit, reach 5 ft., one creature. {@h}16 ({@damage 2d10 + 5}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 15} Constitution saving throw or be cursed with werebear {@variantrule Player Characters as Lycanthropes|MM|lycanthropy}, as described in the Monster Manual."
 					]
 				},
 				{
@@ -3496,7 +3475,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Grandolpha's innate spellcasting ability is Wisdom (spell save {@dc 13}). She can innately cast the following spells, requiring no material components:"
 					],
@@ -3515,10 +3494,7 @@
 							"{@spell stoneskin} (self only)"
 						]
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -3578,6 +3554,47 @@
 			"hasToken": true,
 			"hasFluff": true,
 			"hasFluffImages": true
+		},
+		{
+			"name": "Gromin'gorn",
+			"isNpc": true,
+			"isNamedCreature": true,
+			"source": "IDRotF",
+			"page": 140,
+			"_copy": {
+				"name": "Frost Giant",
+				"source": "MM",
+				"_mod": {
+					"action": [
+						{
+							"mode": "replaceArr",
+							"replace": "Multiattack",
+							"items": {
+								"name": "Multiattack",
+								"entries": [
+									"Gromin'gorn makes two Anvil Chain attacks."
+								]
+							}
+						},
+						{
+							"mode": "replaceArr",
+							"replace": "Greataxe",
+							"items": {
+								"name": "Anvil Chain",
+								"entries": [
+									"{@atk mw} {@hit 9} to hit, reach 10 ft., one target. {@h}25 ({@damage 3d12 + 6}) bludgeoning damage."
+								]
+							}
+						}
+					]
+				}
+			},
+			"tokenCredit": "Adam Barker",
+			"tokenCustom": true,
+			"damageTags": [
+				"B"
+			],
+			"hasToken": true
 		},
 		{
 			"name": "Gunvald Halraggson",
@@ -3818,7 +3835,13 @@
 				"N",
 				"G"
 			],
+			"languages": [
+				"Common"
+			],
 			"tokenCustom": true,
+			"languageTags": [
+				"C"
+			],
 			"hasToken": true,
 			"hasFluff": true
 		},
@@ -4656,6 +4679,10 @@
 					}
 				}
 			},
+			"alignment": [
+				"L",
+				"E"
+			],
 			"languages": [
 				"Common",
 				"Infernal"
@@ -5423,7 +5450,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ghost is a 6th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}). The ghost has the following wizard spells prepared:"
 					],
@@ -5454,10 +5481,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 6
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -5596,7 +5620,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Prisoner 237 is a 5th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 13}; {@hit 5} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -5636,10 +5660,7 @@
 					"footerEntries": [
 						"*Prisoner 237 needs material components to cast these spells."
 					],
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 5
+					"ability": "int"
 				}
 			],
 			"action": [
@@ -5690,18 +5711,30 @@
 							"replace": "gladiator",
 							"with": "chieftain"
 						}
-					],
-					"_": [
-						{
-							"mode": "addSkills",
-							"skills": {
-								"survival": 1
-							}
-						}
 					]
 				}
 			},
+			"ac": [
+				{
+					"ac": 16,
+					"from": [
+						"{@item hide armor|PHB}",
+						"{@item shield|PHB}"
+					]
+				}
+			],
+			"skill": {
+				"athletics": "+10",
+				"intimidation": "+5",
+				"survival": "+5"
+			},
+			"languages": [
+				"Common"
+			],
 			"tokenCustom": true,
+			"languageTags": [
+				"C"
+			],
 			"hasToken": true,
 			"hasFluff": true
 		},
@@ -5719,18 +5752,30 @@
 							"replace": "gladiator",
 							"with": "great warrior"
 						}
-					],
-					"_": [
-						{
-							"mode": "addSkills",
-							"skills": {
-								"survival": 1
-							}
-						}
 					]
 				}
 			},
+			"ac": [
+				{
+					"ac": 16,
+					"from": [
+						"{@item hide armor|PHB}",
+						"{@item shield|PHB}"
+					]
+				}
+			],
+			"skill": {
+				"athletics": "+10",
+				"intimidation": "+5",
+				"survival": "+5"
+			},
+			"languages": [
+				"Common"
+			],
 			"tokenCustom": true,
+			"languageTags": [
+				"C"
+			],
 			"hasToken": true,
 			"hasFluff": true
 		},
@@ -5952,7 +5997,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Sephek can innately cast {@spell misty step} up to three times per day, requiring no components. His innate spellcasting ability is Charisma."
 					],
@@ -5962,10 +6007,7 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					],
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -5992,7 +6034,7 @@
 				{
 					"name": "Ice Dagger",
 					"entries": [
-						"{@atk rw} {@hit 5} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage plus 5 ({@damage 2d4}) cold damage."
+						"{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage plus 5 ({@damage 2d4}) cold damage."
 					]
 				}
 			],
@@ -6224,7 +6266,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Spellix's spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -6246,10 +6288,7 @@
 					"footerEntries": [
 						"*See \"Actions\" below."
 					],
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -6823,7 +6862,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Vellynne is an 8th-level spellcaster. Her spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). She has the following wizard spells prepared:"
 					],
@@ -6870,10 +6909,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 8
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6987,7 +7023,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The verbeeg's innate spellcasting ability is Wisdom. It can innately cast the following spells, requiring no components:"
 					],
@@ -7001,10 +7037,7 @@
 							"{@spell water walk}"
 						]
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -7289,7 +7322,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Xardorok's innate spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -7303,10 +7336,7 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [

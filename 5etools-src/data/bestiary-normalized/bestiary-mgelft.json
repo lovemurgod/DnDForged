@@ -1,0 +1,1190 @@
+[
+  {
+    "id": "creature_dankwood_duergar_mgelft",
+    "name": "Dankwood Duergar",
+    "source": "MGELFT",
+    "edition": "2014",
+    "page": 32,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "dwarf",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 26,
+      "formula": "4d8 + 8"
+    },
+    "speed": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [
+      "Dwarvish",
+      "Undercommon"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_duergar_resilience_9i3c",
+        "name": "Duergar Resilience",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Dankwood duergar has advantage on saving throws against poison, spells, and illusions, as well as to resist being charmed or paralyzed.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sunlight_sensitivity_x28c",
+        "name": "Sunlight Sensitivity",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in sunlight, the Dankwood duergar has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_verbal_jab_30il",
+        "name": "Verbal Jab",
+        "actionType": "action",
+        "descriptionHtml": "<p>The duergar unleashes a string of insults laced with subtle enchantments at a creature they can see within 60 feet. If the creature can hear them (it doesn't need to understand them), it must succeed on a DC 12 Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "1d4",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_haymaker_w2hj",
+        "name": "Haymaker",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}9 (1d6 + 6) bludgeoning damage. If the duergar is enlarged, increase their damage to 10 (2d6 + 3) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 6",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "2d6 + 3",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MGELFT/Dankwood Duergar.webp",
+    "tokenImg": "img/bestiary/tokens/MGELFT/Dankwood Duergar.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_dankwood_grung_mgelft",
+    "name": "Dankwood Grung",
+    "source": "MGELFT",
+    "edition": "2014",
+    "page": 31,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "grung",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 27,
+      "formula": "5d6 + 10"
+    },
+    "speed": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 25,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 7,
+        "mod": -2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+5"
+    },
+    "skills": {
+      "athletics": "+2",
+      "intimidation": "+4",
+      "perception": "+2",
+      "stealth": "+5"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Grung"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_3mdx",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The grung can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_poisonous_skin_ym51",
+        "name": "Poisonous Skin",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. A poisoned creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_standing_leap_0fy1",
+        "name": "Standing Leap",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_grumpy_grung_growl_izpz",
+        "name": "Grumpy Grung Growl",
+        "actionType": "action",
+        "descriptionHtml": "<p>A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a DC 12 Charisma saving throw or be frightened until the end of their next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dagger_wq6l",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +0 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 0,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": {
+            "dc": 12,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d4",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MGELFT/Dankwood Grung.webp",
+    "tokenImg": "img/bestiary/tokens/MGELFT/Dankwood Grung.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_king_robbit_the_slimy_mgelft",
+    "name": "King Robbit the Slimy",
+    "source": "MGELFT",
+    "edition": "2014",
+    "page": 32,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "grung",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 27,
+      "formula": "5d6 + 10"
+    },
+    "speed": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 25,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 7,
+        "mod": -2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+5"
+    },
+    "skills": {
+      "athletics": "+2",
+      "intimidation": "+4",
+      "perception": "+2",
+      "stealth": "+5"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Grung"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_x3gy",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The grung can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_poisonous_skin_3etq",
+        "name": "Poisonous Skin",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. A poisoned creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_standing_leap_brr3",
+        "name": "Standing Leap",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_grumpy_grung_growl_37w9",
+        "name": "Grumpy Grung Growl",
+        "actionType": "action",
+        "descriptionHtml": "<p>A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a DC 12 Charisma saving throw or be frightened until the end of their next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dagger_3irs",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +0 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 0,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": {
+            "dc": 12,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d4",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortbow_vo3w",
+        "name": "Shortbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +5 to hit, range 80/320 ft., one target. {@h}9 (1d6 + 6) piercing damage. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": null,
+          "range": "80/320 ft.",
+          "targets": "one target",
+          "save": {
+            "dc": 12,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d4",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MGELFT/King Robbit the Slimy.webp",
+    "tokenImg": "img/bestiary/tokens/MGELFT/King Robbit the Slimy.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_sludge_hag_mgelft",
+    "name": "Sludge Hag",
+    "source": "MGELFT",
+    "edition": "2014",
+    "page": 33,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Fey",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 82,
+      "formula": "11d8 + 33"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "arcana": "+3",
+      "deception": "+4",
+      "perception": "+4",
+      "stealth": "+3"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Draconic",
+      "Sylvan"
+    ],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_sludge_hag_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 1,
+        "casterLevel": 0,
+        "dc": 11,
+        "atkMod": 3,
+        "header": "",
+        "footer": "The hag's innate spellcasting ability is Charisma (spell save DC 12). She can innately cast the following spells, requiring no material components. ",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_acid_splash_xphb",
+            "name": "Acid Splash",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 11,
+            "damageList": [
+              {
+                "formula": "1d6",
+                "type": "Acid",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_dancing_lights_xphb",
+            "name": "Dancing Lights",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a bit of phosphorus)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_minor_illusion_xphb",
+            "name": "Minor Illusion",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a bit of fleece)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Acid Splash",
+          "Dancing Lights",
+          "Minor Illusion"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_amorphous_stwz",
+        "name": "Amorphous",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sludge hag can move through a space as narrow as 1 inch wide without squeezing.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_amphibious_x9kp",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sludge hag can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_false_appearance_bup5",
+        "name": "False Appearance",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sludge hag collapses into a oily pool of sludge. While motionless, the sludge hag is indistinguishable from any other oily pool of oozy drippiness.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sludge_slap_k4ts",
+        "name": "Sludge Slap",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}12 (1d8 + 8) bludgeoning damage, plus 4 (1d8) acid damage. Sludge Slap does both bludgeoning and acid damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 8",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MGELFT/Sludge Hag.webp",
+    "tokenImg": "img/bestiary/tokens/MGELFT/Sludge Hag.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_spiderfrog_mgelft",
+    "name": "Spiderfrog",
+    "source": "MGELFT",
+    "edition": "2014",
+    "page": 33,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 13,
+      "formula": "2d8 + 4"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 30,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 4,
+        "mod": -3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+3",
+      "stealth": "+7"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "blindsight 10 ft., darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_wl88",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spiderfrog can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spider_climb_1i56",
+        "name": "Spider Climb",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spiderfrog can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_standing_leap_72iy",
+        "name": "Standing Leap",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Spiderfrog's long jump is up to 20 feet and its high jump is up to 10 feet, with or without a running start.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_68na",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) piercing damage. Target is grappled (escape DC 11). Until this grapple ends, the target is restrained, and spiderfrog can't bite another target.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 2,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 11,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MGELFT/Spiderfrog.webp",
+    "tokenImg": "img/bestiary/tokens/MGELFT/Spiderfrog.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_yeti_tyke_mgelft",
+    "name": "Yeti Tyke",
+    "source": "MGELFT",
+    "edition": "2014",
+    "page": 34,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 9,
+      "formula": "2d6 + 2"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 20,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 8,
+        "mod": -1
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands Yeti but can't speak"
+    ],
+    "cr": "1/8",
+    "crNumeric": 0.125,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_keen_smell_1v2c",
+        "name": "Keen Smell",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The yeti tyke has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_snow_camouflage_ykpb",
+        "name": "Snow Camouflage",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The yeti tyke has advantage on Dexterity (Stealth) checks made to hide in snowy terrain.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_claw_s5p4",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) slashing damage, plus 2 (1d4) cold damage. Claw does both slashing and cold damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 2,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d4",
+              "type": "Cold"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MGELFT/Yeti Tyke.webp",
+    "tokenImg": "img/bestiary/tokens/MGELFT/Yeti Tyke.webp",
+    "fluff": null
+  }
+]

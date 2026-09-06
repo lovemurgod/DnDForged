@@ -82,7 +82,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Amble is a 12th-level spellcaster. Their spellcasting ability is Wisdom (spell save {@dc 16}, {@hit 8} to hit with spell attacks). Amble has the following druid spells prepared:"
 					],
@@ -142,10 +142,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 12
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -390,7 +387,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Gar is a 13th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 18}, {@hit 10} to hit with spell attacks). He has the following druid spells prepared:"
 					],
@@ -469,10 +466,7 @@
 					"footerEntries": [
 						"*Circle spells don't count against spells prepared."
 					],
-					"ability": "wis",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 13
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -674,7 +668,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Shoalar's innate spellcasting ability is Constitution (spell save {@dc 14}, {@hit 6} to hit with spell attacks). He can innately cast the following spells:"
 					],
@@ -686,14 +680,11 @@
 							"{@spell create or destroy water}"
 						]
 					},
-					"ability": "con",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"ability": "con"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Shoalar is a 7th-level spellcaster. His spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). He knows the following sorcerer spells:"
 					],
@@ -736,10 +727,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 7
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -830,7 +818,7 @@
 							{
 								"name": "Ink Cloud",
 								"entries": [
-									"While underwater, Whymsee can expel an ink cloud in a 20-foot radius. The cloud spreads around corners, and that area is heavily obscured to creatures other than kraken priests or a kraken. Each creature other than a kraken priest or a kraken that ends its turn there must succeed on a {@dc 14} Constitution saving throw, taking 9 ({@damage 2d8}) poison damage on a failed save, or half as much damage on a successful one. A strong current disperses the cloud, which otherwise disappears at the end of Whymsee's next turn."
+									"While underwater, Whymsee can expel an ink cloud in a 20-foot radius. The cloud spreads around corners, and that area is {@quickref Vision and Light||2||heavily obscured} to creatures other than kraken priests or a kraken. Each creature other than a kraken priest or a kraken that ends its turn there must succeed on a {@dc 14} Constitution saving throw, taking 9 ({@damage 2d8}) poison damage on a failed save, or half as much damage on a successful one. A strong current disperses the cloud, which otherwise disappears at the end of Whymsee's next turn."
 								]
 							},
 							{

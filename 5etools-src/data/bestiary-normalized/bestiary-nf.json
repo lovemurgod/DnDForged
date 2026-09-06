@@ -1,0 +1,1799 @@
+[
+  {
+    "id": "creature_caldron_magen_nf",
+    "name": "Caldron Magen",
+    "source": "NF",
+    "edition": "2024",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 67,
+      "formula": "9d8 + 27"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+4"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": ""
+    },
+    "languages": [
+      "understands Common plus two other languages but can't speak"
+    ],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_disintegration_g0iq",
+        "name": "Disintegration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_9xui",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_81kv",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The magen makes two attacks, using Extended Fist or Acid Spittle in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_extended_fist_wmgf",
+        "name": "Extended Fist",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +6, reach 15 ft. {@h}8 (1d8 + 4) Bludgeoning damage plus 5 (1d10) Acid damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 14) from one of two fists.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 15,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 14}) from one of two fists",
+          "save": {
+            "dc": 14,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "1d8 + 4",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d10",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_acid_spittle_jmhs",
+        "name": "Acid Spittle",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +6, range 60 ft. {@h}13 (2d8 + 4) Acid damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 4",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NF/Caldron Magen.webp",
+    "tokenImg": "img/bestiary/tokens/NF/Caldron Magen.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_eldritch_eddy_nf",
+    "name": "Eldritch Eddy",
+    "source": "NF",
+    "edition": "2024",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "C N",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 144,
+      "formula": "17d10 + 51"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 9,
+        "mod": -1
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "dex": "+4",
+      "int": "+4",
+      "cha": "+6"
+    },
+    "skills": {},
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": "Blindsight 60 ft."
+    },
+    "languages": [
+      "understands Common plus one other language but can't speak"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_magic_resistance_uyy5",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The eddy has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_za3p",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The eddy makes two attacks, using Searing Swipe or Arcane Bolt in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_searing_swipe_ybm5",
+        "name": "Searing Swipe",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +6, reach 10 ft. {@h}13 (3d6 + 3) Fire or Lightning damage (eddy's choice).</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6 + 3",
+              "type": "Lightning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_arcane_bolt_7tsl",
+        "name": "Arcane Bolt",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +6, range 120 ft. {@h}14 (2d10 + 3) Force damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 3",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_eldritch_overload_mnc4",
+        "name": "Eldritch Overload",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} The eddy takes damage. dstr DC 14, each creature of the eddy's choice in a 5-foot Emanation [Area of Effect] originating from the eddy. {@actSaveFail} 7 (2d6) Force damage, and the target has the Prone condition.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NF/Eldritch Eddy.webp",
+    "tokenImg": "img/bestiary/tokens/NF/Eldritch Eddy.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_phaerimm_elder_nf",
+    "name": "Phaerimm Elder",
+    "source": "NF",
+    "edition": "2024",
+    "page": 0,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 218,
+      "formula": "23d12 + 69"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "con": "+8",
+      "int": "+8",
+      "wis": "+8",
+      "cha": "+9"
+    },
+    "skills": {
+      "arcana": "+13",
+      "insight": "+8",
+      "perception": "+8"
+    },
+    "senses": {
+      "passivePerception": 18,
+      "sensesString": "Truesight 120 ft."
+    },
+    "languages": [
+      "telepathy 120 ft. understands Common and Deep Speech but can't speak"
+    ],
+    "cr": "14",
+    "crNumeric": 14,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_phaerimm_elder_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 17,
+        "atkMod": 9,
+        "header": "The phaerimm casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save DC 17):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_command_xphb",
+            "name": "Command",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 17,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_thoughts_xphb",
+            "name": "Detect Thoughts",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 17,
+            "damageList": [],
+            "components": "V, S, M (1 Copper Piece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_clairvoyance_xphb",
+              "name": "Clairvoyance",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "1 miles",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 100+ GP, either a jeweled horn for hearing or a glass eye for seeing)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_geas_xphb",
+              "name": "Geas",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Enchantment",
+              "castingTime": "1 minute",
+              "range": "60 feet",
+              "duration": "30 days",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [
+                {
+                  "formula": "5d10",
+                  "type": "Psychic",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_major_image_xphb",
+              "name": "Major Image",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a bit of fleece)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_mirage_arcane_xphb",
+              "name": "Mirage Arcane",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Illusion",
+              "castingTime": "10 minutes",
+              "range": "sight",
+              "duration": "10 days",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Command",
+          "Detect Magic",
+          "Detect Thoughts",
+          "Mage Hand"
+        ]
+      },
+      {
+        "id": "sc_phaerimm_elder_1",
+        "name": "Protective Magic (3/Day)",
+        "type": "spellcasting",
+        "displayAs": "reaction",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 17,
+        "atkMod": 9,
+        "header": "The phaerimm casts Counterspell or Shield in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "3": [
+            {
+              "spellId": "sp_counterspell_xphb",
+              "name": "Counterspell",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components)",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [],
+              "components": "S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_shield_xphb",
+              "name": "Shield",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+              "range": "self",
+              "duration": "1 round",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_magic_resistance_xq0l",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_8dmf",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The phaerimm makes three Mind Lash attacks. It can replace one attack with either (A) a Vicious Stinger attack or (B) a use of Spellcasting to cast Command (level 3 version).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_mind_lash_sxzi",
+        "name": "Mind Lash",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +9, reach 10 ft. or range 120 ft. {@h}32 (6d8 + 4) Psychic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 10,
+          "range": "120 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "6d8 + 4",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_vicious_stinger_4ert",
+        "name": "Vicious Stinger",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +9, reach 5 ft. {@h}11 (2d6 + 4) Piercing damage plus 26 (4d12) Poison damage, and the target's Speed is reduced to 0 feet until the start of the phaerimm's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "and the target's {@variantrule Speed|XPHB} is reduced to 0 feet until the start of the phaerimm's next turn",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Piercing"
+            },
+            {
+              "formula": "4d12",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_siphon_magic__recharge_5__g2ad",
+        "name": "Siphon Magic (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The phaerimm focuses on a magic item it can see within 10 feet. When it does, the phaerimm drains the magic item of any charges. Regardless of whether charges are drained, the phaerimm can cast Clairvoyance, Geas, Major Image, and Mirage Arcane one additional time that day.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_teleport_w0pi",
+        "name": "Teleport",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The phaerimm teleports up to 30 feet to an unoccupied space it can see.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NF/Phaerimm Elder.webp",
+    "tokenImg": "img/bestiary/tokens/NF/Phaerimm Elder.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_phaerimm_scout_nf",
+    "name": "Phaerimm Scout",
+    "source": "NF",
+    "edition": "2024",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 44,
+      "formula": "8d8 + 8"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 40,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "int": "+4",
+      "cha": "+5"
+    },
+    "skills": {
+      "perception": "+5"
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": "Truesight 60 ft."
+    },
+    "languages": [
+      "telepathy 120 ft. understands Common and Deep Speech but can't speak"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_phaerimm_scout_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 13,
+        "atkMod": 5,
+        "header": "The phaerimm casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save DC 13):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_thoughts_xphb",
+            "name": "Detect Thoughts",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 13,
+            "damageList": [],
+            "components": "V, S, M (1 Copper Piece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_clairvoyance_xphb",
+              "name": "Clairvoyance",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "1 miles",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 100+ GP, either a jeweled horn for hearing or a glass eye for seeing)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic",
+          "Detect Thoughts",
+          "Mage Hand"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_magic_resistance_hnx0",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_4bv1",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The phaerimm makes two attacks, using Stinger or Mindwarp Ray in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_stinger_arcq",
+        "name": "Stinger",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +3, reach 5 ft. {@h}4 (1d6 + 1) Piercing damage plus 9 (2d8) Poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d8",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_mindwarp_ray_3lwb",
+        "name": "Mindwarp Ray",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +5, range 120 ft. {@h}6 (1d6 + 3) Psychic damage, and the target has the Charmed condition until the start of the phaerimm's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": "and the target has the {@condition Charmed|XPHB} condition until the start of the phaerimm's next turn",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_uncanny_dodge_ern0",
+        "name": "Uncanny Dodge",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} The phaerimm is hit by an attack roll. {@actResponse} The phaerimm halves the damage (round down) it takes from that attack.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NF/Phaerimm Scout.webp",
+    "tokenImg": "img/bestiary/tokens/NF/Phaerimm Scout.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_terran_magen_nf",
+    "name": "Terran Magen",
+    "source": "NF",
+    "edition": "2024",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 21,
+        "condition": null
+      }
+    ],
+    "primaryAc": 21,
+    "acCondition": "",
+    "hp": {
+      "average": 121,
+      "formula": "22d8 + 22"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "wis": "+7"
+    },
+    "skills": {
+      "perception": "+7"
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": ""
+    },
+    "languages": [
+      "understands Common plus two other languages but can't speak"
+    ],
+    "cr": "8",
+    "crNumeric": 8,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_terran_magen_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "The magen casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save DC 15):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mending_xphb",
+            "name": "Mending",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 minute",
+            "range": "touch",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (two lodestones)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_disintegrate_xphb",
+              "name": "Disintegrate",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [
+                {
+                  "formula": "10d6 + 40",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a lodestone and dust)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_move_earth_xphb",
+              "name": "Move Earth",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 2 hours",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a miniature shovel)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_stone_shape_xphb",
+              "name": "Stone Shape",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (soft clay)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Mage Hand",
+          "Mending",
+          "Prestidigitation"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_disintegration_56h8",
+        "name": "Disintegration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_q1fs",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_365x",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The magen makes two attacks, using Hammer Fist or Thunderous Boom in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hammer_fist_4tyi",
+        "name": "Hammer Fist",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}16 (3d8 + 3) Bludgeoning damage plus 13 (3d8) Force damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d8 + 3",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "3d8",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thunderous_boom_0ibh",
+        "name": "Thunderous Boom",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +7, range 60 ft. {@h}28 (8d6) Thunder damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": null,
+          "range": "60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "8d6",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NF/Terran Magen.webp",
+    "tokenImg": "img/bestiary/tokens/NF/Terran Magen.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_virvos_magen_nf",
+    "name": "Virvos Magen",
+    "source": "NF",
+    "edition": "2024",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 21,
+        "condition": null
+      }
+    ],
+    "primaryAc": 21,
+    "acCondition": "",
+    "hp": {
+      "average": 110,
+      "formula": "17d8 + 34"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {
+      "perception": "+6"
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": ""
+    },
+    "languages": [
+      "understands Common plus two other languages but can't speak"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_virvos_magen_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "The magen casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save DC 14):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_dancing_lights_xphb",
+            "name": "Dancing Lights",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a bit of phosphorus)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_minor_illusion_xphb",
+            "name": "Minor Illusion",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a bit of fleece)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_hypnotic_pattern_xphb",
+              "name": "Hypnotic Pattern",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "S, M (a pinch of confetti)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_major_image_xphb",
+              "name": "Major Image",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a bit of fleece)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Dancing Lights",
+          "Minor Illusion"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_disintegration_slsk",
+        "name": "Disintegration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_e4qe",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_zyav",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The magen makes two Psychic Blast attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_psychic_blast_0cdn",
+        "name": "Psychic Blast",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 60 ft. {@h}21 (6d6) Psychic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": "60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "6d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NF/Virvos Magen.webp",
+    "tokenImg": "img/bestiary/tokens/NF/Virvos Magen.webp",
+    "fluff": null
+  }
+]

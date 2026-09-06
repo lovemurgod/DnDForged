@@ -1,0 +1,488 @@
+[
+  {
+    "id": "creature_adult_sapphire_dragon_sads",
+    "name": "Adult Sapphire Dragon",
+    "source": "SADS",
+    "edition": "2014",
+    "page": 1,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "L N",
+    "ac": [
+      {
+        "value": 19,
+        "condition": null
+      }
+    ],
+    "primaryAc": 19,
+    "acCondition": "",
+    "hp": {
+      "average": 207,
+      "formula": "18d12 + 60"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 80,
+      "swim": 0,
+      "climb": 40,
+      "burrow": 40,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 23,
+        "mod": 6
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 21,
+        "mod": 5
+      },
+      "int": {
+        "score": 18,
+        "mod": 4
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "dex": "+8",
+      "con": "+10",
+      "wis": "+8",
+      "cha": "+9"
+    },
+    "skills": {
+      "history": "+9",
+      "perception": "+13",
+      "persuasion": "+14",
+      "stealth": "+8"
+    },
+    "senses": {
+      "passivePerception": 23,
+      "sensesString": "blindsight 60 ft., darkvision 120 ft."
+    },
+    "languages": [
+      "telepathy 120 ft.",
+      "Common",
+      "Draconic"
+    ],
+    "cr": "15",
+    "crNumeric": 15,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_adult_sapphire_dragon_0",
+        "name": "Innate Spellcasting (Psionics)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 4,
+        "casterLevel": 0,
+        "dc": 17,
+        "atkMod": 9,
+        "header": "The dragon's innate spellcasting ability is Intelligence (spell save DC 17). It can innately cast the following spells, requiring no components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_scrying_xphb",
+              "name": "Scrying",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "self",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_telekinesis_xphb",
+              "name": "Telekinesis",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_teleportation_circle_xphb",
+              "name": "Teleportation Circle",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Conjuration",
+              "castingTime": "1 minute",
+              "range": "10 feet",
+              "duration": "1 round",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, M (rare inks worth 50+ GP, which the spell consumes)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__2_day__x3ht",
+        "name": "Legendary Resistance (2/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spider_climb_5myy",
+        "name": "Spider Climb",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The dragon can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tunneler_o3lz",
+        "name": "Tunneler",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The dragon can burrow through solid rock at half its burrow speed and can choose to leave a 10-foot-diameter tunnel in its wake.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_e29s",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes two melee attacks, one with its bite and one with its claws.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_5l6f",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}17 (2d10 + 6) piercing damage plus 3 (1d6) thunder damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d6",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claws_56xd",
+        "name": "Claws",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}19 (3d8 + 6) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d8 + 6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tail_va28",
+        "name": "Tail",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}15 (2d8 + 6) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 6",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_frightful_presence_t48a",
+        "name": "Frightful Presence",
+        "actionType": "action",
+        "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 17,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_debilitating_breath__recharge_5__gw7g",
+        "name": "Debilitating Breath (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The dragon exhales a pulse of high-pitched, nearly inaudible sound in a 60-foot-cone. Each creature in that cone must make a DC 18 Constitution saving throw. On a failed save, the creature takes 45 (13d6) thunder damage and is incapacitated until the end of its next turn. On a successful save, the creature takes half as much damage and isn't incapacitated.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "13d6",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_tail_attack_xt3u",
+          "name": "Tail Attack",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The dragon makes a tail attack.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_telekinetic_fling_t851",
+          "name": "Telekinetic Fling",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The dragon chooses a Small or smaller object that isn't being worn or carried that it can see within 60 feet of it, and magically hurls the object at a creature it can see within 60 feet of the object. The target must succeed on a DC 17 Dexterity saving throw or take 15 (4d6) bludgeoning damage.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 17,
+              "ability": "DEX"
+            },
+            "damages": [
+              {
+                "formula": "4d6",
+                "type": "Bludgeoning"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_teleport__costs_2_actions__tn37",
+          "name": "Teleport (Costs 2 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The dragon magically teleports to an unoccupied space it can see within 30 feet of it.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [
+      {
+        "id": "act_lair_action_1f6i",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The dragon targets a creature within 120 feet of it that can hear and understand it. The creature must succeed on a DC 15 Wisdom saving throw or be charmed by the dragon until initiative count 20 on the following round. A creature charmed in this way obeys to the best of its ability any command the dragon issues that isn't directly harmful to itself.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_dqcp",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The dragon touches a section of stone up to 10 feet in any dimension. The dragon can form the stone into any shape that suits its purpose.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_xx11",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>A wall of stone springs into existence on a solid surface within 120 feet of the dragon. The wall is up to 60 feet long, 10 feet high, and 1 foot thick. When the wall appears, each creature in its space is pushed to either side of the wall the creature wants. Each 5-foot section of wall has AC 17, 20 hit points, vulnerability to thunder damage, and immunity to poison and psychic damage. The wall vanishes when the dragon uses this lair action again or when the dragon dies.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/SADS/Adult Sapphire Dragon.webp",
+    "tokenImg": "img/bestiary/tokens/SADS/Adult Sapphire Dragon.webp",
+    "fluff": null
+  }
+]

@@ -535,6 +535,7 @@ function simulateRoll(formula, critRange = 20) {
                             <option value="class">Class Features</option>
                             <option value="feat">Feats</option>
                             <option value="race">Species</option>
+                            <option value="background">Backgrounds</option>
                             <option value="charoption">Character Creation Options</option>
                             <option value="optionalfeature">Optional Features</option>
                         </select>
@@ -1981,22 +1982,36 @@ function simulateRoll(formula, critRange = 20) {
             });
         });
 
-        document.getElementById('pc-item-modal-add').addEventListener('click', () => {
+        document.getElementById('pc-item-modal-add').addEventListener('click', async () => {
             if (!currentChar) return;
-            const checkboxes = document.querySelectorAll('.pc-item-select:checked');
-            checkboxes.forEach(cb => {
+            const checkboxes = Array.from(document.querySelectorAll('.pc-item-select:checked'));
+            for (const cb of checkboxes) {
                 const name = cb.dataset.name;
                 const weight = cb.dataset.weight;
-                const desc = cb.dataset.desc ? decodeURIComponent(cb.dataset.desc) : '';
+                let desc = cb.dataset.desc ? decodeURIComponent(cb.dataset.desc) : '';
+                const source = cb.dataset.source || '';
+                const itemId = cb.dataset.id || '';
+
+                if (!desc && source && itemId) {
+                    try {
+                        const res = await fetch(`/api/item/${encodeURIComponent(source)}/${encodeURIComponent(itemId)}`);
+                        if (res.ok) {
+                            const fullItem = await res.json();
+                            desc = fullItem.descriptionHtml || (Array.isArray(fullItem.entries) ? fullItem.entries.map(e => typeof e === 'string' ? e : JSON.stringify(e)).join('\n\n') : '');
+                        }
+                    } catch(e) {}
+                }
+
                 currentChar.equipment.push({
                     id: 'eq_' + Date.now() + Math.random().toString(36).substr(2, 5),
                     name: name,
                     qty: 1,
                     weight: weight,
-                    description: desc
+                    description: desc,
+                    source: source
                 });
                 cb.checked = false;
-            });
+            }
             updateItemSelectedCount();
             saveAndEmit(currentChar);
             renderSheetData(currentChar);
@@ -2067,12 +2082,22 @@ function simulateRoll(formula, critRange = 20) {
         if (itemCache) {
             renderItemSearchList();
         } else {
-            Promise.all([
-                fetch('data/items.json').then(res => res.json()).catch(() => ({})),
-                fetch('data/items-base.json').then(res => res.json()).catch(() => ({})),
-                fetch('data/magicvariants.json').then(res => res.json()).catch(() => ({})),
-                fetch('data/fluff-items.json').then(res => res.json()).catch(() => ({}))
-            ]).then(([itemData, baseData, variantData, fluffData]) => {
+            fetch('/data/items-catalog.json?v=' + Date.now())
+                .then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                })
+                .then(catalogItems => {
+                    itemCache = { items: catalogItems, fluffDict: {}, ruleDict: { property: {}, mastery: {} }, isCatalog: true };
+                    renderItemSearchList();
+                })
+                .catch(() => {
+                    Promise.all([
+                        fetch('data/items.json').then(res => res.json()).catch(() => ({})),
+                        fetch('data/items-base.json').then(res => res.json()).catch(() => ({})),
+                        fetch('data/magicvariants.json').then(res => res.json()).catch(() => ({})),
+                        fetch('data/fluff-items.json').then(res => res.json()).catch(() => ({}))
+                    ]).then(([itemData, baseData, variantData, fluffData]) => {
                 let generatedVariants = [];
                 if (variantData.magicvariant && baseData.baseitem) {
                     variantData.magicvariant.forEach(variant => {
@@ -2159,8 +2184,9 @@ function simulateRoll(formula, critRange = 20) {
             }).catch(err => {
                 listEl.innerHTML = `<div style="color:var(--color-danger);">Error loading items: ${err.message}</div>`;
             });
-        }
-    };
+        });
+    }
+};
 
     function renderItemSearchList() {
         if (!itemCache) return;
@@ -2310,13 +2336,19 @@ function simulateRoll(formula, critRange = 20) {
 
             let descText = mechText + parts.filter(Boolean).join('\n\n');
 
+            const is2024 = (source || '').toUpperCase() === 'XPHB' || (source || '').toUpperCase() === 'XDMG';
+            const badgeBg = is2024 ? '#059669' : ((source || '').toUpperCase() === 'PHB' ? '#2563eb' : '#475569');
+
             html += `
                 <label class="pc-item-row glassmorphism" data-name="${item.name.replace(/"/g, '&quot;')}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; cursor:pointer;">
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="checkbox" class="pc-item-select" data-name="${item.name.replace(/"/g, '&quot;')}" data-weight="${weight}" data-desc="${encodeURIComponent(descText)}" style="cursor:pointer; width:16px; height:16px;">
+                        <input type="checkbox" class="pc-item-select" data-name="${item.name.replace(/"/g, '&quot;')}" data-weight="${weight}" data-desc="${encodeURIComponent(descText)}" data-source="${item.source || ''}" data-id="${item.id || ''}" style="cursor:pointer; width:16px; height:16px;">
                         <div style="display:flex; flex-direction:column;">
-                            <span style="font-weight:bold; color:var(--color-gold-light);">${item.name}</span>
-                            <span style="font-size:0.75rem; color:var(--color-text-muted);">${source} ${val ? '| ' + val : ''}</span>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span style="font-weight:bold; color:var(--color-gold-light);">${item.name}</span>
+                                ${source ? `<span style="background:${badgeBg}; color:#fff; border-radius:3px; padding:1px 4px; font-size:0.55rem; font-weight:700; text-transform:uppercase;">${source}</span>` : ''}
+                            </div>
+                            <span style="font-size:0.75rem; color:var(--color-text-muted);">${item.type || ''} ${val ? '| ' + val : ''}</span>
                         </div>
                     </div>
                     <div style="font-size:0.85rem; color:var(--color-text-secondary);">
@@ -2425,6 +2457,26 @@ function simulateRoll(formula, critRange = 20) {
         }
 
         if (companions.length > 0) {
+            companions.forEach(c => {
+                if (!c.tokenImages || c.tokenImages.length === 0) {
+                    const m = c.monsterData || {};
+                    let tokenUrl = m.tokenImg || m.tokenUrl || m.imgUrl;
+                    if (!tokenUrl && typeof window.Renderer !== 'undefined' && window.Renderer.monster?.getTokenUrl) {
+                        try { tokenUrl = window.Renderer.monster.getTokenUrl(m); } catch (e) {}
+                    }
+                    if (!tokenUrl && (m.source || m.name)) {
+                        const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(m.name) : (m.name || '').replace(/ /g, '-').toLowerCase();
+                        const source = m.source || 'MM';
+                        tokenUrl = `img/bestiary/tokens/${source}/${cleanName}.webp`;
+                    }
+                    if (tokenUrl) {
+                        c.tokenImages = [{ url: tokenUrl, name: 'Default Token', isDefault: true }];
+                        c.activeTokenIndex = 0;
+                        if (vtt.socket) vtt.socket.emit('character:update', { character: c });
+                    }
+                }
+            });
+
             if (pcs.length > 0) {
                 html += `<div style="font-family:var(--font-heading); font-size:0.8rem; color:var(--color-text-muted); margin:12px 0 4px 8px; text-transform:uppercase; letter-spacing:1px;">Player Companions</div>`;
             }
@@ -2517,23 +2569,10 @@ function simulateRoll(formula, critRange = 20) {
         btnCharAddCompanion.addEventListener('click', async () => {
             // We need a modal to select a monster, then an owner.
             try {
-                const indexRes = await fetch('data/bestiary/index.json');
-                if (!indexRes.ok) throw new Error('Could not load bestiary index.json');
-                const indexData = await indexRes.json();
-                
-                const fetchPromises = Object.values(indexData).map(filename => 
-                    fetch(`data/bestiary/${filename}`)
-                        .then(res => res.ok ? res.json() : { monster: [] })
-                        .catch(() => ({ monster: [] }))
-                );
-                
-                const results = await Promise.all(fetchPromises);
-                const monsters = [];
-                results.forEach(data => {
-                    if (data && data.monster && Array.isArray(data.monster)) {
-                        monsters.push(...data.monster);
-                    }
-                });
+                let catRes = await fetch('/api/bestiary/catalog');
+                if (!catRes.ok) catRes = await fetch('/data/bestiary-catalog.json');
+                if (!catRes.ok) throw new Error('Could not load bestiary catalog');
+                const monsters = await catRes.json();
                 
                 // create a temporary modal
                 const modalOverlay = document.createElement('div');
@@ -2567,13 +2606,14 @@ function simulateRoll(formula, critRange = 20) {
                     const filtered = monsters.filter(m => {
                         const nameMatch = m.name.toLowerCase().includes(q);
                         const crStr = m.cr ? (typeof m.cr === 'object' ? String(m.cr.cr) : String(m.cr)).toLowerCase() : '0';
-                        const crMatch = crStr === q || crStr.includes(q) || `cr ${crStr}`.includes(q) || `cr${crStr}`.includes(q);
+                        const crMatch = crStr === q || crStr.includes(q) || `cr ${crStr}`.includes(query) || `cr${crStr}`.includes(q);
                         return nameMatch || crMatch;
                     }).slice(0, 50);
                     filtered.forEach(m => {
                         const row = document.createElement('div');
-                        row.style.cssText = 'padding:8px; border-bottom:1px solid var(--color-border-subtle); cursor:pointer; display:flex; justify-content:space-between;';
-                        row.innerHTML = `<span>${m.name} <span style="font-size:0.75em; color:var(--color-text-muted);">[${m.source || 'Unknown'}]</span></span> <span style="color:var(--color-text-muted);">CR ${m.cr ? (m.cr.cr || m.cr) : '0'}</span>`;
+                        row.style.cssText = 'padding:8px; border-bottom:1px solid var(--color-border-subtle); cursor:pointer; display:flex; justify-content:space-between; align-items:center;';
+                        const spellBadge = m.hasSpellcasting ? `<span style="color:var(--color-gold-base); margin-left:4px;" title="Spellcaster"><i class="fa-solid fa-wand-magic-sparkles"></i></span>` : '';
+                        row.innerHTML = `<span><strong>${m.name}</strong>${spellBadge} <span style="font-size:0.75em; color:var(--color-text-muted);">[${m.source || 'Unknown'} ${m.edition || ''}]</span></span> <span style="color:var(--color-text-muted);">CR ${m.cr ? (m.cr.cr || m.cr) : '0'}</span>`;
                         row.addEventListener('click', () => {
                             selectOwnerForCompanion(m);
                             closeModal();
@@ -2619,7 +2659,7 @@ function simulateRoll(formula, critRange = 20) {
                         </div>
                         <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
                             <button id="comp-owner-cancel" class="btn btn-secondary btn-sm">Cancel</button>
-                            <button id="comp-owner-save" class="btn btn-primary btn-sm">Create Companion</button>
+                            <button id="comp-owner-save" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Create Companion</button>
                         </div>
                     `;
                     
@@ -2632,25 +2672,49 @@ function simulateRoll(formula, critRange = 20) {
                     };
                     
                     ownerModal.querySelector('#comp-owner-cancel').addEventListener('click', closeOwnerModal);
-                    ownerModal.querySelector('#comp-owner-save').addEventListener('click', () => {
+                    ownerModal.querySelector('#comp-owner-save').addEventListener('click', async () => {
                         const owner = ownerModal.querySelector('#comp-owner-sel').value;
                         const nickname = ownerModal.querySelector('#comp-nickname').value.trim() || monster.name;
                         
-                        // Calculate basic HP to render on card
                         let hp = 20;
-                        if (monster.hp && monster.hp.average) hp = monster.hp.average;
+                        if (typeof monster.hp === 'number') hp = monster.hp;
+                        else if (monster.hp && monster.hp.average) hp = monster.hp.average;
                         
+                        // Hydrate full normalized creature data
+                        let fullMonster = null;
+                        if (window.fetchFullCreature) {
+                            fullMonster = await window.fetchFullCreature(monster.source, monster.id || monster.name);
+                        } else {
+                            try {
+                                const r = await fetch(`/api/creature/${encodeURIComponent(monster.source)}/${encodeURIComponent(monster.id || monster.name)}`);
+                                if (r.ok) fullMonster = await r.json();
+                            } catch (err) {}
+                        }
+                        const finalMonsterData = fullMonster || monster;
+
+                        let defaultToken = finalMonsterData.tokenImg || finalMonsterData.tokenUrl || finalMonsterData.imgUrl;
+                        if (!defaultToken && typeof window.Renderer !== 'undefined' && window.Renderer.monster?.getTokenUrl) {
+                            try { defaultToken = window.Renderer.monster.getTokenUrl(finalMonsterData); } catch (e) {}
+                        }
+                        if (!defaultToken && (finalMonsterData.source || finalMonsterData.name)) {
+                            const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(finalMonsterData.name) : (finalMonsterData.name || '').replace(/ /g, '-').toLowerCase();
+                            const source = finalMonsterData.source || 'MM';
+                            defaultToken = `img/bestiary/tokens/${source}/${cleanName}.webp`;
+                        }
+                        const initialTokens = defaultToken ? [{ url: defaultToken, name: 'Default Token', isDefault: true }] : [];
+
                         const newComp = {
                             id: 'comp_' + Date.now(),
                             name: nickname,
                             isCompanion: true,
                             assignedPlayers: owner ? [owner] : [],
-                            monsterData: monster,
+                            monsterData: finalMonsterData,
                             hpMax: hp,
                             hpCurrent: hp,
                             tempHp: 0,
-                            ac: monster.ac ? (monster.ac[0].ac || monster.ac[0]) : 10,
-                            tokenImages: []
+                            ac: monster.ac ? (Array.isArray(monster.ac) ? (monster.ac[0].ac || monster.ac[0]) : (typeof monster.ac === 'object' ? monster.ac.ac : monster.ac)) : 10,
+                            tokenImages: initialTokens,
+                            activeTokenIndex: 0
                         };
                         
                         vtt.socket.emit('character:update', { character: newComp });
@@ -3627,7 +3691,8 @@ function simulateRoll(formula, critRange = 20) {
                 const currentRace = raceSel.dataset.val;
                 let opts = '<option value="">Select Species</option>';
                 builderCache.races.forEach(r => {
-                    opts += `<option value="${r.name}" ${r.name === currentRace ? 'selected' : ''}>${r.name}</option>`;
+                    const srcTag = r.source ? ` [${r.source}]` : '';
+                    opts += `<option value="${r.name}" ${r.name === currentRace ? 'selected' : ''}>${r.name}${srcTag}</option>`;
                 });
                 raceSel.innerHTML = opts;
             }
@@ -3637,7 +3702,8 @@ function simulateRoll(formula, critRange = 20) {
                 const currentBg = bgSel.dataset.val;
                 let opts = '<option value="">Select Background</option>';
                 builderCache.bgs.forEach(b => {
-                    opts += `<option value="${b.name}" ${b.name === currentBg ? 'selected' : ''}>${b.name}</option>`;
+                    const srcTag = b.source ? ` [${b.source}]` : '';
+                    opts += `<option value="${b.name}" ${b.name === currentBg ? 'selected' : ''}>${b.name}${srcTag}</option>`;
                 });
                 bgSel.innerHTML = opts;
             }
@@ -3666,11 +3732,15 @@ function simulateRoll(formula, critRange = 20) {
         
         if (!builderCache) {
             Promise.all([
-                fetch('data/races.json').then(res => res.json()).catch(() => ({})),
-                fetch('data/backgrounds.json').then(res => res.json()).catch(() => ({})),
+                fetch('data/races-catalog.json').then(r => r.json()).catch(() => fetch('data/races.json').then(r => r.json()).catch(() => ({}))),
+                fetch('data/backgrounds-catalog.json').then(r => r.json()).catch(() => fetch('data/backgrounds.json').then(r => r.json()).catch(() => ({}))),
                 fetch('data/class/index.json').then(res => res.json()).catch(() => ({}))
             ]).then(([raceData, bgData, classIndex]) => {
-                builderCache = { races: raceData.race || [], bgs: bgData.background || [], classIndex };
+                builderCache = {
+                    races: Array.isArray(raceData) ? raceData : (raceData.race || []),
+                    bgs: Array.isArray(bgData) ? bgData : (bgData.background || []),
+                    classIndex
+                };
                 populateBuildDropdowns();
             });
         } else {
@@ -6947,11 +7017,78 @@ function simulateRoll(formula, critRange = 20) {
             listEl.innerHTML = html;
 
             listEl.querySelectorAll('.btn-import-feature-exec').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', async (e) => {
                     const idx = e.currentTarget.dataset.idx;
                     const f = availableFeatures[idx];
                     document.getElementById('modal-ability-name').value = f.name || '';
-                    document.getElementById('modal-ability-desc').value = extractTextFromEntries(f.entries).trim();
+                    let desc = extractTextFromEntries(f.entries).trim();
+                    if (!desc && f.source && f.id) {
+                        let cType = currentCategory === 'feat' ? 'feats' : (currentCategory === 'race' ? 'races' : (currentCategory === 'background' ? 'backgrounds' : ''));
+                        if (cType) {
+                            try {
+                                const res = await fetch(`/api/compendium/${cType}/${encodeURIComponent(f.source)}/${encodeURIComponent(f.id)}`);
+                                if (res.ok) {
+                                    const full = await res.json();
+                                    desc = full.descriptionHtml || extractTextFromEntries(full.entries).trim();
+                                }
+                            } catch(err) {}
+                        }
+                    }
+                    document.getElementById('modal-ability-desc').value = desc;
+
+                    // Auto-populate active resource counter if detected or configured
+                    let hasCounter = f.hasCounter || false;
+                    let usesMax = f.usesMax || null;
+                    let resetType = f.resetType || 'short';
+
+                    if (!hasCounter) {
+                        const plain = ((f.name || '') + ' ' + desc).toLowerCase();
+                        if (plain.includes('action surge') || plain.includes('second wind')) {
+                            hasCounter = true; usesMax = 1; resetType = 'short';
+                        } else if (plain.includes('bardic inspiration')) {
+                            hasCounter = true; usesMax = 'CHA'; resetType = 'long';
+                        } else if (plain.includes('rage') && (f.className === 'Barbarian' || plain.includes('barbarian'))) {
+                            hasCounter = true; usesMax = 2; resetType = 'long';
+                        } else if (plain.match(/(?:finish|complete) a (?:short or long|short) rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
+                            hasCounter = true; usesMax = 1; resetType = 'short';
+                        } else if (plain.match(/(?:finish|complete) a long rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
+                            hasCounter = true; usesMax = 1; resetType = 'long';
+                        } else if (plain.match(/proficiency bonus.*?regain/)) {
+                            hasCounter = true; usesMax = 'PB'; resetType = plain.includes('short rest') ? 'short' : 'long';
+                        }
+                    }
+
+                    const counterCheckbox = document.getElementById('modal-ability-has-counter');
+                    const usesContainer = document.getElementById('modal-ability-uses-container');
+                    const usesMaxInput = document.getElementById('modal-ability-uses-max');
+                    const usesCurrentInput = document.getElementById('modal-ability-uses-current');
+                    const resetSelect = document.getElementById('modal-ability-reset-type');
+
+                    if (hasCounter && counterCheckbox) {
+                        counterCheckbox.checked = true;
+                        if (usesContainer) usesContainer.style.display = 'flex';
+
+                        let resolvedMax = 1;
+                        if (typeof usesMax === 'number') {
+                            resolvedMax = usesMax;
+                        } else if (usesMax === 'PB') {
+                            const lvl = (char.classes || []).reduce((acc, c) => acc + (parseInt(c.level) || 0), 0) || 1;
+                            resolvedMax = Math.ceil(lvl / 4) + 1;
+                        } else if (typeof usesMax === 'string' && ['CHA', 'WIS', 'INT', 'CON', 'DEX', 'STR'].includes(usesMax)) {
+                            const modKey = usesMax.toLowerCase();
+                            resolvedMax = Math.max(1, (char.statMods && char.statMods[modKey] !== undefined) ? parseInt(char.statMods[modKey]) : 1);
+                        }
+
+                        if (usesMaxInput) usesMaxInput.value = resolvedMax;
+                        if (usesCurrentInput) usesCurrentInput.value = resolvedMax;
+                        if (resetSelect) resetSelect.value = resetType || 'short';
+                    } else if (counterCheckbox) {
+                        counterCheckbox.checked = false;
+                        if (usesContainer) usesContainer.style.display = 'none';
+                        if (usesMaxInput) usesMaxInput.value = 0;
+                        if (usesCurrentInput) usesCurrentInput.value = 0;
+                    }
+
                     switchModalTab('manual');
                 });
             });
@@ -6976,17 +7113,31 @@ function simulateRoll(formula, critRange = 20) {
                 classFilters.style.display = 'none';
                 let file = '';
                 let key = '';
-                if (currentCategory === 'feat') { file = 'data/feats.json'; key = 'feat'; }
-                if (currentCategory === 'race') { file = 'data/races.json'; key = 'race'; }
+                let fallback = '';
+                if (currentCategory === 'feat') { file = 'data/feats-catalog.json'; key = 'feat'; fallback = 'data/feats.json'; }
+                if (currentCategory === 'race') { file = 'data/races-catalog.json'; key = 'race'; fallback = 'data/races.json'; }
+                if (currentCategory === 'background') { file = 'data/backgrounds-catalog.json'; key = 'background'; fallback = 'data/backgrounds.json'; }
                 if (currentCategory === 'charoption') { file = 'data/charcreationoptions.json'; key = 'charoption'; }
                 if (currentCategory === 'optionalfeature') { file = 'data/optionalfeatures.json'; key = 'optionalfeature'; }
                 
                 document.getElementById('import-feature-list').innerHTML = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">Loading...</div>';
-                fetch(file).then(r => r.json()).then(data => {
-                    currentImportData = data[key] || [];
+                fetch(file).then(r => {
+                    if (!r.ok) throw new Error('Not found');
+                    return r.json();
+                }).then(data => {
+                    currentImportData = Array.isArray(data) ? data : (data[key] || []);
                     renderImportFeatureList();
                 }).catch(() => {
-                    document.getElementById('import-feature-list').innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
+                    if (fallback) {
+                        fetch(fallback).then(r => r.json()).then(data => {
+                            currentImportData = Array.isArray(data) ? data : (data[key] || []);
+                            renderImportFeatureList();
+                        }).catch(() => {
+                            document.getElementById('import-feature-list').innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
+                        });
+                    } else {
+                        document.getElementById('import-feature-list').innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
+                    }
                 });
             }
         });

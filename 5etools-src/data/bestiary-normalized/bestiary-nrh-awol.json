@@ -1,0 +1,172 @@
+[
+  {
+    "id": "creature_szikzith_nrh-awol",
+    "name": "Szikzith",
+    "source": "NRH-AWoL",
+    "edition": "2014",
+    "page": 6,
+    "isSrd": true,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 11,
+      "formula": "2d8 + 2"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 40,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 4,
+        "mod": -3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "perception": "+3",
+      "stealth": "+7"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "blindsight 10 ft., darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_spider_climb_te53",
+        "name": "Spider Climb",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spider can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_web_sense_5do6",
+        "name": "Web Sense",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in contact with a web, the spider knows the exact location of any other creature in contact with the same web.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_web_walker_3hpt",
+        "name": "Web Walker",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spider ignores movement restrictions caused by webbing.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_cdsb",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one creature. {@h}4 (1d6 + 1) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "one creature",
+          "save": {
+            "dc": 11,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/NRH-AWoL/Szikzith.webp",
+    "tokenImg": "img/bestiary/tokens/NRH-AWoL/Szikzith.webp",
+    "fluff": null
+  }
+]

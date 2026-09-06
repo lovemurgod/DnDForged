@@ -162,13 +162,16 @@
 						"with": "Diderius",
 						"flags": "i"
 					}
+				},
+				"_preserve": {
+					"legendaryGroup": true
 				}
 			},
 			"int": 18,
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Diderius is a 10th-level spellcaster. His spellcasting ability is Intelligence (spell save {@dc 17}, {@hit 9} to hit with spell attacks). He has the following wizard spells prepared:"
 					],
@@ -218,10 +221,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 10
+					"ability": "int"
 				}
 			],
 			"tokenCustom": true,
@@ -770,9 +770,6 @@
 					"page": 185
 				}
 			],
-			"referenceSources": [
-				"HotDQ"
-			],
 			"size": [
 				"M"
 			],
@@ -921,7 +918,8 @@
 				"N",
 				"E"
 			],
-			"hasToken": true
+			"hasToken": true,
+			"hasFluffImages": true
 		},
 		{
 			"name": "Maccath the Crimson",
@@ -966,7 +964,8 @@
 			"spellcastingTags": [
 				"CW"
 			],
-			"hasToken": true
+			"hasToken": true,
+			"hasFluffImages": true
 		},
 		{
 			"name": "Marfulb",
@@ -1534,6 +1533,7 @@
 				"strength"
 			],
 			"hasToken": true,
+			"hasFluff": true,
 			"hasFluffImages": true
 		},
 		{
@@ -1691,7 +1691,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Tiamat can innately cast the following spell, her spellcasting ability is Charisma (spell save {@dc 26}):"
 					],
@@ -1700,10 +1700,7 @@
 							"{@spell divine word}"
 						]
 					},
-					"ability": "cha",
-					"dc": 26,
-					"atkMod": 18,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -1915,7 +1912,8 @@
 				"DR",
 				"I"
 			],
-			"hasToken": true
+			"hasToken": true,
+			"hasFluffImages": true
 		}
 	]
 }

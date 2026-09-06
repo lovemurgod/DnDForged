@@ -1,0 +1,660 @@
+[
+  {
+    "id": "creature_vecna_the_archlich_vd",
+    "name": "Vecna the Archlich",
+    "source": "VD",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "wizard",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 272,
+      "formula": "32d8 + 128"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 22,
+        "mod": 6
+      },
+      "wis": {
+        "score": 24,
+        "mod": 7
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 8,
+    "saves": {
+      "con": "+12",
+      "int": "+14",
+      "wis": "+15"
+    },
+    "skills": {
+      "arcana": "+22",
+      "history": "+14",
+      "insight": "+15",
+      "perception": "+15"
+    },
+    "senses": {
+      "passivePerception": 25,
+      "sensesString": "truesight 120 ft."
+    },
+    "languages": [
+      "Common",
+      "Draconic",
+      "Elvish",
+      "Infernal"
+    ],
+    "cr": "26",
+    "crNumeric": 26,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_vecna_the_archlich_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 22,
+        "atkMod": 14,
+        "header": "Vecna casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save DC 22):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_animate_dead_xphb",
+            "name": "Animate Dead",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Necromancy",
+            "castingTime": "1 minute",
+            "range": "10 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a drop of blood, a piece of flesh, and a pinch of bone dust)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_dispel_magic_xphb",
+            "name": "Dispel Magic",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_fly_xphb",
+            "name": "Fly",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a feather)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_lightning_bolt_xphb",
+            "name": "Lightning Bolt",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "Self (100 feet line)",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 22,
+            "damageList": [
+              {
+                "formula": "8d6",
+                "type": "Lightning",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S, M (a bit of fur and a crystal rod)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_dimension_door_xphb",
+              "name": "Dimension Door",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "500 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_invisibility_xphb",
+              "name": "Invisibility",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (an eyelash in gum arabic)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_scrying_xphb",
+              "name": "Scrying",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "self",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 22,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_dominate_monster_xphb",
+              "name": "Dominate Monster",
+              "source": "XPHB",
+              "level": 8,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 22,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_globe_of_invulnerability_xphb",
+              "name": "Globe of Invulnerability",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "Self (10 feet emanation)",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a glass bead)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_plane_shift_xphb",
+              "name": "Plane Shift",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a forked, metal rod worth 250+ GP and attuned to a plane of existence)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Animate Dead",
+          "Detect Magic",
+          "Dispel Magic",
+          "Fly",
+          "Lightning Bolt",
+          "Mage Hand",
+          "Prestidigitation"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__5_day__l2ep",
+        "name": "Legendary Resistance (5/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Vecna fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_special_equipment_pzmf",
+        "name": "Special Equipment",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Vecna carries a magic dagger named Afterthought. In the hands of anyone other than Vecna, Afterthought is a +2 dagger.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_undying_fxdo",
+        "name": "Undying",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Vecna is slain, his soul refuses to accept its fate and lives on as a disembodied spirit that fashions a new body for itself after 1d100 years. Vecna's soul can fashion a new body even if its old body was burned to ash or otherwise obliterated. When the new body is complete, Vecna regains all his hit points and becomes active again. Vecna's new body appears anywhere within 100 miles of where Vecna was slain.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_unusual_nature_q3ub",
+        "name": "Unusual Nature",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Vecna doesn't require air, food, drink, or sleep.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_rt91",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Vecna uses Flight of the Damned (if available), Rotten Fate, or Spellcasting. He then makes two attacks with <em>Afterthought</em>.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_afterthought_lqqt",
+        "name": "Afterthought",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +13 to hit, reach 5 ft., one target. {@h}7 (1d4 + 5) piercing damage, plus 9 (2d8) necrotic damage. If the target is a creature, it is afflicted by entropic magic, taking 9 (2d8) necrotic damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 20 Constitution saving throw, ending the effect on itself on a success. Until it succeeds on this save, the afflicted target can't regain hit points.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 13,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 20,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4 + 5",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d8",
+              "type": "Necrotic"
+            },
+            {
+              "formula": "2d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_flight_of_the_damned__recharge_5__gpba",
+        "name": "Flight of the Damned (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Vecna conjures a torrent of flying, spectral entities that fill a 120-foot cone and pass through all creatures in that area before dissipating. Each creature in that area must make a DC 22 Constitution saving throw. On a failed save, the creature takes 36 (8d8) necrotic damage and is frightened of Vecna for 1 minute. On a successful save, the creature takes half as much damage and isn't frightened. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 22,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "8d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": "5"
+        }
+      },
+      {
+        "id": "act_rotten_fate_w8u0",
+        "name": "Rotten Fate",
+        "actionType": "action",
+        "descriptionHtml": "<p>Vecna causes necrotic magic to engulf one creature he can see within 120 feet of himself. The target must make a DC 22 Constitution saving throw, taking 96 (8d8 + 60) necrotic damage on a failed save, or half as much damage on a successful one. A Humanoid killed by this magic rises as a zombie at the start of Vecna's next turn and acts immediately after Vecna in the initiative order. The zombie is under Vecna's control.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 22,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "8d8 + 60",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_vile_teleport_53zx",
+        "name": "Vile Teleport",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Vecna teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see. He can cause each creature of his choice within 15 feet of his destination space to take 10 (3d6) psychic damage. If at least one creature takes this damage, Vecna regains 80 hit points.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_dread_counterspell_4yyd",
+        "name": "Dread Counterspell",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>Vecna utters a dread word to interrupt a creature he can see that is casting a spell. If the spell is 4th level or lower, it fails and has no effect. If the spell is 5th level or higher, Vecna makes an Intelligence check (DC 10 + the spell's level). On a success, the spell fails and has no effect. Whatever the spell's level, the caster takes 10 (3d6) psychic damage if the spell fails.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 10,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fell_rebuke_b9ge",
+        "name": "Fell Rebuke",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>In response to being hit by an attack, Vecna utters a fell word, dealing 10 (3d6) necrotic damage to the attacker, and Vecna teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/VD/Vecna the Archlich.webp",
+    "tokenImg": "img/bestiary/tokens/VD/Vecna the Archlich.webp",
+    "fluff": null
+  }
+]

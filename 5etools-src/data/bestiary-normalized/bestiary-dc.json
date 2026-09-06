@@ -1,0 +1,1909 @@
+[
+  {
+    "id": "creature_ebondeath_dc",
+    "name": "Ebondeath",
+    "source": "DC",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 225,
+      "formula": "10d8"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 40,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 7,
+        "mod": -2
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Any languages it knew in life"
+    ],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_ethereal_sight_zubd",
+        "name": "Ethereal Sight",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Ebondeath can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incorporeal_movement_iign",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Ebondeath can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__3_day__o8zp",
+        "name": "Legendary Resistance (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_withering_touch_yujx",
+        "name": "Withering Touch",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}17 (4d6 + 3) necrotic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d6 + 3",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_etherealness_lc5x",
+        "name": "Etherealness",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ebondeath enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_horrifying_visage_e7d7",
+        "name": "Horrifying Visage",
+        "actionType": "action",
+        "descriptionHtml": "<p>Each non-undead creature within 60 feet of Ebondeath that can see it must succeed on a DC 13 Wisdom saving throw or be frightened for 1 minute. If the save fails by 5 or more, the target also ages 1d4 × 10 years. A frightened target can repeat the saving throw at the end of each of its turns, ending the frightened condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this Ebondeath's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a greater restoration spell, but only within 24 hours of it occurring.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_possession___recharge__1lbk",
+        "name": "Possession {@recharge}",
+        "actionType": "action",
+        "descriptionHtml": "<p>One humanoid that Ebondeath can see within 5 feet of it must succeed on a DC 20 Charisma saving throw or be possessed by Ebondeath; Ebondeath then disappears, and the target is incapacitated and loses control of its body. Ebondeath now controls the body but doesn't deprive the target of awareness. Ebondeath can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target's statistics, including gaining access to the target's knowledge, class features, and proficiencies.</p><p>The possession lasts until the body drops to 0 hit points, Ebondeath ends it as a bonus action, or Ebondeath is turned or forced out by an effect like the dispel evil and good spell. When the possession ends, Ebondeath reappears in an unoccupied space within 5 feet of the body. The target is immune to Ebondeath Possession for 24 hours after succeeding on the saving throw or after the possession ends.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 20,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/DC/Ebondeath.webp",
+    "tokenImg": "img/bestiary/tokens/DC/Ebondeath.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_expert_dc",
+    "name": "Expert",
+    "source": "DC",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 66,
+      "formula": "12d8 + 12"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 20,
+        "mod": 5
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+9"
+    },
+    "skills": {
+      "acrobatics": "+13",
+      "performance": "+6",
+      "persuasion": "+6",
+      "sleight of hand": "+9",
+      "stealth": "+13"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "plus one of your choice"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_helpful_ssv1",
+        "name": "Helpful",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The expert can take the Help action as a bonus action, and the creature who receives the help gains a 1d6 bonus to the d20 roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_evasion_11bs",
+        "name": "Evasion",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When the expert is not incapacitated and subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failed.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_reliable_talent_37kk",
+        "name": "Reliable Talent",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever the expert makes an ability check that includes its whole proficiency bonus, it can treat a d20 roll of 9 or lower as a 10.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tools_9nlh",
+        "name": "Tools",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_extra_attack_v2x2",
+        "name": "Extra Attack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The expert can attack twice, instead of once, whenever it takes the attack action on its turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortsword_4vba",
+        "name": "Shortsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}8 (1d6 + 5) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 5",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dagger_zn5m",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +9 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}7 (1d4 + 5) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 5",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortbow_4j7v",
+        "name": "Shortbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +9 to hit, range 80/320 ft., one target. {@h}8 (1d6 + 5) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": null,
+          "range": "80/320 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 5",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/DC/Expert.webp",
+    "tokenImg": "img/bestiary/tokens/DC/Expert.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_spellcaster__healer__dc",
+    "name": "Spellcaster (Healer)",
+    "source": "DC",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "healer",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 54,
+      "formula": "12d8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 13,
+        "mod": 1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "wis": "+8"
+    },
+    "skills": {
+      "arcana": "+6",
+      "investigation": "+6",
+      "religion": "+6"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "plus one of your choice"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_spellcaster__healer__0",
+        "name": "Spellcasting (Healer)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 11,
+        "dc": 16,
+        "atkMod": 8,
+        "header": "The spellcaster's spellcasting ability is Wisdom (spell save DC 16, +8 to hit with spell attacks). The spellcaster has following cleric spells prepared:",
+        "footer": "",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_guidance_xphb",
+                "name": "Guidance",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Divination",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_light_xphb",
+                "name": "Light",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, M (a firefly or phosphorescent moss)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_resistance_xphb",
+                "name": "Resistance",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_sacred_flame_xphb",
+                "name": "Sacred Flame",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "1d8",
+                    "type": "Radiant",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_spare_the_dying_xphb",
+                "name": "Spare the Dying",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Necromancy",
+                "castingTime": "1 action",
+                "range": "15 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_bless_xphb",
+                "name": "Bless",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a Holy Symbol worth 5+ GP)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_cure_wounds_xphb",
+                "name": "Cure Wounds",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Healing",
+                    "stat": "spell"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shield_of_faith_xphb",
+                "name": "Shield of Faith",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 bonus action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a prayer scroll)",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_aid_xphb",
+                "name": "Aid",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a strip of white cloth)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_lesser_restoration_xphb",
+                "name": "Lesser Restoration",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Abjuration",
+                "castingTime": "1 bonus action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_protection_from_energy_xphb",
+                "name": "Protection from Energy",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_revivify_xphb",
+                "name": "Revivify",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Necromancy",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a diamond worth 300+ GP, which the spell consumes)",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_banishment_xphb",
+                "name": "Banishment",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "charisma",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [],
+                "components": "V, S, M (a pentacle)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_death_ward_xphb",
+                "name": "Death Ward",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "5": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_greater_restoration_xphb",
+                "name": "Greater Restoration",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mass_cure_wounds_xphb",
+                "name": "Mass Cure Wounds",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "5d8",
+                    "type": "Healing",
+                    "stat": "spell"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "6": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_heal_xphb",
+                "name": "Heal",
+                "source": "XPHB",
+                "level": 6,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "70",
+                    "type": "Healing",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_empowered_spells_n7zs",
+        "name": "Empowered Spells",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_potent_cantrip_g0if",
+        "name": "Potent Cantrip",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_quarterstaff_6u32",
+        "name": "Quarterstaff",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/DC/Spellcaster (Healer).webp",
+    "tokenImg": "img/bestiary/tokens/DC/Spellcaster (Healer).webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_spellcaster__mage__dc",
+    "name": "Spellcaster (Mage)",
+    "source": "DC",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "mage",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 54,
+      "formula": "12d8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 18,
+        "mod": 4
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "wis": "+6"
+    },
+    "skills": {
+      "arcana": "+8",
+      "investigation": "+8",
+      "religion": "+8"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "plus one of your choice"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_spellcaster__mage__0",
+        "name": "Spellcasting (Mage)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 4,
+        "casterLevel": 11,
+        "dc": 16,
+        "atkMod": 8,
+        "header": "The spellcaster's spellcasting ability is Intelligence (spell save DC 16, +8 to hit with spell attacks). The spellcaster has following wizard spells prepared:",
+        "footer": "",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_fire_bolt_xphb",
+                "name": "Fire Bolt",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 8,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d10",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_light_xphb",
+                "name": "Light",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, M (a firefly or phosphorescent moss)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mage_hand_xphb",
+                "name": "Mage Hand",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_minor_illusion_xphb",
+                "name": "Minor Illusion",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "S, M (a bit of fleece)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shocking_grasp_xphb",
+                "name": "Shocking Grasp",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 8,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d8",
+                    "type": "Lightning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_burning_hands_xphb",
+                "name": "Burning Hands",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "Self (15 feet cone)",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "3d6",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shield_xphb",
+                "name": "Shield",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+                "range": "self",
+                "duration": "1 round",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_sleep_xphb",
+                "name": "Sleep",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [],
+                "components": "V, S, M (a pinch of sand or rose petals)",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_flaming_sphere_xphb",
+                "name": "Flaming Sphere",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "2d6",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a ball of wax)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_invisibility_xphb",
+                "name": "Invisibility",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (an eyelash in gum arabic)",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_fireball_xphb",
+                "name": "Fireball",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "150 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "8d6",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a ball of bat guano and sulfur)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_fly_xphb",
+                "name": "Fly",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a feather)",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_polymorph_xphb",
+                "name": "Polymorph",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [],
+                "components": "V, S, M (a caterpillar cocoon)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_wall_of_fire_xphb",
+                "name": "Wall of Fire",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "5d8",
+                    "type": "Fire",
+                    "label": "Damage 1",
+                    "stat": "none"
+                  },
+                  {
+                    "formula": "5d8",
+                    "type": "Fire",
+                    "label": "Damage 2",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a piece of charcoal)",
+                "type": "slot"
+              }
+            ]
+          },
+          "5": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_cone_of_cold_xphb",
+                "name": "Cone of Cold",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "Self (60 feet cone)",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "8d8",
+                    "type": "Cold",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a small crystal or glass cone)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_hold_monster_xphb",
+                "name": "Hold Monster",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "90 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [],
+                "components": "V, S, M (a straight piece of iron)",
+                "type": "slot"
+              }
+            ]
+          },
+          "6": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_chain_lightning_xphb",
+                "name": "Chain Lightning",
+                "source": "XPHB",
+                "level": 6,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "150 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "10d8",
+                    "type": "Lightning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (three silver pins)",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_empowered_spells_412z",
+        "name": "Empowered Spells",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_potent_cantrip_qipi",
+        "name": "Potent Cantrip",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_quarterstaff_8624",
+        "name": "Quarterstaff",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/DC/Spellcaster (Mage).webp",
+    "tokenImg": "img/bestiary/tokens/DC/Spellcaster (Mage).webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_warrior_dc",
+    "name": "Warrior",
+    "source": "DC",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 21,
+        "condition": null
+      }
+    ],
+    "primaryAc": 21,
+    "acCondition": "",
+    "hp": {
+      "average": 78,
+      "formula": "12d8 + 24"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "con": "+6"
+    },
+    "skills": {
+      "athletics": "+8",
+      "perception": "+5",
+      "survival": "+5"
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "plus one of your choice"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_battle_readiness_5211",
+        "name": "Battle Readiness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The warrior has advantage on initiative rolls.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_improved_critical_2mml",
+        "name": "Improved Critical",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the d20.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_improved_defense_1wdd",
+        "name": "Improved Defense",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The warrior's AC increases by 1.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_indomitable__1_day__ipxl",
+        "name": "Indomitable (1/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The warrior can reroll a saving throw that it fails, but it must use the new result.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_martial_role_qns4",
+        "name": "Martial Role",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__2p6z",
+        "name": "Second Wind (Recharges after a Short or Long Rest)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The warrior can use a bonus action on its turn to regain hit points equal to 1d10 + its level.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_extra_attack_bvpf",
+        "name": "Extra Attack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The warrior can attack three times, instead of once, whenever it takes the attack action on its turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longsword_lnzg",
+        "name": "Longsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 4",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d10 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longbow_u5zf",
+        "name": "Longbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +6 to hit, range 150/600 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "150/600 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_protection__defender_only__xrm7",
+        "name": "Protection (Defender Only)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When a creature the warrior can see attacks a target other than the warrior that is within 5 feet of the warrior, the warrior can use their reaction to impose disadvantage on the attack roll. The warrior must be wielding a shield.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/DC/Warrior.webp",
+    "tokenImg": "img/bestiary/tokens/DC/Warrior.webp",
+    "fluff": null
+  }
+]

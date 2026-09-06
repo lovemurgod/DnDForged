@@ -1,0 +1,2182 @@
+[
+  {
+    "id": "creature_big_water_slurpent_awm",
+    "name": "Big Water Slurpent",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 29,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 0,
+      "swim": 60,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 17,
+        "mod": 3
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_invisible_in_water_9ny6",
+        "name": "Invisible in Water",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The big water slurpent is invisible while fully immersed in water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_water_bound_p8ka",
+        "name": "Water Bound",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The big water slurpent dies if it leaves the water to which it is bound or if that water is destroyed.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_constrict_823a",
+        "name": "Constrict",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, one target. {@h}13 (3d6+3) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 13) and pulled 5 feet toward the big water slurpent. Until this grapple ends, the target is restrained, the big water slurpent tries to drown it, and the big water slurpent can't constrict another target.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "3d6+3",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Big Water Slurpent.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Big Water Slurpent.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_birdsquirrel_awm",
+    "name": "Birdsquirrel",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 30,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 30,
+      "swim": 0,
+      "climb": 20,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 6,
+        "mod": -2
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_pack_tactics_2903",
+        "name": "Pack Tactics",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Birdsquirrel has advantage on an attack roll against a creature if at least one of the Birdsquirrel's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_eazt",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Birdsquirrel makes two attacks: one with its bite and one with its claws.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_db23",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6+2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6+2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claws_dni3",
+        "name": "Claws",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4+2) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4+2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Birdsquirrel.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Birdsquirrel.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_boontu_monkey_awm",
+    "name": "Boontu Monkey",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 30,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 20,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 11,
+        "mod": 0
+      },
+      "int": {
+        "score": 5,
+        "mod": -3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_pack_tactics_jpzl",
+        "name": "Pack Tactics",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Boontu monkey has advantage on an attack roll against a creature if at least one of the boontu monkey's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_76ge",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}1 (1d4 - 1) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 1,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 - 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Boontu Monkey.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Boontu Monkey.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_crystal_cave_merfolk_awm",
+    "name": "Crystal Cave Merfolk",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 31,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "merfolk",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 0,
+      "swim": 40,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 12,
+        "mod": 1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "1/8",
+    "crNumeric": 0.125,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_a8l8",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The merfolk can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_siren_song_fiyw",
+        "name": "Siren Song",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Lovely singing voices charm every humanoid or giant within 300 feet. The targets must succeed on a DC 11 Wisdom saving throw or be charmed until the song ends.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 11,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_idn1",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +2 to hit, one target. {@h}3 (1d6) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 2,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Crystal Cave Merfolk.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Crystal Cave Merfolk.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_dankwood_hag_awm",
+    "name": "Dankwood Hag",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 31,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Fey",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_dankwood_hag_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 2,
+        "casterLevel": 0,
+        "dc": 12,
+        "atkMod": 4,
+        "header": "The hag's spellcasting ability is Charisma (spell save DC 12). It can innately cast the following spells:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_dancing_lights_xphb",
+            "name": "Dancing Lights",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a bit of phosphorus)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_minor_illusion_xphb",
+            "name": "Minor Illusion",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a bit of fleece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_vicious_mockery_xphb",
+            "name": "Vicious Mockery",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 12,
+            "damageList": [
+              {
+                "formula": "1d6",
+                "type": "Psychic",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Dancing Lights",
+          "Minor Illusion",
+          "Vicious Mockery"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_amphibious_las4",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The hag can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_mimicry__green_hag__1ccx",
+        "name": "Mimicry (Green Hag)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The hag can mimic animal sounds and humanoid voices. A creature that hears the sounds can tell they are imitations with a successful DC 14 Wisdom (Insight) check.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_illusory_appearance_bnmf",
+        "name": "Illusory Appearance",
+        "actionType": "action",
+        "descriptionHtml": "<p>The hag covers herself with a magical illusion that allows her to look like another creature of her general size and shape. The illusion ends when the hag chooses, or if she dies. A DC 20 Intelligence (Investigation) check will expose the hag's disguise.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 20,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_invisible_passage_wdqx",
+        "name": "Invisible Passage",
+        "actionType": "action",
+        "descriptionHtml": "<p>The hag magically turns invisible until she attacks or casts a spell, or until her concentration ends. While invisible, she leaves no physical evidence of her passage, and can only be tracked by magic.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claws_lp2c",
+        "name": "Claws",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, one target. {@h}17 (2d8 + 4) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Dankwood Hag.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Dankwood Hag.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_dum_dum_goblin_awm",
+    "name": "Dum-Dum Goblin",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 32,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "goblinoid",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 7,
+        "condition": null
+      }
+    ],
+    "primaryAc": 7,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 8,
+        "mod": -1
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_nimble_escape_zql5",
+        "name": "Nimble Escape",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The goblin can take the Disengage or Hide action as a bonus action on each of its turns.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_catch_me_if_you_can__ewi5",
+        "name": "Catch me if you can!",
+        "actionType": "action",
+        "descriptionHtml": "<p>Dum-Dum Goblins will opt to run and hide before fighting! A DC 15 Dexterity check must be made before they can be attacked.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_scimitar_s3qx",
+        "name": "Scimitar",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, one target. {@h}3 (1d6 +2) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 +2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortbow_u8wu",
+        "name": "Shortbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +4 to hit, one target. {@h}6 (1d6 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Dum-Dum Goblin.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Dum-Dum Goblin.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_dwarf_awm",
+    "name": "Dwarf",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 32,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "dwarf",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 25,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_dwarven_resilience_0sre",
+        "name": "Dwarven Resilience",
+        "actionType": "trait",
+        "descriptionHtml": "<p>They have advantage on saving throws against poison, and they have resistance to poison damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_shortbow_jobh",
+        "name": "Shortbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +3 to hit, one target. {@h}4 (1d6 + 1) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Dwarf.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Dwarf.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_great_kroom__purple_worm_awm",
+    "name": "Great Kroom, Purple Worm",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 33,
+    "isSrd": false,
+    "size": "Gargantuan",
+    "sizeCategory": "G",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 50,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 30,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 12,
+        "mod": 1
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "15",
+    "crNumeric": 15,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_tunneler_kzdr",
+        "name": "Tunneler",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The worm can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_7kkx",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The worm makes two attacks:</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_862q",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +14 to hit, one target. {@h}22 (3d8) piercing damage. Target must make a DC 19 Dexterity save, or be swallowed by the worm!</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 14,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 19,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "3d8",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tail_stinger_m9bs",
+        "name": "Tail Stinger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +14 to hit, one creature. {@h}19 (3d6 + 9) piercing damage Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 14,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 19,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "3d6 + 9",
+              "type": "Piercing"
+            },
+            {
+              "formula": "12d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Great Kroom, Purple Worm.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Great Kroom, Purple Worm.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_hangry_otyugh_awm",
+    "name": "Hangry Otyugh",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 33,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 19,
+        "mod": 4
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_limited_telepathy_a90l",
+        "name": "Limited Telepathy",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The otyugh can magically transmit simple messages and images to any creature within 120 feet of it that can understand a language. This form of telepathy doesn't allow the receiving creature to telepathically respond.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_hh9h",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The otyugh makes three attacks:</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_oms5",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}12 (2d8 + 3) piercing damage. Target must make a DC 15 Constitution save, or take 6 (1d10) poison damage until cured.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 15,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d8 + 3",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d10",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tentacle_gfoc",
+        "name": "Tentacle",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage. Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 19,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "1d8 + 3",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "12d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_slam__qdjb",
+        "name": "Slam!",
+        "actionType": "action",
+        "descriptionHtml": "<p>Target must make a DC 14 Constitution save, or be grappled.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Hangry Otyugh.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Hangry Otyugh.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_hill_giant__blorbo_awm",
+    "name": "Hill Giant, Blorbo",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 34,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Giant",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 8,
+        "mod": -1
+      },
+      "con": {
+        "score": 19,
+        "mod": 4
+      },
+      "int": {
+        "score": 5,
+        "mod": -3
+      },
+      "wis": {
+        "score": 9,
+        "mod": -1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_w7lu",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The giant makes two greatclub attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_greatclub_032m",
+        "name": "Greatclub",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, one target. {@h}18 (3d8 + 5) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d8 + 5",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rock_p89h",
+        "name": "Rock",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +8 to hit, one target. {@h}21 (3d10 + 5) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d10 + 5",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Hill Giant, Blorbo.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Hill Giant, Blorbo.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_saleeth_the_couatl_awm",
+    "name": "Saleeth the Couatl",
+    "source": "AWM",
+    "edition": "2014",
+    "page": 34,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Celestial",
+    "subtype": "",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 19,
+        "condition": null
+      }
+    ],
+    "primaryAc": 19,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 90,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 20,
+        "mod": 5
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 18,
+        "mod": 4
+      },
+      "wis": {
+        "score": 20,
+        "mod": 5
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_saleeth_the_couatl_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 0,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "The couatl's spellcasting ability is Charisma (spell save DC 14). It can innately cast the following spells, requiring only verbal components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_evil_and_good_xphb",
+            "name": "Detect Evil and Good",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_thoughts_xphb",
+            "name": "Detect Thoughts",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 14,
+            "damageList": [],
+            "components": "V, S, M (1 Copper Piece)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_bless_xphb",
+              "name": "Bless",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a Holy Symbol worth 5+ GP)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_create_food_and_water_xphb",
+              "name": "Create Food and Water",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_cure_wounds_xphb",
+              "name": "Cure Wounds",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Healing",
+                  "stat": "spell"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_lesser_restoration_xphb",
+              "name": "Lesser Restoration",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Abjuration",
+              "castingTime": "1 bonus action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_protection_from_poison_xphb",
+              "name": "Protection from Poison",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_sanctuary_xphb",
+              "name": "Sanctuary",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 bonus action",
+              "range": "30 feet",
+              "duration": "1 minute",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S, M (a shard of glass from a mirror)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_shield_xphb",
+              "name": "Shield",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+              "range": "self",
+              "duration": "1 round",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_dream_xphb",
+              "name": "Dream",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Illusion",
+              "castingTime": "1 minute",
+              "range": "self",
+              "duration": "8 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "3d6",
+                  "type": "Psychic",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a handful of sand)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_greater_restoration_xphb",
+              "name": "Greater Restoration",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_scrying_xphb",
+              "name": "Scrying",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "self",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Evil and Good",
+          "Detect Magic",
+          "Detect Thoughts"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_magic_weapons_aiec",
+        "name": "Magic Weapons",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The couatl's weapon attacks are magical.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shielded_mind_kytq",
+        "name": "Shielded Mind",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The couatl is immune to scrying and to any effect that would sense its emotions, read its thoughts, or detect its location.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_w5uw",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one creature. {@h}8 (1d6 + 5) piercing damage. Target must make a DC 13 Constitution save, or fall unconscious. Another creature can use an action to shake the target awake.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one creature",
+          "save": {
+            "dc": 13,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 5",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_constrict_30b4",
+        "name": "Constrict",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one Medium or smaller creature. {@h}10 (2d6 + 3) bludgeoning damage. Target is grappled (escape DC 15). The couatl can constrain only one target at a time.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 10,
+          "range": null,
+          "targets": "one Medium or smaller creature",
+          "save": {
+            "dc": 15,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d6 + 3",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_change_shape_uclg",
+        "name": "Change Shape",
+        "actionType": "action",
+        "descriptionHtml": "<p>The couatl magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the couatl's choice).</p><p>In a new form, the couatl retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and other actions are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks. If the new form has a bite attack, the couatl can use its bite in that form.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AWM/Saleeth the Couatl.webp",
+    "tokenImg": "img/bestiary/tokens/AWM/Saleeth the Couatl.webp",
+    "fluff": null
+  }
+]

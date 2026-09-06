@@ -1,0 +1,617 @@
+[
+  {
+    "id": "creature_alax_jadescales_lrdt",
+    "name": "Alax Jadescales",
+    "source": "LRDT",
+    "edition": "2014",
+    "page": 11,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "dragonborn",
+    "alignment": "N G",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 58,
+      "formula": "9d8 + 18"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "animal handling": "+5",
+      "survival": "+5"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Draconic"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_alax_jadescales_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 13,
+        "atkMod": 5,
+        "header": "Alax casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 13):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_druidcraft_xphb",
+            "name": "Druidcraft",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_resistance_xphb",
+            "name": "Resistance",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_cure_wounds_xphb",
+              "name": "Cure Wounds",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Healing",
+                  "stat": "spell"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_faerie_fire_xphb",
+              "name": "Faerie Fire",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [],
+              "components": "V",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_purify_food_and_drink_xphb",
+              "name": "Purify Food and Drink",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "10 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Druidcraft",
+          "Resistance"
+        ]
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_bcso",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Alax makes two Fire Strike attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fire_strike_gshy",
+        "name": "Fire Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms,rs +5 to hit, reach 5 ft. or range 60 ft., one target. {@h}10 (2d6 + 3) fire damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 3",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__z6ph",
+        "name": "Breath Weapon (Recharges after a Short or Long Rest)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Alax exhales a 15-foot cone of fire. Each creature in that area must make a DC 12 Dexterity saving throw, taking 14 (4d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "4d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LRDT/Alax Jadescales.webp",
+    "tokenImg": "img/bestiary/tokens/LRDT/Alax Jadescales.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_ervan_soulfallen_lrdt",
+    "name": "Ervan Soulfallen",
+    "source": "LRDT",
+    "edition": "2014",
+    "page": 11,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      },
+      {
+        "value": 15,
+        "condition": "with {@spell mage armor}"
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 84,
+      "formula": "13d8 + 26"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 8,
+        "mod": -1
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {
+      "arcana": "3",
+      "deception": "+6"
+    },
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Draconic"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_ervan_soulfallen_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "Ervan casts one of the following spells, using Charisma as the spellcasting ability (spell save DC 14):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_light_xphb",
+            "name": "Light",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, M (a firefly or phosphorescent moss)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2": [
+            {
+              "spellId": "sp_dimension_door_xphb",
+              "name": "Dimension Door",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "500 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_disguise_self_xphb",
+              "name": "Disguise Self",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_levitate_xphb",
+              "name": "Levitate",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S, M (a metal spring)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_mage_armor_xphb",
+              "name": "Mage Armor",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "8 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a piece of cured leather)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Light",
+          "Mage Hand"
+        ]
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_gpav",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ervan uses his staff to make three Arcane Blast attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_arcane_blast_tql7",
+        "name": "Arcane Blast",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms,rs +6 to hit, reach 5 ft. or range 120 ft., one target. {@h}13 (3d6 + 3) force damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": "120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6 + 3",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_acid_rain__recharges_after_a_short_or_long_rest__mxpx",
+        "name": "Acid Rain (Recharges after a Short or Long Rest)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Acid falls in a 10-foot-radius, 20-foot-high cylinder centered on a point Ervan can see within 120 feet of himself. Each creature in that area must make a DC 14 Dexterity saving throw, taking 22 (4d10) acid damage on a failed save, or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "4d10",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LRDT/Ervan Soulfallen.webp",
+    "tokenImg": "img/bestiary/tokens/LRDT/Ervan Soulfallen.webp",
+    "fluff": null
+  }
+]

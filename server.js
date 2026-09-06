@@ -158,16 +158,49 @@ app.use('/vtt-uploads', (req, res, next) => {
 
 app.use('/assets', express.static(ASSETS_DIR));
 
-// Middleware: If a request for /img/* results in a 404 locally,
-// redirect/proxy it to the official 5etools CDN to load it instantly!
+// Local Image Route for /img/* (Tokens, Bestiary, Items, Adventure Maps)
 app.get('/img/*', (req, res, next) => {
-  const localPath = path.join(__dirname, '5etools-src', req.path);
-  if (fs.existsSync(localPath)) {
-    return next(); // File exists locally, let static middleware handle it
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(req.path);
+  } catch (e) {
+    decodedPath = req.path;
   }
-  // Redirect to official 5etools image CDN mirror
-  const remoteUrl = `https://5e.tools${req.path}`;
-  res.redirect(remoteUrl);
+
+  // Prevent path traversal
+  const safePath = path.normalize(decodedPath).replace(/^(\.\.[\/\\])+/, '');
+  const localTarget = path.join(__dirname, '5etools-src', safePath);
+
+  // 1. Check exact local path on disk
+  if (fs.existsSync(localTarget) && fs.statSync(localTarget).isFile()) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    return res.sendFile(localTarget);
+  }
+
+  // 2. Also check raw encoded path locally
+  const rawTarget = path.join(__dirname, '5etools-src', req.path);
+  if (fs.existsSync(rawTarget) && fs.statSync(rawTarget).isFile()) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    return res.sendFile(rawTarget);
+  }
+
+  // 3. If file has spaces or hyphens, check local variant on disk
+  if (safePath.includes(' ')) {
+    const hyphenVariant = path.join(__dirname, '5etools-src', safePath.replace(/ /g, '-'));
+    if (fs.existsSync(hyphenVariant) && fs.statSync(hyphenVariant).isFile()) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      return res.sendFile(hyphenVariant);
+    }
+  } else if (safePath.includes('-')) {
+    const spaceVariant = path.join(__dirname, '5etools-src', safePath.replace(/-/g, ' '));
+    if (fs.existsSync(spaceVariant) && fs.statSync(spaceVariant).isFile()) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      return res.sendFile(spaceVariant);
+    }
+  }
+
+  // Local asset not found - return clean 404 (handled offline by client token generator)
+  res.status(404).send('Image not found');
 });
 
 // Proxy for Discord CDN to bypass expiring signatures
@@ -203,35 +236,300 @@ app.get('/api/proxy-discord', (req, res) => {
   });
 });
 
-// Pre-compressed GZIP cache for spells-normalized.json
-let gzippedSpellsBuf = null;
-let spellsEtag = null;
+// Pre-compressed GZIP cache for spells-catalog.json
+let gzippedSpellsCatalogBuf = null;
+let spellsCatalogEtag = null;
 
-function loadGzippedSpells() {
+function loadGzippedSpellsCatalog() {
   try {
-    const normPath = path.join(__dirname, '5etools-src', 'data', 'spells-normalized.json');
-    if (fs.existsSync(normPath)) {
-      const raw = fs.readFileSync(normPath);
-      gzippedSpellsBuf = zlib.gzipSync(raw, { level: 9 });
-      spellsEtag = `W/"${gzippedSpellsBuf.length}-${fs.statSync(normPath).mtimeMs}"`;
+    const catPath = path.join(__dirname, '5etools-src', 'data', 'spells-catalog.json');
+    if (fs.existsSync(catPath)) {
+      const raw = fs.readFileSync(catPath);
+      gzippedSpellsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
+      spellsCatalogEtag = `W/"${gzippedSpellsCatalogBuf.length}-${fs.statSync(catPath).mtimeMs}"`;
     }
   } catch (e) {
-    console.error('Error loading gzipped spells cache:', e);
+    console.error('Error loading gzipped spells catalog cache:', e);
   }
 }
-loadGzippedSpells();
+loadGzippedSpellsCatalog();
 
-app.get(['/data/spells-normalized.json', '/5etools-src/data/spells-normalized.json'], (req, res) => {
-  loadGzippedSpells();
-  if (!gzippedSpellsBuf) return res.status(404).send('Spells database not found');
+app.get(['/api/spells/catalog', '/data/spells-catalog.json', '/5etools-src/data/spells-catalog.json'], (req, res) => {
+  loadGzippedSpellsCatalog();
+  if (!gzippedSpellsCatalogBuf) return res.status(404).send('Spells catalog not found');
 
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Content-Encoding', 'gzip');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
-  res.setHeader('ETag', spellsEtag);
-  res.send(gzippedSpellsBuf);
+  res.setHeader('ETag', spellsCatalogEtag);
+  res.send(gzippedSpellsCatalogBuf);
+});
+
+// In-memory cache for normalized spell partitions
+const spellPartitionCache = new Map();
+
+function getSpellPartition(source) {
+  const srcKey = (source || 'phb').toLowerCase();
+  if (spellPartitionCache.has(srcKey)) {
+    return spellPartitionCache.get(srcKey);
+  }
+  const partPath = path.join(__dirname, '5etools-src', 'data', 'spells-normalized', `spells-${srcKey}.json`);
+  if (fs.existsSync(partPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
+      spellPartitionCache.set(srcKey, data);
+      return data;
+    } catch (err) {
+      console.error(`Failed to load spell partition for ${srcKey}:`, err);
+    }
+  }
+  return null;
+}
+
+// Single spell API endpoint
+app.get('/api/spell/:source/:id', (req, res) => {
+  const { source, id } = req.params;
+  const partition = getSpellPartition(source);
+  if (!partition) {
+    return res.status(404).json({ error: `Spell source '${source}' not found` });
+  }
+
+  const cleanId = id.toLowerCase();
+  const spell = partition.find(sp =>
+    sp.id.toLowerCase() === cleanId ||
+    sp.name.toLowerCase() === cleanId ||
+    sp.id.toLowerCase() === `sp_${cleanId}_${source.toLowerCase()}`
+  );
+
+  if (!spell) {
+    return res.status(404).json({ error: `Spell '${id}' not found in source '${source}'` });
+  }
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json(spell);
+});
+
+// Full spell source partition endpoint
+app.get('/api/spell/partition/:source', (req, res) => {
+  const { source } = req.params;
+  const partition = getSpellPartition(source);
+  if (!partition) {
+    return res.status(404).json({ error: `Spell partition '${source}' not found` });
+  }
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json(partition);
+});
+
+// Pre-compressed GZIP cache for items-catalog.json
+let gzippedItemsCatalogBuf = null;
+let itemsCatalogEtag = null;
+
+function loadGzippedItemsCatalog() {
+  try {
+    const catPath = path.join(__dirname, '5etools-src', 'data', 'items-catalog.json');
+    if (fs.existsSync(catPath)) {
+      const raw = fs.readFileSync(catPath);
+      gzippedItemsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
+      itemsCatalogEtag = `W/"${gzippedItemsCatalogBuf.length}-${fs.statSync(catPath).mtimeMs}"`;
+    }
+  } catch (e) {
+    console.error('Error loading gzipped items catalog cache:', e);
+  }
+}
+loadGzippedItemsCatalog();
+
+app.get(['/api/items/catalog', '/data/items-catalog.json', '/5etools-src/data/items-catalog.json'], (req, res) => {
+  loadGzippedItemsCatalog();
+  if (!gzippedItemsCatalogBuf) return res.status(404).send('Items catalog not found');
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Content-Encoding', 'gzip');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('ETag', itemsCatalogEtag);
+  res.send(gzippedItemsCatalogBuf);
+});
+
+// In-memory cache for normalized item partitions
+const itemPartitionCache = new Map();
+
+function getItemPartition(source) {
+  const srcKey = (source || 'phb').toLowerCase();
+  if (itemPartitionCache.has(srcKey)) {
+    return itemPartitionCache.get(srcKey);
+  }
+  const partPath = path.join(__dirname, '5etools-src', 'data', 'items-normalized', `items-${srcKey}.json`);
+  if (fs.existsSync(partPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
+      itemPartitionCache.set(srcKey, data);
+      return data;
+    } catch (err) {
+      console.error(`Failed to load item partition for ${srcKey}:`, err);
+    }
+  }
+  return null;
+}
+
+// Single item API endpoint
+app.get('/api/item/:source/:id', (req, res) => {
+  const { source, id } = req.params;
+  const partition = getItemPartition(source);
+  if (!partition) {
+    return res.status(404).json({ error: `Item source '${source}' not found` });
+  }
+
+  const cleanId = id.toLowerCase();
+  const item = partition.find(it =>
+    it.id.toLowerCase() === cleanId ||
+    it.name.toLowerCase() === cleanId ||
+    it.id.toLowerCase() === `it_${cleanId}_${source.toLowerCase()}`
+  );
+
+  if (!item) {
+    return res.status(404).json({ error: `Item '${id}' not found in source '${source}'` });
+  }
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json(item);
+});
+
+// Generic Compendium Partition Endpoint for Races, Feats, Backgrounds, Classes
+const compendiumPartitionCache = new Map();
+
+function getCompendiumPartition(type, source) {
+  const cleanType = (type || '').toLowerCase();
+  const srcKey = (source || 'phb').toLowerCase();
+  const cacheKey = `${cleanType}:${srcKey}`;
+  if (compendiumPartitionCache.has(cacheKey)) {
+    return compendiumPartitionCache.get(cacheKey);
+  }
+  const partPath = path.join(__dirname, '5etools-src', 'data', `${cleanType}-normalized`, `${cleanType}-${srcKey}.json`);
+  if (fs.existsSync(partPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
+      compendiumPartitionCache.set(cacheKey, data);
+      return data;
+    } catch (err) {
+      console.error(`Failed to load compendium partition ${cacheKey}:`, err);
+    }
+  }
+  return null;
+}
+
+app.get(['/api/compendium/:type/catalog', '/data/:type-catalog.json', '/5etools-src/data/:type-catalog.json'], (req, res) => {
+  const type = req.params.type.replace(/-catalog\.json$/i, '');
+  const catPath = path.join(__dirname, '5etools-src', 'data', `${type}-catalog.json`);
+  if (fs.existsSync(catPath)) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    return res.sendFile(catPath);
+  }
+  res.status(404).json({ error: `Compendium catalog '${type}' not found` });
+});
+
+app.get('/api/compendium/:type/:source/:id', (req, res) => {
+  const { type, source, id } = req.params;
+  const partition = getCompendiumPartition(type, source);
+  if (!partition) {
+    return res.status(404).json({ error: `Compendium partition '${type}-${source}' not found` });
+  }
+
+  const cleanId = id.toLowerCase();
+  const entry = partition.find(item =>
+    item.id.toLowerCase() === cleanId ||
+    item.name.toLowerCase() === cleanId
+  );
+
+  if (!entry) {
+    return res.status(404).json({ error: `Entry '${id}' not found in '${type}-${source}'` });
+  }
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json(entry);
+});
+
+// Pre-compressed GZIP cache for bestiary-catalog.json
+let gzippedBestiaryCatalogBuf = null;
+let bestiaryCatalogEtag = null;
+
+function loadGzippedBestiaryCatalog() {
+  try {
+    const catPath = path.join(__dirname, '5etools-src', 'data', 'bestiary-catalog.json');
+    if (fs.existsSync(catPath)) {
+      const raw = fs.readFileSync(catPath);
+      gzippedBestiaryCatalogBuf = zlib.gzipSync(raw, { level: 9 });
+      bestiaryCatalogEtag = `W/"${gzippedBestiaryCatalogBuf.length}-${fs.statSync(catPath).mtimeMs}"`;
+    }
+  } catch (e) {
+    console.error('Error loading gzipped bestiary catalog cache:', e);
+  }
+}
+loadGzippedBestiaryCatalog();
+
+app.get(['/api/bestiary/catalog', '/data/bestiary-catalog.json', '/5etools-src/data/bestiary-catalog.json'], (req, res) => {
+  loadGzippedBestiaryCatalog();
+  if (!gzippedBestiaryCatalogBuf) return res.status(404).send('Bestiary catalog not found');
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Content-Encoding', 'gzip');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('ETag', bestiaryCatalogEtag);
+  res.send(gzippedBestiaryCatalogBuf);
+});
+
+// In-memory cache for normalized creature partitions
+const creaturePartitionCache = new Map();
+
+function getCreaturePartition(source) {
+  const srcKey = (source || 'mm').toLowerCase();
+  if (creaturePartitionCache.has(srcKey)) {
+    return creaturePartitionCache.get(srcKey);
+  }
+  const partPath = path.join(__dirname, '5etools-src', 'data', 'bestiary-normalized', `bestiary-${srcKey}.json`);
+  if (fs.existsSync(partPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
+      creaturePartitionCache.set(srcKey, data);
+      return data;
+    } catch (err) {
+      console.error(`Failed to load bestiary partition for ${srcKey}:`, err);
+    }
+  }
+  return null;
+}
+
+// Single creature API endpoint
+app.get('/api/creature/:source/:id', (req, res) => {
+  const { source, id } = req.params;
+  const partition = getCreaturePartition(source);
+  if (!partition) {
+    return res.status(404).json({ error: `Bestiary source '${source}' not found` });
+  }
+
+  const cleanId = id.toLowerCase();
+  const creature = partition.find(m =>
+    m.id.toLowerCase() === cleanId ||
+    m.name.toLowerCase() === cleanId ||
+    m.id.toLowerCase() === `creature_${cleanId}_${source.toLowerCase()}`
+  );
+
+  if (!creature) {
+    return res.status(404).json({ error: `Creature '${id}' not found in source '${source}'` });
+  }
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json(creature);
 });
 
 // Disable JS/CSS caching during development so browsers always load the latest files

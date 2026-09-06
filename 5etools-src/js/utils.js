@@ -6660,7 +6660,7 @@ globalThis.DataUtil = class {
 				return this._LOADED_CACHE;
 			}
 			try {
-				const res = await fetch('/data/spells-normalized.json');
+				const res = await fetch('/data/spells-catalog.json');
 				this._LOADED_CACHE = await res.json();
 				return this._LOADED_CACHE;
 			} catch (e) {

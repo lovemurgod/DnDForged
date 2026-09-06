@@ -1,0 +1,1067 @@
+[
+  {
+    "id": "creature_mercenary_envoy_aitfr-fcd",
+    "name": "Mercenary Envoy",
+    "source": "AitFR-FCD",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 26,
+      "formula": "4d8 + 8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "str": "+4",
+      "con": "+4"
+    },
+    "skills": {
+      "athletics": "+4",
+      "perception": "+3"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_inspired_courage_is8u",
+        "name": "Inspired Courage",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The mercenary has advantage on savings throws against being charmed, frightened, grappled, or restrained while within 5 feet of at least one ally.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_martial_advantage_yanc",
+        "name": "Martial Advantage",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Once per turn, the mercenary can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the mercenary that isn't incapacitated.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_xme2",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The mercenary makes two longsword attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longsword_7c3d",
+        "name": "Longsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_heavy_crossbow_eh8v",
+        "name": "Heavy Crossbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +4 to hit, range</p><p>100/400 ft., one target. {@h}7 (1d10 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "100/400 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AitFR-FCD/Mercenary Envoy.webp",
+    "tokenImg": "img/bestiary/tokens/AitFR-FCD/Mercenary Envoy.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_tyreus__illusionist_aitfr-fcd",
+    "name": "Tyreus, Illusionist",
+    "source": "AitFR-FCD",
+    "edition": "2014",
+    "page": 11,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 156,
+      "formula": "24d8 + 48"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "int": "+10",
+      "wis": "+7"
+    },
+    "skills": {
+      "arcana": "+12",
+      "deception": "+8",
+      "history": "+10",
+      "perception": "+7"
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Deep Speech",
+      "Draconic",
+      "Primordial",
+      "Sylvan"
+    ],
+    "cr": "13",
+    "crNumeric": 13,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_tyreus__illusionist_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 16,
+        "dc": 18,
+        "atkMod": 10,
+        "header": "Tyreus is a 16th-level spellcaster. His spellcasting ability is Intelligence (spell save DC 18, +10 to hit with spell attacks). He has the following wizard spells prepared.",
+        "footer": "*(Illusion spell of 1st level or higher)",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_fire_bolt_xphb",
+                "name": "Fire Bolt",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 10,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d10",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_light_xphb",
+                "name": "Light",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, M (a firefly or phosphorescent moss)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mage_hand_xphb",
+                "name": "Mage Hand",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_minor_illusion_xphb",
+                "name": "Minor Illusion",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "S, M (a bit of fleece)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shocking_grasp_xphb",
+                "name": "Shocking Grasp",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 10,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d8",
+                    "type": "Lightning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_mage_armor_xphb",
+                "name": "Mage Armor",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a piece of cured leather)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_magic_missile_xphb",
+                "name": "Magic Missile",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d4 + 1",
+                    "type": "Force",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shield_xphb",
+                "name": "Shield",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+                "range": "self",
+                "duration": "1 round",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_thunderwave_xphb",
+                "name": "Thunderwave",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "Self (15 feet cube)",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Thunder",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_invisibility_xphb",
+                "name": "Invisibility",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (an eyelash in gum arabic)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mirror_image_xphb",
+                "name": "Mirror Image",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "self",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_phantasmal_force_xphb",
+                "name": "Phantasmal Force",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "intelligence",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Psychic",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a bit of fleece)",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_counterspell_xphb",
+                "name": "Counterspell",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Abjuration",
+                "castingTime": "1 reaction (which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components)",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_fly_xphb",
+                "name": "Fly",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a feather)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_lightning_bolt_xphb",
+                "name": "Lightning Bolt",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "Self (100 feet line)",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "8d6",
+                    "type": "Lightning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a bit of fur and a crystal rod)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_major_image_xphb",
+                "name": "Major Image",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a bit of fleece)",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_banishment_xphb",
+                "name": "Banishment",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "charisma",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S, M (a pentacle)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_hallucinatory_terrain_xphb",
+                "name": "Hallucinatory Terrain",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Illusion",
+                "castingTime": "10 minutes",
+                "range": "300 feet",
+                "duration": "24 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a mushroom)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_phantasmal_killer_xphb",
+                "name": "Phantasmal Killer",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "4d10",
+                    "type": "Psychic",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_stoneskin_xphb",
+                "name": "Stoneskin",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+                "type": "slot"
+              }
+            ]
+          },
+          "5": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_conjure_elemental_xphb",
+                "name": "Conjure Elemental",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "8d8",
+                    "type": "Lightning",
+                    "label": "Damage 1",
+                    "stat": "none"
+                  },
+                  {
+                    "formula": "4d8",
+                    "type": "Thunder",
+                    "label": "Damage 2",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mislead_xphb",
+                "name": "Mislead",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "self",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_telekinesis_xphb",
+                "name": "Telekinesis",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "strength",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "6": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_disintegrate_xphb",
+                "name": "Disintegrate",
+                "source": "XPHB",
+                "level": 6,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "10d6 + 40",
+                    "type": "Force",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a lodestone and dust)",
+                "type": "slot"
+              }
+            ]
+          },
+          "7": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_plane_shift_xphb",
+                "name": "Plane Shift",
+                "source": "XPHB",
+                "level": 7,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a forked, metal rod worth 250+ GP and attuned to a plane of existence)",
+                "type": "slot"
+              }
+            ]
+          },
+          "8": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_maze_xphb",
+                "name": "Maze",
+                "source": "XPHB",
+                "level": 8,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__3_day__rmzv",
+        "name": "Legendary Resistance (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Tyreus fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_illusory_reality_6b8v",
+        "name": "Illusory Reality",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When Tyreus casts an illusion spell of 1st level or higher, he can choose one inanimate, nonmagical object that is part of the illusion and make that object real. He can do this on his turn as a bonus action while the spell is ongoing.</p><p>The object remains real for 1 minute. The object can't deal damage or otherwise directly harm anyone.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_displacement__recharges_after_tyreus_casts_an_illusion_spell_of_1st_level_or_higher__oleh",
+        "name": "Displacement (Recharges after Tyreus Casts an Illusion Spell of 1st Level or Higher)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As a bonus action, Tyreus projects an illusion that makes him appear to be standing a few inches from his actual location, causing any creature to have disadvantage on attack rolls against Tyreus. The effect ends if Tyreus takes damage, he is incapacitated, or his speed becomes 0.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_dagger_cqg1",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +8 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_modify_illusion_2s7i",
+        "name": "Modify Illusion",
+        "actionType": "action",
+        "descriptionHtml": "<p>When Tyreus casts an illusion spell that has a duration of 1 minute or longer, he can use his action to change the nature of that illusion (using the spell's normal parameters for the illusion), provided that he can see the illusion.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_scrutinize_qhwm",
+          "name": "Scrutinize",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Tyreus makes an Intelligence (Investigation) or Wisdom (Perception) check.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_cast_cantrip_xejl",
+          "name": "Cast Cantrip",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Tyreus casts a cantrip from his spell list.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_cast_spell__costs_1_3_actions__02op",
+          "name": "Cast Spell (Costs 1-3 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Tyreus uses a spell slot to cast a 1st-, 2nd-, or 3rd-level spell that he has prepared. Doing so costs 1 legendary action per level of the spell.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AitFR-FCD/Tyreus, Illusionist.webp",
+    "tokenImg": "img/bestiary/tokens/AitFR-FCD/Tyreus, Illusionist.webp",
+    "fluff": null
+  }
+]

@@ -3540,10 +3540,10 @@
 												"The character needs endorsements from at least three members of the kindness."
 											]
 										},
-										"Characters who aren't wereravens but who meet the other criteria for membership must find a patron in the Scarlet Sash or some other wereraven willing to turn them into lycanthropes. Any member of the Scarlet Sash who bestows the \"gift\" of wereraven lycanthropy on a character becomes responsible for that character's conduct in the eyes of the other members of the kindness; therefore, the decision to bestow the gift is not made lightly.",
+										"Characters who aren't wereravens but who meet the other criteria for membership must find a patron in the Scarlet Sash or some other wereraven willing to turn them into lycanthropes. Any member of the Scarlet Sash who bestows the \"gift\" of wereraven {@variantrule Player Characters as Lycanthropes|MM|lycanthropy} on a character becomes responsible for that character's conduct in the eyes of the other members of the kindness; therefore, the decision to bestow the gift is not made lightly.",
 										"Getting the endorsement of Scarlet Sash members isn't as simple as succeeding on an ability check. Earning the trust and friendship of the wereravens should require good roleplaying, and it could take days, weeks, or months for members of the Scarlet Sash to trust any characters enough to welcome them into their tight-knit circle.",
 										"Members of the Scarlet Sash have no obligations other than to support the group's goal of keeping evil items out of evil hands. Madrina asks only that members visit Chalet Brantifax on occasion and keep her apprised of their efforts in this regard.",
-										"A character who joins the Scarlet Sash can leave the kindness at any time without fear of reprisal. If subjected to a {@spell greater restoration} spell, a {@spell remove curse} spell, or any other magic that ends a curse, that character is no longer afflicted with wereraven lycanthropy but can choose to remain a member of the Scarlet Sash."
+										"A character who joins the Scarlet Sash can leave the kindness at any time without fear of reprisal. If subjected to a {@spell greater restoration} spell, a {@spell remove curse} spell, or any other magic that ends a curse, that character is no longer afflicted with wereraven {@variantrule Player Characters as Lycanthropes|MM|lycanthropy} but can choose to remain a member of the Scarlet Sash."
 									]
 								}
 							]
@@ -19850,7 +19850,7 @@
 					"entries": [
 						"After the party deals with Ashgarlyth and finds the clues in the dragon's lair, the characters can travel to the Cloud Peaks in search of {@creature Zikran|CM}.",
 						"Flesh out the journey with encounters appropriate for your campaign, and give the characters a chance to prepare before they start climbing mountains. They will be encountering extreme weather conditions and might have difficulty with the harshness of the climb.",
-						"Rules for extreme cold, strong wind, and high altitude can be found in {@book Chapter 5|DMG|5|Wilderness Survival} of the {@book Dungeon Master's Guide|DMG}.",
+						"Rules for {@hazard extreme cold}, {@hazard strong wind}, and {@hazard high altitude} can be found in {@book Chapter 5|DMG|5|Wilderness Survival} of the {@book Dungeon Master's Guide|DMG}.",
 						{
 							"type": "entries",
 							"name": "The Climb",
@@ -19897,7 +19897,7 @@
 					"page": 143,
 					"id": "37f",
 					"entries": [
-						"The ruins of a cloud giant keep sit in a frozen, naturally formed cleft in the mountain near its peak. Sheltered by the high walls of the cleft, the ruins are not subject to strong wind. Rules for extreme cold apply, however.",
+						"The ruins of a cloud giant keep sit in a frozen, naturally formed cleft in the mountain near its peak. Sheltered by the high walls of the cleft, the ruins are not subject to strong wind. Rules for {@hazard extreme cold} apply, however.",
 						"What was once a truly impressive structure, six or more floors in height, is now frozen rubble. Only the first floor of the castle, part of the second floor, and the basement are traversable. The surrounding rubble is scattered in a way that suggests a tornado might have been responsible.",
 						{
 							"type": "entries",
@@ -22381,7 +22381,7 @@
 									"id": "3e6",
 									"entries": [
 										"If the characters don't locate any clues or identify the wounds, an Avowed scholar discovers the scrap of white cloth.",
-										"A {@spell commune} spell or similar magic can be used to establish the location of the killers, leading characters into the heart of the Cloakwood. Alternatively, any character who studies the scrap of white cloth and succeeds on a {@dc 20} Intelligence ({@skill History}) check) knows that the Order of the Immortal Lotus is rumored to have a sanctuary deep in that forest."
+										"A {@spell commune} spell or similar magic can be used to establish the location of the killers, leading characters into the heart of the Cloakwood. Alternatively, any character who studies the scrap of white cloth and succeeds on a {@dc 20} Intelligence ({@skill History}) check knows that the Order of the Immortal Lotus is rumored to have a sanctuary deep in that forest."
 									]
 								}
 							]
@@ -24845,7 +24845,20 @@
 									"items": [
 										"{@item Staff of Fate|CM}",
 										"{@item Watchful Helm|CM}"
-									]
+									],
+									"columns": 3
+								},
+								{
+									"type": "statblock",
+									"name": "Staff of Fate",
+									"tag": "item",
+									"source": "CM"
+								},
+								{
+									"type": "statblock",
+									"name": "Watchful Helm",
+									"tag": "item",
+									"source": "CM"
 								}
 							]
 						}
@@ -27610,7 +27623,7 @@
 											"rows": [
 												[
 													"1",
-													"Two fire opals (1,000 gp each)"
+													"Two {@item Fire Opal||fire opals} (1,000 gp each)"
 												],
 												[
 													"2",

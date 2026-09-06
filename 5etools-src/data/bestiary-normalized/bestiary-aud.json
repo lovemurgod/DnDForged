@@ -1,0 +1,2538 @@
+[
+  {
+    "id": "creature_abveku_aud",
+    "name": "Abveku",
+    "source": "AUD",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Fiend",
+    "subtype": "demon",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 209,
+      "formula": "22d8 + 110"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 22,
+        "mod": 6
+      },
+      "con": {
+        "score": 20,
+        "mod": 5
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "str": "+8",
+      "dex": "+11",
+      "int": "+8",
+      "wis": "+9"
+    },
+    "skills": {
+      "acrobatics": "+11",
+      "perception": "+9",
+      "stealth": "+16"
+    },
+    "senses": {
+      "passivePerception": 19,
+      "sensesString": ""
+    },
+    "languages": [
+      "Abyssal; telepathy 120 ft."
+    ],
+    "cr": "14",
+    "crNumeric": 14,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_demonic_restoration_ucbi",
+        "name": "Demonic Restoration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the abveku dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_x9kt",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The abveku has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_tx7z",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The abveku makes four Scything Claw attacks and uses Mesmerizing Dance if available.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_scything_claw_rv3r",
+        "name": "Scything Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +11, reach 10 ft. {@h}19 (3d8 + 6) Slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d8 + 6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_mesmerizing_dance__recharge_5__7bc3",
+        "name": "Mesmerizing Dance (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>wis DC 18, each creature within a 20-foot Emanation [Area of Effect] originating from the abveku. {@actSaveFail} The target has the Paralyzed condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "Save"
+          },
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_shadow_stealth_fr51",
+        "name": "Shadow Stealth",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>While in Dim Light or Darkness, the abveku takes the Hide action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_parry_cwrb",
+        "name": "Parry",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} The abveku is hit by a melee attack roll. {@actResponse} The abveku adds 5 to its AC against that attack, possibly causing it to miss.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AUD/Abveku.webp",
+    "tokenImg": "img/bestiary/tokens/AUD/Abveku.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_arisen_sarrukh_aud",
+    "name": "Arisen Sarrukh",
+    "source": "AUD",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 273,
+      "formula": "26d8 + 156"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 23,
+        "mod": 6
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 22,
+        "mod": 6
+      },
+      "int": {
+        "score": 18,
+        "mod": 4
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 6,
+    "saves": {},
+    "skills": {
+      "perception": "+9",
+      "stealth": "+12"
+    },
+    "senses": {
+      "passivePerception": 19,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Draconic; telepathy 120 ft."
+    ],
+    "cr": "18",
+    "crNumeric": 18,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__3_day__5leo",
+        "name": "Legendary Resistance (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the sarrukh fails a saving throw, it can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_nwsu",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sarrukh has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_7h1j",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sarrukh makes three attacks, using Trident or Necrotic Spit in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_trident_876x",
+        "name": "Trident",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +12, reach 10 ft. {@h}33 (6d8 + 6) Piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 12,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "6d8 + 6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_necrotic_spit_7ih5",
+        "name": "Necrotic Spit",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +12, range 90 ft. {@h}11 (2d10) Poison damage plus 22 (4d10) Necrotic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 12,
+          "reach": null,
+          "range": "90 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10",
+              "type": "Poison"
+            },
+            {
+              "formula": "4d10",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_venomous_teleport__recharge_5__y9ll",
+        "name": "Venomous Teleport (Recharge 5)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The sarrukh teleports up to 120 feet to an occupied space it can see, and each creature within 10 feet of the space the sarrukh leaves or arrives in (sarrukh's choice) is subjected to the following effect. con DC 20. {@actSaveFail} 22 (4d10) Poison damage. {@actSaveSuccess} Half damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 20,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "4d10",
+              "type": "Poison"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_shape_control_r7by",
+        "name": "Shape Control",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} A creature the sarrukh can see shape-shifts. {@actResponse} The sarrukh chooses the resulting form from among the options available to the shape-shifting creature or prevents the creature from shape-shifting.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AUD/Arisen Sarrukh.webp",
+    "tokenImg": "img/bestiary/tokens/AUD/Arisen Sarrukh.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_rendelith_aud",
+    "name": "Rendelith",
+    "source": "AUD",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Fiend",
+    "subtype": "demon",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 294,
+      "formula": "31d10 + 124"
+    },
+    "speed": {
+      "walk": 50,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 25,
+        "mod": 7
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 19,
+        "mod": 4
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 6,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 19,
+      "sensesString": ""
+    },
+    "languages": [
+      "Abyssal; telepathy 120 ft."
+    ],
+    "cr": "18",
+    "crNumeric": 18,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_rendelith_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 19,
+        "atkMod": 11,
+        "header": "The rendelith casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save DC 19):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_move_earth_xphb",
+            "name": "Move Earth",
+            "source": "XPHB",
+            "level": 6,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Concentration, up to 2 hours",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a miniature shovel)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_passwall_xphb",
+            "name": "Passwall",
+            "source": "XPHB",
+            "level": 5,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a pinch of sesame seeds)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_shatter_xphb",
+            "name": "Shatter",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "constitution",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 19,
+            "damageList": [
+              {
+                "formula": "3d8",
+                "type": "Thunder",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S, M (a chip of mica)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_wall_of_stone_xphb",
+            "name": "Wall of Stone",
+            "source": "XPHB",
+            "level": 5,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 19,
+            "damageList": [],
+            "components": "V, S, M (a cube of granite)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Move Earth",
+          "Passwall",
+          "Shatter",
+          "Wall of Stone"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_demonic_restoration_rmbu",
+        "name": "Demonic Restoration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the rendelith dies outside the Abyss, its body dissolves into gravel, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_na7j",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The rendelith has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_siege_monster_2hr1",
+        "name": "Siege Monster",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The rendelith deals double damage to objects and structures.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_pc43",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The rendelith makes two Stone Hammer attacks and uses Spellcasting to cast Shatter (level 6 version).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_stone_hammer_ghv2",
+        "name": "Stone Hammer",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +13, reach 10 ft. or range 120 ft. {@h}21 (4d6 + 7) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition. If the target already has the Prone condition, it instead takes an extra 7 (2d6) Bludgeoning damage. {@hom}The hammer magically returns to the rendelith's hand immediately after a ranged attack.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 13,
+          "reach": 10,
+          "range": "120 ft.",
+          "targets": "it has the {@condition Prone|XPHB} condition",
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d6 + 7",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "2d6",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_quick_fortifications__recharge_5__xwh6",
+        "name": "Quick Fortifications (Recharge 5)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The rendelith uses Spellcasting to cast Move Earth or Wall of Stone.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AUD/Rendelith.webp",
+    "tokenImg": "img/bestiary/tokens/AUD/Rendelith.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_sarrukh_tyrant_aud",
+    "name": "Sarrukh Tyrant",
+    "source": "AUD",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 19,
+        "condition": null
+      }
+    ],
+    "primaryAc": 19,
+    "acCondition": "",
+    "hp": {
+      "average": 256,
+      "formula": "27d8 + 135"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 22,
+        "mod": 6
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 20,
+        "mod": 5
+      },
+      "int": {
+        "score": 23,
+        "mod": 6
+      },
+      "wis": {
+        "score": 19,
+        "mod": 4
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 6,
+    "saves": {},
+    "skills": {
+      "arcana": "+12",
+      "perception": "+10"
+    },
+    "senses": {
+      "passivePerception": 20,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Draconic; telepathy 120 ft."
+    ],
+    "cr": "17",
+    "crNumeric": 17,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_sarrukh_tyrant_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 20,
+        "atkMod": 12,
+        "header": "The sarrukh casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save DC 20):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_invisibility_xphb",
+            "name": "Invisibility",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (an eyelash in gum arabic)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_polymorph_xphb",
+            "name": "Polymorph",
+            "source": "XPHB",
+            "level": 4,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 20,
+            "damageList": [],
+            "components": "V, S, M (a caterpillar cocoon)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_fireball_xphb",
+              "name": "Fireball",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 20,
+              "damageList": [
+                {
+                  "formula": "8d6",
+                  "type": "Fire",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a ball of bat guano and sulfur)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_scrying_xphb",
+              "name": "Scrying",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "self",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 20,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_teleport_xphb",
+              "name": "Teleport",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "10 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "3d10",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_wall_of_force_xphb",
+              "name": "Wall of Force",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a shard of glass)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic",
+          "Invisibility",
+          "Polymorph"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__3_day__dolx",
+        "name": "Legendary Resistance (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the sarrukh fails a saving throw, it can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_dwae",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sarrukh has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_shpp",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sarrukh makes two attacks, using Bite or Fearsome Fauchard in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_oxfh",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +12, reach 5 ft. {@h}13 (2d6 + 6) Piercing damage plus 13 (3d8) Poison damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 12,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "3d8",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fearsome_fauchard_6mtu",
+        "name": "Fearsome Fauchard",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +12, reach 5 ft. or range 20/60 ft. {@h}17 (2d10 + 6) Piercing damage. If the target is a creature, it has the Frightened condition. If the target already has the Frightened condition, it takes an additional 10 (3d6) Psychic damage. {@hom}The fauchard magically returns to the sarrukh's hand immediately after a ranged attack.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 12,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "it has the {@condition Frightened|XPHB} condition",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_shape_control_sl5u",
+        "name": "Shape Control",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} A creature the sarrukh can see shape-shifts. {@actResponse} The sarrukh chooses the resulting form from among the options available to the shape-shifting creature or prevents the creature from shape-shifting.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_fearsome_glance_uyx4",
+          "name": "Fearsome Glance",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>wis DC 20, one creature the sarrukh can see within 30 feet. {@actSaveFail} 18 (4d8) Psychic damage, and the target has the Frightened condition. {@actSaveSuccess} Half damage only.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 20,
+              "ability": "Save"
+            },
+            "damages": [
+              {
+                "formula": "4d8",
+                "type": "Psychic"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_slither_mlm3",
+          "name": "Slither",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The sarrukh moves up to half its Speed without provoking Opportunity Attack, and it makes one Bite attack.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_twisted_transformation_fktz",
+          "name": "Twisted Transformation",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The sarrukh uses Spellcasting to cast Polymorph, and if the target fails its saving throw, the target also has the Stunned condition until the end of its next turn. The sarrukh can't take this action again until the start of its next turn.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AUD/Sarrukh Tyrant.webp",
+    "tokenImg": "img/bestiary/tokens/AUD/Sarrukh Tyrant.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_szass_tam_aud",
+    "name": "Szass Tam",
+    "source": "AUD",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "wizard",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 397,
+      "formula": "53d8 + 159"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 30,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 23,
+        "mod": 6
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 19,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 7,
+    "saves": {},
+    "skills": {
+      "arcana": "+20",
+      "insight": "+11",
+      "investigation": "+13",
+      "perception": "+11"
+    },
+    "senses": {
+      "passivePerception": 21,
+      "sensesString": ""
+    },
+    "languages": [
+      "all"
+    ],
+    "cr": "23",
+    "crNumeric": 23,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_szass_tam_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 21,
+        "atkMod": 13,
+        "header": "Szass Tam casts one of the following spells, using Intelligence as the spellcasting ability (spell save DC 21, +13 to hit with spell attacks):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_thoughts_xphb",
+            "name": "Detect Thoughts",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [],
+            "components": "V, S, M (1 Copper Piece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_finger_of_death_xphb",
+            "name": "Finger of Death",
+            "source": "XPHB",
+            "level": 7,
+            "school": "Necromancy",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "constitution",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [
+              {
+                "formula": "7d8 + 30",
+                "type": "Necrotic",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_fireball_xphb",
+            "name": "Fireball",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "150 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [
+              {
+                "formula": "8d6",
+                "type": "Fire",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S, M (a ball of bat guano and sulfur)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_lightning_bolt_xphb",
+            "name": "Lightning Bolt",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "Self (100 feet line)",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [
+              {
+                "formula": "8d6",
+                "type": "Lightning",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S, M (a bit of fur and a crystal rod)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_animate_dead_xphb",
+              "name": "Animate Dead",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Necromancy",
+              "castingTime": "1 minute",
+              "range": "10 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a drop of blood, a piece of flesh, and a pinch of bone dust)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dimension_door_xphb",
+              "name": "Dimension Door",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "500 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_plane_shift_xphb",
+              "name": "Plane Shift",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a forked, metal rod worth 250+ GP and attuned to a plane of existence)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_power_word_kill_xphb",
+              "name": "Power Word Kill",
+              "source": "XPHB",
+              "level": 9,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "12d12",
+                  "type": "Psychic",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_project_image_xphb",
+              "name": "Project Image",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "500 miles",
+              "duration": "Concentration, up to 1 day",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a statuette of yourself worth 5+ GP)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_scrying_xphb",
+              "name": "Scrying",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "self",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_sending_xphb",
+              "name": "Sending",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Divination",
+              "castingTime": "1 action",
+              "range": "unlimited",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a copper wire)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic",
+          "Detect Thoughts",
+          "Finger of Death",
+          "Fireball",
+          "Lightning Bolt",
+          "Mage Hand",
+          "Prestidigitation"
+        ]
+      },
+      {
+        "id": "sc_szass_tam_1",
+        "name": "Protective Magic",
+        "type": "spellcasting",
+        "displayAs": "reaction",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 21,
+        "atkMod": 13,
+        "header": "Szass Tam casts Counterspell or Shield in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_counterspell_xphb",
+            "name": "Counterspell",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 reaction (which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components)",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "constitution",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [],
+            "components": "S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_shield_xphb",
+            "name": "Shield",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Abjuration",
+            "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+            "range": "self",
+            "duration": "1 round",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Counterspell",
+          "Shield"
+        ]
+      },
+      {
+        "id": "sc_szass_tam_2",
+        "name": "Withering Magic",
+        "type": "spellcasting",
+        "displayAs": "legendary",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 21,
+        "atkMod": 13,
+        "header": "Szass Tam casts Blight or Dispel Magic, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__4_day__or_5_day_in_lair__7iy8",
+        "name": "Legendary Resistance (4/Day, or 5/Day in Lair)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Szass Tam fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spirit_jar_x5ve",
+        "name": "Spirit Jar",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If destroyed, Szass Tam re-forms in 1d10 days if he has a spirit jar, reviving with all his Hit Points. The new body appears in an unoccupied space within Szass Tam's lair.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_9pqh",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Szass Tam makes three attacks, using Paralyzing Touch or Soul-Draining Ray in any combination. He can replace two attacks with a use of Spellcasting to cast Finger of Death.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_paralyzing_touch_fh7s",
+        "name": "Paralyzing Touch",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +13, reach 5 ft. {@h}16 (3d6 + 6) Cold damage, and the target has the Paralyzed condition until the start of Szass Tam's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 13,
+          "reach": 5,
+          "range": null,
+          "targets": "and the target has the {@condition Paralyzed|XPHB} condition until the start of Szass Tam's next turn",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6 + 6",
+              "type": "Cold"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_soul_draining_ray_3e61",
+        "name": "Soul-Draining Ray",
+        "actionType": "action",
+        "descriptionHtml": "<p>r +13, range 120 ft. {@h}25 (3d12 + 6) Necrotic damage, and the target has Disadvantage on attack rolls and saving throws until the end of its next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 13,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": "and the target has {@variantrule Disadvantage|XPHB} on attack rolls and saving throws until the end of its next turn",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d12 + 6",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_deathly_teleport_x9qf",
+          "name": "Deathly Teleport",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Szass Tam teleports up to 60 feet to an unoccupied space he can see, and each creature within 10 feet of the space he left takes 13 (3d8) Necrotic damage.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [
+              {
+                "formula": "3d8",
+                "type": "Necrotic"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_disrupt_life_6eku",
+          "name": "Disrupt Life",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>con DC 21, each creature that isn't an Undead in a 20-foot Emanation [Area of Effect] originating from Szass Tam. {@actSaveFail} 14 (4d6) Necrotic damage and the creature's Hit Points maximum decreases by an amount equal to the damage taken. {@actSaveSuccess} Half damage only. {@actSaveSuccessOrFail} Szass Tam can't take this action again until the start of his next turn.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 21,
+              "ability": "Save"
+            },
+            "damages": [
+              {
+                "formula": "4d6",
+                "type": "Necrotic"
+              }
+            ],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AUD/Szass Tam.webp",
+    "tokenImg": "img/bestiary/tokens/AUD/Szass Tam.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_xelnene_thrul_aud",
+    "name": "Xelnene Thrul",
+    "source": "AUD",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "wizard",
+    "alignment": "N G",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 208,
+      "formula": "32d8 + 64"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 18,
+        "mod": 4
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 21,
+        "mod": 5
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 19,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 6,
+    "saves": {},
+    "skills": {
+      "arcana": "+17",
+      "history": "+11",
+      "perception": "+9",
+      "persuasion": "+10"
+    },
+    "senses": {
+      "passivePerception": 19,
+      "sensesString": ""
+    },
+    "languages": [
+      "Celestial",
+      "Common",
+      "Draconic",
+      "Infernal"
+    ],
+    "cr": "17",
+    "crNumeric": 17,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_xelnene_thrul_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 19,
+        "atkMod": 11,
+        "header": "Thrul casts one of the following spells, using Intelligence as the spellcasting ability (spell save DC 19):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_alter_self_xphb",
+            "name": "Alter Self",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [
+              {
+                "formula": "1d6",
+                "type": "Bludgeoning",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_fireball_xphb",
+            "name": "Fireball",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "150 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 19,
+            "damageList": [
+              {
+                "formula": "8d6",
+                "type": "Fire",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S, M (a ball of bat guano and sulfur)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_illusory_script_xphb",
+            "name": "Illusory Script",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Illusion",
+            "castingTime": "1 minute",
+            "range": "touch",
+            "duration": "10 days",
+            "concentration": false,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (ink worth 10+ GP, which the spell consumes)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_lightning_bolt_xphb",
+            "name": "Lightning Bolt",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "Self (100 feet line)",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 19,
+            "damageList": [
+              {
+                "formula": "8d6",
+                "type": "Lightning",
+                "label": "",
+                "stat": "none"
+              }
+            ],
+            "components": "V, S, M (a bit of fur and a crystal rod)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_armor_xphb",
+            "name": "Mage Armor",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "8 hours",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a piece of cured leather)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_demiplane_xphb",
+              "name": "Demiplane",
+              "source": "XPHB",
+              "level": 8,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_modify_memory_xphb",
+              "name": "Modify Memory",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 19,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_scrying_xphb",
+              "name": "Scrying",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "10 minutes",
+              "range": "self",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 19,
+              "damageList": [],
+              "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_sending_xphb",
+              "name": "Sending",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Divination",
+              "castingTime": "1 action",
+              "range": "unlimited",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a copper wire)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_teleport_xphb",
+              "name": "Teleport",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "10 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "3d10",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_chain_lightning_xphb",
+              "name": "Chain Lightning",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 19,
+              "damageList": [
+                {
+                  "formula": "10d8",
+                  "type": "Lightning",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (three silver pins)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_sunburst_xphb",
+              "name": "Sunburst",
+              "source": "XPHB",
+              "level": 8,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 19,
+              "damageList": [
+                {
+                  "formula": "12d6",
+                  "type": "Radiant",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a piece of sunstone)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Alter Self",
+          "Detect Magic",
+          "Fireball",
+          "Illusory Script",
+          "Lightning Bolt",
+          "Mage Armor",
+          "Mage Hand",
+          "Prestidigitation"
+        ]
+      },
+      {
+        "id": "sc_xelnene_thrul_1",
+        "name": "Protective Magic (3/Day)",
+        "type": "spellcasting",
+        "displayAs": "reaction",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 19,
+        "atkMod": 11,
+        "header": "Thrul casts Counterspell or Shield in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "3": [
+            {
+              "spellId": "sp_counterspell_xphb",
+              "name": "Counterspell",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components)",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 19,
+              "damageList": [],
+              "components": "S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_shield_xphb",
+              "name": "Shield",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+              "range": "self",
+              "duration": "1 round",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_evocation_sculptor_dnas",
+        "name": "Evocation Sculptor",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When Thrul casts a spell that creates an area of effect, she can choose herself and up to five other creatures she can see, sculpting the spell's energy around them. A chosen creature automatically succeeds on its saving throw against the spell, and it takes no damage if it would normally take half damage on a successful save.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_fcjz",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Thrul has Advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ci02",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Thrul makes four Arcane Burst attacks. She can replace two attacks with a use of Spellcasting to cast Fireball (level 5 version) or Lightning Bolt (level 5 version).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_arcane_burst_wu71",
+        "name": "Arcane Burst",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +11, reach 5 ft. or range 120 ft. {@h}32 (5d10 + 5) Force damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 5,
+          "range": "120 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "5d10 + 5",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AUD/Xelnene Thrul.webp",
+    "tokenImg": "img/bestiary/tokens/AUD/Xelnene Thrul.webp",
+    "fluff": null
+  }
+]

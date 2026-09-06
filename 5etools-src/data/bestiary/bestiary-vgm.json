@@ -15,7 +15,8 @@
 			"source": "VGM",
 			"page": 209,
 			"reprintedAs": [
-				"Abjurer Wizard|MPMM"
+				"Abjurer Wizard|MPMM",
+				"Abjurer Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -66,7 +67,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The abjurer is a 13th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). The abjurer has the following wizard spells prepared:"
 					],
@@ -136,10 +137,7 @@
 					"footerEntries": [
 						"*Abjuration spell of 1st level or higher"
 					],
-					"ability": "int",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 13
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -289,7 +287,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The alhoon's innate spellcasting ability is Intelligence (spell save {@dc 16}). It can innately cast the following spells, requiring no components:"
 					],
@@ -303,14 +301,11 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "int",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"ability": "int"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The alhoon is a 12th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 16}, {@hit 8} to hit with spell attacks). The alhoon has the following wizard spells prepared:"
 					],
@@ -372,10 +367,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 12
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -542,7 +534,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hag's innate spellcasting ability is Charisma (spell save {@dc 13}). She can innately cast the following spells:"
 					],
@@ -552,10 +544,7 @@
 							"{@spell fog cloud}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"action": [
@@ -1203,7 +1192,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The apprentice is a 1st-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -1224,10 +1213,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 1
+					"ability": "int"
 				}
 			],
 			"action": [
@@ -1343,7 +1329,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The archdruid is an 18th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). It has the following druid spells prepared:"
 					],
@@ -1425,10 +1411,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 18
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -1769,7 +1752,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The babau's innate spellcasting ability is Wisdom (spell save {@dc 11}). The babau can innately cast the following spells, requiring no material components:"
 					],
@@ -1780,10 +1763,7 @@
 						"{@spell heat metal}",
 						"{@spell levitate}"
 					],
-					"ability": "wis",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -2050,7 +2030,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The bard is a 4th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has the following bard spells prepared:"
 					],
@@ -2080,10 +2060,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -2252,7 +2229,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The barghest's innate spellcasting ability is Charisma (spell save {@dc 12}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -2268,10 +2245,7 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -2429,7 +2403,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hag's innate spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). She can innately cast the following spells, requiring no material components:"
 					],
@@ -2447,10 +2421,7 @@
 							"{@spell control weather}"
 						]
 					},
-					"ability": "cha",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -3227,7 +3198,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The blackguard is a 10th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It has the following paladin spells prepared:"
 					],
@@ -3255,10 +3226,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 10
+					"ability": "cha"
 				}
 			],
 			"action": [
@@ -3760,14 +3728,11 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The goblin can cast a randomly determined {@filter 1st-level wizard spell|spells|level=1|class=wizard} once per day. Intelligence is its spellcasting ability (spell save {@dc 10}, {@hit 2} to hit with spell attacks)."
 					],
-					"ability": "int",
-					"dc": 10,
-					"atkMod": 2,
-					"casterLevel": 0
+					"ability": "int"
 				}
 			],
 			"tokenCustom": true,
@@ -4547,7 +4512,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The choldrith is a 4th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The choldrith has the following cleric spells prepared:"
 					],
@@ -4577,10 +4542,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -4743,7 +4705,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The giant's innate spellcasting ability is Charisma (spell save {@dc 15}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -4764,14 +4726,11 @@
 							"{@spell gaseous form}"
 						]
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The giant is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). The giant has the following bard spells prepared:"
 					],
@@ -4807,10 +4766,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 5
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -4907,7 +4863,8 @@
 				"TftYP-WPM"
 			],
 			"reprintedAs": [
-				"Conjurer Wizard|MPMM"
+				"Conjurer Wizard|MPMM",
+				"Conjurer Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -4958,7 +4915,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The conjurer is a 9th-level spellcaster. Its spellcasting ability is intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The conjurer has the following wizard spells prepared:"
 					],
@@ -5012,10 +4969,7 @@
 					"footerEntries": [
 						"*Conjuration spell of 1st level or higher"
 					],
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -5647,7 +5601,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The deep rothé's spellcasting ability is Charisma. It can innately cast {@spell dancing lights} at will, requiring no components."
 					],
@@ -5657,10 +5611,7 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					],
-					"dc": 7,
-					"atkMod": -1,
-					"casterLevel": 0
+					]
 				}
 			],
 			"trait": [
@@ -6155,7 +6106,8 @@
 			"source": "VGM",
 			"page": 213,
 			"reprintedAs": [
-				"Diviner Wizard|MPMM"
+				"Diviner Wizard|MPMM",
+				"Diviner Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -6206,7 +6158,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The diviner is a 15th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 15}, {@hit 7} to hit with spell attacks). The diviner has the following wizard spells prepared:"
 					],
@@ -6283,10 +6235,7 @@
 					"footerEntries": [
 						"* Divination spell of 1st level or higher"
 					],
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 15
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6504,7 +6453,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The draegloth's innate spellcasting ability is Charisma (spell save {@dc 11}). The draegloth can innately cast the following spells, requiring no material components:"
 					],
@@ -6518,10 +6467,7 @@
 							"{@spell faerie fire}"
 						]
 					},
-					"ability": "cha",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -6650,7 +6596,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The elder brain's innate spellcasting ability is Intelligence (spell save {@dc 18}). It can innately cast the following spells, requiring no components:"
 					],
@@ -6664,10 +6610,7 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "int",
-					"dc": 18,
-					"atkMod": 10,
-					"casterLevel": 0
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -6826,7 +6769,8 @@
 				"TftYP-WPM"
 			],
 			"reprintedAs": [
-				"Enchanter Wizard|MPMM"
+				"Enchanter Wizard|MPMM",
+				"Enchanter Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -6877,7 +6821,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The enchanter is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The enchanter has the following wizard spells prepared:"
 					],
@@ -6931,10 +6875,7 @@
 					"footerEntries": [
 						"*Enchantment spell of 1st level or higher"
 					],
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"action": [
@@ -7010,7 +6951,8 @@
 				"TftYP-WPM"
 			],
 			"reprintedAs": [
-				"Evoker Wizard|MPMM"
+				"Evoker Wizard|MPMM",
+				"Evoker Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -7061,7 +7003,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The evoker is a 12th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 15}, {@hit 7} to hit with spell attacks). The evoker has the following wizard spells prepared:"
 					],
@@ -7123,10 +7065,7 @@
 					"footerEntries": [
 						"*Evocation spell"
 					],
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 12
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -7368,7 +7307,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The firenewt's innate spellcasting ability is Charisma. It can innately cast {@spell mage armor} (self only) at will, requiring no material components."
 					],
@@ -7378,14 +7317,11 @@
 					"ability": "cha",
 					"hidden": [
 						"will"
-					],
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					]
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The firenewt is a 3rd-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -7410,10 +7346,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 3
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -7663,17 +7596,17 @@
 							"items": [
 								{
 									"type": "itemSub",
-									"name": "1–2",
+									"name": "1\u20132",
 									"entry": "If the spell affects an area or has multiple targets, it fails and has no effect. If the spell targets only the snail, it has no effect on the snail and is reflected back at the caster, using the spell slot level, spell save DC, attack bonus, and spellcasting ability of the caster."
 								},
 								{
 									"type": "itemSub",
-									"name": "3–4",
+									"name": "3\u20134",
 									"entry": "No additional effect."
 								},
 								{
 									"type": "itemSub",
-									"name": "5–6",
+									"name": "5\u20136",
 									"entry": "The snail's shell converts some of the spell's energy into a burst of destructive force. Each creature within 30 feet of the snail must make a {@dc 15} Constitution saving throw, taking {@damage 1d6} force damage per level of the spell on a failed save, or half as much damage on a successful one."
 								}
 							]
@@ -7959,7 +7892,7 @@
 				{
 					"name": "Shock Susceptibility",
 					"entries": [
-						"If the froghemoth takes lightning damage, it suffers several effects until the end of its next turn: its speed is halved, it takes a −2 penalty to AC and Dexterity saving throws, it can't use reactions or Multiattack, and on its turn, it can use either an action or a bonus action, not both."
+						"If the froghemoth takes lightning damage, it suffers several effects until the end of its next turn: its speed is halved, it takes a \u22122 penalty to AC and Dexterity saving throws, it can't use reactions or Multiattack, and on its turn, it can use either an action or a bonus action, not both."
 					]
 				}
 			],
@@ -9839,7 +9772,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The grung is a 9th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It knows the following ranger spells:"
 					],
@@ -9865,10 +9798,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 9
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -10234,7 +10164,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hobgoblin is a 7th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -10278,10 +10208,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 7
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -10406,7 +10333,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hobgoblin is a 2nd-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -10428,10 +10355,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 2
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -10595,7 +10519,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The illithilich's innate spellcasting ability is Intelligence (spell save {@dc 20}). It can innately cast the following spells, requiring no components."
 					],
@@ -10609,14 +10533,11 @@
 							"{@spell plane shift} (self only)"
 						]
 					},
-					"ability": "int",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"ability": "int"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The illithilich is an 18th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 20}, {@hit 12} to hit with spell attacks). The lich has the following wizard spells prepared:"
 					],
@@ -10697,10 +10618,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 18
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -10775,7 +10693,7 @@
 					]
 				},
 				{
-					"name": "Cast Spell (Costs 1–3 Actions)",
+					"name": "Cast Spell (Costs 1\u20133 Actions)",
 					"entries": [
 						"The illithilich uses a spell slot to cast a 1st-, 2nd-, or 3rd-level spell that it has prepared. Doing so costs 1 legendary action per level of the spell."
 					]
@@ -10877,7 +10795,8 @@
 				"TftYP-WPM"
 			],
 			"reprintedAs": [
-				"Illusionist Wizard|MPMM"
+				"Illusionist Wizard|MPMM",
+				"Illusionist Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -10928,7 +10847,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The illusionist is a 7th-level spellcaster. its spellcasting ability is Intelligence (spell save {@dc 13}, {@hit 5} to hit with spell attacks). The illusionist has the following wizard spells prepared:"
 					],
@@ -10975,10 +10894,7 @@
 					"footerEntries": [
 						"*Illusion spell of 1st level or higher"
 					],
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 7
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -11104,7 +11020,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ki-rin's innate spellcasting ability is Charisma (spell save {@dc 17}). The ki-rin can innately cast the following spells, requiring no material components:"
 					],
@@ -11118,14 +11034,11 @@
 							"{@spell create food and water}"
 						]
 					},
-					"ability": "cha",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ki-rin is a 18th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 17}, {@hit 9} to hit with spell attacks). It has the following cleric spells prepared:"
 					],
@@ -11208,10 +11121,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 18
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -11391,7 +11301,7 @@
 				{
 					"name": "Dragon's Resistance",
 					"entries": [
-						"The kobold has resistance to a type of damage based on the color of dragon that invested it with power (choose or roll a {@damage d10}): 1–2, acid (black); 3–4, cold (white); 5–6, fire (red); 7–8, lightning (blue); 9–10, poison (green)."
+						"The kobold has resistance to a type of damage based on the color of dragon that invested it with power (choose or roll a {@damage d10}): 1\u20132, acid (black); 3\u20134, cold (white); 5\u20136, fire (red); 7\u20138, lightning (blue); 9\u201310, poison (green)."
 					]
 				},
 				{
@@ -11706,7 +11616,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The kobold is a 3rd-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It has the following sorcerer spells prepared:"
 					],
@@ -11734,10 +11644,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 3
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -11898,7 +11805,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The korred's innate spellcasting ability is Wisdom (save {@dc 13}). It can innately cast the following spells, requiring no components:"
 					],
@@ -11913,10 +11820,7 @@
 							"{@spell Otto's irresistible dance}"
 						]
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -12085,7 +11989,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The priest's spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
 					],
@@ -12105,10 +12009,7 @@
 							"{@spell Evard's black tentacles}"
 						]
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -12897,7 +12798,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The mind flayer is a 10th-level spellcaster. Its innate spellcasting ability is Intelligence (spell save {@dc 15}; {@hit 7} to hit with spell attacks). It can innately cast the following spells, requiring no components:"
 					],
@@ -12956,10 +12857,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 10
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -13298,7 +13196,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The morkoth is an 11th-level spellcaster. Its spellcasting ability is Intelligence (save {@dc 17}, {@hit 9} to hit with spell attacks). The morkoth has the following wizard spells prepared:"
 					],
@@ -13358,10 +13256,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 11
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -13535,10 +13430,10 @@
 					"entries": [
 						"The giant is immune to {@spell confusion} spells and similar magic.",
 						"On each of its turns, the giant uses all its movement to move toward the nearest creature or whatever else it might perceive as food. Roll a {@dice d10} at the start of each of the giant's turns to determine its action for that turn:",
-						"1–3. The giant makes three attacks with its fists against one random target within its reach. If no other creatures are within its reach, the giant flies into a rage and gains advantage on all attack rolls until the end of its next turn.",
-						"4–5. The giant makes one attack with its fist against every creature within its reach. If no other creatures are within its reach, the giant makes one fist attack against itself.",
-						"6–7. The giant makes one attack with its bite against one random target within its reach. If no other creatures are within its reach, its eyes glaze over and it becomes {@condition stunned} until the start of its next turn.",
-						"8–10. The giant makes three attacks against one random target within its reach: one attack with its bite and two with its fists. If no other creatures are within its reach, the giant flies into a rage and gains advantage on all attack rolls until the end of its next turn."
+						"1\u20133. The giant makes three attacks with its fists against one random target within its reach. If no other creatures are within its reach, the giant flies into a rage and gains advantage on all attack rolls until the end of its next turn.",
+						"4\u20135. The giant makes one attack with its fist against every creature within its reach. If no other creatures are within its reach, the giant makes one fist attack against itself.",
+						"6\u20137. The giant makes one attack with its bite against one random target within its reach. If no other creatures are within its reach, its eyes glaze over and it becomes {@condition stunned} until the start of its next turn.",
+						"8\u201310. The giant makes three attacks against one random target within its reach: one attack with its bite and two with its fists. If no other creatures are within its reach, the giant flies into a rage and gains advantage on all attack rolls until the end of its next turn."
 					]
 				}
 			],
@@ -13596,7 +13491,8 @@
 				"TftYP-WPM"
 			],
 			"reprintedAs": [
-				"Necromancer Wizard|MPMM"
+				"Necromancer Wizard|MPMM",
+				"Necromancer Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -13650,7 +13546,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The necromancer is a 12th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 15}, {@hit 7} to hit with spell attacks). The necromancer has the following wizard spells prepared:"
 					],
@@ -13712,10 +13608,7 @@
 					"footerEntries": [
 						"*Necromancy spell of 1st level or higher"
 					],
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 12
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -14050,7 +13943,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The neogi is a 7th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -14080,10 +13973,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 7
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -14248,7 +14138,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The neothelid's innate spellcasting ability is Wisdom (spell save {@dc 16}). It can innately cast the following spells, requiring no components:"
 					],
@@ -14262,10 +14152,7 @@
 							"{@spell telekinesis}"
 						]
 					},
-					"ability": "wis",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 0
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -14409,7 +14296,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The nilbog's innate spellcasting ability is Charisma (spell save {@dc 12}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -14423,10 +14310,7 @@
 							"{@spell confusion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -14708,7 +14592,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The orc is a 5th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). The orc has the following cleric spells prepared:"
 					],
@@ -14744,10 +14628,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 5
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -14869,7 +14750,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The orc is a 4th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 12}, {@hit 4} to hit with spell attacks). It requires no verbal components to cast its spells. The orc has the following cleric spells prepared:"
 					],
@@ -14899,10 +14780,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -16050,7 +15928,7 @@
 						{
 							"type": "list",
 							"items": [
-								"The alpha has above average (42–54) hit points.",
+								"The alpha has above average (42\u201354) hit points.",
 								"It has an Intelligence of 6 (-2).",
 								"It has the Terrifying Howl action option described below."
 							]
@@ -17095,7 +16973,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The swarm's innate spellcasting ability is Intelligence (spell save {@dc 13}). As long as it has more than half of its hit points, it can innately cast the following spells, requiring no components:"
 					],
@@ -17110,10 +16988,7 @@
 							"{@spell dominate monster}"
 						]
 					},
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -17775,7 +17650,8 @@
 				"TftYP-WPM"
 			],
 			"reprintedAs": [
-				"Transmuter Wizard|MPMM"
+				"Transmuter Wizard|MPMM",
+				"Transmuter Archmage|AU"
 			],
 			"size": [
 				"M"
@@ -17826,7 +17702,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The transmuter is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). The transmuter has the following wizard spells prepared:"
 					],
@@ -17880,10 +17756,7 @@
 					"footerEntries": [
 						"*Transmutation spell of 1st level or higher"
 					],
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -18118,7 +17991,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Psionics)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The ulitharid's innate spellcasting ability is Intelligence (spell save {@dc 17}). It can innately cast the following spells, requiring no components:"
 					],
@@ -18139,10 +18012,7 @@
 							"{@spell telekinesis}"
 						]
 					},
-					"ability": "int",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -18775,7 +18645,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The priest is a 9th-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 15}, {@hit 7} to hit with spell attacks). It has the following cleric spells prepared:"
 					],
@@ -18836,10 +18706,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 9
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -18966,7 +18833,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The warlock's innate spellcasting ability is Charisma. It can innately cast the following spells (spell save {@dc 15}), requiring no material components:"
 					],
@@ -18981,14 +18848,11 @@
 							"{@spell conjure fey}"
 						]
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 6,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The warlock is an 11th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -19022,10 +18886,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 11
+					"ability": "cha"
 				}
 			],
 			"action": [
@@ -19167,7 +19028,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The warlock's innate spellcasting ability is Charisma. It can innately cast the following spells (spell save {@dc 15}), requiring no material components:"
 					],
@@ -19185,14 +19046,11 @@
 							"{@spell plane shift}"
 						]
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The warlock is a 17th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -19225,10 +19083,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 17
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -19368,7 +19223,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The warlock's innate spellcasting ability is Charisma. It can innately cast the following spells (spell save {@dc 15}), requiring no material components:"
 					],
@@ -19385,14 +19240,11 @@
 							"{@spell true seeing}"
 						]
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The warlock is a 14th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -19426,10 +19278,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 14
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -20187,7 +20036,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The xvart's innate spellcasting ability is Charisma. it can innately cast the following spells, requiring no material components:"
 					],
@@ -20195,14 +20044,11 @@
 						"{@spell detect magic}",
 						"{@spell mage armor} (self only)"
 					],
-					"ability": "cha",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The xvart is a 3rd-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 11}, {@hit 3} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -20227,10 +20073,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 11,
-					"atkMod": 3,
-					"casterLevel": 3
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -20516,7 +20359,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Anathema Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The anathema's innate spellcasting ability is Charisma (spell save {@dc 17}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -20536,10 +20379,7 @@
 							"{@spell polymorph}"
 						]
 					},
-					"ability": "cha",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -20911,7 +20751,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -20923,10 +20763,7 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -21098,7 +20935,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -21110,10 +20947,7 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -21297,7 +21131,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -21309,14 +21143,11 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting (Yuan-ti Form Only)",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti is a 6th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -21345,10 +21176,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 6
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -21547,7 +21375,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -21559,14 +21387,11 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting (Yuan-ti Form Only)",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti is a 6th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -21595,10 +21420,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 6
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -21815,7 +21637,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting (Yuan-ti Form Only)",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti's innate spellcasting ability is Charisma (spell save {@dc 13}). The yuan-ti can innately cast the following spells, requiring no material components:"
 					],
@@ -21827,14 +21649,11 @@
 							"{@spell suggestion}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 6,
-					"casterLevel": 0
+					"ability": "cha"
 				},
 				{
 					"name": "Spellcasting (Yuan-ti Form Only)",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The yuan-ti is a 6th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It regains its expended spell slots when it finishes a short or long rest. It knows the following warlock spells:"
 					],
@@ -21863,10 +21682,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 6
+					"ability": "cha"
 				}
 			],
 			"trait": [

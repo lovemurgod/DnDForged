@@ -731,16 +731,22 @@ export function initVttChat(vtt, chatHistory) {
             initContainer.classList.add('is-minimized');
         });
 
-        // Position & Free-Drag settings
+        // Position, Orientation & Free-Drag settings
         const hudPosition = document.getElementById('hud-init-position');
         const btnDrag = document.getElementById('btn-init-drag');
+        const btnOrientation = document.getElementById('btn-init-orientation');
+        const btnResize = document.getElementById('init-resize-handle');
+        const btnScrollLeft = document.getElementById('btn-init-scroll-left');
+        const btnScrollRight = document.getElementById('btn-init-scroll-right');
+
+        let currentOrientation = localStorage.getItem('vtt_initiative_orientation') || 'vertical';
 
         function updateChevronIcons(pos) {
             const prevIcon = document.querySelector('#btn-init-prev i');
             const nextIcon = document.querySelector('#btn-init-next i');
             if (!prevIcon || !nextIcon) return;
 
-            const isHorizontal = pos === 'top' || pos === 'bottom' || pos === 'custom';
+            const isHorizontal = currentOrientation === 'horizontal' || pos === 'top' || pos === 'bottom';
             if (isHorizontal) {
                 prevIcon.className = 'fa-solid fa-chevron-left';
                 nextIcon.className = 'fa-solid fa-chevron-right';
@@ -750,20 +756,77 @@ export function initVttChat(vtt, chatHistory) {
             }
         }
 
-        function setPositionStyle(pos, coords = null) {
-            initContainer.classList.remove('pos-right', 'pos-top', 'pos-bottom', 'pos-custom');
+        function updateScrollButtons() {
+            if (!btnScrollLeft || !btnScrollRight || !initList) return;
+            if (currentOrientation !== 'horizontal') {
+                btnScrollLeft.style.display = 'none';
+                btnScrollRight.style.display = 'none';
+                return;
+            }
+
+            const hasOverflow = initList.scrollWidth > initList.clientWidth + 5;
+            if (!hasOverflow) {
+                btnScrollLeft.style.display = 'none';
+                btnScrollRight.style.display = 'none';
+                return;
+            }
+
+            btnScrollLeft.style.display = initList.scrollLeft > 5 ? 'flex' : 'none';
+            btnScrollRight.style.display = (initList.scrollLeft + initList.clientWidth < initList.scrollWidth - 5) ? 'flex' : 'none';
+        }
+
+        function setOrientation(orientation, forceCustom = false) {
+            currentOrientation = orientation;
+            localStorage.setItem('vtt_initiative_orientation', orientation);
+            
+            initContainer.classList.remove('orientation-horizontal', 'orientation-vertical');
+            initContainer.classList.add(`orientation-${orientation}`);
+
+            if (btnOrientation) {
+                btnOrientation.title = orientation === 'horizontal' ? 'Switch to Vertical Orientation' : 'Switch to Horizontal Orientation';
+                const icon = btnOrientation.querySelector('i');
+                if (icon) {
+                    icon.className = orientation === 'horizontal' ? 'fa-solid fa-arrows-up-down' : 'fa-solid fa-arrows-left-right';
+                }
+            }
+
+            const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
+            updateChevronIcons(forceCustom ? 'custom' : currentPos);
+            setTimeout(updateScrollButtons, 50);
+        }
+
+        function setPositionStyle(pos, coords = null, size = null) {
+            initContainer.classList.remove('pos-right', 'pos-left', 'pos-top', 'pos-bottom', 'pos-custom');
             initContainer.classList.add(`pos-${pos}`);
+
+            if (pos === 'top' || pos === 'bottom') {
+                currentOrientation = 'horizontal';
+            } else if (pos === 'right' || pos === 'left') {
+                currentOrientation = 'vertical';
+            }
+
+            setOrientation(currentOrientation);
 
             if (pos !== 'custom') {
                 initContainer.style.top = '';
                 initContainer.style.left = '';
                 initContainer.style.right = '';
                 initContainer.style.bottom = '';
-            } else if (coords && Number.isFinite(coords.left) && Number.isFinite(coords.top)) {
-                initContainer.style.left = `${coords.left}px`;
-                initContainer.style.top = `${coords.top}px`;
-                initContainer.style.right = 'auto';
-                initContainer.style.bottom = 'auto';
+                initContainer.style.width = '';
+                initContainer.style.height = '';
+            } else {
+                if (coords && Number.isFinite(coords.left) && Number.isFinite(coords.top)) {
+                    initContainer.style.left = `${coords.left}px`;
+                    initContainer.style.top = `${coords.top}px`;
+                    initContainer.style.right = 'auto';
+                    initContainer.style.bottom = 'auto';
+                }
+                if (size && Number.isFinite(size.width)) {
+                    initContainer.style.width = `${size.width}px`;
+                }
+                if (size && Number.isFinite(size.height)) {
+                    initContainer.style.height = `${size.height}px`;
+                }
             }
 
             updateChevronIcons(pos);
@@ -771,6 +834,7 @@ export function initVttChat(vtt, chatHistory) {
             if (configPosition) configPosition.value = pos;
             if (hudPosition) hudPosition.value = pos;
             localStorage.setItem('vtt_initiative_position_style', pos);
+            setTimeout(updateScrollButtons, 50);
         }
 
         if (configPosition) {
@@ -780,7 +844,70 @@ export function initVttChat(vtt, chatHistory) {
             hudPosition.addEventListener('change', (e) => setPositionStyle(e.target.value));
         }
 
-        // Free dragging implementation
+        // Orientation Toggle Button
+        if (btnOrientation) {
+            btnOrientation.addEventListener('click', () => {
+                const newOrientation = currentOrientation === 'horizontal' ? 'vertical' : 'horizontal';
+                const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
+
+                // If docked in a preset that contradicts the new orientation, switch to custom floating mode smoothly
+                if (currentPos !== 'custom') {
+                    const rect = initContainer.getBoundingClientRect();
+                    initContainer.classList.remove('pos-right', 'pos-left', 'pos-top', 'pos-bottom');
+                    initContainer.classList.add('pos-custom');
+                    initContainer.style.left = `${Math.round(rect.left)}px`;
+                    initContainer.style.top = `${Math.round(rect.top)}px`;
+                    initContainer.style.right = 'auto';
+                    initContainer.style.bottom = 'auto';
+                    localStorage.setItem('vtt_initiative_position_style', 'custom');
+                    localStorage.setItem('vtt_initiative_custom_coords', JSON.stringify({ left: Math.round(rect.left), top: Math.round(rect.top) }));
+
+                    [configPosition, hudPosition].forEach(sel => {
+                        if (sel && !sel.querySelector('option[value="custom"]')) {
+                            const opt = document.createElement('option');
+                            opt.value = 'custom';
+                            opt.textContent = 'Custom Dragged';
+                            sel.appendChild(opt);
+                        }
+                        if (sel) sel.value = 'custom';
+                    });
+                }
+
+                // Adjust default width/height on orientation flip if custom
+                if (newOrientation === 'horizontal') {
+                    initContainer.style.height = '';
+                } else {
+                    initContainer.style.width = '';
+                }
+
+                setOrientation(newOrientation, true);
+            });
+        }
+
+        // Scroll Buttons & Wheel Scroll for Horizontal Mode
+        if (btnScrollLeft && btnScrollRight && initList) {
+            btnScrollLeft.addEventListener('click', (e) => {
+                e.stopPropagation();
+                initList.scrollBy({ left: -180, behavior: 'smooth' });
+            });
+            btnScrollRight.addEventListener('click', (e) => {
+                e.stopPropagation();
+                initList.scrollBy({ left: 180, behavior: 'smooth' });
+            });
+            initList.addEventListener('scroll', () => {
+                updateScrollButtons();
+            });
+            initList.addEventListener('wheel', (e) => {
+                if (currentOrientation === 'horizontal') {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                        e.preventDefault();
+                        initList.scrollLeft += e.deltaY;
+                        updateScrollButtons();
+                    }
+                }
+            }, { passive: false });
+        }
+        // Free dragging implementation (preserves orientation)
         if (btnDrag && initContainer) {
             let isDragging = false;
             let startX = 0, startY = 0;
@@ -788,18 +915,28 @@ export function initVttChat(vtt, chatHistory) {
 
             const onPointerDown = (e) => {
                 isDragging = true;
+                initContainer.classList.add('is-dragging');
+                document.body.style.userSelect = 'none';
                 const rect = initContainer.getBoundingClientRect();
                 startX = e.clientX;
                 startY = e.clientY;
                 startLeft = rect.left;
                 startTop = rect.top;
 
+                // Determine orientation based on current preset if dragging from docked
+                const currentPos = localStorage.getItem('vtt_initiative_position_style') || 'right';
+                if (currentPos === 'top' || currentPos === 'bottom') {
+                    currentOrientation = 'horizontal';
+                } else if (currentPos === 'right' || currentPos === 'left') {
+                    currentOrientation = 'vertical';
+                }
+
                 initContainer.style.left = `${startLeft}px`;
                 initContainer.style.top = `${startTop}px`;
                 initContainer.style.right = 'auto';
                 initContainer.style.bottom = 'auto';
-                initContainer.classList.remove('pos-right', 'pos-top', 'pos-bottom');
-                initContainer.classList.add('pos-custom');
+                initContainer.classList.remove('pos-right', 'pos-left', 'pos-top', 'pos-bottom');
+                initContainer.classList.add('pos-custom', `orientation-${currentOrientation}`);
 
                 document.addEventListener('pointermove', onPointerMove);
                 document.addEventListener('pointerup', onPointerUp);
@@ -820,6 +957,8 @@ export function initVttChat(vtt, chatHistory) {
             const onPointerUp = () => {
                 if (!isDragging) return;
                 isDragging = false;
+                initContainer.classList.remove('is-dragging');
+                document.body.style.userSelect = '';
                 document.removeEventListener('pointermove', onPointerMove);
                 document.removeEventListener('pointerup', onPointerUp);
 
@@ -827,6 +966,7 @@ export function initVttChat(vtt, chatHistory) {
                 const coords = { left: Math.round(finalRect.left), top: Math.round(finalRect.top) };
                 localStorage.setItem('vtt_initiative_custom_coords', JSON.stringify(coords));
                 localStorage.setItem('vtt_initiative_position_style', 'custom');
+                localStorage.setItem('vtt_initiative_orientation', currentOrientation);
 
                 [configPosition, hudPosition].forEach(sel => {
                     if (sel && !sel.querySelector('option[value="custom"]')) {
@@ -837,16 +977,80 @@ export function initVttChat(vtt, chatHistory) {
                     }
                     if (sel) sel.value = 'custom';
                 });
+                updateChevronIcons('custom');
+                updateScrollButtons();
             };
 
             btnDrag.addEventListener('pointerdown', onPointerDown);
         }
 
-        // Restore saved position on load
+        // Corner resizing implementation in free-drag mode
+        if (btnResize && initContainer) {
+            let isResizing = false;
+            let startW = 0, startH = 0;
+            let startX = 0, startY = 0;
+
+            const onResizeDown = (e) => {
+                isResizing = true;
+                initContainer.classList.add('is-dragging');
+                document.body.style.userSelect = 'none';
+                const rect = initContainer.getBoundingClientRect();
+                startW = rect.width;
+                startH = rect.height;
+                startX = e.clientX;
+                startY = e.clientY;
+
+                document.addEventListener('pointermove', onResizeMove);
+                document.addEventListener('pointerup', onResizeUp);
+                e.preventDefault();
+                e.stopPropagation();
+            };
+
+            const onResizeMove = (e) => {
+                if (!isResizing) return;
+                const dw = e.clientX - startX;
+                const dh = e.clientY - startY;
+
+                const newW = Math.max(160, Math.min(window.innerWidth * 0.95, startW + dw));
+                const newH = Math.max(70, Math.min(window.innerHeight * 0.95, startH + dh));
+
+                if (currentOrientation === 'horizontal') {
+                    initContainer.style.width = `${newW}px`;
+                } else {
+                    initContainer.style.height = `${newH}px`;
+                }
+                updateScrollButtons();
+            };
+
+            const onResizeUp = () => {
+                if (!isResizing) return;
+                isResizing = false;
+                initContainer.classList.remove('is-dragging');
+                document.body.style.userSelect = '';
+                document.removeEventListener('pointermove', onResizeMove);
+                document.removeEventListener('pointerup', onResizeUp);
+
+                const rect = initContainer.getBoundingClientRect();
+                const size = { width: Math.round(rect.width), height: Math.round(rect.height) };
+                localStorage.setItem('vtt_initiative_custom_size', JSON.stringify(size));
+            };
+
+            btnResize.addEventListener('pointerdown', onResizeDown);
+        }
+
+        // Restore saved position, orientation, and size on load
         const savedPosStyle = localStorage.getItem('vtt_initiative_position_style') || 'right';
+        const savedOrientation = localStorage.getItem('vtt_initiative_orientation') || (savedPosStyle === 'top' || savedPosStyle === 'bottom' ? 'horizontal' : 'vertical');
+        currentOrientation = savedOrientation;
+
         if (savedPosStyle === 'custom') {
             try {
                 const savedCoords = JSON.parse(localStorage.getItem('vtt_initiative_custom_coords'));
+                let savedSize = null;
+                try {
+                    savedSize = JSON.parse(localStorage.getItem('vtt_initiative_custom_size'));
+                } catch (e) {}
+
                 if (savedCoords) {
                     [configPosition, hudPosition].forEach(sel => {
                         if (sel && !sel.querySelector('option[value="custom"]')) {
@@ -856,7 +1060,7 @@ export function initVttChat(vtt, chatHistory) {
                             sel.appendChild(opt);
                         }
                     });
-                    setPositionStyle('custom', savedCoords);
+                    setPositionStyle('custom', savedCoords, savedSize);
                 } else {
                     setPositionStyle('right');
                 }
@@ -1144,10 +1348,24 @@ export function initVttChat(vtt, chatHistory) {
                 row.addEventListener('mouseleave', () => videoEl.pause());
             }
 
+            // Highlight token on canvas when hovering over card
+            row.addEventListener('mouseenter', () => {
+                if (c.tokenId && window.VTT?.canvasEngine?.setInitiativeHoverToken) {
+                    window.VTT.canvasEngine.setInitiativeHoverToken(c.tokenId);
+                }
+            });
+            row.addEventListener('mouseleave', () => {
+                if (window.VTT?.canvasEngine?.setInitiativeHoverToken) {
+                    window.VTT.canvasEngine.setInitiativeHoverToken(null);
+                }
+            });
+
             initList.appendChild(row);
         });
 
-        // No need to scrollIntoView because the active element is always at index 0
+        if (typeof updateScrollButtons === 'function') {
+            setTimeout(updateScrollButtons, 50);
+        }
     }
 
     function appendWhisperMessage(msg, isHistorical = false) {

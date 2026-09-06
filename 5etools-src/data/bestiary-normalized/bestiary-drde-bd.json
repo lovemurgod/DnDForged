@@ -1,0 +1,135 @@
+[
+  {
+    "id": "creature_bubba_wugga_drde-bd",
+    "name": "Bubba Wugga",
+    "source": "DrDe-BD",
+    "edition": "2024",
+    "page": 38,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 68,
+      "formula": "8d10 + 24"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 8,
+        "mod": -1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 5,
+        "mod": -3
+      },
+      "wis": {
+        "score": 7,
+        "mod": -2
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 8,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Elvish"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_greatclub_klmr",
+        "name": "Greatclub",
+        "actionType": "action",
+        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}13 (2d8 + 4) Bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 4",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_javelin_3d52",
+        "name": "Javelin",
+        "actionType": "action",
+        "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 30/120 ft. {@h}11 (2d6 + 4) Piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": "30/120 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/DrDe-BD/Bubba Wugga.webp",
+    "tokenImg": "img/bestiary/tokens/DrDe-BD/Bubba Wugga.webp",
+    "fluff": null
+  }
+]

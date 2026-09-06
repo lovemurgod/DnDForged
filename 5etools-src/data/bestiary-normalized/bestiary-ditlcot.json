@@ -1,0 +1,282 @@
+[
+  {
+    "id": "creature_pech_ditlcot",
+    "name": "Pech",
+    "source": "DitLCoT",
+    "edition": "2014",
+    "page": 16,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "N G",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 82,
+      "formula": "11d6 + 44"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 20,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "con": "+6",
+      "wis": "+4"
+    },
+    "skills": {
+      "athletics": "+6",
+      "perception": "+4",
+      "survival": "+4"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 120 ft., tremorsense 120 ft."
+    },
+    "languages": [
+      "Common",
+      "Terran"
+    ],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_pech_0",
+        "name": "Communal Spellcasting (2/Day)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 2,
+        "casterLevel": 1,
+        "dc": 12,
+        "atkMod": 4,
+        "header": "The pech works with three or more pechs to cast spells, requiring no spell components and using Wisdom as the spellcasting ability (save DC 12). If at least three other pechs are within 30 feet of it, the pech can cast Wall of Stone. If at least seven other pechs are within 30 feet of it, it can cast Greater Restoration. Each other pech involved in casting the spell can't have the incapacitated condition and must have at least one use of Communal Spellcasting remaining, which it must immediately expend to participate (no action required).",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "2": [
+            {
+              "spellId": "sp_wall_of_stone_xphb",
+              "name": "Wall of Stone",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 12,
+              "damageList": [],
+              "components": "V, S, M (a cube of granite)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_greater_restoration_xphb",
+              "name": "Greater Restoration",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      },
+      {
+        "id": "sc_pech_1",
+        "name": "Stone Shape (3/Day)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 2,
+        "casterLevel": 1,
+        "dc": 12,
+        "atkMod": 4,
+        "header": "The pech casts Stone Shape, requiring no spell components and using Wisdom as the spellcasting ability.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_stone_shape_xphb",
+              "name": "Stone Shape",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (soft clay)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_magic_resistance_n7hq",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The pech has advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sunlight_sensitivity_cn2f",
+        "name": "Sunlight Sensitivity",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in sunlight, the pech has disadvantage on attack rolls.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_icoo",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The pech makes two Fortified Pickaxe attacks. If it hits a Large or smaller creature with both attacks, the target must succeed on a DC 14 Strength saving throw or have the prone condition.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fortified_pickaxe_4vqn",
+        "name": "Fortified Pickaxe",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) force damage. If the target is a Construct or an object, the attack is automatically a critical hit.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/DitLCoT/Pech.webp",
+    "tokenImg": "img/bestiary/tokens/DitLCoT/Pech.webp",
+    "fluff": null
+  }
+]

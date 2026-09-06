@@ -1,0 +1,2552 @@
+[
+  {
+    "id": "creature_doric_hat-tg",
+    "name": "Doric",
+    "source": "HAT-TG",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "druid",
+    "alignment": "N G",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 104,
+      "formula": "16d8 + 32"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 16,
+        "mod": 3
+      },
+      "wis": {
+        "score": 19,
+        "mod": 4
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "int": "+6",
+      "wis": "+7"
+    },
+    "skills": {
+      "insight": "+7",
+      "nature": "+6",
+      "perception": "+7",
+      "survival": "+7"
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Druidic",
+      "Elvish",
+      "Infernal",
+      "Sylvan"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_doric_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "Doric casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 15):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_animal_messenger_xphb",
+            "name": "Animal Messenger",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "24 hours",
+            "concentration": false,
+            "ritual": true,
+            "saveAbility": "charisma",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 15,
+            "damageList": [],
+            "components": "V, S, M (a morsel of food)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_beast_sense_xphb",
+            "name": "Beast Sense",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_speak_with_animals_xphb",
+            "name": "Speak with Animals",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "10 minutes",
+            "concentration": false,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_cure_wounds_xphb",
+              "name": "Cure Wounds",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Healing",
+                  "stat": "spell"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_entangle_xphb",
+              "name": "Entangle",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_faerie_fire_xphb",
+              "name": "Faerie Fire",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_thunderwave_xphb",
+              "name": "Thunderwave",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "Self (15 feet cube)",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Thunder",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Animal Messenger",
+          "Beast Sense",
+          "Speak with Animals"
+        ]
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_5d6k",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Doric makes two Shaped Claw or Sling attacks. She can replace one attack with a use of Spellcasting.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shaped_claw_pxvc",
+        "name": "Shaped Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms +7 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sling_ebup",
+        "name": "Sling",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +6 to hit, range 30/120 ft., one target. {@h}8 (2d4 + 3) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "30/120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4 + 3",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_change_shape__5_day__b1km",
+        "name": "Change Shape (5/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Doric magically transforms into a Beast with a challenge rating of 3 or less or into an owlbear (see the Monster Manual).</p><p>Doric can remain in that form for up to 2 hours. She can choose whether her equipment falls to the ground, melds with her new form, or is worn by the new form. Doric reverts to her true form if she is incapacitated or dies. She can revert to her true form using a bonus action.</p><p>While Doric is transformed, her stat block is replaced by the stat block of that form, except she keeps her current hit points, her hit point maximum, this bonus action, her alignment, and her Intelligence, Wisdom, and Charisma scores.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_fiery_rebuke__3_day__274a",
+        "name": "Fiery Rebuke (3/Day)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When Doric is damaged by a creature that she can see within 60 feet of herself, she magically engulfs the creature in flames. The creature must make a DC 15 Dexterity saving throw, taking 16 (3d10) fire damage on failed save, or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "3d10",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HAT-TG/Doric.webp",
+    "tokenImg": "img/bestiary/tokens/HAT-TG/Doric.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_edgin_darvis_hat-tg",
+    "name": "Edgin Darvis",
+    "source": "HAT-TG",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "bard",
+    "alignment": "C G",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 110,
+      "formula": "17d8 + 34"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "dex": "+6",
+      "cha": "+7"
+    },
+    "skills": {
+      "deception": "+7",
+      "performance": "+10",
+      "persuasion": "+10",
+      "sleight of hand": "+6"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_edgin_darvis_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "Edgin casts one of the following spells, using Charisma as the spellcasting ability (spell save DC 15):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_friends_xphb",
+            "name": "Friends",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 15,
+            "damageList": [],
+            "components": "S, M (some makeup)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_message_xphb",
+            "name": "Message",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "1 round",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a copper wire)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_suggestion_xphb",
+              "name": "Suggestion",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 8 hours",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [],
+              "components": "V, M (a drop of honey)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ],
+          "3e": [
+            {
+              "spellId": "sp_charm_person_xphb",
+              "name": "Charm Person",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_disguise_self_xphb",
+              "name": "Disguise Self",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Friends",
+          "Message"
+        ]
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_ihbp",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Edgin makes two Reinforced Lute or Shortsword attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_reinforced_lute_w1cv",
+        "name": "Reinforced Lute",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) bludgeoning damage plus 11 (2d10) thunder damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "2d10",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortsword_igmn",
+        "name": "Shortsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage plus 11 (2d10) thunder damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d10",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_disorienting_words_p3fs",
+        "name": "Disorienting Words",
+        "actionType": "action",
+        "descriptionHtml": "<p>Edgin magically taunts up to three creatures he can see within 60 feet of himself. Each creature must succeed on a DC 15 Wisdom saving throw or take 10 (3d6) psychic damage and have disadvantage on the next attack roll it makes before the start of Edgin's next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_inspiring_words__3_day__hj5s",
+        "name": "Inspiring Words (3/Day)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When a creature Edgin can see within 60 feet of himself fails an ability check, an attack roll, or a saving throw, Edgin grants the creature magical encouragement. The creature can roll a d8 and add the number rolled to the total, potentially turning the failure into a success.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HAT-TG/Edgin Darvis.webp",
+    "tokenImg": "img/bestiary/tokens/HAT-TG/Edgin Darvis.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_forge_fitzwilliam_hat-tg",
+    "name": "Forge Fitzwilliam",
+    "source": "HAT-TG",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 110,
+      "formula": "20d8 + 20"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 20,
+        "mod": 5
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "dex": "+5",
+      "int": "+5"
+    },
+    "skills": {
+      "acrobatics": "+5",
+      "deception": "+11",
+      "investigation": "+8",
+      "persuasion": "+11",
+      "sleight of hand": "+5",
+      "stealth": "+8"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Thieves' cant"
+    ],
+    "cr": "8",
+    "crNumeric": 8,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_disarming_charm_j2f1",
+        "name": "Disarming Charm",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While Forge isn't wearing armor, his AC includes his Charisma modifier.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_double_cross_iesy",
+        "name": "Double-Cross",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Forge hits a creature friendly to him with an attack roll, the attack is automatically a critical hit.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_evasion_199e",
+        "name": "Evasion",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Forge is subjected to an effect that allows him to make a Dexterity saving throw to take only half damage, he takes no damage if he succeeds on the saving throw, and only half damage if he fails, provided he isn't incapacitated.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_hfhe",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Forge makes two Dagger attacks, two Heavy Crossbow attacks, or one of each.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dagger_t704",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage plus 24 (7d6) poison damage, and the target is poisoned until the end of its next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Piercing"
+            },
+            {
+              "formula": "7d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_heavy_crossbow_qmih",
+        "name": "Heavy Crossbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +5 to hit, range 100/400 ft., one target. {@h}7 (1d10 + 2) piercing damage plus 24 (7d6) poison damage. {@hom}If the target is a creature, it has disadvantage on the next attack roll it makes before the start of Forge's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": null,
+          "range": "100/400 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 2",
+              "type": "Piercing"
+            },
+            {
+              "formula": "7d6",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_cunning_uque",
+        "name": "Cunning",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Forge takes the Dash, Disengage, or Hide action, or he gives himself advantage on the next attack roll he makes before the end of this turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_uncanny_dodge_0lc9",
+        "name": "Uncanny Dodge",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>Forge halves the damage he takes from an attack that hits him. He must be able to see the attacker.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HAT-TG/Forge Fitzwilliam.webp",
+    "tokenImg": "img/bestiary/tokens/HAT-TG/Forge Fitzwilliam.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_holga_kilgore_hat-tg",
+    "name": "Holga Kilgore",
+    "source": "HAT-TG",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "C G",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 120,
+      "formula": "16d8 + 48"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 13,
+        "mod": 1
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "str": "+7",
+      "con": "+6"
+    },
+    "skills": {
+      "athletics": "+7",
+      "intimidation": "+4",
+      "nature": "+3",
+      "survival": "+6"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Halfling"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_reckless_2lwf",
+        "name": "Reckless",
+        "actionType": "trait",
+        "descriptionHtml": "<p>At the start of her turn, Holga can gain advantage on melee weapon attack rolls during that turn, but attack rolls against her have advantage until the start of her next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_special_equipment_cyiq",
+        "name": "Special Equipment",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Holga carries a darksteel greataxe, a magic weapon that grants her resistance to lightning damage while she carries it (included above).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_unarmored_defense_93ac",
+        "name": "Unarmored Defense",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While Holga isn't wearing armor, her AC includes her Constitution modifier.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_v1kl",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Holga makes three Darksteel Greataxe or Improvised Weapon attacks, in any combination.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_darksteel_greataxe_f5ue",
+        "name": "Darksteel Greataxe",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}10 (1d12 + 4) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d12 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_improvised_weapon_6x5u",
+        "name": "Improvised Weapon",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +7 to hit, reach 5 ft., or range 20/60 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "or range 20/60 ft",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_wrestle_tnx2",
+        "name": "Wrestle",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Holga shoves a creature within 5 feet of herself. That creature must succeed on a DC 15 Strength saving throw or be moved 5 feet into an unoccupied space of Holga's choice.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HAT-TG/Holga Kilgore.webp",
+    "tokenImg": "img/bestiary/tokens/HAT-TG/Holga Kilgore.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_simon_aumar_hat-tg",
+    "name": "Simon Aumar",
+    "source": "HAT-TG",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "sorcerer",
+    "alignment": "C G",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 99,
+      "formula": "18d8 + 18"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 16,
+        "mod": 3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "con": "+4",
+      "cha": "+6"
+    },
+    "skills": {
+      "arcana": "+6",
+      "deception": "+6",
+      "history": "+6",
+      "religion": "+6",
+      "survival": "+4"
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Draconic",
+      "Elvish"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_simon_aumar_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "Roll a d6. On a roll of 1, Simon must roll on the Wild Magic Surge table in the Player's Handbook. On a roll of 2 or higher, Simon casts one of the following spells, using Charisma as the spellcasting ability (spell save DC 14):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_minor_illusion_xphb",
+            "name": "Minor Illusion",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a bit of fleece)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_speak_with_dead_xphb",
+            "name": "Speak with Dead",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Necromancy",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "10 minutes",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (burning incense)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_fog_cloud_xphb",
+              "name": "Fog Cloud",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_mage_armor_xphb",
+              "name": "Mage Armor",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "8 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a piece of cured leather)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_magic_missile_xphb",
+              "name": "Magic Missile",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "1d4 + 1",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_spider_climb_xphb",
+              "name": "Spider Climb",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a drop of bitumen and a spider)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_bigby_s_hand_xphb",
+              "name": "Bigby's Hand",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "spell",
+              "atkMod": 6,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "5d8",
+                  "type": "Force",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (an eggshell and a glove)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_major_image_xphb",
+              "name": "Major Image",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a bit of fleece)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Mage Hand",
+          "Minor Illusion",
+          "Prestidigitation",
+          "Speak with Dead"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_fey_ancestry_60t0",
+        "name": "Fey Ancestry",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Simon has advantage on saving throws he makes to avoid or end the charmed condition on himself, and magic can't put him to sleep.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_special_equipment_9uns",
+        "name": "Special Equipment",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Simon carries a bag of holding, two pairs of sending stones, and a deathly token (see Spellcasting).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wild_magic_99yw",
+        "name": "Wild Magic",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When Simon takes 20 or more damage from a single source or takes damage from a critical hit, he must roll on the Wild Magic Surge table in the Player's Handbook.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_hdag",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Simon makes three Quarterstaff or Chaos Bolt attacks. He can replace one attack with one use of Spellcasting.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_quarterstaff_lvf5",
+        "name": "Quarterstaff",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands, plus 11 (2d10) force damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 2,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 - 1",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8 - 1",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "2d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_chaos_bolt_01el",
+        "name": "Chaos Bolt",
+        "actionType": "action",
+        "descriptionHtml": "<p>rs +6 to hit, range 60 ft., one target. {@h}14 (2d10 + 3) damage of a random type determined by rolling a d8: 1, acid; 2, cold; 3, fire; 4, force; 5, lightning; 6, poison; 7, psychic; 8, thunder.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 3",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_sheltering_shield__3_day__ij2i",
+        "name": "Sheltering Shield (3/Day)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When Simon or another creature he can see within 10 feet of himself would take damage, he conjures a shimmering, 10-foot-radius sphere of magical force centered on himself. Creatures inside the sphere have resistance to the damage that triggered this reaction.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HAT-TG/Simon Aumar.webp",
+    "tokenImg": "img/bestiary/tokens/HAT-TG/Simon Aumar.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_sofina_hat-tg",
+    "name": "Sofina",
+    "source": "HAT-TG",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "wizard",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 161,
+      "formula": "19d8 + 76"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "int": "+10",
+      "wis": "+7"
+    },
+    "skills": {
+      "arcana": "+10",
+      "history": "+10",
+      "insight": "+7"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Abyssal",
+      "Common",
+      "Draconic",
+      "Infernal",
+      "Thayan"
+    ],
+    "cr": "15",
+    "crNumeric": 15,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_sofina_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 18,
+        "atkMod": 10,
+        "header": "Sofina casts one of the following spells, using Intelligence as the spellcasting ability (spell save DC 18):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_message_xphb",
+            "name": "Message",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "1 round",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a copper wire)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_prestidigitation_xphb",
+            "name": "Prestidigitation",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_bestow_curse_xphb",
+              "name": "Bestow Curse",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [
+                {
+                  "formula": "1d8",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_bigby_s_hand_xphb",
+              "name": "Bigby's Hand",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "spell",
+              "atkMod": 10,
+              "dc": 18,
+              "damageList": [
+                {
+                  "formula": "5d8",
+                  "type": "Force",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (an eggshell and a glove)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dimension_door_xphb",
+              "name": "Dimension Door",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "500 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_mage_armor_xphb",
+              "name": "Mage Armor",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "8 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a piece of cured leather)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_otiluke_s_resilient_sphere_xphb",
+              "name": "Otiluke's Resilient Sphere",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [],
+              "components": "V, S, M (a glass sphere)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_thunderwave_xphb",
+              "name": "Thunderwave",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "Self (15 feet cube)",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Thunder",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_evard_s_black_tentacles_xphb",
+              "name": "Evard's Black Tentacles",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [
+                {
+                  "formula": "3d6",
+                  "type": "Bludgeoning",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a tentacle)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_finger_of_death_xphb",
+              "name": "Finger of Death",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [
+                {
+                  "formula": "7d8 + 30",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_time_stop_xphb",
+              "name": "Time Stop",
+              "source": "XPHB",
+              "level": 9,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Mage Hand",
+          "Message",
+          "Prestidigitation"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_special_equipment_t9um",
+        "name": "Special Equipment",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Sofina wears a magic robe that grants her a +2 bonus to AC and a +1 bonus to saving throws (included above).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_zmeu",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Sofina makes three Necrotic Strike attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_necrotic_strike_amdv",
+        "name": "Necrotic Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms,rs +10 to hit, reach 5 ft. or range 120 ft., one target. {@h}32 (5d10 + 5) necrotic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 10,
+          "reach": 5,
+          "range": "120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "5d10 + 5",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_swarm_of_meteors__1_day__70wt",
+        "name": "Swarm of Meteors (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Sofina magically calls down a meteor swarm that detonates in four 40-foot-radius spheres, each one centered on a point she can see within 1 mile of herself. These spheres can overlap. Each creature in one or more of these spheres must make a DC 18 Dexterity saving throw, taking 35 (10d6) fire damage and 35 (10d6) bludgeoning damage on a failed saving throw, or half as much damage on a successful one. A creature in multiple spheres takes this damage only once.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "10d6",
+              "type": "Fire"
+            },
+            {
+              "formula": "10d6",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_summon_wraith__1_day__c83n",
+        "name": "Summon Wraith (1/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Sofina magically summons the spirit of a Thayan assassin, which appears as a wraith (see the Monster Manual). The summoned wraith appears in an unoccupied space within 60 feet of Sofina, whom it obeys. The summoned wraith takes its turn immediately after Sofina. It lasts for 1 hour, until it or Sofina dies, or until Sofina dismisses it as a bonus action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HAT-TG/Sofina.webp",
+    "tokenImg": "img/bestiary/tokens/HAT-TG/Sofina.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_xenk_yendar_hat-tg",
+    "name": "Xenk Yendar",
+    "source": "HAT-TG",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "paladin",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 157,
+      "formula": "21d8 + 63"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {
+      "str": "+8",
+      "cha": "+7"
+    },
+    "skills": {
+      "athletics": "+8",
+      "history": "+6",
+      "insight": "+7",
+      "survival": "+7"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Thayan",
+      "Undercommon"
+    ],
+    "cr": "10",
+    "crNumeric": 10,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_aura_of_protection_h41s",
+        "name": "Aura of Protection",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Xenk and his allies within 10 feet of him have advantage on saving throws.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_zh3z",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Xenk makes three Daggersword attacks and uses Daggersword Flourish. He can replace Daggersword Flourish with Cleansing Touch if it's available.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_daggersword_2qeo",
+        "name": "Daggersword",
+        "actionType": "action",
+        "descriptionHtml": "<p>Choose the attack that corresponds to the daggersword's current form (see Daggersword Shift below):</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longsword_n564",
+        "name": "Longsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands, plus 6 (1d12) radiant damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 4",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d10 + 4",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d12",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortsword_and_dagger_94fw",
+        "name": "Shortsword and Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) piercing damage plus 6 (1d12) radiant damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d12",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_daggersword_flourish_onw7",
+        "name": "Daggersword Flourish",
+        "actionType": "action",
+        "descriptionHtml": "<p>Choose the option that corresponds to the daggersword's current form (see Daggersword Shift below):</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longsword_kx6n",
+        "name": "Longsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>Xenk magically detaches the longsword's blade from its hilt, launching the blade at a creature he can see within 30 feet of himself. The target must make a DC 16 Dexterity saving throw. On a failed save, the target is impaled by the blade, taking 14 (3d6 + 4) piercing damage, and is knocked prone. At the end of the current turn, the blade magically reattaches to its hilt.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "3d6 + 4",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortsword_and_dagger_406p",
+        "name": "Shortsword and Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>Xenk lashes out with both weapons. Each creature of his choice within 10 feet of him must make a DC 16 Dexterity throw. On a failed save, the creature takes 7 (2d6) piercing damage and has disadvantage on attack rolls until the start of Xenk's next turn. On a successful save, the creature takes half as much damage and suffers no other effect.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_cleansing_touch__1_day__8yo6",
+        "name": "Cleansing Touch (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Xenk touches a creature within 5 feet of himself. The target magically regains 27 (6d8) hit points and gains the benefit of a lesser restoration spell.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_daggersword_shift_xfr7",
+        "name": "Daggersword Shift",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Xenk changes the form of his daggersword, choosing one of the following forms: a longsword, or a shortsword in one hand and a dagger in the other.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/HAT-TG/Xenk Yendar.webp",
+    "tokenImg": "img/bestiary/tokens/HAT-TG/Xenk Yendar.webp",
+    "fluff": null
+  }
+]

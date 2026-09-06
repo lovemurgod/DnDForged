@@ -9,6 +9,11 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "online": "node launcher.js",
+    "build:creatures": "node scripts/build-creature-db.mjs",
+    "build:spells": "node scripts/build-spell-db.mjs",
+    "build:items": "node scripts/build-item-db.mjs",
+    "build:compendium": "node scripts/build-compendium-db.mjs",
+    "build:dbs": "node scripts/build-spell-db.mjs && node scripts/build-creature-db.mjs && node scripts/build-item-db.mjs && node scripts/build-compendium-db.mjs",
     "app": "electron .",
     "dist": "electron-builder",
     "dist:portable": "electron-builder --win portable"

@@ -1,0 +1,3322 @@
+[
+  {
+    "id": "creature_amble_lr",
+    "name": "Amble",
+    "source": "LR",
+    "edition": "2014",
+    "page": 15,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "tortle",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 90,
+      "formula": "12d8 + 36"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {
+      "str": "+6",
+      "dex": "+4",
+      "con": "+7",
+      "int": "+4",
+      "wis": "+8",
+      "cha": "+6"
+    },
+    "skills": {
+      "animal handling": "+8",
+      "insight": "+8",
+      "medicine": "+8",
+      "perception": "+8",
+      "survival": "+8"
+    },
+    "senses": {
+      "passivePerception": 18,
+      "sensesString": ""
+    },
+    "languages": [
+      "Aquan",
+      "Common",
+      "Druidic"
+    ],
+    "cr": "10",
+    "crNumeric": 10,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_amble_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 12,
+        "dc": 16,
+        "atkMod": 8,
+        "header": "Amble is a 12th-level spellcaster. Their spellcasting ability is Wisdom (spell save DC 16, +8 to hit with spell attacks). Amble has the following druid spells prepared:",
+        "footer": "",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_guidance_xphb",
+                "name": "Guidance",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Divination",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mending_xphb",
+                "name": "Mending",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 minute",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (two lodestones)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shape_water_xge",
+                "name": "Shape Water",
+                "source": "XGE",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Instantaneous, 1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shillelagh_xphb",
+                "name": "Shillelagh",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 bonus action",
+                "range": "self",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (mistletoe)",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_absorb_elements_xge",
+                "name": "Absorb Elements",
+                "source": "XGE",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 reaction (which you take when you take acid, cold, fire, lightning, or thunder damage)",
+                "range": "self",
+                "duration": "1 round",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_cure_wounds_xphb",
+                "name": "Cure Wounds",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Healing",
+                    "stat": "spell"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_entangle_xphb",
+                "name": "Entangle",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "90 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "strength",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_speak_with_animals_xphb",
+                "name": "Speak with Animals",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Divination",
+                "castingTime": "1 action",
+                "range": "self",
+                "duration": "10 minutes",
+                "concentration": false,
+                "ritual": true,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_darkvision_xphb",
+                "name": "Darkvision",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a dried carrot)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_hold_person_xphb",
+                "name": "Hold Person",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [],
+                "components": "V, S, M (a straight piece of iron)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_lesser_restoration_xphb",
+                "name": "Lesser Restoration",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Abjuration",
+                "castingTime": "1 bonus action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_moonbeam_xphb",
+                "name": "Moonbeam",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "2d10",
+                    "type": "Radiant",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a moonseed leaf)",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_conjure_animals_xphb",
+                "name": "Conjure Animals",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [
+                  {
+                    "formula": "3d10",
+                    "type": "Slashing",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_dispel_magic_xphb",
+                "name": "Dispel Magic",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_water_breathing_xphb",
+                "name": "Water Breathing",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "24 hours",
+                "concentration": false,
+                "ritual": true,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a short reed)",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_charm_monster_xge",
+                "name": "Charm Monster",
+                "source": "XGE",
+                "level": 4,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 16,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_freedom_of_movement_xphb",
+                "name": "Freedom of Movement",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a leather strap)",
+                "type": "slot"
+              }
+            ]
+          },
+          "5": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_greater_restoration_xphb",
+                "name": "Greater Restoration",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mass_cure_wounds_xphb",
+                "name": "Mass Cure Wounds",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "5d8",
+                    "type": "Healing",
+                    "stat": "spell"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "6": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_conjure_fey_xphb",
+                "name": "Conjure Fey",
+                "source": "XPHB",
+                "level": 6,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 8,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "3d12",
+                    "type": "Psychic",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_hearth_of_moonlight_and_shadow_6ry4",
+        "name": "Hearth of Moonlight and Shadow",
+        "actionType": "trait",
+        "descriptionHtml": "<p>At the start of a short or long rest, Amble can touch a point in space, and an invisible, 30-foot-radius sphere of magic appears, centered on that point. Cover blocks the sphere.</p><p>While within the sphere, Amble and their allies gain a +5 bonus to Dexterity (Stealth) and Wisdom (Perception) checks, and any light from open flames in the sphere isn't visible outside it.</p><p>The sphere vanishes at the end of the rest or when Amble leaves the sphere.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hold_breath_uytk",
+        "name": "Hold Breath",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Amble can hold their breath for up to 1 hour at a time.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_balm_of_the_summer_court__12d6__fuss",
+        "name": "Balm of the Summer Court (12d6)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>(As a Bonus Action) Amble can choose one creature they can see within 120 feet of them and spend up to 6d6 of their die pool. Roll the spent dice and add them together. The target regains a number of hit points equal to the total. The target also gains 1 temporary hit point per die spent. Amble regains all expended dice when they finish a long rest.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hidden_paths__4_day__72at",
+        "name": "Hidden Paths (4/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>(As a Bonus Action) Amble may teleport up to 60 feet to an unoccupied space they can see.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_change_shape__2_day__mnsx",
+        "name": "Change Shape (2/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Amble magically polymorphs into a beast with a challenge rating of 1 or less, and can remain in this form for up to 6 hours. Amble's equipment melds with their new form. Amble reverts to their true form if they die or fall unconscious. Amble can revert to their true form using a bonus action on their turn.</p><p>Amble's game statistics are replaced by the statistics of the beast, but they retain their alignment, personality, and Intelligence, Wisdom, and Charisma scores. Amble also retains all their skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as Amble and the bonus in its stat block is higher, use the creature's bonus instead of Amble's.</p><p>When Amble transforms, they assume the beast's hit points and Hit Dice. When Amble reverts to their normal form, they return to the number of hit points they had before they transformed. However, if Amble reverts as a result of dropping to 0 hit points, any excess damage carries over their normal form.</p><p>Amble can't cast spells, and their ability to speak or take any action that requires hands is limited to the capabilities of their beast form. Transforming doesn't break Amble's concentration on a spell they've already cast however, or prevent them from taking actions that are part of a spell.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claws_3hfc",
+        "name": "Claws",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_club_cqwa",
+        "name": "Club",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit (+8 to hit with shillelagh), reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage, or 8 (1d8 + 4) bludgeoning damage with shillelagh.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d8 + 4",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LR/Amble.webp",
+    "tokenImg": "img/bestiary/tokens/LR/Amble.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_fhenimore_lr",
+    "name": "Fhenimore",
+    "source": "LR",
+    "edition": "2014",
+    "page": 20,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 75,
+      "formula": "10d8 + 30"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {
+      "perception": "+5"
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Aquan"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_fhenimore_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 2,
+        "casterLevel": 0,
+        "dc": 13,
+        "atkMod": 5,
+        "header": "The priest's spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_command_xphb",
+            "name": "Command",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 13,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_create_or_destroy_water_xphb",
+            "name": "Create or Destroy Water",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a mix of water and sand)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_control_water_xphb",
+              "name": "Control Water",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "300 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Bludgeoning",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a mixture of water and dust)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_darkness_xphb",
+              "name": "Darkness",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, M (bat fur and a piece of coal)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_water_breathing_xphb",
+              "name": "Water Breathing",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "24 hours",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a short reed)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_water_walk_xphb",
+              "name": "Water Walk",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a piece of cork)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_call_lightning_xphb",
+              "name": "Call Lightning",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [
+                {
+                  "formula": "3d10",
+                  "type": "Lightning",
+                  "label": "Damage 1",
+                  "stat": "none"
+                },
+                {
+                  "formula": "1d10",
+                  "type": "Lightning",
+                  "label": "Damage 2",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_evard_s_black_tentacles_xphb",
+              "name": "Evard's Black Tentacles",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [
+                {
+                  "formula": "3d6",
+                  "type": "Bludgeoning",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a tentacle)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Command",
+          "Create or Destroy Water"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_amphibious_veet",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The priest can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_thunderous_touch_e53t",
+        "name": "Thunderous Touch",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms +5 to hit, reach 5 ft., one creature. {@h}27 (5d10) thunder damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one creature",
+          "save": null,
+          "damages": [
+            {
+              "formula": "5d10",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_voice_of_the_kraken__recharges_after_a_short_or_long_rest__ib2n",
+        "name": "Voice of the Kraken (Recharges after a Short or Long Rest)",
+        "actionType": "action",
+        "descriptionHtml": "<p>A kraken speaks through the priest with a thunderous voice audible within 300 feet. Creatures of the priest's choice that can hear the kraken's words (which are spoken in Abyssal, Infernal, or Primordial) must succeed on a DC 14 Charisma saving throw or be frightened for 1 minute. A frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LR/Fhenimore.webp",
+    "tokenImg": "img/bestiary/tokens/LR/Fhenimore.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_gar_shatterkeel_lr",
+    "name": "Gar Shatterkeel",
+    "source": "LR",
+    "edition": "2014",
+    "page": 18,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 144,
+      "formula": "17d8 + 68"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 20,
+        "mod": 5
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {},
+    "skills": {
+      "nature": "+11",
+      "perception": "+10",
+      "survival": "+10"
+    },
+    "senses": {
+      "passivePerception": 20,
+      "sensesString": ""
+    },
+    "languages": [
+      "Aquan",
+      "Common"
+    ],
+    "cr": "15",
+    "crNumeric": 15,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_gar_shatterkeel_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 5,
+        "casterLevel": 13,
+        "dc": 18,
+        "atkMod": 10,
+        "header": "Gar is a 13th-level spellcaster. His spellcasting ability is Wisdom (spell save DC 18, +10 to hit with spell attacks). He has the following druid spells prepared:",
+        "footer": "*Circle spells don't count against spells prepared.",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_frostbite_xge",
+                "name": "Frostbite",
+                "source": "XGE",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "1d6",
+                    "type": "Cold",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mending_xphb",
+                "name": "Mending",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 minute",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (two lodestones)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_resistance_xphb",
+                "name": "Resistance",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shape_water_xge",
+                "name": "Shape Water",
+                "source": "XGE",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Instantaneous, 1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_thunderclap_xge",
+                "name": "Thunderclap",
+                "source": "XGE",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "5 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "1d6",
+                    "type": "Thunder",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "S",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_create_or_destroy_water_xphb",
+                "name": "Create or Destroy Water",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a mix of water and sand)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_charm_person_xphb",
+                "name": "Charm Person",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_cure_wounds_xphb",
+                "name": "Cure Wounds",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Healing",
+                    "stat": "spell"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_thunderwave_xphb",
+                "name": "Thunderwave",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "Self (15 feet cube)",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Thunder",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_darkvision_xphb",
+                "name": "Darkvision",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a dried carrot)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_hold_person_xphb",
+                "name": "Hold Person",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S, M (a straight piece of iron)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mirror_image_xphb",
+                "name": "Mirror Image",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "self",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_misty_step_xphb",
+                "name": "Misty Step",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Conjuration",
+                "castingTime": "1 bonus action",
+                "range": "self",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_pass_without_trace_xphb",
+                "name": "Pass Without Trace",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "Self (30 feet emanation)",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (ashes from burned mistletoe)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_protection_from_poison_xphb",
+                "name": "Protection from Poison",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_conjure_animals_xphb",
+                "name": "Conjure Animals",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "3d10",
+                    "type": "Slashing",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_dispel_magic_xphb",
+                "name": "Dispel Magic",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_tidal_wave_xge",
+                "name": "Tidal Wave",
+                "source": "XGE",
+                "level": 3,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "4d8",
+                    "type": "Bludgeoning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a drop of water)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_water_breathing_xphb",
+                "name": "Water Breathing",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "24 hours",
+                "concentration": false,
+                "ritual": true,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a short reed)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_water_walk_xphb",
+                "name": "Water Walk",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": true,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a piece of cork)",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_charm_monster_xge",
+                "name": "Charm Monster",
+                "source": "XGE",
+                "level": 4,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_control_water_xphb",
+                "name": "Control Water",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "300 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "strength",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "2d8",
+                    "type": "Bludgeoning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a mixture of water and dust)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_dominate_beast_xphb",
+                "name": "Dominate Beast",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_freedom_of_movement_xphb",
+                "name": "Freedom of Movement",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a leather strap)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_watery_sphere_xge",
+                "name": "Watery Sphere",
+                "source": "XGE",
+                "level": 4,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "90 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "strength",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S, M (a droplet of water)",
+                "type": "slot"
+              }
+            ]
+          },
+          "5": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_conjure_elemental_xphb",
+                "name": "Conjure Elemental",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "8d8",
+                    "type": "Lightning",
+                    "label": "Damage 1",
+                    "stat": "none"
+                  },
+                  {
+                    "formula": "4d8",
+                    "type": "Thunder",
+                    "label": "Damage 2",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_maelstrom_xge",
+                "name": "Maelstrom",
+                "source": "XGE",
+                "level": 5,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "strength",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [
+                  {
+                    "formula": "6d6",
+                    "type": "Bludgeoning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (paper or leaf in the shape of a funnel)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_scrying_xphb",
+                "name": "Scrying",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Divination",
+                "castingTime": "10 minutes",
+                "range": "self",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 18,
+                "damageList": [],
+                "components": "V, S, M (a focus worth 1,000+ GP, such as a crystal ball, mirror, or water-filled font)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_tree_stride_xphb",
+                "name": "Tree Stride",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "self",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "6": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_heal_xphb",
+                "name": "Heal",
+                "source": "XPHB",
+                "level": 6,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "70",
+                    "type": "Healing",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "7": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_plane_shift_xphb",
+                "name": "Plane Shift",
+                "source": "XPHB",
+                "level": 7,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a forked, metal rod worth 250+ GP and attuned to a plane of existence)",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_amphibious_joas",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Gar can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__3_day__d9jq",
+        "name": "Legendary Resistance (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Gar fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_water_walk_gcj1",
+        "name": "Water Walk",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Gar can stand and move on liquid surfaces as if they were solid ground.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_watery_fall_ndkf",
+        "name": "Watery Fall",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When Gar drops to 0 hit points, his body collapses into a pool of inky water that rapidly disperses. Except for Wave and his claw, anything he was wearing or carrying is left behind.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_9ux9",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Gar makes two melee attacks, one with his claw and one with Wave.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_gg8z",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) bludgeoning damage, and the target is grappled (escape DC 16). Until the grapple ends, Gar can't attack other creatures with his claw.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 16,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d6 + 3",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wave_9l62",
+        "name": "Wave",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +11 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}9 (1d6 + 6) piercing damage or 10 (1d8 + 6) piercing damage when used with two hands. If Gar scores a critical hit with this weapon, the target takes extra necrotic damage equal to half its hit point maximum.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d8 + 6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_umberlee_s_wake__recharge_5__2d3r",
+        "name": "Umberlee's Wake (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Power ripples out in a 60-foot radius sphere from a point within range (150 ft.) as the will of Umberlee affects all in her watery embrace. Each creature in that area must succeed on a DC 18 Constitution saving throw. On a failed save, the creature can't use reactions, its speed is halved, and it can't make more than one attack on its turn. In addition, the creature can use either an action or a bonus action on its turn, but not both. These effects last for 1 minute. The creature can repeat the saving throw at the end of each of its turns, ending the effect on itself with a successful save. This only affects targets that are submerged or floating in water. Gar Shatterkeel and any undead serving him are immune to this effect.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_move_12tw",
+          "name": "Move",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Gar moves up to his speed without provoking opportunity attacks.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_claw_6yv9",
+          "name": "Claw",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Gar makes one attack with his claw.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_wave__costs_2_actions__j73v",
+          "name": "Wave (Costs 2 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Gar makes one attack with Wave with advantage.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [
+      {
+        "id": "act_lair_action_3k4t",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>Gar can employ lair actions while he's within the coral mountain.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_yy66",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>Gar may teleport anywhere within the coral mountain, bringing up to five willing creatures with him.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_mtpu",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The coral in a 60-foot radius grows rapidly around creatures inside the coral mountain. Each creature must succeed on a DC 18 Strength saving throw or become restrained. Restrained creatures can take an action on their turn to make a DC 18 Strength (Athletics) or Dexterity (Acrobatics) check to free themselves. This effect lasts for 1 minute unless dispelled (it counts as a 6th level spell), and doesn't require Gar to maintain concentration. Gar Shatterkeel and any creatures he designates are immune to this effect.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lair_action_9lnw",
+        "name": "Lair Action",
+        "actionType": "lair",
+        "descriptionHtml": "<p>Up to five corpses that Gar can see within 60 feet rise up as drowned blade and attack anyone Gar directs them to on his turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LR/Gar Shatterkeel.webp",
+    "tokenImg": "img/bestiary/tokens/LR/Gar Shatterkeel.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_shoalar_quanderil_lr",
+    "name": "Shoalar Quanderil",
+    "source": "LR",
+    "edition": "2014",
+    "page": 23,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "genasi",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      },
+      {
+        "value": 14,
+        "condition": "with {@spell mage armor}"
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 75,
+      "formula": "10d8 + 30"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {},
+    "skills": {
+      "arcana": "+6",
+      "deception": "+8",
+      "insight": "+4",
+      "persuasion": "+8"
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "Aquan",
+      "Common"
+    ],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_shoalar_quanderil_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "con",
+        "abilityMod": 3,
+        "casterLevel": 0,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "Shoalar's innate spellcasting ability is Constitution (spell save DC 14, +6 to hit with spell attacks). He can innately cast the following spells:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_shape_water_xge",
+            "name": "Shape Water",
+            "source": "XGE",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous, 1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_create_or_destroy_water_xphb",
+              "name": "Create or Destroy Water",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a mix of water and sand)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Shape Water"
+        ]
+      },
+      {
+        "id": "sc_shoalar_quanderil_1",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 7,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "Shoalar is a 7th-level spellcaster. His spellcasting ability is Charisma (spell save DC 15, +7 to hit with spell attacks). He knows the following sorcerer spells:",
+        "footer": "",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_acid_splash_xphb",
+                "name": "Acid Splash",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [
+                  {
+                    "formula": "1d6",
+                    "type": "Acid",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_chill_touch_xphb",
+                "name": "Chill Touch",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Necromancy",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 7,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d10",
+                    "type": "Necrotic",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_light_xphb",
+                "name": "Light",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, M (a firefly or phosphorescent moss)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_prestidigitation_xphb",
+                "name": "Prestidigitation",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "10 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_ray_of_frost_xphb",
+                "name": "Ray of Frost",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 7,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d8",
+                    "type": "Cold",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_disguise_self_xphb",
+                "name": "Disguise Self",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Illusion",
+                "castingTime": "1 action",
+                "range": "self",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mage_armor_xphb",
+                "name": "Mage Armor",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a piece of cured leather)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_shield_xphb",
+                "name": "Shield",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+                "range": "self",
+                "duration": "1 round",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_hold_person_xphb",
+                "name": "Hold Person",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Enchantment",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "wisdom",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [],
+                "components": "V, S, M (a straight piece of iron)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_misty_step_xphb",
+                "name": "Misty Step",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Conjuration",
+                "castingTime": "1 bonus action",
+                "range": "self",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_lightning_bolt_xphb",
+                "name": "Lightning Bolt",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "Self (100 feet line)",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [
+                  {
+                    "formula": "8d6",
+                    "type": "Lightning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a bit of fur and a crystal rod)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_tidal_wave_xge",
+                "name": "Tidal Wave",
+                "source": "XGE",
+                "level": 3,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [
+                  {
+                    "formula": "4d8",
+                    "type": "Bludgeoning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a drop of water)",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 1,
+            "spells": [
+              {
+                "spellId": "sp_watery_sphere_xge",
+                "name": "Watery Sphere",
+                "source": "XGE",
+                "level": 4,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "90 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "strength",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 15,
+                "damageList": [],
+                "components": "V, S, M (a droplet of water)",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_amphibious_2a11",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Shoalar can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_dagger_uh7w",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LR/Shoalar Quanderil.webp",
+    "tokenImg": "img/bestiary/tokens/LR/Shoalar Quanderil.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_whymsee_lr",
+    "name": "Whymsee",
+    "source": "LR",
+    "edition": "2014",
+    "page": 20,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 75,
+      "formula": "10d8 + 30"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {
+      "perception": "+5"
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Aquan"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_whymsee_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 2,
+        "casterLevel": 0,
+        "dc": 13,
+        "atkMod": 5,
+        "header": "The priest's spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_command_xphb",
+            "name": "Command",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 13,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_create_or_destroy_water_xphb",
+            "name": "Create or Destroy Water",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a mix of water and sand)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_control_water_xphb",
+              "name": "Control Water",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "300 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Bludgeoning",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a mixture of water and dust)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_darkness_xphb",
+              "name": "Darkness",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, M (bat fur and a piece of coal)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_water_breathing_xphb",
+              "name": "Water Breathing",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "24 hours",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a short reed)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_water_walk_xphb",
+              "name": "Water Walk",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a piece of cork)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_call_lightning_xphb",
+              "name": "Call Lightning",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [
+                {
+                  "formula": "3d10",
+                  "type": "Lightning",
+                  "label": "Damage 1",
+                  "stat": "none"
+                },
+                {
+                  "formula": "1d10",
+                  "type": "Lightning",
+                  "label": "Damage 2",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_evard_s_black_tentacles_xphb",
+              "name": "Evard's Black Tentacles",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [
+                {
+                  "formula": "3d6",
+                  "type": "Bludgeoning",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a tentacle)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Command",
+          "Create or Destroy Water"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_amphibious_4hev",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The priest can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_thunderous_touch_a50n",
+        "name": "Thunderous Touch",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms +5 to hit, reach 5 ft., one creature. {@h}27 (5d10) thunder damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one creature",
+          "save": null,
+          "damages": [
+            {
+              "formula": "5d10",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_voice_of_the_kraken__recharges_after_a_short_or_long_rest__tmwy",
+        "name": "Voice of the Kraken (Recharges after a Short or Long Rest)",
+        "actionType": "action",
+        "descriptionHtml": "<p>A kraken speaks through the priest with a thunderous voice audible within 300 feet. Creatures of the priest's choice that can hear the kraken's words (which are spoken in Abyssal, Infernal, or Primordial) must succeed on a DC 14 Charisma saving throw or be frightened for 1 minute. A frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LR/Whymsee.webp",
+    "tokenImg": "img/bestiary/tokens/LR/Whymsee.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_young_kraken_lr",
+    "name": "Young Kraken",
+    "source": "LR",
+    "edition": "2014",
+    "page": 21,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Monstrosity",
+    "subtype": "titan",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 207,
+      "formula": "18d12 + 90"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 50,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 24,
+        "mod": 7
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 20,
+        "mod": 5
+      },
+      "int": {
+        "score": 19,
+        "mod": 4
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 5,
+    "saves": {
+      "str": "+12",
+      "dex": "+5",
+      "con": "+10",
+      "int": "+9",
+      "wis": "+7"
+    },
+    "skills": {},
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "truesight 120 ft."
+    },
+    "languages": [
+      "Abyssal",
+      "Celestial",
+      "Infernal",
+      "Primordial",
+      "telepathy 60 ft. but can't speak"
+    ],
+    "cr": "14",
+    "crNumeric": 14,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_tiya",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The kraken can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_tdff",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The kraken makes two tentacle attacks, each of which it can replace with one use of Fling.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_j4zk",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}20 (3d8 + 7) piercing damage.</p><p>If the target is a Medium or smaller creature grappled by the kraken, that creature is swallowed and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the kraken, and it takes 21 (6d6) acid damage at the start of each of the kraken's turns. One Medium or two smaller creatures can be swallowed at the same time.</p><p>If the kraken takes 35 damage or more on a single turn from a creature inside it, the kraken must succeed on a DC 23 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in spaces within 10 feet of the kraken. If the kraken dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 10 feet of movement, exiting prone.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 12,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 23,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "3d8 + 7",
+              "type": "Piercing"
+            },
+            {
+              "formula": "6d6",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tentacle_q4t0",
+        "name": "Tentacle",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +12 to hit, reach 20 ft., one target. {@h}17 (3d6 + 7) bludgeoning damage, and the target is grappled (escape DC 20). Until the grapple ends, the target is restrained. The kraken has ten tentacles, each of which can grapple one target.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 12,
+          "reach": 20,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 20,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "3d6 + 7",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fling_dg3h",
+        "name": "Fling",
+        "actionType": "action",
+        "descriptionHtml": "<p>One Medium or smaller object held or creature grappled by the kraken is thrown up to 40 feet in a random direction and knocked prone. If a thrown target strikes a solid surface, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 13 Dexterity saving throw or take the same damage and be knocked prone.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lightning_strike_q8gw",
+        "name": "Lightning Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>The kraken magically create a bolt of lightning, which can strike a target the kraken can see within 90 feet of it. The target must make a DC 18 Dexterity saving throw, taking 22 (4d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "4d10",
+              "type": "Lightning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/LR/Young Kraken.webp",
+    "tokenImg": "img/bestiary/tokens/LR/Young Kraken.webp",
+    "fluff": null
+  }
+]

@@ -1,0 +1,970 @@
+[
+  {
+    "id": "creature_exul_aitfr-isf",
+    "name": "Exul",
+    "source": "AitFR-ISF",
+    "edition": "2014",
+    "page": 12,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 200,
+      "formula": "16d10 + 112"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 60,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 22,
+        "mod": 6
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 24,
+        "mod": 7
+      },
+      "int": {
+        "score": 16,
+        "mod": 3
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {
+      "int": "+7",
+      "cha": "+7"
+    },
+    "skills": {},
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [
+      "Common",
+      "Ignan",
+      "Terran"
+    ],
+    "cr": "11",
+    "crNumeric": 11,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_exul_0",
+        "name": "Innate Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 3,
+        "casterLevel": 0,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "Exul's innate spellcasting ability is Charisma (spell save DC 15, +7 to hit with spell attacks). He can innately cast the following spells, requiring no material components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_comprehend_languages_xphb",
+              "name": "Comprehend Languages",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Divination",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a pinch of soot and salt)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_tongues_xphb",
+              "name": "Tongues",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Divination",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, M (a miniature ziggurat)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_conjure_elemental_xphb",
+              "name": "Conjure Elemental",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [
+                {
+                  "formula": "8d8",
+                  "type": "Lightning",
+                  "label": "Damage 1",
+                  "stat": "none"
+                },
+                {
+                  "formula": "4d8",
+                  "type": "Thunder",
+                  "label": "Damage 2",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_invisibility_xphb",
+              "name": "Invisibility",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (an eyelash in gum arabic)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_major_image_xphb",
+              "name": "Major Image",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a bit of fleece)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_plane_shift_xphb",
+              "name": "Plane Shift",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a forked, metal rod worth 250+ GP and attuned to a plane of existence)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_wall_of_fire_xphb",
+              "name": "Wall of Fire",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [
+                {
+                  "formula": "5d8",
+                  "type": "Fire",
+                  "label": "Damage 1",
+                  "stat": "none"
+                },
+                {
+                  "formula": "5d8",
+                  "type": "Fire",
+                  "label": "Damage 2",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a piece of charcoal)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_elemental_demise_hl22",
+        "name": "Elemental Demise",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Exul dies, his body disintegrates in a flash of fire and puff of smoke, leaving behind only the equipment he was wearing or carrying.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_747i",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Exul makes two handaxe attacks or uses his Hurl Flame twice.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_handaxe_eebb",
+        "name": "Handaxe",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) slashing damage plus 3 (1d6) fire damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 10,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 6",
+              "type": "Slashing"
+            },
+            {
+              "formula": "1d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hurl_flame_z7tu",
+        "name": "Hurl Flame",
+        "actionType": "action",
+        "descriptionHtml": "<p>rs +7 to hit, range 120 ft., one target. {@h}17 (5d6) fire damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "5d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AitFR-ISF/Exul.webp",
+    "tokenImg": "img/bestiary/tokens/AitFR-ISF/Exul.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_malivar_aitfr-isf",
+    "name": "Malivar",
+    "source": "AitFR-ISF",
+    "edition": "2014",
+    "page": 12,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 40,
+      "formula": "9d8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 9,
+        "mod": -1
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 11,
+        "mod": 0
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "int": "+6",
+      "wis": "+4"
+    },
+    "skills": {
+      "arcana": "+6",
+      "history": "+6"
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Draconic",
+      "Ignan",
+      "Infernal"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_malivar_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 3,
+        "casterLevel": 9,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "Malivar is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save DC 14, +6 to hit with spell attacks). He has the following wizard spells prepared:",
+        "footer": "*Conjuration spell of 1st level or higher",
+        "spellsByLevel": {
+          "0": {
+            "slots": 0,
+            "spells": [
+              {
+                "spellId": "sp_acid_splash_xphb",
+                "name": "Acid Splash",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 14,
+                "damageList": [
+                  {
+                    "formula": "1d6",
+                    "type": "Acid",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_mage_hand_xphb",
+                "name": "Mage Hand",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "1 minute",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_poison_spray_xphb",
+                "name": "Poison Spray",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Necromancy",
+                "castingTime": "1 action",
+                "range": "30 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "spell",
+                "atkMod": 6,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d12",
+                    "type": "Poison",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_prestidigitation_xphb",
+                "name": "Prestidigitation",
+                "source": "XPHB",
+                "level": 0,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "10 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          },
+          "1": {
+            "slots": 4,
+            "spells": [
+              {
+                "spellId": "sp_mage_armor_xphb",
+                "name": "Mage Armor",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Abjuration",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "8 hours",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a piece of cured leather)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_magic_missile_xphb",
+                "name": "Magic Missile",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "120 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "1d4 + 1",
+                    "type": "Force",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_unseen_servant_xphb",
+                "name": "Unseen Servant",
+                "source": "XPHB",
+                "level": 1,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "1 hour",
+                "concentration": false,
+                "ritual": true,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (a bit of string and of wood)",
+                "type": "slot"
+              }
+            ]
+          },
+          "2": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_cloud_of_daggers_xphb",
+                "name": "Cloud of Daggers",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [
+                  {
+                    "formula": "4d4",
+                    "type": "Slashing",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a sliver of glass)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_misty_step_xphb",
+                "name": "Misty Step",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Conjuration",
+                "castingTime": "1 bonus action",
+                "range": "self",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_web_xphb",
+                "name": "Web",
+                "source": "XPHB",
+                "level": 2,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 14,
+                "damageList": [
+                  {
+                    "formula": "2d4",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a bit of spiderweb)",
+                "type": "slot"
+              }
+            ]
+          },
+          "3": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_fireball_xphb",
+                "name": "Fireball",
+                "source": "XPHB",
+                "level": 3,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "150 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 14,
+                "damageList": [
+                  {
+                    "formula": "8d6",
+                    "type": "Fire",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a ball of bat guano and sulfur)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_thunder_step_xge",
+                "name": "Thunder Step",
+                "source": "XGE",
+                "level": 3,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "90 feet",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 14,
+                "damageList": [
+                  {
+                    "formula": "3d10",
+                    "type": "Thunder",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V",
+                "type": "slot"
+              }
+            ]
+          },
+          "4": {
+            "slots": 3,
+            "spells": [
+              {
+                "spellId": "sp_evard_s_black_tentacles_xphb",
+                "name": "Evard's Black Tentacles",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "90 feet",
+                "duration": "Concentration, up to 1 minute",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "strength",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 14,
+                "damageList": [
+                  {
+                    "formula": "3d6",
+                    "type": "Bludgeoning",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a tentacle)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_stoneskin_xphb",
+                "name": "Stoneskin",
+                "source": "XPHB",
+                "level": 4,
+                "school": "Transmutation",
+                "castingTime": "1 action",
+                "range": "touch",
+                "duration": "Concentration, up to 1 hour",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": null,
+                "damageList": [],
+                "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+                "type": "slot"
+              }
+            ]
+          },
+          "5": {
+            "slots": 2,
+            "spells": [
+              {
+                "spellId": "sp_cone_of_cold_xphb",
+                "name": "Cone of Cold",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Evocation",
+                "castingTime": "1 action",
+                "range": "Self (60 feet cone)",
+                "duration": "Instantaneous",
+                "concentration": false,
+                "ritual": false,
+                "saveAbility": "constitution",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 14,
+                "damageList": [
+                  {
+                    "formula": "8d8",
+                    "type": "Cold",
+                    "label": "",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S, M (a small crystal or glass cone)",
+                "type": "slot"
+              },
+              {
+                "spellId": "sp_conjure_elemental_xphb",
+                "name": "Conjure Elemental",
+                "source": "XPHB",
+                "level": 5,
+                "school": "Conjuration",
+                "castingTime": "1 action",
+                "range": "60 feet",
+                "duration": "Concentration, up to 10 minutes",
+                "concentration": true,
+                "ritual": false,
+                "saveAbility": "dexterity",
+                "attackStat": "none",
+                "atkMod": null,
+                "dc": 14,
+                "damageList": [
+                  {
+                    "formula": "8d8",
+                    "type": "Lightning",
+                    "label": "Damage 1",
+                    "stat": "none"
+                  },
+                  {
+                    "formula": "4d8",
+                    "type": "Thunder",
+                    "label": "Damage 2",
+                    "stat": "none"
+                  }
+                ],
+                "components": "V, S",
+                "type": "slot"
+              }
+            ]
+          }
+        },
+        "atWill": [],
+        "daily": {},
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_benign_transportation__recharges_after_malivar_casts_a_conjuration_spell_of_1st_level_or_higher__hl70",
+        "name": "Benign Transportation (Recharges after Malivar Casts a Conjuration Spell of 1st Level or Higher)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As a bonus action, Malivar teleports up to 30 feet to an unoccupied space that he can see.</p><p>If he instead chooses a space within range that is occupied by a willing Small or Medium creature, they both teleport, swapping places.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_dagger_pwrr",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/AitFR-ISF/Malivar.webp",
+    "tokenImg": "img/bestiary/tokens/AitFR-ISF/Malivar.webp",
+    "fluff": null
+  }
+]

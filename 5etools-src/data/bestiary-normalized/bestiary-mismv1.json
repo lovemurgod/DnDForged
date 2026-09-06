@@ -1,0 +1,1676 @@
+[
+  {
+    "id": "creature_coral_mismv1",
+    "name": "Coral",
+    "source": "MisMV1",
+    "edition": "2014",
+    "page": 4,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Fey",
+    "subtype": "",
+    "alignment": "C G",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 135,
+      "formula": "18d10 + 36"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 60,
+      "swim": 60,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 19,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {
+      "dex": "+5",
+      "con": "+6",
+      "wis": "+8",
+      "cha": "+8"
+    },
+    "skills": {
+      "arcana": "+6",
+      "insight": "+8",
+      "perception": "+8"
+    },
+    "senses": {
+      "passivePerception": 18,
+      "sensesString": "blindsight 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Primordial",
+      "Sylvan"
+    ],
+    "cr": "9",
+    "crNumeric": 9,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_magic_resistance_w4rj",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Coral has advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_fx3a",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Coral makes two Hoof attacks and uses Tail Thump.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hoof_anyl",
+        "name": "Hoof",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}12 (2d6 + 5) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 5",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tail_thump_7r2v",
+        "name": "Tail Thump",
+        "actionType": "action",
+        "descriptionHtml": "<p>Coral slams her tail down, unleashing a burst of magical force toward one creature she can see within 60 feet of her. The target must make a DC 16 Dexterity saving throw. On a failed save, the target takes 22 (4d10) force damage and has the prone condition. On a successful save, the target takes half as much damage only. If this damage reduces the target to 0 hit points, the target dies, and its body is reduced to fine dust.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "4d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_bubbles_of_whimsy__2_day__avk2",
+        "name": "Bubbles of Whimsy (2/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Coral produces a stream of magical bubbles from her horn. These bubbles float toward a creature Coral can see within 60 feet of herself. Roll a d6 to determine the bubbles' effect:</p><ul><li><strong><em>1-2: Bolstering Treat.</em></strong> <p>The bubbles transform into 1d4 cookies that appear in the target's space. The target gains 11 (2d8 + 2) temporary hit points if it immediately uses its reaction to eat one of the cookies. Any leftover cookies are delicious but confer no benefits.</p></li><li><strong><em>3-4: Sparkle Burst.</em></strong> <p>The bubbles transform into glitter that swirls around the target before bursting outward. Each creature within 5 feet of the target must succeed on a DC 16 Constitution saving throw or have the blinded condition until the start of Coral's next turn.</p></li><li><strong><em>5-6: Stink Bomb Shield.</em></strong> <p>The bubbles transform into a foul-smelling cloud of gas that surrounds and shields the target. The target has Cover until the gas disappears at the start of Coral's next turn.</p></li></ul>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_gift_of_speech__1_day__cq58",
+        "name": "Gift of Speech (1/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Coral targets one Beast she can see within 10 feet of herself. The target gains the ability to understand and speak Common or Sylvan (Coral's choice) for 10 minutes.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MisMV1/Coral.webp",
+    "tokenImg": "img/bestiary/tokens/MisMV1/Coral.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_dandylion_mismv1",
+    "name": "Dandylion",
+    "source": "MisMV1",
+    "edition": "2014",
+    "page": 6,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Fey",
+    "subtype": "",
+    "alignment": "C N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 90,
+      "formula": "12d10 + 24"
+    },
+    "speed": {
+      "walk": 50,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 22,
+        "mod": 6
+      },
+      "dex": {
+        "score": 19,
+        "mod": 4
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 16,
+        "mod": 3
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "str": "+9",
+      "cha": "+7"
+    },
+    "skills": {
+      "nature": "+9",
+      "perception": "+6",
+      "survival": "+6"
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Sylvan"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_dandylion_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "The dandylion casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save DC 15):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_druidcraft_xphb",
+            "name": "Druidcraft",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_guidance_xphb",
+            "name": "Guidance",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_purify_food_and_drink_xphb",
+            "name": "Purify Food and Drink",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "10 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_speak_with_plants_xphb",
+              "name": "Speak with Plants",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "Self (30 feet emanation)",
+              "duration": "10 minutes",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ],
+          "2e": [
+            {
+              "spellId": "sp_entangle_xphb",
+              "name": "Entangle",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_goodberry_xphb",
+              "name": "Goodberry",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "24 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a sprig of mistletoe)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Druidcraft",
+          "Guidance",
+          "Purify Food and Drink"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_magic_resistance_hykc",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The dandylion has advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_pack_tactics_l03e",
+        "name": "Pack Tactics",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The dandylion has advantage on an attack roll against a creature if at least one of the dandylion's allies is within 5 feet of the creature and the ally doesn't have the incapacitated condition.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_aasx",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The dandylion makes one Bite attack and one Claws attack.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_202k",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claws_gdpg",
+        "name": "Claws",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}20 (4d6 + 6) slashing damage. If the dandylion moved at least 20 feet straight toward the target immediately before the hit, the target must succeed on a DC 17 Strength saving throw or have the prone condition. If the target has the prone condition, the dandylion can make one Bite attack against it as a bonus action.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 17,
+            "ability": "STR"
+          },
+          "damages": [
+            {
+              "formula": "4d6 + 6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rejuvenating_seedpods__2_day__zc4a",
+        "name": "Rejuvenating Seedpods (2/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The dandylion releases a burst of seedpods from its tail, filling a 10-foot-radius sphere centered on itself. Each creature of the dandylion's choice in the sphere can immediately end one of the following conditions on itself (creature's choice): blinded, deafened, paralyzed, or poisoned. In addition, all soil in the sphere's area is enriched, restoring withered vegetation in the area to full health and causing all crops in the area to produce twice the normal harvest for the next year.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_roar_of_pride_rii3",
+        "name": "Roar of Pride",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When a creature within 60 feet of the dandylion hits it with an attack roll, the dandylion can unleash a furious roar. The creature that triggered this reaction must succeed on a DC 15 Wisdom saving throw or have the frightened condition until the end of the dandylion's next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MisMV1/Dandylion.webp",
+    "tokenImg": "img/bestiary/tokens/MisMV1/Dandylion.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_rain_mismv1",
+    "name": "Rain",
+    "source": "MisMV1",
+    "edition": "2014",
+    "page": 8,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Celestial",
+    "subtype": "",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 60,
+      "formula": "11d6 + 22"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 120,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "dex": "+3",
+      "con": "+5",
+      "wis": "+7"
+    },
+    "skills": {
+      "acrobatics": "+3",
+      "insight": "+7",
+      "stealth": "+3"
+    },
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": ""
+    },
+    "languages": [
+      "Celestial",
+      "Common"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_fiery_wings_slfx",
+        "name": "Fiery Wings",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Rain's wings are made of flame, and they shed bright light out to 15 feet and dim light for an additional 15 feet. At the start of each of Rain's turns, each creature of Rain's choice within 5 feet of her takes 3 (1d6) fire damage. A creature that hits Rain with a melee attack takes 3 (1d6) fire damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Fire"
+            },
+            {
+              "formula": "1d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_hhrj",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Rain has advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_pq6i",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Rain makes two Hoof attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hoof_1ukg",
+        "name": "Hoof",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (2d4) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_haloed_horn_burst__recharge_5__yq22",
+        "name": "Haloed Horn Burst (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Rain uses her haloed horn to produce one of the following magical effects:</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": "5"
+        }
+      },
+      {
+        "id": "act_glitterstorm_3be5",
+        "name": "Glitterstorm",
+        "actionType": "action",
+        "descriptionHtml": "<p>Rain emits a rainbow beam in a 30-foot line that is 5 feet wide. Each creature in that area must make a DC 15 Dexterity saving throw, taking 21 (6d6) radiant damage on a failed saving throw, or half as much damage on a successful one; creatures of evil alignment have disadvantage on this saving throw. If the damage from this effect reduces a creature to 0 hit points, the creature dies, and its body turns into glittery flowers.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "6d6",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healing_rainbows_od7a",
+        "name": "Healing Rainbows",
+        "actionType": "action",
+        "descriptionHtml": "<p>Rain releases a wave of rejuvenating multicolored light in a 30-foot cone. Each creature of Rain's choice in that area regains 18 (4d8) hit points.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_nimble_escape_oeue",
+        "name": "Nimble Escape",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Rain takes either the Disengage or the Hide action.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MisMV1/Rain.webp",
+    "tokenImg": "img/bestiary/tokens/MisMV1/Rain.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_scrapper_mismv1",
+    "name": "Scrapper",
+    "source": "MisMV1",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 126,
+      "formula": "12d10 + 60"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 20,
+        "mod": 5
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 1,
+        "mod": -5
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {
+      "perception": "+6"
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [
+      "understands the languages of its creator but can't speak"
+    ],
+    "cr": "8",
+    "crNumeric": 8,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_electrified_chassis_qhl0",
+        "name": "Electrified Chassis",
+        "actionType": "trait",
+        "descriptionHtml": "<p>A creature that hits the scrapper with a melee attack while within 5 feet of it takes 19 (3d12) lightning damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d12",
+              "type": "Lightning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_u3nn",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The scrapper makes two Spike Punch attacks. It can replace one of those with a Wires attack.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spike_punch_9uob",
+        "name": "Spike Punch",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}14 (2d8 + 5) bludgeoning damage plus 5 (1d10) piercing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 5",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "1d10",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wires_dya8",
+        "name": "Wires",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 20 ft., one Large or smaller creature. {@h}The target has the grappled condition (escape DC 16) and must succeed on a DC 16 Strength saving throw or be pulled into an unoccupied space within 5 feet of the scrapper and take 19 (3d12) lightning damage. The scrapper can have only one creature grappled in this way at a time.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 20,
+          "range": null,
+          "targets": "one Large or smaller creature",
+          "save": {
+            "dc": 16,
+            "ability": "STR"
+          },
+          "damages": [
+            {
+              "formula": "3d12",
+              "type": "Lightning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_eye_beam__recharge_5__esei",
+        "name": "Eye Beam (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The scrapper shoots a magical beam from its extended eye at one creature it can see within 120 feet of itself. The target must make a DC 16 Dexterity saving throw, taking 44 (8d10) force damage on a failed save, or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "8d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MisMV1/Scrapper.webp",
+    "tokenImg": "img/bestiary/tokens/MisMV1/Scrapper.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_seth_the_shapeshifting_dragon_mismv1",
+    "name": "Seth the Shapeshifting Dragon",
+    "source": "MisMV1",
+    "edition": "2014",
+    "page": 12,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 153,
+      "formula": "18d8 + 72"
+    },
+    "speed": {
+      "walk": 50,
+      "fly": 0,
+      "swim": 50,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 25,
+        "mod": 7
+      },
+      "con": {
+        "score": 19,
+        "mod": 4
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 4,
+    "saves": {
+      "str": "+7",
+      "dex": "+11",
+      "con": "+8"
+    },
+    "skills": {
+      "perception": "+6",
+      "stealth": "+11"
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": "blindsight 30 ft., darkvision 120 ft."
+    },
+    "languages": [
+      "Aquan",
+      "Common",
+      "Draconic"
+    ],
+    "cr": "10",
+    "crNumeric": 10,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_s8ou",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Seth can breathe air and water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_invisible_in_water_bt95",
+        "name": "Invisible in Water",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Seth has the invisible condition while fully immersed in water.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_pbqg",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Seth makes one Bite attack and two Claw attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_yhbh",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}10 (1d6 + 7) piercing damage plus 9 (2d8) cold damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 7",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d8",
+              "type": "Cold"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_rw7y",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +11 to hit, reach 5 ft., one target. {@h}14 (2d6 + 7) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 11,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 7",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_riptide_breath__recharge_5__qb7b",
+        "name": "Riptide Breath (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Seth exhales a torrent of frigid water in a 30-foot cone. Each creature in that area must make a DC 16 Constitution saving throw. On a failed save, the creature takes 36 (8d8) cold damage and has the incapacitated condition until the end of its next turn. On a successful save, the creature takes half as much damage only.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "8d8",
+              "type": "Cold"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_change_shape_8lpl",
+        "name": "Change Shape",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Seth magically transforms into a Small Humanoid or a Beast that is Tiny or Small, while retaining his game statistics (other than his size). This transformation ends if Seth is reduced to 0 hit points or uses another bonus action to end it.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_superspeed__2_day__mjt7",
+        "name": "Superspeed (2/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Seth's speed is doubled for as long as he maintains concentration (as if concentration on a spell). While his speed is increased in this way, all attack rolls against him are made with disadvantage, and he becomes partially incorporeal, allowing him to move through creatures and objects as if they were difficult terrain. Seth takes 5 (1d10) force damage if he ends his turn inside an object.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MisMV1/Seth the Shapeshifting Dragon.webp",
+    "tokenImg": "img/bestiary/tokens/MisMV1/Seth the Shapeshifting Dragon.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_sheldon_the_blueberry_dragon_mismv1",
+    "name": "Sheldon the Blueberry Dragon",
+    "source": "MisMV1",
+    "edition": "2014",
+    "page": 14,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "N G",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 142,
+      "formula": "15d10 + 60"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 60,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "dex": "+4",
+      "con": "+7",
+      "int": "+6"
+    },
+    "skills": {
+      "acrobatics": "+7",
+      "athletics": "+7",
+      "performance": "+6"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "blindsight 30 ft., darkvision 120 ft."
+    },
+    "languages": [
+      "Common",
+      "Draconic",
+      "telepathy 120 ft."
+    ],
+    "cr": "7",
+    "crNumeric": 7,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_sheldon_the_blueberry_dragon_0",
+        "name": "Spellcasting (Psionics)",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "Sheldon casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save DC 14):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_light_xphb",
+            "name": "Light",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, M (a firefly or phosphorescent moss)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_dimension_door_xphb",
+              "name": "Dimension Door",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "500 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Force",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_telekinesis_xphb",
+              "name": "Telekinesis",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Light",
+          "Mage Hand"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_space_dweller_p5ku",
+        "name": "Space Dweller",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Sheldon can breathe normally in a vacuum.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_doxb",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Sheldon makes either two Bite attacks, two Blueberry Fling attacks, or one of each.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_4lry",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) piercing damage plus 4 (1d8) psychic damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d8",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_blueberry_fling_qwde",
+        "name": "Blueberry Fling",
+        "actionType": "action",
+        "descriptionHtml": "<p>rw +7 to hit, range 30 ft., one creature. {@h}11 (2d6 + 4) blueberry damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": null,
+          "range": "30 ft.",
+          "targets": "one creature",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_jetstream_breath__recharge_5__88dq",
+        "name": "Jetstream Breath (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Sheldon exhales a line of magical wind that is 60 feet long and 5 feet wide. Each creature in that area must make a DC 15 Strength saving throw. On a failed save, the creature takes 21 (6d6) force damage, is pushed 15 feet away from Sheldon, and has the prone condition. On a successful save, the creature takes half as much damage only.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "STR"
+          },
+          "damages": [
+            {
+              "formula": "6d6",
+              "type": "Force"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_wind_dash__2_day__wcei",
+        "name": "Wind Dash (2/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Sheldon summons a powerful gust of wind and flies up to his speed. This movement doesn't provoke opportunity attacks. At the end of this movement, each creature within 5 feet of Sheldon must succeed on a DC 15 Strength saving throw or have the prone condition, as the wind bursts around Sheldon.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MisMV1/Sheldon the Blueberry Dragon.webp",
+    "tokenImg": "img/bestiary/tokens/MisMV1/Sheldon the Blueberry Dragon.webp",
+    "fluff": null
+  }
+]

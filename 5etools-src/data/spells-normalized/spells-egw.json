@@ -1,0 +1,628 @@
+[
+  {
+    "id": "sp_dark_star_egw",
+    "name": "Dark Star",
+    "source": "EGW",
+    "page": 186,
+    "level": 8,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "150 feet",
+    "components": "V, S, M (a shard of onyx and a drop of the caster's blood, both of which the spell consumes)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>This spell creates a sphere centered on a point you choose within range. The sphere can have a radius of up to 40 feet. The area within this sphere is filled with magical darkness and crushing gravitational force.</p><p>For the duration, the spell's area is difficult terrain. A creature with darkvision can't see through the magical darkness, and nonmagical light can't illuminate it. No sound can be created within or pass through the area. Any creature or object entirely inside the sphere is immune to thunder damage, and creatures are deafened while entirely inside it. Casting a spell that includes a verbal component is impossible there.</p><p>Any creature that enters the spell's area for the first time on a turn or starts its turn there must make a Constitution saving throw. The creature takes 8d10 force damage on a failed save, or half as much damage on a successful one. A creature reduced to 0 hit points by this damage is disintegrated. A disintegrated creature and everything it is wearing and carrying, except magic items, are reduced to a pile of fine gray dust.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Deafened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "DFT",
+      "OBJ",
+      "OBS"
+    ]
+  },
+  {
+    "id": "sp_fortune_s_favor_egw",
+    "name": "Fortune's Favor",
+    "source": "EGW",
+    "page": 186,
+    "level": 2,
+    "school": "Divination",
+    "castingTime": "1 minute",
+    "range": "60 feet",
+    "components": "V, S, M (a white pearl worth at least 100 gp, which the spell consumes)",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You impart latent luck to yourself or one willing creature you can see within range. When the chosen creature makes an attack roll, an ability check, or a saving throw before the spell ends, it can dismiss this spell on itself to roll an additional d20 and choose which of the d20s to use. Alternatively, when an attack roll is made against the chosen creature, it can dismiss this spell on itself to roll a d20 and choose which of the d20s to use, the one it rolled or the one the attacker rolled.</p><p>If the original d20 roll has advantage or disadvantage, the creature rolls the additional d20 after advantage or disadvantage has been applied to the original roll.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "SCT",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_gift_of_alacrity_egw",
+    "name": "Gift of Alacrity",
+    "source": "EGW",
+    "page": 186,
+    "level": 1,
+    "school": "Divination",
+    "castingTime": "1 minute",
+    "range": "touch",
+    "components": "V, S",
+    "duration": "8 hours",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You touch a willing creature. For the duration, the target can add 1d8 to its initiative rolls.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_gravity_fissure_egw",
+    "name": "Gravity Fissure",
+    "source": "EGW",
+    "page": 187,
+    "level": 6,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (100 feet line)",
+    "components": "V, S, M (a fistful of iron filings)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You manifest a ravine of gravitational energy in a line originating from you that is 100 feet long and 5 feet wide. Each creature in that line must make a Constitution saving throw, taking 8d8 force damage on a failed save, or half as much damage on a successful one.</p><p>Each creature within 10 feet of the line but not in it must succeed on a Constitution saving throw or take 8d8 force damage and be pulled toward the line until the creature is in its area.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 7th level or higher, the damage increases by 1d8 for each slot level above 6th.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 7th level or higher, the damage increases by 1d8 for each slot level above 6th.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d8",
+        "type": "Force",
+        "label": "Damage 1",
+        "stat": "none"
+      },
+      {
+        "formula": "8d8",
+        "type": "Force",
+        "label": "Damage 2",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Line"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_gravity_sinkhole_egw",
+    "name": "Gravity Sinkhole",
+    "source": "EGW",
+    "page": 187,
+    "level": 4,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S, M (a black marble)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>A 20-foot-radius sphere of crushing force forms at a point you can see within range and tugs at the creatures there. Each creature in the sphere must make a Constitution saving throw. On a failed save, the creature takes 5d10 force damage and is pulled in a straight line toward the center of the sphere, ending in an unoccupied space as close to the center as possible (even if that space is in the air). On a successful save, the creature takes half as much damage and isn't pulled.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d10 for each slot level above 4th.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d10 for each slot level above 4th.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d10",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_immovable_object_egw",
+    "name": "Immovable Object",
+    "source": "EGW",
+    "page": 187,
+    "level": 2,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S, M (gold dust worth at least 25 gp, which the spell consumes)",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You touch an object that weighs no more than 10 pounds and cause it to become magically fixed in place. You and the creatures you designate when you cast this spell can move the object normally. You can also set a password that, when spoken within 5 feet of the object, suppresses this spell for 1 minute.</p><p>If the object is fixed in the air, it can hold up to 4,000 pounds of weight. More weight causes the object to fall. Otherwise, a creature can use an action to make a Strength check against your spell save DC. On a success, the creature can move the object up to 10 feet.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>If you cast this spell using a spell slot of 4th or 5th level, the DC to move the object increases by 5, it can carry up to 8,000 pounds of weight, and the duration increases to 24 hours. If you cast this spell using a spell slot of 6th level or higher, the DC to move the object increases by 10, it can carry up to 20,000 pounds of weight, and the effect is permanent until dispelled.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>If you cast this spell using a spell slot of 4th or 5th level, the DC to move the object increases by 5, it can carry up to 8,000 pounds of weight, and the duration increases to 24 hours. If you cast this spell using a spell slot of 6th level or higher, the DC to move the object increases by 10, it can carry up to 20,000 pounds of weight, and the effect is permanent until dispelled.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "OBJ",
+      "Permanent"
+    ]
+  },
+  {
+    "id": "sp_magnify_gravity_egw",
+    "name": "Magnify Gravity",
+    "source": "EGW",
+    "page": 188,
+    "level": 1,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "1 round",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>The gravity in a 10-foot-radius sphere centered on a point you can see within range increases for a moment. Each creature in the sphere on the turn when you cast the spell must make a Constitution saving throw. On a failed save, a creature takes 2d8 force damage, and its speed is halved until the end of its next turn. On a successful save, a creature takes half as much damage and suffers no reduction to its speed.</p><p>Until the start of your next turn, any object that isn't being worn or carried in the sphere requires a successful Strength check against your spell save DC to pick up or move.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "OBJ",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_pulse_wave_egw",
+    "name": "Pulse Wave",
+    "source": "EGW",
+    "page": 188,
+    "level": 3,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (30 feet cone)",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You create intense pressure, unleash it in a 30-foot cone, and decide whether the pressure pulls or pushes creatures and objects. Each creature in that cone must make a Constitution saving throw. A creature takes 6d6 force damage on a failed save, or half as much damage on a successful one. And every creature that fails the save is either pulled 15 feet toward you or pushed 15 feet away from you, depending on the choice you made for the spell.</p><p>In addition, unsecured objects that are completely within the cone are likewise pulled or pushed 15 feet.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 and the distance pulled or pushed increases by 5 feet for each slot level above 3rd.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 and the distance pulled or pushed increases by 5 feet for each slot level above 3rd.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "6d6",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Cylinder"
+    ],
+    "miscTags": [
+      "FMV",
+      "OBJ"
+    ]
+  },
+  {
+    "id": "sp_ravenous_void_egw",
+    "name": "Ravenous Void",
+    "source": "EGW",
+    "page": 188,
+    "level": 9,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "1000 feet",
+    "components": "V, S, M (a small, nine-pointed star made of iron)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a 20-foot-radius sphere of destructive gravitational force centered on a point you can see within range. For the spell's duration, the sphere and any space within 100 feet of it are difficult terrain, and nonmagical objects fully inside the sphere are destroyed if they aren't being worn or carried.</p><p>When the sphere appears and at the start of each of your turns until the spell ends, unsecured objects within 100 feet of the sphere are pulled toward the sphere's center, ending in an unoccupied space as close to the center as possible.</p><p>A creature that starts its turn within 100 feet of the sphere must succeed on a Strength saving throw or be pulled straight toward the sphere's center, ending in an unoccupied space as close to the center as possible. A creature that enters the sphere for the first time on a turn or starts its turn there takes 5d10 force damage and is restrained until it is no longer in the sphere. If the sphere is in the air, the restrained creature hovers inside the sphere. A creature can use its action to make a Strength check against your spell save DC, ending this restrained condition on itself or another creature in the sphere that it can reach. A creature reduced to 0 hit points by this spell is annihilated, along with any nonmagical items it is wearing or carrying.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "strength",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Restrained"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "OBJ",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_reality_break_egw",
+    "name": "Reality Break",
+    "source": "EGW",
+    "page": 189,
+    "level": 8,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a crystal prism)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You shatter the barriers between realities and timelines, thrusting a creature into turmoil and madness. The target must succeed on a Wisdom saving throw, or it can't take reactions until the spell ends. The affected target must also roll a d10 at the start of each of its turns; the number rolled determines what happens to the target, as shown on the Reality Break Effects table.</p><p>At the end of each of its turns, the affected target can repeat the Wisdom saving throw, ending the spell on itself on a success.</p><table style=\"width:100%; border-collapse:collapse; margin:8px 0;\"><caption>Reality Break Effects</caption><thead><tr><th>d10</th><th>Effect</th></tr></thead><tbody><tr><td>1-2</td><td><strong>Vision of the Far Realm.</strong> The target takes 6d12 psychic damage, and it is stunned until the end of the turn.</td></tr><tr><td>3-5</td><td><strong>Rending Rift.</strong> The target must make a Dexterity saving throw, taking 8d12 force damage on a failed save, or half as much damage on a successful one.</td></tr><tr><td>6-8</td><td><strong>Wormhole.</strong> The target is teleported, along with everything it is wearing and carrying, up to 30 feet to an unoccupied space of your choice that you can see. The target also takes 10d12 force damage and is knocked prone.</td></tr><tr><td>9-10</td><td><strong>Chill of the Dark Void.</strong> The target takes 10d12 cold damage, and it is blinded until the end of the turn.</td></tr></tbody></table>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "6d12",
+        "type": "Psychic",
+        "stat": "none"
+      },
+      {
+        "formula": "8d12",
+        "type": "Force",
+        "stat": "none"
+      },
+      {
+        "formula": "10d12",
+        "type": "Cold",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Stunned",
+      "Prone",
+      "Blinded"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "RO",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_sapping_sting_egw",
+    "name": "Sapping Sting",
+    "source": "EGW",
+    "page": 189,
+    "level": 0,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "30 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You sap the vitality of one creature you can see in range. The target must succeed on a Constitution saving throw or take 1d4 necrotic damage and fall prone.</p><p>This spell's damage increases by 1d4 when you reach 5th level (2d4), 11th level (3d4), and 17th level (4d4).</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d4",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d4",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "necrotic damage",
+      "scaling": {
+        "1": "1d4",
+        "5": "2d4",
+        "11": "3d4",
+        "17": "4d4"
+      }
+    },
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Scaling Damage",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_temporal_shunt_egw",
+    "name": "Temporal Shunt",
+    "source": "EGW",
+    "page": 189,
+    "level": 5,
+    "school": "Transmutation",
+    "castingTime": "1 reaction (taken when a creature you can see makes an attack roll or starts to cast a spell)",
+    "range": "120 feet",
+    "components": "V, S",
+    "duration": "1 round",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You target the triggering creature, which must succeed on a Wisdom saving throw or vanish, being thrown to another point in time and causing the attack to miss or the spell to be wasted. At the start of its next turn, the target reappears where it was or in the closest unoccupied space. The target doesn't remember you casting the spell or being affected by it.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. All targets must be within 30 feet of each other.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. All targets must be within 30 feet of each other.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "SCT"
+    ]
+  },
+  {
+    "id": "sp_tether_essence_egw",
+    "name": "Tether Essence",
+    "source": "EGW",
+    "page": 189,
+    "level": 7,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a spool of platinum cord worth at least 250 gp, which the spell consumes)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>Two creatures you can see within range must make a Constitution saving throw, with disadvantage if they are within 30 feet of each other. Either creature can willingly fail the save. If either save succeeds, the spell has no effect. If both saves fail, the creatures are magically linked for the duration, regardless of the distance between them. When damage is dealt to one of them, the same damage is dealt to the other one. If hit points are restored to one of them, the same number of hit points are restored to the other one. If either of the tethered creatures is reduced to 0 hit points, the spell ends on both. If the spell ends on one creature, it ends on both.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Multiple Targets"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_time_ravage_egw",
+    "name": "Time Ravage",
+    "source": "EGW",
+    "page": 189,
+    "level": 9,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (an hourglass filled with diamond dust worth at least 5,000 gp, which the spell consumes)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You target a creature you can see within range, putting its physical form through the devastation of rapid aging. The target must make a Constitution saving throw, taking 10d12 necrotic damage on a failed save, or half as much damage on a successful one. If the save fails, the target also ages to the point where it has only 30 days left before it dies of old age. In this aged state, the target has disadvantage on attack rolls, ability checks, and saving throws, and its walking speed is halved. Only the wish spell or the greater restoration cast with a 9th-level spell slot can end these effects and restore the target to its previous age.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "10d12",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none"
+      }
+    ],
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_wristpocket_egw",
+    "name": "Wristpocket",
+    "source": "EGW",
+    "page": 190,
+    "level": 2,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "S",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": true,
+    "descriptionHtml": "<p>You flick your wrist, causing one object in your hand to vanish. The object, which only you can be holding and can weigh no more than 5 pounds, is transported to an extradimensional space, where it remains for the duration.</p><p>Until the spell ends, you can use your action to summon the object to your free hand, and you can use your action to return the object to the extradimensional space. An object still in the pocket plane when the spell ends appears in your space, at your feet.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "UA"
+    ]
+  }
+]

@@ -211,7 +211,7 @@
 				{
 					"name": "Smoke Bomb (1/Day)",
 					"entries": [
-						"Amrik hurls a smoke bomb up to 20 feet away. The bomb explodes on impact, creating a cloud of black smoke that fills a 10-foot-radius sphere. The area within the cloud is heavily obscured. A strong wind disperses the cloud, which otherwise remains until the end of Amrik's next turn."
+						"Amrik hurls a smoke bomb up to 20 feet away. The bomb explodes on impact, creating a cloud of black smoke that fills a 10-foot-radius sphere. The area within the cloud is {@quickref Vision and Light||2||heavily obscured}. A strong wind disperses the cloud, which otherwise remains until the end of Amrik's next turn."
 					]
 				}
 			],
@@ -395,7 +395,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Arkhan's spellcasting ability is Charisma (spell save {@dc 17}). He can cast the following spells, requiring no material components:"
 					],
@@ -410,10 +410,7 @@
 							"{@spell raise dead}"
 						]
 					},
-					"ability": "cha",
-					"dc": 17,
-					"atkMod": 9,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -583,7 +580,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Bel's spellcasting ability is Charisma (spell save {@dc 23}). Bel can innately cast the following spells, requiring no material components:"
 					],
@@ -606,10 +603,7 @@
 							"{@spell meteor swarm}"
 						]
 					},
-					"ability": "cha",
-					"dc": 23,
-					"atkMod": 16,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -816,7 +810,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The black gauntlet is a 5th-level spellcaster. Its spellcasting ability is Charisma (spell save {@dc 15}, {@hit 7} to hit with spell attacks). It has the following cleric spells prepared:"
 					],
@@ -853,10 +847,7 @@
 							]
 						}
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 5
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -2240,7 +2231,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The hollyphant's innate spellcasting ability is Wisdom (spell save {@dc 15}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -2261,10 +2252,7 @@
 							"{@spell teleport} (with no chance of error)"
 						]
 					},
-					"ability": "wis",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -2530,7 +2518,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Kostchtchie's innate spellcasting ability is Charisma (spell save {@dc 20}). He can innately cast the following spells, requiring no material components:"
 					],
@@ -2548,10 +2536,7 @@
 							"{@spell wind walk}"
 						]
 					},
-					"ability": "cha",
-					"dc": 20,
-					"atkMod": 12,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -2712,7 +2697,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Krull is a 14th-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 16}, {@hit 8} to hit with spell attacks). He has the following cleric spells prepared:"
 					],
@@ -2791,10 +2776,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 16,
-					"atkMod": 8,
-					"casterLevel": 14
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -2997,7 +2979,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Mahadi's innate spellcasting ability is Charisma (spell save {@dc 18}, {@hit 9} to hit with spell attacks). He can innately cast the following spells, requiring no material components:"
 					],
@@ -3029,10 +3011,7 @@
 							"{@spell true seeing}"
 						]
 					},
-					"ability": "cha",
-					"dc": 18,
-					"atkMod": 9,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -3156,7 +3135,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The master of souls is a 5th-level spellcaster. Its spellcasting ability is Intelligence (spell save {@dc 14}, {@hit 6} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -3194,10 +3173,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 5
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -3809,7 +3785,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The reaper's innate spellcasting ability is Charisma (spell save {@dc 13}). It can innately cast the following spells, requiring no material components:"
 					],
@@ -3820,10 +3796,7 @@
 							"{@spell sanctuary}"
 						]
 					},
-					"ability": "cha",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -4076,7 +4049,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The skull lasher is a 3rd-level spellcaster. Its spellcasting ability is Wisdom (spell save {@dc 13}, {@hit 5} to hit with spell attacks). It has the following wizard spells prepared:"
 					],
@@ -4105,10 +4078,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 3
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -4237,7 +4207,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Smiler's innate spellcasting ability is Charisma (spell save {@dc 15}). He can innately cast the following spells, requiring no material components:"
 					],
@@ -4256,10 +4226,7 @@
 							"{@spell Otto's irresistible dance}"
 						]
 					},
-					"ability": "cha",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0
+					"ability": "cha"
 				}
 			],
 			"trait": [
@@ -4520,7 +4487,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Thurstwell is a 2nd-level spellcaster. His spellcasting ability is Wisdom (spell save {@dc 13}). He has the following cleric spells prepared:"
 					],
@@ -4541,10 +4508,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 2
+					"ability": "wis"
 				}
 			],
 			"trait": [

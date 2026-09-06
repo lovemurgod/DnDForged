@@ -887,6 +887,7 @@ let lastBroadcastedTokens = {};
         if (overlayLayer) {
             overlayLayer.querySelectorAll('[id^="asset_node_"], [id^="token_ui_"]').forEach(node => node.remove());
         }
+        if (typeof cleanupAllYouTubePingPong === 'function') cleanupAllYouTubePingPong();
         const menu = document.getElementById('vtt-token-context-menu');
         if (menu) menu.remove();
 
@@ -2601,6 +2602,282 @@ let lastBroadcastedTokens = {};
                 });
             });
 
+        // ==========================================
+        // YouTube Dual-Player Ping-Pong Controller
+        // ==========================================
+        const ytPingPongControllers = {};
+
+        function cleanupAllYouTubePingPong() {
+            Object.keys(ytPingPongControllers).forEach(id => {
+                try {
+                    if (ytPingPongControllers[id]?.destroy) ytPingPongControllers[id].destroy();
+                } catch (e) {}
+                delete ytPingPongControllers[id];
+            });
+        }
+
+        function cleanupYouTubePingPongForId(id) {
+            if (ytPingPongControllers[id]) {
+                try {
+                    if (ytPingPongControllers[id]?.destroy) ytPingPongControllers[id].destroy();
+                } catch (e) {}
+                delete ytPingPongControllers[id];
+            }
+        }
+
+        function ensureYouTubeIframeApi() {
+            if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+            if (window._ytIframeApiPromise) return window._ytIframeApiPromise;
+
+            window._ytIframeApiPromise = new Promise((resolve) => {
+                const checkExisting = () => {
+                    if (window.YT && window.YT.Player) {
+                        resolve(window.YT);
+                        return true;
+                    }
+                    return false;
+                };
+
+                if (checkExisting()) return;
+
+                const prevOnReady = window.onYouTubeIframeAPIReady;
+                window.onYouTubeIframeAPIReady = () => {
+                    if (typeof prevOnReady === 'function') {
+                        try { prevOnReady(); } catch (e) {}
+                    }
+                    resolve(window.YT);
+                };
+
+                if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+                    const tag = document.createElement('script');
+                    tag.src = "https://www.youtube.com/iframe_api";
+                    const firstScript = document.getElementsByTagName('script')[0] || document.head;
+                    firstScript.parentNode.insertBefore(tag, firstScript);
+                }
+
+                let checkCount = 0;
+                const interval = setInterval(() => {
+                    checkCount++;
+                    if (checkExisting() || checkCount > 35) {
+                        clearInterval(interval);
+                        resolve(window.YT || null);
+                    }
+                }, 100);
+            });
+
+            return window._ytIframeApiPromise;
+        }
+
+        function initDualYouTubePlayer(container, rawUrl, id) {
+            if (ytPingPongControllers[id]) {
+                try { ytPingPongControllers[id].destroy(); } catch (e) {}
+                delete ytPingPongControllers[id];
+            }
+
+            const ytMatch = rawUrl ? rawUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) : null;
+            if (!ytMatch || !ytMatch[1]) return;
+            const videoId = ytMatch[1];
+
+            container.innerHTML = '';
+            container.dataset.rawImg = rawUrl;
+            container.style.position = 'absolute';
+            container.style.overflow = 'hidden';
+            container.style.pointerEvents = 'none';
+
+            const wrapA = document.createElement('div');
+            wrapA.id = `yt_wrap_a_${id}`;
+            wrapA.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:1;transition:opacity 0.3s ease;overflow:hidden;';
+            const targetA = document.createElement('div');
+            targetA.id = `yt_player_a_${id}`;
+            // Scale by 1.10 and center to crop out YouTube top title header and bottom watermark
+            targetA.style.cssText = 'width:100%;height:100%;pointer-events:none;transform:scale(1.1);transform-origin:center center;';
+            wrapA.appendChild(targetA);
+            container.appendChild(wrapA);
+
+            const wrapB = document.createElement('div');
+            wrapB.id = `yt_wrap_b_${id}`;
+            wrapB.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0;transition:opacity 0.3s ease;overflow:hidden;';
+            const targetB = document.createElement('div');
+            targetB.id = `yt_player_b_${id}`;
+            targetB.style.cssText = 'width:100%;height:100%;pointer-events:none;transform:scale(1.1);transform-origin:center center;';
+            wrapB.appendChild(targetB);
+            container.appendChild(wrapB);
+
+            let playerA = null;
+            let playerB = null;
+            let activePlayer = 'A';
+            let prewarmed = false;
+            let pollTimer = null;
+            let isDestroyed = false;
+
+            const controller = {
+                rawUrl,
+                destroy: () => {
+                    isDestroyed = true;
+                    if (pollTimer) {
+                        clearInterval(pollTimer);
+                        pollTimer = null;
+                    }
+                    try { if (playerA && typeof playerA.destroy === 'function') playerA.destroy(); } catch (e) {}
+                    try { if (playerB && typeof playerB.destroy === 'function') playerB.destroy(); } catch (e) {}
+                    playerA = null;
+                    playerB = null;
+                    container.innerHTML = '';
+                }
+            };
+            ytPingPongControllers[id] = controller;
+
+            ensureYouTubeIframeApi().then((YT) => {
+                if (isDestroyed) return;
+                if (!YT || !YT.Player) {
+                    // Fallback to standard single iframe with crop wrapper if API is blocked or offline
+                    container.innerHTML = `<div style="width:100%;height:100%;overflow:hidden;position:relative;"><iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&rel=0&iv_load_policy=3&showinfo=0&playlist=${videoId}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" style="width:100%;height:100%;pointer-events:none;border:none;transform:scale(1.1);transform-origin:center center;"></iframe></div>`;
+                    return;
+                }
+
+                const origin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : undefined;
+                const pVars = {
+                    autoplay: 1,
+                    mute: 1,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    playsinline: 1,
+                    rel: 0,
+                    iv_load_policy: 3,
+                    ...(origin ? { origin } : {})
+                };
+
+                let readyCount = 0;
+                const onReadyCheck = () => {
+                    readyCount++;
+                    if (readyCount === 2) {
+                        startMonitoring();
+                    }
+                };
+
+                playerA = new YT.Player(`yt_player_a_${id}`, {
+                    width: '100%',
+                    height: '100%',
+                    videoId: videoId,
+                    playerVars: { ...pVars, autoplay: 1 },
+                    events: {
+                        onReady: (e) => {
+                            try {
+                                e.target.mute();
+                                e.target.playVideo();
+                            } catch (err) {}
+                            onReadyCheck();
+                        },
+                        onStateChange: (e) => {
+                            if (e.data === YT.PlayerState.ENDED && activePlayer === 'A') {
+                                doSwapToB();
+                            }
+                        }
+                    }
+                });
+
+                playerB = new YT.Player(`yt_player_b_${id}`, {
+                    width: '100%',
+                    height: '100%',
+                    videoId: videoId,
+                    playerVars: { ...pVars, autoplay: 0 },
+                    events: {
+                        onReady: (e) => {
+                            try {
+                                e.target.mute();
+                            } catch (err) {}
+                            onReadyCheck();
+                        },
+                        onStateChange: (e) => {
+                            if (e.data === YT.PlayerState.ENDED && activePlayer === 'B') {
+                                doSwapToA();
+                            }
+                        }
+                    }
+                });
+
+                function doSwapToB() {
+                    if (isDestroyed || activePlayer !== 'A') return;
+                    activePlayer = 'B';
+                    prewarmed = false;
+                    wrapB.style.zIndex = '2';
+                    wrapB.style.opacity = '1';
+                    wrapA.style.zIndex = '1';
+                    wrapA.style.opacity = '0';
+                    try {
+                        playerB.playVideo();
+                        setTimeout(() => {
+                            if (activePlayer === 'B' && playerA && typeof playerA.seekTo === 'function') {
+                                try { playerA.seekTo(0, false); } catch (e) {}
+                            }
+                        }, 350);
+                    } catch (err) {}
+                }
+
+                function doSwapToA() {
+                    if (isDestroyed || activePlayer !== 'B') return;
+                    activePlayer = 'A';
+                    prewarmed = false;
+                    wrapA.style.zIndex = '2';
+                    wrapA.style.opacity = '1';
+                    wrapB.style.zIndex = '1';
+                    wrapB.style.opacity = '0';
+                    try {
+                        playerA.playVideo();
+                        setTimeout(() => {
+                            if (activePlayer === 'A' && playerB && typeof playerB.seekTo === 'function') {
+                                try { playerB.seekTo(0, false); } catch (e) {}
+                            }
+                        }, 350);
+                    } catch (err) {}
+                }
+
+                function startMonitoring() {
+                    if (pollTimer) clearInterval(pollTimer);
+                    pollTimer = setInterval(() => {
+                        if (isDestroyed) return;
+                        try {
+                            if (activePlayer === 'A' && playerA && typeof playerA.getCurrentTime === 'function' && typeof playerA.getDuration === 'function') {
+                                const cur = playerA.getCurrentTime() || 0;
+                                const dur = playerA.getDuration() || 0;
+                                if (dur > 0) {
+                                    const lead = Math.max(0.2, Math.min(0.5, dur * 0.1));
+                                    if (cur >= dur - lead && !prewarmed) {
+                                        prewarmed = true;
+                                        try {
+                                            playerB.seekTo(0, true);
+                                            playerB.playVideo();
+                                        } catch (err) {}
+                                    }
+                                    if (cur >= dur - 0.08) {
+                                        doSwapToB();
+                                    }
+                                }
+                            } else if (activePlayer === 'B' && playerB && typeof playerB.getCurrentTime === 'function' && typeof playerB.getDuration === 'function') {
+                                const cur = playerB.getCurrentTime() || 0;
+                                const dur = playerB.getDuration() || 0;
+                                if (dur > 0) {
+                                    const lead = Math.max(0.2, Math.min(0.5, dur * 0.1));
+                                    if (cur >= dur - lead && !prewarmed) {
+                                        prewarmed = true;
+                                        try {
+                                            playerA.seekTo(0, true);
+                                            playerA.playVideo();
+                                        } catch (err) {}
+                                    }
+                                    if (cur >= dur - 0.08) {
+                                        doSwapToA();
+                                    }
+                                }
+                            }
+                        } catch (err) {}
+                    }, 50);
+                }
+            });
+        }
+
         // 2. Draw Tokens Layer
         Object.entries(tokens)
             .sort((a, b) => (a[1].zIndex || 0) - (b[1].zIndex || 0))
@@ -2609,8 +2886,8 @@ let lastBroadcastedTokens = {};
             const cleanImgUrl = token.img ? token.img.split('?')[0].toLowerCase() : '';
             const isGif = token.isGif || cleanImgUrl.endsWith('.gif') || (token.img && token.img.includes('.gif'));
             const isYoutube = token.img && (token.img.includes('youtube.com') || token.img.includes('youtu.be'));
-            const needsIframe = isYoutube || (token.img && token.img.trim().startsWith('<iframe'));
-            const isActuallyVideo = !isGif && !needsIframe && (
+            const needsIframe = !isYoutube && token.img && token.img.trim().startsWith('<iframe');
+            const isActuallyVideo = !isGif && !isYoutube && !needsIframe && (
                 (token.isVideo && !isGif) ||
                 (cleanImgUrl && cleanImgUrl.match(/\.(mp4|webm|ogg|m4v|mov)$/i)) ||
                 (token.img && token.img.includes('pinimg.com/videos'))
@@ -2627,10 +2904,10 @@ let lastBroadcastedTokens = {};
             if (targetOverlay) {
                 let node = document.getElementById('asset_node_' + id);
                 
-                const needsImg = token.img && !needsIframe && !isActuallyVideo;
-                const needsVideo = token.img && !needsIframe && isActuallyVideo;
+                const needsImg = token.img && !isYoutube && !needsIframe && !isActuallyVideo;
+                const needsVideo = token.img && !isYoutube && !needsIframe && isActuallyVideo;
                 const needsDiv = !token.img;
-                const neededTag = needsIframe ? 'IFRAME' : needsImg ? 'IMG' : needsVideo ? 'VIDEO' : 'DIV';
+                const neededTag = isYoutube ? 'DIV' : needsIframe ? 'IFRAME' : needsImg ? 'IMG' : needsVideo ? 'VIDEO' : 'DIV';
 
                 // If node exists but is in wrong container or wrong tag, remove and recreate
                 if (node && (node.parentElement !== targetOverlay || node.tagName !== neededTag)) {
@@ -2639,17 +2916,19 @@ let lastBroadcastedTokens = {};
                 }
 
                 if (!node) {
-                    if (needsIframe) {
+                    if (isYoutube) {
+                        node = document.createElement('div');
+                        node.id = 'asset_node_' + id;
+                        node.style.position = 'absolute';
+                        node.style.pointerEvents = 'none';
+                        targetOverlay.appendChild(node);
+                        initDualYouTubePlayer(node, token.img, id);
+                    } else if (needsIframe) {
                         node = document.createElement('iframe');
-                        let ytUrl = token.img;
-                        const ytMatch = token.img ? token.img.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) : null;
-                        if (ytMatch) {
-                            const videoId = ytMatch[1];
-                            ytUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&playlist=${videoId}`;
-                        }
-                        node.setAttribute('src', ytUrl);
+                        node.setAttribute('src', token.img);
+                        node.dataset.rawImg = token.img;
                         node.frameBorder = "0";
-                        node.setAttribute('allow', 'autoplay; encrypted-media');
+                        node.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
                     } else if (needsImg) {
                         node = document.createElement('img');
                         node.setAttribute('src', getSafeVttUrl(token.img));
@@ -2671,8 +2950,17 @@ let lastBroadcastedTokens = {};
                     node.id = 'asset_node_' + id;
                     node.style.position = 'absolute';
                     node.style.pointerEvents = 'none';
-                    targetOverlay.appendChild(node);
+                    if (!isYoutube) targetOverlay.appendChild(node);
                     if (needsVideo) node.play().catch(() => {});
+                } else if (isYoutube) {
+                    if (node.dataset.rawImg !== token.img) {
+                        initDualYouTubePlayer(node, token.img, id);
+                    }
+                } else if (needsIframe) {
+                    if (node.dataset.rawImg !== token.img) {
+                        node.dataset.rawImg = token.img;
+                        node.setAttribute('src', token.img);
+                    }
                 } else if (token.img && node.getAttribute('src') !== getSafeVttUrl(token.img) && node.src !== getSafeVttUrl(token.img)) {
                     node.setAttribute('src', getSafeVttUrl(token.img));
                     if (node.tagName === 'VIDEO') {
@@ -3634,6 +3922,39 @@ let lastBroadcastedTokens = {};
     }
 
     let visualFxAnimFrame = null;
+    let initiativeHoverTokenId = null;
+
+    function getTokenCategory(token) {
+        if (!token) return 'bestiary';
+        let char = null;
+        if (vtt.campaignState && vtt.campaignState.characters && token.characterId) {
+            char = vtt.campaignState.characters[token.characterId];
+        }
+        if (char) {
+            if (char.isCompanion || token.isCompanion) return 'companion';
+            if (char.isCustomNpc || token.isCustomNpc) return 'customNpc';
+            if (char.isPlayer || token.isPlayer) return 'player';
+        } else {
+            if (token.isCompanion) return 'companion';
+            if (token.isCustomNpc) return 'customNpc';
+            if (token.isPlayer) return 'player';
+        }
+        return 'bestiary';
+    }
+
+    function getCategoryColor(category) {
+        switch (category) {
+            case 'player':
+                return '#2563eb'; // Solid Blue
+            case 'companion':
+                return '#f59e0b'; // Solid Yellow
+            case 'customNpc':
+                return '#8b5cf6'; // Solid Purple
+            case 'bestiary':
+            default:
+                return '#dc3545'; // Solid Red
+        }
+    }
 
     function animateVisualFx() {
         const overlayContainer = document.getElementById('vtt-html-overlays');
@@ -3642,6 +3963,9 @@ let lastBroadcastedTokens = {};
             return;
         }
 
+        // =====================================================================
+        // 1. ACTIVE INITIATIVE TOKEN SOLID OUTLINE (5% cell width, no glow/fade)
+        // =====================================================================
         let glowNode = document.getElementById('vtt-active-initiative-glow');
         
         let activeToken = null;
@@ -3662,56 +3986,135 @@ let lastBroadcastedTokens = {};
                 glowNode.id = 'vtt-active-initiative-glow';
                 glowNode.style.position = 'absolute';
                 glowNode.style.pointerEvents = 'none';
-                glowNode.style.zIndex = '-1'; // Ensure it renders below ALL tokens
+                glowNode.style.zIndex = '10';
                 overlayContainer.appendChild(glowNode);
             }
             
             const { drawW, drawH } = getTokenDrawDimensions(activeToken);
-            
-            // Sync geometry with the active token
-            glowNode.style.left = `${activeToken.x}px`;
-            glowNode.style.top = `${activeToken.y}px`;
-            glowNode.style.width = `${drawW}px`;
-            glowNode.style.height = `${drawH}px`;
-            
-            if (!activeToken.isAsset) {
-                glowNode.style.borderRadius = '50%';
-            } else {
-                glowNode.style.borderRadius = '0';
-            }
+            const cellWidth = (grid && grid.size) ? grid.size : 50;
+            const outlineThickness = Math.max(2, Math.round(cellWidth * 0.05));
+            const category = getTokenCategory(activeToken);
+            const solidColor = getCategoryColor(category);
 
-            const turnStartTime = vtt.campaignState.initiative.lastTurnStartTime || Date.now();
-            const elapsed = Math.max(0, Date.now() - turnStartTime);
-            const progress = Math.min(elapsed / 30000, 1.0);
-            const freq = 0.5 + 2.5 * progress;
-            let pulse = (Math.sin(elapsed * 0.001 * Math.PI * 2 * freq) + 1) / 2;
-            if (elapsed >= 30000) pulse = 1.0;
-            
-            let colorStr = '220, 53, 69'; // Default Red for Enemies
-            if (activeToken.isPlayer) {
-                colorStr = '32, 138, 255'; // Blue for Player
-            }
-            if (vtt.campaignState && vtt.campaignState.characters && activeToken.characterId) {
-                const char = vtt.campaignState.characters[activeToken.characterId];
-                if (char) {
-                    if (char.isCompanion) {
-                        colorStr = '40, 167, 69'; // Green for Companions
-                    } else if (char.isPlayer && !char.isCustomNpc) {
-                        colorStr = '32, 138, 255'; // Blue for Player
-                    }
-                }
-            }
-
-            const glowAlpha = 0.3 + 0.6 * pulse;
-            const glowBlur = 10 + 20 * pulse;
-            const glowSpread = 4 + 8 * pulse;
-            
-            glowNode.style.boxShadow = `0 0 ${glowBlur}px ${glowSpread}px rgba(${colorStr}, ${glowAlpha})`;
-            glowNode.style.backgroundColor = `rgba(${colorStr}, ${glowAlpha * 0.5})`; // Inner fill for a solid glow core
+            // Tightly hug the outer perimeter of the token without obscuring token art
+            glowNode.style.left = `${activeToken.x - outlineThickness}px`;
+            glowNode.style.top = `${activeToken.y - outlineThickness}px`;
+            glowNode.style.width = `${drawW + outlineThickness * 2}px`;
+            glowNode.style.height = `${drawH + outlineThickness * 2}px`;
+            glowNode.style.boxSizing = 'border-box';
+            glowNode.style.border = `${outlineThickness}px solid ${solidColor}`;
+            glowNode.style.borderRadius = !activeToken.isAsset ? '50%' : '0';
+            glowNode.style.boxShadow = 'none';
+            glowNode.style.backgroundColor = 'transparent';
+            glowNode.style.opacity = '1';
         } else {
             if (glowNode) {
                 glowNode.remove();
             }
+        }
+
+        // =====================================================================
+        // 2. INITIATIVE CARD HOVER HIGHLIGHT & OFF-SCREEN INDICATOR
+        // =====================================================================
+        let hoverNode = document.getElementById('vtt-initiative-hover-glow');
+        let offscreenIndicator = document.getElementById('vtt-offscreen-indicator');
+
+        if (initiativeHoverTokenId && tokens[initiativeHoverTokenId]) {
+            const hToken = tokens[initiativeHoverTokenId];
+            if (hToken.layer === activeLayer || vtt.role === 'GM') {
+                const { drawW: hW, drawH: hH } = getTokenDrawDimensions(hToken);
+                const screenLeft = panX + hToken.x * zoom;
+                const screenTop = panY + hToken.y * zoom;
+                const screenRight = screenLeft + hW * zoom;
+                const screenBottom = screenTop + hH * zoom;
+                const vpW = window.innerWidth;
+                const vpH = window.innerHeight;
+
+                const isOffScreen = (screenRight < 40 || screenLeft > vpW - 40 || screenBottom < 40 || screenTop > vpH - 40);
+                const hCat = getTokenCategory(hToken);
+                const hColor = getCategoryColor(hCat);
+
+                if (isOffScreen) {
+                    if (hoverNode) hoverNode.style.display = 'none';
+
+                    // Off-screen indicator is strictly GM only
+                    if (vtt.role === 'GM') {
+                        if (!offscreenIndicator) {
+                            offscreenIndicator = document.createElement('div');
+                            offscreenIndicator.id = 'vtt-offscreen-indicator';
+                            offscreenIndicator.className = 'vtt-offscreen-token-indicator';
+                            document.body.appendChild(offscreenIndicator);
+                        }
+
+                        const vpCenterX = vpW / 2;
+                        const vpCenterY = vpH / 2;
+                        const tokenCenterX = screenLeft + (hW * zoom) / 2;
+                        const tokenCenterY = screenTop + (hH * zoom) / 2;
+                        const angle = Math.atan2(tokenCenterY - vpCenterY, tokenCenterX - vpCenterX);
+
+                        const marginX = 90;
+                        const marginY = 70;
+                        const maxDx = vpW / 2 - marginX;
+                        const maxDy = vpH / 2 - marginY;
+                        const cos = Math.cos(angle);
+                        const sin = Math.sin(angle);
+
+                        let edgeX = 0, edgeY = 0;
+                        if (Math.abs(cos * maxDy) > Math.abs(sin * maxDx)) {
+                            edgeX = cos > 0 ? maxDx : -maxDx;
+                            edgeY = edgeX * Math.tan(angle);
+                        } else {
+                            edgeY = sin > 0 ? maxDy : -maxDy;
+                            edgeX = edgeY / Math.tan(angle);
+                        }
+
+                        const cellPx = (grid && grid.size) ? grid.size : 50;
+                        const worldDist = Math.hypot(hToken.x + hW / 2 - ((vpCenterX - panX) / zoom), hToken.y + hH / 2 - ((vpCenterY - panY) / zoom));
+                        const distFt = Math.round((worldDist / cellPx) * 5);
+
+                        offscreenIndicator.style.display = 'flex';
+                        offscreenIndicator.style.left = `${vpCenterX + edgeX}px`;
+                        offscreenIndicator.style.top = `${vpCenterY + edgeY}px`;
+                        offscreenIndicator.style.borderColor = hColor;
+
+                        const arrowAngleDeg = angle * (180 / Math.PI);
+                        offscreenIndicator.innerHTML = `<span class="indicator-arrow" style="transform: rotate(${arrowAngleDeg}deg); color: ${hColor};">➤</span> <span>${hToken.name || 'Creature'} (${distFt} ft)</span>`;
+                    } else if (offscreenIndicator) {
+                        offscreenIndicator.style.display = 'none';
+                    }
+                } else {
+                    if (offscreenIndicator) offscreenIndicator.style.display = 'none';
+
+                    if (!hoverNode) {
+                        hoverNode = document.createElement('div');
+                        hoverNode.id = 'vtt-initiative-hover-glow';
+                        hoverNode.style.position = 'absolute';
+                        hoverNode.style.pointerEvents = 'none';
+                        hoverNode.style.zIndex = '12';
+                        overlayContainer.appendChild(hoverNode);
+                    }
+
+                    const cellWidth = (grid && grid.size) ? grid.size : 50;
+                    const hOutline = Math.max(3, Math.round(cellWidth * 0.06));
+
+                    hoverNode.style.display = 'block';
+                    hoverNode.style.left = `${hToken.x - hOutline}px`;
+                    hoverNode.style.top = `${hToken.y - hOutline}px`;
+                    hoverNode.style.width = `${hW + hOutline * 2}px`;
+                    hoverNode.style.height = `${hH + hOutline * 2}px`;
+                    hoverNode.style.boxSizing = 'border-box';
+                    hoverNode.style.border = `${hOutline}px solid ${hColor}`;
+                    hoverNode.style.borderRadius = !hToken.isAsset ? '50%' : '0';
+                    hoverNode.style.boxShadow = `0 0 12px ${hColor}`;
+                    hoverNode.style.backgroundColor = 'transparent';
+                }
+            } else {
+                if (hoverNode) hoverNode.style.display = 'none';
+                if (offscreenIndicator) offscreenIndicator.style.display = 'none';
+            }
+        } else {
+            if (hoverNode) hoverNode.style.display = 'none';
+            if (offscreenIndicator) offscreenIndicator.style.display = 'none';
         }
         
         visualFxAnimFrame = requestAnimationFrame(animateVisualFx);
@@ -3964,7 +4367,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         const cleanName = typeof Parser !== 'undefined' ? Parser.nameToTokenName(char.monsterData.name) : char.monsterData.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '_');
                         token.img = `img/bestiary/tokens/${char.monsterData.source}/${cleanName}.webp`;
                     } else if (!char.monsterData && (!char.tokenImages || char.tokenImages.length === 0)) {
-                        token.img = 'favicon.svg';
+                        token.img = (window.VTT && window.VTT.generateArcaneToken) ? window.VTT.generateArcaneToken(char.name || 'Hero', char.isPlayer ? 'player' : 'npc') : 'favicon.svg';
                     }
 
                     if (token.img && typeof token.img === 'string') {
@@ -4036,7 +4439,12 @@ window.emitTokenUpdates = function(currentTokens) {
             card.style.transition = 'var(--transition-smooth)';
             
             // Image preview
-            const thumbUrl = map.thumbnail || map.mapImage || (Object.values(map.tokens || {}).find(t => t.layer === 'map' && t.img)?.img) || '';
+            let rawThumb = map.thumbnail || map.mapImage || (Object.values(map.tokens || {}).find(t => t.layer === 'map' && t.img)?.img) || '';
+            let thumbUrl = rawThumb;
+            const ytThumbMatch = rawThumb ? rawThumb.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) : null;
+            if (ytThumbMatch && ytThumbMatch[1]) {
+                thumbUrl = `https://img.youtube.com/vi/${ytThumbMatch[1]}/hqdefault.jpg`;
+            }
             const hasThumb = !!thumbUrl;
             
             card.innerHTML = `
@@ -4153,12 +4561,27 @@ window.emitTokenUpdates = function(currentTokens) {
                         body: JSON.stringify({ url: finalVal })
                     }).then(res => res.json()).then(data => {
                         if (data.url) {
-                            map.mapImage = data.url;
+                            const newUrl = data.url;
+                            map.mapImage = newUrl;
+                            const ytMatch = newUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+                            if (ytMatch && ytMatch[1]) {
+                                map.thumbnail = `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+                            } else {
+                                map.thumbnail = newUrl;
+                            }
+                            if (map.tokens) {
+                                const mapAsset = Object.values(map.tokens).find(t => t.layer === 'map');
+                                if (mapAsset) {
+                                    mapAsset.img = newUrl;
+                                    mapAsset.isVideo = !!ytMatch || !!newUrl.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || newUrl.includes('pinimg.com/videos');
+                                }
+                            }
                             if (currentMapId === editingMapId) {
-                                setMapBackground(data.url);
+                                setMapBackground(newUrl);
                                 renderAll();
                             }
-                            vtt.socket.emit('map:edit', { mapId: editingMapId, updates: { mapImage: data.url } });
+                            vtt.socket.emit('map:edit', { mapId: editingMapId, updates: { mapImage: newUrl, thumbnail: map.thumbnail, tokens: map.tokens } });
+                            renderMapGrid();
                         }
                     });
                     return;
@@ -4472,19 +4895,40 @@ window.emitTokenUpdates = function(currentTokens) {
                         }
                     }
 
-                    const img = new Image();
-                    await new Promise((resolve) => {
-                        img.onload = () => resolve();
-                        img.onerror = () => resolve();
-                        img.src = getSafeVttUrl(url);
-                        setTimeout(resolve, 3000);
-                    });
-
-                    const nw = img.naturalWidth || 2000;
-                    const nh = img.naturalHeight || 1500;
+                    const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+                    const isYt = !!ytMatch;
+                    const ytVideoId = ytMatch ? ytMatch[1] : null;
+                    let embedUrl = url;
+                    let thumbUrl = url;
+                    let nw = 2000;
+                    let nh = 1500;
                     const gSize = 50;
-                    const gWidth = Math.ceil(nw / gSize);
-                    const gHeight = Math.ceil(nh / gSize);
+                    let gWidth = Math.ceil(nw / gSize);
+                    let gHeight = Math.ceil(nh / gSize);
+
+                    if (isYt) {
+                        embedUrl = `https://www.youtube.com/embed/${ytVideoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&fs=0&modestbranding=1&playsinline=1&playlist=${ytVideoId}`;
+                        thumbUrl = `https://img.youtube.com/vi/${ytVideoId}/hqdefault.jpg`;
+                        // Standard 16:9 widescreen canvas grid (38x22 squares at 50px = 1900x1100)
+                        gWidth = 38;
+                        gHeight = 22;
+                        nw = gWidth * gSize;
+                        nh = gHeight * gSize;
+                    } else {
+                        const img = new Image();
+                        await new Promise((resolve) => {
+                            img.onload = () => resolve();
+                            img.onerror = () => resolve();
+                            img.src = getSafeVttUrl(url);
+                            setTimeout(resolve, 3000);
+                        });
+
+                        nw = img.naturalWidth || 2000;
+                        nh = img.naturalHeight || 1500;
+                        gWidth = Math.ceil(nw / gSize);
+                        gHeight = Math.ceil(nh / gSize);
+                    }
+
                     const assetId = `asset_${Date.now()}_map`;
                     const initialTokens = {
                         [assetId]: {
@@ -4494,7 +4938,8 @@ window.emitTokenUpdates = function(currentTokens) {
                             y: 0,
                             layer: 'map',
                             isAsset: true,
-                            img: url,
+                            img: isYt ? embedUrl : url,
+                            isVideo: isYt || !!url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos'),
                             pixelWidth: nw,
                             pixelHeight: nh,
                             size: 1,
@@ -4503,11 +4948,11 @@ window.emitTokenUpdates = function(currentTokens) {
                         }
                     };
 
-                    console.log('[map:create] Emitting map:create for URL map as Freeform Asset...', url);
+                    console.log('[map:create] Emitting map:create for URL map as Freeform Asset...', isYt ? embedUrl : url);
                     vtt.socket.emit('map:create', {
                         name,
                         mapImage: "",
-                        thumbnail: url,
+                        thumbnail: thumbUrl,
                         gridWidth: gWidth,
                         gridHeight: gHeight,
                         grid: { size: gSize, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' },
@@ -5404,7 +5849,11 @@ window.emitTokenUpdates = function(currentTokens) {
         stepZoom,
         centerOnToken: centerOnTokenOrMap,
         broadcastViewToPlayers,
-        getCampaignSettings: () => campaignSettings
+        getCampaignSettings: () => campaignSettings,
+        setInitiativeHoverToken: (tokenId) => {
+            initiativeHoverTokenId = tokenId;
+        },
+        getInitiativeHoverToken: () => initiativeHoverTokenId
     };
 
     // =========================================================================
@@ -5905,15 +6354,22 @@ window.emitTokenUpdates = function(currentTokens) {
 
         // Helper to get default monster token
         const getMonsterTokenUrl = (monster) => {
-            if (monster && monster.hasToken) {
-                if (typeof window.Renderer !== 'undefined' && window.Renderer.monster && window.Renderer.monster.getTokenUrl) {
-                    return window.Renderer.monster.getTokenUrl(monster);
-                }
-                const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(monster.name) : monster.name.replace(/ /g, '-').toLowerCase();
-                const source = monster.source;
+            if (!monster) return null;
+            if (monster.tokenImg) return monster.tokenImg;
+            if (monster.tokenUrl) return monster.tokenUrl;
+            if (monster.imgUrl) return monster.imgUrl;
+            if (typeof window.Renderer !== 'undefined' && window.Renderer.monster && window.Renderer.monster.getTokenUrl) {
+                try {
+                    const rUrl = window.Renderer.monster.getTokenUrl(monster);
+                    if (rUrl) return rUrl;
+                } catch (e) {}
+            }
+            if (monster.hasToken || monster.source || monster.name) {
+                const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(monster.name) : (monster.name || '').replace(/"/g, '').trim();
+                const source = monster.source || 'MM';
                 return `img/bestiary/tokens/${source}/${cleanName}.webp`;
             }
-            return null;
+            return (window.VTT && window.VTT.generateArcaneToken) ? window.VTT.generateArcaneToken(monster?.name || 'Creature', 'monster') : null;
         };
 
         // 1. Add Default Token if NPC or Companion
@@ -9938,6 +10394,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 selectedTokenIds.forEach(id => {
                     const t = tokens[id];
                     if (isTokenControlledByPlayer(t)) {
+                        if (typeof cleanupYouTubePingPongForId === 'function') cleanupYouTubePingPongForId(id);
                         delete tokens[id];
                     }
                 });

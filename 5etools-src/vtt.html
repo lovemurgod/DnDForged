@@ -17,6 +17,9 @@
     <!-- 3D WebGL Dice Engine Stylesheet -->
     <link rel="stylesheet" href="css/dice-3d.css">
     
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
     
@@ -255,7 +258,7 @@
         </main>
 
         <!-- Initiative Tracker Container -->
-        <div id="vtt-initiative-carousel-container" class="vtt-hidden tracker-floating pos-right">
+        <div id="vtt-initiative-carousel-container" class="vtt-hidden tracker-floating pos-right orientation-vertical">
             <!-- Top Controls -->
             <div class="init-controls-top">
                 <button id="btn-init-drag" class="btn btn-icon btn-secondary init-drag-handle" title="Drag to move tracker">
@@ -264,17 +267,29 @@
                 <span class="current-round" title="Current Round"><i class="fa-solid fa-hourglass-half"></i> <span id="init-round-num">1</span></span>
                 <select id="hud-init-position" class="hud-init-pos-select" title="Tracker Position Style">
                     <option value="right" selected>Right</option>
+                    <option value="left">Left</option>
                     <option value="top">Top</option>
                     <option value="bottom">Bottom</option>
                 </select>
+                <button id="btn-init-orientation" class="btn btn-icon btn-secondary" title="Toggle Horizontal / Vertical Orientation">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
                 <button id="btn-init-minimize" class="btn btn-icon btn-secondary" title="Minimize Tracker">
                     <i class="fa-solid fa-compress"></i>
                 </button>
             </div>
             
-            <!-- Tracking Icons -->
-            <div id="init-list" class="init-carousel-list scroll-styled">
-                <div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "Add".</div>
+            <!-- Tracking Icons with Scroll Controls -->
+            <div id="init-scroll-wrapper" class="init-scroll-wrapper">
+                <button id="btn-init-scroll-left" class="btn btn-icon btn-secondary init-scroll-btn init-scroll-btn-left" title="Scroll Left" style="display: none;">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <div id="init-list" class="init-carousel-list scroll-styled">
+                    <div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "Add".</div>
+                </div>
+                <button id="btn-init-scroll-right" class="btn btn-icon btn-secondary init-scroll-btn init-scroll-btn-right" title="Scroll Right" style="display: none;">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
             </div>
 
             <!-- Bottom Controls -->
@@ -287,6 +302,11 @@
                 <button id="btn-init-clear" class="btn btn-icon btn-danger gm-only" title="Clear Tracker">
                     <i class="fa-solid fa-trash"></i>
                 </button>
+            </div>
+
+            <!-- Free-drag Corner Resize Handle -->
+            <div id="init-resize-handle" class="init-resize-handle" title="Drag corner to resize tracker">
+                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
             </div>
         </div>
         
@@ -374,6 +394,16 @@
                             <div class="search-box">
                                 <input type="text" id="library-search" placeholder="Search monsters (e.g., Goblin)...">
                                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            </div>
+                            <div class="library-filter-bar" style="display:flex; gap:6px; margin: 4px 0 8px 0; font-size:0.75rem; align-items:center;">
+                                <div style="display:flex; border: 1px solid var(--color-border-subtle); border-radius: 4px; overflow: hidden; flex: 1;">
+                                    <button class="lib-filter-edition active" data-edition="all" style="flex:1; padding:4px 2px; border:none; background:var(--color-bg-tertiary); color:var(--color-gold-light); cursor:pointer; font-size:0.75rem; font-weight:600;">All</button>
+                                    <button class="lib-filter-edition" data-edition="2024" style="flex:1; padding:4px 2px; border:none; background:transparent; color:var(--color-text-secondary); cursor:pointer; font-size:0.75rem;">2024</button>
+                                    <button class="lib-filter-edition" data-edition="2014" style="flex:1; padding:4px 2px; border:none; background:transparent; color:var(--color-text-secondary); cursor:pointer; font-size:0.75rem;">2014</button>
+                                </div>
+                                <button id="lib-filter-spellcaster" class="btn btn-secondary btn-xxs" style="padding:4px 8px; font-size:0.75rem; border-radius:4px;" title="Filter Spellcasters Only">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Spells
+                                </button>
                             </div>
                             
                             <div id="library-monster-list" class="library-items scroll-styled" style="flex: 1; overflow-y: auto;">
@@ -740,6 +770,7 @@
                                 <label for="config-init-position">Tracker Position</label>
                                 <select id="config-init-position" style="width: 130px; padding: 4px 8px; font-size: 0.8rem;">
                                     <option value="right" selected>Right Aligned</option>
+                                    <option value="left">Left Aligned</option>
                                     <option value="top">Top Aligned</option>
                                     <option value="bottom">Bottom Aligned</option>
                                 </select>

@@ -577,9 +577,60 @@ function buildNormalizedDatabase() {
 
     allSpells.sort((a, b) => a.name.localeCompare(b.name));
 
-    fs.writeFileSync(outputPath, JSON.stringify(allSpells, null, 2), 'utf8');
-    console.log(`✅ Fully expanded spell database successfully generated! Total spells: ${allSpells.length}`);
-    console.log(`📁 Output path: ${outputPath}`);
+    // 1. Generate lightweight search catalog index
+    const catalogPath = path.join(rootDir, '5etools-src', 'data', 'spells-catalog.json');
+    const catalog = allSpells.map(sp => ({
+        id: sp.id,
+        name: sp.name,
+        source: sp.source,
+        page: sp.page,
+        level: sp.level,
+        school: sp.school,
+        castingTime: sp.castingTime,
+        range: sp.range,
+        components: sp.components,
+        duration: sp.duration,
+        concentration: sp.concentration,
+        ritual: sp.ritual,
+        classes: sp.classes,
+        damageList: sp.damageList,
+        saveAbility: sp.saveAbility,
+        attackStat: sp.attackStat
+    }));
+
+    fs.writeFileSync(catalogPath, JSON.stringify(catalog, null, 2), 'utf8');
+    console.log(`📁 Spells search catalog generated: ${catalogPath} (${catalog.length} spells)`);
+
+    // 2. Strict Source Partitions: output spells-normalized/spells-<source>.json
+    const partitionsDir = path.join(rootDir, '5etools-src', 'data', 'spells-normalized');
+    if (!fs.existsSync(partitionsDir)) {
+        fs.mkdirSync(partitionsDir, { recursive: true });
+    }
+
+    const sourcePartitions = new Map();
+    for (const sp of allSpells) {
+        const srcKey = (sp.source || 'phb').toLowerCase();
+        if (!sourcePartitions.has(srcKey)) {
+            sourcePartitions.set(srcKey, []);
+        }
+        sourcePartitions.get(srcKey).push(sp);
+    }
+
+    for (const [srcKey, spellsList] of sourcePartitions.entries()) {
+        const partFile = path.join(partitionsDir, `spells-${srcKey}.json`);
+        fs.writeFileSync(partFile, JSON.stringify(spellsList, null, 2), 'utf8');
+    }
+
+    console.log(`📁 Successfully wrote ${sourcePartitions.size} source-partitioned spell tables to ${partitionsDir}`);
+    console.log(`✅ Complete! Total partitioned spells: ${allSpells.length}`);
+
+    // Remove legacy monolithic file if present
+    if (fs.existsSync(outputPath)) {
+        try {
+            fs.unlinkSync(outputPath);
+            console.log(`🗑️ Removed legacy monolithic spells-normalized.json`);
+        } catch (e) {}
+    }
 }
 
 buildNormalizedDatabase();

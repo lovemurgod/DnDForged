@@ -15,6 +15,70 @@ export function initVttCreatureSheet(vtt) {
     let isMinimized = false;
     let spellCache = null;
 
+    function toSpellTitleCase(str) {
+        if (window.toSpellTitleCase) return window.toSpellTitleCase(str);
+        if (!str || typeof str !== 'string') return str;
+        const minorWords = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'for', 'nor', 'on', 'at', 'to', 'from', 'by', 'of', 'in', 'with']);
+        return str.split(/\s+/).map((word, index, arr) => {
+            let clean = word.toLowerCase();
+            if (clean.includes('/')) {
+                return clean.split('/').map(part => {
+                    if (!part) return part;
+                    return part.charAt(0).toUpperCase() + part.slice(1);
+                }).join('/');
+            }
+            if (clean.includes('-')) {
+                return clean.split('-').map(part => {
+                    if (!part) return part;
+                    return part.charAt(0).toUpperCase() + part.slice(1);
+                }).join('-');
+            }
+            if (index > 0 && index < arr.length - 1 && minorWords.has(clean)) {
+                return clean;
+            }
+            return clean.charAt(0).toUpperCase() + clean.slice(1);
+        }).join(' ');
+    }
+
+    function get5eSlotsForCaster(type, level) {
+        const lvl = Math.max(0, Math.min(20, parseInt(level) || 0));
+        if (lvl <= 0) return {};
+        if (type === 'pact') {
+            if (lvl === 1) return { level1: 1 };
+            if (lvl === 2) return { level1: 2 };
+            if (lvl <= 4) return { level2: 2 };
+            if (lvl <= 6) return { level3: 2 };
+            if (lvl <= 8) return { level4: 2 };
+            if (lvl <= 10) return { level5: 2 };
+            if (lvl <= 16) return { level5: 3 };
+            return { level5: 4 };
+        }
+        const table = [
+            {},
+            { level1: 2 },
+            { level1: 3 },
+            { level1: 4, level2: 2 },
+            { level1: 4, level2: 3 },
+            { level1: 4, level2: 3, level3: 2 },
+            { level1: 4, level2: 3, level3: 3 },
+            { level1: 4, level2: 3, level3: 3, level4: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 2 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2, level6: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2, level6: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2, level6: 1, level7: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2, level6: 1, level7: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2, level6: 1, level7: 1, level8: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2, level6: 1, level7: 1, level8: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 2, level6: 1, level7: 1, level8: 1, level9: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 3, level6: 1, level7: 1, level8: 1, level9: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 3, level6: 2, level7: 1, level8: 1, level9: 1 },
+            { level1: 4, level2: 3, level3: 3, level4: 3, level5: 3, level6: 2, level7: 2, level8: 1, level9: 1 }
+        ];
+        return table[lvl] || {};
+    }
+
     function showVttPrompt(title, defaultValue, callback) {
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
@@ -135,6 +199,33 @@ export function initVttCreatureSheet(vtt) {
     async function openSheet(monsterData, tokenId, characterId) {
         console.log('[vtt-creature-sheet] openSheet called', { monsterData, tokenId, characterId });
         if (!monsterData) return;
+
+        // Hydrate from single-creature API if monsterData is only catalog summary
+        if (monsterData.source && monsterData.id && (!monsterData.actions || (monsterData.hasSpellcasting && (!monsterData.spellcasting || monsterData.spellcasting.length === 0)))) {
+            try {
+                const full = (window.fetchFullCreature ? await window.fetchFullCreature(monsterData.source, monsterData.id) : null) ||
+                    (await (await fetch(`/api/creature/${encodeURIComponent(monsterData.source)}/${encodeURIComponent(monsterData.id)}`)).json());
+                if (full) {
+                    monsterData = Object.assign({}, full, monsterData, {
+                        spellcasting: full.spellcasting,
+                        actions: full.actions,
+                        bonusActions: full.bonusActions,
+                        reactions: full.reactions,
+                        legendaryActions: full.legendaryActions,
+                        traits: full.traits,
+                        abilities: full.abilities,
+                        saves: full.saves,
+                        skills: full.skills,
+                        senses: full.senses,
+                        speed: full.speed,
+                        hp: full.hp,
+                        ac: full.ac
+                    });
+                }
+            } catch (err) {
+                console.warn('[vtt-creature-sheet] Could not hydrate monsterData:', err);
+            }
+        }
 
         // Check if this sheet is already popped out into a separate window/tab
         const keyId = tokenId || characterId || (monsterData ? `${monsterData.name}_${monsterData.source || ''}` : null);
@@ -279,10 +370,10 @@ export function initVttCreatureSheet(vtt) {
         const saves = buildSavesHtml(m);
         const skills = buildSkillsHtml(m);
         const immunities = buildImmunityHtml(m);
-        const traits = buildAbilitySection('Traits', m.trait);
-        const actions = buildAbilitySection('Actions', m.action);
-        const bonus = buildAbilitySection('Bonus Actions', m.bonus);
-        const reactions = buildAbilitySection('Reactions', m.reaction);
+        const traits = buildAbilitySection('Traits', m.traits || m.trait);
+        const actions = buildAbilitySection('Actions', m.actions || m.action);
+        const bonus = buildAbilitySection('Bonus Actions', m.bonusActions || m.bonus);
+        const reactions = buildAbilitySection('Reactions', m.reactions || m.reaction);
         const legendary = buildLegendarySection(m);
 
         const isEditableCreature = Boolean(linkedCharacterId || m.isCustomNpc || m.isCompanion);
@@ -335,7 +426,8 @@ export function initVttCreatureSheet(vtt) {
             }
             portraitMediaHtml = `<iframe src="${ytUrl}" frameborder="0" allow="autoplay; encrypted-media" style="width:100%; height:100%; pointer-events:none; border:none;"></iframe>`;
         } else {
-            portraitMediaHtml = `<img src="${tokenUrl}" alt="${m.name}" onerror="this.src='favicon.svg'" style="width:100%; height:100%; object-fit:cover; display:block;">`;
+            const safeName = (m.name || 'Creature').replace(/'/g, "\\'");
+            portraitMediaHtml = `<img src="${tokenUrl}" alt="${m.name}" onerror="if (window.VTT?.generateArcaneToken) { this.src = window.VTT.generateArcaneToken('${safeName}', 'monster'); } else { this.src = 'favicon.svg'; }" style="width:100%; height:100%; object-fit:cover; display:block;">`;
         }
 
         contentEl.innerHTML = `
@@ -914,9 +1006,10 @@ export function initVttCreatureSheet(vtt) {
 
     function buildLegendarySection(m) {
         let html = '';
-        if (m.legendary && m.legendary.length > 0) {
-            const lairDesc = m.legendaryActions !== undefined ? `<p class="cs-legendary-desc">${m.legendaryActions}</p>` : '';
-            const rows = m.legendary.map(entry => buildAbilityEntryHtml(entry)).join('');
+        const legEntries = m.legendaryActions?.entries || m.legendary || [];
+        if (legEntries && legEntries.length > 0) {
+            const lairDesc = m.legendaryActions?.description ? `<p class="cs-legendary-desc">${m.legendaryActions.description}</p>` : (m.legendaryActions !== undefined ? `<p class="cs-legendary-desc">${m.legendaryActions}</p>` : '');
+            const rows = legEntries.map(entry => buildAbilityEntryHtml(entry)).join('');
             html += `
                 <div class="cs-section cs-legendary-section">
                     <h3 class="cs-section-title"><i class="fa-solid fa-crown"></i> <span>Legendary Actions</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
@@ -946,7 +1039,12 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function ensureSpellcastingFromTraits(m) {
-        if (!m || !m.trait || !Array.isArray(m.trait) || m.trait.length === 0) return;
+        if (!m) return;
+        // If monster already has pre-normalized spellcasting data, do not overwrite or guess with regex
+        if (m.spellcasting && m.spellcasting.length > 0 && m.spellcasting.some(sc => sc.spellsByLevel || sc.atWill || sc.daily)) {
+            return;
+        }
+        if (!m.trait || !Array.isArray(m.trait) || m.trait.length === 0) return;
         
         const scTraits = m.trait.filter(t => {
             if (!t || !t.name) return false;
@@ -1083,13 +1181,47 @@ export function initVttCreatureSheet(vtt) {
                     daily: {}
                 };
 
-                if (sc.spells) {
+                if (sc.spellsByLevel) {
+                    for (let lvl in sc.spellsByLevel) {
+                        let levelKey = lvl === '0' ? 'cantrip' : 'level' + lvl;
+                        let rawList = sc.spellsByLevel[lvl]?.spells || [];
+                        rawList.forEach((sp, spIdx) => {
+                            let spObj = Object.assign({}, sp, {
+                                id: sp.id || ('sp_' + scIdx + '_' + lvl + '_' + spIdx),
+                                spellcastingBlockId: sc.id,
+                                spellcastingBlockName: sc.name || 'Spellcasting',
+                                spellcastingType: sc.type || (isBlockInnate ? 'innate' : 'slot'),
+                                ability: abilityStr,
+                                dc: dcVal,
+                                atkMod: atkVal,
+                                casterLevel: casterLvlVal,
+                                prepared: true
+                            });
+                            if (isBlockInnate) {
+                                if (levelKey === 'cantrip') {
+                                    spObj.uses = 'at_will';
+                                    spObj.innate = true;
+                                    scInnate.will.push(spObj);
+                                } else {
+                                    spObj.innate = true;
+                                    spObj.usesMax = 1;
+                                    spObj.usesRemaining = m.dailyUsages[spObj.id] !== undefined ? m.dailyUsages[spObj.id] : 1;
+                                    scInnate.daily['1e'] = scInnate.daily['1e'] || [];
+                                    scInnate.daily['1e'].push(spObj);
+                                }
+                            } else {
+                                if (!scSpells[levelKey].some(s => s.name === spObj.name)) scSpells[levelKey].push(spObj);
+                                if (!spells[levelKey].some(s => s.name === spObj.name)) spells[levelKey].push(spObj);
+                            }
+                        });
+                    }
+                } else if (sc.spells) {
                     for (let lvl in sc.spells) {
                         let levelKey = lvl === '0' ? 'cantrip' : 'level' + lvl;
                         let rawList = Array.isArray(sc.spells[lvl]) ? sc.spells[lvl] : (sc.spells[lvl]?.spells || []);
                         rawList.forEach((sp, spIdx) => {
-                            let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                            let spObj = typeof sp === 'object' ? sp : { id: 'sp_' + scIdx + '_' + lvl + '_' + spIdx, name: name, prepared: true };
+                            let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
+                            let spObj = typeof sp === 'object' ? Object.assign({}, sp) : { id: 'sp_' + scIdx + '_' + lvl + '_' + spIdx, name: name, prepared: true };
                             spObj.id = spObj.id || ('sp_' + scIdx + '_' + lvl + '_' + spIdx);
                             spObj.name = name;
                             spObj.spellcastingBlockId = sc.id;
@@ -1116,35 +1248,51 @@ export function initVttCreatureSheet(vtt) {
                                 if (scSpells[levelKey] && !scSpells[levelKey].some(s => s.name === name)) {
                                     scSpells[levelKey].push(spObj);
                                 }
-                            }
-                            if (spells[levelKey] && !spells[levelKey].some(s => s.name === name)) {
-                                spells[levelKey].push(spObj);
+                                if (spells[levelKey] && !spells[levelKey].some(s => s.name === name)) {
+                                    spells[levelKey].push(spObj);
+                                }
                             }
                         });
                     }
                 }
 
-                if (sc.will) {
+                if (sc.atWill && Array.isArray(sc.atWill)) {
+                    sc.atWill.forEach((sp, spIdx) => {
+                        let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
+                        let spObj = Object.assign({}, typeof sp === 'object' ? sp : {}, {
+                            id: sp.id || ('sp_will_' + scIdx + '_' + spIdx),
+                            name: name,
+                            uses: 'at_will',
+                            innate: true,
+                            prepared: true,
+                            spellcastingBlockId: sc.id,
+                            spellcastingBlockName: sc.name || (isBlockInnate ? 'Innate Spellcasting' : 'Spellcasting'),
+                            spellcastingType: sc.type || (isBlockInnate ? 'innate' : 'slot'),
+                            ability: abilityStr,
+                            dc: dcVal,
+                            atkMod: atkVal,
+                            casterLevel: casterLvlVal
+                        });
+                        scInnate.will.push(spObj);
+                        if (!isBlockInnate && !scSpells.cantrip.some(s => s.name === spObj.name)) scSpells.cantrip.push(spObj);
+                    });
+                } else if (sc.will) {
                     sc.will.forEach((sp, spIdx) => {
-                        let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-                        let spObj = typeof sp === 'object' ? sp : { id: 'sp_will_' + scIdx + '_' + spIdx, name: name, prepared: true, innate: true, uses: 'at_will' };
+                        let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
+                        let spObj = typeof sp === 'object' ? Object.assign({}, sp) : { id: 'sp_will_' + scIdx + '_' + spIdx, name: name, prepared: true, innate: true, uses: 'at_will' };
                         spObj.id = spObj.id || ('sp_will_' + scIdx + '_' + spIdx);
                         spObj.name = name;
                         spObj.uses = 'at_will';
                         spObj.spellcastingBlockId = sc.id;
-                        spObj.spellcastingBlockName = sc.name || 'Innate Spellcasting';
-                        spObj.spellcastingType = sc.type || 'innate';
+                        spObj.spellcastingBlockName = sc.name || (isBlockInnate ? 'Innate Spellcasting' : 'Spellcasting');
+                        spObj.spellcastingType = sc.type || (isBlockInnate ? 'innate' : 'slot');
                         spObj.ability = abilityStr;
                         spObj.dc = dcVal;
                         spObj.atkMod = atkVal;
                         spObj.casterLevel = casterLvlVal;
 
-                        if (isBlockInnate) {
-                            scInnate.will.push(spObj);
-                        } else {
-                            if (!scSpells.cantrip.some(s => s.name === name)) scSpells.cantrip.push(spObj);
-                        }
-                        if (!spells.cantrip.some(s => s.name === name)) spells.cantrip.push(spObj);
+                        scInnate.will.push(spObj);
+                        if (!isBlockInnate && !scSpells.cantrip.some(s => s.name === name)) scSpells.cantrip.push(spObj);
                     });
                 }
 
@@ -1153,35 +1301,58 @@ export function initVttCreatureSheet(vtt) {
                         let usesMax = parseInt(dailyKey) || 1;
                         scInnate.daily[dailyKey] = scInnate.daily[dailyKey] || [];
                         sc.daily[dailyKey].forEach((sp, spIdx) => {
-                            let name = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
+                            let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
                             let spId = 'sp_daily_' + scIdx + '_' + dailyKey + '_' + spIdx;
                             let usesRemaining = m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
-                            let spObj = typeof sp === 'object' ? sp : { id: spId, name: name, prepared: true, innate: true, usesMax, usesRemaining, dailyKey };
+                            let spObj = typeof sp === 'object' ? Object.assign({}, sp) : { id: spId, name: name, prepared: true, innate: true, usesMax, usesRemaining, dailyKey };
                             spObj.id = spObj.id || spId;
                             spObj.name = name;
                             spObj.usesMax = usesMax;
                             spObj.usesRemaining = usesRemaining;
                             spObj.dailyKey = dailyKey;
                             spObj.spellcastingBlockId = sc.id;
-                            spObj.spellcastingBlockName = sc.name || 'Innate Spellcasting';
-                            spObj.spellcastingType = sc.type || 'innate';
+                            spObj.spellcastingBlockName = sc.name || (isBlockInnate ? 'Innate Spellcasting' : 'Spellcasting');
+                            spObj.spellcastingType = sc.type || (isBlockInnate ? 'innate' : 'slot');
                             spObj.ability = abilityStr;
                             spObj.dc = dcVal;
                             spObj.atkMod = atkVal;
                             spObj.casterLevel = casterLvlVal;
 
-                            if (isBlockInnate) {
-                                scInnate.daily[dailyKey].push(spObj);
-                            } else {
-                                if (!scSpells.level1.some(s => s.name === name)) scSpells.level1.push(spObj);
-                            }
-                            if (!spells.level1.some(s => s.name === name)) spells.level1.push(spObj);
+                            scInnate.daily[dailyKey].push(spObj);
                         });
+                    }
+                }
+
+                // Preserve any user-added spells from sc.innateObj
+                if (sc.innateObj) {
+                    if (scInnate.will.length === 0 && sc.innateObj.will && sc.innateObj.will.length > 0) {
+                        scInnate.will = sc.innateObj.will;
+                    } else if (sc.innateObj.will) {
+                        sc.innateObj.will.forEach(sp => {
+                            if (!scInnate.will.some(s => s.id === sp.id || s.name === sp.name)) {
+                                scInnate.will.push(sp);
+                            }
+                        });
+                    }
+                    if (sc.innateObj.daily) {
+                        for (let dk in sc.innateObj.daily) {
+                            if (!scInnate.daily[dk]) {
+                                scInnate.daily[dk] = sc.innateObj.daily[dk];
+                            } else {
+                                sc.innateObj.daily[dk].forEach(sp => {
+                                    if (!scInnate.daily[dk].some(s => s.id === sp.id || s.name === sp.name)) {
+                                        scInnate.daily[dk].push(sp);
+                                    }
+                                });
+                            }
+                        }
                     }
                 }
 
                 sc.spellsObj = scSpells;
                 sc.innateObj = scInnate;
+                sc.will = scInnate.will;
+                sc.daily = scInnate.daily;
             });
         }
 
@@ -1217,11 +1388,6 @@ export function initVttCreatureSheet(vtt) {
                 }];
                 m.spellcasting[0].spellsObj = spells;
             }
-        } else {
-            const standardBlock = m.spellcasting.find(b => b.type !== 'innate') || m.spellcasting[0];
-            if (standardBlock) {
-                standardBlock.spellsObj = spells;
-            }
         }
 
         if (window.VTTSpellManager && window.VTTSpellManager.getSpellCache) {
@@ -1246,14 +1412,26 @@ export function initVttCreatureSheet(vtt) {
         return m.spells;
     }
 
-    function getMaxSlotsForLevel(m, slKey) {
+    function getMaxSlotsForLevel(m, slKey, sc = null) {
         if (!slKey || slKey === 'cantrip') return 0;
         const lvlNum = slKey.replace('level', '');
         
+        if (sc) {
+            if (sc.spellsByLevel && sc.spellsByLevel[lvlNum] && sc.spellsByLevel[lvlNum].slots !== undefined) {
+                return parseInt(sc.spellsByLevel[lvlNum].slots) || 0;
+            }
+            if (sc.spells && sc.spells[lvlNum] && sc.spells[lvlNum].slots !== undefined) {
+                return parseInt(sc.spells[lvlNum].slots) || 0;
+            }
+        }
+
         if (m.spellcasting) {
-            for (let sc of m.spellcasting) {
-                if (sc.spells && sc.spells[lvlNum] && sc.spells[lvlNum].slots !== undefined) {
-                    return parseInt(sc.spells[lvlNum].slots) || 0;
+            for (let block of m.spellcasting) {
+                if (block.spellsByLevel && block.spellsByLevel[lvlNum] && block.spellsByLevel[lvlNum].slots !== undefined) {
+                    return parseInt(block.spellsByLevel[lvlNum].slots) || 0;
+                }
+                if (block.spells && block.spells[lvlNum] && block.spells[lvlNum].slots !== undefined) {
+                    return parseInt(block.spells[lvlNum].slots) || 0;
                 }
             }
         }
@@ -1272,7 +1450,60 @@ export function initVttCreatureSheet(vtt) {
                 return typeof val === 'object' ? (parseInt(val.max) || 0) : (parseInt(val) || 0);
             }
         }
+        // Fallback: calculate standard slots from Caster Level for slot or pact blocks
+        if (sc && (sc.type === 'slot' || sc.type === 'pact') && (sc.casterLevel || m.casterLevel)) {
+            const computed = get5eSlotsForCaster(sc.type, sc.casterLevel || m.casterLevel);
+            if (computed[slKey] !== undefined) return computed[slKey];
+        }
+        if (m.spellcasting) {
+            for (let block of m.spellcasting) {
+                if ((block.type === 'slot' || block.type === 'pact') && (block.casterLevel || m.casterLevel)) {
+                    const computed = get5eSlotsForCaster(block.type, block.casterLevel || m.casterLevel);
+                    if (computed[slKey] !== undefined) return computed[slKey];
+                }
+            }
+        }
         return 0;
+    }
+
+    function getSpellFromMonster(m, level, idx, spellId = null, blockId = null, sectionKey = null) {
+        if (!m) return null;
+        if (spellId && m.spellcasting) {
+            for (const sc of m.spellcasting) {
+                if (sc.innateObj) {
+                    const foundWill = (sc.innateObj.will || []).find(s => s.id === spellId);
+                    if (foundWill) return foundWill;
+                    for (const k in sc.innateObj.daily) {
+                        const foundDaily = (sc.innateObj.daily[k] || []).find(s => s.id === spellId);
+                        if (foundDaily) return foundDaily;
+                    }
+                }
+                if (sc.spellsObj) {
+                    for (const k in sc.spellsObj) {
+                        const foundSlot = (sc.spellsObj[k] || []).find(s => s.id === spellId);
+                        if (foundSlot) return foundSlot;
+                    }
+                }
+            }
+        }
+        if (blockId && m.spellcasting) {
+            const sc = m.spellcasting.find(b => b.id === blockId);
+            if (sc) {
+                if (sc.type === 'innate' || /innate|psionic/i.test(sc.name || '')) {
+                    if (sectionKey === 'will' && sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
+                    if (sectionKey && sc.innateObj?.daily?.[sectionKey]?.[idx]) return sc.innateObj.daily[sectionKey][idx];
+                    if (level === 'cantrip' && sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
+                    if (sc.innateObj?.daily) {
+                        for (const k in sc.innateObj.daily) {
+                            if (sc.innateObj.daily[k]?.[idx]) return sc.innateObj.daily[k][idx];
+                        }
+                    }
+                }
+                if (sc.spellsObj?.[level]?.[idx]) return sc.spellsObj[level][idx];
+            }
+        }
+        if (m.spells?.[level]?.[idx]) return m.spells[level][idx];
+        return null;
     }
 
     function buildSpellcastingHtml(m) {
@@ -1310,7 +1541,27 @@ export function initVttCreatureSheet(vtt) {
                 const dcVal = sc.dc !== undefined ? sc.dc : (8 + pb + abMod);
                 const atkVal = sc.atkMod !== undefined ? sc.atkMod : (pb + abMod);
                 const casterLvlVal = sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0);
-                const isInnate = sc.type === 'innate';
+                const isInnate = sc.type === 'innate' || /innate|psionic/i.test(scName);
+
+                // Distinct Casting Type Badges
+                let typeBadge = '';
+                if (/psionics/i.test(scName)) {
+                    typeBadge = `<span class="badge" style="background:rgba(186,85,211,0.2); color:#dda0dd; border:1px solid rgba(186,85,211,0.3); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-brain" style="margin-right:3px;"></i>Psionics</span>`;
+                } else if (isInnate) {
+                    typeBadge = `<span class="badge" style="background:rgba(30,144,255,0.15); color:#87cefa; border:1px solid rgba(30,144,255,0.25); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-sparkles" style="margin-right:3px;"></i>Innate</span>`;
+                } else {
+                    typeBadge = `<span class="badge" style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); border:1px solid rgba(212,175,55,0.25); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-layer-group" style="margin-right:3px;"></i>Slots</span>`;
+                }
+
+                // Distinct Action Cost Badges (e.g. 2024 / XMM action types)
+                let actionBadge = '';
+                if (sc.displayAs === 'bonus' || /bonus action/i.test(scName)) {
+                    actionBadge = `<span class="badge" style="background:rgba(255,165,0,0.18); color:#ffaa00; border:1px solid rgba(255,165,0,0.3); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-bolt" style="margin-right:3px;"></i>Bonus Action</span>`;
+                } else if (sc.displayAs === 'reaction' || /reaction/i.test(scName)) {
+                    actionBadge = `<span class="badge" style="background:rgba(70,130,180,0.2); color:#87ceeb; border:1px solid rgba(70,130,180,0.3); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-shield-halved" style="margin-right:3px;"></i>Reaction</span>`;
+                } else if (sc.displayAs === 'legendary') {
+                    actionBadge = `<span class="badge" style="background:rgba(220,20,60,0.2); color:#ff6b81; border:1px solid rgba(220,20,60,0.3); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-crown" style="margin-right:3px;"></i>Legendary</span>`;
+                }
 
                 const hEntries = sc.headerEntries ? sc.headerEntries.map(e => formatRawEntry(e)).join('<br>') : '';
                 const fEntries = sc.footerEntries ? '<br>' + sc.footerEntries.map(e => formatRawEntry(e)).join('<br>') : '';
@@ -1319,7 +1570,11 @@ export function initVttCreatureSheet(vtt) {
                 html += `
                     <div class="cs-spellcasting-block" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid var(--color-gold-base); margin-bottom: 8px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">
-                            <strong style="color:var(--color-gold-light); font-size: 1.05rem;"><i class="fa-solid fa-hand-sparkles" style="margin-right:6px;"></i>${scName}</strong>
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <strong style="color:var(--color-gold-light); font-size: 1.05rem;"><i class="fa-solid fa-hand-sparkles" style="margin-right:6px;"></i>${scName}</strong>
+                                ${typeBadge}
+                                ${actionBadge}
+                            </div>
                             <div style="display:flex; align-items:center; gap:6px; font-size:0.78rem;">
                                 <span style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); padding:2px 8px; border-radius:4px; font-weight:600;">${abilityStr}</span>
                                 ${dcVal ? `<span style="background:rgba(255,255,255,0.08); color:var(--color-text-primary); padding:2px 8px; border-radius:4px;">DC ${dcVal}</span>` : ''}
@@ -1339,13 +1594,16 @@ export function initVttCreatureSheet(vtt) {
                     // At Will group
                     if (willList.length > 0 || allowEdit) {
                         html += `
-                            <div class="cs-spell-page" style="margin-bottom:8px;">
+                            <div class="cs-spell-page" data-block-id="${sc.id}" style="margin-bottom:8px;">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
                                     <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-infinity" style="margin-right:4px;"></i> At Will</span>
-                                    ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="cantrip" data-block-id="${sc.id}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                                    ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="cantrip" data-block-id="${sc.id}" data-section-key="will"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
                                 </div>
                                 <div style="display:flex; flex-direction:column; gap:8px;">
-                                    ${willList.length > 0 ? willList.map((sp, idx) => renderSingleSpellRowHtml(sp, 'cantrip', idx, allowEdit)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No at-will spells added.</div>'}
+                                    ${willList.length > 0 ? willList.map((sp, idx) => {
+                                        const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'cantrip';
+                                        return renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, sp.id, 'will');
+                                    }).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No at-will spells added.</div>'}
                                 </div>
                             </div>
                         `;
@@ -1353,26 +1611,21 @@ export function initVttCreatureSheet(vtt) {
 
                     // Daily groups
                     if (hasDaily || allowEdit) {
-                        const dailyKeys = Object.keys(dailyObj).length > 0 ? Object.keys(dailyObj).sort((a, b) => parseInt(b) - parseInt(a)) : ['1e'];
-                        dailyKeys.forEach(dailyKey => {
-                            const list = dailyObj[dailyKey] || [];
-                            if (list.length === 0 && !allowEdit) return;
-                            const count = parseInt(dailyKey) || 1;
-                            const isEach = dailyKey.endsWith('e');
-                            const label = isEach ? `${count}/Day Each` : `${count}/Day`;
-
+                        Object.keys(dailyObj).forEach(dayKey => {
+                            const list = dailyObj[dayKey] || [];
+                            const usesMax = parseInt(dayKey) || 1;
                             html += `
-                                <div class="cs-spell-page" style="margin-bottom:8px;">
+                                <div class="cs-spell-page" data-block-id="${sc.id}" style="margin-bottom:8px;">
                                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-                                        <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-regular fa-calendar-check" style="margin-right:4px;"></i> ${label}</span>
-                                        ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="level1" data-block-id="${sc.id}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                                        <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-sun" style="margin-right:4px;"></i> ${usesMax}/Day</span>
+                                        ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="level1" data-block-id="${sc.id}" data-section-key="${dayKey}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
                                     </div>
                                     <div style="display:flex; flex-direction:column; gap:8px;">
                                         ${list.length > 0 ? list.map((sp, idx) => {
-                                            const rowHtml = renderSingleSpellRowHtml(sp, 'level1', idx, allowEdit);
-                                            const usesMax = sp.usesMax || count;
-                                            const spId = sp.id;
-                                            const curUsages = m.dailyUsages?.[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
+                                            const spId = sp.id || ('sp_daily_' + scIdx + '_' + dayKey + '_' + idx);
+                                            const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'level1';
+                                            const rowHtml = renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, spId, dayKey);
+                                            const curUsages = m.dailyUsages && m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
                                             let boxesHtml = '';
                                             for (let u = 0; u < usesMax; u++) {
                                                 const checked = u < curUsages;
@@ -1395,23 +1648,23 @@ export function initVttCreatureSheet(vtt) {
                     }
                 } else {
                     // Standard / Leveled Spells block
-                    const scSpellsObj = sc.spellsObj || spellsObj;
+                    const scSpellsObj = sc.spellsObj || { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [] };
                     spellLevels.forEach(sl => {
                         const list = scSpellsObj[sl.key] || [];
                         if (list.length === 0 && !allowEdit && m.spellcasting.length > 1) return;
 
-                        const maxSlots = getMaxSlotsForLevel(m, sl.key);
+                        const maxSlots = getMaxSlotsForLevel(m, sl.key, sc);
                         const slotTrackerHtml = sl.key !== 'cantrip' ? `
                             <div class="cs-spell-level-slots" style="display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); padding:2px 6px; border-radius:4px; border:1px solid var(--color-border-subtle, #444);">
                                 <span style="color:var(--color-text-muted);">Slots:</span>
-                                <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-type="current" data-max="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Current Slots">
+                                <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-block-id="${sc.id}" data-type="current" data-max="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Current Slots">
                                 <span style="color:var(--color-text-muted);">/</span>
-                                <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-type="max" value="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Max Slots">
+                                <input type="number" class="cs-spell-slot-input" data-level="${sl.key}" data-block-id="${sc.id}" data-type="max" value="${maxSlots}" min="0" style="width:36px; padding:1px 4px; text-align:center; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle, #555); color:#fff; border-radius:3px; font-size:0.85rem;" title="Max Slots">
                             </div>
                         ` : '';
 
                         html += `
-                            <div class="cs-spell-page" style="margin-bottom:8px;">
+                            <div class="cs-spell-page" data-block-id="${sc.id}" style="margin-bottom:8px;">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
                                     <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                                         <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);">${sl.label}</span>
@@ -1420,7 +1673,7 @@ export function initVttCreatureSheet(vtt) {
                                     ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}" data-block-id="${sc.id}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
                                 </div>
                                 <div style="display:flex; flex-direction:column; gap:8px;">
-                                    ${list.length > 0 ? list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx, allowEdit)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No spells added.</div>'}
+                                    ${list.length > 0 ? list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx, allowEdit, sc.id, sp.id)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No spells added.</div>'}
                                 </div>
                             </div>
                         `;
@@ -1463,21 +1716,29 @@ export function initVttCreatureSheet(vtt) {
         return html;
     }
 
-    function renderSingleSpellRowHtml(sp, slKey, idx, allowEdit = false) {
+    function renderSingleSpellRowHtml(sp, slKey, idx, allowEdit = false, blockId = '', spellId = '', sectionKey = '') {
+        const spId = spellId || sp?.id || '';
+        let rawHtml = '';
         if (window.VTTSpellManager && window.VTTSpellManager.renderSpellRowHtml) {
-            return window.VTTSpellManager.renderSpellRowHtml(sp, slKey, idx, { allowEdit, classPrefix: 'cs-spell-' });
-        }
-        if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderSpellRowHtml) {
-            let rawHtml = window.vttPlayerSheetAPI.renderSpellRowHtml(sp, slKey, idx, false);
+            rawHtml = window.VTTSpellManager.renderSpellRowHtml(sp, slKey, idx, { allowEdit, classPrefix: 'cs-spell-' });
+        } else if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.renderSpellRowHtml) {
+            rawHtml = window.vttPlayerSheetAPI.renderSpellRowHtml(sp, slKey, idx, false);
             rawHtml = rawHtml.replace(/pc-spell-/g, 'cs-spell-');
             if (!allowEdit) {
                 rawHtml = rawHtml.replace(/<button class="[^"]*cs-spell-edit[^"]*"[\s\S]*?<\/button>/gi, '');
                 rawHtml = rawHtml.replace(/<div class="cs-spell-drag-handle"[\s\S]*?<\/div>/gi, '');
             }
-            return rawHtml;
+        } else {
+            let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
+            spName = toSpellTitleCase(spName);
+            return `<div class="cs-spell-item" data-block-id="${blockId}" data-spell-id="${spId}" data-section-key="${sectionKey}" data-level="${slKey}" data-idx="${idx}">${spName}</div>`;
         }
-        let spName = typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown');
-        return `<div>${spName}</div>`;
+
+        if (rawHtml) {
+            rawHtml = rawHtml.replace(/(class="[^"]*cs-spell-item[^"]*")/i, `$1 data-block-id="${blockId}" data-spell-id="${spId}" data-section-key="${sectionKey}"`);
+            rawHtml = rawHtml.replace(/(class="[^"]*cs-spell-edit[^"]*")/i, `$1 data-block-id="${blockId}" data-spell-id="${spId}" data-section-key="${sectionKey}"`);
+        }
+        return rawHtml;
     }
 
     function formatRawEntry(e) {
@@ -1530,7 +1791,10 @@ export function initVttCreatureSheet(vtt) {
         return '';
     }
 
-    function isPassiveAbility(name, rawEntries, cleanText) {
+    function isPassiveAbility(name, rawEntries, cleanText, macro) {
+        if (macro) {
+            if (macro.isAttack || (macro.damages && macro.damages.length > 0) || macro.save || macro.recharge) return false;
+        }
         const combined = (name + ' ' + (typeof rawEntries === 'string' ? rawEntries : JSON.stringify(rawEntries)) + ' ' + cleanText).toLowerCase();
         if (/\{@atk\s/i.test(combined) || /\{@hit\s/i.test(combined) || /\bto hit\b/i.test(combined)) return false;
         if (/\{@dc\s/i.test(combined) || /\bsaving throw\b/i.test(combined) || /\bsave dc\b/i.test(combined)) return false;
@@ -1545,7 +1809,7 @@ export function initVttCreatureSheet(vtt) {
         const rawEntries = entry.entries || [];
         const textLines = rawEntries.map(e => formatRawEntry(e)).join(' ');
         const cleanText = parse5eMarkup(textLines);
-        const displayText = injectDiceChips(cleanText);
+        const displayText = entry.descriptionHtml ? injectDiceChips(entry.descriptionHtml) : injectDiceChips(cleanText);
 
         const parsedName = name ? parse5eMarkup(name) : '';
         const nameHtml = parsedName 
@@ -1553,7 +1817,8 @@ export function initVttCreatureSheet(vtt) {
             : `<span style="color:var(--color-primary); font-size:0.85em;"><i class="fa-solid fa-tower-broadcast"></i> Ping</span>`;
 
         const rawJson = encodeURIComponent(JSON.stringify(rawEntries));
-        const isPassive = isPassiveAbility(name, rawEntries, cleanText);
+        const macroJson = entry.macro ? encodeURIComponent(JSON.stringify(entry.macro)) : '';
+        const isPassive = isPassiveAbility(name, rawEntries, cleanText, entry.macro);
 
         const nameSectionHtml = isPassive ? `
             <div class="cs-ability-name cs-passive-trigger" title="Click to expand details" style="cursor: pointer; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;">
@@ -1576,6 +1841,7 @@ export function initVttCreatureSheet(vtt) {
                 </div>
                 <div class="cs-ability-text">${displayText}</div>
                 <div class="cs-ability-raw" style="display:none;">${rawJson}</div>
+                <div class="cs-ability-macro" style="display:none;">${macroJson}</div>
             </div>
         `;
     }
@@ -1772,8 +2038,79 @@ export function initVttCreatureSheet(vtt) {
         return 9;
     }
 
+    function generateArcaneTokenDataUrl(name, category = 'monster') {
+        const cleanName = (name || 'Creature').trim();
+        const words = cleanName.split(/\s+/).filter(Boolean);
+        let initials = words.length > 1 ? (words[0][0] + words[1][0]) : cleanName.slice(0, 2);
+        initials = (initials || 'C').toUpperCase();
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return 'favicon.svg';
+
+        const colors = {
+            monster: '#dc2626',
+            npc: '#9333ea',
+            companion: '#eab308',
+            player: '#2563eb'
+        };
+        const primaryColor = colors[category] || colors.monster;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(64, 64, 60, 0, Math.PI * 2);
+        ctx.clip();
+
+        const bgGrad = ctx.createRadialGradient(64, 64, 10, 64, 64, 64);
+        bgGrad.addColorStop(0, '#1c2436');
+        bgGrad.addColorStop(0.7, '#0f1422');
+        bgGrad.addColorStop(1, '#080c14');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 128, 128);
+
+        ctx.beginPath();
+        ctx.arc(64, 64, 48, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(64, 64, 53, 0, Math.PI * 2);
+        ctx.strokeStyle = `${primaryColor}55`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.beginPath();
+        ctx.arc(64, 64, 60, 0, Math.PI * 2);
+        ctx.strokeStyle = primaryColor;
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(64, 64, 62, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.font = 'bold 36px "Cinzel", "Georgia", "Times New Roman", serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+        ctx.fillText(initials, 65, 66);
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText(initials, 64, 64);
+
+        return canvas.toDataURL('image/png');
+    }
+
+    window.VTT = window.VTT || {};
+    window.VTT.generateArcaneToken = generateArcaneTokenDataUrl;
+
     function getMonsterImageUrl(m) {
-        if (!m) return 'favicon.svg';
+        if (!m) return generateArcaneTokenDataUrl('Creature', 'monster');
 
         // 1. If canvas token is linked, check token's explicit image/URL
         if (linkedTokenId && window.VTT?.canvasEngine) {
@@ -1800,7 +2137,8 @@ export function initVttCreatureSheet(vtt) {
             }
         }
 
-        // 3. Check direct tokenUrl / imgUrl properties on monster object
+        // 3. Check direct tokenImg / tokenUrl / imgUrl properties on monster object
+        if (m.tokenImg) return m.tokenImg;
         if (m.tokenUrl) return m.tokenUrl;
         if (m.imgUrl) return m.imgUrl;
 
@@ -1815,13 +2153,13 @@ export function initVttCreatureSheet(vtt) {
         }
 
         // 5. Fallback path generator based on 5etools naming conventions
-        if (m.hasToken || m.source) {
-            const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(m.name) : m.name.replace(/ /g, '-').toLowerCase();
+        if (m.hasToken || m.source || m.name) {
+            const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(m.name) : (m.name || '').replace(/"/g, '').trim();
             const source = m.source || 'MM';
             return `img/bestiary/tokens/${source}/${cleanName}.webp`;
         }
 
-        return 'favicon.svg';
+        return generateArcaneTokenDataUrl(m.name || 'Creature', 'monster');
     }
 
     function getLinkedTokenHp() {
@@ -2011,14 +2349,21 @@ export function initVttCreatureSheet(vtt) {
             
             const abilityText = entry.querySelector('.cs-ability-text')?.innerHTML.trim() || '';
             const rawJsonEl = entry.querySelector('.cs-ability-raw');
+            const macroJsonEl = entry.querySelector('.cs-ability-macro');
             let rawEntries = [];
+            let preParsedMacro = null;
             if (rawJsonEl) {
                 try {
                     rawEntries = JSON.parse(decodeURIComponent(rawJsonEl.textContent));
                 } catch (err) {}
             }
+            if (macroJsonEl && macroJsonEl.textContent) {
+                try {
+                    preParsedMacro = JSON.parse(decodeURIComponent(macroJsonEl.textContent));
+                } catch (err) {}
+            }
             const charName = currentMonster?.name || 'Creature';
-            const macroCard = parseActionMacro(abilityName, rawEntries, abilityText, charName);
+            const macroCard = parseActionMacro(abilityName, rawEntries, abilityText, charName, preParsedMacro);
             
             if (!macroCard.atkRoll && !macroCard.saveInfo && macroCard.dmgRolls.length === 0) {
                 const abilityCard = {
@@ -2045,37 +2390,6 @@ export function initVttCreatureSheet(vtt) {
                 } else {
                     vtt.socket.emit('chat:msg', msgOut);
                 }
-            }
-            e.stopPropagation();
-            return;
-        }
-        
-        const addSpellBtn = e.target.closest('.cs-btn-add-spell');
-        if (addSpellBtn) {
-            const level = addSpellBtn.dataset.level || 'cantrip';
-            const openFn = (window.VTTSpellManager && window.VTTSpellManager.openModal) || window.openSpellModal;
-            if (openFn) {
-                openFn(level, -1, currentMonster, (updatedChar) => {
-                    currentMonster = updatedChar;
-                    renderSheetData(currentMonster);
-                    saveMonsterData(currentMonster);
-                });
-            }
-            e.stopPropagation();
-            return;
-        }
-
-        const editSpellBtn = e.target.closest('.cs-spell-edit');
-        if (editSpellBtn) {
-            const level = editSpellBtn.dataset.level;
-            const idx = parseInt(editSpellBtn.dataset.idx);
-            const openFn = (window.VTTSpellManager && window.VTTSpellManager.openModal) || window.openSpellModal;
-            if (level && idx >= 0 && openFn) {
-                openFn(level, idx, currentMonster, (updatedChar) => {
-                    currentMonster = updatedChar;
-                    renderSheetData(currentMonster);
-                    saveMonsterData(currentMonster);
-                });
             }
             e.stopPropagation();
             return;
@@ -2206,9 +2520,14 @@ export function initVttCreatureSheet(vtt) {
         }
         if (typeof char.activeTokenIndex !== 'number') char.activeTokenIndex = 0;
 
-        let defaultTokenUrl = m.tokenUrl || m.imgUrl;
+        let defaultTokenUrl = m.tokenImg || m.tokenUrl || m.imgUrl;
         if (!defaultTokenUrl && typeof window.Renderer !== 'undefined' && window.Renderer.monster && window.Renderer.monster.getTokenUrl) {
             try { defaultTokenUrl = window.Renderer.monster.getTokenUrl(m); } catch (e) {}
+        }
+        if (!defaultTokenUrl && (m.source || m.name)) {
+            const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(m.name) : (m.name || '').replace(/"/g, '').trim();
+            const source = m.source || 'MM';
+            defaultTokenUrl = `img/bestiary/tokens/${source}/${cleanName}.webp`;
         }
         if (defaultTokenUrl && !char.defaultTokenDeleted) {
             const hasDefault = char.tokenImages.some(t => t?.isDefault || (typeof t === 'string' ? t : t?.url) === defaultTokenUrl);
@@ -2471,6 +2790,12 @@ export function initVttCreatureSheet(vtt) {
                 </div>
 
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
+                    <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Bonus Actions</h4>
+                    <div id="cs-edit-bonus-list"></div>
+                    <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-bonus">+ Add Bonus Action</button>
+                </div>
+
+                <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Reactions</h4>
                     <div id="cs-edit-reactions-list"></div>
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-reaction">+ Add Reaction</button>
@@ -2478,7 +2803,7 @@ export function initVttCreatureSheet(vtt) {
 
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Legendary Actions</h4>
-                    <textarea id="cs-edit-legendary-desc" class="vtt-input mb-2" style="width:100%; height:60px;" placeholder="Legendary action description...">${m.legendaryActions || ''}</textarea>
+                    <textarea id="cs-edit-legendary-desc" class="vtt-input mb-2" style="width:100%; height:60px;" placeholder="Legendary action description...">${typeof m.legendaryActions === 'object' && m.legendaryActions ? (m.legendaryActions.description || '') : (m.legendaryActions || '')}</textarea>
                     <div id="cs-edit-legendary-list"></div>
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-legendary">+ Add Legendary Action</button>
                 </div>
@@ -2501,38 +2826,290 @@ export function initVttCreatureSheet(vtt) {
         `;
         content.innerHTML = html;
 
+        function calcDiceAverage(formula) {
+            if (!formula) return 0;
+            let avg = 0;
+            const clean = formula.replace(/\s+/g, '');
+            const tokens = clean.match(/([+-]?[0-9]*d[0-9]+)|([+-]?[0-9]+)/gi) || [];
+            tokens.forEach(tok => {
+                if (tok.toLowerCase().includes('d')) {
+                    const sign = tok.startsWith('-') ? -1 : 1;
+                    const stripped = tok.replace(/^[+-]/, '');
+                    const parts = stripped.toLowerCase().split('d');
+                    const count = parseInt(parts[0]) || 1;
+                    const sides = parseInt(parts[1]) || 6;
+                    avg += sign * Math.floor(count * (sides + 1) / 2);
+                } else {
+                    avg += parseInt(tok) || 0;
+                }
+            });
+            return Math.max(0, avg);
+        }
+
+        function createAbilityRow(item = {}) {
+            const row = document.createElement('div');
+            row.className = 'cs-edit-ability-row';
+            row.style.cssText = "display:flex; flex-direction:column; gap:6px; margin-bottom:10px; padding:10px; background:var(--color-bg-dark); border-radius:6px; border:1px solid var(--color-border);";
+
+            let desc = '';
+            if (item.entries && Array.isArray(item.entries)) {
+                desc = item.entries.map(e => typeof e === 'string' ? e : (e.entries ? e.entries.join('\n') : JSON.stringify(e))).join('\n');
+            } else if (item.descriptionHtml) {
+                desc = item.descriptionHtml;
+            }
+
+            let initAtk = '';
+            let initDc = '';
+            let initSaveAb = 'dex';
+            let initDamages = [];
+
+            if (item.macro) {
+                if (item.macro.attackBonus !== undefined && item.macro.attackBonus !== null) {
+                    const b = item.macro.attackBonus;
+                    initAtk = b >= 0 ? `+${b}` : `${b}`;
+                }
+                if (item.macro.save && item.macro.save.dc !== undefined) {
+                    initDc = `${item.macro.save.dc}`;
+                    if (item.macro.save.ability) initSaveAb = item.macro.save.ability.toLowerCase();
+                }
+                if (item.macro.damages && Array.isArray(item.macro.damages)) {
+                    initDamages = item.macro.damages.map(d => ({ formula: d.formula || '', type: d.type || 'slashing' }));
+                }
+            } else if (desc) {
+                const atkMatch = desc.match(/(?:\{@hit\s+([+-]?\d+)\}|([+-]?\d+)\s+to\s+hit)/i);
+                if (atkMatch) {
+                    const val = parseInt(atkMatch[1] || atkMatch[2]);
+                    if (!isNaN(val)) initAtk = val >= 0 ? `+${val}` : `${val}`;
+                }
+                const dcMatch = desc.match(/DC\s+(\d+)(?:\s+(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|STR|DEX|CON|INT|WIS|CHA))?/i);
+                if (dcMatch) {
+                    initDc = dcMatch[1];
+                    if (dcMatch[2]) {
+                        initSaveAb = dcMatch[2].substring(0, 3).toLowerCase();
+                    }
+                }
+                const dmgMatches = [...desc.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*\d+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
+                dmgMatches.forEach(dm => {
+                    const formula = (dm[1] || dm[3] || dm[4] || '').trim();
+                    const type = (dm[5] || 'slashing').toLowerCase().trim();
+                    if (formula) {
+                        initDamages.push({ formula, type });
+                    }
+                });
+            }
+
+            row.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <input type="text" class="vtt-input edit-ab-name" value="${item.name || ''}" placeholder="Ability / Action Name" style="flex:1; font-weight:600;">
+                    <button type="button" class="btn btn-xxs btn-danger edit-ab-del" title="Delete Ability"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <!-- Modular Modifier Bar -->
+                <div class="edit-ab-modifier-bar" style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:6px 8px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; font-size:0.8rem;">
+                    <div style="display:flex; align-items:center; gap:4px;">
+                        <span style="color:var(--color-text-muted); font-size:0.75rem;">Atk Mod:</span>
+                        <input type="text" class="vtt-input edit-ab-atk" value="${initAtk}" placeholder="+0" style="width:48px; text-align:center; padding:2px 4px; font-size:0.8rem;">
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px;">
+                        <span style="color:var(--color-text-muted); font-size:0.75rem;">Save DC:</span>
+                        <input type="number" class="vtt-input edit-ab-dc" value="${initDc}" placeholder="DC" style="width:48px; text-align:center; padding:2px 4px; font-size:0.8rem;">
+                        <select class="vtt-input edit-ab-save-ab" style="padding:2px 4px; font-size:0.8rem;">
+                            ${['dex','con','wis','str','int','cha'].map(ab => `<option value="${ab}" ${initSaveAb === ab ? 'selected' : ''}>${ab.toUpperCase()}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="edit-ab-dmg-container" style="display:flex; flex-direction:column; gap:4px; flex:1; min-width:200px;">
+                        <div class="edit-ab-dmg-list" style="display:flex; flex-direction:column; gap:4px;"></div>
+                        <button type="button" class="btn btn-xxs btn-secondary edit-ab-add-dmg" style="align-self:flex-start; font-size:0.75rem; padding:2px 6px;">
+                            <i class="fa-solid fa-plus"></i> Add Dmg
+                        </button>
+                    </div>
+                </div>
+                <textarea class="vtt-input edit-ab-desc" style="width:100%; height:65px; resize:vertical; font-family:var(--font-body); font-size:0.85rem;" placeholder="Description (e.g. Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage)...">${desc}</textarea>
+            `;
+
+            row.querySelector('.edit-ab-del').addEventListener('click', () => row.remove());
+
+            const dmgList = row.querySelector('.edit-ab-dmg-list');
+            const descArea = row.querySelector('.edit-ab-desc');
+            const atkInput = row.querySelector('.edit-ab-atk');
+            const dcInput = row.querySelector('.edit-ab-dc');
+            const saveAbSelect = row.querySelector('.edit-ab-save-ab');
+
+            const damageTypes = ['slashing', 'piercing', 'bludgeoning', 'fire', 'cold', 'lightning', 'thunder', 'poison', 'acid', 'psychic', 'necrotic', 'radiant', 'force', 'healing'];
+
+            function createDmgRow(formula = '', type = 'slashing') {
+                const dRow = document.createElement('div');
+                dRow.className = 'edit-ab-dmg-row';
+                dRow.style.cssText = "display:flex; align-items:center; gap:4px;";
+                dRow.innerHTML = `
+                    <input type="text" class="vtt-input edit-ab-dmg-formula" value="${formula}" placeholder="e.g. 2d6 + 3" style="flex:1; min-width:70px; padding:2px 4px; font-size:0.8rem;">
+                    <select class="vtt-input edit-ab-dmg-type" style="padding:2px 4px; font-size:0.8rem;">
+                        ${damageTypes.map(t => `<option value="${t}" ${t === type ? 'selected' : ''}>${t.charAt(0).toUpperCase() + t.slice(1)}</option>`).join('')}
+                    </select>
+                    <button type="button" class="btn btn-xxs btn-danger edit-ab-del-dmg" style="padding:2px 5px;"><i class="fa-solid fa-times"></i></button>
+                `;
+                dRow.querySelector('.edit-ab-del-dmg').addEventListener('click', () => {
+                    dRow.remove();
+                    syncDescFromInputs();
+                });
+                dRow.querySelector('.edit-ab-dmg-formula').addEventListener('input', () => syncDescFromInputs());
+                dRow.querySelector('.edit-ab-dmg-type').addEventListener('change', () => syncDescFromInputs());
+                return dRow;
+            }
+
+            if (initDamages.length > 0) {
+                initDamages.forEach(d => dmgList.appendChild(createDmgRow(d.formula, d.type)));
+            }
+
+            row.querySelector('.edit-ab-add-dmg').addEventListener('click', () => {
+                dmgList.appendChild(createDmgRow('1d6', 'slashing'));
+                syncDescFromInputs();
+            });
+
+            let isSyncing = false;
+
+            // 1. Sync from Inputs -> Description Textarea
+            function syncDescFromInputs() {
+                if (isSyncing) return;
+                isSyncing = true;
+                try {
+                    let text = descArea.value;
+
+                    // Update Attack Mod
+                    const atkVal = atkInput.value.trim();
+                    if (atkVal) {
+                        const parsedAtk = parseInt(atkVal.replace(/^\+/, ''));
+                        if (!isNaN(parsedAtk)) {
+                            const modStr = parsedAtk >= 0 ? `+${parsedAtk}` : `${parsedAtk}`;
+                            if (/\{@hit\s+[+-]?\d+\}/i.test(text)) {
+                                text = text.replace(/\{@hit\s+[+-]?\d+\}/gi, `{@hit ${parsedAtk}}`);
+                            } else if (/[+-]?\d+\s+to\s+hit/i.test(text)) {
+                                text = text.replace(/[+-]?\d+\s+to\s+hit/gi, `${modStr} to hit`);
+                            }
+                        }
+                    }
+
+                    // Update Save DC & Ability
+                    const dcVal = dcInput.value.trim();
+                    const abVal = saveAbSelect.value.toUpperCase();
+                    if (dcVal) {
+                        const parsedDc = parseInt(dcVal);
+                        if (!isNaN(parsedDc)) {
+                            if (/DC\s+\d+(?:\s+(?:Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|STR|DEX|CON|INT|WIS|CHA))?/i.test(text)) {
+                                text = text.replace(/DC\s+\d+(?:\s+(?:Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|STR|DEX|CON|INT|WIS|CHA))?/gi, `DC ${parsedDc} ${abVal}`);
+                            }
+                        }
+                    }
+
+                    // Update Damages
+                    const currentDmgRows = dmgList.querySelectorAll('.edit-ab-dmg-row');
+                    if (currentDmgRows.length > 0) {
+                        const dmgParts = [];
+                        currentDmgRows.forEach(dr => {
+                            const form = dr.querySelector('.edit-ab-dmg-formula').value.trim();
+                            const typ = dr.querySelector('.edit-ab-dmg-type').value.trim();
+                            if (form) {
+                                const avg = calcDiceAverage(form);
+                                dmgParts.push({ form, typ, avg });
+                            }
+                        });
+
+                        if (dmgParts.length > 0) {
+                            const primary = dmgParts[0];
+                            const formattedPrimary = `${primary.avg} (${primary.form}) ${primary.typ} damage`;
+                            let formattedAll = formattedPrimary;
+                            if (dmgParts.length > 1) {
+                                const extra = dmgParts.slice(1).map(p => `${p.avg} (${p.form}) ${p.typ} damage`).join(' plus ');
+                                formattedAll += ` plus ${extra}`;
+                            }
+
+                            if (/\{@h\}[^.]*\.?/i.test(text)) {
+                                text = text.replace(/\{@h\}[^.]*\.?/gi, `{@h}${formattedAll}.`);
+                            } else if (/Hit:\s*[^.]*\.?/i.test(text)) {
+                                text = text.replace(/Hit:\s*[^.]*\.?/gi, `Hit: ${formattedAll}.`);
+                            }
+                        }
+                    }
+
+                    descArea.value = text;
+                } finally {
+                    isSyncing = false;
+                }
+            }
+
+            // 2. Sync from Description Textarea -> Inputs
+            function syncInputsFromDesc() {
+                if (isSyncing) return;
+                isSyncing = true;
+                try {
+                    const text = descArea.value;
+
+                    // Parse Attack Mod
+                    const atkMatch = text.match(/(?:\{@hit\s+([+-]?\d+)\}|([+-]?\d+)\s+to\s+hit)/i);
+                    if (atkMatch) {
+                        const val = parseInt(atkMatch[1] || atkMatch[2]);
+                        if (!isNaN(val)) {
+                            atkInput.value = val >= 0 ? `+${val}` : `${val}`;
+                        }
+                    }
+
+                    // Parse Save DC & Ability
+                    const dcMatch = text.match(/DC\s+(\d+)(?:\s+(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|STR|DEX|CON|INT|WIS|CHA))?/i);
+                    if (dcMatch) {
+                        dcInput.value = dcMatch[1];
+                        if (dcMatch[2]) {
+                            const parsedAb = dcMatch[2].substring(0, 3).toLowerCase();
+                            saveAbSelect.value = parsedAb;
+                        }
+                    }
+
+                    // Parse Damages
+                    const parsedDamages = [];
+                    const dmgMatches = [...text.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*\d+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
+                    dmgMatches.forEach(dm => {
+                        const formula = (dm[1] || dm[3] || dm[4] || '').trim();
+                        let type = (dm[5] || 'slashing').toLowerCase().trim();
+                        if (!damageTypes.includes(type)) type = 'slashing';
+                        if (formula && !parsedDamages.some(pd => pd.formula === formula)) {
+                            parsedDamages.push({ formula, type });
+                        }
+                    });
+
+                    if (parsedDamages.length > 0) {
+                        dmgList.innerHTML = '';
+                        parsedDamages.forEach(d => {
+                            dmgList.appendChild(createDmgRow(d.formula, d.type));
+                        });
+                    }
+                } finally {
+                    isSyncing = false;
+                }
+            }
+
+            atkInput.addEventListener('input', syncDescFromInputs);
+            dcInput.addEventListener('input', syncDescFromInputs);
+            saveAbSelect.addEventListener('change', syncDescFromInputs);
+            descArea.addEventListener('input', syncInputsFromDesc);
+
+            return row;
+        }
+
         // Populate lists
         function renderAbilityList(containerId, dataArray) {
             const container = content.querySelector('#' + containerId);
+            if (!container) return;
             container.innerHTML = '';
             if (dataArray && Array.isArray(dataArray)) {
                 dataArray.forEach(item => {
-                    const row = document.createElement('div');
-                    row.style.cssText = "display:flex; flex-direction:column; gap:4px; margin-bottom:8px; padding:8px; background:var(--color-bg-dark); border-radius:4px; border:1px solid var(--color-border);";
-                    
-                    // Simple text extraction for entries
-                    let desc = '';
-                    if (item.entries && Array.isArray(item.entries)) {
-                        desc = item.entries.join('\\n');
-                    }
-                    
-                    row.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <input type="text" class="vtt-input edit-ab-name" value="${item.name || ''}" placeholder="Name" style="flex:1; margin-right:8px;">
-                            <button class="btn btn-xxs btn-danger edit-ab-del"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                        <textarea class="vtt-input edit-ab-desc" style="width:100%; height:60px; resize:vertical; font-family:var(--font-body); font-size:0.85rem;" placeholder="Description...">${desc}</textarea>
-                    `;
-                    row.querySelector('.edit-ab-del').addEventListener('click', () => row.remove());
-                    container.appendChild(row);
+                    container.appendChild(createAbilityRow(item));
                 });
             }
         }
 
-        renderAbilityList('cs-edit-traits-list', m.trait);
-        renderAbilityList('cs-edit-actions-list', m.action);
-        renderAbilityList('cs-edit-reactions-list', m.reaction);
-        renderAbilityList('cs-edit-legendary-list', m.legendary);
+        renderAbilityList('cs-edit-traits-list', m.traits || m.trait);
+        renderAbilityList('cs-edit-actions-list', m.actions || m.action);
+        renderAbilityList('cs-edit-bonus-list', m.bonusActions || m.bonus);
+        renderAbilityList('cs-edit-reactions-list', m.reactions || m.reaction);
+        renderAbilityList('cs-edit-legendary-list', m.legendaryActions?.entries || m.legendary);
         renderAbilityList('cs-edit-lair-list', m.lairActions);
 
         // Render Spellcasting Blocks in Modal
@@ -2543,16 +3120,34 @@ export function initVttCreatureSheet(vtt) {
             blocks.forEach((sc, idx) => {
                 const card = document.createElement('div');
                 card.className = 'cs-edit-sc-card';
-                card.style.cssText = "display:flex; flex-direction:column; gap:6px; padding:10px; background:var(--color-bg-dark); border-radius:6px; border:1px solid rgba(212,175,55,0.3);";
+                card.style.cssText = "display:flex; flex-direction:column; gap:6px; padding:10px; background:var(--color-bg-dark); border-radius:6px; border:1px solid rgba(212,175,55,0.3); margin-bottom:8px;";
                 
                 const currentType = sc.type || 'slot';
                 const rechargeRule = sc.rechargeRule || (currentType === 'innate' ? 'long_rest' : 'long_rest');
                 const abVal = (sc.ability || 'int').toLowerCase();
+                const casterLvl = sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0);
+
+                // Collect existing innate sections (0 = At Will, N = N/day)
+                const initialSections = [];
+                if (currentType === 'innate') {
+                    if (sc.will || sc.atWill || sc.innateObj?.will) {
+                        initialSections.push(0);
+                    }
+                    const dailyObj = sc.daily || sc.innateObj?.daily || {};
+                    for (const k in dailyObj) {
+                        const num = parseInt(k);
+                        if (!isNaN(num) && !initialSections.includes(num)) {
+                            initialSections.push(num);
+                        }
+                    }
+                    initialSections.sort((a, b) => a - b);
+                    if (initialSections.length === 0) initialSections.push(0);
+                }
 
                 card.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                        <input type="text" class="vtt-input sc-edit-name" value="${sc.name || 'Spellcasting'}" placeholder="Block Name (e.g. Innate Spellcasting, Fey Heritage)" style="flex:1; font-weight:600; color:var(--color-gold-base);">
-                        <button class="btn btn-xxs btn-danger sc-edit-del"><i class="fa-solid fa-trash"></i></button>
+                        <input type="text" class="vtt-input sc-edit-name" value="${sc.name || (currentType === 'innate' ? 'Innate Spellcasting' : 'Spellcasting')}" placeholder="Block Name (e.g. Innate Spellcasting, Fey Heritage)" style="flex:1; font-weight:600; color:var(--color-gold-base);">
+                        <button class="btn btn-xxs btn-danger sc-edit-del" title="Delete Block"><i class="fa-solid fa-trash"></i></button>
                     </div>
                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap:8px;">
                         <div>
@@ -2589,14 +3184,124 @@ export function initVttCreatureSheet(vtt) {
                         </div>
                         <div>
                             <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Caster Lvl</label>
-                            <input type="number" class="vtt-input sc-edit-caster-level" value="${sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0)}" placeholder="0" min="0" max="20" style="width:100%;">
+                            <input type="number" class="vtt-input sc-edit-caster-level" value="${casterLvl}" placeholder="0" min="0" max="20" style="width:100%;">
                         </div>
                     </div>
+
+                    <!-- Slot Preview / Calculation Area for Slot & Pact Blocks -->
+                    <div class="sc-edit-slot-info-box" style="display:${(currentType === 'slot' || currentType === 'pact') ? 'block' : 'none'}; padding:6px 8px; background:rgba(0,0,0,0.25); border-radius:4px; border:1px solid rgba(255,255,255,0.08); font-size:0.78rem;">
+                        <span style="color:var(--color-gold-base); font-weight:600;"><i class="fa-solid fa-calculator" style="margin-right:4px;"></i>Spell Slots (Calculated from Caster Level):</span>
+                        <div class="sc-edit-slot-preview-text" style="color:var(--color-text-secondary); margin-top:2px;"></div>
+                    </div>
+
+                    <!-- Innate Usage Sections Customization for Innate Blocks -->
+                    <div class="sc-edit-innate-sections-box" style="display:${currentType === 'innate' ? 'block' : 'none'}; padding:8px; background:rgba(0,0,0,0.25); border-radius:4px; border:1px solid rgba(30,144,255,0.25);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <span style="font-size:0.8rem; font-weight:600; color:#87cefa;"><i class="fa-solid fa-sparkles" style="margin-right:4px;"></i>Innate Usage Sections</span>
+                            <button type="button" class="btn btn-xxs btn-secondary sc-edit-add-section-btn" style="border:1px solid rgba(30,144,255,0.4);"><i class="fa-solid fa-plus"></i> Add Section</button>
+                        </div>
+                        <div class="sc-edit-sections-list" style="display:flex; flex-direction:column; gap:4px;"></div>
+                        <div style="font-size:0.72rem; color:var(--color-text-muted); margin-top:4px; font-style:italic;">
+                            * 0 = At Will (default), 1–9 = Daily Usages (e.g. 1/Day, 3/Day). Spells are added and customized on the Spells tab.
+                        </div>
+                    </div>
+
                     <div style="margin-top:4px;">
                         <label style="display:block; font-size:0.75rem; color:var(--color-text-muted); margin-bottom:2px;">Description / Header Notes</label>
                         <textarea class="vtt-input sc-edit-desc" style="width:100%; height:40px; font-size:0.8rem;" placeholder="e.g. The creature is a 5th-level spellcaster...">${sc.headerEntries ? sc.headerEntries.join('\n') : ''}</textarea>
                     </div>
                 `;
+
+                const typeSelect = card.querySelector('.sc-edit-type');
+                const casterLvlInput = card.querySelector('.sc-edit-caster-level');
+                const slotInfoBox = card.querySelector('.sc-edit-slot-info-box');
+                const slotPreviewText = card.querySelector('.sc-edit-slot-preview-text');
+                const innateBox = card.querySelector('.sc-edit-innate-sections-box');
+                const sectionsList = card.querySelector('.sc-edit-sections-list');
+                const addSectionBtn = card.querySelector('.sc-edit-add-section-btn');
+
+                function updateSlotPreview() {
+                    const t = typeSelect.value;
+                    const cl = parseInt(casterLvlInput.value) || 0;
+                    if (t === 'slot' || t === 'pact') {
+                        slotInfoBox.style.display = 'block';
+                        const slots = get5eSlotsForCaster(t, cl);
+                        const entries = Object.keys(slots);
+                        if (entries.length === 0) {
+                            slotPreviewText.textContent = cl > 0 ? "No spell slots at this level." : "Set Caster Level > 0 to auto-calculate spell slots.";
+                        } else if (t === 'pact') {
+                            const pactSlotKey = entries[0];
+                            const pactLvlNum = pactSlotKey.replace('level', '');
+                            const count = slots[pactSlotKey];
+                            slotPreviewText.textContent = `${count} × Level ${pactLvlNum} spell slot${count > 1 ? 's' : ''} (Short Rest)`;
+                        } else {
+                            const parts = entries.map(k => {
+                                const num = k.replace('level', '');
+                                const suffix = num === '1' ? 'st' : num === '2' ? 'nd' : num === '3' ? 'rd' : 'th';
+                                return `${num}${suffix}: ${slots[k]}`;
+                            });
+                            slotPreviewText.textContent = parts.join(' | ');
+                        }
+                    } else {
+                        slotInfoBox.style.display = 'none';
+                    }
+                }
+
+                function addSectionRow(usages = 0) {
+                    const row = document.createElement('div');
+                    row.className = 'sc-edit-section-row';
+                    row.style.cssText = "display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.3); padding:4px 6px; border-radius:4px; border:1px solid rgba(255,255,255,0.08);";
+                    
+                    const isAtWill = parseInt(usages) === 0;
+                    row.innerHTML = `
+                        <span style="font-size:0.75rem; color:var(--color-text-muted); width:70px;">Usage Count:</span>
+                        <div style="display:flex; align-items:center; gap:6px; flex:1;">
+                            <input type="number" class="vtt-input sc-edit-section-counter" value="${usages}" min="0" max="9" style="width:52px; text-align:center; padding:2px 4px; font-weight:bold;">
+                            <span class="sc-edit-section-label" style="font-size:0.75rem; color:var(--color-gold-base); font-weight:600;">${isAtWill ? 'At Will (0)' : `${usages}/Day`}</span>
+                        </div>
+                        <button type="button" class="btn btn-xxs btn-danger sc-edit-section-del" title="Remove Section"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                    
+                    const counterInput = row.querySelector('.sc-edit-section-counter');
+                    const labelSpan = row.querySelector('.sc-edit-section-label');
+                    counterInput.addEventListener('input', () => {
+                        const val = parseInt(counterInput.value) || 0;
+                        labelSpan.textContent = val === 0 ? 'At Will (0)' : `${val}/Day`;
+                    });
+
+                    row.querySelector('.sc-edit-section-del').addEventListener('click', () => row.remove());
+                    sectionsList.appendChild(row);
+                }
+
+                // Populate initial sections for innate blocks
+                if (currentType === 'innate') {
+                    initialSections.forEach(u => addSectionRow(u));
+                }
+
+                addSectionBtn.addEventListener('click', () => {
+                    const currentRows = sectionsList.querySelectorAll('.sc-edit-section-counter');
+                    const existingUsages = Array.from(currentRows).map(inp => parseInt(inp.value) || 0);
+                    if (!existingUsages.includes(0)) {
+                        addSectionRow(0); // 0 = At Will (default when creating a new block)
+                    } else {
+                        let next = 1;
+                        while (existingUsages.includes(next) && next < 10) next++;
+                        addSectionRow(next);
+                    }
+                });
+
+                typeSelect.addEventListener('change', () => {
+                    const isNowInnate = typeSelect.value === 'innate';
+                    innateBox.style.display = isNowInnate ? 'block' : 'none';
+                    if (isNowInnate && sectionsList.children.length === 0) {
+                        addSectionRow(0); // 0 = At Will by default
+                    }
+                    updateSlotPreview();
+                });
+
+                casterLvlInput.addEventListener('input', updateSlotPreview);
+                updateSlotPreview();
+
                 card.querySelector('.sc-edit-del').addEventListener('click', () => card.remove());
                 container.appendChild(card);
             });
@@ -2605,28 +3310,20 @@ export function initVttCreatureSheet(vtt) {
 
         content.querySelector('#cs-edit-add-spellcasting-block').addEventListener('click', () => {
             m.spellcasting = m.spellcasting || [];
-            m.spellcasting.push({ name: 'Spellcasting', type: 'slot', ability: 'int', headerEntries: [] });
+            m.spellcasting.push({ name: 'Innate Spellcasting', type: 'innate', ability: 'cha', casterLevel: 0, headerEntries: [], will: [] });
             renderModalSpellcastingBlocks();
         });
 
         // Add buttons
         function wireAddBtn(btnId, containerId) {
             content.querySelector('#' + btnId).addEventListener('click', () => {
-                const row = document.createElement('div');
-                row.style.cssText = "display:flex; flex-direction:column; gap:4px; margin-bottom:8px; padding:8px; background:var(--color-bg-dark); border-radius:4px; border:1px solid var(--color-border);";
-                row.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <input type="text" class="vtt-input edit-ab-name" placeholder="Name" style="flex:1; margin-right:8px;">
-                        <button class="btn btn-xxs btn-danger edit-ab-del"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                    <textarea class="vtt-input edit-ab-desc" style="width:100%; height:60px; resize:vertical; font-family:var(--font-body); font-size:0.85rem;" placeholder="Description..."></textarea>
-                `;
-                row.querySelector('.edit-ab-del').addEventListener('click', () => row.remove());
+                const row = createAbilityRow({});
                 content.querySelector('#' + containerId).appendChild(row);
             });
         }
         wireAddBtn('cs-edit-add-trait', 'cs-edit-traits-list');
         wireAddBtn('cs-edit-add-action', 'cs-edit-actions-list');
+        wireAddBtn('cs-edit-add-bonus', 'cs-edit-bonus-list');
         wireAddBtn('cs-edit-add-reaction', 'cs-edit-reactions-list');
         wireAddBtn('cs-edit-add-legendary', 'cs-edit-legendary-list');
         wireAddBtn('cs-edit-add-lair', 'cs-edit-lair-list');
@@ -2901,39 +3598,92 @@ export function initVttCreatureSheet(vtt) {
             delete m.save;
         }
 
-        // Helper to extract abilities
         function extractAbilityList(containerId) {
             const rows = content.querySelectorAll('#' + containerId + ' > div');
             const arr = [];
             rows.forEach(r => {
-                const name = r.querySelector('.edit-ab-name').value.trim();
-                const desc = r.querySelector('.edit-ab-desc').value.trim();
-                if (name || desc) {
-                    arr.push({
+                const name = r.querySelector('.edit-ab-name')?.value.trim() || '';
+                const desc = r.querySelector('.edit-ab-desc')?.value.trim() || '';
+                const atkRaw = r.querySelector('.edit-ab-atk')?.value.trim() || '';
+                const dcRaw = r.querySelector('.edit-ab-dc')?.value.trim() || '';
+                const saveAb = r.querySelector('.edit-ab-save-ab')?.value.trim() || 'dex';
+
+                const dmgRows = r.querySelectorAll('.edit-ab-dmg-row');
+                const damages = [];
+                dmgRows.forEach(dr => {
+                    const formula = dr.querySelector('.edit-ab-dmg-formula')?.value.trim();
+                    const type = dr.querySelector('.edit-ab-dmg-type')?.value.trim() || 'slashing';
+                    if (formula) {
+                        damages.push({ formula, type });
+                    }
+                });
+
+                if (name || desc || atkRaw || dcRaw || damages.length > 0) {
+                    const abilityItem = {
                         name: name,
-                        entries: desc ? desc.split('\\n') : []
-                    });
+                        entries: desc ? desc.split('\n') : []
+                    };
+
+                    const macro = {};
+                    let hasMacro = false;
+
+                    const atkNum = atkRaw !== '' ? parseInt(atkRaw.replace(/^\+/, '')) : NaN;
+                    if (!isNaN(atkNum)) {
+                        macro.isAttack = true;
+                        macro.attackBonus = atkNum;
+                        hasMacro = true;
+                    }
+
+                    const dcNum = dcRaw !== '' ? parseInt(dcRaw) : NaN;
+                    if (!isNaN(dcNum)) {
+                        macro.save = {
+                            dc: dcNum,
+                            ability: saveAb.toLowerCase()
+                        };
+                        hasMacro = true;
+                    }
+
+                    if (damages.length > 0) {
+                        macro.damages = damages;
+                        hasMacro = true;
+                    }
+
+                    if (hasMacro) {
+                        abilityItem.macro = macro;
+                    }
+
+                    arr.push(abilityItem);
                 }
             });
             return arr.length > 0 ? arr : undefined;
         }
 
         const newTraits = extractAbilityList('cs-edit-traits-list');
-        if (newTraits) m.trait = newTraits; else delete m.trait;
+        if (newTraits) m.traits = newTraits; else delete m.traits;
+        delete m.trait;
 
         const newActions = extractAbilityList('cs-edit-actions-list');
-        if (newActions) m.action = newActions; else delete m.action;
+        if (newActions) m.actions = newActions; else delete m.actions;
+        delete m.action;
+
+        const newBonus = extractAbilityList('cs-edit-bonus-list');
+        if (newBonus) m.bonusActions = newBonus; else delete m.bonusActions;
+        delete m.bonus;
 
         const newReactions = extractAbilityList('cs-edit-reactions-list');
-        if (newReactions) m.reaction = newReactions; else delete m.reaction;
+        if (newReactions) m.reactions = newReactions; else delete m.reactions;
+        delete m.reaction;
 
         const legDesc = content.querySelector('#cs-edit-legendary-desc').value.trim();
-        if (legDesc) m.legendaryActions = legDesc; else delete m.legendaryActions;
         const newLegendary = extractAbilityList('cs-edit-legendary-list');
-        if (newLegendary) m.legendary = newLegendary; else delete m.legendary;
+        if (newLegendary || legDesc) {
+            m.legendaryActions = { description: legDesc, entries: newLegendary || [] };
+        } else {
+            delete m.legendaryActions;
+        }
+        delete m.legendary;
 
         const lairDesc = content.querySelector('#cs-edit-lair-desc').value.trim();
-        if (lairDesc) m.lairActionsDesc = lairDesc; else delete m.lairActionsDesc;
         const newLair = extractAbilityList('cs-edit-lair-list');
         if (newLair) m.lairActions = newLair; else delete m.lairActions;
 
@@ -2985,10 +3735,46 @@ export function initVttCreatureSheet(vtt) {
                     }
                     delete block.daily;
                 }
+
+                // Automatically calculate standard spell slots from Caster Level
+                const autoSlots = get5eSlotsForCaster(scType, casterLvlVal);
+                m.slots = m.slots || {};
+                m.spellSlots = m.spellSlots || {};
+                char.spellSlots = char.spellSlots || {};
+                for (let sl = 1; sl <= 9; sl++) {
+                    const k = 'level' + sl;
+                    const maxVal = autoSlots[k] || 0;
+                    if (maxVal > 0) {
+                        m.slots[k] = maxVal;
+                        m.spellSlots[k] = { max: maxVal, current: maxVal };
+                        char.spellSlots[k] = { max: maxVal, current: maxVal };
+                    } else {
+                        delete m.slots[k];
+                        delete m.spellSlots[k];
+                        delete char.spellSlots[k];
+                    }
+                }
             } else if (scType === 'innate') {
+                // Extract customized innate usage sections
+                const sectionRows = card.querySelectorAll('.sc-edit-section-counter');
+                const targetUsages = Array.from(sectionRows).map(inp => parseInt(inp.value) || 0);
+
+                const oldWill = block.will || block.innateObj?.will || [];
+                const oldDaily = block.daily || block.innateObj?.daily || {};
+
+                block.will = [];
+                block.daily = {};
+
+                targetUsages.forEach(u => {
+                    if (u === 0) {
+                        block.will = oldWill;
+                    } else {
+                        const dKey = u + 'e';
+                        block.daily[dKey] = oldDaily[dKey] || oldDaily['' + u] || [];
+                    }
+                });
+
                 if (block.spells && typeof block.spells === 'object') {
-                    block.will = block.will || [];
-                    block.daily = block.daily || { '1e': [] };
                     for (let lvl in block.spells) {
                         const rawList = Array.isArray(block.spells[lvl]) ? block.spells[lvl] : (block.spells[lvl]?.spells || []);
                         if (lvl === '0') {
@@ -3000,6 +3786,11 @@ export function initVttCreatureSheet(vtt) {
                     }
                     delete block.spells;
                 }
+
+                block.innateObj = {
+                    will: block.will,
+                    daily: block.daily
+                };
             }
 
             if (dcRaw !== '') block.dc = parseInt(dcRaw) || undefined; else delete block.dc;
@@ -3018,6 +3809,7 @@ export function initVttCreatureSheet(vtt) {
         // Update UI
         if (overlay) overlay.remove();
         renderStatBlock(m);
+        saveAndRenderNpcSpells(m);
         
         // window.VTT.socket.emit('chat:msg', {
         //     text: `*Companion **${char.name}** was updated.*`
@@ -3349,7 +4141,7 @@ export function initVttCreatureSheet(vtt) {
         return mc;
     }
 
-    function parseActionMacro(abilityName, rawEntries, abilityText, charName) {
+    function parseActionMacro(abilityName, rawEntries, abilityText, charName, preParsedMacro) {
         const mc = {
             charName: charName || 'Creature',
             macroName: abilityName,
@@ -3357,6 +4149,52 @@ export function initVttCreatureSheet(vtt) {
             saveInfo: null,
             dmgRolls: []
         };
+        
+        // Zero-regex execution: Use pre-compiled macro schema if available
+        if (preParsedMacro) {
+            let isCrit = false;
+            if (preParsedMacro.isAttack && preParsedMacro.attackBonus !== null && preParsedMacro.attackBonus !== undefined) {
+                const mod = preParsedMacro.attackBonus;
+                const formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                const evalRoll = evaluateDiceHelper(formula);
+                mc.atkRoll = {
+                    formula: formula,
+                    total: evalRoll.total,
+                    breakdownStr: evalRoll.breakdownStr,
+                    diceList: evalRoll.diceList,
+                    isCritSuccess: evalRoll.isCritSuccess,
+                    isCritFail: evalRoll.isCritFail
+                };
+                isCrit = mc.atkRoll.isCritSuccess;
+            }
+
+            if (preParsedMacro.save && preParsedMacro.save.dc) {
+                mc.saveInfo = {
+                    dc: preParsedMacro.save.dc,
+                    ability: preParsedMacro.save.ability || 'Save'
+                };
+            }
+
+            if (preParsedMacro.damages && Array.isArray(preParsedMacro.damages) && preParsedMacro.damages.length > 0) {
+                preParsedMacro.damages.forEach(d => {
+                    const evalRoll = evaluateDiceHelper(d.formula, isCrit);
+                    mc.dmgRolls.push({
+                        type: d.type || 'Slashing',
+                        formula: evalRoll.formula || d.formula,
+                        roll: {
+                            total: evalRoll.total,
+                            formula: evalRoll.formula || d.formula,
+                            breakdownStr: evalRoll.breakdownStr,
+                            diceList: evalRoll.diceList
+                        }
+                    });
+                });
+            }
+
+            if (mc.atkRoll || mc.saveInfo || mc.dmgRolls.length > 0) {
+                return mc;
+            }
+        }
         
         const rawString = typeof rawEntries === 'string' ? rawEntries : JSON.stringify(rawEntries);
         let isCrit = false;
@@ -3474,76 +4312,81 @@ export function initVttCreatureSheet(vtt) {
         const contentEl = document.getElementById('vtt-creature-sheet-panel');
         if (!contentEl) return;
 
-        async function ensureSpellIsParsed(level, idx) {
-            const m = currentMonster;
-            if (!m || !m.spells || !m.spells[level] || !m.spells[level][idx]) return null;
-            const sp = m.spells[level][idx];
+        async function ensureSpellIsParsed(sp) {
+            if (!sp) return null;
             if (window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
                 return await window.VTTSpellManager.ensureSpellIsParsed(sp);
             }
             return sp;
         }
 
+        function extractSpellContext(el) {
+            const row = el.closest('.cs-spell-item');
+            const level = el.dataset.level || row?.dataset.level || 'cantrip';
+            const idx = parseInt(el.dataset.idx !== undefined ? el.dataset.idx : row?.dataset.idx);
+            const blockId = row?.dataset.blockId || el.dataset.blockId;
+            const spellId = row?.dataset.spellId || el.dataset.spellId;
+            const sectionKey = row?.dataset.sectionKey || el.dataset.sectionKey;
+            const sp = getSpellFromMonster(currentMonster, level, idx, spellId, blockId, sectionKey);
+            return { level, idx, blockId, spellId, sectionKey, sp, row };
+        }
+
         // Ping Macro / Post Chat
         contentEl.querySelectorAll('.cs-spell-ping-macro').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const level = e.currentTarget.dataset.level;
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            await ensureSpellIsParsed(level, idx);
-            const sp = currentMonster?.spells?.[level]?.[idx];
+            const { level, idx, sp } = extractSpellContext(e.currentTarget);
+            if (!sp) return;
+            await ensureSpellIsParsed(sp);
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
-            if (sp && level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
                 const baseLvl = parseInt(level.replace('level', '')) || 1;
                 upcastFn(baseLvl, (lvl) => {
-                    if (lvl) rollNpcSpell(level, idx, 'roll', lvl);
+                    if (lvl) rollNpcSpell(level, idx, 'roll', lvl, sp);
                 });
             } else {
-                rollNpcSpell(level, idx, 'roll');
+                rollNpcSpell(level, idx, 'roll', null, sp);
             }
         }));
         contentEl.querySelectorAll('.cs-spell-macro-attack').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const level = e.currentTarget.dataset.level;
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            await ensureSpellIsParsed(level, idx);
-            rollNpcSpell(level, idx, 'attack');
+            const { level, idx, sp } = extractSpellContext(e.currentTarget);
+            if (!sp) return;
+            await ensureSpellIsParsed(sp);
+            rollNpcSpell(level, idx, 'attack', null, sp);
         }));
         contentEl.querySelectorAll('.cs-spell-macro-save').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const level = e.currentTarget.dataset.level;
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            await ensureSpellIsParsed(level, idx);
-            rollNpcSpell(level, idx, 'save');
+            const { level, idx, sp } = extractSpellContext(e.currentTarget);
+            if (!sp) return;
+            await ensureSpellIsParsed(sp);
+            rollNpcSpell(level, idx, 'save', null, sp);
         }));
         contentEl.querySelectorAll('.cs-spell-macro-damage').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const level = e.currentTarget.dataset.level;
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            await ensureSpellIsParsed(level, idx);
-            const sp = currentMonster?.spells?.[level]?.[idx];
+            const { level, idx, sp } = extractSpellContext(e.currentTarget);
+            if (!sp) return;
+            await ensureSpellIsParsed(sp);
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
-            if (sp && level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
                 const baseLvl = parseInt(level.replace('level', '')) || 1;
                 upcastFn(baseLvl, (lvl) => {
-                    if (lvl) rollNpcSpell(level, idx, 'damage', lvl);
+                    if (lvl) rollNpcSpell(level, idx, 'damage', lvl, sp);
                 });
             } else {
-                rollNpcSpell(level, idx, 'damage');
+                rollNpcSpell(level, idx, 'damage', null, sp);
             }
         }));
         contentEl.querySelectorAll('.cs-spell-post-chat').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const level = e.currentTarget.dataset.level;
-            const idx = e.currentTarget.dataset.idx;
-            const sp = currentMonster?.spells?.[level]?.[idx];
+            const { level, sp } = extractSpellContext(e.currentTarget);
             if (!sp) return;
 
-            await ensureSpellIsParsed(level, idx);
+            await ensureSpellIsParsed(sp);
 
             const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
             if (window.VTTSpellManager && window.VTTSpellManager.postSpellToChat) {
@@ -3564,10 +4407,15 @@ export function initVttCreatureSheet(vtt) {
             e.stopPropagation();
             if (!currentMonster) return;
             const level = e.currentTarget.dataset.level || 'cantrip';
+            const blockId = e.currentTarget.dataset.blockId || null;
+            const sectionKey = e.currentTarget.dataset.sectionKey || null;
             if (window.VTTSpellManager) {
                 window.VTTSpellManager.openModal(level, -1, currentMonster, (updatedMonster) => {
                     currentMonster = updatedMonster;
                     saveAndRenderNpcSpells(currentMonster);
+                }, {
+                    blockId,
+                    sectionKey
                 });
             }
         }));
@@ -3578,14 +4426,38 @@ export function initVttCreatureSheet(vtt) {
             e.stopPropagation();
             if (!currentMonster) return;
             
-            const level = e.currentTarget.dataset.level;
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            await ensureSpellIsParsed(level, idx);
+            const { level, idx, blockId, spellId, sectionKey, sp } = extractSpellContext(e.currentTarget);
+            if (!sp) return;
+            await ensureSpellIsParsed(sp);
             
             if (window.VTTSpellManager) {
                 window.VTTSpellManager.openModal(level, idx, currentMonster, (updatedMonster) => {
                     currentMonster = updatedMonster;
                     saveAndRenderNpcSpells(currentMonster);
+                }, {
+                    targetSpell: sp,
+                    blockId,
+                    sectionKey,
+                    spellId,
+                    onDelete: (monster, target) => {
+                        if (blockId && monster.spellcasting) {
+                            const sc = monster.spellcasting.find(b => b.id === blockId);
+                            if (sc) {
+                                if (sectionKey === 'will' && sc.innateObj?.will) {
+                                    sc.innateObj.will = sc.innateObj.will.filter(s => s !== target && s.id !== target.id);
+                                    if (sc.will) sc.will = sc.will.filter(s => (typeof s === 'string' ? s.toLowerCase() : s.id) !== (target.name?.toLowerCase() || target.id));
+                                } else if (sectionKey && sc.innateObj?.daily?.[sectionKey]) {
+                                    sc.innateObj.daily[sectionKey] = sc.innateObj.daily[sectionKey].filter(s => s !== target && s.id !== target.id);
+                                    if (sc.daily?.[sectionKey]) sc.daily[sectionKey] = sc.daily[sectionKey].filter(s => (typeof s === 'string' ? s.toLowerCase() : s.id) !== (target.name?.toLowerCase() || target.id));
+                                } else if (sc.spellsObj?.[level]) {
+                                    sc.spellsObj[level] = sc.spellsObj[level].filter(s => s !== target && s.id !== target.id);
+                                }
+                            }
+                        }
+                        if (monster.spells?.[level]) {
+                            monster.spells[level] = monster.spells[level].filter(s => s !== target && s.id !== target.id);
+                        }
+                    }
                 });
             }
         }));
@@ -3593,15 +4465,13 @@ export function initVttCreatureSheet(vtt) {
         contentEl.querySelectorAll('.cs-spell-prep-toggle').forEach(btn => btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const level = e.currentTarget.dataset.level;
-            const idx = parseInt(e.currentTarget.dataset.idx);
-            if (!currentMonster || !currentMonster.spells || !currentMonster.spells[level] || !currentMonster.spells[level][idx]) return;
+            const { level, sp, row } = extractSpellContext(btn);
+            if (!sp) return;
             
-            const sp = currentMonster.spells[level][idx];
             sp.prepared = sp.prepared === false ? true : false;
             
             const icon = btn.querySelector('i');
-            const itemRow = btn.closest('.cs-spell-item');
+            const itemRow = row || btn.closest('.cs-spell-item');
             if (sp.prepared) {
                 if (icon) {
                     icon.classList.remove('fa-regular');
@@ -3642,27 +4512,19 @@ export function initVttCreatureSheet(vtt) {
             const spId = e.currentTarget.dataset.spellId;
             const usesMax = parseInt(e.currentTarget.dataset.usesMax) || 1;
             const useIdx = parseInt(e.currentTarget.dataset.useIdx) || 0;
+            if (!currentMonster || !spId) return;
 
             currentMonster.dailyUsages = currentMonster.dailyUsages || {};
-            let curUsages = currentMonster.dailyUsages[spId] !== undefined ? currentMonster.dailyUsages[spId] : usesMax;
+            const cur = currentMonster.dailyUsages[spId] !== undefined ? currentMonster.dailyUsages[spId] : usesMax;
+            
+            let nextVal = (useIdx + 1 === cur) ? useIdx : (useIdx + 1);
+            currentMonster.dailyUsages[spId] = Math.max(0, Math.min(usesMax, nextVal));
 
-            if (useIdx < curUsages) {
-                curUsages = useIdx;
-            } else {
-                curUsages = useIdx + 1;
-            }
-            currentMonster.dailyUsages[spId] = curUsages;
-
-            const row = e.currentTarget.closest('.cs-spell-item') || e.currentTarget.parentElement;
-            if (row) {
-                row.querySelectorAll('.cs-innate-use-checkbox').forEach((box, u) => {
-                    if (u < curUsages) {
-                        box.classList.remove('fa-regular', 'fa-square');
-                        box.classList.add('fa-solid', 'fa-square-check');
-                    } else {
-                        box.classList.remove('fa-solid', 'fa-square-check');
-                        box.classList.add('fa-regular', 'fa-square');
-                    }
+            const parent = e.currentTarget.closest('.cs-spell-page') || e.currentTarget.parentElement;
+            if (parent) {
+                parent.querySelectorAll(`.cs-innate-use-checkbox[data-spell-id="${spId}"]`).forEach((box, bIdx) => {
+                    const checked = bIdx < currentMonster.dailyUsages[spId];
+                    box.className = `cs-innate-use-checkbox ${checked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}`;
                 });
             }
 
@@ -3697,10 +4559,11 @@ export function initVttCreatureSheet(vtt) {
         });
     }
 
-    function rollNpcSpell(level, idx, type, customCastLvl = null) {
+    function rollNpcSpell(level, idx, type, customCastLvl = null, targetSpell = null) {
         const m = currentMonster;
-        if (!m || !m.spells || !m.spells[level] || !m.spells[level][idx]) return;
-        const sp = m.spells[level][idx];
+        if (!m) return;
+        const sp = targetSpell || getSpellFromMonster(m, level, idx);
+        if (!sp) return;
         const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
 
         if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {

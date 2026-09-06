@@ -1,0 +1,3200 @@
+[
+  {
+    "id": "creature_dream_eater_mcv2dc",
+    "name": "Dream Eater",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 3,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 77,
+      "formula": "14d8 + 14"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 20,
+        "mod": 5
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 21,
+        "mod": 5
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {},
+    "skills": {},
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "blindsight 120 ft. (blind beyond this radius)"
+    },
+    "languages": [
+      "Deep Speech",
+      "telepathy 120 ft."
+    ],
+    "cr": "7",
+    "crNumeric": 7,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_ghastly_visions_6jay",
+        "name": "Ghastly Visions",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Each creature that starts its turn within 30 feet of the dream eater must make a DC 16 Wisdom saving throw. On a failed save, the creature is frightened of the dream eater until the start of the creature's next turn. If a creature's saving throw is successful, the creature is immune to this dream eater's Ghastly Visions trait for the next 24 hours.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incorporeal_movement_mu16",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The dream eater can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_ra03",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The dream eater has advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_rsl4",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The dream eater makes two Ensnaring Shriek attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_ensnaring_shriek_r3cz",
+        "name": "Ensnaring Shriek",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms,rs +8 to hit, reach 15 ft. or range 60 ft., one target. {@h}12 (2d6 + 5) psychic damage, and if the target is a Medium or smaller creature, the target must succeed on a DC 16 Charisma saving throw or be pulled up to 15 feet toward the dream eater.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 15,
+          "range": "60 ft.",
+          "targets": "one target",
+          "save": {
+            "dc": 16,
+            "ability": "CHA"
+          },
+          "damages": [
+            {
+              "formula": "2d6 + 5",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_engulfing_nightmare_8zap",
+        "name": "Engulfing Nightmare",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The dream eater targets one creature within 5 feet of itself. The target must succeed on a DC 16 Wisdom saving throw or be engulfed by the dream eater, as the dream eater envelops the creature in a miasma of its worst fears.</p><p>When the dream eater engulfs a target, the dream eater enters its space, and the target immediately takes 10 (3d6) psychic damage. An engulfed target is restrained and blinded, and it takes an additional 10 (3d6) psychic damage at the start of each of the dream eater's turns. When the dream eater moves, the engulfed target moves with it.</p><p>The dream eater can have only one target engulfed at a time. An engulfed target escapes at the start of its turn by making a DC 16 Wisdom saving throw. On a successful save, the target escapes; the target is no longer engulfed, and it enters a space of its choice within 5 feet of the dream eater. A creature within 15 feet of the dream eater also can use its action to attempt to free an engulfed target. Doing so requires the creature to use its action to make a DC 16 Charisma (Persuasion) check to convince the engulfed target the nightmare isn't real, with the target escaping on a success. The creature making the check takes 10 (3d6) psychic damage, regardless of the check's success or failure, as its mind brushes against the nightmare.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            },
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            },
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Dream Eater.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Dream Eater.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_ember_mcv2dc",
+    "name": "Ember",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 5,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Dragon",
+    "subtype": "adult chromatic",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 270,
+      "formula": "20d12 + 140"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 80,
+      "swim": 0,
+      "climb": 40,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 28,
+        "mod": 9
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 25,
+        "mod": 7
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 22,
+        "mod": 6
+      }
+    },
+    "proficiencyBonus": 7,
+    "saves": {
+      "dex": "+7",
+      "con": "+14",
+      "wis": "+9",
+      "cha": "+13"
+    },
+    "skills": {
+      "perception": "+16",
+      "religion": "+10",
+      "stealth": "+14"
+    },
+    "senses": {
+      "passivePerception": 26,
+      "sensesString": "blindsight 60 ft., darkvision 120 ft."
+    },
+    "languages": [
+      "Abyssal",
+      "Common",
+      "Draconic"
+    ],
+    "cr": "22",
+    "crNumeric": 22,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_calescent_aura_l8zc",
+        "name": "Calescent Aura",
+        "actionType": "trait",
+        "descriptionHtml": "<p>At the start of Ember's turn, Ember can force any number of creatures of his choice within 10 feet of himself to make a DC 22 Constitution saving throw. On a failed save, a creature takes 7 (2d6) fire damage and is frightened of Ember until the start of its next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 22,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__5_day__u7f3",
+        "name": "Legendary Resistance (5/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Ember fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_special_equipment_abrv",
+        "name": "Special Equipment",
+        "actionType": "trait",
+        "descriptionHtml": "<p>In battle, Ember dons magical plate armor custom-forged for his use. While wearing the armor, Ember adds his Charisma modifier to his weapon damage rolls (included in the attack descriptions), and his AC can't be lower than 20.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_r9n7",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ember makes one Bite attack and two Claw attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_wbqp",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +16 to hit, reach 10 ft., one target. {@h}26 (2d10 + 15) piercing damage plus 13 (2d6 + 6) fire damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 16,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 15",
+              "type": "Piercing"
+            },
+            {
+              "formula": "2d6 + 6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_b7wi",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +16 to hit, reach 5 ft., one target. {@h}22 (2d6 + 15) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 16,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 15",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_firestorm_breath__recharge_5__9i7b",
+        "name": "Firestorm Breath (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ember exhales roiling flames and ash in a 90-foot cone. Each creature in that area must make a DC 22 Dexterity saving throw. On a failed save, a creature takes 56 (16d6) fire damage and is pushed up to 30 feet away from Ember and knocked prone. On a successful save, a creature takes half as much damage with no other effects. If a creature is reduced to 0 hit points by this effect, the creature immediately dies, and its body is reduced to ash.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 22,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "16d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_alter_shape_sfod",
+        "name": "Alter Shape",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Ember magically transforms into a vulture or a mage and retains his alignment, damage immunities, hit points, and Hit Dice, as well as his Intelligence, Wisdom, and Charisma scores. This transformation ends if Ember is reduced to 0 hit points or if he uses another bonus action to end it.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_pursuit_jqs1",
+          "name": "Pursuit",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Ember moves up to 40 feet in a straight line toward one creature he can see. This movement ignores opportunity attacks.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_searing_bite__costs_2_actions__b9zv",
+          "name": "Searing Bite (Costs 2 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Ember makes one Bite attack. If the attack hits, it deals an additional 7 (2d6) fire damage.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [
+              {
+                "formula": "2d6",
+                "type": "Fire"
+              }
+            ],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Ember.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Ember.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_forest_master_mcv2dc",
+    "name": "Forest Master",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 6,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Celestial",
+    "subtype": "unicorn",
+    "alignment": "N G",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 105,
+      "formula": "14d10 + 28"
+    },
+    "speed": {
+      "walk": 50,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 19,
+        "mod": 4
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "int": "+4",
+      "wis": "+7"
+    },
+    "skills": {
+      "insight": "+7",
+      "nature": "+4",
+      "perception": "+7"
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Celestial",
+      "Elvish",
+      "Sylvan",
+      "telepathy 60 ft."
+    ],
+    "cr": "8",
+    "crNumeric": 8,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_forest_master_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "The Forest Master casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save DC 15):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_druidcraft_xphb",
+            "name": "Druidcraft",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_fog_cloud_xphb",
+            "name": "Fog Cloud",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_guidance_xphb",
+            "name": "Guidance",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_goodberry_xphb",
+              "name": "Goodberry",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "24 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a sprig of mistletoe)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_greater_restoration_xphb",
+              "name": "Greater Restoration",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_pass_without_trace_xphb",
+              "name": "Pass Without Trace",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "Self (30 feet emanation)",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (ashes from burned mistletoe)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_speak_with_plants_xphb",
+              "name": "Speak with Plants",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "Self (30 feet emanation)",
+              "duration": "10 minutes",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Druidcraft",
+          "Fog Cloud",
+          "Guidance"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__2_day__gvzw",
+        "name": "Legendary Resistance (2/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the Forest Master fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_oc8q",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Forest Master has advantage on saving throws against spells and other magical effects.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_master_of_beasts_77u3",
+        "name": "Master of Beasts",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Forest Master can comprehend and communicate with any Beast, even if the Beast knows no languages.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_zspz",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The Forest Master makes either two Hooves attacks, two Moon Bolt attacks, or one of each.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hooves_pfgn",
+        "name": "Hooves",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_moon_bolt_56o2",
+        "name": "Moon Bolt",
+        "actionType": "action",
+        "descriptionHtml": "<p>rs +7 to hit, range 60 ft., one target. {@h}11 (2d6 + 4) radiant damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": null,
+          "range": "60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_erupting_briars__recharge_4__f3ep",
+        "name": "Erupting Briars (Recharge 4)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The Forest Master touches his horn to the earth and causes a 5-foot-tall wall of briars to erupt in a 90-foot line that is 10 feet wide. When the wall appears, each creature in its area is pushed into the nearest unoccupied space adjacent to the wall and must make a DC 15 Dexterity saving throw, taking 27 (6d8) piercing damage on a failed save or half as much damage on a successful one.</p><p>The wall of briars lasts until the start of the Forest Master's next turn. The wall blocks line of sight and counts as difficult terrain for all creatures except the Forest Master. The first time a creature enters the wall's area on a turn, that creature must succeed on a DC 15 Dexterity saving throw or take 13 (3d8) piercing damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "6d8",
+              "type": "Piercing"
+            },
+            {
+              "formula": "3d8",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": "4"
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_misty_escape_zxze",
+        "name": "Misty Escape",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>If the Forest Master takes damage from a melee attack, he, along with any equipment he is wearing or carrying, teleports to an unoccupied space within 30 feet that he can see.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Forest Master.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Forest Master.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_foresworn_mcv2dc",
+    "name": "Foresworn",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 7,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 82,
+      "formula": "11d8 + 33"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "str": "+8",
+      "wis": "+7"
+    },
+    "skills": {},
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "the languages it knew in life"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_foresworn_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "The foresworn casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save DC 15):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_wall_of_force_xphb",
+              "name": "Wall of Force",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a shard of glass)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ],
+          "2e": [
+            {
+              "spellId": "sp_command_xphb",
+              "name": "Command",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_detect_evil_and_good_xphb",
+              "name": "Detect Evil and Good",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Divination",
+              "castingTime": "1 action",
+              "range": "Self (30 feet sphere)",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_duty_bound_qqca",
+        "name": "Duty-Bound",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The foresworn is bound to enacting a singular duty it pledged itself to in life. While this duty is incomplete, whenever the foresworn is destroyed, it re-forms at its previous location after 3 (1d6) days, with all its hit points restored.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incorporeal_movement_7esq",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The foresworn can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_unusual_nature_c1b1",
+        "name": "Unusual Nature",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The foresworn doesn't require air, food, drink, or sleep.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_1jqn",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The foresworn makes three Spectral Polearm attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spectral_polearm_1vpx",
+        "name": "Spectral Polearm",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}12 (2d6 + 5) force damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 5",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_phantasmic_battalion__recharge_5__zwgy",
+        "name": "Phantasmic Battalion (Recharge 5)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The foresworn summons a battalion of ghostly soldiers to its aid. The ghostly soldiers fill a 10-foot-cube centered on the foresworn, move with the foresworn when the foresworn moves, and last until the start of the foresworn's next turn. While the ghostly soldiers are present, the area they occupy is considered difficult terrain for all creatures except the foresworn, and the foresworn's reach for melee weapon attacks increases by 10 feet.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Foresworn.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Foresworn.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_irda_seeker_mcv2dc",
+    "name": "Irda Seeker",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 8,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Giant",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 27,
+      "formula": "5d8 + 5"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+4",
+      "cha": "+5"
+    },
+    "skills": {
+      "insight": "+6",
+      "perception": "+6",
+      "stealth": "+4"
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": "darkvision 60 ft., truesight 5 ft."
+    },
+    "languages": [
+      "Common",
+      "Giant",
+      "Sylvan"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_8k5b",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The seeker uses Augment Physicality, if available, and makes two Crystal Blade attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_crystal_blade_t0da",
+        "name": "Crystal Blade",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) force damage, plus 7 (2d6) force damage if the seeker is Large.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Force"
+            },
+            {
+              "formula": "2d6",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_augment_physicality__1_day__9pxa",
+        "name": "Augment Physicality (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>For 1 minute, the seeker magically heightens its physical ability and increases in size, along with anything it is wearing or carrying. While augmented, the seeker is Large, and makes Strength and Dexterity saving throws with advantage. If the seeker lacks the room to become Large, it attains the maximum size possible in the space available.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_change_shape__1_day__5840",
+        "name": "Change Shape (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The seeker magically transforms to look and feel like a Medium Humanoid it has seen. Any equipment the seeker is wearing or carrying isn't transformed, and the seeker's statistics don't change. The seeker reverts to its true form if the seeker is reduced to 0 hit points or if the seeker uses an action to end the transformation.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_veil_walk__recharge_4__86ya",
+        "name": "Veil Walk (Recharge 4)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The seeker, along with any equipment it is wearing or carrying, turns invisible and teleports to an unoccupied space it can see within 30 feet of itself. The seeker remains invisible until the start of its next turn or until immediately after the seeker makes an attack roll, whichever comes first.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": "4"
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Irda Seeker.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Irda Seeker.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_irda_veil_keeper_mcv2dc",
+    "name": "Irda Veil Keeper",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 9,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Giant",
+    "subtype": "sorcerer",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 49,
+      "formula": "9d8 + 9"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 9,
+        "mod": -1
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 19,
+        "mod": 4
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "int": "+4",
+      "wis": "+5",
+      "cha": "+6"
+    },
+    "skills": {
+      "arcana": "+4",
+      "insight": "+7",
+      "perception": "+7"
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": "darkvision 60 ft., truesight 5 ft."
+    },
+    "languages": [
+      "Common",
+      "Giant",
+      "Sylvan"
+    ],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_irda_veil_keeper_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "The veil keeper casts one of the following spells, requiring no material components and using Charisma as the spellcasting ability (spell save DC 14):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_dancing_lights_xphb",
+            "name": "Dancing Lights",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a bit of phosphorus)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_minor_illusion_xphb",
+            "name": "Minor Illusion",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a bit of fleece)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_hallucinatory_terrain_xphb",
+              "name": "Hallucinatory Terrain",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Illusion",
+              "castingTime": "10 minutes",
+              "range": "300 feet",
+              "duration": "24 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a mushroom)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ],
+          "2e": [
+            {
+              "spellId": "sp_invisibility_xphb",
+              "name": "Invisibility",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (an eyelash in gum arabic)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_major_image_xphb",
+              "name": "Major Image",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a bit of fleece)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_phantasmal_force_xphb",
+              "name": "Phantasmal Force",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "intelligence",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Psychic",
+                  "label": "",
+                  "stat": "none"
+                }
+              ],
+              "components": "V, S, M (a bit of fleece)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Dancing Lights",
+          "Minor Illusion"
+        ]
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_841p",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The veil keeper uses Augment Physicality, if available, and makes two Mirage Flare attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_mirage_flare_p0fa",
+        "name": "Mirage Flare",
+        "actionType": "action",
+        "descriptionHtml": "<p>ms,rs +6 to hit, reach 5 ft. or range 60 ft., one target. {@h}11 (2d6 + 4) radiant damage, and the target must succeed on a DC 14 Wisdom saving throw or be charmed by the veil keeper until the start of the veil keeper's next turn. While charmed in this way, a creature is incapacitated as it is beset by hypnotic, illusory visions.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": "60 ft.",
+          "targets": "one target",
+          "save": {
+            "dc": 14,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_augment_physicality__1_day__4len",
+        "name": "Augment Physicality (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>For 1 minute, the veil keeper magically obscures it location, heightens its physical ability, and increases in size, along with anything it is wearing or carrying. While the veil keeper is augmented, attack rolls against it have disadvantage, it is Large, and it makes Strength and Dexterity saving throws with advantage. If the veil keeper lacks the room to become Large, it attains the maximum size possible in the space available. These augmentations end if the veil keeper is incapacitated.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_change_shape__3_day__yhbb",
+        "name": "Change Shape (3/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The veil keeper magically transforms to look and feel like a Medium Humanoid it has seen. Any equipment the veil keeper is wearing or carrying isn't transformed, and the veil keeper's statistics don't change. The veil keeper reverts to its true form if the veil keeper is reduced to 0 hit points or if the veil keeper uses an action to end the transformation.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_obscuring_mist_uslz",
+        "name": "Obscuring Mist",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>If a creature that the veil keeper can see within 30 feet of itself is targeted by an attack, the veil keeper surrounds the creature with illusory mist, granting the creature Cover until the start of the veil keeper's next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Irda Veil Keeper.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Irda Veil Keeper.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_nevermind_gnome_inventor_mcv2dc",
+    "name": "Nevermind Gnome Inventor",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 36,
+      "formula": "8d6 + 8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 18,
+        "mod": 4
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "dex": "+5",
+      "int": "+6"
+    },
+    "skills": {
+      "arcana": "+6",
+      "investigation": "+6",
+      "perception": "+2"
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Gnomish"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_always_thinking_ahead_e3yf",
+        "name": "Always Thinking Ahead",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The inventor has advantage on initiative rolls.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_cto7",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The inventor makes two Flying Fangtrap attacks. It can replace one of these attacks with Thunderscream Gadget if it's available.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_flying_fangtrap_6u2n",
+        "name": "Flying Fangtrap",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 60 ft., one target. {@h}8 (1d10 + 3) piercing damage, and the creature must succeed on a DC 14 Dexterity saving throw or have its speed reduced to 0 until the start of the inventor's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "60 ft.",
+          "targets": "one target",
+          "save": {
+            "dc": 14,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "1d10 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thunderscream_gadget__recharge_5__od6x",
+        "name": "Thunderscream Gadget (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The inventor produces a gadget that emits a screeching wave of sound in a 30-foot cone originating from the inventor. Each creature in that area must make a DC 14 Constitution saving throw, taking 10 (3d6) thunder damage on a failed save or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_flash_powder_zjwt",
+        "name": "Flash Powder",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>If the inventor is damaged by a creature it can see within 15 feet of itself, the inventor retaliates by flinging brilliantly explosive powder at the creature. The creature must succeed on a DC 14 Dexterity saving throw or be blinded until the end of its next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "DEX"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Nevermind Gnome Inventor.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Nevermind Gnome Inventor.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_nevermind_gnome_mastermind_mcv2dc",
+    "name": "Nevermind Gnome Mastermind",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 11,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 82,
+      "formula": "15d6 + 30"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 30,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 9,
+        "mod": -1
+      },
+      "dex": {
+        "score": 18,
+        "mod": 4
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "dex": "+7",
+      "con": "+5",
+      "int": "+8"
+    },
+    "skills": {
+      "arcana": "+8",
+      "investigation": "+8",
+      "perception": "+3"
+    },
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Gnomish"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_always_thinking_ahead_dih3",
+        "name": "Always Thinking Ahead",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The mastermind has advantage on initiative rolls.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spider_climb_emn1",
+        "name": "Spider Climb",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The mastermind can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check. This trait doesn't function if the mastermind is grappling creatures in both of its clockwork claws.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_3bqa",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The mastermind makes two Clockwork Claw attacks. The mastermind can replace one of these attacks with Generate Gadget if it's available.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_clockwork_claw_itpy",
+        "name": "Clockwork Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +7 to hit, reach 20 ft., one target. {@h}11 (2d6 + 4) piercing damage, and if the target is a Medium or smaller creature, the target is grappled (escape DC 15). Until this grapple ends, the target takes 10 (3d6) piercing damage at the start of each of the mastermind's turns. The mastermind has two claws, each of which can grapple only one target.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 20,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 15,
+            "ability": "Save"
+          },
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Piercing"
+            },
+            {
+              "formula": "3d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_generate_gadget__recharge_5__hyod",
+        "name": "Generate Gadget (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The mastermind quickly assembles a clockwork gadget, producing one of the following effects (the mastermind's choice):</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": "5"
+        }
+      },
+      {
+        "id": "act_chattergrab_x9zg",
+        "name": "Chattergrab",
+        "actionType": "action",
+        "descriptionHtml": "<p>Parts of this gadget look like gnashing metal teeth. This gadget hurtles toward a creature the mastermind can see within 60 feet of itself. The creature must succeed on a DC 16 Dexterity saving throw or take 31 (7d8) piercing damage and be incapacitated until the start of the mastermind's next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "7d8",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_phasmoball_j5au",
+        "name": "Phasmoball",
+        "actionType": "action",
+        "descriptionHtml": "<p>The mastermind launches this gadget to a point the mastermind can see within 30 feet of itself, where the gadget unleashes a cloud of mind-warping gases in a 10-foot-radius sphere. Each creature within the sphere must succeed on a DC 16 Wisdom saving throw or take 11 (2d10) psychic damage and be frightened of the mastermind until the start of the mastermind's next turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "2d10",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thunderscream_3uho",
+        "name": "Thunderscream",
+        "actionType": "action",
+        "descriptionHtml": "<p>This gadget emits a screeching wave of sound in a 30-foot cone originating from the mastermind. Each creature in that area must make a DC 16 Constitution saving throw, taking 21 (6d6) thunder damage on a failed save or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "6d6",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Nevermind Gnome Mastermind.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Nevermind Gnome Mastermind.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_thanoi_hunter_mcv2dc",
+    "name": "Thanoi Hunter",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 12,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 32,
+      "formula": "5d8 + 10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "proficiencyBonus": 2,
+    "saves": {
+      "str": "+6",
+      "con": "+4"
+    },
+    "skills": {
+      "athletics": "+6",
+      "perception": "+5",
+      "survival": "+5"
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": ""
+    },
+    "languages": [
+      "Aquan",
+      "Common"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_hold_breath_vmco",
+        "name": "Hold Breath",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The hunter can hold its breath for up to 10 minutes.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_pack_tactics_mq1h",
+        "name": "Pack Tactics",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The hunter has advantage on an attack roll against a creature if at least one of the hunter's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_b8eq",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The hunter makes one Bone Harpoon attack and one Tusk attack.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bone_harpoon_ue64",
+        "name": "Bone Harpoon",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw,rw +6 to hit, reach 10 ft. or range 20/60 ft., one target. {@h}8 (1d8 + 4) piercing damage. {@hom}The harpoon returns to the hunter's hand.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 10,
+          "range": "20/60 ft.",
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 4",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tusk_bo98",
+        "name": "Tusk",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}6 (1d4 + 4) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Thanoi Hunter.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Thanoi Hunter.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_traag_draconian_mcv2dc",
+    "name": "Traag Draconian",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 13,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 68,
+      "formula": "8d10 + 24"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 8,
+        "mod": -1
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "proficiencyBonus": 3,
+    "saves": {
+      "str": "+8",
+      "con": "+6"
+    },
+    "skills": {},
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Common",
+      "Draconic"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_blood_frenzy_p3v9",
+        "name": "Blood Frenzy",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The draconian has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_controlled_fall_9ldw",
+        "name": "Controlled Fall",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the draconian falls and isn't incapacitated, it subtracts up to 50 feet from the fall when calculating the fall's damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_death_throes_vz0q",
+        "name": "Death Throes",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the draconian is reduced to 0 hit points, its body erupts into sludge that fills a 10-foot-radius sphere. Each creature within that area must succeed on a DC 14 Dexterity saving throw or be covered in the sludge for 1 minute. While covered in the sludge, a creature's speed is halved. A creature can use its action to scrape the sludge off itself or another creature within 5 feet of itself.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "DEX"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_e33e",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The draconian makes two Claw attacks.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_fmze",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}14 (2d8 + 5) slashing damage.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 10,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 5",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_flaming_carnage__recharge_5__kj1m",
+        "name": "Flaming Carnage (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The draconian indulges its rage, wreathing itself in fire and moving up to its speed. The draconian can enter creatures' spaces during this move. During this movement, when the draconian enters a creature's space, the creature must make a DC 14 Dexterity saving throw. On a failed save, the creature takes 22 (4d10) fire damage and is knocked prone. On a successful save, the creature takes half as much damage and is pushed to the nearest space out of the draconian's path. A creature can be affected by this draconian's Flaming Carnage only once during a turn.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "4d10",
+              "type": "Fire"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_violent_retaliation_h6r0",
+        "name": "Violent Retaliation",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>If a creature within 10 feet of the draconian hits it with an attack, the draconian can make one Claw attack against that creature. If the Claw attack hits, it deals an additional 4 (1d8) slashing damage.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Traag Draconian.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Traag Draconian.webp",
+    "fluff": null
+  },
+  {
+    "id": "creature_verminaard_mcv2dc",
+    "name": "Verminaard",
+    "source": "MCV2DC",
+    "edition": "2014",
+    "page": 15,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "cleric, human",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 143,
+      "formula": "22d8 + 44"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 22,
+        "mod": 6
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 16,
+        "mod": 3
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "proficiencyBonus": 6,
+    "saves": {
+      "wis": "+10",
+      "cha": "+9"
+    },
+    "skills": {
+      "perception": "+16",
+      "religion": "+9"
+    },
+    "senses": {
+      "passivePerception": 26,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Abyssal",
+      "Common",
+      "Draconic"
+    ],
+    "cr": "17",
+    "crNumeric": 17,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_verminaard_0",
+        "name": "Spellcasting",
+        "type": "spellcasting",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 18,
+        "atkMod": 10,
+        "header": "Verminaard casts one of the following spells, requiring no material components and using Wisdom as the spellcasting ability (spell save DC 18):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_light_xphb",
+            "name": "Light",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, M (a firefly or phosphorescent moss)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_thaumaturgy_xphb",
+            "name": "Thaumaturgy",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_bane_xphb",
+              "name": "Bane",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "charisma",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [],
+              "components": "V, S, M (a drop of blood)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_fear_xphb",
+              "name": "Fear",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "Self (30 feet cone)",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [],
+              "components": "V, S, M (a white feather)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_freedom_of_movement_xphb",
+              "name": "Freedom of Movement",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a leather strap)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_greater_restoration_xphb",
+              "name": "Greater Restoration",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (diamond dust worth 100+ GP, which the spell consumes)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_hold_monster_xphb",
+              "name": "Hold Monster",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [],
+              "components": "V, S, M (a straight piece of iron)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_revivify_xphb",
+              "name": "Revivify",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a diamond worth 300+ GP, which the spell consumes)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Light",
+          "Thaumaturgy"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_draconic_command_7j5j",
+        "name": "Draconic Command",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever a Dragon or a creature with the Draconic Devotion trait within 30 feet of Verminaard makes an attack roll, the creature can roll a d4 and add the number rolled to the attack roll.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__3_day__cmdg",
+        "name": "Legendary Resistance (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Verminaard fails a saving throw, he can choose to succeed instead.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_special_equipment_2paa",
+        "name": "Special Equipment",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Verminaard wears +2 plate armor and wields the mace Nightbringer, which grants him darkvision as well as immunity to fire damage and to the charmed and frightened conditions (included above).</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_uatk",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Verminaard makes two Nightbringer attacks and uses Malediction.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_nightbringer_nrgn",
+        "name": "Nightbringer",
+        "actionType": "action",
+        "descriptionHtml": "<p>mw +15 to hit, reach 5 ft., one target. {@h}12 (1d6 + 9) bludgeoning damage plus 10 (4d4) radiant damage. If the target is a creature, the target must succeed on a DC 20 Constitution saving throw or be blinded until the start of Verminaard's next turn.</p>",
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 15,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 20,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 9",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "4d4",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_malediction_lcai",
+        "name": "Malediction",
+        "actionType": "action",
+        "descriptionHtml": "<p>Verminaard utters an unholy word, causing profane fire to descend on one creature Verminaard can see within 60 feet of himself. The creature must make a DC 18 Dexterity saving throw, taking 11 (2d10) necrotic damage plus 11 (2d10) radiant damage on a failed save or half as much damage on a successful one.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 18,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "2d10",
+              "type": "Necrotic"
+            },
+            {
+              "formula": "2d10",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_dragon_queen_s_favor__5_day__tn7q",
+        "name": "Dragon Queen's Favor (5/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Verminaard or one creature he can see within 60 feet of himself magically regains 17 (2d12 + 4) hit points.</p>",
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_tactical_movement_nfcc",
+          "name": "Tactical Movement",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Verminaard moves up to his speed or commands a mount he is riding to move up to its speed. This movement doesn't provoke opportunity attacks.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_fervent_strike__costs_2_actions__b7tg",
+          "name": "Fervent Strike (Costs 2 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Verminaard makes one Nightbringer attack. If this attack hits, it deals an additional 7 (2d6) bludgeoning damage.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [
+              {
+                "formula": "2d6",
+                "type": "Bludgeoning"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_cast_a_spell__costs_3_actions__cini",
+          "name": "Cast a Spell (Costs 3 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Verminaard uses Spellcasting.</p>",
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "lairActions": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MCV2DC/Verminaard.webp",
+    "tokenImg": "img/bestiary/tokens/MCV2DC/Verminaard.webp",
+    "fluff": null
+  }
+]

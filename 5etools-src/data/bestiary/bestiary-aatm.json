@@ -210,7 +210,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Skall casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 19}):"
 					],
@@ -232,10 +232,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 19,
-					"atkMod": 11,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [
@@ -248,7 +245,7 @@
 				{
 					"name": "Cosmic Annihilation",
 					"entries": [
-						"A creature killed by Skall can be restored to life only by means of a true resurrection or {@spell wish} spell."
+						"A creature killed by Skall can be restored to life only by means of a {@spell true resurrection} or {@spell wish} spell."
 					]
 				},
 				{
@@ -292,7 +289,7 @@
 				{
 					"name": "Fog of Death (1/Day)",
 					"entries": [
-						"Skall exudes a killing fog in a 30-foot-radius sphere centered on himself. The sphere spreads around corners, and its area is heavily obscured. The fog lasts until the start of Skall's next turn, and it can't be dispersed by wind. It does not move with him.",
+						"Skall exudes a killing fog in a 30-foot-radius sphere centered on himself. The sphere spreads around corners, and its area is {@quickref Vision and Light||2||heavily obscured}. The fog lasts until the start of Skall's next turn, and it can't be dispersed by wind. It does not move with him.",
 						"Each creature that enters the fog for the first time on a turn or starts its turn there must make a {@dc 19} Constitution saving throw, taking 28 ({@damage 8d6}) necrotic damage and 28 ({@damage 8d6}) poison damage on a failed save, or half as much damage on a successful one. A Medium or smaller Humanoid killed by this damage becomes a zombie under Skall's control. The zombie acts on Skall's initiative but immediately after his turn. Absent any other command, the zombie tries to kill any non-Undead creature it encounters."
 					]
 				}
@@ -422,7 +419,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"The exorcist casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save {@dc 14}, {@hit 6} to hit with spell attacks):"
 					],
@@ -443,10 +440,7 @@
 						]
 					},
 					"ability": "int",
-					"displayAs": "action",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 0
+					"displayAs": "action"
 				}
 			],
 			"trait": [

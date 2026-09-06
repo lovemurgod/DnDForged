@@ -178,7 +178,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Azbara is a 6th-level spellcaster that uses Intelligence as his spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Azbara has the following spells prepared from the wizard spell list:"
 					],
@@ -217,10 +217,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 6
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -357,7 +354,7 @@
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
-					"type": "innate",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Blagothkus can innately cast the following spells (spell save {@dc 15}), requiring no material components:"
 					],
@@ -366,15 +363,11 @@
 							"{@spell fog cloud}",
 							"{@spell levitate}"
 						]
-					},
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 0,
-					"ability": "int"
+					}
 				},
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Blagothkus is a 5th-level spellcaster that uses Intelligence as his spellcasting ability (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Blagothkus has the following spells prepared from the wizard spell list:"
 					],
@@ -411,10 +404,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 5
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -937,7 +927,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Dralmorrer is a 7th-level spellcaster that uses Intelligence as his spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Dralmorrer has the following spells prepared from the wizard spell list:"
 					],
@@ -966,10 +956,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 7
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -1154,7 +1141,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Frulam is a 5th-level spellcaster that uses Wisdom as her spellcasting ability (spell save {@dc 14}, {@hit 6} to hit with spell attacks). Frulam has the following spells prepared from the cleric spell list:"
 					],
@@ -1191,10 +1178,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 5
+					"ability": "wis"
 				}
 			],
 			"action": [
@@ -1438,7 +1422,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Jamna is a 4th-level spellcaster that uses Intelligence as her spellcasting ability (spell save {@dc 12}, {@hit 4} to hit with spell attacks). Jamna has the following spells prepared from the wizard spell list."
 					],
@@ -1461,10 +1445,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 12,
-					"atkMod": 4,
-					"casterLevel": 4
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -1540,9 +1521,6 @@
 					"source": "ToD",
 					"page": 186
 				}
-			],
-			"referenceSources": [
-				"RoT"
 			],
 			"size": [
 				"M"
@@ -1701,6 +1679,15 @@
 					}
 				}
 			},
+			"type": {
+				"type": "humanoid",
+				"tags": [
+					"half-elf"
+				]
+			},
+			"languages": [
+				"Common"
+			],
 			"hasToken": true,
 			"hasFluffImages": true
 		},
@@ -1786,7 +1773,15 @@
 					"human"
 				]
 			},
+			"alignment": [
+				"L",
+				"G"
+			],
+			"languages": [
+				"Common"
+			],
 			"hasToken": true,
+			"hasFluff": true,
 			"hasFluffImages": true
 		},
 		{
@@ -1858,7 +1853,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Pharblex is a 6th-level spellcaster that uses Wisdom as his spellcasting ability (spell save {@dc 13}, {@hit 5} to hit with spell attacks). Pharblex has the following spells prepared from the druid spell list:"
 					],
@@ -1895,10 +1890,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 13,
-					"atkMod": 5,
-					"casterLevel": 6
+					"ability": "wis"
 				}
 			],
 			"trait": [
@@ -2091,7 +2083,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Rath is an 11th-level spellcaster who uses Intelligence as his spellcasting ability (spell save {@dc 15}, {@hit 7} to hit with spell attacks). Rath has the following spells prepared from the wizard spell list:"
 					],
@@ -2150,10 +2142,7 @@
 							]
 						}
 					},
-					"ability": "int",
-					"dc": 15,
-					"atkMod": 7,
-					"casterLevel": 11
+					"ability": "int"
 				}
 			],
 			"trait": [
@@ -2455,9 +2444,6 @@
 					"page": 189
 				}
 			],
-			"referenceSources": [
-				"RoT"
-			],
 			"size": [
 				"M"
 			],
@@ -2517,7 +2503,7 @@
 			"spellcasting": [
 				{
 					"name": "Spellcasting",
-					"type": "slot",
+					"type": "spellcasting",
 					"headerEntries": [
 						"Talis is a 9th-level spellcaster that uses Wisdom as her spellcasting ability (spell save {@dc 14}, {@hit 6} to hit with spell attacks). Talis has the following spells prepared from the cleric spell list:"
 					],
@@ -2568,10 +2554,7 @@
 							]
 						}
 					},
-					"ability": "wis",
-					"dc": 14,
-					"atkMod": 6,
-					"casterLevel": 9
+					"ability": "wis"
 				}
 			],
 			"trait": [
