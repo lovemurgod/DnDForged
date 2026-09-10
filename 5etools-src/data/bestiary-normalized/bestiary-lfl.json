@@ -57,12 +57,37 @@
         "mod": 3
       }
     },
+    "str": 21,
+    "dex": 20,
+    "con": 17,
+    "int": 10,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+8",
+      "con": "+6"
+    },
     "saves": {
       "dex": "+8",
       "con": "+6"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "prone",
+      "restrained"
+    ],
+    "passive": 12,
+    "initiative": {
+      "proficiency": 1
+    },
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 60 ft."
@@ -76,7 +101,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ephemeral_movement_56i8",
+        "id": "act_ephemeral_movement_rwqg",
         "name": "Ephemeral Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation can move through other creatures and objects as if they were Difficult Terrain, and its movement doesn't provoke Opportunity Attack. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
@@ -98,7 +123,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_hjh3",
+        "id": "act_magic_resistance_uvso",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation has Advantage on saving throws against spells and other magical effects.</p>",
@@ -117,7 +142,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yvh2",
+        "id": "act_multiattack_aohi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation makes three attacks, using Bite or Miasmic Globule in any combination.</p>",
@@ -134,7 +159,7 @@
         }
       },
       {
-        "id": "act_bite_b7km",
+        "id": "act_bite_7doc",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>m +8, reach 5 ft. {@h}14 (2d8 + 5) Piercing damage.</p>",
@@ -156,7 +181,7 @@
         }
       },
       {
-        "id": "act_miasmic_globule_fkk0",
+        "id": "act_miasmic_globule_ui32",
         "name": "Miasmic Globule",
         "actionType": "action",
         "descriptionHtml": "<p>r +8, range 60/120 ft. {@h}15 (6d4) Acid damage, and the target's Speed is reduced by 10 feet until the end of the incarnation's next turn.</p>",
@@ -178,7 +203,7 @@
         }
       },
       {
-        "id": "act_spectral_stampede_7fdj",
+        "id": "act_spectral_stampede_yu3e",
         "name": "Spectral Stampede",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation moves up to 80 feet in a straight line. Each creature whose space the incarnation enters is targeted once by the following effect. dex DC 16. {@actSaveFail} 18 (4d8) Force damage. If the target is the incarnation's size or smaller, it has the Prone condition. {@actSaveSuccess} Half damage only.</p>",
@@ -205,7 +230,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_oqk1",
+        "id": "act_shape_shift_g0kl",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation changes its size to Medium, Large, or Huge.</p>",
@@ -292,12 +317,38 @@
         "mod": 5
       }
     },
+    "str": 20,
+    "dex": 17,
+    "con": 20,
+    "int": 10,
+    "wis": 16,
+    "cha": 21,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "con": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "frightened"
+    ],
+    "passive": 13,
+    "initiative": {
+      "proficiency": 1
+    },
     "senses": {
       "passivePerception": 13,
       "sensesString": "Darkvision 60 ft."
@@ -419,7 +470,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_vtl3",
+        "id": "act_magic_resistance_zfw1",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation has Advantage on saving throws against spells and other magical effects.</p>",
@@ -438,7 +489,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_h3x8",
+        "id": "act_multiattack_r81k",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation makes two Vine attacks and uses Radiant Blast. It can replace one vine attack with a use of Spellcasting to cast Blindness/Deafness if available.</p>",
@@ -455,7 +506,7 @@
         }
       },
       {
-        "id": "act_vine_8yuq",
+        "id": "act_vine_at0b",
         "name": "Vine",
         "actionType": "action",
         "descriptionHtml": "<p>m +9, reach 20 ft. {@h}18 (3d8 + 5) Bludgeoning damage. If the target is the incarnation's size or smaller, it has the Grappled condition (escape DC 15) from one of two vines.</p>",
@@ -480,7 +531,7 @@
         }
       },
       {
-        "id": "act_radiant_blast_9lg0",
+        "id": "act_radiant_blast_0nkz",
         "name": "Radiant Blast",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 17, each creature of the incarnation's choice in a 20-foot Emanation [Area of Effect] originating from the incarnation. {@actSaveFail} The creature takes 14 (2d8 + 5) Radiant damage. {@actSaveSuccess} Half damage.</p>",
@@ -507,7 +558,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_ieri",
+        "id": "act_shape_shift_h2uc",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation changes its size to Medium, Large, or Huge.</p>",
@@ -524,7 +575,7 @@
         }
       },
       {
-        "id": "act_teleport_6lj1",
+        "id": "act_teleport_of6c",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation teleports up to 60 feet to an unoccupied space it can see. The incarnation can't teleport while it has a creature Grappled.</p>",
@@ -611,12 +662,28 @@
         "mod": -1
       }
     },
+    "str": 21,
+    "dex": 13,
+    "con": 18,
+    "int": 9,
+    "wis": 16,
+    "cha": 8,
     "proficiencyBonus": 3,
+    "save": {
+      "con": "+7",
+      "wis": "+6"
+    },
     "saves": {
       "con": "+7",
       "wis": "+6"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -632,7 +699,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_8vgy",
+        "id": "act_multiattack_x48n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes two attacks, using Stone Sword or Boulder in any combination.</p>",
@@ -649,7 +716,7 @@
         }
       },
       {
-        "id": "act_stone_sword_z3aj",
+        "id": "act_stone_sword_bhsm",
         "name": "Stone Sword",
         "actionType": "action",
         "descriptionHtml": "<p>m +8, reach 15 ft. {@h}21 (3d10 + 5) Slashing damage.</p>",
@@ -671,7 +738,7 @@
         }
       },
       {
-        "id": "act_boulder_a5cy",
+        "id": "act_boulder_0unp",
         "name": "Boulder",
         "actionType": "action",
         "descriptionHtml": "<p>r +8, range 60/240 ft. {@h}14 (2d8 + 5) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -695,7 +762,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_name_sleep__recharge_5__9ik0",
+        "id": "act_name_sleep__recharge_5__1t9k",
         "name": "Name Sleep (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The giant falls into a deep, restorative slumber. The giant gains 20 Temporary Hit Points and has the Unconscious condition until it takes damage or the end of its next turn. The giant has Advantage on ability checks and saving throws for 1 minute.</p>",
@@ -782,15 +849,34 @@
         "mod": 3
       }
     },
+    "str": 18,
+    "dex": 17,
+    "con": 16,
+    "int": 12,
+    "wis": 13,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5",
+      "cha": "+5"
+    },
     "saves": {
       "dex": "+5",
       "cha": "+5"
+    },
+    "skill": {
+      "deception": "+5",
+      "stealth": "+5"
     },
     "skills": {
       "deception": "+5",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "Darkvision 120 ft."
@@ -888,7 +974,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_h50e",
+        "id": "act_amphibious_xkv0",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
@@ -905,7 +991,7 @@
         }
       },
       {
-        "id": "act_mimicry_w3dt",
+        "id": "act_mimicry_9gyd",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can mimic voices and animal sounds. A creature that hears the mimicries can tell they are imitations with a successful DC 15 Wisdom (Insight) check.</p>",
@@ -927,7 +1013,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mbpp",
+        "id": "act_multiattack_5g2h",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes three Spined Tail attacks. It can replace one of these attacks with a use of Spellcasting to cast Command.</p>",
@@ -944,7 +1030,7 @@
         }
       },
       {
-        "id": "act_spined_tail_yv89",
+        "id": "act_spined_tail_kitx",
         "name": "Spined Tail",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 20/60 ft. {@h}14 (3d6 + 4) Piercing damage.</p>",
@@ -1037,15 +1123,34 @@
         "mod": 4
       }
     },
+    "str": 18,
+    "dex": 18,
+    "con": 16,
+    "int": 14,
+    "wis": 15,
+    "cha": 19,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+7",
+      "cha": "+7"
+    },
     "saves": {
       "dex": "+7",
       "cha": "+7"
+    },
+    "skill": {
+      "performance": "+7",
+      "persuasion": "+7"
     },
     "skills": {
       "performance": "+7",
       "persuasion": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1060,7 +1165,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_miip",
+        "id": "act_amphibious_8me3",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
@@ -1079,7 +1184,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9ykn",
+        "id": "act_multiattack_md7b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes three attacks, using Coral Scepter and Poisoned Longbow in any combination.</p>",
@@ -1096,7 +1201,7 @@
         }
       },
       {
-        "id": "act_coral_scepter_03bb",
+        "id": "act_coral_scepter_40xs",
         "name": "Coral Scepter",
         "actionType": "action",
         "descriptionHtml": "<p>m +7, reach 5 ft. {@h}14 (2d10 + 4) Bludgeoning damage.</p>",
@@ -1118,7 +1223,7 @@
         }
       },
       {
-        "id": "act_poisoned_longbow_i4xj",
+        "id": "act_poisoned_longbow_60au",
         "name": "Poisoned Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>r +7, range 150/600 ft. {@h}8 (1d8 + 4) Piercing damage plus 7 (2d6) Poison damage.</p>",
@@ -1144,7 +1249,7 @@
         }
       },
       {
-        "id": "act_invective_7f8z",
+        "id": "act_invective_et60",
         "name": "Invective",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 15, up to three creatures the merrow can see within 60 feet. {@actSaveFail} 14 (4d6) Psychic damage, and the creature has Disadvantage on its next attack roll before the end of the merrow's next turn. {@actSaveSuccess} Half damage only.</p>",
@@ -1240,11 +1345,26 @@
         "mod": 1
       }
     },
+    "str": 14,
+    "dex": 15,
+    "con": 13,
+    "int": 8,
+    "wis": 10,
+    "cha": 12,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+4"
+    },
     "skills": {
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -1259,7 +1379,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_siege_monster_s818",
+        "id": "act_siege_monster_b1lt",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The noggle deals double damage to objects and structures.</p>",
@@ -1278,7 +1398,7 @@
     ],
     "actions": [
       {
-        "id": "act_sabotaging_swipe_0lyk",
+        "id": "act_sabotaging_swipe_djlk",
         "name": "Sabotaging Swipe",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}6 (1d8 + 2) Slashing damage. If the target is wearing armor, it is subjected to the following effect. dex DC 12. {@actSaveFail} The armor takes a -1 penalty to the AC it offers. The target can take an action to remove the penalty from its armor.</p>",
@@ -1305,7 +1425,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_ztee",
+        "id": "act_nimble_escape_rtfu",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The noggle takes the Disengage or Hide action.</p>",
@@ -1392,12 +1512,28 @@
         "mod": 3
       }
     },
+    "str": 11,
+    "dex": 16,
+    "con": 14,
+    "int": 10,
+    "wis": 12,
+    "cha": 17,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+4",
+      "cha": "+5"
+    },
     "saves": {
       "con": "+4",
       "cha": "+5"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "Darkvision 60 ft."
@@ -1412,7 +1548,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bloodied_wild_magic_a37f",
+        "id": "act_bloodied_wild_magic_xt3c",
         "name": "Bloodied Wild Magic",
         "actionType": "trait",
         "descriptionHtml": "<p>While Bloodied, the noggle has a Fly Speed of 30 feet and it can choose for any damage it deals to be Force damage.</p>",
@@ -1431,7 +1567,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_iarn",
+        "id": "act_multiattack_ni2m",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The noggle makes two attacks, using Noggling Stick or Befuddling Ray in any combination.</p>",
@@ -1448,7 +1584,7 @@
         }
       },
       {
-        "id": "act_noggling_stick_7ljl",
+        "id": "act_noggling_stick_r8v2",
         "name": "Noggling Stick",
         "actionType": "action",
         "descriptionHtml": "<p>m +5, reach 5 ft. {@h}5 (1d4 + 3) Bludgeoning damage plus 2 (1d4) Psychic damage.</p>",
@@ -1474,7 +1610,7 @@
         }
       },
       {
-        "id": "act_befuddling_ray_a5mg",
+        "id": "act_befuddling_ray_y3uq",
         "name": "Befuddling Ray",
         "actionType": "action",
         "descriptionHtml": "<p>r +5, range 60 ft. {@h}6 (1d6 + 3) Psychic damage, and the target subtracts 1d4 from the next saving throw it makes before the end of the noggle's next turn.</p>",
@@ -1567,12 +1703,28 @@
         "mod": -1
       }
     },
+    "str": 22,
+    "dex": 14,
+    "con": 20,
+    "int": 7,
+    "wis": 19,
+    "cha": 8,
     "proficiencyBonus": 3,
+    "save": {
+      "con": "+8",
+      "wis": "+7"
+    },
     "saves": {
       "con": "+8",
       "wis": "+7"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "Darkvision 120 ft."
@@ -1587,7 +1739,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_3af5",
+        "id": "act_multiattack_rzjr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes three attacks, using Tree Club or Boulder in any combination.</p>",
@@ -1604,7 +1756,7 @@
         }
       },
       {
-        "id": "act_tree_club_5mj7",
+        "id": "act_tree_club_2omc",
         "name": "Tree Club",
         "actionType": "action",
         "descriptionHtml": "<p>m +9, reach 15 ft. {@h}17 (2d10 + 6) Bludgeoning damage.</p>",
@@ -1626,7 +1778,7 @@
         }
       },
       {
-        "id": "act_boulder_qdmw",
+        "id": "act_boulder_xqv2",
         "name": "Boulder",
         "actionType": "action",
         "descriptionHtml": "<p>r +9, range 60/240 ft. {@h}13 (2d6 + 6) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -1648,7 +1800,7 @@
         }
       },
       {
-        "id": "act_wild_magic_cataclysm__recharge_5__1glo",
+        "id": "act_wild_magic_cataclysm__recharge_5__3dqt",
         "name": "Wild Magic Cataclysm (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 15, each creature in a 20-foot-radius Sphere [Area of Effect] centered on a point within 120 feet. {@actSaveFail} 28 (8d6) damage (roll 1d4 to determine damage type: 1—Acid; 2—Fire; 3—Lightning; 4—Thunder). {@actSaveSuccess} Half damage.</p>",

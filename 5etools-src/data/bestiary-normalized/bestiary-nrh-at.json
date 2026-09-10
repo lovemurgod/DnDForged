@@ -57,15 +57,36 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 14,
+    "con": 18,
+    "int": 17,
+    "wis": 15,
+    "cha": 17,
     "proficiencyBonus": 5,
+    "save": {
+      "int": "+8",
+      "wis": "+7",
+      "cha": "+8"
+    },
     "saves": {
       "int": "+8",
       "wis": "+7",
       "cha": "+8"
     },
+    "skill": {
+      "perception": "+12"
+    },
     "skills": {
       "perception": "+12"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "prone"
+    ],
+    "passive": 22,
     "senses": {
       "passivePerception": 22,
       "sensesString": "darkvision 120 ft."
@@ -80,7 +101,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_cone_57ne",
+        "id": "act_antimagic_cone_w7es",
         "name": "Antimagic Cone",
         "actionType": "trait",
         "descriptionHtml": "<p>The beholder's central eye creates an area of antimagic, as in the antimagic field spell, in a 150-foot cone. At the start of each of its turns, the beholder decides which way the cone faces and whether the cone is active. The area works against the beholder's own eye rays.</p>",
@@ -99,7 +120,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_x14i",
+        "id": "act_bite_w538",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}14 (4d6) piercing damage.</p>",
@@ -121,7 +142,7 @@
         }
       },
       {
-        "id": "act_eye_rays_8lm1",
+        "id": "act_eye_rays_10md",
         "name": "Eye Rays",
         "actionType": "action",
         "descriptionHtml": "<p>The beholder shoots three of the following magical eye rays at random (reroll duplicates), choosing one to three targets it can see within 120 feet of it:</p><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>",
@@ -153,7 +174,7 @@
       "description": "The beholder can take 3 legendary actions, using the Eye Ray option below. It can take only one legendary action at a time and only at the end of another creature's turn. The beholder regains spent legendary actions at the start of its turn.",
       "entries": [
         {
-          "id": "act_eye_ray_gru7",
+          "id": "act_eye_ray_4r04",
           "name": "Eye Ray",
           "actionType": "legendary",
           "descriptionHtml": "<p>The beholder uses one random eye ray.</p>",
@@ -173,7 +194,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_sqhr",
+        "id": "act_lair_action_rh1s",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>A 50-foot-square area of ground within 120 feet of the beholder becomes slimy; that area is difficult terrain until initiative count 20 on the next round.</p>",
@@ -190,7 +211,7 @@
         }
       },
       {
-        "id": "act_lair_action_j2qj",
+        "id": "act_lair_action_b0cj",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Walls within 120 feet of the beholder sprout grasping appendages until initiative count 20 on the round after next. Each creature of the beholder's choice that starts its turn within 10 feet of such a wall must succeed on a DC 15 Dexterity saving throw or be grappled. Escaping requires a successful DC 15 Strength (Athletics) or Dexterity (Acrobatics) check.</p>",
@@ -210,7 +231,7 @@
         }
       },
       {
-        "id": "act_lair_action_243e",
+        "id": "act_lair_action_2j7b",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>An eye opens on a solid surface within 60 feet of the beholder. One random eye ray of the beholder shoots from that eye at a target of the beholder's choice that it can see. The eye then closes and disappears.</p>",
@@ -227,7 +248,7 @@
         }
       },
       {
-        "id": "act_lair_action_8781",
+        "id": "act_lair_action_gqy8",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>The beholder can't repeat an effect until they have all been used, and it can't use the same effect two rounds in a row.</p>",
@@ -307,13 +328,30 @@
         "mod": 0
       }
     },
+    "str": 17,
+    "dex": 14,
+    "con": 14,
+    "int": 11,
+    "wis": 12,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "intimidation": "+2",
+      "stealth": "+6",
+      "survival": "+3"
+    },
     "skills": {
       "intimidation": "+2",
       "stealth": "+6",
       "survival": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -328,7 +366,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brute_c81n",
+        "id": "act_brute_n5sm",
         "name": "Brute",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when the bugbear hits with it (included in the attack).</p>",
@@ -345,7 +383,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_h0ph",
+        "id": "act_surprise_attack_cxz4",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If the bugbear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
@@ -367,7 +405,7 @@
         }
       },
       {
-        "id": "act_heart_of_hruggek_yo0x",
+        "id": "act_heart_of_hruggek_9i0k",
         "name": "Heart of Hruggek",
         "actionType": "trait",
         "descriptionHtml": "<p>The bugbear has advantage on saving throws against being charmed, frightened, paralyzed, poisoned, stunned, or put to sleep.</p>",
@@ -386,7 +424,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6f8d",
+        "id": "act_multiattack_r6qs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The bugbear makes two melee attacks.</p>",
@@ -403,7 +441,7 @@
         }
       },
       {
-        "id": "act_morningstar_rsag",
+        "id": "act_morningstar_7onb",
         "name": "Morningstar",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}11 (2d8 + 3) piercing damage.</p>",
@@ -425,7 +463,7 @@
         }
       },
       {
-        "id": "act_javelin_2nw1",
+        "id": "act_javelin_tric",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}9 (2d6 + 3) piercing damage in melee or 5 (1d6 + 3) piercing damage at range.</p>",
@@ -522,16 +560,36 @@
         "mod": 2
       }
     },
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 10,
+    "wis": 12,
+    "cha": 15,
     "proficiencyBonus": 3,
+    "save": {
+      "str": "+7",
+      "dex": "+5",
+      "con": "+6"
+    },
     "saves": {
       "str": "+7",
       "dex": "+5",
       "con": "+6"
     },
+    "skill": {
+      "athletics": "+10",
+      "intimidation": "+5"
+    },
     "skills": {
       "athletics": "+10",
       "intimidation": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -546,7 +604,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brave_j0cf",
+        "id": "act_brave_lf3f",
         "name": "Brave",
         "actionType": "trait",
         "descriptionHtml": "<p>Mr. Greystone has advantage on saving throws against being frightened.</p>",
@@ -563,7 +621,7 @@
         }
       },
       {
-        "id": "act_brute_drgi",
+        "id": "act_brute_rnmt",
         "name": "Brute",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Mr. Greystone hits with it (included in the attack).</p>",
@@ -582,7 +640,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hcqw",
+        "id": "act_multiattack_jat6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Mr. Greystone makes two melee attacks or two ranged attacks.</p>",
@@ -599,7 +657,7 @@
         }
       },
       {
-        "id": "act_club_5u6v",
+        "id": "act_club_xjmf",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage.</p>",
@@ -621,7 +679,7 @@
         }
       },
       {
-        "id": "act_hand_crossbow_v701",
+        "id": "act_hand_crossbow_9tx2",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",

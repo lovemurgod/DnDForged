@@ -57,12 +57,30 @@
         "mod": -3
       }
     },
+    "str": 19,
+    "dex": 16,
+    "con": 14,
+    "int": 1,
+    "wis": 15,
+    "cha": 4,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+5",
+      "stealth": "+6"
+    },
     "skills": {
       "perception": "+5",
       "stealth": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [
+      "poison"
+    ],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "blindsight 15 ft., darkvision 60 ft."
@@ -74,7 +92,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_vulnerability_rd53",
+        "id": "act_sunlight_vulnerability_qrss",
         "name": "Sunlight Vulnerability",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the snake has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight. When the snake begins its turn in sunlight, it immediately suffers 10 radiant damage.</p>",
@@ -91,7 +109,7 @@
         }
       },
       {
-        "id": "act_undead_fortitude_4sag",
+        "id": "act_undead_fortitude_1i07",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the snake to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the snake drops to 1 hit point instead.</p>",
@@ -110,7 +128,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8nqr",
+        "id": "act_multiattack_41qa",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The snake makes two attacks: one with its bite and one with a constrict attack.</p>",
@@ -127,7 +145,7 @@
         }
       },
       {
-        "id": "act_bite_fml5",
+        "id": "act_bite_55xe",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}17 (3d8 + 4) piercing damage, and the target must make a DC 15 Constitution saving throw, taking 17 (5d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -156,7 +174,7 @@
         }
       },
       {
-        "id": "act_constrict_z0b6",
+        "id": "act_constrict_gotg",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}17 (3d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained and the snake cannot constrict another target.</p>",
@@ -252,10 +270,26 @@
         "mod": 0
       }
     },
+    "str": 23,
+    "dex": 11,
+    "con": 15,
+    "int": 10,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "str": "+9",
+      "wis": "+5"
+    },
     "saves": {
       "str": "+9",
       "wis": "+5"
+    },
+    "skill": {
+      "athletics": "+9",
+      "history": "+3",
+      "insight": "+5",
+      "perception": "+5"
     },
     "skills": {
       "athletics": "+9",
@@ -263,6 +297,11 @@
       "insight": "+5",
       "perception": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": ""
@@ -279,7 +318,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_7yu9",
+        "id": "act_multiattack_lywu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hamish makes two attacks with his axe or throws two rocks.</p>",
@@ -296,7 +335,7 @@
         }
       },
       {
-        "id": "act_axe_1bk7",
+        "id": "act_axe_5496",
         "name": "Axe",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}17 (2d10 + 6) slashing damage.</p>",
@@ -318,7 +357,7 @@
         }
       },
       {
-        "id": "act_rock_cu2p",
+        "id": "act_rock_q0dq",
         "name": "Rock",
         "actionType": "action",
         "descriptionHtml": "<p>rw +9 to hit, range 60/240 ft., one target. {@h}17 (2d10 + 6) bludgeoning damage.</p>",
@@ -343,7 +382,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_ppez",
+        "id": "act_parry_5rbm",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Hamish adds 2 to his AC against one melee attack that would hit him. To do so, he must see the attacker and be wielding a melee weapon or a shield.</p>",
@@ -429,10 +468,26 @@
         "mod": 2
       }
     },
+    "str": 11,
+    "dex": 16,
+    "con": 16,
+    "int": 14,
+    "wis": 14,
+    "cha": 15,
     "proficiencyBonus": 4,
+    "save": {
+      "wis": "+6",
+      "cha": "+6"
+    },
     "saves": {
       "wis": "+6",
       "cha": "+6"
+    },
+    "skill": {
+      "deception": "+6",
+      "insight": "+6",
+      "perception": "+6",
+      "stealth": "+7"
     },
     "skills": {
       "deception": "+6",
@@ -440,6 +495,25 @@
       "perception": "+6",
       "stealth": "+7"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 60 ft."
@@ -455,7 +529,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_feed_on_pain__2_day__f329",
+        "id": "act_feed_on_pain__2_day__0snn",
         "name": "Feed on Pain (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The first time she hits with a weapon attack on her turn, Kyrilla can deal an extra 16 (3d10) poison damage to the target and regains a number of hit points equal to half the damage dealt.</p>",
@@ -477,7 +551,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__2_day__f67v",
+        "id": "act_legendary_resistance__2_day__ap2v",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If she fails a saving throw, Kyrilla can choose to succeed instead.</p>",
@@ -494,7 +568,7 @@
         }
       },
       {
-        "id": "act_petrifying_gaze_8z2d",
+        "id": "act_petrifying_gaze_jkyw",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see Kyrilla's eyes starts its turn within 30 feet of her, Kyrilla can force it to make a DC 14 Constitution saving throw if Kyrilla isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, a creature that fails the save begins to turn to stone and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.</p><p>Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see Kyrilla until the start of its next turn, when it can avert its eyes again. If the creature looks at Kyrilla in the meantime, it must immediately make the save.</p><p>Kyrilla's accursed gaze does not affect undead or constructs. If Kyrilla sees herself reflected on a polished surface within 30 feet of her and in an area of bright light, she is, due to her curse, affected by her own gaze.</p>",
@@ -514,7 +588,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_986m",
+        "id": "act_sunlight_sensitivity_h53x",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Kyrilla has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.</p>",
@@ -533,7 +607,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yhfq",
+        "id": "act_multiattack_iagi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Kyrilla makes one attack to constrict and two attacks with her claws, or she makes three attacks with her longbow.</p>",
@@ -550,7 +624,7 @@
         }
       },
       {
-        "id": "act_claw_wprn",
+        "id": "act_claw_i0gi",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}13 (3d6 + 3) slashing damage.</p>",
@@ -572,7 +646,7 @@
         }
       },
       {
-        "id": "act_constrict_35ct",
+        "id": "act_constrict_k068",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 10 ft., one target. {@h}10 (3d6) bludgeoning damage, and the target is grappled (escape DC 13) if it is a Large or smaller creature. Until this grapple ends, the target is restrained, and Kyrilla can't constrict another target.</p>",
@@ -597,7 +671,7 @@
         }
       },
       {
-        "id": "act_longbow_7ena",
+        "id": "act_longbow_kayy",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +7 to hit, range 150/600 ft., one target. {@h}16 (3d8 + 3) piercing damage.</p>",
@@ -619,7 +693,7 @@
         }
       },
       {
-        "id": "act_summon_swarm_of_poisonous_snakes__recharge_5__lkai",
+        "id": "act_summon_swarm_of_poisonous_snakes__recharge_5__ra39",
         "name": "Summon Swarm of Poisonous Snakes (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Kyrilla conjures a swarm of poisonous snakes into an empty space within 10 feet of her. The swarm is under Kyrilla's control and acts on her turn, immediately after her in the initiative order.</p><p>It remains in existence for up to 1 hour. She can summon no more than three swarms per day. Kyrilla can banish any or all of her summoned swarms with a bonus action.</p>",
@@ -643,7 +717,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_claw_8w46",
+          "id": "act_claw_a2e4",
           "name": "Claw",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla or a swarm of poisonous snakes makes a weapon attack.</p>",
@@ -660,7 +734,7 @@
           }
         },
         {
-          "id": "act_detect_w39h",
+          "id": "act_detect_zzea",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla makes a Wisdom (Perception) check.</p>",
@@ -677,7 +751,7 @@
           }
         },
         {
-          "id": "act_slither_t2si",
+          "id": "act_slither_n2vk",
           "name": "Slither",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla moves up to her speed without provoking opportunity attacks.</p>",
@@ -697,7 +771,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_u6ev",
+        "id": "act_lair_action_40l6",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Kyrilla casts moonbeam (no components required). While maintaining concentration on this effect, she can't take other lair actions.</p>",
@@ -714,7 +788,7 @@
         }
       },
       {
-        "id": "act_lair_action_78tr",
+        "id": "act_lair_action_fsqa",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Kyrilla casts cloud of daggers (no components required), except the daggers are flying snakes and the spell deals piercing damage. While maintaining concentration on this effect, she can't take other lair actions.</p>",
@@ -731,7 +805,7 @@
         }
       },
       {
-        "id": "act_lair_action_oiz3",
+        "id": "act_lair_action_zhpm",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Pools of liquid within 60 feet of Kyrilla surge and froth, splashing and soaking any creature on the ground within 5 feet of such pools. Creatures that succeed on a DC 14 Dexterity saving throw avoid getting liquid in their eyes and mouths. Kyrilla can't use this lair action again until she has used a different one.</p>",
@@ -814,11 +888,33 @@
         "mod": -3
       }
     },
+    "str": 16,
+    "dex": 14,
+    "con": 15,
+    "int": 6,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3"
+    },
     "skills": {
       "perception": "+3"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [
+      "bludgeoning"
+    ],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 60 ft."
@@ -831,7 +927,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_r5je",
+        "id": "act_multiattack_uv36",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The horror makes two attacks with its claws.</p>",
@@ -848,7 +944,7 @@
         }
       },
       {
-        "id": "act_claw_bc5f",
+        "id": "act_claw_xoei",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}19 (3d10 + 3) slashing damage.</p>",
@@ -870,7 +966,7 @@
         }
       },
       {
-        "id": "act_wave_of_bones__recharge_5__2l3b",
+        "id": "act_wave_of_bones__recharge_5__o9ul",
         "name": "Wave of Bones (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The horror crashes into foes like a wave before quickly reforming. Each creature within 10 feet of the horror must make a DC 15 Dexterity saving throw, taking 18 (4d8) bludgeoning damage on a failed save, or half as much damage on a successful one. A creature that fails this saving throw is also knocked prone.</p>",

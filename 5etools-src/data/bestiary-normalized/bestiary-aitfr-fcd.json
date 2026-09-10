@@ -57,15 +57,34 @@
         "mod": -1
       }
     },
+    "str": 15,
+    "dex": 15,
+    "con": 15,
+    "int": 10,
+    "wis": 12,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {
+      "str": "+4",
+      "con": "+4"
+    },
     "saves": {
       "str": "+4",
       "con": "+4"
+    },
+    "skill": {
+      "athletics": "+4",
+      "perception": "+3"
     },
     "skills": {
       "athletics": "+4",
       "perception": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -79,7 +98,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inspired_courage_is8u",
+        "id": "act_inspired_courage_88vq",
         "name": "Inspired Courage",
         "actionType": "trait",
         "descriptionHtml": "<p>The mercenary has advantage on savings throws against being charmed, frightened, grappled, or restrained while within 5 feet of at least one ally.</p>",
@@ -96,7 +115,7 @@
         }
       },
       {
-        "id": "act_martial_advantage_yanc",
+        "id": "act_martial_advantage_xl4i",
         "name": "Martial Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, the mercenary can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the mercenary that isn't incapacitated.</p>",
@@ -120,7 +139,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xme2",
+        "id": "act_multiattack_2c3s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mercenary makes two longsword attacks.</p>",
@@ -137,7 +156,7 @@
         }
       },
       {
-        "id": "act_longsword_7c3d",
+        "id": "act_longsword_0b1c",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) slashing damage.</p>",
@@ -159,7 +178,7 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_eh8v",
+        "id": "act_heavy_crossbow_fn2b",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range</p><p>100/400 ft., one target. {@h}7 (1d10 + 2) piercing damage.</p>",
@@ -252,10 +271,26 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 16,
+    "con": 14,
+    "int": 20,
+    "wis": 15,
+    "cha": 16,
     "proficiencyBonus": 5,
+    "save": {
+      "int": "+10",
+      "wis": "+7"
+    },
     "saves": {
       "int": "+10",
       "wis": "+7"
+    },
+    "skill": {
+      "arcana": "+12",
+      "deception": "+8",
+      "history": "+10",
+      "perception": "+7"
     },
     "skills": {
       "arcana": "+12",
@@ -263,6 +298,25 @@
       "history": "+10",
       "perception": "+7"
     },
+    "immune": [],
+    "resist": [
+      {
+        "special": "damage from spells"
+      },
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "(from stoneskin)",
+        "preNote": "nonmagical",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": ""
@@ -907,7 +961,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__rmzv",
+        "id": "act_legendary_resistance__3_day__hmdd",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Tyreus fails a saving throw, he can choose to succeed instead.</p>",
@@ -924,7 +978,7 @@
         }
       },
       {
-        "id": "act_illusory_reality_6b8v",
+        "id": "act_illusory_reality_9fp7",
         "name": "Illusory Reality",
         "actionType": "trait",
         "descriptionHtml": "<p>When Tyreus casts an illusion spell of 1st level or higher, he can choose one inanimate, nonmagical object that is part of the illusion and make that object real. He can do this on his turn as a bonus action while the spell is ongoing.</p><p>The object remains real for 1 minute. The object can't deal damage or otherwise directly harm anyone.</p>",
@@ -941,7 +995,7 @@
         }
       },
       {
-        "id": "act_displacement__recharges_after_tyreus_casts_an_illusion_spell_of_1st_level_or_higher__oleh",
+        "id": "act_displacement__recharges_after_tyreus_casts_an_illusion_spell_of_1st_level_or_higher__7z67",
         "name": "Displacement (Recharges after Tyreus Casts an Illusion Spell of 1st Level or Higher)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Tyreus projects an illusion that makes him appear to be standing a few inches from his actual location, causing any creature to have disadvantage on attack rolls against Tyreus. The effect ends if Tyreus takes damage, he is incapacitated, or his speed becomes 0.</p>",
@@ -960,7 +1014,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_cqg1",
+        "id": "act_dagger_7di0",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +8 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
@@ -982,7 +1036,7 @@
         }
       },
       {
-        "id": "act_modify_illusion_2s7i",
+        "id": "act_modify_illusion_8w63",
         "name": "Modify Illusion",
         "actionType": "action",
         "descriptionHtml": "<p>When Tyreus casts an illusion spell that has a duration of 1 minute or longer, he can use his action to change the nature of that illusion (using the spell's normal parameters for the illusion), provided that he can see the illusion.</p>",
@@ -1006,7 +1060,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_scrutinize_qhwm",
+          "id": "act_scrutinize_u1bc",
           "name": "Scrutinize",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus makes an Intelligence (Investigation) or Wisdom (Perception) check.</p>",
@@ -1023,7 +1077,7 @@
           }
         },
         {
-          "id": "act_cast_cantrip_xejl",
+          "id": "act_cast_cantrip_auy2",
           "name": "Cast Cantrip",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus casts a cantrip from his spell list.</p>",
@@ -1040,7 +1094,7 @@
           }
         },
         {
-          "id": "act_cast_spell__costs_1_3_actions__02op",
+          "id": "act_cast_spell__costs_1_3_actions__sqg6",
           "name": "Cast Spell (Costs 1-3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus uses a spell slot to cast a 1st-, 2nd-, or 3rd-level spell that he has prepared. Doing so costs 1 legendary action per level of the spell.</p>",

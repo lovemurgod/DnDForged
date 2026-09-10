@@ -57,13 +57,30 @@
         "mod": 1
       }
     },
+    "str": 16,
+    "dex": 13,
+    "con": 14,
+    "int": 9,
+    "wis": 15,
+    "cha": 12,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "nature": "+1",
+      "stealth": "+3",
+      "survival": "+4"
+    },
     "skills": {
       "nature": "+1",
       "stealth": "+3",
       "survival": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -225,7 +242,7 @@
     ],
     "traits": [
       {
-        "id": "act_shapechanger_etxl",
+        "id": "act_shapechanger_4gqf",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The anchorite can use its action to polymorph into a boar or back into its true form, which is humanoid. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -244,7 +261,7 @@
     ],
     "actions": [
       {
-        "id": "act_clawed_gauntlet__humanoid_form_only__hcml",
+        "id": "act_clawed_gauntlet__humanoid_form_only__2525",
         "name": "Clawed Gauntlet (Humanoid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) slashing damage.</p>",
@@ -266,7 +283,7 @@
         }
       },
       {
-        "id": "act_tusk__boar_form_only__mqbx",
+        "id": "act_tusk__boar_form_only__5hyk",
         "name": "Tusk (Boar Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) slashing damage.</p>",
@@ -359,15 +376,34 @@
         "mod": 2
       }
     },
+    "str": 11,
+    "dex": 10,
+    "con": 13,
+    "int": 12,
+    "wis": 10,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+2",
+      "con": "+3"
+    },
     "saves": {
       "dex": "+2",
       "con": "+3"
+    },
+    "skill": {
+      "deception": "+4",
+      "persuasion": "+4"
     },
     "skills": {
       "deception": "+4",
       "persuasion": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -382,7 +418,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brave_85vl",
+        "id": "act_brave_pllp",
         "name": "Brave",
         "actionType": "trait",
         "descriptionHtml": "<p>Don-Jon has advantage on saving throws against being frightened.</p>",
@@ -399,7 +435,7 @@
         }
       },
       {
-        "id": "act_not_dead_yet__recharges_after_a_long_rest__1n6l",
+        "id": "act_not_dead_yet__recharges_after_a_long_rest__02o9",
         "name": "Not Dead Yet (Recharges after a Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces Don-Jon to 0 hit points, he drops to 1 hit point instead and gains advantage on attack rolls until the end of his next turn.</p>",
@@ -418,7 +454,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_t56e",
+        "id": "act_multiattack_mt0w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Don-Jon makes three melee attacks.</p>",
@@ -435,7 +471,7 @@
         }
       },
       {
-        "id": "act_dagger_vdkp",
+        "id": "act_dagger_lvvv",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +2 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}2 (1d4) piercing damage.</p>",
@@ -457,7 +493,7 @@
         }
       },
       {
-        "id": "act_sling_3fkk",
+        "id": "act_sling_srdp",
         "name": "Sling",
         "actionType": "action",
         "descriptionHtml": "<p>rw +2 to hit, range 30/120 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
@@ -550,16 +586,36 @@
         "mod": 2
       }
     },
+    "str": 14,
+    "dex": 15,
+    "con": 16,
+    "int": 11,
+    "wis": 16,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+4",
+      "wis": "+5"
+    },
     "saves": {
       "dex": "+4",
       "wis": "+5"
+    },
+    "skill": {
+      "athletics": "+4",
+      "perception": "+7",
+      "survival": "+5"
     },
     "skills": {
       "athletics": "+4",
       "perception": "+7",
       "survival": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": ""
@@ -573,7 +629,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_archer_wesv",
+        "id": "act_archer_p28e",
         "name": "Archer",
         "actionType": "trait",
         "descriptionHtml": "<p>A longbow or shortbow deals one extra die of its damage when Falcon hits with it (included in his longbow attack).</p>",
@@ -590,7 +646,7 @@
         }
       },
       {
-        "id": "act_sharpshooter_m1fu",
+        "id": "act_sharpshooter_45nn",
         "name": "Sharpshooter",
         "actionType": "trait",
         "descriptionHtml": "<p>Falcon's ranged weapon attacks ignore Cover and Cover.</p>",
@@ -609,7 +665,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9lfp",
+        "id": "act_multiattack_elzt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Falcon makes three melee attacks or two ranged attacks.</p>",
@@ -626,7 +682,7 @@
         }
       },
       {
-        "id": "act_longsword_4xm9",
+        "id": "act_longsword_5y2j",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
@@ -652,7 +708,7 @@
         }
       },
       {
-        "id": "act_longbow_4jz9",
+        "id": "act_longbow_ecym",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 150/600 ft., one target. {@h}11 (2d8 + 2) piercing damage.</p>",
@@ -745,9 +801,35 @@
         "mod": 2
       }
     },
+    "str": 20,
+    "dex": 11,
+    "con": 19,
+    "int": 6,
+    "wis": 10,
+    "cha": 14,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "lightning",
+      "thunder"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -759,7 +841,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_relentless__recharges_after_a_short_or_long_rest__9kae",
+        "id": "act_relentless__recharges_after_a_short_or_long_rest__wf6x",
         "name": "Relentless (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gorthok takes 27 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
@@ -778,7 +860,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r2ya",
+        "id": "act_multiattack_t084",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gorthok makes two melee attacks: one with its lightning tusks and one with its thunder hooves.</p>",
@@ -795,7 +877,7 @@
         }
       },
       {
-        "id": "act_lightning_tusks_g2qp",
+        "id": "act_lightning_tusks_mtoq",
         "name": "Lightning Tusks",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}12 (2d6 + 5) slashing damage plus 7 (2d6) lightning damage.</p>",
@@ -821,7 +903,7 @@
         }
       },
       {
-        "id": "act_thunder_hooves_t548",
+        "id": "act_thunder_hooves_g6hx",
         "name": "Thunder Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}12 (2d6 + 5) bludgeoning damage plus 7 (2d6) thunder damage.</p>",
@@ -847,7 +929,7 @@
         }
       },
       {
-        "id": "act_lightning_bolt___recharge__glmp",
+        "id": "act_lightning_bolt___recharge__hbcv",
         "name": "Lightning Bolt {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Gorthok shoots a bolt of lightning at one creature it can see within 120 feet of it. The target must make a DC 15 Dexterity saving throw, taking 18 (4d8) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -947,12 +1029,28 @@
         "mod": 1
       }
     },
+    "str": 6,
+    "dex": 11,
+    "con": 10,
+    "int": 15,
+    "wis": 10,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "arcana": "+4",
+      "history": "+4"
+    },
     "skills": {
       "arcana": "+4",
       "history": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -1143,7 +1241,7 @@
     ],
     "traits": [
       {
-        "id": "act_gnome_cunning_0812",
+        "id": "act_gnome_cunning_ivqt",
         "name": "Gnome Cunning",
         "actionType": "trait",
         "descriptionHtml": "<p>The gnome has advantage on Intelligence, Wisdom, and Charisma saving throws against magic.</p>",
@@ -1162,7 +1260,7 @@
     ],
     "actions": [
       {
-        "id": "act_magic_missile__expends_a_1st_level_spell_slot__jojf",
+        "id": "act_magic_missile__expends_a_1st_level_spell_slot__i834",
         "name": "Magic Missile (Expends a 1st-Level Spell Slot)",
         "actionType": "action",
         "descriptionHtml": "<p>The gnome creates three magical darts. Each dart hits a creature the gnome chooses within 120 feet of it and deals 3 (1d4 + 1) force damage.</p>",
@@ -1184,7 +1282,7 @@
         }
       },
       {
-        "id": "act_ray_of_frost_vpku",
+        "id": "act_ray_of_frost_mkz8",
         "name": "Ray of Frost",
         "actionType": "action",
         "descriptionHtml": "<p>rs +4 to hit, range 60 ft., one creature. {@h}4 (1d8) cold damage, and the target's speed is reduced by 10 feet until the start of the gnome's next turn.</p>",
@@ -1277,9 +1375,22 @@
         "mod": -2
       }
     },
+    "str": 16,
+    "dex": 10,
+    "con": 12,
+    "int": 2,
+    "wis": 11,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -1292,7 +1403,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_hooves_txds",
+        "id": "act_hooves_typc",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}8 (2d4 + 3) bludgeoning damage.</p>",

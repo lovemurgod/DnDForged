@@ -57,16 +57,39 @@
         "mod": 4
       }
     },
+    "str": 24,
+    "dex": 16,
+    "con": 21,
+    "int": 18,
+    "wis": 21,
+    "cha": 19,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+9",
+      "wis": "+9",
+      "cha": "+8"
+    },
     "saves": {
       "con": "+9",
       "wis": "+9",
       "cha": "+8"
     },
+    "skill": {
+      "perception": "+13",
+      "stealth": "+7"
+    },
     "skills": {
       "perception": "+13",
       "stealth": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 23,
     "senses": {
       "passivePerception": 23,
       "sensesString": "truesight 120 ft."
@@ -259,7 +282,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_rebirth_qm9l",
+        "id": "act_fey_rebirth_ezkj",
         "name": "Fey Rebirth",
         "actionType": "trait",
         "descriptionHtml": "<p>If Yarnspinner dies in his Domain of Delight, he revives with all his hit points 1d4 days later in a safe location in that domain.</p>",
@@ -276,7 +299,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__xqid",
+        "id": "act_legendary_resistance__3_day__dzec",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Yarnspinner fails a saving throw, he can choose to succeed instead.</p>",
@@ -293,7 +316,7 @@
         }
       },
       {
-        "id": "act_spider_climb_3znj",
+        "id": "act_spider_climb_3m5l",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>Yarnspinner can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -310,7 +333,7 @@
         }
       },
       {
-        "id": "act_web_walker_n6l2",
+        "id": "act_web_walker_ahx0",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>Yarnspinner ignores movement restrictions caused by webbing.</p>",
@@ -327,7 +350,7 @@
         }
       },
       {
-        "id": "act_web_weaver__3_day__ig58",
+        "id": "act_web_weaver__3_day__bbm2",
         "name": "Web Weaver (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Yarnspinner can take 1 minute to craft one of the following structures out of webbing:</p><ul><li>A 3-inch-thick, opaque wall of webbing consisting of up to three 10-foot-square sections, each of which must be anchored on at least two sides by other walls or surfaces. Each section has AC 12; 20 hit points; vulnerability to fire damage; and immunity to bludgeoning, poison, and psychic damage.</li><li>A hut small enough to fit in a 10-foot cube. The hut comes with a closable door and a comfortable bed made of webbing, sized for a Tiny, Small, or Medium creature.</li><li>A message consisting of no more than twenty-five characters, anchored at various points so it hangs in the air.</li></ul>",
@@ -346,7 +369,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hxvb",
+        "id": "act_multiattack_d650",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Yarnspinner makes two Bite attacks and uses Spellcasting or Web once.</p>",
@@ -363,7 +386,7 @@
         }
       },
       {
-        "id": "act_bite_teh4",
+        "id": "act_bite_tk6q",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}17 (3d6 + 7) piercing damage plus 11 (2d10) poison damage.</p>",
@@ -389,7 +412,7 @@
         }
       },
       {
-        "id": "act_web_9yz6",
+        "id": "act_web_tzhf",
         "name": "Web",
         "actionType": "action",
         "descriptionHtml": "<p>Yarnspinner shoots webbing at one creature he can see within 120 feet of himself. The target must succeed on a DC 17 Strength saving throw or be restrained for 1 hour. The target can repeat the save at the end of each of its turns, ending the effect on itself on a success.</p>",

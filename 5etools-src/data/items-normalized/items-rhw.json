@@ -4,17 +4,46 @@
     "name": "Ebonbane",
     "source": "RHW",
     "page": 152,
-    "type": "martial Weapon",
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
     "rarity": "artifact",
     "reqAttune": "Requires Attunement",
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": "1d10",
     "dmgType": "slashing",
+    "bonusWeapon": "+3",
     "properties": [
-      "V|XPHB"
+      "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Ebonbane",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Martial Weapon, artifact (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb\n\n---\n\nThe Darklord of the Domain of Dread known as the Shadowlands is Ebonbane, a sapient sword. Ebonbane uses its monster stat block while in Shadowborn Manor.\n\n**Bound to the Shadowlands.** When you enter a space outside of the Shadowlands, your Attunement|XPHB immediately ends and Ebonbane teleports to somewhere in Shadowborn Manor.\n\n**Insatiable Rage.** The sword demands destruction. If the sword hasn't slain a Celestial or a Humanoid for 3 days, you make a DC 17 Charisma saving throw at the next dawn. On a successful save, you take 8d8 Force damage. On a failed save, you are dominated by the sword, as if by the Dominate Monster spell, and the sword demands the blood of a Celestial or a Humanoid. The spell effect ends when the sword's demand is met.\n\n**Magic Weapon.** You gain a +3 bonus to attack rolls and damage rolls made with this magic weapon. When you hit a Celestial or a Humanoid with it, that attack also deals 3d6 Necrotic damage.\n\nWhile you hold this weapon, you have Advantage|XPHB on saving throws against spells and other magical effects.\n\n**Sentience.** Ebonbane is a sentient Chaotic Evil weapon with an Intelligence of 17, a Wisdom of 14, and a Charisma of 19. It has hearing and Truesight out to 120 feet. The weapon speaks Common and can communicate with its wielder telepathically. While you are attuned to it, Ebonbane also understands every language you know.\n\n**Personality.** Ebonbane was created to kill the paladin Kateri Shadowborn, and it still possesses a burning hatred for goodly knights. Ebonbane revels in seeing good defeated and hope vanquished. The sword bonds with any wielder that assists in its goals but always views it wielder as a lackey.\n\n**Destroying Ebonbane.** The only way to destroy Ebonbane is to forge a weapon from the Four Keys and reduce Ebonbane to 0 Hit Points|XPHB with it (see the Ebonbane stat block).",
     "descriptionHtml": "<p>The Darklord of the Domain of Dread known as the Shadowlands is Ebonbane, a sapient sword. Ebonbane uses its monster stat block while in Shadowborn Manor.</p>\n<div class=\"item-subentry\"><strong>Bound to the Shadowlands.</strong> <p>When you enter a space outside of the Shadowlands, your Attunement|XPHB immediately ends and Ebonbane teleports to somewhere in Shadowborn Manor.</p></div>\n<div class=\"item-subentry\"><strong>Insatiable Rage.</strong> <p>The sword demands destruction. If the sword hasn't slain a Celestial or a Humanoid for 3 days, you make a DC 17 Charisma saving throw at the next dawn. On a successful save, you take 8d8 Force damage. On a failed save, you are dominated by the sword, as if by the Dominate Monster spell, and the sword demands the blood of a Celestial or a Humanoid. The spell effect ends when the sword's demand is met.</p></div>\n<div class=\"item-subentry\"><strong>Magic Weapon.</strong> <p>You gain a +3 bonus to attack rolls and damage rolls made with this magic weapon. When you hit a Celestial or a Humanoid with it, that attack also deals 3d6 Necrotic damage.</p>\n<p>While you hold this weapon, you have Advantage|XPHB on saving throws against spells and other magical effects.</p></div>\n<div class=\"item-subentry\"><strong>Sentience.</strong> <p>Ebonbane is a sentient Chaotic Evil weapon with an Intelligence of 17, a Wisdom of 14, and a Charisma of 19. It has hearing and Truesight out to 120 feet. The weapon speaks Common and can communicate with its wielder telepathically. While you are attuned to it, Ebonbane also understands every language you know.</p></div>\n<div class=\"item-subentry\"><strong>Personality.</strong> <p>Ebonbane was created to kill the paladin Kateri Shadowborn, and it still possesses a burning hatred for goodly knights. Ebonbane revels in seeing good defeated and hope vanquished. The sword bonds with any wielder that assists in its goals but always views it wielder as a lackey.</p></div>\n<div class=\"item-subentry\"><strong>Destroying Ebonbane.</strong> <p>The only way to destroy Ebonbane is to forge a weapon from the Four Keys and reduce Ebonbane to 0 Hit Points|XPHB with it (see the Ebonbane stat block).</p></div>"
   },
   {
@@ -23,14 +52,24 @@
     "source": "RHW",
     "page": 126,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "uncommon",
     "reqAttune": "by a Humanoid",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, uncommon (by a Humanoid)*\n\n---\n\nA dire wolf's tooth dangles from this simple cord necklace. You gain a +1 bonus to ability checks and saving throws while you wear this necklace.\n\n**Curse.** This necklace is cursed. Attuning to the necklace curses you; this curse can't be removed until Harkon Lukas dies. As long as you remain cursed, you become a Werewolf serving Harkon Lukas under the DM's control during the night of a full moon.",
     "descriptionHtml": "<p>A dire wolf's tooth dangles from this simple cord necklace. You gain a +1 bonus to ability checks and saving throws while you wear this necklace.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>This necklace is cursed. Attuning to the necklace curses you; this curse can't be removed until Harkon Lukas dies. As long as you remain cursed, you become a Werewolf serving Harkon Lukas under the DM's control during the night of a full moon.</p></div>"
   }
 ]

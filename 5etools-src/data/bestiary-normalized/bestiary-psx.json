@@ -57,9 +57,22 @@
         "mod": -3
       }
     },
+    "str": 19,
+    "dex": 11,
+    "con": 15,
+    "int": 2,
+    "wis": 12,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -72,7 +85,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_tail_zl5v",
+        "id": "act_tail_istz",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}18 (4d6 + 4) bludgeoning damage. If the target is a creature, it must succeed on a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -168,11 +181,26 @@
         "mod": -3
       }
     },
+    "str": 15,
+    "dex": 13,
+    "con": 13,
+    "int": 2,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+2"
+    },
     "skills": {
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -184,7 +212,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dive_attack_by60",
+        "id": "act_dive_attack_ubig",
         "name": "Dive Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If the quetzalcoatlus is flying and dives at least 30 feet toward a target and then hits with a bite attack, the attack deals an extra 10 (3d6) damage to the target.</p>",
@@ -206,7 +234,7 @@
         }
       },
       {
-        "id": "act_flyby_hk7e",
+        "id": "act_flyby_nsj9",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The quetzalcoatlus doesn't provoke an opportunity attack when it flies out of an enemy's reach.</p>",
@@ -225,7 +253,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_b8c8",
+        "id": "act_bite_8fi8",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 10 ft., one creature. {@h}12 (3d6 + 2) piercing damage.</p>",
@@ -318,11 +346,26 @@
         "mod": -3
       }
     },
+    "str": 12,
+    "dex": 15,
+    "con": 10,
+    "int": 2,
+    "wis": 9,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+1"
+    },
     "skills": {
       "perception": "+1"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -334,7 +377,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_6cv8",
+        "id": "act_flyby_jkh8",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The pteranodon doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -353,7 +396,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_32dd",
+        "id": "act_bite_8mzh",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}6 (2d4 + 1) piercing damage.</p>",
@@ -446,9 +489,45 @@
         "mod": -2
       }
     },
+    "str": 14,
+    "dex": 20,
+    "con": 14,
+    "int": 6,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "lightning",
+      "thunder",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "unconscious"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -462,7 +541,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_air_form_v76r",
+        "id": "act_air_form_rl60",
         "name": "Air Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -481,7 +560,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ytar",
+        "id": "act_multiattack_st0r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes two slam attacks.</p>",
@@ -498,7 +577,7 @@
         }
       },
       {
-        "id": "act_slam_yc1m",
+        "id": "act_slam_4hkn",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}14 (2d8 + 5) bludgeoning damage.</p>",
@@ -520,7 +599,7 @@
         }
       },
       {
-        "id": "act_whirlwind__recharge_4__4tyw",
+        "id": "act_whirlwind__recharge_4__1ev0",
         "name": "Whirlwind (Recharge 4)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature in the elemental's space must make a DC 13 Strength saving throw. On a failure, a target takes 15 (3d8 + 2) bludgeoning damage and is flung up 20 feet away from the elemental in a random direction and knocked prone. If a thrown target strikes an object, such as a wall or floor, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 13 Dexterity saving throw or take the same damage and be knocked prone.</p><p>If the saving throw is successful, the target takes half the bludgeoning damage and isn't flung away or knocked prone.</p>",
@@ -620,11 +699,26 @@
         "mod": -2
       }
     },
+    "str": 21,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 3,
+    "save": {
+      "con": "+6"
+    },
     "saves": {
       "con": "+6"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -637,7 +731,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_stomp_21lo",
+        "id": "act_stomp_3dv3",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 20 ft., one target. {@h}27 (5d8 + 5) bludgeoning damage, and the target must succeed on a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -662,7 +756,7 @@
         }
       },
       {
-        "id": "act_tail_syak",
+        "id": "act_tail_5hg4",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 20 ft., one target. {@h}32 (6d8 + 5) bludgeoning damage.</p>",
@@ -755,9 +849,22 @@
         "mod": -3
       }
     },
+    "str": 20,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 11,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -770,7 +877,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_tail_lvvu",
+        "id": "act_tail_g57a",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}26 (6d6 + 5) piercing damage.</p>",
@@ -863,9 +970,26 @@
         "mod": -2
       }
     },
+    "str": 3,
+    "dex": 8,
+    "con": 11,
+    "int": 10,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "piercing"
+    ],
+    "vulnerable": [
+      "fire"
+    ],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -879,7 +1003,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_unxz",
+        "id": "act_false_appearance_134q",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the shrub remains motionless, it is indistinguishable from a normal shrub.</p>",
@@ -898,7 +1022,7 @@
     ],
     "actions": [
       {
-        "id": "act_rake_f60g",
+        "id": "act_rake_iq66",
         "name": "Rake",
         "actionType": "action",
         "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}1 (1d4 - 1) slashing damage.</p>",
@@ -991,11 +1115,29 @@
         "mod": -4
       }
     },
+    "str": 15,
+    "dex": 8,
+    "con": 14,
+    "int": 5,
+    "wis": 10,
+    "cha": 3,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+1"
+    },
     "skills": {
       "stealth": "+1"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "deafened"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -1009,7 +1151,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_ohbx",
+        "id": "act_false_appearance_y7vs",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the blight remains motionless, it is indistinguishable from a tangle of vines.</p>",
@@ -1028,7 +1170,7 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_hat1",
+        "id": "act_constrict_hqhb",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 10 ft., one target. {@h}9 (2d6 + 2) bludgeoning damage, and a Large or smaller target is grappled (escape DC 12). Until this grapple ends, the target is restrained, and the blight can't constrict another target.</p>",
@@ -1053,7 +1195,7 @@
         }
       },
       {
-        "id": "act_entangling_plants__recharge_5__nszq",
+        "id": "act_entangling_plants__recharge_5__f2us",
         "name": "Entangling Plants (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Grasping roots and vines sprout in a 15-foot radius centered on the blight, withering away after 1 minute. For the duration, that area is difficult terrain for nonplant creatures. In addition, each creature of the blight's choice in that area when the plants appear must succeed on a DC 12 Strength saving throw or become restrained. A creature can use its action to make a DC 12 Strength check, freeing itself or another entangled creature within reach on a success.</p>",
@@ -1144,11 +1286,26 @@
         "mod": -2
       }
     },
+    "str": 21,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 3,
+    "save": {
+      "con": "+6"
+    },
     "saves": {
       "con": "+6"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -1161,7 +1318,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_stomp_ont6",
+        "id": "act_stomp_b0km",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 20 ft., one target. {@h}27 (5d8 + 5) bludgeoning damage, and the target must succeed on a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -1186,7 +1343,7 @@
         }
       },
       {
-        "id": "act_tail_bf48",
+        "id": "act_tail_o8wv",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 20 ft., one target. {@h}32 (6d8 + 5) bludgeoning damage.</p>",
@@ -1279,9 +1436,22 @@
         "mod": -3
       }
     },
+    "str": 22,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 11,
+    "cha": 5,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -1293,7 +1463,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_trampling_charge_su6g",
+        "id": "act_trampling_charge_4auo",
         "name": "Trampling Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the triceratops moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 13 Strength saving throw or be knocked prone. If the target is prone, the triceratops can make one stomp attack against it as a bonus action.</p>",
@@ -1315,7 +1485,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_g4ux",
+        "id": "act_gore_vs4k",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}24 (4d8 + 6) piercing damage.</p>",
@@ -1337,7 +1507,7 @@
         }
       },
       {
-        "id": "act_stomp_lptv",
+        "id": "act_stomp_iguc",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one prone creature. {@h}22 (3d10 + 6) bludgeoning damage.</p>",
@@ -1430,12 +1600,38 @@
         "mod": -1
       }
     },
+    "str": 15,
+    "dex": 14,
+    "con": 16,
+    "int": 6,
+    "wis": 13,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+4"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical weapons",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 120 ft."
@@ -1447,7 +1643,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_sensitivity_1scy",
+        "id": "act_sunlight_sensitivity_9dlv",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the chupacabra has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -1466,7 +1662,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_oe6t",
+        "id": "act_bite_a21n",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -1491,7 +1687,7 @@
         }
       },
       {
-        "id": "act_drain_blood_nc5f",
+        "id": "act_drain_blood_32f8",
         "name": "Drain Blood",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature that is prone, incapacitated, or restrained. {@h}5 (1d6 + 2) necrotic damage. The target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken, and the chupacabra regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>",
@@ -1519,7 +1715,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_pin_6s4d",
+        "id": "act_pin_zv80",
         "name": "Pin",
         "actionType": "reaction",
         "descriptionHtml": "<p>If a creature within 5 feet of the chupacabra stands up, the chupacabra can use its reaction to make a bite attack.</p>",
@@ -1605,13 +1801,43 @@
         "mod": 4
       }
     },
+    "str": 16,
+    "dex": 20,
+    "con": 17,
+    "int": 18,
+    "wis": 20,
+    "cha": 18,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+5",
+      "wis": "+7",
+      "cha": "+6"
+    },
     "saves": {
       "con": "+5",
       "wis": "+7",
       "cha": "+6"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "psychic",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "truesight 120 ft."
@@ -1947,7 +2173,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_weapons_ki4r",
+        "id": "act_magic_weapons_m6c2",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The couatl's weapon attacks are magical.</p>",
@@ -1964,7 +2190,7 @@
         }
       },
       {
-        "id": "act_shielded_mind_mbzr",
+        "id": "act_shielded_mind_i1jr",
         "name": "Shielded Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The couatl is immune to scrying and to any effect that would sense its emotions, read its thoughts, or detect its location.</p>",
@@ -1983,7 +2209,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_05ji",
+        "id": "act_bite_zhlw",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one creature. {@h}8 (1d6 + 5) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 24 hours. Until this poison ends, the target is unconscious. Another creature can use an action to shake the target awake.</p>",
@@ -2008,7 +2234,7 @@
         }
       },
       {
-        "id": "act_constrict_btkr",
+        "id": "act_constrict_5n56",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one Medium or smaller creature. {@h}10 (2d6 + 3) bludgeoning damage, and the target is grappled (escape DC 15). Until this grapple ends, the target is restrained, and the couatl can't constrict another target.</p>",
@@ -2033,7 +2259,7 @@
         }
       },
       {
-        "id": "act_change_shape_y0vy",
+        "id": "act_change_shape_2j7p",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The couatl magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the couatl's choice).</p><p>In a new form, the couatl retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and other actions are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks. If the new form has a bite attack, the couatl can use its bite in that form.</p>",
@@ -2121,13 +2347,47 @@
         "mod": -1
       }
     },
+    "str": 17,
+    "dex": 15,
+    "con": 18,
+    "int": 8,
+    "wis": 13,
+    "cha": 8,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+5",
+      "wis": "+4",
+      "cha": "+2"
+    },
     "saves": {
       "dex": "+5",
       "wis": "+4",
       "cha": "+2"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "fire",
+      "lightning",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 120 ft."
@@ -2142,7 +2402,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_1syh",
+        "id": "act_magic_resistance_p1sx",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The vrock has advantage on saving throws against spells and other magical effects.</p>",
@@ -2161,7 +2421,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_57hb",
+        "id": "act_multiattack_bf1v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The vrock makes two attacks: one with its beak and one with its talons.</p>",
@@ -2178,7 +2438,7 @@
         }
       },
       {
-        "id": "act_beak_rvd7",
+        "id": "act_beak_tyap",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) piercing damage.</p>",
@@ -2200,7 +2460,7 @@
         }
       },
       {
-        "id": "act_talons_dzpe",
+        "id": "act_talons_9d87",
         "name": "Talons",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}14 (2d10 + 3) slashing damage.</p>",
@@ -2222,7 +2482,7 @@
         }
       },
       {
-        "id": "act_spores___recharge__aggg",
+        "id": "act_spores___recharge__n72i",
         "name": "Spores {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>A 15-foot-radius cloud of toxic spores extends out from the vrock. The spores spread around corners. Each creature in that area must succeed on a DC 14 Constitution saving throw or become poisoned. While poisoned in this way, a target takes 5 (1d10) poison damage at the start of each of its turns. A target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. Emptying a Holy Water (Flask) on the target also ends the effect on it.</p>",
@@ -2247,7 +2507,7 @@
         }
       },
       {
-        "id": "act_stunning_screech__1_day__d6ur",
+        "id": "act_stunning_screech__1_day__wb77",
         "name": "Stunning Screech (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The vrock emits a horrific screech. Each creature within 20 feet of it that can hear it and that isn't a demon must succeed on a DC 14 Constitution saving throw or be stunned until the end of the vrock's next turn.</p>",
@@ -2342,12 +2602,28 @@
         "mod": 4
       }
     },
+    "str": 10,
+    "dex": 12,
+    "con": 11,
+    "int": 14,
+    "wis": 15,
+    "cha": 18,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4",
+      "stealth": "+5"
+    },
     "skills": {
       "perception": "+4",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -2518,7 +2794,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_pjhh",
+        "id": "act_magic_resistance_up2g",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The dryad has advantage on saving throws against spells and other magical effects.</p>",
@@ -2535,7 +2811,7 @@
         }
       },
       {
-        "id": "act_speak_with_beasts_and_plants_yrs5",
+        "id": "act_speak_with_beasts_and_plants_6l6x",
         "name": "Speak with Beasts and Plants",
         "actionType": "trait",
         "descriptionHtml": "<p>The dryad can communicate with beasts and plants as if they shared a language.</p>",
@@ -2552,7 +2828,7 @@
         }
       },
       {
-        "id": "act_tree_stride_6qt7",
+        "id": "act_tree_stride_9wzp",
         "name": "Tree Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on her turn, the dryad can use 10 feet of her movement to step magically into one living tree within her reach and emerge from a second living tree within 60 feet of the first tree, appearing in an unoccupied space within 5 feet of the second tree. Both trees must be large or bigger.</p>",
@@ -2571,7 +2847,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_kmq2",
+        "id": "act_club_6cd1",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit (+6 to hit with shillelagh), reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage, or 8 (1d8 + 4) bludgeoning damage with shillelagh.</p>",
@@ -2597,7 +2873,7 @@
         }
       },
       {
-        "id": "act_fey_charm_n9hu",
+        "id": "act_fey_charm_29s2",
         "name": "Fey Charm",
         "actionType": "action",
         "descriptionHtml": "<p>The dryad targets one humanoid or beast that she can see within 30 feet of her. If the target can see the dryad, it must succeed on a DC 14 Wisdom saving throw or be magically charmed. The charmed creature regards the dryad as a trusted friend to be heeded and protected. Although the target isn't under the dryad's control, it takes the dryad's requests or actions in the most favorable way it can.</p><p>Each time the dryad or its allies do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the dryad dies, is on a different plane of existence from the target, or ends the effect as a bonus action. If a target's saving throw is successful, the target is immune to the dryad's Fey Charm for the next 24 hours.</p><p>The dryad can have no more than one humanoid and up to three beasts charmed at a time.</p>",
@@ -2688,9 +2964,42 @@
         "mod": -3
       }
     },
+    "str": 20,
+    "dex": 8,
+    "con": 20,
+    "int": 5,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [
+      "thunder"
+    ],
+    "conditionImmune": [
+      "exhaustion",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "unconscious"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft., tremorsense 60 ft."
@@ -2704,7 +3013,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_earth_glide_b3rp",
+        "id": "act_earth_glide_w27g",
         "name": "Earth Glide",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can burrow through nonmagical, unworked earth and stone. While doing so, the elemental doesn't disturb the material it moves through.</p>",
@@ -2721,7 +3030,7 @@
         }
       },
       {
-        "id": "act_siege_monster_bdsq",
+        "id": "act_siege_monster_nw9h",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental deals double damage to objects and structures.</p>",
@@ -2740,7 +3049,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3voa",
+        "id": "act_multiattack_86mp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes two slam attacks.</p>",
@@ -2757,7 +3066,7 @@
         }
       },
       {
-        "id": "act_slam_fi3f",
+        "id": "act_slam_knuf",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}14 (2d8 + 5) bludgeoning damage.</p>",
@@ -2850,13 +3159,47 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 30,
+    "int": 3,
+    "wis": 11,
+    "cha": 11,
     "proficiencyBonus": 9,
+    "save": {
+      "int": "+5",
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "int": "+5",
       "wis": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -2868,7 +3211,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__bifg",
+        "id": "act_legendary_resistance__3_day__fx4o",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -2885,7 +3228,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_cee8",
+        "id": "act_magic_resistance_vsyf",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -2902,7 +3245,7 @@
         }
       },
       {
-        "id": "act_siege_monster_orhb",
+        "id": "act_siege_monster_fv8v",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -2919,7 +3262,7 @@
         }
       },
       {
-        "id": "act_uniqueness_8gie",
+        "id": "act_uniqueness_hb1d",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -2938,7 +3281,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_plo7",
+        "id": "act_frightful_presence_z5f1",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -2958,7 +3301,7 @@
         }
       },
       {
-        "id": "act_swallow_lsea",
+        "id": "act_swallow_muez",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -2990,7 +3333,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_lz72",
+          "id": "act_attack_vanp",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -3007,7 +3350,7 @@
           }
         },
         {
-          "id": "act_move_nhxr",
+          "id": "act_move_btvq",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -3024,7 +3367,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__k7rl",
+          "id": "act_chomp__costs_2_actions__o7hd",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -3106,13 +3449,47 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 30,
+    "int": 3,
+    "wis": 11,
+    "cha": 11,
     "proficiencyBonus": 9,
+    "save": {
+      "int": "+5",
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "int": "+5",
       "wis": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -3124,7 +3501,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__ado9",
+        "id": "act_legendary_resistance__3_day__82y4",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -3141,7 +3518,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_1zln",
+        "id": "act_magic_resistance_vocx",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -3158,7 +3535,7 @@
         }
       },
       {
-        "id": "act_siege_monster_vq3y",
+        "id": "act_siege_monster_xg3e",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -3175,7 +3552,7 @@
         }
       },
       {
-        "id": "act_uniqueness_p5gi",
+        "id": "act_uniqueness_07gy",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -3194,7 +3571,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_793x",
+        "id": "act_frightful_presence_i2wt",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -3214,7 +3591,7 @@
         }
       },
       {
-        "id": "act_swallow_rrcr",
+        "id": "act_swallow_yu7e",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -3246,7 +3623,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_2piv",
+          "id": "act_attack_o6ow",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -3263,7 +3640,7 @@
           }
         },
         {
-          "id": "act_move_qqrx",
+          "id": "act_move_vvbe",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -3280,7 +3657,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__8j4p",
+          "id": "act_chomp__costs_2_actions__en0h",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -3362,13 +3739,47 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 30,
+    "int": 3,
+    "wis": 11,
+    "cha": 11,
     "proficiencyBonus": 9,
+    "save": {
+      "int": "+5",
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "int": "+5",
       "wis": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -3380,7 +3791,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__3mmm",
+        "id": "act_legendary_resistance__3_day__25np",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -3397,7 +3808,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_erdm",
+        "id": "act_magic_resistance_arbj",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -3414,7 +3825,7 @@
         }
       },
       {
-        "id": "act_siege_monster_2wrj",
+        "id": "act_siege_monster_tf4s",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -3431,7 +3842,7 @@
         }
       },
       {
-        "id": "act_uniqueness_l89o",
+        "id": "act_uniqueness_eld2",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -3450,7 +3861,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_0hc0",
+        "id": "act_frightful_presence_dg4i",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -3470,7 +3881,7 @@
         }
       },
       {
-        "id": "act_swallow_2knm",
+        "id": "act_swallow_99y7",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -3502,7 +3913,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_lilh",
+          "id": "act_attack_jk9d",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -3519,7 +3930,7 @@
           }
         },
         {
-          "id": "act_move_11my",
+          "id": "act_move_60cl",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -3536,7 +3947,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__eioh",
+          "id": "act_chomp__costs_2_actions__eid6",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -3618,13 +4029,47 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 30,
+    "int": 3,
+    "wis": 11,
+    "cha": 11,
     "proficiencyBonus": 9,
+    "save": {
+      "int": "+5",
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "int": "+5",
       "wis": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -3636,7 +4081,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__eo5l",
+        "id": "act_legendary_resistance__3_day__nb5z",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -3653,7 +4098,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_agmw",
+        "id": "act_magic_resistance_qdnj",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -3670,7 +4115,7 @@
         }
       },
       {
-        "id": "act_siege_monster_kvx5",
+        "id": "act_siege_monster_nlx6",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -3687,7 +4132,7 @@
         }
       },
       {
-        "id": "act_uniqueness_6582",
+        "id": "act_uniqueness_xt50",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -3706,7 +4151,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_e3yl",
+        "id": "act_frightful_presence_ws00",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -3726,7 +4171,7 @@
         }
       },
       {
-        "id": "act_swallow_3qoc",
+        "id": "act_swallow_55kz",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -3758,7 +4203,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_s6hl",
+          "id": "act_attack_vxio",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -3775,7 +4220,7 @@
           }
         },
         {
-          "id": "act_move_ls6u",
+          "id": "act_move_o72r",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -3792,7 +4237,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__fhfi",
+          "id": "act_chomp__costs_2_actions__ula1",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -3874,13 +4319,47 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 30,
+    "int": 3,
+    "wis": 11,
+    "cha": 11,
     "proficiencyBonus": 9,
+    "save": {
+      "int": "+5",
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "int": "+5",
       "wis": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -3892,7 +4371,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__tluy",
+        "id": "act_legendary_resistance__3_day__ozoy",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -3909,7 +4388,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_0as9",
+        "id": "act_magic_resistance_g5ky",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -3926,7 +4405,7 @@
         }
       },
       {
-        "id": "act_siege_monster_8vuq",
+        "id": "act_siege_monster_lp0s",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -3943,7 +4422,7 @@
         }
       },
       {
-        "id": "act_uniqueness_b40z",
+        "id": "act_uniqueness_uoi9",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -3962,7 +4441,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_0te8",
+        "id": "act_frightful_presence_srsd",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -3982,7 +4461,7 @@
         }
       },
       {
-        "id": "act_swallow_hms5",
+        "id": "act_swallow_menu",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -4014,7 +4493,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_od1k",
+          "id": "act_attack_4mbn",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -4031,7 +4510,7 @@
           }
         },
         {
-          "id": "act_move_ev19",
+          "id": "act_move_8xdo",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -4048,7 +4527,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__y1ym",
+          "id": "act_chomp__costs_2_actions__1bzs",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -4130,13 +4609,47 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 30,
+    "int": 3,
+    "wis": 11,
+    "cha": 11,
     "proficiencyBonus": 9,
+    "save": {
+      "int": "+5",
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "int": "+5",
       "wis": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -4148,7 +4661,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__v0md",
+        "id": "act_legendary_resistance__3_day__vwov",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -4165,7 +4678,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_v8nw",
+        "id": "act_magic_resistance_hy2x",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -4182,7 +4695,7 @@
         }
       },
       {
-        "id": "act_siege_monster_vlgt",
+        "id": "act_siege_monster_6v3y",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -4199,7 +4712,7 @@
         }
       },
       {
-        "id": "act_uniqueness_l4sm",
+        "id": "act_uniqueness_3tzy",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -4218,7 +4731,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_1gph",
+        "id": "act_frightful_presence_g0oc",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -4238,7 +4751,7 @@
         }
       },
       {
-        "id": "act_swallow_3pio",
+        "id": "act_swallow_c9ve",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -4270,7 +4783,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_ph6o",
+          "id": "act_attack_guft",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -4287,7 +4800,7 @@
           }
         },
         {
-          "id": "act_move_g6wh",
+          "id": "act_move_h8el",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -4304,7 +4817,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__dkxo",
+          "id": "act_chomp__costs_2_actions__d802",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -4386,13 +4899,49 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 30,
+    "int": 3,
+    "wis": 11,
+    "cha": 11,
     "proficiencyBonus": 9,
+    "save": {
+      "int": "+5",
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "int": "+5",
       "wis": "+9",
       "cha": "+9"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -4404,7 +4953,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__er0j",
+        "id": "act_legendary_resistance__3_day__qluv",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -4421,7 +4970,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_b2ad",
+        "id": "act_magic_resistance_9m62",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -4438,7 +4987,7 @@
         }
       },
       {
-        "id": "act_siege_monster_3l3b",
+        "id": "act_siege_monster_4yf9",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -4455,7 +5004,7 @@
         }
       },
       {
-        "id": "act_uniqueness_sanu",
+        "id": "act_uniqueness_2gmo",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -4474,7 +5023,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_hyln",
+        "id": "act_frightful_presence_adev",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -4494,7 +5043,7 @@
         }
       },
       {
-        "id": "act_swallow_yxwp",
+        "id": "act_swallow_7932",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -4526,7 +5075,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_gzt5",
+          "id": "act_attack_s0z0",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -4543,7 +5092,7 @@
           }
         },
         {
-          "id": "act_move_fs8c",
+          "id": "act_move_0y3p",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -4560,7 +5109,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__rgdf",
+          "id": "act_chomp__costs_2_actions__scz0",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -4642,11 +5191,26 @@
         "mod": -3
       }
     },
+    "str": 19,
+    "dex": 13,
+    "con": 17,
+    "int": 2,
+    "wis": 12,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+5"
+    },
     "skills": {
       "perception": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": ""
@@ -4658,7 +5222,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pounce_1f4d",
+        "id": "act_pounce_zjhf",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the allosaurus moves at least 30 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 13 Strength saving throw or be knocked prone. If the target is prone, the allosaurus can make one bite attack against it as a bonus action.</p>",
@@ -4680,7 +5244,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_ebga",
+        "id": "act_bite_6poa",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}15 (2d10 + 4) piercing damage.</p>",
@@ -4702,7 +5266,7 @@
         }
       },
       {
-        "id": "act_claw_b6su",
+        "id": "act_claw_sl9l",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage.</p>",
@@ -4795,9 +5359,44 @@
         "mod": -2
       }
     },
+    "str": 10,
+    "dex": 17,
+    "con": 16,
+    "int": 6,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "unconscious"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -4811,7 +5410,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fire_form_wv1d",
+        "id": "act_fire_form_z36e",
         "name": "Fire Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can move through a space as narrow as 1 inch wide without squeezing. A creature that touches the elemental or hits it with a melee attack while within 5 feet of it takes 5 (1d10) fire damage. In addition, the elemental can enter a hostile creature's space and stop there. The first time it enters a creature's space on a turn, that creature takes 5 (1d10) fire damage and catches fire; until someone takes an action to douse the fire, the creature takes 5 (1d10) fire damage at the start of each of its turns.</p>",
@@ -4841,7 +5440,7 @@
         }
       },
       {
-        "id": "act_illumination_9170",
+        "id": "act_illumination_nxs0",
         "name": "Illumination",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental sheds bright light in a 30-foot radius and dim light in an additional 30 feet.</p>",
@@ -4858,7 +5457,7 @@
         }
       },
       {
-        "id": "act_water_susceptibility_8vwp",
+        "id": "act_water_susceptibility_r982",
         "name": "Water Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>For every 5 feet the elemental moves in water, or for every gallon of water splashed on it, it takes 1 cold damage.</p>",
@@ -4877,7 +5476,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7cnm",
+        "id": "act_multiattack_e5uj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes two touch attacks.</p>",
@@ -4894,7 +5493,7 @@
         }
       },
       {
-        "id": "act_touch_mher",
+        "id": "act_touch_tl00",
         "name": "Touch",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) fire damage. If the target is a creature or a flammable object, it ignites. Until a creature takes an action to douse the fire, the target takes 5 (1d10) fire damage at the start of each of its turns.</p>",
@@ -4991,11 +5590,26 @@
         "mod": -2
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 13,
+    "int": 4,
+    "wis": 12,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3"
+    },
     "skills": {
       "perception": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -5008,7 +5622,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_aq9s",
+        "id": "act_multiattack_ilft",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The deathspitter makes three attacks: one with its bite and two with its claws.</p>",
@@ -5025,7 +5639,7 @@
         }
       },
       {
-        "id": "act_bite_3hro",
+        "id": "act_bite_mgug",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
@@ -5047,7 +5661,7 @@
         }
       },
       {
-        "id": "act_claw_6kxy",
+        "id": "act_claw_r19g",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) slashing damage.</p>",
@@ -5069,7 +5683,7 @@
         }
       },
       {
-        "id": "act_spit_poison_gxa9",
+        "id": "act_spit_poison_w8w0",
         "name": "Spit Poison",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 15/30 ft., one creature. {@h}The target must make a DC 13 Constitution saving throw, taking 18 (4d8) poison damage on a failed save, or half as much damage on a successful one. In addition, a creature that fails its saving throw is blinded until the end of the deathspitter's next turn.</p>",
@@ -5165,16 +5779,36 @@
         "mod": -2
       }
     },
+    "str": 24,
+    "dex": 12,
+    "con": 18,
+    "int": 12,
+    "wis": 16,
+    "cha": 6,
     "proficiencyBonus": 4,
+    "save": {
+      "str": "+11",
+      "con": "+8",
+      "wis": "+7",
+      "cha": "+2"
+    },
     "saves": {
       "str": "+11",
       "con": "+8",
       "wis": "+7",
       "cha": "+2"
     },
+    "skill": {
+      "perception": "+7"
+    },
     "skills": {
       "perception": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": ""
@@ -5186,7 +5820,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__bwhm",
+        "id": "act_legendary_resistance__3_day__dnmb",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gishath fails a saving throw, it can choose to succeed instead.</p>",
@@ -5205,7 +5839,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_txgm",
+        "id": "act_multiattack_4wsr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gishath makes two attacks: one with its bite and one with its stomp or tail. It can't make both attacks against the same target.</p>",
@@ -5222,7 +5856,7 @@
         }
       },
       {
-        "id": "act_bite_nozh",
+        "id": "act_bite_b0iy",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 15 ft., one target. {@h}39 (5d12 + 7) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or it is grappled (escape DC 19). Until this grapple ends, the target is restrained, and Gishath can't bite another target.</p>",
@@ -5247,7 +5881,7 @@
         }
       },
       {
-        "id": "act_swallow_d8fb",
+        "id": "act_swallow_v2ls",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>Gishath makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage and is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside Gishath, and it takes 21 (6d6) acid damage at the start of each of Gishath's turns.</p><p>If Gishath takes 30 damage or more on a single turn from a creature inside it, it must succeed on a DC 18 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If Gishath dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -5272,7 +5906,7 @@
         }
       },
       {
-        "id": "act_stomp_fdb1",
+        "id": "act_stomp_gx7f",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}29 (5d8 + 7) bludgeoning damage, and the target must succeed on a DC 19 Strength saving throw or be knocked prone.</p>",
@@ -5297,7 +5931,7 @@
         }
       },
       {
-        "id": "act_tail_ncvm",
+        "id": "act_tail_1dce",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 15 ft., one target. {@h}25 (4d8 + 7) bludgeoning damage.</p>",
@@ -5326,7 +5960,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_4l54",
+          "id": "act_attack_a77r",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Gishath makes one stomp or tail attack.</p>",
@@ -5343,7 +5977,7 @@
           }
         },
         {
-          "id": "act_roar__costs_2_actions__s6et",
+          "id": "act_roar__costs_2_actions__ct5v",
           "name": "Roar (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Each creature that is within 120 feet of Gishath and can hear it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to Gishath's Roar for the next 24 hours.</p>",
@@ -5428,11 +6062,26 @@
         "mod": -1
       }
     },
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 2,
+    "wis": 13,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+5"
+    },
     "skills": {
       "perception": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "darkvision 60 ft."
@@ -5444,7 +6093,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_px8n",
+        "id": "act_keen_sight_og4w",
         "name": "Keen Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The griffon has advantage on Wisdom (Perception) checks that rely on sight.</p>",
@@ -5463,7 +6112,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vhj8",
+        "id": "act_multiattack_0bb2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The griffon makes two attacks: one with its beak and one with its claws.</p>",
@@ -5480,7 +6129,7 @@
         }
       },
       {
-        "id": "act_beak_83i8",
+        "id": "act_beak_x093",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) piercing damage.</p>",
@@ -5502,7 +6151,7 @@
         }
       },
       {
-        "id": "act_claws_52m2",
+        "id": "act_claws_zv6s",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
@@ -5595,11 +6244,26 @@
         "mod": -3
       }
     },
+    "str": 15,
+    "dex": 10,
+    "con": 13,
+    "int": 2,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+2"
+    },
     "skills": {
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -5612,7 +6276,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_tail_7wc0",
+        "id": "act_tail_sgmk",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (1d10 + 2) bludgeoning damage.</p>",
@@ -5705,9 +6369,22 @@
         "mod": -2
       }
     },
+    "str": 17,
+    "dex": 11,
+    "con": 12,
+    "int": 3,
+    "wis": 12,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -5719,7 +6396,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_c97b",
+        "id": "act_charge_lzy0",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the goat moves at least 20 feet straight toward a target and then hits it with a ram attack on the same turn, the target takes an extra 5 (2d4) bludgeoning damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -5744,7 +6421,7 @@
         }
       },
       {
-        "id": "act_sure_footed_wi80",
+        "id": "act_sure_footed_be43",
         "name": "Sure-Footed",
         "actionType": "trait",
         "descriptionHtml": "<p>The goat has advantage on Strength and Dexterity saving throws made against effects that would knock it prone.</p>",
@@ -5763,7 +6440,7 @@
     ],
     "actions": [
       {
-        "id": "act_ram_ggyz",
+        "id": "act_ram_qezq",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}8 (2d4 + 3) bludgeoning damage.</p>",
@@ -5856,9 +6533,22 @@
         "mod": 1
       }
     },
+    "str": 12,
+    "dex": 13,
+    "con": 12,
+    "int": 7,
+    "wis": 10,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -5873,7 +6563,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_lxs8",
+        "id": "act_multiattack_cioj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The harpy makes two attacks: one with its claws and one with its club.</p>",
@@ -5890,7 +6580,7 @@
         }
       },
       {
-        "id": "act_claws_b3ve",
+        "id": "act_claws_esh8",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}6 (2d4 + 1) slashing damage.</p>",
@@ -5912,7 +6602,7 @@
         }
       },
       {
-        "id": "act_club_ph7h",
+        "id": "act_club_et4j",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
@@ -5934,7 +6624,7 @@
         }
       },
       {
-        "id": "act_luring_song_a88c",
+        "id": "act_luring_song_rfac",
         "name": "Luring Song",
         "actionType": "action",
         "descriptionHtml": "<p>The harpy sings a magical melody. Every humanoid and giant within 300 feet of the harpy that can hear the song must succeed on a DC 11 Wisdom saving throw or be charmed until the song ends. The harpy must take a bonus action on its subsequent turns to continue singing. It can stop singing at any time. The song ends if the harpy is incapacitated.</p><p>While charmed by the harpy, a target is incapacitated and ignores the songs of other harpies. If the charmed target is more than 5 feet away from the harpy, the target must move on its turn toward the harpy by the most direct route. It doesn't avoid opportunity attacks, but before moving into damaging terrain, such as lava or a pit, and whenever it takes damage from a source other than the harpy, a target can repeat the saving throw. A creature can also repeat the saving throw at the end of each of its turns. If a creature's saving throw is successful, the effect ends on it.</p><p>A target that successfully saves is immune to this harpy's song for the next 24 hours.</p>",
@@ -6025,12 +6715,28 @@
         "mod": -4
       }
     },
+    "str": 12,
+    "dex": 13,
+    "con": 11,
+    "int": 2,
+    "wis": 10,
+    "cha": 3,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+2",
+      "stealth": "+3"
+    },
     "skills": {
       "perception": "+2",
       "stealth": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 30 ft."
@@ -6042,7 +6748,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_eubt",
+        "id": "act_amphibious_czbk",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The frog can breathe air and water.</p>",
@@ -6059,7 +6765,7 @@
         }
       },
       {
-        "id": "act_standing_leap_okzt",
+        "id": "act_standing_leap_u6ql",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The frog's long jump is up to 20 feet and its high jump is up to 10 feet, with or without a running start.</p>",
@@ -6078,7 +6784,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_qjvr",
+        "id": "act_bite_du4p",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) piercing damage, and the target is grappled (escape DC 11). Until this grapple ends, the target is restrained, and the frog can't bite another target.</p>",
@@ -6103,7 +6809,7 @@
         }
       },
       {
-        "id": "act_swallow_mvcp",
+        "id": "act_swallow_v9vu",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The frog makes one bite attack against a Small or smaller target it is grappling. If the attack hits, the target is swallowed, and the grapple ends. The swallowed target is blinded and restrained, it has Cover against attacks and other effects outside the frog, and it takes 5 (2d4) acid damage at the start of each of the frog's turns. The frog can have only one target swallowed at a time. If the frog dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 5 feet of movement, exiting prone.</p>",
@@ -6196,11 +6902,26 @@
         "mod": -2
       }
     },
+    "str": 2,
+    "dex": 14,
+    "con": 8,
+    "int": 2,
+    "wis": 12,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3"
+    },
     "skills": {
       "perception": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -6212,7 +6933,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_mimicry_gzmn",
+        "id": "act_mimicry_ck2p",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The raven can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
@@ -6234,7 +6955,7 @@
     ],
     "actions": [
       {
-        "id": "act_beak_z6b8",
+        "id": "act_beak_7vdl",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}1 piercing damage.</p>",
@@ -6322,11 +7043,26 @@
         "mod": -2
       }
     },
+    "str": 2,
+    "dex": 14,
+    "con": 8,
+    "int": 2,
+    "wis": 12,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3"
+    },
     "skills": {
       "perception": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -6338,7 +7074,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_mimicry_jxo8",
+        "id": "act_mimicry_rqot",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The raven can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
@@ -6360,7 +7096,7 @@
     ],
     "actions": [
       {
-        "id": "act_beak_wg7u",
+        "id": "act_beak_srtg",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}1 piercing damage.</p>",
@@ -6448,9 +7184,22 @@
         "mod": -4
       }
     },
+    "str": 2,
+    "dex": 16,
+    "con": 9,
+    "int": 1,
+    "wis": 7,
+    "cha": 2,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 8,
     "senses": {
       "passivePerception": 8,
       "sensesString": "darkvision 60 ft."
@@ -6462,7 +7211,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_chug",
+        "id": "act_blood_frenzy_4sqy",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The quipper has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -6479,7 +7228,7 @@
         }
       },
       {
-        "id": "act_water_breathing_zn7p",
+        "id": "act_water_breathing_38ds",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>The quipper can breathe only underwater.</p>",
@@ -6498,7 +7247,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_w4no",
+        "id": "act_bite_hsky",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}1 piercing damage.</p>",
@@ -6586,11 +7335,26 @@
         "mod": -2
       }
     },
+    "str": 21,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+5"
+    },
     "skills": {
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -6602,7 +7366,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_hnvv",
+        "id": "act_hold_breath_jlub",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The crocodile can hold its breath for 30 minutes.</p>",
@@ -6621,7 +7385,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0x33",
+        "id": "act_multiattack_xdka",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The crocodile makes two attacks: one with its bite and one with its tail.</p>",
@@ -6638,7 +7402,7 @@
         }
       },
       {
-        "id": "act_bite_x876",
+        "id": "act_bite_g4mz",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}21 (3d10 + 5) piercing damage, and the target is grappled (escape DC 16). Until this grapple ends, the target is restrained, and the crocodile can't bite another target.</p>",
@@ -6663,7 +7427,7 @@
         }
       },
       {
-        "id": "act_tail_7esi",
+        "id": "act_tail_fqby",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target not grappled by the crocodile. {@h}14 (2d8 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 16 Strength saving throw or be knocked prone.</p>",
@@ -6759,11 +7523,35 @@
         "mod": -3
       }
     },
+    "str": 18,
+    "dex": 8,
+    "con": 16,
+    "int": 5,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+2"
+    },
     "skills": {
       "stealth": "+2"
     },
+    "immune": [
+      "lightning"
+    ],
+    "resist": [
+      "cold",
+      "fire"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "deafened",
+      "exhaustion"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -6775,7 +7563,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_lightning_absorption_6hbr",
+        "id": "act_lightning_absorption_6c9y",
         "name": "Lightning Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the shambling mound is subjected to lightning damage, it takes no damage and regains a number of hit points equal to the lightning damage dealt.</p>",
@@ -6794,7 +7582,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2wwb",
+        "id": "act_multiattack_2yb4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The shambling mound makes two slam attacks. If both attacks hit a Medium or smaller target, the target is grappled (escape DC 14), and the shambling mound uses its Engulf on it.</p>",
@@ -6814,7 +7602,7 @@
         }
       },
       {
-        "id": "act_slam_ggs0",
+        "id": "act_slam_2fn3",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}13 (2d8 + 4) bludgeoning damage.</p>",
@@ -6836,7 +7624,7 @@
         }
       },
       {
-        "id": "act_engulf_9swi",
+        "id": "act_engulf_nt3j",
         "name": "Engulf",
         "actionType": "action",
         "descriptionHtml": "<p>The shambling mound engulfs a Medium or smaller creature grappled by it. The engulfed target is blinded, restrained, and unable to breathe, and it must succeed on a DC 14 Constitution saving throw at the start of each of the mound's turns or take 13 (2d8 + 4) bludgeoning damage. If the mound moves, the engulfed target moves with it. The mound can have only one creature engulfed at a time.</p>",
@@ -6932,9 +7720,34 @@
         "mod": -5
       }
     },
+    "str": 14,
+    "dex": 11,
+    "con": 13,
+    "int": 1,
+    "wis": 3,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 6,
     "senses": {
       "passivePerception": 6,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -6946,7 +7759,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_susceptibility_rla7",
+        "id": "act_antimagic_susceptibility_eo73",
         "name": "Antimagic Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The armor is incapacitated while in the area of an antimagic field. If targeted by dispel magic, the armor must succeed on a Constitution saving throw against the caster's spell save DC or fall unconscious for 1 minute.</p>",
@@ -6963,7 +7776,7 @@
         }
       },
       {
-        "id": "act_false_appearance_gdu5",
+        "id": "act_false_appearance_uhzv",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the armor remains motionless, it is indistinguishable from a normal suit of armor.</p>",
@@ -6982,7 +7795,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9mq6",
+        "id": "act_multiattack_i804",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The armor makes two melee attacks.</p>",
@@ -6999,7 +7812,7 @@
         }
       },
       {
-        "id": "act_slam_v7jw",
+        "id": "act_slam_dghi",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
@@ -7092,11 +7905,49 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 10,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [
+      "force",
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks that aren't adamantine",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "stunned"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -7110,7 +7961,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_cqew",
+        "id": "act_magic_resistance_gw7z",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The helmed horror has advantage on saving throws against spells and other magical effects.</p>",
@@ -7127,7 +7978,7 @@
         }
       },
       {
-        "id": "act_spell_immunity_w5v0",
+        "id": "act_spell_immunity_j1dc",
         "name": "Spell Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The helmed horror is immune to three spells chosen by its creator. Typical immunities include fireball, heat metal, and lightning bolt.</p>",
@@ -7146,7 +7997,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2p1h",
+        "id": "act_multiattack_wjmp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The helmed horror makes two longsword attacks.</p>",
@@ -7163,7 +8014,7 @@
         }
       },
       {
-        "id": "act_longsword_mdgz",
+        "id": "act_longsword_o21m",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
@@ -7260,9 +8111,30 @@
         "mod": -4
       }
     },
+    "str": 18,
+    "dex": 8,
+    "con": 18,
+    "int": 7,
+    "wis": 10,
+    "cha": 3,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 10 ft., darkvision 60 ft."
@@ -7276,7 +8148,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bound_hha7",
+        "id": "act_bound_ehvp",
         "name": "Bound",
         "actionType": "trait",
         "descriptionHtml": "<p>The shield guardian is magically bound to an amulet. As long as the guardian and its amulet are on the same plane of existence, the amulet's wearer can telepathically call the guardian to travel to it, and the guardian knows the distance and direction to the amulet. If the guardian is within 60 feet of the amulet's wearer, half of any damage the wearer takes (rounded up) is transferred to the guardian.</p>",
@@ -7293,7 +8165,7 @@
         }
       },
       {
-        "id": "act_regeneration_nbo1",
+        "id": "act_regeneration_4csc",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The shield guardian regains 10 hit points at the start of its turn if it has at least 1 hit point.</p>",
@@ -7310,7 +8182,7 @@
         }
       },
       {
-        "id": "act_spell_storing_3c7m",
+        "id": "act_spell_storing_48vy",
         "name": "Spell Storing",
         "actionType": "trait",
         "descriptionHtml": "<p>A spellcaster who wears the shield guardian's amulet can cause the guardian to store one spell of 4th level or lower. To do so, the wearer must cast the spell on the guardian. The spell has no effect but is stored within the guardian. When commanded to do so by the wearer or when a situation arises that was predefined by the spellcaster, the guardian casts the stored spell with any parameters set by the original caster, requiring no components. When the spell is cast or a new spell is stored, any previously stored spell is lost.</p>",
@@ -7329,7 +8201,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jfi4",
+        "id": "act_multiattack_8nep",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The guardian makes two fist attacks.</p>",
@@ -7346,7 +8218,7 @@
         }
       },
       {
-        "id": "act_fist_hmq1",
+        "id": "act_fist_5bf6",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage.</p>",
@@ -7371,7 +8243,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shield_jd4c",
+        "id": "act_shield_fylm",
         "name": "Shield",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature makes an attack against the wearer of the guardian's amulet, the guardian grants a +2 bonus to the wearer's AC if the guardian is within 5 feet of the wearer.</p>",
@@ -7457,9 +8329,41 @@
         "mod": -5
       }
     },
+    "str": 22,
+    "dex": 9,
+    "con": 20,
+    "int": 3,
+    "wis": 11,
+    "cha": 1,
     "proficiencyBonus": 4,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks that aren't adamantine",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 120 ft."
@@ -7473,7 +8377,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_form_0nwl",
+        "id": "act_immutable_form_iery",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem is immune to any spell or effect that would alter its form.</p>",
@@ -7490,7 +8394,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_3nea",
+        "id": "act_magic_resistance_98cu",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem has advantage on saving throws against spells and other magical effects.</p>",
@@ -7507,7 +8411,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_nosg",
+        "id": "act_magic_weapons_idk8",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem's weapon attacks are magical.</p>",
@@ -7526,7 +8430,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ei6h",
+        "id": "act_multiattack_husa",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The golem makes two slam attacks.</p>",
@@ -7543,7 +8447,7 @@
         }
       },
       {
-        "id": "act_slam_tfc8",
+        "id": "act_slam_9ccy",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one target. {@h}19 (3d8 + 6) bludgeoning damage.</p>",
@@ -7565,7 +8469,7 @@
         }
       },
       {
-        "id": "act_slow__recharge_5__jke0",
+        "id": "act_slow__recharge_5__an87",
         "name": "Slow (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The golem targets one or more creatures it can see within 10 feet of it. Each target must make a DC 17 Wisdom saving throw against this magic. On a failed save, a target can't use reactions, its speed is halved, and it can't make more than one attack on its turn. In addition, the target can take either an action or a bonus action on its turn, not both. These effects last for 1 minute. A target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -7656,16 +8560,48 @@
         "mod": 2
       }
     },
+    "str": 28,
+    "dex": 10,
+    "con": 20,
+    "int": 13,
+    "wis": 14,
+    "cha": 15,
     "proficiencyBonus": 5,
+    "save": {
+      "dex": "+5",
+      "con": "+10",
+      "wis": "+7",
+      "cha": "+7"
+    },
     "saves": {
       "dex": "+5",
       "con": "+10",
       "wis": "+7",
       "cha": "+7"
     },
+    "skill": {
+      "perception": "+7"
+    },
     "skills": {
       "perception": "+7"
     },
+    "immune": [
+      "fire"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 120 ft."
@@ -7680,7 +8616,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_throes_2wq7",
+        "id": "act_death_throes_ycpm",
         "name": "Death Throes",
         "actionType": "trait",
         "descriptionHtml": "<p>When the sunbird dies, it explodes, and each creature within 30 feet of it must make a DC 18 Dexterity saving throw, taking 42 (12d6) fire damage on a failed save, or half as much damage on a successful one. The explosion ignites flammable objects in that area that aren't being worn or carried. The sunbird's body turns to ash, but an egg is left where the sunbird was.</p>",
@@ -7705,7 +8641,7 @@
         }
       },
       {
-        "id": "act_fire_aura_4033",
+        "id": "act_fire_aura_lxwe",
         "name": "Fire Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of the sunbird's turns, each creature within 5 feet of it takes 11 (2d10) fire damage, and flammable objects in the area that aren't being worn or carried ignite. A creature that touches the sunbird or hits it with a melee attack while within 5 feet of it takes 11 (2d10) fire damage. The aura also sheds bright light in a 60-foot radius and dim light for an additional 60 feet.</p>",
@@ -7731,7 +8667,7 @@
         }
       },
       {
-        "id": "act_flyby_ekuh",
+        "id": "act_flyby_25f8",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The sunbird doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -7748,7 +8684,7 @@
         }
       },
       {
-        "id": "act_keen_hearing_and_sight_4gw9",
+        "id": "act_keen_hearing_and_sight_bks6",
         "name": "Keen Hearing and Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The sunbird has advantage on Wisdom (Perception) checks that rely on hearing or sight.</p>",
@@ -7767,7 +8703,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4m56",
+        "id": "act_multiattack_cfe1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sunbird makes two talon attacks.</p>",
@@ -7784,7 +8720,7 @@
         }
       },
       {
-        "id": "act_talon_iry6",
+        "id": "act_talon_xl6v",
         "name": "Talon",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 5 ft., one target. {@h}16 (2d6 + 9) slashing damage plus 14 (4d6) fire damage, and the target is grappled (escape DC 18). Until this grapple ends, the target is restrained, and the sunbird can't attack another target with that talon. A grappled creature takes 11 (2d10) fire damage at the start of each of the sunbird's turns.</p>",
@@ -7888,9 +8824,35 @@
         "mod": -4
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 9,
+    "int": 1,
+    "wis": 7,
+    "cha": 2,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "prone",
+      "restrained",
+      "stunned"
+    ],
+    "passive": 8,
     "senses": {
       "passivePerception": 8,
       "sensesString": "darkvision 60 ft."
@@ -7902,7 +8864,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_gprt",
+        "id": "act_blood_frenzy_8mxq",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -7919,7 +8881,7 @@
         }
       },
       {
-        "id": "act_swarm_6muw",
+        "id": "act_swarm_okva",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny quipper. The swarm can't regain hit points or gain temporary hit points.</p>",
@@ -7936,7 +8898,7 @@
         }
       },
       {
-        "id": "act_water_breathing_wdm0",
+        "id": "act_water_breathing_iy0h",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can breathe only underwater.</p>",
@@ -7955,7 +8917,7 @@
     ],
     "actions": [
       {
-        "id": "act_bites_q1ko",
+        "id": "act_bites_rqpl",
         "name": "Bites",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 0 ft., one creature in the swarm's space. {@h}14 (4d6) piercing damage, or 7 (2d6) piercing damage if the swarm has half of its hit points or fewer.</p>",
@@ -8052,9 +9014,27 @@
         "mod": 1
       }
     },
+    "str": 23,
+    "dex": 8,
+    "con": 21,
+    "int": 12,
+    "wis": 16,
+    "cha": 12,
     "proficiencyBonus": 4,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "bludgeoning",
+      "piercing"
+    ],
+    "vulnerable": [
+      "fire"
+    ],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -8071,7 +9051,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_4xny",
+        "id": "act_false_appearance_dnh6",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the treant remains motionless, it is indistinguishable from a normal tree.</p>",
@@ -8088,7 +9068,7 @@
         }
       },
       {
-        "id": "act_siege_monster_hdue",
+        "id": "act_siege_monster_d4mg",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The treant deals double damage to objects and structures.</p>",
@@ -8107,7 +9087,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_d7so",
+        "id": "act_multiattack_gp3t",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The treant makes two slam attacks.</p>",
@@ -8124,7 +9104,7 @@
         }
       },
       {
-        "id": "act_slam_iiya",
+        "id": "act_slam_z15s",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one target. {@h}16 (3d6 + 6) bludgeoning damage.</p>",
@@ -8146,7 +9126,7 @@
         }
       },
       {
-        "id": "act_rock_h17v",
+        "id": "act_rock_52s7",
         "name": "Rock",
         "actionType": "action",
         "descriptionHtml": "<p>rw +10 to hit, range 60/180 ft., one target. {@h}28 (4d10 + 6) bludgeoning damage.</p>",
@@ -8168,7 +9148,7 @@
         }
       },
       {
-        "id": "act_animate_trees__1_day__5jr8",
+        "id": "act_animate_trees__1_day__zdue",
         "name": "Animate Trees (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The treant magically animates one or two trees it can see within 60 feet of it. These trees have the same statistics as a treant, except they have Intelligence and Charisma scores of 1, they can't speak, and they have only the Slam action option. An animated tree acts as an ally of the treant. The tree remains animate for 1 day or until it dies; until the treant dies or is more than 120 feet from the tree; or until the treant takes a bonus action to turn it back into an inanimate tree. The tree then takes root if possible.</p>",
@@ -8256,11 +9236,26 @@
         "mod": -4
       }
     },
+    "str": 2,
+    "dex": 11,
+    "con": 10,
+    "int": 1,
+    "wis": 8,
+    "cha": 2,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+2"
+    },
     "skills": {
       "stealth": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": "blindsight 30 ft."
@@ -8272,7 +9267,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_0g4x",
+        "id": "act_amphibious_6wti",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The crab can breathe air and water.</p>",
@@ -8291,7 +9286,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_b934",
+        "id": "act_claw_xqxn",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +0 to hit, reach 5 ft., one target. {@h}1 bludgeoning damage.</p>",
@@ -8379,11 +9374,26 @@
         "mod": -4
       }
     },
+    "str": 13,
+    "dex": 15,
+    "con": 11,
+    "int": 1,
+    "wis": 9,
+    "cha": 3,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+4"
+    },
     "skills": {
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": "blindsight 30 ft."
@@ -8395,7 +9405,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_jzmr",
+        "id": "act_amphibious_6e3t",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The crab can breathe air and water.</p>",
@@ -8414,7 +9424,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_98zs",
+        "id": "act_claw_uemj",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) bludgeoning damage, and the target is grappled (escape DC 11). The crab has two claws, each of which can grapple only one target.</p>",
@@ -8510,11 +9520,26 @@
         "mod": -1
       }
     },
+    "str": 25,
+    "dex": 10,
+    "con": 19,
+    "int": 2,
+    "wis": 12,
+    "cha": 9,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -8527,7 +9552,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_fjpr",
+        "id": "act_multiattack_qsnd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The tyrannosaurus makes two attacks: one with its bite and one with its tail. It can't make both attacks against the same target.</p>",
@@ -8544,7 +9569,7 @@
         }
       },
       {
-        "id": "act_bite_5gbx",
+        "id": "act_bite_0tja",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}33 (4d12 + 7) piercing damage. If the target is a Medium or smaller creature, it is grappled (escape DC 17). Until this grapple ends, the target is restrained, and the tyrannosaurus can't bite another target.</p>",
@@ -8569,7 +9594,7 @@
         }
       },
       {
-        "id": "act_tail_3u1t",
+        "id": "act_tail_pjvc",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}20 (3d8 + 7) bludgeoning damage.</p>",
@@ -8662,9 +9687,44 @@
         "mod": -1
       }
     },
+    "str": 18,
+    "dex": 14,
+    "con": 18,
+    "int": 5,
+    "wis": 10,
+    "cha": 8,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "unconscious"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -8678,7 +9738,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_water_form_dge3",
+        "id": "act_water_form_we2m",
         "name": "Water Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -8695,7 +9755,7 @@
         }
       },
       {
-        "id": "act_freeze_ffiq",
+        "id": "act_freeze_rsbr",
         "name": "Freeze",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elemental takes cold damage, it partially freezes; its speed is reduced by 20 feet until the end of its next turn.</p>",
@@ -8714,7 +9774,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_a13k",
+        "id": "act_multiattack_djuc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes two slam attacks.</p>",
@@ -8731,7 +9791,7 @@
         }
       },
       {
-        "id": "act_slam_7a3o",
+        "id": "act_slam_fmfm",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}13 (2d8 + 4) bludgeoning damage.</p>",
@@ -8753,7 +9813,7 @@
         }
       },
       {
-        "id": "act_whelm__recharge_4__mq43",
+        "id": "act_whelm__recharge_4__r39e",
         "name": "Whelm (Recharge 4)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature in the elemental's space must make a DC 15 Strength saving throw. On a failure, a target takes 13 (2d8 + 4) bludgeoning damage. If it is Large or smaller, it is also grappled (escape DC 14). Until this grapple ends, the target is restrained and unable to breathe unless it can breathe water. If the saving throw is successful, the target is pushed out of the elemental's space.</p><p>The elemental can grapple one Large creature or up to two Medium or smaller creatures at one time. At the start of each of the elemental's turns, each target grappled by it takes 13 (2d8 + 4) bludgeoning damage. A creature within 5 feet of the elemental can pull a creature or object out of it by taking an action to make a DC 14 Strength check and succeeding.</p>",

@@ -5,14 +5,24 @@
     "source": "LMoP",
     "page": 48,
     "type": "Medium Armor",
+    "rawType": "MA",
     "rarity": "rare",
     "reqAttune": false,
     "weight": 20,
     "value": null,
     "ac": 14,
+    "bonusAc": "+1",
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Medium Armor, rare*\n\n**Armor Class:** 14 | **Weight:** 20 lb\n\n---\n\nYou have a +1 bonus to AC while wearing this armor.\n\nThis +1 breastplate has a gold dragon motif worked into its design. Created for a human hero of Neverwinter named Tergon, it grants its wearer advantage on saving throws against the breath weapons of creatures that have the dragon type.",
     "descriptionHtml": "<p>You have a +1 bonus to AC while wearing this armor.</p>\n<p>This +1 breastplate has a gold dragon motif worked into its design. Created for a human hero of Neverwinter named Tergon, it grants its wearer advantage on saving throws against the breath weapons of creatures that have the dragon type.</p>"
   },
   {
@@ -21,16 +31,45 @@
     "source": "LMoP",
     "page": 33,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "unknown (magic)",
     "reqAttune": false,
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": "1d10",
     "dmgType": "slashing",
+    "bonusWeapon": "+1",
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hew",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, unknown (magic)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 4 lb\n\n---\n\nThis +1 battleaxe deals maximum damage when the wielder hits a plant creature or an object made of wood. The axe's creator was a dwarf smith who feuded with the dryads of a forest where he cut firewood. Whoever carries the axe feels uneasy whenever he or she travels through a forest.",
     "descriptionHtml": "<p>This +1 battleaxe deals maximum damage when the wielder hits a plant creature or an object made of wood. The axe's creator was a dwarf smith who feuded with the dryads of a forest where he cut firewood. Whoever carries the axe feels uneasy whenever he or she travels through a forest.</p>"
   },
   {
@@ -39,14 +78,49 @@
     "source": "LMoP",
     "page": 48,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "uncommon",
     "reqAttune": false,
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": null,
     "dmgType": "bludgeoning",
+    "bonusWeapon": "+1",
     "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Lightbringer",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Bludgeoning"
+        },
+        {
+          "formula": "1d6",
+          "stat": "",
+          "type": "Radiant",
+          "label": "vs Undead"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb\n\n---\n\nThis +1 mace was made for a cleric of Lathander, the god of dawn. The head of the mace is shaped like a sunburst and made of solid brass. Named Lightbringer, this weapon glows as bright as a torch when its wielder commands. While glowing, the mace deals an extra 1d6 radiant damage to undead creatures.",
     "descriptionHtml": "<p>This +1 mace was made for a cleric of Lathander, the god of dawn. The head of the mace is shaped like a sunburst and made of solid brass. Named Lightbringer, this weapon glows as bright as a torch when its wielder commands. While glowing, the mace deals an extra 1d6 radiant damage to undead creatures.</p>"
   },
   {
@@ -54,17 +128,57 @@
     "name": "Spider Staff",
     "source": "LMoP",
     "page": 53,
-    "type": "simple Weapon",
+    "type": "Simple Weapon",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": 6,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": "1d8",
     "dmgType": "bludgeoning",
+    "bonusWeapon": null,
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Spider Climb",
+        "cleanName": "spider climb",
+        "castLevel": null
+      },
+      {
+        "name": "Web",
+        "cleanName": "web",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Spider Staff",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Simple Weapon, rare (Requires Attunement)*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 6 lb\n\n---\n\nThe top of this black, adamantine staff is shaped like a spider. The staff weighs 6 pounds. You must be attuned to the staff to gain its benefits and cast its spells. The staff can be wielded as a quarterstaff. It deals 1d6 extra poison damage on a hit when used to make a weapon attack.\n\nThe staff has 10 charges, which are used to fuel the spells within it. With the staff in hand, you can use your action to cast one of the following spells from the staff if the spell is on your class's spell list: spider climb (1 charge) or web (2 charges, spell save 15). No components are required.\n\nThe staff regains 1d6 + 4 expended charges each day at dusk. If you expend the staff's last charge, roll a d20. On a 1, the staff crumbles to dust and is destroyed.",
     "descriptionHtml": "<p>The top of this black, adamantine staff is shaped like a spider. The staff weighs 6 pounds. You must be attuned to the staff to gain its benefits and cast its spells. The staff can be wielded as a quarterstaff. It deals 1d6 extra poison damage on a hit when used to make a weapon attack.</p>\n<p>The staff has 10 charges, which are used to fuel the spells within it. With the staff in hand, you can use your action to cast one of the following spells from the staff if the spell is on your class's spell list: spider climb (1 charge) or web (2 charges, spell save 15). No components are required.</p>\n<p>The staff regains 1d6 + 4 expended charges each day at dusk. If you expend the staff's last charge, roll a d20. On a 1, the staff crumbles to dust and is destroyed.</p>"
   },
   {
@@ -72,17 +186,57 @@
     "name": "Staff of Defense",
     "source": "LMoP",
     "page": 53,
-    "type": "simple Weapon",
+    "type": "Simple Weapon",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": 3,
     "value": null,
-    "ac": null,
+    "ac": 1,
+    "bonusAc": "+1",
     "dmg1": "1d6",
+    "dmg2": "1d8",
     "dmgType": "bludgeoning",
+    "bonusWeapon": null,
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Mage Armor",
+        "cleanName": "mage armor",
+        "castLevel": null
+      },
+      {
+        "name": "Shield",
+        "cleanName": "shield",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Staff of Defense",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Simple Weapon, rare (Requires Attunement)*\n\n**Armor Class:** 1 | **Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 3 lb\n\n---\n\nThis slender, hollow staff is made of glass yet is as strong as oak. It weighs 3 pounds. You must be attuned to the staff to gain its benefits and cast its spells.\n\nWhile holding the staff, you have a +1 bonus to your Armor Class.\n\nThe staff has 10 charges, which are used to fuel the spells within it. With the staff in hand, you can use your action to cast one of the following spells from the staff if the spell is on your class's spell list: mage armor (1 charge) or shield (2 charges). No components are required.\n\nThe staff regains 1d6 + 4 expended charges each day at dawn. If you expend the staff's last charge, roll a d20. On a 1, the staff shatters and is destroyed.",
     "descriptionHtml": "<p>This slender, hollow staff is made of glass yet is as strong as oak. It weighs 3 pounds. You must be attuned to the staff to gain its benefits and cast its spells.</p>\n<p>While holding the staff, you have a +1 bonus to your Armor Class.</p>\n<p>The staff has 10 charges, which are used to fuel the spells within it. With the staff in hand, you can use your action to cast one of the following spells from the staff if the spell is on your class's spell list: mage armor (1 charge) or shield (2 charges). No components are required.</p>\n<p>The staff regains 1d6 + 4 expended charges each day at dawn. If you expend the staff's last charge, roll a d20. On a 1, the staff shatters and is destroyed.</p>"
   }
 ]

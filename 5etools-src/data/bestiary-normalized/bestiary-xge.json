@@ -57,12 +57,28 @@
         "mod": -2
       }
     },
+    "str": 17,
+    "dex": 15,
+    "con": 15,
+    "int": 3,
+    "wis": 12,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+4"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -74,7 +90,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_hearing_and_smell_u8qf",
+        "id": "act_keen_hearing_and_smell_e65d",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The wolf has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
@@ -91,7 +107,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_9n89",
+        "id": "act_pack_tactics_7210",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The wolf has advantage on an attack roll against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -110,7 +126,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_h89z",
+        "id": "act_bite_0k8o",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -206,9 +222,34 @@
         "mod": -5
       }
     },
+    "str": 4,
+    "dex": 16,
+    "con": 10,
+    "int": 2,
+    "wis": 10,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -221,7 +262,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_slam_boor",
+        "id": "act_slam_wqxu",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) bludgeoning damage.</p>",

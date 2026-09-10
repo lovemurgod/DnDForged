@@ -57,11 +57,26 @@
         "mod": -1
       }
     },
+    "str": 8,
+    "dex": 16,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+5"
+    },
     "skills": {
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -76,7 +91,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_55r1",
+        "id": "act_nimble_escape_9r3a",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>The goblin can take the Disengage or Hide action as a bonus action on each of its turns.</p>",
@@ -95,7 +110,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_m1aq",
+        "id": "act_dagger_meh9",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
@@ -117,7 +132,7 @@
         }
       },
       {
-        "id": "act_light_crossbow_2p5h",
+        "id": "act_light_crossbow_wtye",
         "name": "Light Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 80/320 ft., one target. {@h}7 (1d8 + 3) piercing damage.</p>",
@@ -210,13 +225,30 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 14,
+    "con": 10,
+    "int": 10,
+    "wis": 8,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+6",
+      "deception": "+4",
+      "persuasion": "+4"
+    },
     "skills": {
       "stealth": "+6",
       "deception": "+4",
       "persuasion": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": "darkvision 60 ft."
@@ -231,7 +263,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_574t",
+        "id": "act_nimble_escape_0t0g",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>Krenko can take the Disengage or Hide action as a bonus action on each of his turns.</p>",
@@ -250,7 +282,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3ncb",
+        "id": "act_multiattack_s1wy",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Krenko makes two attacks with his scimitar.</p>",
@@ -267,7 +299,7 @@
         }
       },
       {
-        "id": "act_scimitar_k5e3",
+        "id": "act_scimitar_dwaa",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) slashing damage plus 2 (1d4) poison damage..</p>",
@@ -293,7 +325,7 @@
         }
       },
       {
-        "id": "act_light_crossbow_b43a",
+        "id": "act_light_crossbow_3zsh",
         "name": "Light Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
@@ -318,7 +350,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_redirect_attack_igek",
+        "id": "act_redirect_attack_ci7r",
         "name": "Redirect Attack",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature Krenko can see targets him with an attack, Krenko chooses another goblin within 5 feet of him. The two goblins swap places, and the chosen goblin becomes the target instead.</p>",
@@ -404,9 +436,34 @@
         "mod": -5
       }
     },
+    "str": 18,
+    "dex": 11,
+    "con": 13,
+    "int": 1,
+    "wis": 3,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 6,
     "senses": {
       "passivePerception": 6,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -418,7 +475,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_susceptibility_02cz",
+        "id": "act_antimagic_susceptibility_s2zt",
         "name": "Antimagic Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The rig is incapacitated while in the area of an antimagic field. If targeted by dispel magic, the rig must succeed on a Constitution saving throw against the caster's spell save DC or fall unconscious for 1 minute.</p>",
@@ -435,7 +492,7 @@
         }
       },
       {
-        "id": "act_unstable_3ghb",
+        "id": "act_unstable_z1kl",
         "name": "Unstable",
         "actionType": "trait",
         "descriptionHtml": "<p>If the rig takes damage, it must succeed on a DC 10 Constitution saving throw or be incapacitated with a speed of 0 until a creature activates it with a successful DC 10 Intelligence (Arcana) check made as an action.</p>",
@@ -457,7 +514,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tceb",
+        "id": "act_multiattack_dvfb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The armor makes two melee attacks.</p>",
@@ -474,7 +531,7 @@
         }
       },
       {
-        "id": "act_slam_0eii",
+        "id": "act_slam_7d3z",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage.</p>",

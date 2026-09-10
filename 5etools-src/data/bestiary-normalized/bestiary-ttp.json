@@ -57,13 +57,30 @@
         "mod": -2
       }
     },
+    "str": 15,
+    "dex": 14,
+    "con": 14,
+    "int": 4,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "athletics": "+4",
+      "perception": "+2",
+      "stealth": "+4"
+    },
     "skills": {
       "athletics": "+4",
       "perception": "+2",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -76,7 +93,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_ywbv",
+        "id": "act_multiattack_nb58",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The decapus makes two attacks: one with its bite and one with its tentacles.</p>",
@@ -93,7 +110,7 @@
         }
       },
       {
-        "id": "act_bite_8858",
+        "id": "act_bite_tb6a",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature grappled by the decapus. {@h}7 (2d4 + 2) piercing damage.</p>",
@@ -115,7 +132,7 @@
         }
       },
       {
-        "id": "act_tentacles_4t24",
+        "id": "act_tentacles_w0qd",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 10 ft., one target. {@h}24 (9d4 + 2) bludgeoning damage or 14 (5d4 + 2) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also grappled (escape DC 14) unless the decapus is already grappling a creature. Until this grapple ends, the target is restrained.</p>",
@@ -215,12 +232,28 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 10,
+    "con": 16,
+    "int": 9,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4",
+      "stealth": "+2"
+    },
     "skills": {
       "perception": "+4",
       "stealth": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft., tremorsense 30 ft."
@@ -232,7 +265,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_boulder_guise_eooi",
+        "id": "act_boulder_guise_tkus",
         "name": "Boulder Guise",
         "actionType": "trait",
         "descriptionHtml": "<p>While fully withdrawn into its shell, the geonid can't see and is indistinguishable from a small boulder</p>",
@@ -251,7 +284,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_51m2",
+        "id": "act_club_96j6",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
@@ -273,7 +306,7 @@
         }
       },
       {
-        "id": "act_stone_tell_uwnm",
+        "id": "act_stone_tell_dtbt",
         "name": "Stone Tell",
         "actionType": "action",
         "descriptionHtml": "<p>The geonid touches a stone object or surface and knows what types of creatures have been within 10 feet of that stone in the past 24 hours. The geonid can also determine the number of creatures of each type, but not their identities.</p>",
@@ -361,11 +394,26 @@
         "mod": -3
       }
     },
+    "str": 14,
+    "dex": 13,
+    "con": 16,
+    "int": 1,
+    "wis": 12,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3"
+    },
     "skills": {
       "perception": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 60 ft."
@@ -482,7 +530,7 @@
     ],
     "traits": [
       {
-        "id": "act_keen_smell_vgjf",
+        "id": "act_keen_smell_v3r6",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The slug has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -499,7 +547,7 @@
         }
       },
       {
-        "id": "act_spider_climb_6thv",
+        "id": "act_spider_climb_2u40",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The slug can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -518,7 +566,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9lnm",
+        "id": "act_multiattack_dtsk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The slug makes two attacks: one with its tentacles and one with its bite.</p>",
@@ -535,7 +583,7 @@
         }
       },
       {
-        "id": "act_tentacles_n1qg",
+        "id": "act_tentacles_riuw",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one creature. {@h}4 (1d4 + 2) poison damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. Until this poison ends, the target is paralyzed. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success.</p>",
@@ -560,7 +608,7 @@
         }
       },
       {
-        "id": "act_bite_qj7w",
+        "id": "act_bite_tsdi",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) piercing damage.</p>",
@@ -585,7 +633,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_animate_tentacle_kcy3",
+        "id": "act_animate_tentacle_gh9p",
         "name": "Animate Tentacle",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the slug takes damage in this cave (Shrine of Umberlee), it can use its reaction to animate one of the tentacles of the kraken statue and cause it to   make a melee weapon attack (+3 to hit) against one creature within 20 feet of the statue that the slug can see. The tentacle deals 8 (1d8 + 4) bludgeoning damage on a hit.</p>",
@@ -676,9 +724,28 @@
         "mod": -3
       }
     },
+    "str": 7,
+    "dex": 15,
+    "con": 12,
+    "int": 6,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "bludgeoning"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -692,7 +759,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_turn_resistance_2zqx",
+        "id": "act_turn_resistance_adn1",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The topi has advantage on saving throws against any effect that turns undead.</p>",
@@ -709,7 +776,7 @@
         }
       },
       {
-        "id": "act_undead_fortitude_0jxn",
+        "id": "act_undead_fortitude_eecg",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the topi to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the topi drops to 1 hit point instead.</p>",
@@ -728,7 +795,7 @@
     ],
     "actions": [
       {
-        "id": "act_venomous_claws_vy8u",
+        "id": "act_venomous_claws_ukpt",
         "name": "Venomous Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) slashing damage plus 2 (1d4) poison damage, and the target must succeed on a DC 11 Constitution saving throw or be poisoned until the end of the target's next turn.</p>",
@@ -828,12 +895,28 @@
         "mod": -3
       }
     },
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 2,
+    "wis": 12,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+4"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -845,7 +928,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_976r",
+        "id": "act_hold_breath_qex8",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The plesiosaurus can hold its breath for 1 hour.</p>",
@@ -864,7 +947,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_r03r",
+        "id": "act_bite_1j3z",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one target. {@h}14 (3d6 + 4) piercing damage.</p>",

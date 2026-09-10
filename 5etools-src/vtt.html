@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForgeD VTT - Self-Hosted Virtual Tabletop</title>
     
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,11 +58,8 @@
     <div id="login-overlay" class="vtt-overlay-panel">
         <div class="login-card glassmorphism animated-fade-in">
             <div class="login-header">
-                <img src="img/logo.png" alt="Forge D VTT Logo" class="login-logo-img">
-                <h1 class="login-title">
-                    <span class="title-gold">Forge D</span>
-                    <span class="title-vtt">VTT</span>
-                </h1>
+                <img src="img/logo.png" alt="ForgeD VTT Logo" class="login-logo-img">
+                <img src="img/TextLogo.png" alt="ForgeD VTT" class="login-title-logo">
                 <p>Self-Hosted Virtual Tabletop System</p>
             </div>
             
@@ -99,6 +103,37 @@
             
             <div class="login-footer">
                 <p><a href="https://forgedvtt.com/" target="_blank" class="brand-link">Forge D VTT</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Master Password Verification Modal -->
+    <div id="modal-gm-password" class="vtt-overlay-panel vtt-hidden" style="z-index: 10005;">
+        <div class="login-card glassmorphism animated-fade-in" style="max-width: 400px;">
+            <div class="login-header">
+                <i class="fa-solid fa-shield-halved" style="font-size: 2.2rem; color: var(--color-gold-base, #d4af37); margin-bottom: 8px;"></i>
+                <h2 class="login-title" style="font-size: 1.4rem;">
+                    <span class="title-gold">Password?</span>
+                </h2>
+                <p style="font-size: 0.85rem; color: var(--color-text-muted, #aaa);">Enter Game Master security password to continue</p>
+            </div>
+            <div class="login-body">
+                <div class="form-group">
+                    <label for="input-gm-password"><i class="fa-solid fa-key"></i> GM Password</label>
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <input type="password" id="input-gm-password" placeholder="Enter password..." style="width: 100%; padding-right: 36px;">
+                        <button type="button" id="btn-toggle-login-pw" style="position: absolute; right: 8px; background: transparent; border: none; color: #aaa; cursor: pointer; font-size: 0.9rem;" title="Show/Hide Password">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <div id="gm-password-error" class="text-danger" style="font-size: 0.8rem; margin-top: 6px; display: none; color: #ef4444;"></div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 14px;">
+                    <button id="btn-cancel-gm-password" class="btn btn-secondary" style="flex: 1;">Cancel</button>
+                    <button id="btn-submit-gm-password" class="btn btn-primary" style="flex: 1;">
+                        <i class="fa-solid fa-unlock"></i> Validate
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -307,6 +342,30 @@
             <!-- Free-drag Corner Resize Handle -->
             <div id="init-resize-handle" class="init-resize-handle" title="Drag corner to resize tracker">
                 <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+            </div>
+
+            <!-- Minimized HUD Bar (displayed when is-minimized) -->
+            <div id="init-minimized-bar" class="init-minimized-bar">
+                <button id="btn-init-min-drag" class="btn btn-icon btn-secondary init-drag-handle" title="Drag to move tracker">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </button>
+                <span class="init-min-round" title="Current Round"><i class="fa-solid fa-hourglass-half"></i> <span id="init-min-round-num">1</span></span>
+                <div id="init-min-combatant" class="init-min-combatant" title="Click to focus on map, double-click to open sheet">
+                    <div id="init-min-avatar" class="init-min-avatar">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div class="init-min-info">
+                        <span id="init-min-name" class="init-min-name">No Combat</span>
+                        <span id="init-min-hp" class="init-min-hp" style="display: none;"></span>
+                    </div>
+                </div>
+                <div class="init-min-actions gm-only">
+                    <button id="btn-init-min-prev" class="btn btn-icon btn-secondary" title="Previous Turn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button id="btn-init-min-next" class="btn btn-icon btn-primary" title="Next Turn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <button id="btn-init-min-expand" class="btn btn-icon btn-secondary" title="Expand Tracker">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
             </div>
         </div>
         
@@ -655,6 +714,15 @@
                                         </div>
                                     </div>
 
+                                    <div class="config-setting" style="margin-top: 10px;">
+                                        <label for="config-player-stat-tooltip-visible">Stat Tooltip (AC/PP)</label>
+                                        <select id="config-player-stat-tooltip-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                            <option value="never" selected>Never Visible</option>
+                                            <option value="controlled">Own Tokens Only</option>
+                                            <option value="all">All Tokens</option>
+                                        </select>
+                                    </div>
+
                                 </div>
 
                                 <!-- GM View Settings -->
@@ -719,6 +787,14 @@
                                                 <input type="checkbox" id="config-gm-temp-hp-num-visible" checked style="cursor: pointer; width: 12px; height: 12px;"> Num
                                             </label>
                                         </div>
+                                    </div>
+
+                                    <div class="config-setting" style="margin-top: 10px;">
+                                        <label for="config-gm-stat-tooltip-visible">Stat Tooltip (AC/PP)</label>
+                                        <select id="config-gm-stat-tooltip-visible" style="width: 120px; padding: 4px 8px; font-size: 0.8rem;">
+                                            <option value="always" selected>Always on Hover</option>
+                                            <option value="never">Never Visible</option>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -1090,7 +1166,37 @@
             </button>
         </div>
 
+        <div id="lighting-wall-options" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <label style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px; display: block; font-weight: 600;">Wall Geometry Shape</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                <button type="button" class="btn btn-secondary wall-shape-btn active" data-shape="line" style="font-size: 0.75rem; padding: 6px 8px; text-align: left;">
+                    <i class="fa-solid fa-slash"></i> Line
+                </button>
+                <button type="button" class="btn btn-secondary wall-shape-btn" data-shape="rect" style="font-size: 0.75rem; padding: 6px 8px; text-align: left;">
+                    <i class="fa-regular fa-square"></i> Square
+                </button>
+                <button type="button" class="btn btn-secondary wall-shape-btn" data-shape="circle" style="font-size: 0.75rem; padding: 6px 8px; text-align: left;">
+                    <i class="fa-regular fa-circle"></i> Circle
+                </button>
+                <button type="button" class="btn btn-secondary wall-shape-btn" data-shape="arc" style="font-size: 0.75rem; padding: 6px 8px; text-align: left;">
+                    <i class="fa-solid fa-circle-notch"></i> Semi-Circle
+                </button>
+            </div>
+        </div>
+
         <div id="lighting-light-options" class="vtt-hidden" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="form-group" style="margin-bottom: 8px;">
+                <label for="light-preset">5e Light Preset</label>
+                <select id="light-preset" style="width: 100%;">
+                    <option value="custom">Custom Configuration</option>
+                    <option value="torch">🔥 Torch (20/40 ft, Flicker)</option>
+                    <option value="lantern_hooded">🏮 Hooded Lantern (30/60 ft, Flicker)</option>
+                    <option value="lantern_bullseye">🔦 Bullseye Lantern (60/120 ft, 60° Cone)</option>
+                    <option value="candle">🕯️ Candle (5/10 ft, Flicker)</option>
+                    <option value="spell_light">✨ Light Spell (20/40 ft, Pulse)</option>
+                    <option value="campfire">🏕️ Campfire (30/60 ft, Color Shift)</option>
+                </select>
+            </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                 <div class="form-group" style="flex: 1; min-width: 80px;">
                     <label for="light-bright">Bright (ft)</label>
@@ -1101,11 +1207,46 @@
                     <input type="number" id="light-dim" min="0" value="40">
                 </div>
             </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 80px;">
+                    <label for="light-angle">Beam Arc (°)</label>
+                    <input type="number" id="light-angle" min="1" max="360" step="5" value="360" title="Beam angle (360° is omnidirectional, e.g. 60° for lantern)">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 80px;">
+                    <label for="light-rotation">Facing (°)</label>
+                    <input type="number" id="light-rotation" min="0" max="360" step="5" value="0" title="Direction angle (0° = East / Right)">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="light-color">Light Color</label>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <input type="color" id="light-color" value="#ffaa00">
                     <span style="font-size: 0.75rem; color: var(--color-text-muted);">Base tint</span>
+                </div>
+            </div>
+            <div class="form-group border-top-subtle pt-2 mt-2">
+                <label for="light-fx" style="font-size: 0.75rem; color: var(--color-gold-base);">Light Animation FX</label>
+                <select id="light-fx" style="width: 100%; margin-bottom: 6px;">
+                    <option value="none">Static / None</option>
+                    <option value="flicker">🔥 Torch Flicker</option>
+                    <option value="pulse">✨ Pulse / Beacon</option>
+                    <option value="color_shift">🌈 Color Shift</option>
+                </select>
+                <div id="light-fx-options" class="vtt-hidden" style="display: flex; flex-direction: column; gap: 6px;">
+                    <div style="display: flex; gap: 8px;">
+                        <div style="flex: 1;">
+                            <label for="light-speed" style="font-size: 0.7rem;">Speed</label>
+                            <input type="range" id="light-speed" min="0.5" max="3.0" step="0.1" value="1.0" style="width: 100%;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="light-intensity" style="font-size: 0.7rem;">Intensity</label>
+                            <input type="range" id="light-intensity" min="0.05" max="0.30" step="0.01" value="0.10" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div id="light-color2-group" class="vtt-hidden" style="display: flex; align-items: center; gap: 8px;">
+                        <label for="light-color2" style="font-size: 0.7rem; flex: 1;">Secondary Tint</label>
+                        <input type="color" id="light-color2" value="#ffe082">
+                    </div>
                 </div>
             </div>
         </div>
@@ -1249,6 +1390,19 @@
                 </h4>
                 
                 <div id="token-light-settings" class="vtt-hidden" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 6px; border: 1px solid var(--color-border-subtle);">
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label for="token-edit-light-preset">5e Light Preset</label>
+                        <select id="token-edit-light-preset" style="width: 100%;">
+                            <option value="custom">Custom Configuration</option>
+                            <option value="torch">🔥 Torch (20/40 ft, Flicker)</option>
+                            <option value="lantern_hooded">🏮 Hooded Lantern (30/60 ft, Flicker)</option>
+                            <option value="lantern_bullseye">🔦 Bullseye Lantern (60/120 ft, 60° Cone)</option>
+                            <option value="candle">🕯️ Candle (5/10 ft, Flicker)</option>
+                            <option value="spell_light">✨ Light Spell (20/40 ft, Pulse)</option>
+                            <option value="campfire">🏕️ Campfire (30/60 ft, Color Shift)</option>
+                            <option value="darkvision">👁️ Darkvision (60 ft Self)</option>
+                        </select>
+                    </div>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 1; min-width: 80px;">
                             <label for="token-edit-light-bright">Bright (ft)</label>
@@ -1259,11 +1413,46 @@
                             <input type="number" id="token-edit-light-dim" min="0" max="240" step="5" value="40">
                         </div>
                     </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                        <div class="form-group" style="flex: 1; min-width: 80px;">
+                            <label for="token-edit-light-angle">Beam Arc (°)</label>
+                            <input type="number" id="token-edit-light-angle" min="1" max="360" step="5" value="360" title="Beam angle (360° is omnidirectional, e.g. 60° for lantern)">
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 80px;">
+                            <label for="token-edit-light-rotation">Facing Angle (°)</label>
+                            <input type="number" id="token-edit-light-rotation" min="0" max="360" step="5" value="0" title="Direction angle (0° = East / Right)">
+                        </div>
+                    </div>
                     <div class="form-group" style="margin-bottom: 0;">
                         <label for="token-edit-light-color">Light Tint Color</label>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <input type="color" id="token-edit-light-color" value="#ffaa00">
                             <span style="font-size: 0.7rem; color: var(--color-text-muted);">Changes how the light appears through the fog of war</span>
+                        </div>
+                    </div>
+                    <div class="form-group border-top-subtle pt-2 mt-2" style="margin-bottom: 0;">
+                        <label for="token-edit-light-fx" style="font-size: 0.75rem; color: var(--color-gold-base);">Light Animation FX</label>
+                        <select id="token-edit-light-fx" style="width: 100%; margin-bottom: 6px;">
+                            <option value="none">Static / None</option>
+                            <option value="flicker">🔥 Torch Flicker</option>
+                            <option value="pulse">✨ Pulse / Beacon</option>
+                            <option value="color_shift">🌈 Color Shift</option>
+                        </select>
+                        <div id="token-edit-light-fx-options" class="vtt-hidden" style="display: flex; flex-direction: column; gap: 6px;">
+                            <div style="display: flex; gap: 8px;">
+                                <div style="flex: 1;">
+                                    <label for="token-edit-light-speed" style="font-size: 0.7rem;">Speed</label>
+                                    <input type="range" id="token-edit-light-speed" min="0.5" max="3.0" step="0.1" value="1.0" style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="token-edit-light-intensity" style="font-size: 0.7rem;">Intensity</label>
+                                    <input type="range" id="token-edit-light-intensity" min="0.05" max="0.30" step="0.01" value="0.10" style="width: 100%;">
+                                </div>
+                            </div>
+                            <div id="token-edit-light-color2-group" class="vtt-hidden" style="display: flex; align-items: center; gap: 8px;">
+                                <label for="token-edit-light-color2" style="font-size: 0.7rem; flex: 1;">Secondary Tint</label>
+                                <input type="color" id="token-edit-light-color2" value="#ffe082">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1572,57 +1761,39 @@
                     btnJoin.disabled = false;
                     btnJoin.innerHTML = '<i class="fa-solid fa-door-open"></i> Enter Tabletop';
                 }
+                if (btnSubmitGmPassword) {
+                    btnSubmitGmPassword.disabled = false;
+                    btnSubmitGmPassword.innerHTML = '<i class="fa-solid fa-unlock"></i> Validate';
+                }
             };
 
-            // Join Game handler
-            const executeJoinGame = () => {
-                let username = usernameInput.value.trim();
-                const role = roleSelect.value;
-                const campaignId = campaignSelect.value || 'default';
-                
-                if (!username) {
-                    username = role === 'GM' ? 'Game Master' : 'Player 1';
-                    usernameInput.value = username;
-                }
-                usernameInput.classList.remove('form-control--error');
+            const modalGmPassword = document.getElementById('modal-gm-password');
+            const inputGmPassword = document.getElementById('input-gm-password');
+            const btnToggleLoginPw = document.getElementById('btn-toggle-login-pw');
+            const btnSubmitGmPassword = document.getElementById('btn-submit-gm-password');
+            const btnCancelGmPassword = document.getElementById('btn-cancel-gm-password');
+            const gmPasswordError = document.getElementById('gm-password-error');
 
-                if (rememberCb && rememberCb.checked) {
-                    localStorage.setItem('vtt_remember', 'true');
-                    localStorage.setItem('vtt_username', username);
-                    localStorage.setItem('vtt_role', role);
-                } else {
-                    localStorage.setItem('vtt_remember', 'false');
-                    localStorage.removeItem('vtt_username');
-                    localStorage.removeItem('vtt_role');
-                }
-                
-                window.VTT.username = username;
-                window.VTT.role = role;
-                window.VTT.campaignId = campaignId;
+            if (btnToggleLoginPw && inputGmPassword) {
+                btnToggleLoginPw.addEventListener('click', () => {
+                    if (inputGmPassword.type === 'password') {
+                        inputGmPassword.type = 'text';
+                        btnToggleLoginPw.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+                    } else {
+                        inputGmPassword.type = 'password';
+                        btnToggleLoginPw.innerHTML = '<i class="fa-solid fa-eye"></i>';
+                    }
+                });
+            }
 
-                // Sync connection details to DOM displays
-                const selectedOpt = campaignSelect.options[campaignSelect.selectedIndex];
-                const campName = selectedOpt ? selectedOpt.text : campaignId || 'Default Campaign';
-                const elCampName = document.getElementById('display-campaign-name');
-                if (elCampName) elCampName.textContent = campName;
-                const elUserRole = document.getElementById('display-user-role');
-                if (elUserRole) {
-                    elUserRole.textContent = role;
-                    elUserRole.className = `user-role-badge ${role.toLowerCase()}-badge`;
-                }
-                const elUsername = document.getElementById('display-username');
-                if (elUsername) elUsername.textContent = username;
-                
-                // Hide GM only features for players
-                const dmScreenLink1 = document.getElementById('btn-dmscreen-link');
-                if (role !== 'GM') {
-                    document.querySelectorAll('.gm-only').forEach(el => el.classList.add('vtt-hidden'));
-                    if (dmScreenLink1) dmScreenLink1.classList.add('vtt-hidden');
-                } else {
-                    document.querySelectorAll('.gm-only').forEach(el => el.classList.remove('vtt-hidden'));
-                    if (dmScreenLink1) dmScreenLink1.classList.remove('vtt-hidden');
-                }
+            if (btnCancelGmPassword) {
+                btnCancelGmPassword.addEventListener('click', () => {
+                    modalGmPassword?.classList.add('vtt-hidden');
+                    resetBtnJoin();
+                });
+            }
 
+            const startSocketConnection = (campaignId, username, role, gmPassword = null) => {
                 // Show loading state
                 if (btnJoin) {
                     btnJoin.disabled = true;
@@ -1678,36 +1849,25 @@
                 socket.on('connect', () => {
                     clearTimeout(connTimeout);
                     console.log("Connected to VTT backend!");
-                    socket.emit('join', { campaignId, username, role });
+                    socket.emit('join', { campaignId, username, role, gmPassword });
                 });
 
-                socket.on('join_rejected', ({ reason }) => {
+                socket.on('join_rejected', ({ reason, code }) => {
                     clearTimeout(connTimeout);
                     resetBtnJoin();
-                    alert(`Connection Rejected: ${reason}`);
-                });
-
-                function renderAllowlist(users) {
-                    const container = document.getElementById('config-allowlist-users');
-                    if (!container) return;
-                    container.innerHTML = '';
-                    if (!users || users.length === 0) {
-                        container.innerHTML = '<span class="text-muted" style="font-size: 0.8rem;"><i>Allowlist is empty. Anyone can join.</i></span>';
-                        return;
+                    if (modalGmPassword && !modalGmPassword.classList.contains('vtt-hidden')) {
+                        if (gmPasswordError) {
+                            gmPasswordError.textContent = reason || "Invalid GM Password";
+                            gmPasswordError.style.display = 'block';
+                        }
+                        if (inputGmPassword) {
+                            inputGmPassword.select();
+                            inputGmPassword.focus();
+                        }
+                    } else {
+                        alert(`Connection Rejected: ${reason}`);
                     }
-                    users.forEach((u, idx) => {
-                        const row = document.createElement('div');
-                        row.style.display = 'flex';
-                        row.style.justifyContent = 'space-between';
-                        row.style.alignItems = 'center';
-                        row.style.background = 'rgba(255,255,255,0.05)';
-                        row.style.padding = '4px 8px';
-                        row.style.borderRadius = '4px';
-                        row.innerHTML = `<span style="font-size: 0.85rem;">${u}</span>
-                            <button class="btn btn-xxs btn-danger btn-remove-allowlist" onclick="removeAllowlistUser(${idx})"><i class="fa-solid fa-times"></i></button>`;
-                        container.appendChild(row);
-                    });
-                }
+                });
 
                 socket.on('allowlist:updated', ({ allowedUsers }) => {
                     if (window.VTT.campaignState) {
@@ -1716,28 +1876,28 @@
                     }
                 });
 
-                socket.on('joined', async ({ campaignState, chatHistory }) => {
+                socket.on('joined', async ({ role: serverRole, userRole, campaignState, chatHistory }) => {
                     clearTimeout(connTimeout);
                     resetBtnJoin();
+                    if (modalGmPassword) modalGmPassword.classList.add('vtt-hidden');
                     window.VTT.campaignState = campaignState;
                     
-                    // Enforce role based on GM assignment in server
-                    if (campaignState.gmUsername) {
-                        if (campaignState.gmUsername === username) {
-                            window.VTT.role = 'GM';
-                        } else {
-                            window.VTT.role = 'Player';
-                        }
-                        const elUserRole2 = document.getElementById('display-user-role');
-                        if (elUserRole2) elUserRole2.textContent = window.VTT.role;
-                        const dmScreenLink2 = document.getElementById('btn-dmscreen-link');
-                        if (window.VTT.role !== 'GM') {
-                            document.querySelectorAll('.gm-only').forEach(el => el.classList.add('vtt-hidden'));
-                            if (dmScreenLink2) dmScreenLink2.classList.add('vtt-hidden');
-                        } else {
-                            document.querySelectorAll('.gm-only').forEach(el => el.classList.remove('vtt-hidden'));
-                            if (dmScreenLink2) dmScreenLink2.classList.remove('vtt-hidden');
-                        }
+                    // Authoritative server-validated role
+                    const authoritativeRole = userRole || serverRole || role || 'Player';
+                    window.VTT.role = authoritativeRole;
+
+                    const elUserRole2 = document.getElementById('display-user-role');
+                    if (elUserRole2) {
+                        elUserRole2.textContent = window.VTT.role;
+                        elUserRole2.className = `user-role-badge ${window.VTT.role.toLowerCase()}-badge`;
+                    }
+                    const dmScreenLink2 = document.getElementById('btn-dmscreen-link');
+                    if (window.VTT.role !== 'GM') {
+                        document.querySelectorAll('.gm-only').forEach(el => el.classList.add('vtt-hidden'));
+                        if (dmScreenLink2) dmScreenLink2.classList.add('vtt-hidden');
+                    } else {
+                        document.querySelectorAll('.gm-only').forEach(el => el.classList.remove('vtt-hidden'));
+                        if (dmScreenLink2) dmScreenLink2.classList.remove('vtt-hidden');
                     }
 
                     renderAllowlist(campaignState.allowedUsers || []);
@@ -1789,6 +1949,114 @@
                         window.VTT.chatEngine.appendWhisperMessage(msg);
                     }
                 });
+                // Allowlist renderer inside VTT
+                function renderAllowlist(users) {
+                    const container = document.getElementById('config-allowlist-users');
+                    if (!container) return;
+                    container.innerHTML = '';
+                    if (!users || users.length === 0) {
+                        container.innerHTML = '<span class="text-muted" style="font-size: 0.8rem;"><i>Allowlist is empty. Anyone can join.</i></span>';
+                        return;
+                    }
+                    users.forEach((u, idx) => {
+                        const row = document.createElement('div');
+                        row.style.display = 'flex';
+                        row.style.justifyContent = 'space-between';
+                        row.style.alignItems = 'center';
+                        row.style.background = 'rgba(255,255,255,0.05)';
+                        row.style.padding = '4px 8px';
+                        row.style.borderRadius = '4px';
+                        row.innerHTML = `<span style="font-size: 0.85rem;">${u}</span>
+                            <button class="btn btn-xxs btn-danger btn-remove-allowlist" onclick="removeAllowlistUser(${idx})"><i class="fa-solid fa-times"></i></button>`;
+                        container.appendChild(row);
+                    });
+                }
+            };
+
+            // Join Game handler
+            const executeJoinGame = async () => {
+                let username = usernameInput.value.trim();
+                const role = roleSelect.value;
+                const campaignId = campaignSelect.value || 'default';
+                
+                if (!username) {
+                    username = role === 'GM' ? 'Game Master' : 'Player 1';
+                    usernameInput.value = username;
+                }
+                usernameInput.classList.remove('form-control--error');
+
+                if (rememberCb && rememberCb.checked) {
+                    localStorage.setItem('vtt_remember', 'true');
+                    localStorage.setItem('vtt_username', username);
+                    localStorage.setItem('vtt_role', role);
+                } else {
+                    localStorage.setItem('vtt_remember', 'false');
+                    localStorage.removeItem('vtt_username');
+                    localStorage.removeItem('vtt_role');
+                }
+                
+                window.VTT.username = username;
+                window.VTT.role = role;
+                window.VTT.campaignId = campaignId;
+
+                // Sync connection details to DOM displays
+                const selectedOpt = campaignSelect.options[campaignSelect.selectedIndex];
+                const campName = selectedOpt ? selectedOpt.text : campaignId || 'Default Campaign';
+                const elCampName = document.getElementById('display-campaign-name');
+                if (elCampName) elCampName.textContent = campName;
+                const elUserRole = document.getElementById('display-user-role');
+                if (elUserRole) {
+                    elUserRole.textContent = role;
+                    elUserRole.className = `user-role-badge ${role.toLowerCase()}-badge`;
+                }
+                const elUsername = document.getElementById('display-username');
+                if (elUsername) elUsername.textContent = username;
+                
+                // Hide GM only features for players
+                const dmScreenLink1 = document.getElementById('btn-dmscreen-link');
+                if (role !== 'GM') {
+                    document.querySelectorAll('.gm-only').forEach(el => el.classList.add('vtt-hidden'));
+                    if (dmScreenLink1) dmScreenLink1.classList.add('vtt-hidden');
+                } else {
+                    document.querySelectorAll('.gm-only').forEach(el => el.classList.remove('vtt-hidden'));
+                    if (dmScreenLink1) dmScreenLink1.classList.remove('vtt-hidden');
+                }
+
+                // If joining as GM, verify if server requires password verification
+                if (role === 'GM') {
+                    try {
+                        const checkRes = await fetch(`/api/gm-auth-required?username=${encodeURIComponent(username)}`);
+                        if (checkRes.ok) {
+                            const authInfo = await checkRes.json();
+                            if (authInfo.required && authInfo.hasPassword) {
+                                // Prompt the "Password?" dialogue box
+                                if (modalGmPassword) {
+                                    modalGmPassword.classList.remove('vtt-hidden');
+                                    inputGmPassword.value = '';
+                                    if (gmPasswordError) gmPasswordError.style.display = 'none';
+                                    inputGmPassword.focus();
+
+                                    const submitHandler = () => {
+                                        const pw = inputGmPassword.value;
+                                        btnSubmitGmPassword.disabled = true;
+                                        btnSubmitGmPassword.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Validating...';
+                                        startSocketConnection(campaignId, username, role, pw);
+                                    };
+
+                                    btnSubmitGmPassword.onclick = submitHandler;
+                                    inputGmPassword.onkeydown = (e) => {
+                                        if (e.key === 'Enter') submitHandler();
+                                    };
+                                    return;
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Could not check GM auth requirement:", e);
+                    }
+                }
+
+                startSocketConnection(campaignId, username, role);
             };
 
             btnJoin.addEventListener('click', executeJoinGame);

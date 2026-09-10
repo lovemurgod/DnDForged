@@ -64,7 +64,14 @@ export function initVttCanvas(vtt) {
     // Canvas Active Tool State
     let activeTool = 'select'; // select, grid, lighting, ping, measure
     let currentLightingType = 'wall';
+    let currentWallShape = 'line'; // line, rect, circle, arc
+    let isRotatingLight = false;
+    let rotatingLightEntity = null; // { type: 'light'|'token', id }
     let pingHoldTimeout = null;
+    
+    // Scratch canvas for lighting rendering and feathered angular masks
+    const scratchLightCanvas = document.createElement('canvas');
+    const ctxScratchLight = scratchLightCanvas.getContext('2d');
     
     // Active Layer State
     let activeLayer = 'token'; // token, gm, lighting, map
@@ -84,6 +91,7 @@ export function initVttCanvas(vtt) {
 
     // Advanced Multi-Selection states
     const selectedTokenIds = new Set();
+    let selectedTokenId = null;
     const selectedShapeIds = new Set();
     const selectedWallIdxs = new Set();
 
@@ -117,6 +125,7 @@ export function initVttCanvas(vtt) {
 
     function clearAllSelections() {
         selectedTokenIds.clear();
+        selectedTokenId = null;
         if (typeof selectedShapeIds !== 'undefined') selectedShapeIds.clear();
         if (typeof selectedWallIdxs !== 'undefined') selectedWallIdxs.clear();
         selectedShapeId = null;
@@ -137,7 +146,12 @@ export function initVttCanvas(vtt) {
         activeDragLightId = null;
         activeDragWallVertex = null;
         activeDragWallSegmentIdx = -1;
-        if (vtt.role === 'GM') hideGmTokenTooltip();
+        tokenTooltipPendingId = null;
+        if (gmTokenTooltipTimeout) {
+            clearTimeout(gmTokenTooltipTimeout);
+            gmTokenTooltipTimeout = null;
+        }
+        hideGmTokenTooltip();
     }
 
     function getDistanceToSegment(x, y, x1, y1, x2, y2) {
@@ -349,10 +363,173 @@ export function initVttCanvas(vtt) {
         };
     }
 
+    // Compute effective light beam facing in world degrees, factoring in token rotation, flipX, and flipY
+    function getTokenEffectiveLightFacing(token) {
+        if (!token) return 0;
+        const baseRot = typeof token.lightRotation === 'number' ? token.lightRotation : 0;
+        const alpha = (baseRot * Math.PI / 180);
+        let vx = Math.cos(alpha);
+        let vy = Math.sin(alpha);
+        if (token.flipX) vx = -vx;
+        if (token.flipY) vy = -vy;
+        const theta = ((token.rotation || 0) * Math.PI / 180);
+        const finalVx = vx * Math.cos(theta) - vy * Math.sin(theta);
+        const finalVy = vx * Math.sin(theta) + vy * Math.cos(theta);
+        let deg = Math.atan2(finalVy, finalVx) * 180 / Math.PI;
+        if (deg < 0) deg += 360;
+        return deg;
+    }
+
+    // Invert world facing angle to relative token lightRotation when handle is dragged
+    function getLocalLightFacingFromWorldAngle(token, targetDeg) {
+        if (!token) return targetDeg || 0;
+        const theta = ((token.rotation || 0) * Math.PI / 180);
+        const targetRad = (targetDeg * Math.PI / 180);
+        let vx = Math.cos(targetRad - theta);
+        let vy = Math.sin(targetRad - theta);
+        if (token.flipX) vx = -vx;
+        if (token.flipY) vy = -vy;
+        let localDeg = Math.atan2(vy, vx) * 180 / Math.PI;
+        if (localDeg < 0) localDeg += 360;
+        return Math.round(localDeg);
+    }
+
+    const LIGHTING_PRESETS = {
+        torch: {
+            name: 'Torch',
+            bright: 20,
+            dim: 20,
+            angle: 360,
+            color: '#ff9d3b',
+            animationType: 'flicker',
+            animationSpeed: 1.2,
+            animationIntensity: 0.12,
+            animationColor2: '#ffe082'
+        },
+        lantern_hooded: {
+            name: 'Hooded Lantern',
+            bright: 30,
+            dim: 30,
+            angle: 360,
+            color: '#ffe082',
+            animationType: 'flicker',
+            animationSpeed: 0.8,
+            animationIntensity: 0.06,
+            animationColor2: '#fff8e1'
+        },
+        lantern_bullseye: {
+            name: 'Bullseye Lantern',
+            bright: 60,
+            dim: 60,
+            angle: 60,
+            color: '#fff3b0',
+            animationType: 'none',
+            animationSpeed: 1.0,
+            animationIntensity: 0.10,
+            animationColor2: '#ffffff'
+        },
+        candle: {
+            name: 'Candle',
+            bright: 5,
+            dim: 5,
+            angle: 360,
+            color: '#ffc107',
+            animationType: 'flicker',
+            animationSpeed: 1.5,
+            animationIntensity: 0.15,
+            animationColor2: '#ffe082'
+        },
+        spell_light: {
+            name: 'Light Spell',
+            bright: 20,
+            dim: 20,
+            angle: 360,
+            color: '#e0f7fa',
+            animationType: 'pulse',
+            animationSpeed: 0.6,
+            animationIntensity: 0.08,
+            animationColor2: '#b2ebf2'
+        },
+        campfire: {
+            name: 'Campfire',
+            bright: 30,
+            dim: 30,
+            angle: 360,
+            color: '#ff7043',
+            animationType: 'color_shift',
+            animationSpeed: 1.0,
+            animationIntensity: 0.14,
+            animationColor2: '#ffb74d'
+        },
+        darkvision: {
+            name: 'Darkvision (Self)',
+            bright: 0,
+            dim: 60,
+            angle: 360,
+            color: '#ffffff',
+            animationType: 'none',
+            animationSpeed: 1.0,
+            animationIntensity: 0.10,
+            animationColor2: '#ffffff'
+        }
+    };
+
+    function applyTokenLightingPreset(token, presetId) {
+        if (!token) return;
+        if (presetId === 'none' || !presetId) {
+            token.lightEnabled = false;
+            return;
+        }
+        const preset = LIGHTING_PRESETS[presetId];
+        if (!preset) return;
+        token.lightEnabled = true;
+        token.lightBright = preset.bright;
+        token.lightDim = preset.dim;
+        token.lightAngle = preset.angle;
+        token.lightColor = preset.color;
+        token.lightAnimationType = preset.animationType;
+        token.lightAnimationSpeed = preset.animationSpeed;
+        token.lightAnimationIntensity = preset.animationIntensity;
+        token.lightAnimationColor2 = preset.animationColor2;
+    }
+
+    function applyStandaloneLightingPreset(light, presetId) {
+        if (!light) return;
+        const preset = LIGHTING_PRESETS[presetId];
+        if (!preset) return;
+        light.lightBright = preset.bright;
+        light.lightDim = preset.dim;
+        light.lightAngle = preset.angle;
+        light.lightColor = preset.color;
+        light.animationType = preset.animationType;
+        light.animationSpeed = preset.animationSpeed;
+        light.animationIntensity = preset.animationIntensity;
+        light.animationColor2 = preset.animationColor2;
+    }
+
+    function interpolateColors(c1, c2, factor) {
+        const parseHex = (hex) => {
+            let h = (hex || '#ffffff').replace('#', '');
+            if (h.length === 3) h = h.split('').map(c => c + c).join('');
+            return {
+                r: parseInt(h.substring(0, 2), 16) || 255,
+                g: parseInt(h.substring(2, 4), 16) || 255,
+                b: parseInt(h.substring(4, 6), 16) || 255
+            };
+        };
+        const rgb1 = parseHex(c1);
+        const rgb2 = parseHex(c2);
+        const f = Math.max(0, Math.min(1, factor));
+        const r = Math.round(rgb1.r + (rgb2.r - rgb1.r) * f);
+        const g = Math.round(rgb1.g + (rgb2.g - rgb1.g) * f);
+        const b = Math.round(rgb1.b + (rgb2.b - rgb1.b) * f);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
     // Interactive door/window helper: find an object within 20px radius of click coordinates
-    function getWallCoordinatesForRaycasting(wall) {
-        if (wall.type === 'window' && !wall.isDrawn) {
-            return null; // Undrawn windows do not block light
+    function getWallCoordinatesForRaycasting(wall, originX, originY) {
+        if (wall.type === 'window' && (wall.isSeeThrough || wall.isDrawn === false)) {
+            return null; // See-through windows do not block light or vision
         }
         if ((wall.type === 'door' || wall.type === 'window') && wall.isOpen) {
             if (wall.hasHinge) {
@@ -378,6 +555,23 @@ export function initVttCanvas(vtt) {
             }
             return null; // Open door without hinge does not block light
         }
+
+        // Check one-way vision/light blocking
+        if (wall.oneWay && wall.oneWay !== 'none' && originX !== undefined && originY !== undefined) {
+            const segDx = wall.x2 - wall.x1;
+            const segDy = wall.y2 - wall.y1;
+            const midX = (wall.x1 + wall.x2) / 2;
+            const midY = (wall.y1 + wall.y2) / 2;
+            // Left normal vector is (-segDy, segDx)
+            const nx = -segDy;
+            const ny = segDx;
+            const dot = (originX - midX) * nx + (originY - midY) * ny;
+            // If oneWay === 'left' and dot > 0: origin is on see-through side, so wall doesn't block
+            if (wall.oneWay === 'left' && dot > 0) return null;
+            // If oneWay === 'right' and dot < 0: origin is on see-through side, so wall doesn't block
+            if (wall.oneWay === 'right' && dot < 0) return null;
+        }
+
         return {
             x1: wall.x1,
             y1: wall.y1,
@@ -489,83 +683,435 @@ export function initVttCanvas(vtt) {
         }, 100);
     }
 
-    function showWallContextMenu(wallIdx, clientX, clientY) {
-        const wall = walls[wallIdx];
-
-        // Remove any existing wall context menu first
-        const oldPopup = document.getElementById('vtt-wall-context-menu');
+    function closeAnyWallModal() {
+        const oldPopup = document.getElementById('vtt-wall-settings-modal');
         if (oldPopup) oldPopup.remove();
+        const oldContext = document.getElementById('vtt-wall-context-menu');
+        if (oldContext) oldContext.remove();
+    }
 
+    function createWallSettingsModalContainer(clientX, clientY, width = 280) {
+        closeAnyWallModal();
         const popup = document.createElement('div');
-        popup.id = 'vtt-wall-context-menu';
+        popup.id = 'vtt-wall-settings-modal';
         popup.className = 'glassmorphism floating-tool-panel';
         popup.style.position = 'fixed';
-        popup.style.left = `${clientX}px`;
-        popup.style.top = `${clientY}px`;
+        popup.style.left = `${Math.min(window.innerWidth - width - 20, Math.max(10, clientX))}px`;
+        popup.style.top = `${Math.min(window.innerHeight - 380, Math.max(10, clientY))}px`;
         popup.style.zIndex = '10000';
-        popup.style.padding = '14px';
+        popup.style.padding = '14px 16px';
         popup.style.borderRadius = '8px';
-        popup.style.width = '240px';
+        popup.style.width = `${width}px`;
         popup.style.background = 'rgba(18, 22, 33, 0.98)';
         popup.style.border = '1px solid var(--color-border-subtle)';
-        popup.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.5)';
+        popup.style.boxShadow = '0 10px 36px rgba(0, 0, 0, 0.6)';
+        return popup;
+    }
+
+    function setupModalOutsideClick(popup) {
+        const closeOnOutside = (e) => {
+            if (!popup.contains(e.target)) {
+                popup.remove();
+                window.removeEventListener('mousedown', closeOnOutside);
+            }
+        };
+        setTimeout(() => {
+            window.addEventListener('mousedown', closeOnOutside);
+        }, 120);
+    }
+
+    function showDoorSettingsModal(wallIdx, clientX, clientY) {
+        const wall = walls[wallIdx];
+        if (!wall) return;
+        const popup = createWallSettingsModalContainer(clientX, clientY, 280);
 
         popup.innerHTML = `
-            <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-layer-group text-gradient-gold"></i> Wall Segment
-            </h4>
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-                <button id="btn-wall-type-wall" class="btn btn-secondary btn-xs" style="text-align: left; padding: 6px 12px;">
-                    <i class="fa-solid fa-square-full" style="width: 20px;"></i> Set as Wall
-                </button>
-                <button id="btn-wall-type-door" class="btn btn-secondary btn-xs" style="text-align: left; padding: 6px 12px;">
-                    <i class="fa-solid fa-door-closed" style="width: 20px;"></i> Set as Door
-                </button>
-                <button id="btn-wall-type-window" class="btn btn-secondary btn-xs" style="text-align: left; padding: 6px 12px;">
-                    <i class="fa-solid fa-border-all" style="width: 20px;"></i> Set as Window
-                </button>
-                <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 4px 0;">
-                <button id="btn-wall-delete" class="btn btn-danger btn-xs" style="text-align: left; padding: 6px 12px;">
-                    <i class="fa-solid fa-trash" style="width: 20px;"></i> Delete Segment
-                </button>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                <h4 style="margin: 0; font-size: 0.95rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-door-closed text-gradient-gold"></i> Door Settings
+                </h4>
+                <button type="button" class="btn btn-secondary btn-xxs modal-close-btn" style="padding: 2px 6px;">✕</button>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer;">
+                    <span><i class="fa-solid fa-lock" style="width: 18px; color: ${wall.isLocked ? '#dc3545' : '#6c757d'};"></i> Locked Door</span>
+                    <input type="checkbox" id="modal-door-locked" ${wall.isLocked ? 'checked' : ''}>
+                </label>
+
+                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer;">
+                    <span><i class="fa-solid fa-eye-slash" style="width: 18px; color: ${wall.isSecret ? '#ffc107' : '#28a745'};"></i> Secret (Hidden to Players)</span>
+                    <input type="checkbox" id="modal-door-secret" ${wall.isSecret ? 'checked' : ''}>
+                </label>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer; margin-bottom: 6px;">
+                        <span><i class="fa-solid fa-arrows-spin" style="width: 18px; color: var(--color-gold-base);"></i> Rotating Hinge Pivot</span>
+                        <input type="checkbox" id="modal-door-hinge" ${wall.hasHinge ? 'checked' : ''}>
+                    </label>
+                    <div id="modal-door-hinge-details" class="${wall.hasHinge ? '' : 'vtt-hidden'}" style="display: flex; flex-direction: column; gap: 6px; padding-left: 20px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem;">
+                            <span>Pivot Endpoint:</span>
+                            <select id="modal-door-hinge-endpoint" style="font-size: 0.75rem; padding: 2px 6px;">
+                                <option value="1" ${(wall.hingeEndpoint || 1) === 1 ? 'selected' : ''}>Endpoint 1 (Start)</option>
+                                <option value="2" ${(wall.hingeEndpoint || 1) === 2 ? 'selected' : ''}>Endpoint 2 (End)</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem;">
+                            <span>Swing Angle (°):</span>
+                            <input type="number" id="modal-door-swing-angle" min="15" max="180" step="15" value="${wall.swingAngle || 90}" style="width: 60px; font-size: 0.75rem; padding: 2px 4px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px;">Convert to:</div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" id="modal-convert-to-wall" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-square-full"></i> Wall</button>
+                        <button type="button" id="modal-convert-to-window" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-border-all"></i> Window</button>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <button type="button" id="modal-door-delete" class="btn btn-danger btn-xs" style="width: 100%; text-align: center;">
+                        <i class="fa-solid fa-trash"></i> Delete Door
+                    </button>
+                </div>
             </div>
         `;
 
         document.body.appendChild(popup);
+        setupModalOutsideClick(popup);
 
-        const updateWallType = (newType) => {
-            walls[wallIdx].type = newType;
+        popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
+        
+        popup.querySelector('#modal-door-locked').onchange = (e) => {
+            wall.isLocked = e.target.checked;
+            if (wall.isLocked && wall.isOpen) wall.isOpen = false;
             vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-door-secret').onchange = (e) => {
+            wall.isSecret = e.target.checked;
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        const hingeCb = popup.querySelector('#modal-door-hinge');
+        const hingeDetails = popup.querySelector('#modal-door-hinge-details');
+        hingeCb.onchange = (e) => {
+            wall.hasHinge = e.target.checked;
+            if (wall.hasHinge && !wall.hingeEndpoint) wall.hingeEndpoint = 1;
+            hingeDetails.classList.toggle('vtt-hidden', !wall.hasHinge);
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-door-hinge-endpoint').onchange = (e) => {
+            wall.hingeEndpoint = parseInt(e.target.value) || 1;
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-door-swing-angle').onchange = (e) => {
+            wall.swingAngle = parseInt(e.target.value) || 90;
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-convert-to-wall').onclick = () => {
+            wall.type = 'wall';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
             renderAll();
             popup.remove();
         };
 
-        document.getElementById('btn-wall-type-wall').addEventListener('click', () => updateWallType('wall'));
-        document.getElementById('btn-wall-type-door').addEventListener('click', () => updateWallType('door'));
-        document.getElementById('btn-wall-type-window').addEventListener('click', () => updateWallType('window'));
-        
-        document.getElementById('btn-wall-delete').addEventListener('click', () => {
+        popup.querySelector('#modal-convert-to-window').onclick = () => {
+            wall.type = 'window';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+            popup.remove();
+        };
+
+        popup.querySelector('#modal-door-delete').onclick = () => {
             walls.splice(wallIdx, 1);
             vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            // Cleanup any selection or hover state involving this wall
+            wallsVersion++;
             hoveredWallIdx = -1;
             selectedWallIdxs.clear();
             renderAll();
             popup.remove();
-        });
-
-        // Close popup if clicking outside
-        const closeMenuOnOutsideClick = (e) => {
-            if (!popup.contains(e.target)) {
-                popup.remove();
-                window.removeEventListener('click', closeMenuOnOutsideClick);
-                window.removeEventListener('contextmenu', closeMenuOnOutsideClick);
-            }
         };
-        setTimeout(() => {
-            window.addEventListener('click', closeMenuOnOutsideClick);
-            window.addEventListener('contextmenu', closeMenuOnOutsideClick);
-        }, 100);
+    }
+
+    function showWindowSettingsModal(wallIdx, clientX, clientY) {
+        const wall = walls[wallIdx];
+        if (!wall) return;
+        const popup = createWallSettingsModalContainer(clientX, clientY, 290);
+
+        let initialVisionMode = 'both_blocked';
+        if (wall.oneWay && wall.oneWay !== 'none') {
+            initialVisionMode = 'one_way';
+        } else if (wall.isSeeThrough || wall.isDrawn === false) {
+            initialVisionMode = 'both_seethrough';
+        }
+
+        popup.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                <h4 style="margin: 0; font-size: 0.95rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-border-all text-gradient-gold"></i> Window Settings
+                </h4>
+                <button type="button" class="btn btn-secondary btn-xxs modal-close-btn" style="padding: 2px 6px;">✕</button>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer;">
+                    <span><i class="fa-solid fa-lock" style="width: 18px; color: ${wall.isLocked ? '#dc3545' : '#6c757d'};"></i> Locked (Blocks Pass-Through)</span>
+                    <input type="checkbox" id="modal-window-locked" ${wall.isLocked ? 'checked' : ''}>
+                </label>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <div style="font-size: 0.78rem; font-weight: 500; margin-bottom: 6px; color: var(--color-gold-base);">Vision & Light Mode:</div>
+                    <select id="modal-window-vision-mode" style="width: 100%; font-size: 0.75rem; padding: 4px 8px; margin-bottom: 6px;">
+                        <option value="both_seethrough" ${initialVisionMode === 'both_seethrough' ? 'selected' : ''}>Both Sides See-Through (Transparent)</option>
+                        <option value="both_blocked" ${initialVisionMode === 'both_blocked' ? 'selected' : ''}>Both Sides Blocked (Opaque Glass)</option>
+                        <option value="one_way" ${initialVisionMode === 'one_way' ? 'selected' : ''}>One-Way Vision (Tinted / Mirrored)</option>
+                    </select>
+                    
+                    <div id="modal-window-oneway-controls" class="${initialVisionMode === 'one_way' ? '' : 'vtt-hidden'}" style="background: rgba(0,0,0,0.25); padding: 8px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px;">
+                        <button type="button" id="modal-window-flip-direction" class="btn btn-secondary btn-xs" style="width: 100%;">
+                            <i class="fa-solid fa-arrows-rotate"></i> Flip Direction (Swap Sides)
+                        </button>
+                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
+                            <span style="display:inline-block; width: 10px; height: 10px; background: #28a745; border-radius: 2px;"></span> Green Dashed: See-Through
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
+                            <span style="display:inline-block; width: 10px; height: 10px; background: #dc3545; border-radius: 2px;"></span> Red Solid: Blocked
+                        </div>
+                    </div>
+                </div>
+
+                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <span><i class="fa-solid fa-eye-slash" style="width: 18px; color: ${wall.isSecret ? '#ffc107' : '#28a745'};"></i> Secret (Hidden to Players)</span>
+                    <input type="checkbox" id="modal-window-secret" ${wall.isSecret ? 'checked' : ''}>
+                </label>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px;">Convert to:</div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" id="modal-convert-to-wall" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-square-full"></i> Wall</button>
+                        <button type="button" id="modal-convert-to-door" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-door-closed"></i> Door</button>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <button type="button" id="modal-window-delete" class="btn btn-danger btn-xs" style="width: 100%; text-align: center;">
+                        <i class="fa-solid fa-trash"></i> Delete Window
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+        setupModalOutsideClick(popup);
+
+        popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
+        
+        popup.querySelector('#modal-window-locked').onchange = (e) => {
+            wall.isLocked = e.target.checked;
+            if (wall.isLocked && wall.isOpen) wall.isOpen = false;
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        const visionModeSelect = popup.querySelector('#modal-window-vision-mode');
+        const onewayControls = popup.querySelector('#modal-window-oneway-controls');
+        visionModeSelect.onchange = (e) => {
+            const mode = e.target.value;
+            if (mode === 'both_seethrough') {
+                wall.isSeeThrough = true;
+                wall.isDrawn = false;
+                wall.oneWay = 'none';
+                onewayControls.classList.add('vtt-hidden');
+            } else if (mode === 'both_blocked') {
+                wall.isSeeThrough = false;
+                wall.isDrawn = true;
+                wall.oneWay = 'none';
+                onewayControls.classList.add('vtt-hidden');
+            } else if (mode === 'one_way') {
+                wall.isSeeThrough = false;
+                wall.isDrawn = true;
+                if (!wall.oneWay || wall.oneWay === 'none') wall.oneWay = 'left';
+                onewayControls.classList.remove('vtt-hidden');
+            }
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-window-flip-direction').onclick = () => {
+            wall.oneWay = wall.oneWay === 'left' ? 'right' : 'left';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-window-secret').onchange = (e) => {
+            wall.isSecret = e.target.checked;
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-convert-to-wall').onclick = () => {
+            wall.type = 'wall';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+            popup.remove();
+        };
+
+        popup.querySelector('#modal-convert-to-door').onclick = () => {
+            wall.type = 'door';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+            popup.remove();
+        };
+
+        popup.querySelector('#modal-window-delete').onclick = () => {
+            walls.splice(wallIdx, 1);
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            hoveredWallIdx = -1;
+            selectedWallIdxs.clear();
+            renderAll();
+            popup.remove();
+        };
+    }
+
+    function showWallSettingsModal(wallIdx, clientX, clientY) {
+        const wall = walls[wallIdx];
+        if (!wall) return;
+        const popup = createWallSettingsModalContainer(clientX, clientY, 280);
+
+        const isOneWay = wall.oneWay && wall.oneWay !== 'none';
+
+        popup.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
+                <h4 style="margin: 0; font-size: 0.95rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-square-full text-gradient-gold"></i> Wall Settings
+                </h4>
+                <button type="button" class="btn btn-secondary btn-xxs modal-close-btn" style="padding: 2px 6px;">✕</button>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div>
+                    <div style="font-size: 0.78rem; font-weight: 500; margin-bottom: 6px; color: var(--color-gold-base);">Vision & Light Blocking:</div>
+                    <select id="modal-wall-direction-mode" style="width: 100%; font-size: 0.75rem; padding: 4px 8px; margin-bottom: 6px;">
+                        <option value="none" ${!isOneWay ? 'selected' : ''}>Two-Way Wall (Normal / Blocks Both Sides)</option>
+                        <option value="one_way" ${isOneWay ? 'selected' : ''}>One-Way Wall (Parapet / Ledge / Cliff)</option>
+                    </select>
+                    
+                    <div id="modal-wall-oneway-controls" class="${isOneWay ? '' : 'vtt-hidden'}" style="background: rgba(0,0,0,0.25); padding: 8px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px;">
+                        <button type="button" id="modal-wall-flip-direction" class="btn btn-secondary btn-xs" style="width: 100%;">
+                            <i class="fa-solid fa-arrows-rotate"></i> Flip Direction (Swap Sides)
+                        </button>
+                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
+                            <span style="display:inline-block; width: 10px; height: 10px; background: #28a745; border-radius: 2px;"></span> Green Dashed: See-Through
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
+                            <span style="display:inline-block; width: 10px; height: 10px; background: #dc3545; border-radius: 2px;"></span> Red Solid: Blocked
+                        </div>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px;">Convert to:</div>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" id="modal-convert-to-door" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-door-closed"></i> Door</button>
+                        <button type="button" id="modal-convert-to-window" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-border-all"></i> Window</button>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
+                    <button type="button" id="modal-wall-delete" class="btn btn-danger btn-xs" style="width: 100%; text-align: center;">
+                        <i class="fa-solid fa-trash"></i> Delete Wall
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+        setupModalOutsideClick(popup);
+
+        popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
+
+        const dirModeSelect = popup.querySelector('#modal-wall-direction-mode');
+        const onewayControls = popup.querySelector('#modal-wall-oneway-controls');
+        dirModeSelect.onchange = (e) => {
+            const mode = e.target.value;
+            if (mode === 'none') {
+                wall.oneWay = 'none';
+                onewayControls.classList.add('vtt-hidden');
+            } else {
+                if (!wall.oneWay || wall.oneWay === 'none') wall.oneWay = 'left';
+                onewayControls.classList.remove('vtt-hidden');
+            }
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-wall-flip-direction').onclick = () => {
+            wall.oneWay = wall.oneWay === 'left' ? 'right' : 'left';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+        };
+
+        popup.querySelector('#modal-convert-to-door').onclick = () => {
+            wall.type = 'door';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+            popup.remove();
+        };
+
+        popup.querySelector('#modal-convert-to-window').onclick = () => {
+            wall.type = 'window';
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            renderAll();
+            popup.remove();
+        };
+
+        popup.querySelector('#modal-wall-delete').onclick = () => {
+            walls.splice(wallIdx, 1);
+            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+            wallsVersion++;
+            hoveredWallIdx = -1;
+            selectedWallIdxs.clear();
+            renderAll();
+            popup.remove();
+        };
+    }
+
+    function openWallSettingsModal(wallIdx, clientX, clientY) {
+        const wall = walls[wallIdx];
+        if (!wall) return;
+        if (wall.type === 'door') showDoorSettingsModal(wallIdx, clientX, clientY);
+        else if (wall.type === 'window') showWindowSettingsModal(wallIdx, clientX, clientY);
+        else showWallSettingsModal(wallIdx, clientX, clientY);
     }
 
     function getInteractiveObjectAtCoord(x, y) {
@@ -634,6 +1180,13 @@ let isTokenMeasuring = false;
     let shapeDragOffsetX1 = 0, shapeDragOffsetY1 = 0;
     let shapeDragOffsetX2 = 0, shapeDragOffsetY2 = 0;
 
+    function isShapeControlledByPlayer(shape) {
+        if (!shape) return false;
+        if (vtt.role === 'GM') return true;
+        if (shape.ownerUsername && shape.ownerUsername === vtt.username) return true;
+        return false;
+    }
+
     function getShapeCenterPoint(shapeObj) {
         if (!shapeObj || !shapeObj.startPoint || !shapeObj.endPoint) return { x: 0, y: 0 };
         const p1 = shapeObj.startPoint;
@@ -672,11 +1225,12 @@ let isTokenMeasuring = false;
         return [];
     }
 
-    function getShapeComponentAtCoord(x, y) {
+    function getShapeComponentAtCoord(x, y, requireControl = true) {
         let found = null;
         let minDistance = 16;
 
         Object.entries(shapes).forEach(([id, s]) => {
+            if (requireControl && !isShapeControlledByPlayer(s)) return;
             const center = getShapeCenterPoint(s);
             const centerDist = Math.hypot(x - center.x, y - center.y);
             if (centerDist < minDistance) {
@@ -711,6 +1265,7 @@ let isTokenMeasuring = false;
 
     function drawShapeComponentHandles(ctx, shapeObj, shapeId) {
         if (!shapeObj) return;
+        if (!isShapeControlledByPlayer(shapeObj)) return;
         const polyPoints = getShapePolyPoints(shapeObj);
         const isSelectedShape = selectedShapeIds.has(shapeId) || selectedShapeId === shapeId;
         const isHoveredShape = hoveredShapeComponent && hoveredShapeComponent.shapeId === shapeId;
@@ -796,7 +1351,9 @@ let isTokenMeasuring = false;
     
     // Wall and Door Segment states
     let walls = [];
+    let wallsVersion = 1;
     let lights = [];
+    let isLightingAnimationRunning = false;
     let notes = [];
     let isDrawingWall = false;
     let wallStartPoint = null;
@@ -814,9 +1371,10 @@ let lastBroadcastedTokens = {};
     let hoverTokenTimeout = null;
     let tokenDragInitialPoint = null;
 
-    // GM Token Hover Tooltip state
+    // Token Hover Stat Tooltip state
     let gmTokenTooltipTimeout = null;
     let gmTokenTooltipTokenId = null; // ID of token tooltip is currently anchored to
+    let tokenTooltipPendingId = null; // ID of token currently scheduled for tooltip show
     let tokenDragMeasureActive = false;
 
     // Notes state
@@ -842,6 +1400,7 @@ let lastBroadcastedTokens = {};
         playerPlayerNameVisible: 'always',
         playerTempHpBarVisible: 'always',
         playerTempHpNumVisible: true,
+        playerStatTooltipVisible: 'never',
         gmMonsterHpBarVisible: 'always',
         gmMonsterHpNumVisible: true,
         gmMonsterNameVisible: 'always',
@@ -850,6 +1409,7 @@ let lastBroadcastedTokens = {};
         gmPlayerNameVisible: 'always',
         gmTempHpBarVisible: 'always',
         gmTempHpNumVisible: true,
+        gmStatTooltipVisible: 'always',
         tempHpBarStyle: 'stacked',
         initDexTiebreaker: true
     };
@@ -864,6 +1424,7 @@ let lastBroadcastedTokens = {};
 
         // Reset transient interaction state so maps stay isolated.
         selectedTokenIds.clear();
+        selectedTokenId = null;
         selectedShapeIds.clear();
         selectedWallIdxs.clear();
         otherMeasurements = {};
@@ -891,7 +1452,7 @@ let lastBroadcastedTokens = {};
         const menu = document.getElementById('vtt-token-context-menu');
         if (menu) menu.remove();
 
-        // 1. Auto-migrate legacy mapImage maps to Freeform Assets on the fly if needed
+        // 1. Ensure Freeform Asset on the map layer exists from mapImage or artwork token
         if (mapData.mapImage && mapData.mapImage.trim() !== '') {
             const imgUrl = mapData.mapImage.trim();
             if (!mapData.tokens) mapData.tokens = {};
@@ -914,6 +1475,8 @@ let lastBroadcastedTokens = {};
                     y: 0,
                     layer: 'map',
                     isAsset: true,
+                    isBackground: true,
+                    locked: true,
                     img: imgUrl,
                     isVideo: isVideo || isYoutube,
                     pixelWidth: pixelWidth,
@@ -926,7 +1489,30 @@ let lastBroadcastedTokens = {};
                 if (!mapData.gridHeight) mapData.gridHeight = gHeight;
             }
             mapData.thumbnail = imgUrl;
-            mapData.mapImage = "";
+            // Retain mapData.mapImage as the permanent anchor!
+        } else if (mapData.thumbnail && (!mapData.tokens || !Object.values(mapData.tokens).some(t => t.layer === 'map'))) {
+            // Auto-heal from thumbnail if mapImage and map tokens were missing
+            mapData.mapImage = mapData.thumbnail;
+            if (!mapData.tokens) mapData.tokens = {};
+            const assetId = `asset_${mapData.id}_bg`;
+            const gSize = mapData.grid?.size || 50;
+            const gScale = mapData.grid?.scale || 1.0;
+            mapData.tokens[assetId] = {
+                id: assetId,
+                name: `${mapData.name || 'Map'} (Artwork)`,
+                x: 0,
+                y: 0,
+                layer: 'map',
+                isAsset: true,
+                isBackground: true,
+                locked: true,
+                img: mapData.thumbnail,
+                pixelWidth: mapData.gridWidth ? mapData.gridWidth * gSize * gScale : 2000,
+                pixelHeight: mapData.gridHeight ? mapData.gridHeight * gSize * gScale : 1500,
+                size: 1,
+                zIndex: 0,
+                isPlayer: false
+            };
         }
 
         // Clear legacy background container
@@ -947,6 +1533,9 @@ let lastBroadcastedTokens = {};
         for (const id in tokens) {
             if (tokens[id]?._animReq) delete tokens[id]._animReq;
         }
+        // Critical: Synchronize snapshot with current map's tokens so emitTokenUpdates doesn't diff against prior map
+        lastBroadcastedTokens = JSON.parse(JSON.stringify(tokens));
+
         tokenAnimations = {};
         processedAnimKeys.clear();
         walls = mapData.walls || [];
@@ -1593,109 +2182,285 @@ let lastBroadcastedTokens = {};
 
         // 2. Gather and Process Light Sources (Tokens with lights + Standalone lights)
         const lightSources = [];
+        const nowSec = performance.now() / 1000;
+        let anyLightHasAnimation = false;
+
         Object.values(tokens).forEach(t => {
             if (t.lightEnabled) {
                 const center = getTokenCenter(t);
+                const { drawW, drawH } = getTokenDrawDimensions(t);
+                const tokenRadius = Math.max(drawW, drawH) / 2;
+                const animType = t.lightAnimationType || 'none';
+                if (animType !== 'none') anyLightHasAnimation = true;
                 lightSources.push({
+                    id: t.id,
                     x: center.x,
                     y: center.y,
+                    isToken: true,
+                    tokenRadius: tokenRadius,
                     lightBright: parseFloat(t.lightBright) || 0,
                     lightDim: parseFloat(t.lightDim) || 0,
-                    lightColor: t.lightColor || '#ffffff'
+                    lightColor: t.lightColor || '#ffffff',
+                    lightAngle: t.lightAngle !== undefined ? parseFloat(t.lightAngle) : 360,
+                    lightRotation: getTokenEffectiveLightFacing(t),
+                    animationType: animType,
+                    animationSpeed: parseFloat(t.lightAnimationSpeed) || 1.0,
+                    animationIntensity: parseFloat(t.lightAnimationIntensity) || 0.10,
+                    animationColor2: t.lightAnimationColor2 || '#ffe082',
+                    sourceEntity: t
                 });
             }
         });
         lights.forEach(l => {
+            const animType = l.animationType || 'none';
+            if (animType !== 'none') anyLightHasAnimation = true;
             lightSources.push({
+                id: l.id,
                 x: l.x,
                 y: l.y,
+                isToken: false,
+                tokenRadius: 0,
                 lightBright: parseFloat(l.lightBright) || 0,
                 lightDim: parseFloat(l.lightDim) || 0,
-                lightColor: l.lightColor || '#ffffff'
+                lightColor: l.lightColor || '#ffffff',
+                lightAngle: l.lightAngle !== undefined ? parseFloat(l.lightAngle) : 360,
+                lightRotation: l.lightRotation !== undefined ? parseFloat(l.lightRotation) : 0,
+                animationType: animType,
+                animationSpeed: parseFloat(l.animationSpeed) || 1.0,
+                animationIntensity: parseFloat(l.animationIntensity) || 0.10,
+                animationColor2: l.animationColor2 || '#ffe082',
+                sourceEntity: l
             });
         });
 
         lightSources.forEach(light => {
-            const radiusBright = (light.lightBright / grid.feetPerSquare) * grid.size * grid.scale;
-            const radiusDim = (light.lightDim / grid.feetPerSquare) * grid.size * grid.scale;
-            const maxRadius = Math.max(radiusBright, radiusDim);
+            const tokenRadius = light.tokenRadius || 0;
+            const baseBrightDist = (light.lightBright / grid.feetPerSquare) * grid.size * grid.scale;
+            const baseDimDist = (light.lightDim / grid.feetPerSquare) * grid.size * grid.scale;
 
+            // Bright light begins drawing from the token border; dim light begins at bright light's end
+            const baseRadiusBright = baseBrightDist > 0 ? (tokenRadius + baseBrightDist) : (light.isToken && baseDimDist > 0 ? tokenRadius : 0);
+            const baseRadiusDim = baseDimDist > 0 ? (baseRadiusBright + baseDimDist) : baseRadiusBright;
+            const nominalMaxRadius = Math.max(baseRadiusBright, baseRadiusDim);
+
+            if (nominalMaxRadius <= 0) return;
+
+            // Apply Animated Light FX (Flicker, Pulse, Color Shift)
+            let effectiveColor = light.lightColor;
+            let radMultiplier = 1.0;
+            if (light.animationType && light.animationType !== 'none') {
+                const speed = light.animationSpeed || 1.0;
+                const intensity = light.animationIntensity || 0.10;
+                const seed = (typeof light.id === 'string') ? (light.id.charCodeAt(0) || 1) * 17 : 42;
+                const phase = (nowSec * speed * 2 + seed);
+
+                if (light.animationType === 'flicker') {
+                    // Multi-harmonic sine flicker
+                    const jitter = (Math.sin(phase * 3.7) * 0.5 + Math.sin(phase * 7.1) * 0.3 + Math.sin(phase * 13.9) * 0.2);
+                    radMultiplier = Math.max(0.7, 1.0 + jitter * intensity);
+                } else if (light.animationType === 'pulse') {
+                    // Smooth breathing glow
+                    const pulse = Math.sin(phase * 0.8) * intensity;
+                    radMultiplier = Math.max(0.7, 1.0 + pulse);
+                } else if (light.animationType === 'color_shift') {
+                    // Smooth oscillation between primary and secondary color
+                    const t = (Math.sin(phase * 0.9) + 1) / 2;
+                    effectiveColor = interpolateColors(light.lightColor, light.animationColor2 || '#ffe082', t);
+                    radMultiplier = 1.0 + (Math.sin(phase * 1.8) * 0.05 * intensity);
+                }
+            }
+
+            const radiusBright = baseBrightDist > 0 ? (tokenRadius + baseBrightDist * radMultiplier) : (light.isToken && baseDimDist > 0 ? tokenRadius : 0);
+            const radiusDim = baseDimDist > 0 ? (radiusBright + baseDimDist * radMultiplier) : radiusBright;
+            const maxRadius = Math.max(radiusBright, radiusDim);
             if (maxRadius <= 0) return;
 
-            const visibilityPolygon = computeVisibilityPolygon(light.x, light.y, maxRadius, width, height);
-            if (visibilityPolygon.length < 3) return;
+            const isAngular = typeof light.lightAngle === 'number' && light.lightAngle < 360 && light.lightAngle > 0;
 
-            // Trace polygon path
+            // Use cached visibility polygon if geometry has not moved or walls have not changed
+            const cacheKey = `${light.x.toFixed(1)}_${light.y.toFixed(1)}_${light.lightAngle}_${light.lightRotation.toFixed(1)}_${nominalMaxRadius.toFixed(1)}_${wallsVersion}`;
+            let visibilityPolygon;
+            if (light.sourceEntity && light.sourceEntity._polyCache && light.sourceEntity._polyCache.key === cacheKey) {
+                visibilityPolygon = light.sourceEntity._polyCache.polygon;
+            } else {
+                visibilityPolygon = computeVisibilityPolygon(
+                    light.x, light.y, nominalMaxRadius, width, height,
+                    light.lightAngle, light.lightRotation
+                );
+                if (light.sourceEntity) {
+                    light.sourceEntity._polyCache = { key: cacheKey, polygon: visibilityPolygon };
+                }
+            }
+            if (!visibilityPolygon || visibilityPolygon.length < 3) return;
+
+            // Prepare scratch canvas for soft feathered gradient punching
+            const d = Math.max(16, Math.ceil(maxRadius * 2));
+            if (scratchLightCanvas.width !== d || scratchLightCanvas.height !== d) {
+                scratchLightCanvas.width = d;
+                scratchLightCanvas.height = d;
+            } else {
+                ctxScratchLight.clearRect(0, 0, d, d);
+            }
+
+            const centerX = maxRadius;
+            const centerY = maxRadius;
+
+            // 1. Draw radial gradient on scratch canvas
+            const grad = ctxScratchLight.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
+            const innerStop = Math.min(1.0, Math.max(0.0, tokenRadius / maxRadius));
+            const brightStop = Math.min(1.0, Math.max(0.0, radiusBright / maxRadius));
+
+            if (baseBrightDist > 0) {
+                grad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+                if (brightStop < 1.0) {
+                    grad.addColorStop(brightStop, 'rgba(255, 255, 255, 1.0)');
+                    grad.addColorStop(1.0, 'rgba(255, 255, 255, 0.0)');
+                } else {
+                    grad.addColorStop(1.0, 'rgba(255, 255, 255, 1.0)');
+                }
+            } else {
+                // Pure dim light (or darkvision)
+                grad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+                if (innerStop > 0 && innerStop < 1.0) {
+                    grad.addColorStop(innerStop, 'rgba(255, 255, 255, 1.0)');
+                    grad.addColorStop(Math.min(1.0, innerStop + 0.01), 'rgba(255, 255, 255, 0.85)');
+                }
+                grad.addColorStop(1.0, 'rgba(255, 255, 255, 0.0)');
+            }
+            ctxScratchLight.fillStyle = grad;
+            ctxScratchLight.fillRect(0, 0, d, d);
+
+            // 2. If angular, mask scratch canvas with feathered conic gradient
+            if (isAngular && typeof ctxScratchLight.createConicGradient === 'function') {
+                const facingRad = ((light.lightRotation || 0) * Math.PI / 180);
+                const arcRad = (light.lightAngle * Math.PI / 180);
+                const featherRad = Math.min(arcRad * 0.2, 12 * Math.PI / 180);
+
+                const conic = ctxScratchLight.createConicGradient(facingRad - Math.PI, centerX, centerY);
+                const halfArcNorm = (arcRad / 2) / (2 * Math.PI);
+                const featherNorm = featherRad / (2 * Math.PI);
+                const centerStop = 0.5;
+
+                const startAngleNorm = Math.max(0, centerStop - halfArcNorm);
+                const solidStartNorm = Math.min(1, startAngleNorm + featherNorm);
+                const solidEndNorm = Math.max(0, centerStop + halfArcNorm - featherNorm);
+                const endAngleNorm = Math.min(1, centerStop + halfArcNorm);
+
+                conic.addColorStop(0, 'rgba(0, 0, 0, 0)');
+                if (startAngleNorm > 0) conic.addColorStop(startAngleNorm, 'rgba(0, 0, 0, 0)');
+                conic.addColorStop(solidStartNorm, 'rgba(255, 255, 255, 1.0)');
+                conic.addColorStop(solidEndNorm, 'rgba(255, 255, 255, 1.0)');
+                conic.addColorStop(endAngleNorm, 'rgba(0, 0, 0, 0)');
+                if (endAngleNorm < 1) conic.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+                ctxScratchLight.globalCompositeOperation = 'destination-in';
+                ctxScratchLight.fillStyle = conic;
+                ctxScratchLight.fillRect(0, 0, d, d);
+                ctxScratchLight.globalCompositeOperation = 'source-over';
+            }
+
+            // 3. Punch cutout on ctxFog constrained by visibility polygon
+            ctxFog.save();
             ctxFog.beginPath();
             ctxFog.moveTo(visibilityPolygon[0].x, visibilityPolygon[0].y);
             for (let i = 1; i < visibilityPolygon.length; i++) {
                 ctxFog.lineTo(visibilityPolygon[i].x, visibilityPolygon[i].y);
             }
             ctxFog.closePath();
+            ctxFog.clip();
 
-            // Hole punching
             ctxFog.globalCompositeOperation = 'destination-out';
-            
-            const grad = ctxFog.createRadialGradient(light.x, light.y, 0, light.x, light.y, maxRadius);
-            if (radiusBright > 0) {
-                const brightStop = radiusBright / maxRadius;
-                grad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
-                if (brightStop < 1) {
-                    grad.addColorStop(brightStop, 'rgba(255, 255, 255, 1.0)');
-                    grad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
-                }
-            } else {
-                grad.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-                grad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
-            }
-            ctxFog.fillStyle = grad;
-            ctxFog.fill();
+            ctxFog.drawImage(scratchLightCanvas, light.x - maxRadius, light.y - maxRadius);
+            ctxFog.restore();
 
-            // Add Color Tint
-            if (light.lightColor && light.lightColor !== '#ffffff') {
+            // 4. Color Tint
+            if (effectiveColor && effectiveColor !== '#ffffff') {
+                ctxFog.save();
+                ctxFog.beginPath();
+                ctxFog.moveTo(visibilityPolygon[0].x, visibilityPolygon[0].y);
+                for (let i = 1; i < visibilityPolygon.length; i++) {
+                    ctxFog.lineTo(visibilityPolygon[i].x, visibilityPolygon[i].y);
+                }
+                ctxFog.closePath();
+                ctxFog.clip();
+
                 ctxFog.globalCompositeOperation = 'source-over';
                 
-                // Parse hex color to rgba
-                const hex = light.lightColor.replace('#', '');
-                const rVal = parseInt(hex.substring(0, 2), 16);
-                const gVal = parseInt(hex.substring(2, 4), 16);
-                const bVal = parseInt(hex.substring(4, 6), 16);
-                const r = isNaN(rVal) ? 255 : rVal;
-                const g = isNaN(gVal) ? 255 : gVal;
-                const b = isNaN(bVal) ? 255 : bVal;
+                let r = 255, g = 255, b = 255;
+                if (effectiveColor.startsWith('rgb')) {
+                    const parts = effectiveColor.match(/\d+/g);
+                    if (parts && parts.length >= 3) {
+                        r = parseInt(parts[0], 10);
+                        g = parseInt(parts[1], 10);
+                        b = parseInt(parts[2], 10);
+                    }
+                } else {
+                    const hex = effectiveColor.replace('#', '');
+                    r = parseInt(hex.substring(0, 2), 16) || 255;
+                    g = parseInt(hex.substring(2, 4), 16) || 255;
+                    b = parseInt(hex.substring(4, 6), 16) || 255;
+                }
                 
                 const tintGrad = ctxFog.createRadialGradient(light.x, light.y, 0, light.x, light.y, maxRadius);
                 tintGrad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.35)`);
                 
-                if (radiusBright > 0) {
-                    const brightStop = radiusBright / maxRadius;
-                    if (brightStop < 1) {
-                        tintGrad.addColorStop(brightStop, `rgba(${r}, ${g}, ${b}, 0.20)`);
-                    }
+                if (baseBrightDist > 0 && brightStop < 1.0) {
+                    tintGrad.addColorStop(brightStop, `rgba(${r}, ${g}, ${b}, 0.20)`);
                 }
                 
                 tintGrad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0.0)`);
-                
                 ctxFog.fillStyle = tintGrad;
                 ctxFog.fill();
+                ctxFog.restore();
             }
         });
+
+        if (anyLightHasAnimation) {
+            checkLightingAnimationLoop();
+        }
 
         ctxFog.globalCompositeOperation = 'source-over';
     }
 
-    function computeVisibilityPolygon(cx, cy, sightRadius, width, height) {
+    function checkLightingAnimationLoop() {
+        if (isLightingAnimationRunning) return;
+        isLightingAnimationRunning = true;
+        requestAnimationFrame(lightingAnimationTick);
+    }
+
+    function lightingAnimationTick() {
+        if (!canvasFog || !ctxFog) {
+            isLightingAnimationRunning = false;
+            return;
+        }
+        const hasAnimatedLight = (lights && lights.some(l => l.animationType && l.animationType !== 'none')) ||
+            (tokens && Object.values(tokens).some(t => t.lightEnabled && t.lightAnimationType && t.lightAnimationType !== 'none'));
+        if (!hasAnimatedLight) {
+            isLightingAnimationRunning = false;
+            return;
+        }
+        renderFogOfWarLayer(canvasFog.width, canvasFog.height);
+        requestAnimationFrame(lightingAnimationTick);
+    }
+
+    function computeVisibilityPolygon(cx, cy, sightRadius, width, height, beamArc = 360, beamFacing = 0) {
+        const isAngular = typeof beamArc === 'number' && beamArc < 360 && beamArc > 0;
+        const facingRad = ((beamFacing || 0) * Math.PI / 180) % (Math.PI * 2);
+        const normFacing = facingRad < 0 ? facingRad + Math.PI * 2 : facingRad;
+        const arcRad = (beamArc * Math.PI / 180);
+        const halfArc = arcRad / 2;
+
+        const isAngleInCone = (ang) => {
+            if (!isAngular) return true;
+            let diff = (ang - normFacing) % (Math.PI * 2);
+            if (diff < -Math.PI) diff += Math.PI * 2;
+            if (diff > Math.PI) diff -= Math.PI * 2;
+            return Math.abs(diff) <= halfArc + 0.001;
+        };
+
         // Collect rays and angles
         const angles = new Set();
         
-        // Add extreme map corners to keep boundaries
-        const boundaryPoints = [
-            { x: 0, y: 0 },
-            { x: width, y: 0 },
-            { x: width, y: height },
-            { x: 0, y: height }
-        ];
-
         // Setup boundary walls for ray casting
         const borderWalls = [
             { x1: 0, y1: 0, x2: width, y2: 0 },
@@ -1707,7 +2472,7 @@ let lastBroadcastedTokens = {};
         // Process walls for active layout/collision calculations (e.g. including hinged open doors)
         const processedWalls = [];
         walls.forEach(w => {
-            const coords = getWallCoordinatesForRaycasting(w);
+            const coords = getWallCoordinatesForRaycasting(w, cx, cy);
             if (coords) {
                 processedWalls.push({
                     x1: coords.x1,
@@ -1721,98 +2486,122 @@ let lastBroadcastedTokens = {};
         });
         const allWalls = [...processedWalls, ...borderWalls];
 
-        // Gather all unique wall vertices
-        const points = [];
-        allWalls.forEach(w => {
-            points.push({ x: w.x1, y: w.y1 });
-            points.push({ x: w.x2, y: w.y2 });
-        });
+        if (isAngular) {
+            // Add exact boundary rays of the cone
+            let startAng = (normFacing - halfArc) % (Math.PI * 2);
+            if (startAng < 0) startAng += Math.PI * 2;
+            let endAng = (normFacing + halfArc) % (Math.PI * 2);
+            if (endAng < 0) endAng += Math.PI * 2;
+            angles.add(startAng);
+            angles.add(endAng);
 
-        // Add boundary points
-        points.push(...boundaryPoints);
-
-        // Get unique points to prevent duplicates
-        const uniquePoints = [];
-        const seen = new Set();
-        points.forEach(p => {
-            const key = `${Math.round(p.x)},${Math.round(p.y)}`;
-            if (!seen.has(key)) {
-                seen.add(key);
-                uniquePoints.push(p);
+            // Add smooth step rays within the cone
+            const steps = Math.max(12, Math.round(beamArc / 6));
+            const stepRad = arcRad / steps;
+            for (let s = 0; s <= steps; s++) {
+                let a = (normFacing - halfArc + s * stepRad) % (Math.PI * 2);
+                if (a < 0) a += Math.PI * 2;
+                angles.add(a);
             }
+        } else {
+            // Standard 360 degree boundary points and regular interval rays
+            const boundaryPoints = [
+                { x: 0, y: 0 },
+                { x: width, y: 0 },
+                { x: width, y: height },
+                { x: 0, y: height }
+            ];
+            boundaryPoints.forEach(p => {
+                let angle = Math.atan2(p.y - cy, p.x - cx);
+                if (angle < 0) angle += Math.PI * 2;
+                angles.add(angle);
+            });
+            for (let a = 0; a < Math.PI * 2; a += 0.2) {
+                angles.add(a);
+            }
+        }
+
+        // Gather wall vertices that fall within sight/cone
+        const seen = new Set();
+        allWalls.forEach(w => {
+            [{ x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 }].forEach(p => {
+                const key = `${Math.round(p.x)},${Math.round(p.y)}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    let angle = Math.atan2(p.y - cy, p.x - cx);
+                    if (angle < 0) angle += Math.PI * 2;
+                    if (isAngleInCone(angle)) {
+                        angles.add(angle);
+                        let aMinus = angle - 0.0001;
+                        if (aMinus < 0) aMinus += Math.PI * 2;
+                        if (isAngleInCone(aMinus)) angles.add(aMinus);
+                        let aPlus = angle + 0.0001;
+                        if (aPlus >= Math.PI * 2) aPlus -= Math.PI * 2;
+                        if (isAngleInCone(aPlus)) angles.add(aPlus);
+                    }
+                }
+            });
         });
 
-        // For each vertex, calculate ray angle and cast rays (slightly offset to catch wall edges)
-        uniquePoints.forEach(p => {
-            const dx = p.x - cx;
-            const dy = p.y - cy;
-            let angle = Math.atan2(dy, dx);
-            if (angle < 0) angle += Math.PI * 2;
-            
-            angles.add(angle);
-            
-            let aMinus = angle - 0.0001;
-            if (aMinus < 0) aMinus += Math.PI * 2;
-            angles.add(aMinus);
-            
-            let aPlus = angle + 0.0001;
-            if (aPlus >= Math.PI * 2) aPlus -= Math.PI * 2;
-            angles.add(aPlus);
-        });
-
-        // Add exact points where walls intersect the sight radius to prevent diagonal cuts
+        // Add exact points where walls intersect sight radius
         allWalls.forEach(wall => {
             const dx = wall.x2 - wall.x1;
             const dy = wall.y2 - wall.y1;
             const fx = wall.x1 - cx;
             const fy = wall.y1 - cy;
-            
-            const a = dx*dx + dy*dy;
-            if (a === 0) return; // Skip zero-length walls
-
-            const b = 2 * (fx*dx + fy*dy);
-            const c = (fx*fx + fy*fy) - (sightRadius * sightRadius);
-            
-            const discriminant = b*b - 4*a*c;
+            const a = dx * dx + dy * dy;
+            if (a === 0) return;
+            const b = 2 * (fx * dx + fy * dy);
+            const c = (fx * fx + fy * fy) - (sightRadius * sightRadius);
+            const discriminant = b * b - 4 * a * c;
             if (discriminant > 0) {
                 const sqrtD = Math.sqrt(discriminant);
-                const t1 = (-b - sqrtD) / (2*a);
-                const t2 = (-b + sqrtD) / (2*a);
-                
+                const t1 = (-b - sqrtD) / (2 * a);
+                const t2 = (-b + sqrtD) / (2 * a);
                 [t1, t2].forEach(t => {
                     if (t >= 0 && t <= 1) {
                         const ix = wall.x1 + t * dx;
                         const iy = wall.y1 + t * dy;
                         let angle = Math.atan2(iy - cy, ix - cx);
                         if (angle < 0) angle += Math.PI * 2;
-                        
-                        angles.add(angle);
-                        
-                        let aMinus = angle - 0.0001;
-                        if (aMinus < 0) aMinus += Math.PI * 2;
-                        angles.add(aMinus);
-                        
-                        let aPlus = angle + 0.0001;
-                        if (aPlus >= Math.PI * 2) aPlus -= Math.PI * 2;
-                        angles.add(aPlus);
+                        if (isAngleInCone(angle)) {
+                            angles.add(angle);
+                            let aMinus = angle - 0.0001;
+                            if (aMinus < 0) aMinus += Math.PI * 2;
+                            if (isAngleInCone(aMinus)) angles.add(aMinus);
+                            let aPlus = angle + 0.0001;
+                            if (aPlus >= Math.PI * 2) aPlus -= Math.PI * 2;
+                            if (isAngleInCone(aPlus)) angles.add(aPlus);
+                        }
                     }
                 });
             }
         });
 
-        // Add regular interval rays to smooth circular sight bounds
-        for (let a = 0; a < Math.PI * 2; a += 0.2) {
-            angles.add(a);
+        let sortedAngles;
+        if (isAngular) {
+            // Sort relative to start of cone so rays form a continuous fan
+            const startAng = (normFacing - halfArc) % (Math.PI * 2);
+            const normStart = startAng < 0 ? startAng + Math.PI * 2 : startAng;
+            sortedAngles = Array.from(angles).map(ang => {
+                let rel = (ang - normStart) % (Math.PI * 2);
+                if (rel < 0) rel += Math.PI * 2;
+                return { ang, rel };
+            }).filter(item => item.rel <= arcRad + 0.002)
+              .sort((a, b) => a.rel - b.rel)
+              .map(item => item.ang);
+        } else {
+            sortedAngles = Array.from(angles).sort((a, b) => a - b);
         }
 
-        const sortedAngles = Array.from(angles).sort((a, b) => a - b);
         const polygon = [];
+        if (isAngular) {
+            polygon.push({ x: cx, y: cy });
+        }
 
         sortedAngles.forEach(angle => {
             const dx = Math.cos(angle);
             const dy = Math.sin(angle);
-
-            // Construct Ray
             const rx = cx + dx * sightRadius;
             const ry = cy + dy * sightRadius;
             
@@ -1820,13 +2609,11 @@ let lastBroadcastedTokens = {};
             let intersectX = rx;
             let intersectY = ry;
 
-            // Find closest wall intersection along ray
             allWalls.forEach(wall => {
                 const intersect = getLineIntersection(
                     cx, cy, rx, ry,
                     wall.x1, wall.y1, wall.x2, wall.y2
                 );
-
                 if (intersect && intersect.t < closestT) {
                     closestT = intersect.t;
                     intersectX = intersect.x;
@@ -1836,6 +2623,10 @@ let lastBroadcastedTokens = {};
 
             polygon.push({ x: intersectX, y: intersectY });
         });
+
+        if (isAngular) {
+            polygon.push({ x: cx, y: cy });
+        }
 
         return polygon;
     }
@@ -1934,7 +2725,7 @@ let lastBroadcastedTokens = {};
                         strokeCol = wall.type === 'window' ? 'rgba(13, 202, 240, 0.5)' : 'rgba(40, 167, 69, 0.8)'; // open
                         handleCol = wall.type === 'window' ? '#0dcaf0' : '#28a745';
                         doorSymbol = wall.type === 'window' ? '🌫️' : '🔓';
-                    } else if (wall.isLocked && !wall.isSecret) {
+                    } else if (wall.isLocked) {
                         strokeCol = 'rgba(220, 53, 69, 0.9)'; // locked (red)
                         handleCol = '#dc3545';
                         doorSymbol = '🔒';
@@ -1957,64 +2748,72 @@ let lastBroadcastedTokens = {};
                     ctxInteraction.stroke();
                     ctxInteraction.setLineDash([]);
 
-                    // Draw interactive circle handle(s)
-                    if (wall.type === 'window') {
-                        // Open/Close toggle
-                        ctxInteraction.fillStyle = handleCol;
-                        ctxInteraction.strokeStyle = isSelected ? '#ffc107' : '#ffffff';
-                        ctxInteraction.lineWidth = isSelected ? 2.5 : 1.5;
-                        ctxInteraction.beginPath();
-                        ctxInteraction.arc(midX - 12, midY, isSelected ? 12 : 10, 0, Math.PI * 2);
-                        ctxInteraction.fill();
-                        ctxInteraction.stroke();
-                        
-                        ctxInteraction.fillStyle = '#ffffff';
-                        ctxInteraction.font = isSelected ? 'bold 11px Inter' : '9px Inter';
-                        ctxInteraction.textAlign = 'center';
-                        ctxInteraction.textBaseline = 'middle';
-                        ctxInteraction.fillText(doorSymbol, midX - 12, midY);
+                    // Draw interactive circle handle(s) along the line
+                    const segDx = activeCoords.x2 - activeCoords.x1;
+                    const segDy = activeCoords.y2 - activeCoords.y1;
+                    const segLen = Math.hypot(segDx, segDy);
+                    const uX = segLen > 0 ? segDx / segLen : 1;
+                    const uY = segLen > 0 ? segDy / segLen : 0;
 
-                        // Draw/Undraw toggle
-                        ctxInteraction.fillStyle = wall.isDrawn ? '#28a745' : '#6c757d'; // Green if drawn, gray if undrawn
-                        ctxInteraction.strokeStyle = isSelected ? '#ffc107' : '#ffffff';
-                        ctxInteraction.lineWidth = isSelected ? 2.5 : 1.5;
-                        ctxInteraction.beginPath();
-                        ctxInteraction.arc(midX + 12, midY, isSelected ? 12 : 10, 0, Math.PI * 2);
-                        ctxInteraction.fill();
-                        ctxInteraction.stroke();
-                        
-                        ctxInteraction.fillStyle = '#ffffff';
-                        ctxInteraction.font = isSelected ? 'bold 11px Inter' : '9px Inter';
-                        ctxInteraction.fillText(wall.isDrawn ? '👁️' : '🕶️', midX + 12, midY);
-                    } else {
-                        // Open/Close toggle
-                        ctxInteraction.fillStyle = handleCol;
-                        ctxInteraction.strokeStyle = isSelected ? '#ffc107' : '#ffffff';
-                        ctxInteraction.lineWidth = isSelected ? 2.5 : 1.5;
-                        ctxInteraction.beginPath();
-                        ctxInteraction.arc(midX - 12, midY, isSelected ? 12 : 10, 0, Math.PI * 2);
-                        ctxInteraction.fill();
-                        ctxInteraction.stroke();
-                        
-                        ctxInteraction.fillStyle = '#ffffff';
-                        ctxInteraction.font = isSelected ? 'bold 11px Inter' : '9px Inter';
-                        ctxInteraction.textAlign = 'center';
-                        ctxInteraction.textBaseline = 'middle';
-                        ctxInteraction.fillText(doorSymbol, midX - 12, midY);
+                    // Check if one-way vision/light indicator should be drawn
+                    if (wall.oneWay && wall.oneWay !== 'none') {
+                        const perpX = -uY * 4;
+                        const perpY = uX * 4;
+                        const seeThroughDir = wall.oneWay === 'left' ? 1 : -1;
 
-                        // Secret toggle
-                        ctxInteraction.fillStyle = wall.isSecret ? '#6c757d' : '#28a745'; // Gray if secret, green if visible
-                        ctxInteraction.strokeStyle = isSelected ? '#ffc107' : '#ffffff';
-                        ctxInteraction.lineWidth = isSelected ? 2.5 : 1.5;
+                        ctxInteraction.save();
+                        // Green dashed line on see-through side
+                        ctxInteraction.strokeStyle = '#28a745';
+                        ctxInteraction.lineWidth = 2.5;
+                        ctxInteraction.setLineDash([4, 3]);
                         ctxInteraction.beginPath();
-                        ctxInteraction.arc(midX + 12, midY, isSelected ? 12 : 10, 0, Math.PI * 2);
-                        ctxInteraction.fill();
+                        ctxInteraction.moveTo(activeCoords.x1 + perpX * seeThroughDir, activeCoords.y1 + perpY * seeThroughDir);
+                        ctxInteraction.lineTo(activeCoords.x2 + perpX * seeThroughDir, activeCoords.y2 + perpY * seeThroughDir);
                         ctxInteraction.stroke();
-                        
-                        ctxInteraction.fillStyle = '#ffffff';
-                        ctxInteraction.font = isSelected ? 'bold 11px Inter' : '9px Inter';
-                        ctxInteraction.fillText(wall.isSecret ? '🕶️' : '👁️', midX + 12, midY);
+
+                        // Red solid line on blocked side
+                        ctxInteraction.strokeStyle = '#dc3545';
+                        ctxInteraction.lineWidth = 2.5;
+                        ctxInteraction.setLineDash([]);
+                        ctxInteraction.beginPath();
+                        ctxInteraction.moveTo(activeCoords.x1 - perpX * seeThroughDir, activeCoords.y1 - perpY * seeThroughDir);
+                        ctxInteraction.lineTo(activeCoords.x2 - perpX * seeThroughDir, activeCoords.y2 - perpY * seeThroughDir);
+                        ctxInteraction.stroke();
+                        ctxInteraction.restore();
                     }
+
+                    // 1. Open/Close toggle (ALWAYS DEAD CENTER)
+                    ctxInteraction.fillStyle = handleCol;
+                    ctxInteraction.strokeStyle = isSelected ? '#ffc107' : '#ffffff';
+                    ctxInteraction.lineWidth = isSelected ? 2.5 : 1.5;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(midX, midY, isSelected ? 12 : 10, 0, Math.PI * 2);
+                    ctxInteraction.fill();
+                    ctxInteraction.stroke();
+                    
+                    ctxInteraction.fillStyle = '#ffffff';
+                    ctxInteraction.font = isSelected ? 'bold 11px Inter' : '9px Inter';
+                    ctxInteraction.textAlign = 'center';
+                    ctxInteraction.textBaseline = 'middle';
+                    ctxInteraction.fillText(doorSymbol, midX, midY);
+
+                    // 2. Settings Cog for GM (Cleanly off-center)
+                    const cogDist = Math.min(22, Math.max(16, segLen * 0.28));
+                    const cogX = midX + uX * cogDist;
+                    const cogY = midY + uY * cogDist;
+                    ctxInteraction.fillStyle = '#1e232d';
+                    ctxInteraction.strokeStyle = isSelected ? '#ffc107' : 'rgba(255,255,255,0.7)';
+                    ctxInteraction.lineWidth = isSelected ? 2.0 : 1.2;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(cogX, cogY, isSelected ? 10 : 8.5, 0, Math.PI * 2);
+                    ctxInteraction.fill();
+                    ctxInteraction.stroke();
+
+                    ctxInteraction.fillStyle = '#ffc107';
+                    ctxInteraction.font = isSelected ? '10px Inter' : '8.5px Inter';
+                    ctxInteraction.textAlign = 'center';
+                    ctxInteraction.textBaseline = 'middle';
+                    ctxInteraction.fillText('⚙️', cogX, cogY);
 
                     // Draw hinge pivot indicator if GM and lighting layer is active
                     if (wall.hasHinge && isLightingActive) {
@@ -2069,6 +2868,58 @@ let lastBroadcastedTokens = {};
                     ctxInteraction.lineTo(wall.x2, wall.y2);
                     ctxInteraction.stroke();
 
+                    const segDx = wall.x2 - wall.x1;
+                    const segDy = wall.y2 - wall.y1;
+                    const segLen = Math.hypot(segDx, segDy);
+                    const uX = segLen > 0 ? segDx / segLen : 1;
+                    const uY = segLen > 0 ? segDy / segLen : 0;
+                    const midX = (wall.x1 + wall.x2) / 2;
+                    const midY = (wall.y1 + wall.y2) / 2;
+
+                    // One-way indicator lines for normal walls
+                    if (wall.oneWay && wall.oneWay !== 'none') {
+                        const perpX = -uY * 4;
+                        const perpY = uX * 4;
+                        const seeThroughDir = wall.oneWay === 'left' ? 1 : -1;
+
+                        ctxInteraction.save();
+                        // Green dashed line on see-through side
+                        ctxInteraction.strokeStyle = '#28a745';
+                        ctxInteraction.lineWidth = 2.5;
+                        ctxInteraction.setLineDash([4, 3]);
+                        ctxInteraction.beginPath();
+                        ctxInteraction.moveTo(wall.x1 + perpX * seeThroughDir, wall.y1 + perpY * seeThroughDir);
+                        ctxInteraction.lineTo(wall.x2 + perpX * seeThroughDir, wall.y2 + perpY * seeThroughDir);
+                        ctxInteraction.stroke();
+
+                        // Red solid line on blocked side
+                        ctxInteraction.strokeStyle = '#dc3545';
+                        ctxInteraction.lineWidth = 2.5;
+                        ctxInteraction.setLineDash([]);
+                        ctxInteraction.beginPath();
+                        ctxInteraction.moveTo(wall.x1 - perpX * seeThroughDir, wall.y1 - perpY * seeThroughDir);
+                        ctxInteraction.lineTo(wall.x2 - perpX * seeThroughDir, wall.y2 - perpY * seeThroughDir);
+                        ctxInteraction.stroke();
+                        ctxInteraction.restore();
+                    }
+
+                    // Draw Settings Cog at midpoint if in Lighting Layer or hovered/selected
+                    if (isLightingActive || isSelected || isHovered) {
+                        ctxInteraction.fillStyle = '#1e232d';
+                        ctxInteraction.strokeStyle = isSelected ? '#ffc107' : '#fd7e14';
+                        ctxInteraction.lineWidth = isSelected ? 2.0 : 1.2;
+                        ctxInteraction.beginPath();
+                        ctxInteraction.arc(midX, midY, isSelected ? 10 : 8.5, 0, Math.PI * 2);
+                        ctxInteraction.fill();
+                        ctxInteraction.stroke();
+
+                        ctxInteraction.fillStyle = '#ffc107';
+                        ctxInteraction.font = isSelected ? '10px Inter' : '8.5px Inter';
+                        ctxInteraction.textAlign = 'center';
+                        ctxInteraction.textBaseline = 'middle';
+                        ctxInteraction.fillText('⚙️', midX, midY);
+                    }
+
                     // Draw end handles (only visible in Lighting Layer)
                     if (isLightingActive) {
                         // Endpoint 1
@@ -2098,18 +2949,35 @@ let lastBroadcastedTokens = {};
                 }
             });
 
-            // Draw current active wall segment in progress
+            // Draw current active wall segment/shape in progress
             if (isDrawingWall && wallStartPoint) {
+                const mouse = getCanvasMouseCoords(lastMouseEvent);
+                const p1 = wallStartPoint;
+                const p2 = (lastMouseEvent && lastMouseEvent.altKey) ? mouse : snapToGrid(mouse.x, mouse.y);
+                
                 ctxInteraction.strokeStyle = currentLightingType === 'door' ? '#fd7e14' : currentLightingType === 'window' ? '#0dcaf0' : '#ffc107';
                 ctxInteraction.lineWidth = 3;
                 ctxInteraction.setLineDash([6, 6]);
-                ctxInteraction.beginPath();
-                ctxInteraction.moveTo(wallStartPoint.x, wallStartPoint.y);
-                
-                // Track current mouse
-                const mouse = getCanvasMouseCoords(lastMouseEvent);
-                ctxInteraction.lineTo(mouse.x, mouse.y);
-                ctxInteraction.stroke();
+
+                if (currentLightingType === 'wall' && currentWallShape === 'rect') {
+                    ctxInteraction.strokeRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+                } else if (currentLightingType === 'wall' && currentWallShape === 'circle') {
+                    const r = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(p1.x, p1.y, r, 0, Math.PI * 2);
+                    ctxInteraction.stroke();
+                } else if (currentLightingType === 'wall' && currentWallShape === 'arc') {
+                    const r = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+                    const ang = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(p1.x, p1.y, r, ang - Math.PI / 2, ang + Math.PI / 2);
+                    ctxInteraction.stroke();
+                } else {
+                    ctxInteraction.beginPath();
+                    ctxInteraction.moveTo(p1.x, p1.y);
+                    ctxInteraction.lineTo(p2.x, p2.y);
+                    ctxInteraction.stroke();
+                }
                 ctxInteraction.setLineDash([]);
             }
 
@@ -2121,7 +2989,7 @@ let lastBroadcastedTokens = {};
             // --- DRAW TOKENS ---
             Object.values(tokens || {}).forEach(t => {
                 if (t.isVisible === false && !isGmViewing) return; // Players can't see explicitly hidden tokens
-                if (t.layer !== activeLayer && !isGmViewing) return; // Players only see 'token' layer unless GM
+                if (t.layer !== activeLayer && t.layer !== 'map' && !isGmViewing) return; // Players see 'token' layer and 'map' layer
 
                 const cx = t.x * grid.size * grid.scale;
                 const cy = t.y * grid.size * grid.scale;
@@ -2182,17 +3050,69 @@ let lastBroadcastedTokens = {};
                         ctxInteraction.fill();
                     });
                 }
+
+                // Draw token directional cone guide and rotation handle if angular light is enabled
+                const isSelectedToken = selectedTokenIds.has(t.id) || (selectedTokenId && selectedTokenId === t.id);
+                if (t.lightEnabled && t.lightAngle && t.lightAngle < 360 && isSelectedToken) {
+                    const center = { x: cx + sz / 2, y: cy + sz / 2 };
+                    const effFacing = getTokenEffectiveLightFacing(t);
+                    const facing = (effFacing * Math.PI / 180);
+                    const arc = (t.lightAngle * Math.PI / 180);
+                    const r = sz / 2;
+                    const hx = center.x + Math.cos(facing) * (r + 20);
+                    const hy = center.y + Math.sin(facing) * (r + 20);
+
+                    ctxInteraction.save();
+                    ctxInteraction.strokeStyle = 'rgba(255, 170, 0, 0.7)';
+                    ctxInteraction.lineWidth = 1.5;
+                    ctxInteraction.setLineDash([3, 3]);
+                    ctxInteraction.beginPath();
+                    ctxInteraction.moveTo(center.x, center.y);
+                    ctxInteraction.lineTo(center.x + Math.cos(facing - arc / 2) * (r + 38), center.y + Math.sin(facing - arc / 2) * (r + 38));
+                    ctxInteraction.moveTo(center.x, center.y);
+                    ctxInteraction.lineTo(center.x + Math.cos(facing + arc / 2) * (r + 38), center.y + Math.sin(facing + arc / 2) * (r + 38));
+                    ctxInteraction.stroke();
+                    ctxInteraction.setLineDash([]);
+
+                    // Direction line to handle
+                    ctxInteraction.strokeStyle = '#ffc107';
+                    ctxInteraction.lineWidth = 2;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.moveTo(center.x, center.y);
+                    ctxInteraction.lineTo(hx, hy);
+                    ctxInteraction.stroke();
+
+                    // Rotation handle
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(hx, hy, 5.5, 0, Math.PI * 2);
+                    ctxInteraction.fillStyle = '#ffc107';
+                    ctxInteraction.fill();
+                    ctxInteraction.strokeStyle = '#ffffff';
+                    ctxInteraction.lineWidth = 1.5;
+                    ctxInteraction.stroke();
+                    ctxInteraction.restore();
+                }
             });
 
             walls.forEach(wall => {
                 if (wall.type !== 'door' && wall.type !== 'window') return;
+                if (wall.isSecret && vtt.role !== 'GM') return;
                 
                 const activeCoords = getWallCoordinatesForRaycasting(wall) || { x1: wall.x1, y1: wall.y1, x2: wall.x2, y2: wall.y2 };
                 const midX = (activeCoords.x1 + activeCoords.x2) / 2;
                 const midY = (activeCoords.y1 + activeCoords.y2) / 2;
                 
-                if (!isPointVisible(midX, midY)) return;
-                if (wall.isSecret && vtt.role !== 'GM') return;
+                const segDx = activeCoords.x2 - activeCoords.x1;
+                const segDy = activeCoords.y2 - activeCoords.y1;
+                const segLen = Math.hypot(segDx, segDy);
+                const nx = segLen > 0 ? -segDy / segLen : 0;
+                const ny = segLen > 0 ? segDx / segLen : 0;
+
+                // Visible if midpoint or either side of wall normal is visible in player LOS
+                const isSide1Vis = isPointVisible(midX + nx * 6, midY + ny * 6);
+                const isSide2Vis = isPointVisible(midX - nx * 6, midY - ny * 6);
+                const isCenterVis = isPointVisible(midX, midY);
+                if (!isSide1Vis && !isSide2Vis && !isCenterVis) return;
 
                 let strokeCol = 'rgba(253, 126, 20, 0.8)'; // closed
                 let handleCol = '#fd7e14';
@@ -2207,7 +3127,7 @@ let lastBroadcastedTokens = {};
                 if (wall.isOpen) {
                     strokeCol = wall.type === 'window' ? 'rgba(13, 202, 240, 0.5)' : 'rgba(40, 167, 69, 0.7)'; // open
                     handleCol = wall.type === 'window' ? '#0dcaf0' : '#28a745';
-                    doorSymbol = wall.type === 'window' ? '🌫️' : '🔓';
+                    doorSymbol = '🔓';
                 } else if (wall.isLocked && !wall.isSecret) {
                     strokeCol = 'rgba(220, 53, 69, 0.8)'; // locked (red)
                     handleCol = '#dc3545';
@@ -2225,17 +3145,17 @@ let lastBroadcastedTokens = {};
                 ctxInteraction.stroke();
                 ctxInteraction.setLineDash([]);
 
-                // Open/Close toggle (centered for players)
+                // Open/Close toggle (ALWAYS DEAD CENTER on line for players)
                 ctxInteraction.fillStyle = handleCol;
                 ctxInteraction.strokeStyle = '#ffffff';
-                ctxInteraction.lineWidth = 1;
+                ctxInteraction.lineWidth = 1.2;
                 ctxInteraction.beginPath();
-                ctxInteraction.arc(midX, midY, 9, 0, Math.PI * 2);
+                ctxInteraction.arc(midX, midY, 9.5, 0, Math.PI * 2);
                 ctxInteraction.fill();
                 ctxInteraction.stroke();
                 
                 ctxInteraction.fillStyle = '#ffffff';
-                ctxInteraction.font = '8px Inter';
+                ctxInteraction.font = '8.5px Inter';
                 ctxInteraction.textAlign = 'center';
                 ctxInteraction.textBaseline = 'middle';
                 ctxInteraction.fillText(doorSymbol, midX, midY);
@@ -2289,6 +3209,44 @@ let lastBroadcastedTokens = {};
                 ctxInteraction.textAlign = 'center';
                 ctxInteraction.textBaseline = 'middle';
                 ctxInteraction.fillText('💡', light.x, light.y);
+
+                // Draw rotation handle and directional cone guide if angular light and selected
+                if (isSelected && light.lightAngle && light.lightAngle < 360) {
+                    const facing = ((light.lightRotation || 0) * Math.PI / 180);
+                    const arc = (light.lightAngle * Math.PI / 180);
+                    const hx = light.x + Math.cos(facing) * 36;
+                    const hy = light.y + Math.sin(facing) * 36;
+
+                    ctxInteraction.save();
+                    ctxInteraction.strokeStyle = 'rgba(255, 170, 0, 0.7)';
+                    ctxInteraction.lineWidth = 1.5;
+                    ctxInteraction.setLineDash([3, 3]);
+                    ctxInteraction.beginPath();
+                    ctxInteraction.moveTo(light.x, light.y);
+                    ctxInteraction.lineTo(light.x + Math.cos(facing - arc / 2) * 55, light.y + Math.sin(facing - arc / 2) * 55);
+                    ctxInteraction.moveTo(light.x, light.y);
+                    ctxInteraction.lineTo(light.x + Math.cos(facing + arc / 2) * 55, light.y + Math.sin(facing + arc / 2) * 55);
+                    ctxInteraction.stroke();
+                    ctxInteraction.setLineDash([]);
+
+                    // Direction line to handle
+                    ctxInteraction.strokeStyle = '#ffc107';
+                    ctxInteraction.lineWidth = 2;
+                    ctxInteraction.beginPath();
+                    ctxInteraction.moveTo(light.x, light.y);
+                    ctxInteraction.lineTo(hx, hy);
+                    ctxInteraction.stroke();
+
+                    // Rotation handle circle
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(hx, hy, 5.5, 0, Math.PI * 2);
+                    ctxInteraction.fillStyle = '#ffc107';
+                    ctxInteraction.fill();
+                    ctxInteraction.strokeStyle = '#ffffff';
+                    ctxInteraction.lineWidth = 1.5;
+                    ctxInteraction.stroke();
+                    ctxInteraction.restore();
+                }
             });
         }
 
@@ -2478,7 +3436,8 @@ let lastBroadcastedTokens = {};
         Object.values(shapes).forEach(s => {
             const shapeLayer = s.layer || 'token';
             if (shapeLayer !== activeLayer && !isGmViewing) return;
-            const isSelected = selectedShapeId === s.id || selectedShapeIds.has(s.id);
+            const isControlled = isShapeControlledByPlayer(s);
+            const isSelected = isControlled && (selectedShapeId === s.id || selectedShapeIds.has(s.id));
             
             ctxInteraction.save();
             if (vtt.role === 'GM' && activeLayer !== shapeLayer) {
@@ -2490,11 +3449,13 @@ let lastBroadcastedTokens = {};
             }
             
             drawMeasurementTemplate(ctxInteraction, s.startPoint, s.endPoint, s.shape, s.squareAnchor, s.beamWidth, s.color, s.ownerUsername, null, s.points || null, false);
-            drawShapeComponentHandles(ctxInteraction, s, s.id);
+            if (isControlled) {
+                drawShapeComponentHandles(ctxInteraction, s, s.id);
+            }
             ctxInteraction.restore();
             
-            // If select tool is active, draw a premium center target anchor ring
-            if (activeTool === 'select') {
+            // If select tool is active and shape is controlled, draw center target anchor ring
+            if (activeTool === 'select' && isControlled) {
                 const center = getShapeCenterPoint(s);
                 ctxInteraction.save();
                 ctxInteraction.fillStyle = isSelected ? 'var(--color-gold-base)' : 'rgba(255, 255, 255, 0.7)';
@@ -4127,6 +5088,11 @@ window.emitTokenUpdates = function(currentTokens) {
     // Find deletes
     for (const id in lastBroadcastedTokens) {
         if (!currentTokens[id]) {
+            // Guard: Never delete background map assets via auto-diff
+            const oldTok = lastBroadcastedTokens[id];
+            if (oldTok && (oldTok.layer === 'map' || oldTok.isBackground) && oldTok.isAsset) {
+                continue;
+            }
             vtt.socket.emit('token:delete', { mapId: currentMapId, tokenId: id });
         }
     }
@@ -4189,6 +5155,16 @@ window.emitTokenUpdates = function(currentTokens) {
             console.log('[campaign:state-sync] modal open?', isModalOpen);
             if (isModalOpen) {
                 requestAnimationFrame(() => renderMapGrid());
+            }
+        });
+
+        socket.on('map:full_data', (data) => {
+            if (!data || !data.mapId || !data.map) return;
+            if (vtt.campaignState && vtt.campaignState.maps) {
+                vtt.campaignState.maps[data.mapId] = data.map;
+            }
+            if (data.mapId === currentMapId) {
+                loadMap(data.mapId);
             }
         });
 
@@ -4775,6 +5751,24 @@ window.emitTokenUpdates = function(currentTokens) {
             });
         }
 
+        if (mapDropdown) {
+            mapDropdown.addEventListener('change', () => {
+                if (mapDropdown.selectedIndex >= 0 && mapDropdown.value) {
+                    const selectedText = mapDropdown.options[mapDropdown.selectedIndex].textContent;
+                    if (selectedText && newMapNameInput && (!newMapNameInput.value.trim() || newMapNameInput.dataset.autoFilled === 'true')) {
+                        newMapNameInput.value = selectedText;
+                        newMapNameInput.dataset.autoFilled = 'true';
+                    }
+                }
+            });
+        }
+
+        if (newMapNameInput) {
+            newMapNameInput.addEventListener('input', () => {
+                newMapNameInput.dataset.autoFilled = 'false';
+            });
+        }
+
         if (btnBulkImport) {
             btnBulkImport.addEventListener('click', async () => {
                 const advId = advSelect ? advSelect.value : null;
@@ -4887,6 +5881,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (!url) return alert("Please enter image URL");
                 
                 try {
+                    btnCreateSubmit.disabled = true;
                     btnCreateSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Resolving...';
                     if (window.VTT && typeof window.VTT.resolveMediaUrl === 'function') {
                         const res = await window.VTT.resolveMediaUrl(url);
@@ -4938,6 +5933,8 @@ window.emitTokenUpdates = function(currentTokens) {
                             y: 0,
                             layer: 'map',
                             isAsset: true,
+                            isBackground: true,
+                            locked: true,
                             img: isYt ? embedUrl : url,
                             isVideo: isYt || !!url.match(/\.(mp4|webm|ogg)(\?.*)?$/i) || url.includes('pinimg.com/videos'),
                             pixelWidth: nw,
@@ -4951,7 +5948,7 @@ window.emitTokenUpdates = function(currentTokens) {
                     console.log('[map:create] Emitting map:create for URL map as Freeform Asset...', isYt ? embedUrl : url);
                     vtt.socket.emit('map:create', {
                         name,
-                        mapImage: "",
+                        mapImage: isYt ? "" : url,
                         thumbnail: thumbUrl,
                         gridWidth: gWidth,
                         gridHeight: gHeight,
@@ -4967,6 +5964,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 } catch (e) {
                     console.warn('[map:create] URL resolution warning:', e);
                 } finally {
+                    btnCreateSubmit.disabled = false;
                     btnCreateSubmit.innerHTML = 'Create Map';
                 }
             } else if (mapSelect.value === '5etools') {
@@ -4974,17 +5972,27 @@ window.emitTokenUpdates = function(currentTokens) {
                 const mapId = mapDropdown.value;
                 if(!advId || !mapId) return alert("Please select an adventure and a map to import.");
                 
-                if(window.VTT && window.VTT.dataBridge && window.VTT.dataBridge.import5etoolsMap) {
-                    const importedMap = await window.VTT.dataBridge.import5etoolsMap(advId, mapId);
-                    if(importedMap) {
-                        importedMap.name = name; // Override with user's name
-                        console.log('[map:create] Emitting map:create for 5etools map...', importedMap);
-                        vtt.socket.emit('map:create', importedMap);
-                        createPanel.classList.add('vtt-hidden');
-                        renderMapGrid();
-                    } else {
-                        alert("Error parsing the selected map.");
+                try {
+                    btnCreateSubmit.disabled = true;
+                    btnCreateSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Importing Map...';
+                    if(window.VTT && window.VTT.dataBridge && window.VTT.dataBridge.import5etoolsMap) {
+                        const importedMap = await window.VTT.dataBridge.import5etoolsMap(advId, mapId);
+                        if(importedMap) {
+                            importedMap.name = name; // Override with user's name
+                            console.log('[map:create] Emitting map:create for 5etools map...', importedMap);
+                            vtt.socket.emit('map:create', importedMap);
+                            createPanel.classList.add('vtt-hidden');
+                            renderMapGrid();
+                        } else {
+                            alert("Error parsing the selected map.");
+                        }
                     }
+                } catch (err) {
+                    console.error("Error importing 5etools map:", err);
+                    alert("Failed to import 5etools map: " + (err.message || err));
+                } finally {
+                    btnCreateSubmit.disabled = false;
+                    btnCreateSubmit.innerHTML = 'Create Map';
                 }
             } else {
                 // File upload via REST api
@@ -4994,6 +6002,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 formData.append('image', file);
 
                 try {
+                    btnCreateSubmit.disabled = true;
                     btnCreateSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
                     const res = await fetch('/api/upload', {
                         method: 'POST',
@@ -5026,6 +6035,8 @@ window.emitTokenUpdates = function(currentTokens) {
                                 y: 0,
                                 layer: 'map',
                                 isAsset: true,
+                                isBackground: true,
+                                locked: true,
                                 img: uploadedUrl,
                                 pixelWidth: nw,
                                 pixelHeight: nh,
@@ -5037,7 +6048,7 @@ window.emitTokenUpdates = function(currentTokens) {
 
                         vtt.socket.emit('map:create', {
                             name,
-                            mapImage: "",
+                            mapImage: uploadedUrl,
                             thumbnail: uploadedUrl,
                             gridWidth: gWidth,
                             gridHeight: gHeight,
@@ -5373,6 +6384,40 @@ window.emitTokenUpdates = function(currentTokens) {
             }
         });
 
+        // 5e Light Presets & FX in Token Edit modal
+        const tokenLightPresetSelect = document.getElementById('token-edit-light-preset');
+        const tokenLightFxSelect = document.getElementById('token-edit-light-fx');
+        const tokenLightFxOptionsPanel = document.getElementById('token-edit-light-fx-options');
+        const tokenLightColor2GroupEl = document.getElementById('token-edit-light-color2-group');
+
+        if (tokenLightPresetSelect) {
+            tokenLightPresetSelect.addEventListener('change', () => {
+                const pId = tokenLightPresetSelect.value;
+                if (pId && pId !== 'custom' && LIGHTING_PRESETS[pId]) {
+                    const p = LIGHTING_PRESETS[pId];
+                    document.getElementById('token-edit-light-bright').value = p.bright;
+                    document.getElementById('token-edit-light-dim').value = p.dim;
+                    document.getElementById('token-edit-light-angle').value = p.angle;
+                    document.getElementById('token-edit-light-color').value = p.color;
+                    if (tokenLightFxSelect) tokenLightFxSelect.value = p.animationType || 'none';
+                    if (document.getElementById('token-edit-light-speed')) document.getElementById('token-edit-light-speed').value = p.animationSpeed || 1.0;
+                    if (document.getElementById('token-edit-light-intensity')) document.getElementById('token-edit-light-intensity').value = p.animationIntensity || 0.10;
+                    if (document.getElementById('token-edit-light-color2')) document.getElementById('token-edit-light-color2').value = p.animationColor2 || '#ffe082';
+
+                    if (tokenLightFxOptionsPanel) tokenLightFxOptionsPanel.classList.toggle('vtt-hidden', (p.animationType || 'none') === 'none');
+                    if (tokenLightColor2GroupEl) tokenLightColor2GroupEl.classList.toggle('vtt-hidden', p.animationType !== 'color_shift');
+                }
+            });
+        }
+
+        if (tokenLightFxSelect) {
+            tokenLightFxSelect.addEventListener('change', () => {
+                const val = tokenLightFxSelect.value;
+                if (tokenLightFxOptionsPanel) tokenLightFxOptionsPanel.classList.toggle('vtt-hidden', val === 'none');
+                if (tokenLightColor2GroupEl) tokenLightColor2GroupEl.classList.toggle('vtt-hidden', val !== 'color_shift');
+            });
+        }
+
         // Visual FX Tab switching logic
         const tabBtnOverlay = document.getElementById('tab-btn-fx-overlay');
         const tabBtnVignette = document.getElementById('tab-btn-fx-vignette');
@@ -5536,6 +6581,12 @@ window.emitTokenUpdates = function(currentTokens) {
             tokens[selectedTokenIdForEdit].lightBright = lightBright;
             tokens[selectedTokenIdForEdit].lightDim = lightDim;
             tokens[selectedTokenIdForEdit].lightColor = lightColor;
+            tokens[selectedTokenIdForEdit].lightAngle = parseInt(document.getElementById('token-edit-light-angle')?.value) || 360;
+            tokens[selectedTokenIdForEdit].lightRotation = parseInt(document.getElementById('token-edit-light-rotation')?.value) || 0;
+            tokens[selectedTokenIdForEdit].lightAnimationType = document.getElementById('token-edit-light-fx')?.value || 'none';
+            tokens[selectedTokenIdForEdit].lightAnimationSpeed = parseFloat(document.getElementById('token-edit-light-speed')?.value) || 1.0;
+            tokens[selectedTokenIdForEdit].lightAnimationIntensity = parseFloat(document.getElementById('token-edit-light-intensity')?.value) || 0.10;
+            tokens[selectedTokenIdForEdit].lightAnimationColor2 = document.getElementById('token-edit-light-color2')?.value || '#ffe082';
 
             // Save Auras array (stripping details expand UI state)
             tokens[selectedTokenIdForEdit].auras = tempAurasList.map(a => {
@@ -5605,6 +6656,12 @@ window.emitTokenUpdates = function(currentTokens) {
                         char.tokenLightBright = editedToken.lightBright;
                         char.tokenLightDim = editedToken.lightDim;
                         char.tokenLightColor = editedToken.lightColor;
+                        char.tokenLightAngle = editedToken.lightAngle;
+                        char.tokenLightRotation = editedToken.lightRotation;
+                        char.tokenLightAnimationType = editedToken.lightAnimationType;
+                        char.tokenLightAnimationSpeed = editedToken.lightAnimationSpeed;
+                        char.tokenLightAnimationIntensity = editedToken.lightAnimationIntensity;
+                        char.tokenLightAnimationColor2 = editedToken.lightAnimationColor2;
                     }
 
                     vtt.socket.emit('character:update', { character: char });
@@ -5681,6 +6738,28 @@ window.emitTokenUpdates = function(currentTokens) {
         document.getElementById('token-edit-light-bright').value = token.lightBright !== undefined ? token.lightBright : 20;
         document.getElementById('token-edit-light-dim').value = token.lightDim !== undefined ? token.lightDim : 40;
         document.getElementById('token-edit-light-color').value = token.lightColor || '#ffaa00';
+        const tokenLightAngleEl = document.getElementById('token-edit-light-angle');
+        const tokenLightRotEl = document.getElementById('token-edit-light-rotation');
+        if (tokenLightAngleEl) tokenLightAngleEl.value = token.lightAngle !== undefined ? token.lightAngle : 360;
+        if (tokenLightRotEl) tokenLightRotEl.value = token.lightRotation !== undefined ? token.lightRotation : 0;
+
+        const tokenLightPresetEl = document.getElementById('token-edit-light-preset');
+        if (tokenLightPresetEl) tokenLightPresetEl.value = 'custom';
+        const tokenLightFxEl = document.getElementById('token-edit-light-fx');
+        const tokenLightSpeedEl = document.getElementById('token-edit-light-speed');
+        const tokenLightIntensityEl = document.getElementById('token-edit-light-intensity');
+        const tokenLightColor2El = document.getElementById('token-edit-light-color2');
+        const tokenLightFxOptions = document.getElementById('token-edit-light-fx-options');
+        const tokenLightColor2Group = document.getElementById('token-edit-light-color2-group');
+
+        const animType = token.lightAnimationType || 'none';
+        if (tokenLightFxEl) tokenLightFxEl.value = animType;
+        if (tokenLightSpeedEl) tokenLightSpeedEl.value = token.lightAnimationSpeed !== undefined ? token.lightAnimationSpeed : 1.0;
+        if (tokenLightIntensityEl) tokenLightIntensityEl.value = token.lightAnimationIntensity !== undefined ? token.lightAnimationIntensity : 0.10;
+        if (tokenLightColor2El) tokenLightColor2El.value = token.lightAnimationColor2 || '#ffe082';
+
+        if (tokenLightFxOptions) tokenLightFxOptions.classList.toggle('vtt-hidden', animType === 'none');
+        if (tokenLightColor2Group) tokenLightColor2Group.classList.toggle('vtt-hidden', animType !== 'color_shift');
         
         if (isLightEnabled) {
             document.getElementById('token-light-settings').classList.remove('vtt-hidden');
@@ -6427,6 +7506,43 @@ window.emitTokenUpdates = function(currentTokens) {
             `;
         }
 
+        // Equip Light Submenu
+        html += `
+            <div class="vtt-token-menu-item">
+                <span><i class="fa-solid fa-fire item-icon" style="color: #ff9d3b;"></i> Equip Light</span>
+                <i class="fa-solid fa-chevron-right chevron-icon"></i>
+                <div class="vtt-token-submenu" style="min-width: 220px;">
+                    <div class="vtt-token-submenu-list scroll-styled">
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="torch">
+                            <span>🔥 Torch (20/40 ft)</span>
+                        </div>
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="lantern_hooded">
+                            <span>🏮 Hooded Lantern (30/60 ft)</span>
+                        </div>
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="lantern_bullseye">
+                            <span>🔦 Bullseye Lantern (60/120 ft)</span>
+                        </div>
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="candle">
+                            <span>🕯️ Candle (5/10 ft)</span>
+                        </div>
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="spell_light">
+                            <span>✨ Light Spell (20/40 ft)</span>
+                        </div>
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="campfire">
+                            <span>🏕️ Campfire (30/60 ft)</span>
+                        </div>
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="darkvision">
+                            <span>👁️ Darkvision (60 ft)</span>
+                        </div>
+                        <div class="vtt-token-menu-divider"></div>
+                        <div class="vtt-submenu-item menu-ctx-equip-light" data-preset="extinguish">
+                            <span style="color: var(--color-danger);"><i class="fa-solid fa-ban"></i> Extinguish Light</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
         // 4. Transform options (All Users)
         html += `
             <div class="vtt-token-menu-divider"></div>
@@ -6811,6 +7927,13 @@ window.emitTokenUpdates = function(currentTokens) {
                     }
                 }
 
+                // Synchronize with Initiative Tracker
+                if (window.VTT?.chatEngine?.updateCombatantTokenArt) {
+                    window.VTT.chatEngine.updateCombatantTokenArt(tokenId, url, t.characterId);
+                } else if (window.VTT?.chatEngine?.refreshInitiative) {
+                    window.VTT.chatEngine.refreshInitiative();
+                }
+
                 if (vtt.socket) {
                     window.emitTokenUpdates(tokens);
                 }
@@ -6818,6 +7941,26 @@ window.emitTokenUpdates = function(currentTokens) {
                 menu.remove();
             });
         });
+
+        // Equip Light handlers
+        menu.querySelectorAll('.menu-ctx-equip-light').forEach(item => {
+            item.addEventListener('click', () => {
+                const targetToken = tokens[tokenId];
+                if (!targetToken) return;
+                const preset = item.dataset.preset;
+                if (preset === 'extinguish') {
+                    targetToken.lightEnabled = false;
+                } else {
+                    applyTokenLightingPreset(targetToken, preset);
+                }
+                if (vtt.socket) {
+                    window.emitTokenUpdates(tokens);
+                }
+                renderAll();
+                menu.remove();
+            });
+        });
+
         // Flip Token
         const btnFlipH = menu.querySelector('#menu-flip-h');
         if (btnFlipH) {
@@ -8090,18 +9233,26 @@ window.emitTokenUpdates = function(currentTokens) {
             return;
         }
         if ((e.key === 'Delete' || e.key === 'Backspace') && selectedTokenIds.size > 0 && !isInputActive) {
-            selectedTokenIds.forEach(id => delete tokens[id]);
+            selectedTokenIds.forEach(id => {
+                const t = tokens[id];
+                if (t && (t.layer === 'map' || t.isBackground) && t.isAsset) return; // Never delete map artwork
+                delete tokens[id];
+            });
             selectedTokenIds.clear();
+            selectedTokenId = null;
             tokenDragOriginalPositions = {};
             window.emitTokenUpdates(tokens);
             renderAll();
         }
         
         if ((e.key === 'Delete' || e.key === 'Backspace') && selectedShapeId && !isInputActive) {
-            delete shapes[selectedShapeId];
+            const s = shapes[selectedShapeId];
+            if (s && isShapeControlledByPlayer(s)) {
+                delete shapes[selectedShapeId];
+                vtt.socket.emit('shapes:update', { mapId: currentMapId, shapes });
+            }
             selectedShapeId = null;
             selectedShapeComponent = null;
-            vtt.socket.emit('shapes:update', { mapId: currentMapId, shapes });
             renderAll();
         }
 
@@ -8164,6 +9315,7 @@ window.emitTokenUpdates = function(currentTokens) {
             { id: 'config-player-player-name-visible', key: 'playerPlayerNameVisible', type: 'select' },
             { id: 'config-player-temp-hp-visible', key: 'playerTempHpBarVisible', type: 'select' },
             { id: 'config-player-temp-hp-num-visible', key: 'playerTempHpNumVisible', type: 'checkbox' },
+            { id: 'config-player-stat-tooltip-visible', key: 'playerStatTooltipVisible', type: 'select' },
             { id: 'config-gm-monster-hp-visible', key: 'gmMonsterHpBarVisible', type: 'select' },
             { id: 'config-gm-monster-hp-num-visible', key: 'gmMonsterHpNumVisible', type: 'checkbox' },
             { id: 'config-gm-monster-name-visible', key: 'gmMonsterNameVisible', type: 'select' },
@@ -8172,6 +9324,7 @@ window.emitTokenUpdates = function(currentTokens) {
             { id: 'config-gm-player-name-visible', key: 'gmPlayerNameVisible', type: 'select' },
             { id: 'config-gm-temp-hp-visible', key: 'gmTempHpBarVisible', type: 'select' },
             { id: 'config-gm-temp-hp-num-visible', key: 'gmTempHpNumVisible', type: 'checkbox' },
+            { id: 'config-gm-stat-tooltip-visible', key: 'gmStatTooltipVisible', type: 'select' },
             { id: 'config-temp-hp-style', key: 'tempHpBarStyle', type: 'select' },
             { id: 'config-init-dex-tiebreaker', key: 'initDexTiebreaker', type: 'checkbox' }
         ];
@@ -8199,6 +9352,7 @@ window.emitTokenUpdates = function(currentTokens) {
             { id: 'config-player-player-name-visible', key: 'playerPlayerNameVisible', type: 'select' },
             { id: 'config-player-temp-hp-visible', key: 'playerTempHpBarVisible', type: 'select' },
             { id: 'config-player-temp-hp-num-visible', key: 'playerTempHpNumVisible', type: 'checkbox' },
+            { id: 'config-player-stat-tooltip-visible', key: 'playerStatTooltipVisible', type: 'select' },
             { id: 'config-gm-monster-hp-visible', key: 'gmMonsterHpBarVisible', type: 'select' },
             { id: 'config-gm-monster-hp-num-visible', key: 'gmMonsterHpNumVisible', type: 'checkbox' },
             { id: 'config-gm-monster-name-visible', key: 'gmMonsterNameVisible', type: 'select' },
@@ -8207,6 +9361,7 @@ window.emitTokenUpdates = function(currentTokens) {
             { id: 'config-gm-player-name-visible', key: 'gmPlayerNameVisible', type: 'select' },
             { id: 'config-gm-temp-hp-visible', key: 'gmTempHpBarVisible', type: 'select' },
             { id: 'config-gm-temp-hp-num-visible', key: 'gmTempHpNumVisible', type: 'checkbox' },
+            { id: 'config-gm-stat-tooltip-visible', key: 'gmStatTooltipVisible', type: 'select' },
             { id: 'config-temp-hp-style', key: 'tempHpBarStyle', type: 'select' },
             { id: 'config-init-dex-tiebreaker', key: 'initDexTiebreaker', type: 'checkbox' }
         ];
@@ -8234,7 +9389,7 @@ window.emitTokenUpdates = function(currentTokens) {
         return { x, y };
     }
 
-    // ── GM Token Hover Tooltip ────────────────────────────────────────────────
+    // ── Token Hover Stat Tooltip (AC, PP, Speed, PI, PInv) ───────────────────────
 
     // Inject tooltip CSS once into <head>
     (function injectGmTooltipStyles() {
@@ -8245,30 +9400,30 @@ window.emitTokenUpdates = function(currentTokens) {
             #vtt-gm-token-tooltip {
                 position: fixed;
                 z-index: 99999;
-                width: 210px;
-                background: rgba(12, 15, 24, 0.97);
-                border: 1px solid rgba(212, 175, 55, 0.30);
+                width: 232px;
+                background: rgba(12, 15, 24, 0.96);
+                border: 1px solid rgba(212, 175, 55, 0.38);
                 border-radius: 10px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.70), 0 0 0 1px rgba(255,255,255,0.03) inset;
+                box-shadow: 0 10px 36px rgba(0,0,0,0.80), 0 0 0 1px rgba(255,255,255,0.04) inset;
                 font-family: var(--font-primary, 'Inter', sans-serif);
                 font-size: 12px;
                 color: var(--color-text-primary, #e8e8ec);
                 pointer-events: none;
                 user-select: none;
                 backdrop-filter: blur(8px);
-                animation: gmTooltipFadeIn 0.18s cubic-bezier(0.22,1,0.36,1) forwards;
+                animation: gmTooltipFadeIn 0.16s cubic-bezier(0.22,1,0.36,1) forwards;
                 transform-origin: top left;
             }
             @keyframes gmTooltipFadeIn {
-                from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+                from { opacity: 0; transform: translateY(-3px) scale(0.98); }
                 to   { opacity: 1; transform: translateY(0)    scale(1);    }
             }
             #vtt-gm-token-tooltip .gm-tip-header {
                 display: flex;
                 align-items: center;
                 gap: 7px;
-                padding: 9px 12px 7px;
-                border-bottom: 1px solid rgba(212,175,55,0.15);
+                padding: 8px 12px 7px;
+                border-bottom: 1px solid rgba(212,175,55,0.20);
                 color: #d4af37;
                 font-weight: 700;
                 font-size: 12.5px;
@@ -8282,18 +9437,25 @@ window.emitTokenUpdates = function(currentTokens) {
                 flex-shrink: 0;
                 opacity: 0.9;
             }
-            #vtt-gm-token-tooltip .gm-tip-stats {
-                display: flex;
-                gap: 0;
-                padding: 8px 12px 8px;
-                border-bottom: 1px solid rgba(255,255,255,0.05);
+            #vtt-gm-token-tooltip .gm-tip-row-primary {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                padding: 7px 10px;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
+                background: rgba(255,255,255,0.015);
+            }
+            #vtt-gm-token-tooltip .gm-tip-row-passives {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                padding: 6px 8px;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
             }
             #vtt-gm-token-tooltip .gm-tip-stat {
-                flex: 1;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 2px;
+                gap: 1px;
+                padding: 0 4px;
             }
             #vtt-gm-token-tooltip .gm-tip-stat:not(:last-child) {
                 border-right: 1px solid rgba(255,255,255,0.06);
@@ -8302,37 +9464,45 @@ window.emitTokenUpdates = function(currentTokens) {
                 display: flex;
                 align-items: center;
                 gap: 4px;
-                font-size: 9.5px;
+                font-size: 9px;
                 font-weight: 600;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.05em;
                 text-transform: uppercase;
-                color: rgba(212,175,55,0.7);
+                color: rgba(212,175,55,0.85);
             }
             #vtt-gm-token-tooltip .gm-tip-stat-label i {
-                font-size: 8.5px;
+                font-size: 8px;
             }
             #vtt-gm-token-tooltip .gm-tip-stat-value {
-                font-size: 18px;
+                font-size: 15px;
                 font-weight: 800;
                 color: #ffffff;
-                line-height: 1;
+                line-height: 1.1;
                 font-variant-numeric: tabular-nums;
-                text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+                text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+            #vtt-gm-token-tooltip .gm-tip-stat-value.sm {
+                font-size: 12.5px;
+                font-weight: 700;
             }
             #vtt-gm-token-tooltip .gm-tip-stat-value.na {
-                font-size: 14px;
+                font-size: 13px;
                 color: rgba(255,255,255,0.3);
             }
             #vtt-gm-token-tooltip .gm-tip-conditions {
-                padding: 7px 12px 9px;
+                padding: 6px 10px 8px;
             }
             #vtt-gm-token-tooltip .gm-tip-cond-label {
-                font-size: 9px;
+                font-size: 8.5px;
                 font-weight: 600;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
-                color: rgba(255,255,255,0.3);
-                margin-bottom: 6px;
+                color: rgba(255,255,255,0.35);
+                margin-bottom: 5px;
             }
             #vtt-gm-token-tooltip .gm-tip-cond-pills {
                 display: flex;
@@ -8346,14 +9516,14 @@ window.emitTokenUpdates = function(currentTokens) {
                 background: rgba(220,53,69,0.18);
                 border: 1px solid rgba(220,53,69,0.35);
                 border-radius: 20px;
-                padding: 3px 8px 3px 6px;
-                font-size: 10.5px;
+                padding: 2px 7px 2px 5px;
+                font-size: 10px;
                 font-weight: 600;
                 color: #e88;
                 white-space: nowrap;
             }
             #vtt-gm-token-tooltip .gm-tip-cond-pill i {
-                font-size: 9px;
+                font-size: 8.5px;
                 opacity: 0.85;
             }
             #vtt-gm-token-tooltip .gm-tip-no-cond {
@@ -8365,44 +9535,115 @@ window.emitTokenUpdates = function(currentTokens) {
         document.head.appendChild(style);
     })();
 
+    // Helper: get resolved monster data for token or linked character
+    function getResolvedCreatureMonsterData(token) {
+        if (!token) return null;
+        if (token.monsterData) return token.monsterData;
+        if (token.characterId) {
+            const char = vtt.campaignState?.characters?.[token.characterId] || window.VTT?.campaignState?.characters?.[token.characterId];
+            if (char?.monsterData) return char.monsterData;
+        }
+        return null;
+    }
+
     // Resolve AC for a token (monster or player character)
     function getTokenAC(token) {
-        if (token.monsterData) {
-            const ac = token.monsterData.ac;
-            if (Array.isArray(ac) && ac.length > 0) {
-                const entry = ac[0];
-                return typeof entry === 'object' && entry !== null ? (entry.ac ?? null) : entry;
+        if (!token) return null;
+        const m = getResolvedCreatureMonsterData(token);
+        if (m) {
+            if (m.primaryAc !== undefined && m.primaryAc !== null && m.primaryAc !== '') return m.primaryAc;
+            if (typeof m.ac === 'number') return m.ac;
+            if (Array.isArray(m.ac) && m.ac.length > 0) {
+                const entry = m.ac[0];
+                if (typeof entry === 'object' && entry !== null) {
+                    return entry.ac ?? entry.value ?? null;
+                }
+                if (typeof entry === 'number') return entry;
             }
-            if (typeof ac === 'number') return ac;
         }
         if (token.characterId) {
-            const char = vtt.campaignState?.characters?.[token.characterId];
-            if (char?.ac !== undefined && char.ac !== null) return char.ac;
+            const char = vtt.campaignState?.characters?.[token.characterId] || window.VTT?.campaignState?.characters?.[token.characterId];
+            if (char?.ac !== undefined && char.ac !== null && char.ac !== '') return char.ac;
+        }
+        if (token.ac !== undefined && token.ac !== null && token.ac !== '') return token.ac;
+        return null;
+    }
+
+    // Resolve Speed for a token
+    function getTokenSpeed(token) {
+        if (!token) return null;
+        let speedData = null;
+        const m = getResolvedCreatureMonsterData(token);
+        if (m?.speed !== undefined && m.speed !== null) {
+            speedData = m.speed;
+        } else if (token.characterId) {
+            const char = vtt.campaignState?.characters?.[token.characterId] || window.VTT?.campaignState?.characters?.[token.characterId];
+            if (char?.speed !== undefined && char.speed !== null && char.speed !== '') {
+                speedData = char.speed;
+            }
+        } else if (token.speed !== undefined && token.speed !== null && token.speed !== '') {
+            speedData = token.speed;
+        }
+
+        if (!speedData) return null;
+        if (typeof speedData === 'number') return `${speedData} ft.`;
+        if (typeof speedData === 'string') {
+            return speedData.includes('ft') ? speedData : `${speedData} ft.`;
+        }
+        if (typeof speedData === 'object') {
+            const parts = [];
+            if (speedData.walk !== undefined && speedData.walk !== null) {
+                const val = typeof speedData.walk === 'object' ? speedData.walk.number : speedData.walk;
+                if (val) parts.push(`${val} ft.`);
+            }
+            ['fly', 'swim', 'climb', 'burrow'].forEach(mode => {
+                if (speedData[mode]) {
+                    const val = typeof speedData[mode] === 'object' ? speedData[mode].number : speedData[mode];
+                    if (val) {
+                        const capitalized = mode.charAt(0).toUpperCase() + mode.slice(1);
+                        parts.push(`${capitalized} ${val} ft.`);
+                    }
+                }
+            });
+            return parts.length > 0 ? parts.join(', ') : null;
         }
         return null;
     }
 
     // Resolve Passive Perception for a token
-    // PP = 10 + Wis modifier [+ proficiency bonus if proficient] [+ proficiency again if expert] [+ custom skill mod]
     function getTokenPP(token) {
-        // Monster: use the stored passive field directly
-        if (token.monsterData?.passive !== undefined) return token.monsterData.passive;
+        if (!token) return null;
+        const m = getResolvedCreatureMonsterData(token);
+        if (m) {
+            if (m.passive !== undefined && m.passive !== null && m.passive !== '') return Number(m.passive);
+            if (m.skill && m.skill.perception !== undefined) {
+                return 10 + (parseInt(m.skill.perception) || 0);
+            }
+            if (typeof m.senses === 'string') {
+                const match = m.senses.match(/passive Perception\s+(\d+)/i);
+                if (match) return parseInt(match[1]);
+            } else if (Array.isArray(m.senses)) {
+                for (const s of m.senses) {
+                    const str = typeof s === 'string' ? s : (s?.name || '');
+                    const match = str.match(/passive Perception\s+(\d+)/i);
+                    if (match) return parseInt(match[1]);
+                }
+            }
+            const wis = m.wis ?? m.abilities?.wis?.score ?? 10;
+            return 10 + Math.floor((wis - 10) / 2);
+        }
 
-        // Player character: calculate from stats
         if (token.characterId) {
-            const char = vtt.campaignState?.characters?.[token.characterId];
+            const char = vtt.campaignState?.characters?.[token.characterId] || window.VTT?.campaignState?.characters?.[token.characterId];
             if (!char || !char.stats) return null;
 
             const getMod = (score) => Math.floor((score - 10) / 2);
             const profBonus = Math.floor(((char.level || 1) - 1) / 4) + 2;
 
             let pp = 10 + getMod(char.stats.wis || 10);
-
-            // Add Perception proficiency / expertise
             if (char.skills && char.skills['Perception']) pp += profBonus;
             if (char.expertise && char.expertise['Perception']) pp += profBonus;
 
-            // Add any custom Perception skill modifier
             const customMod = (char.skillMods && char.skillMods['Perception'])
                 ? parseInt(char.skillMods['Perception']) : 0;
             if (!isNaN(customMod)) pp += customMod;
@@ -8412,21 +9653,97 @@ window.emitTokenUpdates = function(currentTokens) {
         return null;
     }
 
+    // Resolve Passive Insight (PI) and Passive Investigation (PInv)
+    function getTokenPassiveStats(token) {
+        if (!token) return { pi: null, pinv: null };
+        const m = getResolvedCreatureMonsterData(token);
+        if (m) {
+            const wis = m.wis ?? m.abilities?.wis?.score ?? 10;
+            const intScore = m.int ?? m.abilities?.int?.score ?? 10;
+            const wisMod = Math.floor((wis - 10) / 2);
+            const intMod = Math.floor((intScore - 10) / 2);
+
+            let pi = 10 + wisMod;
+            if (m.skill && m.skill.insight !== undefined) {
+                pi = 10 + (parseInt(m.skill.insight) || 0);
+            }
+
+            let pinv = 10 + intMod;
+            if (m.skill && m.skill.investigation !== undefined) {
+                pinv = 10 + (parseInt(m.skill.investigation) || 0);
+            }
+
+            return { pi, pinv };
+        }
+
+        if (token.characterId) {
+            const char = vtt.campaignState?.characters?.[token.characterId] || window.VTT?.campaignState?.characters?.[token.characterId];
+            if (!char || !char.stats) return { pi: null, pinv: null };
+
+            const getMod = (score) => Math.floor((score - 10) / 2);
+            const profBonus = Math.floor(((char.level || 1) - 1) / 4) + 2;
+
+            // Passive Insight
+            let pi = 10 + getMod(char.stats.wis || 10);
+            if (char.skills && char.skills['Insight']) pi += profBonus;
+            if (char.expertise && char.expertise['Insight']) pi += profBonus;
+            const insMod = (char.skillMods && char.skillMods['Insight']) ? parseInt(char.skillMods['Insight']) : 0;
+            if (!isNaN(insMod)) pi += insMod;
+
+            // Passive Investigation
+            let pinv = 10 + getMod(char.stats.int || 10);
+            if (char.skills && char.skills['Investigation']) pinv += profBonus;
+            if (char.expertise && char.expertise['Investigation']) pinv += profBonus;
+            const invMod = (char.skillMods && char.skillMods['Investigation']) ? parseInt(char.skillMods['Investigation']) : 0;
+            if (!isNaN(invMod)) pinv += invMod;
+
+            return { pi, pinv };
+        }
+
+        return { pi: null, pinv: null };
+    }
+
+    // Check if stat tooltip is allowed to be viewed by the current user
+    function isTokenTooltipAllowed(token) {
+        if (!token) return false;
+        // The tooltip should only show for tokens on the currently active layer
+        const tokenLayer = token.layer || 'token';
+        if (tokenLayer !== activeLayer) return false;
+        // Suppress tooltip for currently selected tokens to avoid obscuring rotation/resize handles
+        if (selectedTokenIds.has(token.id) || (selectedTokenId && selectedTokenId === token.id)) return false;
+
+        if (vtt.role === 'GM') {
+            return campaignSettings.gmStatTooltipVisible !== 'never';
+        }
+        const setting = campaignSettings.playerStatTooltipVisible || 'never';
+        if (setting === 'all') return true;
+        if (setting === 'controlled') {
+            return isTokenControlledByPlayer(token);
+        }
+        return false;
+    }
+
     function showGmTokenTooltip(tokenId) {
         const token = tokens[tokenId];
-        if (!token || vtt.role !== 'GM') return;
+        if (!token || !isTokenTooltipAllowed(token)) return;
 
         hideGmTokenTooltip(); // Remove any existing tooltip first
 
+        tokenTooltipPendingId = tokenId;
         gmTokenTooltipTokenId = tokenId;
 
         const ac = getTokenAC(token);
         const pp = getTokenPP(token);
+        const speed = getTokenSpeed(token);
+        const { pi, pinv } = getTokenPassiveStats(token);
         const conditions = Array.isArray(token.conditions) ? token.conditions : [];
         const hasConditions = conditions.length > 0;
 
-        const acDisplay = ac !== null && ac !== undefined ? String(ac) : null;
-        const ppDisplay = pp !== null && pp !== undefined ? String(pp) : null;
+        const acDisplay = (ac !== null && ac !== undefined && ac !== '') ? String(ac) : null;
+        const speedDisplay = (speed !== null && speed !== undefined && speed !== '') ? String(speed) : null;
+        const ppDisplay = (pp !== null && pp !== undefined && pp !== '') ? String(pp) : null;
+        const piDisplay = (pi !== null && pi !== undefined && pi !== '') ? String(pi) : null;
+        const pinvDisplay = (pinv !== null && pinv !== undefined && pinv !== '') ? String(pinv) : null;
 
         // Build conditions HTML
         let conditionsHtml = '';
@@ -8460,14 +9777,28 @@ window.emitTokenUpdates = function(currentTokens) {
                 <i class="fa-solid ${tokenTypeIcon}"></i>
                 <span title="${token.name}">${token.name || 'Unknown'}</span>
             </div>
-            <div class="gm-tip-stats">
+            <div class="gm-tip-row-primary">
                 <div class="gm-tip-stat">
                     <div class="gm-tip-stat-label"><i class="fa-solid fa-shield-halved"></i> AC</div>
                     <div class="gm-tip-stat-value ${acDisplay === null ? 'na' : ''}">${acDisplay !== null ? acDisplay : '—'}</div>
                 </div>
                 <div class="gm-tip-stat">
+                    <div class="gm-tip-stat-label"><i class="fa-solid fa-person-running"></i> Speed</div>
+                    <div class="gm-tip-stat-value sm ${speedDisplay === null ? 'na' : ''}" title="${speedDisplay || ''}">${speedDisplay !== null ? speedDisplay : '—'}</div>
+                </div>
+            </div>
+            <div class="gm-tip-row-passives">
+                <div class="gm-tip-stat" title="Passive Perception">
                     <div class="gm-tip-stat-label"><i class="fa-solid fa-eye"></i> PP</div>
                     <div class="gm-tip-stat-value ${ppDisplay === null ? 'na' : ''}">${ppDisplay !== null ? ppDisplay : '—'}</div>
+                </div>
+                <div class="gm-tip-stat" title="Passive Insight">
+                    <div class="gm-tip-stat-label"><i class="fa-solid fa-brain"></i> PI</div>
+                    <div class="gm-tip-stat-value ${piDisplay === null ? 'na' : ''}">${piDisplay !== null ? piDisplay : '—'}</div>
+                </div>
+                <div class="gm-tip-stat" title="Passive Investigation">
+                    <div class="gm-tip-stat-label"><i class="fa-solid fa-magnifying-glass"></i> PInv</div>
+                    <div class="gm-tip-stat-value ${pinvDisplay === null ? 'na' : ''}">${pinvDisplay !== null ? pinvDisplay : '—'}</div>
                 </div>
             </div>
             ${conditionsHtml}
@@ -8490,17 +9821,17 @@ window.emitTokenUpdates = function(currentTokens) {
         // Token radius in screen pixels
         const screenRadius = tokenRadius * zoom;
 
-        const tipW = 214; // matches CSS width + padding
+        const tipW = tooltip.offsetWidth || 232;
         const tipH = tooltip.offsetHeight || 160;
 
         // Try right side first, fall back to left
         let left = cx + screenRadius + 14;
-        if (left + tipW > window.innerWidth - 8) {
+        if (left + tipW > window.innerWidth - 10) {
             left = cx - screenRadius - tipW - 14;
         }
         // Centre vertically on token
         let top = cy - tipH / 2;
-        top = Math.max(8, Math.min(top, window.innerHeight - tipH - 8));
+        top = Math.max(10, Math.min(top, window.innerHeight - tipH - 10));
 
         tooltip.style.left = `${Math.round(left)}px`;
         tooltip.style.top  = `${Math.round(top)}px`;
@@ -8511,6 +9842,7 @@ window.emitTokenUpdates = function(currentTokens) {
             clearTimeout(gmTokenTooltipTimeout);
             gmTokenTooltipTimeout = null;
         }
+        tokenTooltipPendingId = null;
         gmTokenTooltipTokenId = null;
         const existing = document.getElementById('vtt-gm-token-tooltip');
         if (existing) existing.remove();
@@ -8588,7 +9920,7 @@ window.emitTokenUpdates = function(currentTokens) {
         return false;
     }
 
-    function getTokenAtPoint(mouse, requireControl = true) {
+    function getTokenAtPoint(mouse, requireControl = true, matchLayer = true) {
         if (!tokens || !mouse) return null;
 
         const tokenEntries = Object.entries(tokens).map(([id, t], idx) => ({ id, token: t, originalIndex: idx }));
@@ -8602,8 +9934,9 @@ window.emitTokenUpdates = function(currentTokens) {
         for (const { token } of tokenEntries) {
             if (!token) continue;
             const tokenLayer = token.layer || 'token';
-            if (tokenLayer !== activeLayer) continue;
+            if (matchLayer && tokenLayer !== activeLayer) continue;
             if (tokenLayer === 'gm' && vtt.role !== 'GM') continue;
+            if (token.isVisible === false && vtt.role !== 'GM') continue;
             if (requireControl && !isTokenControlledByPlayer(token)) continue;
 
             const { drawW, drawH } = getTokenDrawDimensions(token);
@@ -8882,7 +10215,11 @@ window.emitTokenUpdates = function(currentTokens) {
     function setupLightingPanelControls() {
         const lightingPanel = document.getElementById('panel-lighting-config');
         if (!lightingPanel) return;
+
         const lightingBtns = lightingPanel.querySelectorAll('.lighting-btn');
+        const wallOptions = document.getElementById('lighting-wall-options');
+        const lightOptions = document.getElementById('lighting-light-options');
+
         lightingBtns.forEach(lb => {
             lb.addEventListener('click', () => {
                 const lType = lb.getAttribute('data-lighting');
@@ -8891,7 +10228,6 @@ window.emitTokenUpdates = function(currentTokens) {
                     lb.classList.add('active');
                     currentLightingType = lType;
                     
-                    const lightOptions = document.getElementById('lighting-light-options');
                     if (lightOptions) {
                         if (lType === 'light') {
                             lightOptions.classList.remove('vtt-hidden');
@@ -8899,9 +10235,137 @@ window.emitTokenUpdates = function(currentTokens) {
                             lightOptions.classList.add('vtt-hidden');
                         }
                     }
+
+                    if (wallOptions) {
+                        if (lType === 'wall') {
+                            wallOptions.classList.remove('vtt-hidden');
+                        } else {
+                            wallOptions.classList.add('vtt-hidden');
+                        }
+                    }
                 }
             });
         });
+
+        // Wall Shape buttons handling
+        const wallShapeBtns = lightingPanel.querySelectorAll('.wall-shape-btn');
+        wallShapeBtns.forEach(sb => {
+            sb.addEventListener('click', () => {
+                const shape = sb.getAttribute('data-shape');
+                if (shape) {
+                    wallShapeBtns.forEach(b => b.classList.remove('active'));
+                    sb.classList.add('active');
+                    currentWallShape = shape;
+                }
+            });
+        });
+
+        // Standalone Light live property editing & presets
+        const lightPresetSelect = document.getElementById('light-preset');
+        if (lightPresetSelect) {
+            lightPresetSelect.addEventListener('change', () => {
+                const pId = lightPresetSelect.value;
+                if (pId && pId !== 'custom' && LIGHTING_PRESETS[pId]) {
+                    const p = LIGHTING_PRESETS[pId];
+                    if (document.getElementById('light-bright')) document.getElementById('light-bright').value = p.bright;
+                    if (document.getElementById('light-dim')) document.getElementById('light-dim').value = p.dim;
+                    if (document.getElementById('light-angle')) document.getElementById('light-angle').value = p.angle;
+                    if (document.getElementById('light-color')) document.getElementById('light-color').value = p.color;
+                    if (document.getElementById('light-fx')) document.getElementById('light-fx').value = p.animationType || 'none';
+                    if (document.getElementById('light-speed')) document.getElementById('light-speed').value = p.animationSpeed || 1.0;
+                    if (document.getElementById('light-intensity')) document.getElementById('light-intensity').value = p.animationIntensity || 0.10;
+                    if (document.getElementById('light-color2')) document.getElementById('light-color2').value = p.animationColor2 || '#ffe082';
+
+                    const fxOptions = document.getElementById('light-fx-options');
+                    const color2Group = document.getElementById('light-color2-group');
+                    if (fxOptions) fxOptions.classList.toggle('vtt-hidden', (p.animationType || 'none') === 'none');
+                    if (color2Group) color2Group.classList.toggle('vtt-hidden', p.animationType !== 'color_shift');
+
+                    if (selectedLightId) {
+                        const l = lights.find(item => item.id === selectedLightId);
+                        if (l) {
+                            applyStandaloneLightingPreset(l, pId);
+                            vtt.socket.emit('lights:update', { mapId: currentMapId, lights });
+                            renderAll();
+                        }
+                    }
+                }
+            });
+        }
+
+        const lightFxSelect = document.getElementById('light-fx');
+        if (lightFxSelect) {
+            lightFxSelect.addEventListener('change', () => {
+                const val = lightFxSelect.value;
+                const fxOptions = document.getElementById('light-fx-options');
+                const color2Group = document.getElementById('light-color2-group');
+                if (fxOptions) fxOptions.classList.toggle('vtt-hidden', val === 'none');
+                if (color2Group) color2Group.classList.toggle('vtt-hidden', val !== 'color_shift');
+
+                if (selectedLightId) {
+                    const l = lights.find(item => item.id === selectedLightId);
+                    if (l) {
+                        l.animationType = val;
+                        vtt.socket.emit('lights:update', { mapId: currentMapId, lights });
+                        renderAll();
+                    }
+                }
+            });
+        }
+
+        const lightPropInputs = ['light-bright', 'light-dim', 'light-angle', 'light-rotation', 'light-color', 'light-speed', 'light-intensity', 'light-color2'];
+        lightPropInputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => {
+                    if (selectedLightId) {
+                        const l = lights.find(item => item.id === selectedLightId);
+                        if (l) {
+                            l.lightBright = parseInt(document.getElementById('light-bright')?.value) || 0;
+                            l.lightDim = parseInt(document.getElementById('light-dim')?.value) || 0;
+                            l.lightAngle = parseInt(document.getElementById('light-angle')?.value) || 360;
+                            l.lightRotation = parseInt(document.getElementById('light-rotation')?.value) || 0;
+                            l.lightColor = document.getElementById('light-color')?.value || '#ffaa00';
+                            l.animationSpeed = parseFloat(document.getElementById('light-speed')?.value) || 1.0;
+                            l.animationIntensity = parseFloat(document.getElementById('light-intensity')?.value) || 0.10;
+                            l.animationColor2 = document.getElementById('light-color2')?.value || '#ffe082';
+                            vtt.socket.emit('lights:update', { mapId: currentMapId, lights });
+                            renderAll();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function syncLightPanelWithLight(l) {
+        if (!l) return;
+        const brightEl = document.getElementById('light-bright');
+        const dimEl = document.getElementById('light-dim');
+        const angleEl = document.getElementById('light-angle');
+        const rotEl = document.getElementById('light-rotation');
+        const colEl = document.getElementById('light-color');
+        const fxEl = document.getElementById('light-fx');
+        const speedEl = document.getElementById('light-speed');
+        const intensityEl = document.getElementById('light-intensity');
+        const col2El = document.getElementById('light-color2');
+        const fxOptions = document.getElementById('light-fx-options');
+        const col2Group = document.getElementById('light-color2-group');
+
+        if (brightEl) brightEl.value = l.lightBright !== undefined ? l.lightBright : 20;
+        if (dimEl) dimEl.value = l.lightDim !== undefined ? l.lightDim : 40;
+        if (angleEl) angleEl.value = l.lightAngle !== undefined ? l.lightAngle : 360;
+        if (rotEl) rotEl.value = l.lightRotation !== undefined ? l.lightRotation : 0;
+        if (colEl) colEl.value = l.lightColor || '#ffaa00';
+
+        const animType = l.animationType || 'none';
+        if (fxEl) fxEl.value = animType;
+        if (speedEl) speedEl.value = l.animationSpeed !== undefined ? l.animationSpeed : 1.0;
+        if (intensityEl) intensityEl.value = l.animationIntensity !== undefined ? l.animationIntensity : 0.10;
+        if (col2El) col2El.value = l.animationColor2 || '#ffe082';
+
+        if (fxOptions) fxOptions.classList.toggle('vtt-hidden', animType === 'none');
+        if (col2Group) col2Group.classList.toggle('vtt-hidden', animType !== 'color_shift');
     }
 
     
@@ -9007,6 +10471,31 @@ window.emitTokenUpdates = function(currentTokens) {
 
         if (renderedHtml) {
             body.innerHTML = renderedHtml;
+        } else if (note.source && note.areaId && window.VTT?.dataBridge?.resolveNoteContent) {
+            body.innerHTML = '<div style="padding:30px;text-align:center;color:var(--color-gold-base);"><i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:8px;display:block;"></i> Loading adventure area details...</div>';
+            window.VTT.dataBridge.resolveNoteContent(note.source, note.areaId).then(content => {
+                if (content) {
+                    note.content = content;
+                    let html = '';
+                    if (window.Renderer) {
+                        try {
+                            const renderer = window.Renderer.get();
+                            const stack = [];
+                            renderer.recursiveRender(content, stack, { depth: 0 });
+                            html = stack.join('');
+                        } catch (err) {
+                            html = `<pre style="white-space:pre-wrap;font-size:12px;">${JSON.stringify(content, null, 2)}</pre>`;
+                        }
+                    } else {
+                        html = `<pre style="white-space:pre-wrap;font-size:12px;">${JSON.stringify(content, null, 2)}</pre>`;
+                    }
+                    body.innerHTML = html;
+                } else {
+                    body.innerHTML = `<p style="color:#888;font-style:italic;">No detailed entry found for Area ${note.areaId}.</p>`;
+                }
+            }).catch(err => {
+                body.innerHTML = `<p style="color:#e74c3c;">Failed to load area details: ${err.message}</p>`;
+            });
         } else {
             body.innerHTML = `<p style="color:#888;font-style:italic;">No content available for this note.</p>`;
         }
@@ -9296,9 +10785,9 @@ window.emitTokenUpdates = function(currentTokens) {
         let dragOffsetX = 0;
         let dragOffsetY = 0;
 
-        // Hide GM tooltip when cursor leaves the canvas entirely
+        // Hide stat tooltip when cursor leaves the canvas entirely
         canvasInteraction.addEventListener('mouseleave', () => {
-            if (vtt.role === 'GM') hideGmTokenTooltip();
+            hideGmTokenTooltip();
         });
 
         canvasInteraction.addEventListener('dblclick', e => {
@@ -9336,9 +10825,53 @@ window.emitTokenUpdates = function(currentTokens) {
             }
         });
 
+        // Check for interactive doors/windows/walls
+        function getInteractiveDoorAtCoord(x, y) {
+            for (let i = walls.length - 1; i >= 0; i--) {
+                const wall = walls[i];
+                const activeCoords = getWallCoordinatesForRaycasting(wall) || { x1: wall.x1, y1: wall.y1, x2: wall.x2, y2: wall.y2 };
+                const midX = (activeCoords.x1 + activeCoords.x2) / 2;
+                const midY = (activeCoords.y1 + activeCoords.y2) / 2;
+                const segDx = activeCoords.x2 - activeCoords.x1;
+                const segDy = activeCoords.y2 - activeCoords.y1;
+                const segLen = Math.hypot(segDx, segDy);
+                const uX = segLen > 0 ? segDx / segLen : 1;
+                const uY = segLen > 0 ? segDy / segLen : 0;
+
+                if (wall.type === 'door' || wall.type === 'window') {
+                    if (vtt.role === 'GM') {
+                        // 1. Dead center: Open/Close toggle
+                        if (Math.hypot(x - midX, y - midY) <= 13) return { wallIdx: i, action: 'toggleOpen' };
+                        // 2. Off-center cog: Settings modal
+                        const cogDist = Math.min(22, Math.max(16, segLen * 0.28));
+                        const cogX = midX + uX * cogDist;
+                        const cogY = midY + uY * cogDist;
+                        if (Math.hypot(x - cogX, y - cogY) <= 11) return { wallIdx: i, action: 'openSettings' };
+                    } else {
+                        if (wall.isSecret) continue;
+                        const nx = segLen > 0 ? -segDy / segLen : 0;
+                        const ny = segLen > 0 ? segDx / segLen : 0;
+                        const isVis = isPointVisible(midX + nx * 6, midY + ny * 6) || isPointVisible(midX - nx * 6, midY - ny * 6) || isPointVisible(midX, midY);
+                        if (!isVis) continue;
+
+                        // Players only see and can toggle Open/Close dead center
+                        if (Math.hypot(x - midX, y - midY) <= 12) return { wallIdx: i, action: 'toggleOpen' };
+                    }
+                } else {
+                    // Normal wall: GM Settings Cog at midpoint if lighting layer is active or wall is selected/hovered
+                    const isLightingActive = activeLayer === 'lighting';
+                    if (vtt.role === 'GM' && (isLightingActive || selectedWallIdx === i || selectedWallIdxs.has(i) || hoveredWallIdx === i)) {
+                        if (Math.hypot(x - midX, y - midY) <= 12) return { wallIdx: i, action: 'openSettings' };
+                    }
+                }
+            }
+            return null;
+        }
+
         canvasInteraction.addEventListener('mousedown', e => {
-            lastMouseEvent = e;
-            const mouse = getCanvasMouseCoords(e);
+            try {
+                lastMouseEvent = e;
+                const mouse = getCanvasMouseCoords(e);
 
             if (e.button === 0) {
                 if (pingHoldTimeout) clearTimeout(pingHoldTimeout);
@@ -9358,57 +10891,32 @@ window.emitTokenUpdates = function(currentTokens) {
                     }, 1000);
                 }
             }
-
-            // Check for interactive doors/windows
-            function getInteractiveDoorAtCoord(x, y) {
-                for (let i = walls.length - 1; i >= 0; i--) {
-                    const wall = walls[i];
-                    if (wall.type !== 'door' && wall.type !== 'window') continue;
-                    
-                    const activeCoords = getWallCoordinatesForRaycasting(wall) || { x1: wall.x1, y1: wall.y1, x2: wall.x2, y2: wall.y2 };
-                    const midX = (activeCoords.x1 + activeCoords.x2) / 2;
-                    const midY = (activeCoords.y1 + activeCoords.y2) / 2;
-                    
-                    if (vtt.role === 'GM') {
-                        if (Math.hypot(x - (midX - 12), y - midY) <= 12) return { wallIdx: i, action: 'toggleOpen' };
-                        if (wall.type === 'window') {
-                            if (Math.hypot(x - (midX + 12), y - midY) <= 12) return { wallIdx: i, action: 'toggleDrawn' };
-                        } else {
-                            if (Math.hypot(x - (midX + 12), y - midY) <= 12) return { wallIdx: i, action: 'toggleSecret' };
-                        }
-                    } else {
-                        if (wall.isSecret && wall.type !== 'window') continue;
-                        if (Math.hypot(x - midX, y - midY) <= 12) return { wallIdx: i, action: 'toggleOpen' };
-                    }
-                }
-                return null;
-            }
             
             const doorAction = getInteractiveDoorAtCoord(mouse.x, mouse.y);
             if (doorAction) {
+                if (doorAction.action === 'openSettings') {
+                    openWallSettingsModal(doorAction.wallIdx, e.clientX, e.clientY);
+                    return;
+                }
                 const wall = walls[doorAction.wallIdx];
                 if (e.button === 0) { // left click
                     if (doorAction.action === 'toggleOpen') {
                         if (wall.isLocked && vtt.role !== 'GM') {
-                            // vtt.socket.emit('chat:msg', { text: `[System] That door is locked.` });
+                            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                                JqueryUtil.doToast({
+                                    type: 'warning',
+                                    content: wall.type === 'window' ? 'That window is locked.' : 'That door is locked.'
+                                });
+                            }
                         } else {
                             wall.isOpen = !wall.isOpen;
                             vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                            wallsVersion++;
                             renderAll();
                         }
-                    } else if (doorAction.action === 'toggleDrawn') {
-                        wall.isDrawn = !wall.isDrawn;
-                        vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-                        renderAll();
-                    } else if (doorAction.action === 'toggleSecret') {
-                        wall.isSecret = !wall.isSecret;
-                        vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-                        renderAll();
                     }
-                } else if (e.button === 2 && vtt.role === 'GM' && doorAction.action === 'toggleOpen') {
-                    wall.isLocked = !wall.isLocked;
-                    vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-                    renderAll();
+                } else if (e.button === 2 && vtt.role === 'GM') {
+                    openWallSettingsModal(doorAction.wallIdx, e.clientX, e.clientY);
                 }
                 return;
             }
@@ -9501,6 +11009,38 @@ window.emitTokenUpdates = function(currentTokens) {
                 }
             }
 
+            // Check for clicking light rotation handle
+            if (e.button === 0) {
+                if (selectedLightId) {
+                    const l = lights.find(item => item.id === selectedLightId);
+                    if (l && l.lightAngle && l.lightAngle < 360) {
+                        const facing = ((l.lightRotation || 0) * Math.PI / 180);
+                        const hx = l.x + Math.cos(facing) * 36;
+                        const hy = l.y + Math.sin(facing) * 36;
+                        if (Math.hypot(mouse.x - hx, mouse.y - hy) <= 9) {
+                            isRotatingLight = true;
+                            rotatingLightEntity = { type: 'light', id: l.id };
+                            return;
+                        }
+                    }
+                }
+                const currentSelectedToken = (selectedTokenId && tokens[selectedTokenId]) || (selectedTokenIds.size === 1 ? tokens[Array.from(selectedTokenIds)[0]] : null);
+                if (currentSelectedToken && currentSelectedToken.lightEnabled && currentSelectedToken.lightAngle && currentSelectedToken.lightAngle < 360) {
+                    const center = getTokenCenter(currentSelectedToken);
+                    const { drawW, drawH } = getTokenDrawDimensions(currentSelectedToken);
+                    const r = Math.max(drawW, drawH) / 2;
+                    const effFacing = getTokenEffectiveLightFacing(currentSelectedToken);
+                    const facing = (effFacing * Math.PI / 180);
+                    const hx = center.x + Math.cos(facing) * (r + 20);
+                    const hy = center.y + Math.sin(facing) * (r + 20);
+                    if (Math.hypot(mouse.x - hx, mouse.y - hy) <= 9) {
+                        isRotatingLight = true;
+                        rotatingLightEntity = { type: 'token', id: currentSelectedToken.id };
+                        return;
+                    }
+                }
+            }
+
             if (activeTool === 'select') {
                 if (activeLayer === 'lighting') {
                     if (hoveredLightId) {
@@ -9510,6 +11050,8 @@ window.emitTokenUpdates = function(currentTokens) {
                         if (light) {
                             lightDragOffsetX = mouse.x - light.x;
                             lightDragOffsetY = mouse.y - light.y;
+                            syncLightPanelWithLight(light);
+                            document.getElementById('lighting-light-options')?.classList.remove('vtt-hidden');
                         }
                         if (!e.ctrlKey && !e.shiftKey) {
                             selectedWallIdxs.clear();
@@ -9551,7 +11093,7 @@ window.emitTokenUpdates = function(currentTokens) {
                     if (hoveredShapeComponent) {
                         const shape = shapes[hoveredShapeComponent.shapeId];
                         const shapeLayer = shape?.layer || 'token';
-                        if (shape && shapeLayer === activeLayer) {
+                        if (shape && shapeLayer === activeLayer && isShapeControlledByPlayer(shape)) {
                             selectedTokenIds.clear();
                             selectedShapeId = hoveredShapeComponent.shapeId;
                             selectedShapeComponent = hoveredShapeComponent;
@@ -9628,8 +11170,8 @@ window.emitTokenUpdates = function(currentTokens) {
                         dragOffsetX = mouse.x - t.x;
                         dragOffsetY = mouse.y - t.y;
 
-                        // Hide GM tooltip as soon as dragging begins
-                        if (vtt.role === 'GM') hideGmTokenTooltip();
+                        // Hide stat tooltip as soon as dragging begins
+                        hideGmTokenTooltip();
 
                         if (e.ctrlKey || e.shiftKey) {
                             if (selectedTokenIds.has(clickedId)) {
@@ -9645,6 +11187,7 @@ window.emitTokenUpdates = function(currentTokens) {
                                 selectedTokenIds.add(clickedId);
                             }
                         }
+                        selectedTokenId = clickedId;
 
                         tokenDragOriginalPositions = {};
                         selectedTokenIds.forEach(id => {
@@ -9658,6 +11201,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         boxSelectAdditive = e.ctrlKey || e.shiftKey;
                         if (!boxSelectAdditive) {
                             selectedTokenIds.clear();
+                            selectedTokenId = null;
                         }
                         isBoxSelecting = true;
                         boxSelectStart = mouse;
@@ -9695,13 +11239,25 @@ window.emitTokenUpdates = function(currentTokens) {
                         const lightBright = parseInt(document.getElementById('light-bright')?.value) || 20;
                         const lightDim = parseInt(document.getElementById('light-dim')?.value) || 40;
                         const lightColor = document.getElementById('light-color')?.value || '#ffffff';
+                        const lightAngle = parseInt(document.getElementById('light-angle')?.value) || 360;
+                        const lightRotation = parseInt(document.getElementById('light-rotation')?.value) || 0;
+                        const animationType = document.getElementById('light-fx')?.value || 'none';
+                        const animationSpeed = parseFloat(document.getElementById('light-speed')?.value) || 1.0;
+                        const animationIntensity = parseFloat(document.getElementById('light-intensity')?.value) || 0.10;
+                        const animationColor2 = document.getElementById('light-color2')?.value || '#ffe082';
                         const newLight = {
                             id: 'light_' + Date.now() + Math.random().toString(36).substr(2,5),
                             x: mouse.x,
                             y: mouse.y,
                             lightBright,
                             lightDim,
-                            lightColor
+                            lightColor,
+                            lightAngle,
+                            lightRotation,
+                            animationType,
+                            animationSpeed,
+                            animationIntensity,
+                            animationColor2
                         };
                         if (!Array.isArray(lights)) lights = [];
                         lights.push(newLight);
@@ -9730,6 +11286,9 @@ window.emitTokenUpdates = function(currentTokens) {
                     renderAll();
                 }
             }
+            } catch (err) {
+                console.error("VTT Canvas Interaction Error (mousedown):", err);
+            }
         });
 
         window.addEventListener('mousemove', e => {
@@ -9749,6 +11308,41 @@ window.emitTokenUpdates = function(currentTokens) {
                 const mouse = getCanvasMouseCoords(e);
                 boxSelectEnd = mouse;
                 renderAll();
+                return;
+            }
+
+            if (isRotatingLight && rotatingLightEntity) {
+                const mouse = getCanvasMouseCoords(e);
+                let center = null;
+                if (rotatingLightEntity.type === 'light') {
+                    const l = lights.find(item => item.id === rotatingLightEntity.id);
+                    if (l) center = { x: l.x, y: l.y };
+                } else if (rotatingLightEntity.type === 'token') {
+                    const t = tokens[rotatingLightEntity.id];
+                    if (t) center = getTokenCenter(t);
+                }
+                if (center) {
+                    let deg = Math.round(Math.atan2(mouse.y - center.y, mouse.x - center.x) * 180 / Math.PI);
+                    if (deg < 0) deg += 360;
+                    if (e.shiftKey) deg = Math.round(deg / 15) * 15;
+                    if (rotatingLightEntity.type === 'light') {
+                        const l = lights.find(item => item.id === rotatingLightEntity.id);
+                        if (l) {
+                            l.lightRotation = deg;
+                            const rotEl = document.getElementById('light-rotation');
+                            if (rotEl) rotEl.value = deg;
+                        }
+                    } else if (rotatingLightEntity.type === 'token') {
+                        const t = tokens[rotatingLightEntity.id];
+                        if (t) {
+                            const localDeg = getLocalLightFacingFromWorldAngle(t, deg);
+                            t.lightRotation = localDeg;
+                            const rotEl = document.getElementById('token-edit-light-rotation');
+                            if (rotEl) rotEl.value = localDeg;
+                        }
+                    }
+                    renderAll();
+                }
                 return;
             }
 
@@ -9879,7 +11473,28 @@ window.emitTokenUpdates = function(currentTokens) {
                     if (hoveredRotateTokenId) canvasInteraction.style.cursor = 'grab';
                     renderAll();
                 }
-                if (!hoveredResizeTokenId && !hoveredRotateTokenId && !hoverTokenId && !hoveredNoteId && !dragTargetId && !activeResizeTokenId && !activeRotateTokenId) {
+                // Interactive doors/windows hover
+                const hoveredDoorAction = getInteractiveDoorAtCoord(mouse.x, mouse.y);
+                if (hoveredDoorAction) {
+                    canvasInteraction.style.cursor = 'pointer';
+                    const w = walls[hoveredDoorAction.wallIdx];
+                    let tip = '';
+                    if (hoveredDoorAction.action === 'toggleOpen') {
+                        tip = (w.isLocked && vtt.role !== 'GM') ? (w.type === 'window' ? 'Locked Window' : 'Locked Door') : (w.isOpen ? 'Close' : 'Open');
+                    } else if (hoveredDoorAction.action === 'toggleLock') {
+                        tip = w.isLocked ? 'Unlock (GM)' : 'Lock (GM)';
+                    } else if (hoveredDoorAction.action === 'toggleSecret') {
+                        tip = w.isSecret ? 'Make Visible to Players (GM)' : 'Make Secret (GM)';
+                    } else if (hoveredDoorAction.action === 'toggleSeeThrough') {
+                        const isST = w.isSeeThrough !== undefined ? w.isSeeThrough : !w.isDrawn;
+                        tip = isST ? 'Make Window Opaque (GM)' : 'Make Window See-Through (GM)';
+                    }
+                    canvasInteraction.title = tip;
+                } else if (canvasInteraction.title) {
+                    canvasInteraction.title = '';
+                }
+
+                if (!hoveredResizeTokenId && !hoveredRotateTokenId && !hoverTokenId && !hoveredNoteId && !dragTargetId && !activeResizeTokenId && !activeRotateTokenId && !hoveredDoorAction) {
                     canvasInteraction.style.cursor = '';
                 }
                 
@@ -9896,7 +11511,7 @@ window.emitTokenUpdates = function(currentTokens) {
 
                     // Token hover detection
                     if (activeLayer === 'map' || activeLayer === 'token' || activeLayer === 'gm') {
-                        const newHoveredToken = getTokenAtPoint(mouse, false);
+                        const newHoveredToken = getTokenAtPoint(mouse, false, true);
                         const newHoverTokenId = newHoveredToken ? newHoveredToken.id : null;
                         if (newHoverTokenId !== hoverTokenId) {
                             hoverTokenId = newHoverTokenId;
@@ -9905,34 +11520,29 @@ window.emitTokenUpdates = function(currentTokens) {
                             renderAll();
                         }
 
-                        // GM tooltip — schedule on hover, hide on leave
-                        if (vtt.role === 'GM') {
-                            if (newHoverTokenId !== gmTokenTooltipTokenId) {
-                                // Cancel any pending scheduled show
-                                if (gmTokenTooltipTimeout) {
-                                    clearTimeout(gmTokenTooltipTimeout);
-                                    gmTokenTooltipTimeout = null;
-                                }
-                                // Hide immediately if no longer over a token
-                                const existingTip = document.getElementById('vtt-gm-token-tooltip');
-                                if (existingTip) existingTip.remove();
-                                gmTokenTooltipTokenId = null;
+                        // Stat tooltip — schedule on hover, hide on leave
+                        if (newHoverTokenId !== tokenTooltipPendingId) {
+                            tokenTooltipPendingId = newHoverTokenId;
+                            if (gmTokenTooltipTimeout) {
+                                clearTimeout(gmTokenTooltipTimeout);
+                                gmTokenTooltipTimeout = null;
+                            }
 
-                                if (newHoverTokenId) {
-                                    // Schedule show after 300ms of stable hover
-                                    gmTokenTooltipTimeout = setTimeout(() => {
-                                        gmTokenTooltipTimeout = null;
-                                        showGmTokenTooltip(newHoverTokenId);
-                                    }, 300);
-                                }
+                            if (newHoverTokenId && tokens[newHoverTokenId] && !selectedTokenIds.has(newHoverTokenId) && isTokenTooltipAllowed(tokens[newHoverTokenId])) {
+                                const delay = gmTokenTooltipTokenId ? 80 : 220;
+                                gmTokenTooltipTimeout = setTimeout(() => {
+                                    gmTokenTooltipTimeout = null;
+                                    showGmTokenTooltip(newHoverTokenId);
+                                }, delay);
+                            } else {
+                                hideGmTokenTooltip();
                             }
                         }
                     } else if (hoverTokenId !== null) {
                         hoverTokenId = null;
                         if (!hoveredNoteId) canvasInteraction.style.cursor = '';
                         renderAll();
-                        // Hide GM tooltip if we switch layers
-                        if (vtt.role === 'GM') hideGmTokenTooltip();
+                        hideGmTokenTooltip();
                     }
 
                     if (activeLayer !== 'lighting') {
@@ -9940,7 +11550,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         if (component) {
                             const shape = shapes[component.shapeId];
                             const shapeLayer = shape?.layer || 'token';
-                            if (shape && shapeLayer === activeLayer) {
+                            if (shape && shapeLayer === activeLayer && isShapeControlledByPlayer(shape)) {
                                 hoveredShapeComponent = component;
                             }
                         }
@@ -9999,7 +11609,7 @@ window.emitTokenUpdates = function(currentTokens) {
             if (activeDragShapeId && activeTool === 'select') {
                 const mouse = getCanvasMouseCoords(e);
                 const s = shapes[activeDragShapeId];
-                if (s) {
+                if (s && isShapeControlledByPlayer(s)) {
                     if (activeDragShapeComponent.type === 'shape') {
                         let nx = mouse.x - shapeDragOffsetX;
                         let ny = mouse.y - shapeDragOffsetY;
@@ -10206,6 +11816,21 @@ window.emitTokenUpdates = function(currentTokens) {
             }
             if (e.button !== 0) return;
 
+            if (isRotatingLight) {
+                isRotatingLight = false;
+                if (rotatingLightEntity) {
+                    if (rotatingLightEntity.type === 'light') {
+                        vtt.socket.emit('lights:update', { mapId: currentMapId, lights });
+                    } else if (rotatingLightEntity.type === 'token') {
+                        const t = tokens[rotatingLightEntity.id];
+                        if (t && window.emitTokenUpdates) window.emitTokenUpdates(tokens);
+                    }
+                    rotatingLightEntity = null;
+                }
+                renderAll();
+                return;
+            }
+
             if (activeResizeTokenId) {
                 activeResizeTokenId = null;
                 resizeDragStartMouse = null;
@@ -10283,7 +11908,10 @@ window.emitTokenUpdates = function(currentTokens) {
                 draggingNoteId = null;
                 noteDragStartMouse = null;
             } else if (activeDragShapeId && activeTool === 'select') {
-                vtt.socket.emit('shapes:update', { mapId: currentMapId, shapes });
+                const s = shapes[activeDragShapeId];
+                if (s && isShapeControlledByPlayer(s)) {
+                    vtt.socket.emit('shapes:update', { mapId: currentMapId, shapes });
+                }
                 activeDragShapeId = null;
                 activeDragShapeComponent = null;
             } else if (dragTargetId && activeTool === 'select') {
@@ -10336,19 +11964,69 @@ window.emitTokenUpdates = function(currentTokens) {
                     if (wallStartPoint) {
                         const mouse = getCanvasMouseCoords(e);
                         const endPoint = e.altKey ? mouse : snapToGrid(mouse.x, mouse.y);
-                        
-                        if (Math.hypot(endPoint.x - wallStartPoint.x, endPoint.y - wallStartPoint.y) > 5) {
-                            const newWall = {
-                                id: 'wall_' + Date.now() + Math.random().toString(36).substr(2,5),
-                                x1: wallStartPoint.x,
-                                y1: wallStartPoint.y,
-                                x2: endPoint.x,
-                                y2: endPoint.y,
-                                type: currentLightingType
-                            };
-                            if (!Array.isArray(walls)) walls = [];
-                            walls.push(newWall);
-                            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                        if (!Array.isArray(walls)) walls = [];
+
+                        const createSegment = (x1, y1, x2, y2, type = currentLightingType) => ({
+                            id: 'wall_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                            x1, y1, x2, y2,
+                            type,
+                            isOpen: false,
+                            isLocked: false,
+                            isSecret: false,
+                            isSeeThrough: type === 'window' ? false : undefined
+                        });
+
+                        if (currentLightingType === 'wall' && currentWallShape === 'rect') {
+                            const minX = Math.min(wallStartPoint.x, endPoint.x);
+                            const maxX = Math.max(wallStartPoint.x, endPoint.x);
+                            const minY = Math.min(wallStartPoint.y, endPoint.y);
+                            const maxY = Math.max(wallStartPoint.y, endPoint.y);
+                            if (maxX - minX > 5 && maxY - minY > 5) {
+                                walls.push(createSegment(minX, minY, maxX, minY));
+                                walls.push(createSegment(maxX, minY, maxX, maxY));
+                                walls.push(createSegment(maxX, maxY, minX, maxY));
+                                walls.push(createSegment(minX, maxY, minX, minY));
+                                vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                            }
+                        } else if (currentLightingType === 'wall' && currentWallShape === 'circle') {
+                            const r = Math.hypot(endPoint.x - wallStartPoint.x, endPoint.y - wallStartPoint.y);
+                            if (r > 8) {
+                                const numSegments = 24;
+                                const dTheta = (Math.PI * 2) / numSegments;
+                                for (let s = 0; s < numSegments; s++) {
+                                    const a1 = s * dTheta;
+                                    const a2 = (s + 1) * dTheta;
+                                    const sx1 = wallStartPoint.x + r * Math.cos(a1);
+                                    const sy1 = wallStartPoint.y + r * Math.sin(a1);
+                                    const sx2 = wallStartPoint.x + r * Math.cos(a2);
+                                    const sy2 = wallStartPoint.y + r * Math.sin(a2);
+                                    walls.push(createSegment(sx1, sy1, sx2, sy2));
+                                }
+                                vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                            }
+                        } else if (currentLightingType === 'wall' && currentWallShape === 'arc') {
+                            const r = Math.hypot(endPoint.x - wallStartPoint.x, endPoint.y - wallStartPoint.y);
+                            if (r > 8) {
+                                const baseAngle = Math.atan2(endPoint.y - wallStartPoint.y, endPoint.x - wallStartPoint.x);
+                                const startArc = baseAngle - Math.PI / 2;
+                                const numSegments = 12;
+                                const dTheta = Math.PI / numSegments;
+                                for (let s = 0; s < numSegments; s++) {
+                                    const a1 = startArc + s * dTheta;
+                                    const a2 = startArc + (s + 1) * dTheta;
+                                    const sx1 = wallStartPoint.x + r * Math.cos(a1);
+                                    const sy1 = wallStartPoint.y + r * Math.sin(a1);
+                                    const sx2 = wallStartPoint.x + r * Math.cos(a2);
+                                    const sy2 = wallStartPoint.y + r * Math.sin(a2);
+                                    walls.push(createSegment(sx1, sy1, sx2, sy2));
+                                }
+                                vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                            }
+                        } else {
+                            if (Math.hypot(endPoint.x - wallStartPoint.x, endPoint.y - wallStartPoint.y) > 5) {
+                                walls.push(createSegment(wallStartPoint.x, wallStartPoint.y, endPoint.x, endPoint.y));
+                                vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                            }
                         }
                     }
                     wallStartPoint = null;
@@ -10393,21 +12071,34 @@ window.emitTokenUpdates = function(currentTokens) {
             if (selectedTokenIds.size > 0) {
                 selectedTokenIds.forEach(id => {
                     const t = tokens[id];
+                    if (t && (t.layer === 'map' || t.isBackground) && t.isAsset) return; // Protect map artwork
                     if (isTokenControlledByPlayer(t)) {
                         if (typeof cleanupYouTubePingPongForId === 'function') cleanupYouTubePingPongForId(id);
                         delete tokens[id];
                     }
                 });
                 selectedTokenIds.clear();
+                selectedTokenId = null;
                 changedTokens = true;
             }
 
             if (typeof selectedShapeIds !== 'undefined' && selectedShapeIds.size > 0) {
                 selectedShapeIds.forEach(id => {
-                    delete shapes[id];
+                    const s = shapes[id];
+                    if (s && isShapeControlledByPlayer(s)) {
+                        delete shapes[id];
+                        changedShapes = true;
+                    }
                 });
                 selectedShapeIds.clear();
-                changedShapes = true;
+            } else if (selectedShapeId) {
+                const s = shapes[selectedShapeId];
+                if (s && isShapeControlledByPlayer(s)) {
+                    delete shapes[selectedShapeId];
+                    changedShapes = true;
+                }
+                selectedShapeId = null;
+                selectedShapeComponent = null;
             }
 
             if (typeof selectedWallIdxs !== 'undefined' && selectedWallIdxs.size > 0) {
@@ -10494,10 +12185,12 @@ window.emitTokenUpdates = function(currentTokens) {
                         }
                     });
                 }
-                if (typeof selectedShapeIds !== 'undefined' && selectedShapeIds.size > 0) {
-                    selectedShapeIds.forEach(id => {
+                const shapeIdsToCopy = new Set(selectedShapeIds || []);
+                if (selectedShapeId) shapeIdsToCopy.add(selectedShapeId);
+                if (shapeIdsToCopy.size > 0) {
+                    shapeIdsToCopy.forEach(id => {
                         const s = shapes[id];
-                        if (s) {
+                        if (s && isShapeControlledByPlayer(s)) {
                             items.push({ type: 'shape', data: JSON.parse(JSON.stringify(s)) });
                             if (s.startPoint) {
                                 minX = Math.min(minX, s.startPoint.x, s.endPoint.x);
@@ -10584,6 +12277,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         }
                         const newId = 'shape_' + Date.now() + Math.random().toString(36).substr(2,5);
                         s.id = newId;
+                        s.ownerUsername = vtt.username;
                         if (typeof shapes === 'undefined') window.shapes = {};
                         shapes[newId] = s;
                         if (typeof selectedShapeIds !== 'undefined') selectedShapeIds.add(newId);
@@ -10753,7 +12447,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         Object.keys(tokens).forEach(id => {
                             const t = tokens[id];
                             const tokenLayer = t?.layer || 'token';
-                            if (t && tokenLayer === activeLayer) {
+                            if (t && tokenLayer === activeLayer && isTokenControlledByPlayer(t)) {
                                 selectedTokenIds.add(id);
                             }
                         });
@@ -10762,7 +12456,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         Object.keys(shapes).forEach(id => {
                             const s = shapes[id];
                             const shapeLayer = s?.layer || 'token';
-                            if (s && shapeLayer === activeLayer) {
+                            if (s && shapeLayer === activeLayer && isShapeControlledByPlayer(s)) {
                                 selectedShapeIds.add(id);
                             }
                         });
@@ -10798,7 +12492,7 @@ window.emitTokenUpdates = function(currentTokens) {
             }
 
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                if (selectedTokenIds.size > 0 || (typeof selectedShapeIds !== 'undefined' && selectedShapeIds.size > 0)) {
+                if (selectedTokenIds.size > 0 || (typeof selectedShapeIds !== 'undefined' && selectedShapeIds.size > 0) || selectedShapeId) {
                     e.preventDefault();
                     let dx = 0;
                     let dy = 0;
@@ -10870,10 +12564,12 @@ window.emitTokenUpdates = function(currentTokens) {
                         }
                     });
                     
-                    if (typeof selectedShapeIds !== 'undefined') {
-                        selectedShapeIds.forEach(id => {
+                    const shapeIdsToNudge = new Set(selectedShapeIds || []);
+                    if (selectedShapeId) shapeIdsToNudge.add(selectedShapeId);
+                    if (shapeIdsToNudge.size > 0) {
+                        shapeIdsToNudge.forEach(id => {
                             const s = shapes[id];
-                            if (s) {
+                            if (s && isShapeControlledByPlayer(s)) {
                                 s.startPoint.x += dx; s.startPoint.y += dy;
                                 s.endPoint.x += dx; s.endPoint.y += dy;
                                 if (s.points) s.points.forEach(p => { p.x += dx; p.y += dy; });

@@ -57,9 +57,24 @@
         "mod": -2
       }
     },
+    "str": 16,
+    "dex": 10,
+    "con": 15,
+    "int": 16,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -74,7 +89,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration__slaad_only__37qc",
+        "id": "act_regeneration__slaad_only__k1xh",
         "name": "Regeneration (Slaad Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit regains 5 Hit Points at the start of its turn if it has at least 1 Hit Points.</p>",
@@ -91,7 +106,7 @@
         }
       },
       {
-        "id": "act_whispering_aura__mind_flayer_only__71jo",
+        "id": "act_whispering_aura__mind_flayer_only__h3nx",
         "name": "Whispering Aura (Mind Flayer Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of the spirit's turns, the spirit emits psionic energy if it doesn't have the Incapacitated condition. wis DC equals your spell save DC, each creature (other than you) within 5 feet of the spirit. {@actSaveFail} 2d6 Psychic damage.</p>",
@@ -115,7 +130,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_gdu9",
+        "id": "act_multiattack_6yo4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
@@ -132,7 +147,7 @@
         }
       },
       {
-        "id": "act_claw__slaad_only__4ctw",
+        "id": "act_claw__slaad_only__4met",
         "name": "Claw (Slaad Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d10 + 3 + summonSpellLevel Slashing damage, and the target can't regain Hit Points until the start of the spirit's next turn.</p>",
@@ -154,7 +169,7 @@
         }
       },
       {
-        "id": "act_eye_ray__beholderkin_only__ytkg",
+        "id": "act_eye_ray__beholderkin_only__jq5n",
         "name": "Eye Ray (Beholderkin Only)",
         "actionType": "action",
         "descriptionHtml": "<p>r Bonus equals your spell attack modifier, range 150 ft. {@h}1d8 + 3 + summonSpellLevel Psychic damage.</p>",
@@ -176,7 +191,7 @@
         }
       },
       {
-        "id": "act_psychic_slam__mind_flayer_only__8f1g",
+        "id": "act_psychic_slam__mind_flayer_only__uc0e",
         "name": "Psychic Slam (Mind Flayer Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 3 + summonSpellLevel Psychic damage.</p>",
@@ -269,9 +284,22 @@
         "mod": -5
       }
     },
+    "str": 16,
+    "dex": 10,
+    "con": 10,
+    "int": 3,
+    "wis": 3,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 6,
     "senses": {
       "passivePerception": 6,
       "sensesString": "Blindsight 30 ft."
@@ -286,7 +314,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_slam_zy0z",
+        "id": "act_slam_ryvi",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}Force damage equal to (summonSpellLevel - 4)d4 + 3, (summonSpellLevel - 3)d6 + 3 + your spellcasting ability modifier (Large), or (summonSpellLevel - 3)d12 + 3 + your spellcasting ability modifier (Huge).</p>",
@@ -387,9 +415,22 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 60 ft."
@@ -403,7 +444,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_primal_bond_y1i6",
+        "id": "act_primal_bond_5hra",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency Bonus to any ability check or saving throw the beast makes.</p>",
@@ -422,7 +463,7 @@
     ],
     "actions": [
       {
-        "id": "act_beast_s_strike_iljv",
+        "id": "act_beast_s_strike_n456",
         "name": "Beast's Strike",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 2 plus your Wisdom modifier Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast). If the beast moved at least 20 feet straight toward the target before the hit, the target takes an extra 1d6 damage of the same type, and the target has the Prone condition if it is a Large or smaller creature.</p>",
@@ -519,9 +560,22 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 90 ft."
@@ -535,7 +589,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_qnb9",
+        "id": "act_amphibious_gvfl",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast can breathe air and water.</p>",
@@ -552,7 +606,7 @@
         }
       },
       {
-        "id": "act_primal_bond_bo1d",
+        "id": "act_primal_bond_5kts",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency Bonus to any ability check or saving throw the beast makes.</p>",
@@ -571,7 +625,7 @@
     ],
     "actions": [
       {
-        "id": "act_beast_s_strike_ijwt",
+        "id": "act_beast_s_strike_tsb1",
         "name": "Beast's Strike",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d6 + 2 plus your Wisdom modifier Bludgeoning or Piercing damage (your choice when you summon the beast), and the target has the Grappled condition (escape DC equals your spell save DC).</p>",
@@ -664,9 +718,22 @@
         "mod": 0
       }
     },
+    "str": 6,
+    "dex": 16,
+    "con": 13,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 60 ft."
@@ -680,7 +747,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_e0ub",
+        "id": "act_flyby_xo3v",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke Opportunity Attack when it flies out of an enemy's reach.</p>",
@@ -697,7 +764,7 @@
         }
       },
       {
-        "id": "act_primal_bond_4bzn",
+        "id": "act_primal_bond_6il2",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency Bonus to any ability check or saving throw the beast makes.</p>",
@@ -716,7 +783,7 @@
     ],
     "actions": [
       {
-        "id": "act_beast_s_strike_d6v1",
+        "id": "act_beast_s_strike_5f1d",
         "name": "Beast's Strike",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d4 + 3 plus your Wisdom modifier Slashing damage.</p>",
@@ -809,9 +876,22 @@
         "mod": -3
       }
     },
+    "str": 18,
+    "dex": 11,
+    "con": 16,
+    "int": 4,
+    "wis": 14,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 60 ft."
@@ -825,7 +905,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby__air_only__bcrg",
+        "id": "act_flyby__air_only__r282",
         "name": "Flyby (Air Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit doesn't provoke Opportunity Attack when it flies out of an enemy's reach.</p>",
@@ -842,7 +922,7 @@
         }
       },
       {
-        "id": "act_pack_tactics__land_and_water_only__g1a0",
+        "id": "act_pack_tactics__land_and_water_only__y6ka",
         "name": "Pack Tactics (Land and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit has Advantage on an attack roll against a creature if at least one of the spirit's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
@@ -859,7 +939,7 @@
         }
       },
       {
-        "id": "act_water_breathing__water_only__dowm",
+        "id": "act_water_breathing__water_only__5lnk",
         "name": "Water Breathing (Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can breathe only underwater.</p>",
@@ -878,7 +958,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_b3vl",
+        "id": "act_multiattack_3qbq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of Rend attacks equal to half this spell's level (round down).</p>",
@@ -895,7 +975,7 @@
         }
       },
       {
-        "id": "act_rend_piqb",
+        "id": "act_rend_sd8b",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 4 + summonSpellLevel Piercing damage.</p>",
@@ -988,9 +1068,27 @@
         "mod": 3
       }
     },
+    "str": 16,
+    "dex": 14,
+    "con": 16,
+    "int": 10,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 60 ft."
@@ -1006,7 +1104,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_4hyw",
+        "id": "act_multiattack_740a",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
@@ -1023,7 +1121,7 @@
         }
       },
       {
-        "id": "act_radiant_bow__avenger_only__sjtc",
+        "id": "act_radiant_bow__avenger_only__xa8k",
         "name": "Radiant Bow (Avenger Only)",
         "actionType": "action",
         "descriptionHtml": "<p>r Bonus equals your spell attack modifier, range 600 ft. {@h}2d6 + 2 + summonSpellLevel Radiant damage.</p>",
@@ -1045,7 +1143,7 @@
         }
       },
       {
-        "id": "act_radiant_mace__defender_only__yb61",
+        "id": "act_radiant_mace__defender_only__f5dl",
         "name": "Radiant Mace (Defender Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d10 + 3 + summonSpellLevel Radiant damage, and the spirit can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains 1d10 Temporary Hit Points.</p>",
@@ -1067,7 +1165,7 @@
         }
       },
       {
-        "id": "act_healing_touch__1_day__wkb7",
+        "id": "act_healing_touch__1_day__bhuc",
         "name": "Healing Touch (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit touches another creature. The target regains Hit Points equal to 2d8 + summonSpellLevel.</p>",
@@ -1155,9 +1253,30 @@
         "mod": -3
       }
     },
+    "str": 18,
+    "dex": 10,
+    "con": 18,
+    "int": 14,
+    "wis": 11,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -1171,7 +1290,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_heated_body__metal_only__mvf2",
+        "id": "act_heated_body__metal_only__h157",
         "name": "Heated Body (Metal Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>A creature that hits the spirit with a melee attack or that starts its turn in a grapple with the spirit takes 1d10 Fire damage.</p>",
@@ -1193,7 +1312,7 @@
         }
       },
       {
-        "id": "act_stony_lethargy__stone_only__bdi5",
+        "id": "act_stony_lethargy__stone_only__5bkj",
         "name": "Stony Lethargy (Stone Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature starts its turn within 10 feet of the spirit, the spirit can target it with magical energy if the spirit can see it. wis DC equals your spell save DC, the target. {@actSaveFail} Until the start of its next turn, the target can't make Opportunity Attack, and its Speed is halved.</p>",
@@ -1212,7 +1331,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ubvk",
+        "id": "act_multiattack_rtkk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of Slam attacks equal to half this spell's level (round down).</p>",
@@ -1229,7 +1348,7 @@
         }
       },
       {
-        "id": "act_slam_ymfz",
+        "id": "act_slam_tpx1",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 4 + summonSpellLevel Bludgeoning damage.</p>",
@@ -1254,7 +1373,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_berserk_lashing__clay_only__qpir",
+        "id": "act_berserk_lashing__clay_only__3t6w",
         "name": "Berserk Lashing (Clay Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The spirit takes damage from a creature. {@actResponse} The spirit makes a Slam attack against that creature if possible, or the spirit moves up to half its Speed toward that creature without provoking Opportunity Attack.</p>",
@@ -1340,9 +1459,32 @@
         "mod": 2
       }
     },
+    "str": 19,
+    "dex": 14,
+    "con": 17,
+    "int": 10,
+    "wis": 14,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Blindsight 30 ft., Darkvision 60 ft."
@@ -1357,7 +1499,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shared_resistances_icwg",
+        "id": "act_shared_resistances_wpld",
         "name": "Shared Resistances",
         "actionType": "trait",
         "descriptionHtml": "<p>When you summon the spirit, choose one of its Resistances. You have Resistance to the chosen damage type until the spell ends.</p>",
@@ -1376,7 +1518,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yfu8",
+        "id": "act_multiattack_cupo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of Rend attacks equal to half the spell's level (round down), and it uses Breath Weapon.</p>",
@@ -1393,7 +1535,7 @@
         }
       },
       {
-        "id": "act_rend_jvj5",
+        "id": "act_rend_8vcp",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 10 feet. {@h}1d6 + 4 + summonSpellLevel Piercing damage.</p>",
@@ -1415,7 +1557,7 @@
         }
       },
       {
-        "id": "act_breath_weapon_wvof",
+        "id": "act_breath_weapon_1qut",
         "name": "Breath Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC equals your spell save DC, each creature in a 30-foot Cone [Area of Effect]. {@actSaveFail} 2d6 damage of a type this spirit has Resistance to (your choice when you cast the spell). {@actSaveSuccess} Half damage.</p>",
@@ -1508,9 +1650,60 @@
         "mod": 3
       }
     },
+    "str": 18,
+    "dex": 15,
+    "con": 17,
+    "int": 4,
+    "wis": 10,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      {
+        "immune": [
+          "fire"
+        ],
+        "cond": true,
+        "note": "(Fire only)"
+      }
+    ],
+    "resist": [
+      {
+        "resist": [
+          "lightning",
+          "thunder"
+        ],
+        "cond": true,
+        "note": "(Air only)"
+      },
+      {
+        "resist": [
+          "piercing",
+          "slashing"
+        ],
+        "cond": true,
+        "note": "(Earth only)"
+      },
+      {
+        "resist": [
+          "acid"
+        ],
+        "cond": true,
+        "note": "(Water only)"
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -1525,7 +1718,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_form__air__fire__and_water_only__35f1",
+        "id": "act_amorphous_form__air__fire__and_water_only__0sbb",
         "name": "Amorphous Form (Air, Fire, and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can move through a space as narrow as 1 inch wide without it counting as Difficult Terrain.</p>",
@@ -1544,7 +1737,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rw3v",
+        "id": "act_multiattack_xx92",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of Slam attacks equal to half this spell's level (round down).</p>",
@@ -1561,7 +1754,7 @@
         }
       },
       {
-        "id": "act_slam_9gr6",
+        "id": "act_slam_zt9z",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d10 + 4 + summonSpellLevel Bludgeoning (Earth only), Cold (Water only), Lightning (Air only), or Fire (Fire only) damage.</p>",
@@ -1654,9 +1847,24 @@
         "mod": 3
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 14,
+    "int": 14,
+    "wis": 11,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -1672,7 +1880,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_qk71",
+        "id": "act_multiattack_ae60",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of Fey Blade attacks equal to half this spell's level (round down).</p>",
@@ -1689,7 +1897,7 @@
         }
       },
       {
-        "id": "act_fey_blade_nebx",
+        "id": "act_fey_blade_xc04",
         "name": "Fey Blade",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}2d6 + 3 + summonSpellLevel Force damage.</p>",
@@ -1713,7 +1921,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_fey_step_skq2",
+        "id": "act_fey_step_vlx7",
         "name": "Fey Step",
         "actionType": "bonus",
         "descriptionHtml": "<p>The spirit magically teleports up to 30 feet to an unoccupied space it can see. Then one of the following effects occurs, based on the spirit's chosen mood:</p><ul><li><strong><em>Fuming.</em></strong> <p>The spirit has Advantage on the next attack roll it makes before the end of this turn.</p></li><li><strong><em>Mirthful.</em></strong> <p>wis DC equals your spell save DC, one creature the spirit can see within 10 feet of itself. {@actSaveFail} The target is Charmed by you and the spirit for 1 minute or until the target takes any damage.</p></li><li><strong><em>Tricksy.</em></strong> <p>The spirit fills a 10-foot Cube [Area of Effect] within 5 feet of it with magical Darkness, which lasts until the end of its next turn.</p></li></ul>",
@@ -1800,9 +2008,28 @@
         "mod": 3
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 15,
+    "int": 10,
+    "wis": 10,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "fire"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -1818,7 +2045,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_throes__demon_only__ggo2",
+        "id": "act_death_throes__demon_only__56is",
         "name": "Death Throes (Demon Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When the spirit drops to 0 Hit Points or the spell ends, the spirit explodes. dex DC equals your spell save DC, each creature in a 10-foot Emanation [Area of Effect] originating from the spirit. {@actSaveFail} 2d10 plus this spell's level Fire damage. {@actSaveSuccess} Half damage.</p>",
@@ -1840,7 +2067,7 @@
         }
       },
       {
-        "id": "act_devil_s_sight__devil_only__zngr",
+        "id": "act_devil_s_sight__devil_only__dyv4",
         "name": "Devil's Sight (Devil Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical Darkness doesn't impede the spirit's Darkvision.</p>",
@@ -1857,7 +2084,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_0hfv",
+        "id": "act_magic_resistance_047a",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1876,7 +2103,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6g84",
+        "id": "act_multiattack_i8c8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
@@ -1893,7 +2120,7 @@
         }
       },
       {
-        "id": "act_bite__demon_only__qvu5",
+        "id": "act_bite__demon_only__l0t6",
         "name": "Bite (Demon Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d12 + 3 + summonSpellLevel Necrotic damage.</p>",
@@ -1915,7 +2142,7 @@
         }
       },
       {
-        "id": "act_claws__yugoloth_only__pipi",
+        "id": "act_claws__yugoloth_only__57a9",
         "name": "Claws (Yugoloth Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 3 + summonSpellLevel Slashing damage. Immediately after the attack hits or misses, the spirit can teleport up to 30 feet to an unoccupied space it can see.</p>",
@@ -1937,7 +2164,7 @@
         }
       },
       {
-        "id": "act_fiery_strike__devil_only__bgj3",
+        "id": "act_fiery_strike__devil_only__t8b1",
         "name": "Fiery Strike (Devil Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m,r Bonus equals your spell attack modifier, reach 5 ft. or range 150 ft. {@h}2d6 + 3 + summonSpellLevel Fire damage.</p>",
@@ -2030,9 +2257,22 @@
         "mod": -4
       }
     },
+    "str": 17,
+    "dex": 13,
+    "con": 15,
+    "int": 4,
+    "wis": 14,
+    "cha": 3,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 60 ft."
@@ -2046,7 +2286,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spider_climb_rjcb",
+        "id": "act_spider_climb_ea2n",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The insect can climb difficult surfaces, including along ceilings, without needing to make an ability check.</p>",
@@ -2065,7 +2305,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fla4",
+        "id": "act_multiattack_lxrs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The insect makes a number of attacks equal to half this spell's level (round down).</p>",
@@ -2082,7 +2322,7 @@
         }
       },
       {
-        "id": "act_poison_jab_ts0j",
+        "id": "act_poison_jab_x2ht",
         "name": "Poison Jab",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 10 ft. {@h}1d6 + 3 + summonSpellLevel Piercing damage plus 1d4 Poison damage.</p>",
@@ -2108,7 +2348,7 @@
         }
       },
       {
-        "id": "act_web_bolt__spider_only__ykvp",
+        "id": "act_web_bolt__spider_only__clix",
         "name": "Web Bolt (Spider Only)",
         "actionType": "action",
         "descriptionHtml": "<p>r Bonus equals your spell attack modifier, range 60 ft. {@h}1d10 + 3 + summonSpellLevel Bludgeoning damage, and the target's Speed is reduced to 0 until the start of the insect's next turn.</p>",
@@ -2132,7 +2372,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_venomous_spew__centipede_only__llib",
+        "id": "act_venomous_spew__centipede_only__uctb",
         "name": "Venomous Spew (Centipede Only)",
         "actionType": "bonus",
         "descriptionHtml": "<p>con Your spell save DC, one creature the insect can see within 10 feet. {@actSaveFail} The target has the Poisoned condition until the start of the insect's next turn.</p>",
@@ -2219,9 +2459,22 @@
         "mod": -1
       }
     },
+    "str": 18,
+    "dex": 12,
+    "con": 14,
+    "int": 6,
+    "wis": 12,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -2235,7 +2488,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_life_bond_s981",
+        "id": "act_life_bond_iopu",
         "name": "Life Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>When you regain Hit Points from a level 1+ spell, the steed regains the same number of Hit Points if you're within 5 feet of it.</p>",
@@ -2254,7 +2507,7 @@
     ],
     "actions": [
       {
-        "id": "act_otherworldly_slam_3ap4",
+        "id": "act_otherworldly_slam_6023",
         "name": "Otherworldly Slam",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + summonSpellLevel of Radiant (Celestial), Psychic (Fey), or Necrotic (Fiend) damage.</p>",
@@ -2278,7 +2531,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_fell_glare__fiend_only__recharges_after_a_long_rest__nhrm",
+        "id": "act_fell_glare__fiend_only__recharges_after_a_long_rest__qldk",
         "name": "Fell Glare (Fiend Only; Recharges after a Long Rest)",
         "actionType": "bonus",
         "descriptionHtml": "<p>wis DC equals your spell save DC, one creature within 60 feet the steed can see. {@actSaveFail} The target has the Frightened condition until the end of your next turn.</p>",
@@ -2295,7 +2548,7 @@
         }
       },
       {
-        "id": "act_fey_step__fey_only__recharges_after_a_long_rest__q9ow",
+        "id": "act_fey_step__fey_only__recharges_after_a_long_rest__ym3r",
         "name": "Fey Step (Fey Only; Recharges after a Long Rest)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The steed teleports, along with its rider, to an unoccupied space of your choice up to 60 feet away from itself.</p>",
@@ -2312,7 +2565,7 @@
         }
       },
       {
-        "id": "act_healing_touch__celestial_only__recharges_after_a_long_rest__wjze",
+        "id": "act_healing_touch__celestial_only__recharges_after_a_long_rest__5jvw",
         "name": "Healing Touch (Celestial Only; Recharges after a Long Rest)",
         "actionType": "bonus",
         "descriptionHtml": "<p>One creature within 5 feet of the steed regains a number of Hit Points equal to 2d8 + summonSpellLevel.</p>",
@@ -2399,9 +2652,30 @@
         "mod": -1
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 15,
+    "int": 4,
+    "wis": 10,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -2415,7 +2689,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_festering_aura__putrid_only__8up3",
+        "id": "act_festering_aura__putrid_only__5jqt",
         "name": "Festering Aura (Putrid Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>con DC equals your spell save DC, any creature (other than you) that starts its turn within a 5-foot Emanation [Area of Effect] originating from the spirit. {@actSaveFail} The creature has the Poisoned condition until the start of its next turn.</p>",
@@ -2432,7 +2706,7 @@
         }
       },
       {
-        "id": "act_incorporeal_passage__ghostly_only__d2sq",
+        "id": "act_incorporeal_passage__ghostly_only__g7nt",
         "name": "Incorporeal Passage (Ghostly Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can move through other creatures and objects as if they were Difficult Terrain. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes 1d10 Force damage for every 5 feet traveled.</p>",
@@ -2456,7 +2730,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_eeep",
+        "id": "act_multiattack_h2qm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
@@ -2473,7 +2747,7 @@
         }
       },
       {
-        "id": "act_deathly_touch__ghostly_only__t38t",
+        "id": "act_deathly_touch__ghostly_only__39v9",
         "name": "Deathly Touch (Ghostly Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 3 + summonSpellLevel Necrotic damage, and the target has the Frightened condition until the end of its next turn.</p>",
@@ -2495,7 +2769,7 @@
         }
       },
       {
-        "id": "act_grave_bolt__skeletal_only__hshu",
+        "id": "act_grave_bolt__skeletal_only__j4m9",
         "name": "Grave Bolt (Skeletal Only)",
         "actionType": "action",
         "descriptionHtml": "<p>r Bonus equals your spell attack modifier, range 150 ft. {@h}2d4 + 3 + summonSpellLevel Necrotic damage.</p>",
@@ -2517,7 +2791,7 @@
         }
       },
       {
-        "id": "act_rotting_claw__putrid_only__3cy7",
+        "id": "act_rotting_claw__putrid_only__t8zu",
         "name": "Rotting Claw (Putrid Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d6 + 3 + summonSpellLevel Slashing damage. If the target has the Poisoned condition, it has the Paralyzed condition until the end of its next turn.</p>",

@@ -35,9 +35,37 @@ export function createCampaignTemplate(id, name) {
       tempHpBarStyle: 'stacked'
     },
     playerMapOverrides: {},
+    description: "",
     allowedUsers: [],
     knownPlayers: []
   };
+}
+
+import crypto from 'crypto';
+
+/**
+ * Hashes a password with a salt.
+ * @param {string} password
+ * @param {string} [salt]
+ * @returns {{ hash: string, salt: string }}
+ */
+export function hashPassword(password, salt = null) {
+  const generatedSalt = salt || crypto.randomBytes(16).toString('hex');
+  const hash = crypto.pbkdf2Sync(password, generatedSalt, 1000, 64, 'sha256').toString('hex');
+  return { hash, salt: generatedSalt };
+}
+
+/**
+ * Verifies a password against a salt and hash.
+ * @param {string} password
+ * @param {string} salt
+ * @param {string} hash
+ * @returns {boolean}
+ */
+export function verifyPassword(password, salt, hash) {
+  if (!password || !salt || !hash) return false;
+  const computed = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha256').toString('hex');
+  return computed === hash;
 }
 
 /**
@@ -49,9 +77,9 @@ export function createCampaignTemplate(id, name) {
  * @param {any} value - The new value for the property.
  * @returns {object|null} The resolved mapId if successful, null otherwise.
  */
-export function updateMapProperty(campaigns, campaignId, mapId, propertyKey, value) {
+export function updateMapProperty(campaigns, campaignId, mapId, propertyKey, value, fallbackMapId) {
   if (!campaigns[campaignId]) return null;
-  const targetMapId = mapId || campaigns[campaignId].activeMapId;
+  const targetMapId = mapId || fallbackMapId || campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId;
   if (campaigns[campaignId].maps && campaigns[campaignId].maps[targetMapId]) {
     campaigns[campaignId].maps[targetMapId][propertyKey] = value;
     return targetMapId;
@@ -68,3 +96,4 @@ export function updateMapProperty(campaigns, campaignId, mapId, propertyKey, val
 export function isValidAssetPath(targetPath, assetsDir) {
   return targetPath.startsWith(assetsDir);
 }
+

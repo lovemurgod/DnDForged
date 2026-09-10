@@ -306,7 +306,8 @@ export function initVttDataBridge(vtt) {
                         if (fullMonster) {
                             token.monsterData = fullMonster;
                             if (window.VTT?.socket) {
-                                window.VTT.socket.emit('token:update', { token });
+                                const curMapId = canvasEngine.getCurrentMapId?.() || canvasEngine.currentMap?.id || null;
+                                window.VTT.socket.emit('token:update', { mapId: curMapId, token });
                             }
                         }
                     });
@@ -586,44 +587,6 @@ export function initVttDataBridge(vtt) {
         // });
     }
 
-    // Support initiative tracker integration
-    document.getElementById('btn-init-add').addEventListener('click', () => {
-        const name = prompt("Enter creature name for initiative:");
-        if (!name) return;
-        const initiativeRoll = prompt("Enter initiative roll (or leave blank for random 1d20):");
-        
-        let score = parseFloat(initiativeRoll);
-        if (isNaN(score)) {
-            let base = Math.floor(Math.random() * 20) + 1;
-            const isTiebreaker = window.VTT?.campaignState?.settings?.initDexTiebreaker ?? window.VTT?.canvasEngine?.getCampaignSettings?.()?.initDexTiebreaker ?? true;
-            score = isTiebreaker ? Math.round((base + 0.10) * 100) / 100 : base;
-        }
-
-        const canvasEngine = window.VTT.canvasEngine;
-        const currentTokens = canvasEngine.getTokens();
-        
-        // Spawn active token if doesn't exist
-        const tokenId = `pc_${Date.now()}`;
-        const pcToken = {
-            id: tokenId,
-            name: name,
-            x: 100,
-            y: 100,
-            hp: 0,
-            maxHp: 0,
-            size: 1,
-            img: 'favicon.svg',
-            isPlayer: true,
-            layer: 'token'
-        };
-        canvasEngine.addToken(pcToken);
-
-        // Add to VTT combat roster
-        const chatEngine = window.VTT.chatEngine;
-        if (chatEngine) {
-            chatEngine.addToInitiative(name, score, tokenId);
-        }
-    });
 
     // Tab switching logic for Bestiary Drawer
     document.querySelectorAll('.lib-tab-btn').forEach(btn => {
@@ -1065,6 +1028,48 @@ export function initVttDataBridge(vtt) {
         });
     }
 
+    const adventureCache = {};
+    async function loadAdventureData(source) {
+        if (!source) return null;
+        const sourceLower = source.toLowerCase();
+        if (adventureCache[sourceLower]) return adventureCache[sourceLower];
+        try {
+            let res = await fetch(`/data/adventure/adventure-${sourceLower}.json`);
+            if (!res.ok) res = await fetch(`/data/book/book-${sourceLower}.json`);
+            if (res.ok) {
+                const data = await res.json();
+                adventureCache[sourceLower] = data;
+                return data;
+            }
+        } catch (e) {
+            console.warn(`[loadAdventureData] Failed to load adventure data for ${sourceLower}:`, e);
+        }
+        return null;
+    }
+
+    function findEntryById(data, id) {
+        if (!data || !id) return null;
+        if (Array.isArray(data)) {
+            for (let i = 0; i < data.length; i++) {
+                const res = findEntryById(data[i], id);
+                if (res) return res;
+            }
+        } else if (typeof data === 'object' && data !== null) {
+            if (data.id === id) return data;
+            if (data.entries) {
+                const res = findEntryById(data.entries, id);
+                if (res) return res;
+            }
+        }
+        return null;
+    }
+
+    async function resolveNoteContent(source, areaId) {
+        const advData = await loadAdventureData(source);
+        if (!advData || !advData.data) return null;
+        return findEntryById(advData.data, areaId);
+    }
+
     async function import5etoolsMap(adventureId, mapPathId) {
         if (!mapCatalog || !adventureId || !mapPathId) return null;
         
@@ -1072,45 +1077,60 @@ export function initVttDataBridge(vtt) {
         if (!adv || !adv.chapters) return null;
 
         let targetMap = null;
+        let targetChapter = null;
         for (const ch of adv.chapters) {
             if (ch.images) {
                 targetMap = ch.images.find(img => img.href && img.href.path === mapPathId);
-                if (targetMap) break;
+                if (targetMap) {
+                    targetChapter = ch;
+                    break;
+                }
             }
         }
         
         if (!targetMap) return null;
+
+        // Find parent map if this is a player/variant map
+        let parentMap = null;
+        if (targetMap.mapParent && targetMap.mapParent.id) {
+            for (const ch of adv.chapters) {
+                if (ch.images) {
+                    parentMap = ch.images.find(img => img.id === targetMap.mapParent.id);
+                    if (parentMap) break;
+                }
+            }
+        }
+
+        // Generate a clear, descriptive map name
+        let mapTitle = targetMap.title || "Imported Map";
+        if (targetMap.imageType === 'mapPlayer' || mapTitle.toLowerCase() === 'player version') {
+            if (parentMap && parentMap.title) {
+                mapTitle = `${parentMap.title} (Player)`;
+            } else if (targetChapter && targetChapter.name) {
+                mapTitle = `${targetChapter.name} (Player)`;
+            } else {
+                mapTitle = `${adv.name || adventureId} Map (Player)`;
+            }
+        }
 
         // Local image path
         const baseUrl = '/img/';
         const mapUrl = baseUrl + targetMap.href.path;
 
         // Construct grid
-        let mapGrid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
+        let mapGrid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
         
-        // Some maps inherit grid from mapParent
         let gridSource = targetMap;
-        if (!gridSource.grid && targetMap.mapParent && targetMap.mapParent.id) {
-            // Find parent
-            for (const ch of adv.chapters) {
-                if (ch.images) {
-                    const parent = ch.images.find(img => img.id === targetMap.mapParent.id);
-                    if (parent && parent.grid) {
-                        gridSource = parent;
-                        break;
-                    }
-                }
-            }
+        if (!gridSource.grid && parentMap && parentMap.grid) {
+            gridSource = parentMap;
         }
         
         if (gridSource.grid) {
-            // Usually 5eTools uses 'square' type with a size in pixels
-            // We'll trust their pixel size entirely since it perfectly matches the webp resolution
             mapGrid.size = gridSource.grid.size || 50;
             mapGrid.offsetX = gridSource.grid.offsetX || 0;
             mapGrid.offsetY = gridSource.grid.offsetY || 0;
-            // Some grids use a multiplier scale, usually we set scale to 1.0 since size is absolute pixels
             mapGrid.scale = 1.0; 
+            mapGrid.type = gridSource.grid.type || 'square';
         }
 
         // Construct Walls and Notes from mapRegions
@@ -1118,54 +1138,16 @@ export function initVttDataBridge(vtt) {
         const notes = [];
         
         let regionsSource = targetMap;
-        // If this is a player map, it usually doesn't have regions, the parent GM map does
-        if (!regionsSource.mapRegions && targetMap.mapParent && targetMap.mapParent.id) {
-            for (const ch of adv.chapters) {
-                if (ch.images) {
-                    const parent = ch.images.find(img => img.id === targetMap.mapParent.id);
-                    if (parent && parent.mapRegions) {
-                        regionsSource = parent;
-                        break;
-                    }
-                }
-            }
+        if (!regionsSource.mapRegions && parentMap && parentMap.mapRegions) {
+            regionsSource = parentMap;
         }
 
         if (regionsSource.mapRegions) {
-            // Fetch adventure text if we have map regions
+            // Load adventure data for area names (lightweight lookup)
+            const sourceKey = regionsSource.source || adventureId;
             let adventureData = null;
-            if (regionsSource.source) {
-                try {
-                    const sourceName = regionsSource.source.toLowerCase();
-                    let res = await fetch(`/data/adventure/adventure-${sourceName}.json`);
-                    if (!res.ok) {
-                        res = await fetch(`/data/book/book-${sourceName}.json`);
-                    }
-                    if (res.ok) {
-                        adventureData = await res.json();
-                        console.log(`[import5etoolsMap] Loaded adventure data for ${sourceName}`);
-                    }
-                } catch (e) {
-                    console.warn(`[import5etoolsMap] Failed to load adventure text:`, e);
-                }
-            }
-
-            // Helper to recursively find an entry by area ID
-            function findEntryById(data, id) {
-                if (Array.isArray(data)) {
-                    for (let i = 0; i < data.length; i++) {
-                        const res = findEntryById(data[i], id);
-                        if (res) return res;
-                    }
-                } else if (typeof data === 'object' && data !== null) {
-                    if (data.id === id) return data;
-                    // Sometimes entries have an array of entries
-                    if (data.entries) {
-                        const res = findEntryById(data.entries, id);
-                        if (res) return res;
-                    }
-                }
-                return null;
+            if (sourceKey) {
+                adventureData = await loadAdventureData(sourceKey);
             }
 
             regionsSource.mapRegions.forEach(region => {
@@ -1188,19 +1170,21 @@ export function initVttDataBridge(vtt) {
                         maxY = Math.max(maxY, p1[1]);
                     }
 
-                    // Generate a Note pin if we have an area ID and adventure data
-                    if (region.area && adventureData) {
-                        const entry = findEntryById(adventureData.data, region.area);
-                        if (entry) {
-                            notes.push({
-                                id: `note_${region.area}_${Date.now()}_${Math.random().toString(36).substr(2,9)}`,
-                                areaId: region.area,
-                                name: entry.name || `Area ${region.area}`,
-                                content: entry,
-                                x: (minX + maxX) / 2,
-                                y: (minY + maxY) / 2
-                            });
+                    // Generate a lightweight Note pin (content resolved on-demand when clicked)
+                    if (region.area) {
+                        let areaName = `Area ${region.area}`;
+                        if (adventureData && adventureData.data) {
+                            const entry = findEntryById(adventureData.data, region.area);
+                            if (entry && entry.name) areaName = entry.name;
                         }
+                        notes.push({
+                            id: `note_${region.area}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                            areaId: region.area,
+                            source: sourceKey,
+                            name: areaName,
+                            x: (minX + maxX) / 2,
+                            y: (minY + maxY) / 2
+                        });
                     }
                 }
             });
@@ -1221,11 +1205,13 @@ export function initVttDataBridge(vtt) {
         if (mapUrl) {
             initialTokens[mapAssetId] = {
                 id: mapAssetId,
-                name: targetMap.title || "Map Artwork",
+                name: `${mapTitle} (Artwork)`,
                 x: 0,
                 y: 0,
                 layer: 'map',
                 isAsset: true,
+                isBackground: true,
+                locked: true,
                 img: mapUrl,
                 pixelWidth: targetMap.width || (gWidth ? gWidth * mapGrid.size : 2000),
                 pixelHeight: targetMap.height || (gHeight ? gHeight * mapGrid.size : 1500),
@@ -1236,8 +1222,8 @@ export function initVttDataBridge(vtt) {
         }
 
         return {
-            name: targetMap.title || "Imported Map",
-            mapImage: "",
+            name: mapTitle,
+            mapImage: mapUrl, // Dual-guarantee authoritative background anchor!
             thumbnail: mapUrl,
             gridWidth: gWidth || 40,
             gridHeight: gHeight || 30,
@@ -1276,6 +1262,8 @@ export function initVttDataBridge(vtt) {
         emitSplashShow,
         load5eToolsMapCatalog,
         import5etoolsMap,
+        loadAdventureData,
+        resolveNoteContent,
         resolveMediaUrl
     };
 }

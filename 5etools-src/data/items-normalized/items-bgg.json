@@ -5,17 +5,57 @@
     "source": "BGG",
     "page": 110,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "artifact",
     "reqAttune": "Requires Attunement",
     "weight": 7,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d12",
+    "dmg2": null,
     "dmgType": "slashing",
+    "bonusWeapon": "+3",
     "properties": [
       "Heavy",
       "Two-Handed"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Fabricate",
+        "cleanName": "fabricate",
+        "castLevel": null
+      },
+      {
+        "name": "Move Earth",
+        "cleanName": "move earth",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Adze of Annam",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d12",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, artifact (Requires Attunement)*\n\n**Damage:** 1d12 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 7 lb\n\n---\n\nThis massive adze is said to have been wielded by All-Father Annam, not as a weapon but as the tool he used to shape the various worlds of the Material Plane eons ago.\n\n**Random Properties.** The adze has the following random properties, determined by rolling on the appropriate table in the Dungeon Master's Guide:\n\n- 2 Artifact Properties; Minor Beneficial Properties properties\n- 1 Artifact Properties; Major Beneficial Properties property\n- 2 Artifact Properties; Minor Detrimental Properties properties\n\n**Magic Weapon.** When a creature attunes to the adze, the artifact magically adjusts its size so that creature can wield it as a greataxe. The adze is a magic weapon that grants a +3 bonus to attack and damage rolls made with it. On a hit, the adze deals an additional 3d12 force damage. It also deals double damage to objects and structures.\n\n**Divine Mattock.** As an action, you can call upon the might of the All-Father and use the adze to cast move earth or fabricate. Once this property is used, it can't be used again until the next dawn.",
     "descriptionHtml": "<p>This massive adze is said to have been wielded by All-Father Annam, not as a weapon but as the tool he used to shape the various worlds of the Material Plane eons ago.</p>\n<div class=\"item-subentry\"><strong>Random Properties.</strong> <p>The adze has the following random properties, determined by rolling on the appropriate table in the Dungeon Master's Guide:</p>\n<ul><li>2 Artifact Properties; Minor Beneficial Properties properties</li><li>1 Artifact Properties; Major Beneficial Properties property</li><li>2 Artifact Properties; Minor Detrimental Properties properties</li></ul></div>\n<div class=\"item-subentry\"><strong>Magic Weapon.</strong> <p>When a creature attunes to the adze, the artifact magically adjusts its size so that creature can wield it as a greataxe. The adze is a magic weapon that grants a +3 bonus to attack and damage rolls made with it. On a hit, the adze deals an additional 3d12 force damage. It also deals double damage to objects and structures.</p></div>\n<div class=\"item-subentry\"><strong>Divine Mattock.</strong> <p>As an action, you can call upon the might of the All-Father and use the adze to cast move earth or fabricate. Once this property is used, it can't be used again until the next dawn.</p></div>"
   },
   {
@@ -24,15 +64,354 @@
     "source": "BGG",
     "page": 111,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "artifact",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Mage Hand",
+        "cleanName": "mage hand",
+        "castLevel": null
+      },
+      {
+        "name": "Bigby's Hand",
+        "cleanName": "bigby's hand",
+        "castLevel": 9
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, artifact (Requires Attunement)*\n\n---\n\nThis gorgeous jewelry piece, crafted by the wizard Bigby himself, consists of four gold rings attached via delicate chains to a wrist cuff studded with sapphires and diamonds.\n\n**Random Properties.** The bracelet has the following random properties, determined by rolling on the appropriate table in the Dungeon Master's Guide:\n\n- 1 Artifact Properties; Minor Beneficial Properties property\n- 1 Artifact Properties; Major Beneficial Properties property\n- 1 Artifact Properties; Minor Detrimental Properties property\n\n**Dexterous Fingers.** While wearing the bracelet, you can cast mage hand.\n\n**Force Sculpture.** By focusing and channeling the bracelet's magic for 1 minute, you can create a spectral copy of a Large or smaller nonmagical object. The copy appears in an unoccupied space within 10 feet of you, and it is made of tangible but translucent force that mimics the size, weight, and other properties of the object it's copying. The copy must appear on a surface or liquid that can support it. Creatures can touch and interact with the copy as if it were a nonmagical object.\n\nThe copy is immune to all damage and can't be dispelled, but a disintegrate spell destroys it immediately. Otherwise, the copy disappears after 8 hours or when you dismiss it as an action.\n\nThe bracelet can create up to three copies and regains all expended uses at dawn.\n\n**Helpful Hand.** As an action, you can use the bracelet to cast Bigby's hand as a 9th-level spell (spell attack bonus +13). When you cast the spell this way, the spell doesn't require concentration. Once this property is used, it can't be used again until the next dawn.",
     "descriptionHtml": "<p>This gorgeous jewelry piece, crafted by the wizard Bigby himself, consists of four gold rings attached via delicate chains to a wrist cuff studded with sapphires and diamonds.</p>\n<div class=\"item-subentry\"><strong>Random Properties.</strong> <p>The bracelet has the following random properties, determined by rolling on the appropriate table in the Dungeon Master's Guide:</p>\n<ul><li>1 Artifact Properties; Minor Beneficial Properties property</li><li>1 Artifact Properties; Major Beneficial Properties property</li><li>1 Artifact Properties; Minor Detrimental Properties property</li></ul></div>\n<div class=\"item-subentry\"><strong>Dexterous Fingers.</strong> <p>While wearing the bracelet, you can cast mage hand.</p></div>\n<div class=\"item-subentry\"><strong>Force Sculpture.</strong> <p>By focusing and channeling the bracelet's magic for 1 minute, you can create a spectral copy of a Large or smaller nonmagical object. The copy appears in an unoccupied space within 10 feet of you, and it is made of tangible but translucent force that mimics the size, weight, and other properties of the object it's copying. The copy must appear on a surface or liquid that can support it. Creatures can touch and interact with the copy as if it were a nonmagical object.</p>\n<p>The copy is immune to all damage and can't be dispelled, but a disintegrate spell destroys it immediately. Otherwise, the copy disappears after 8 hours or when you dismiss it as an action.</p>\n<p>The bracelet can create up to three copies and regains all expended uses at dawn.</p></div>\n<div class=\"item-subentry\"><strong>Helpful Hand.</strong> <p>As an action, you can use the bracelet to cast Bigby's hand as a 9th-level spell (spell attack bonus +13). When you cast the spell this way, the spell doesn't require concentration. Once this property is used, it can't be used again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_double_bladed_scimitar_bgg",
+    "name": "Bloodshed Double-Bladed Scimitar",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 6,
+    "value": "100 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d4",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Special",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Double-Bladed Scimitar",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 2d4 slashing | **Properties:** Special, Two-Handed | **Weight:** 6 lb | **Value:** 100 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.\n\n**Special.** If you attack with a double-bladed scimitar as part of the Attack action on your turn, you can use a bonus action immediately after to make a melee attack with it. This attack deals 1d4 slashing damage on a hit, instead of 2d4.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<div class=\"item-subentry\"><strong>Special.</strong> <p>If you attack with a double-bladed scimitar as part of the Attack action on your turn, you can use a bonus action immediately after to make a melee attack with it. This attack deals 1d4 slashing damage on a hit, instead of 2d4.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_greatsword_bgg",
+    "name": "Bloodshed Greatsword",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 6,
+    "value": "50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Greatsword",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 2d6 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 6 lb | **Value:** 50 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_longsword_bgg",
+    "name": "Bloodshed Longsword",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "15 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Longsword",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb | **Value:** 15 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_rapier_bgg",
+    "name": "Bloodshed Rapier",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "25 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Rapier",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 25 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_scimitar_bgg",
+    "name": "Bloodshed Scimitar",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "25 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Scimitar",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing | **Properties:** Finesse, Light | **Weight:** 3 lb | **Value:** 25 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_shortsword_bgg",
+    "name": "Bloodshed Shortsword",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Shortsword",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb | **Value:** 10 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_chain_mail_of_safeguarding_bgg",
+    "name": "Chain Mail of Safeguarding",
+    "source": "BGG",
+    "page": 111,
+    "type": "Heavy Armor",
+    "rawType": "HA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 55,
+    "value": "75 gp",
+    "ac": 16,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Beacon Of Hope",
+        "cleanName": "beacon of hope",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 16 | **Weight:** 55 lb | **Value:** 75 gp\n\n---\n\nSet in the center of this armor's chest is a citrine engraved with the shield rune.\n\nWhile wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nMade of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows. The suit includes gauntlets.",
+    "descriptionHtml": "<p>Set in the center of this armor's chest is a citrine engraved with the shield rune.</p>\n<p>While wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>Made of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows. The suit includes gauntlets.</p>"
   },
   {
     "id": "it_crown_of_the_wrath_bringer_bgg",
@@ -40,14 +419,30 @@
     "source": "BGG",
     "page": 111,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Fear",
+        "cleanName": "fear",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, rare (Requires Attunement)*\n\n---\n\nThis jagged iron circlet bears ornaments in the shape of the enemy rune. When worn, the crown glows with pale light as it draws upon the wearer's fury to strike opponents with vicious terror.\n\nWhen you make an attack roll against a creature and hit it while wearing this crown, you can spend and roll one of your unspent Hit Dice. The creature takes extra psychic damage equal to the number rolled.\n\n**Invoking the Rune.** As an action, you can invoke the crown's rune to cast the fear spell (save 15) with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>This jagged iron circlet bears ornaments in the shape of the enemy rune. When worn, the crown glows with pale light as it draws upon the wearer's fury to strike opponents with vicious terror.</p>\n<p>When you make an attack roll against a creature and hit it while wearing this crown, you can spend and roll one of your unspent Hit Dice. The creature takes extra psychic damage equal to the number rolled.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the crown's rune to cast the fear spell (save 15) with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -56,14 +451,24 @@
     "source": "BGG",
     "page": 112,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, rare (Requires Attunement)*\n\n---\n\nThe back of this weatherworn leather glove is adorned with three large metal hooks shaped like a mole's claws. Stitched into the glove's palm is the mountain rune.\n\nThe glove is considered a simple melee weapon with the finesse and light properties, and it deals 1d4 slashing damage on a hit. While attuned to the glove, you gain a burrowing speed equal to your walking speed and blindsight to 15 feet.\n\n**Invoking the Rune.** As an action, you can invoke the glove's rune to bolster yourself with the sturdiness of the earth. Spend and roll a number of your unspent Hit Dice up to a maximum equal to your proficiency bonus. You then regain a number of hit points equal to the total roll plus your Constitution modifier.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>The back of this weatherworn leather glove is adorned with three large metal hooks shaped like a mole's claws. Stitched into the glove's palm is the mountain rune.</p>\n<p>The glove is considered a simple melee weapon with the finesse and light properties, and it deals 1d4 slashing damage on a hit. While attuned to the glove, you gain a burrowing speed equal to your walking speed and blindsight to 15 feet.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the glove's rune to bolster yourself with the sturdiness of the earth. Spend and roll a number of your unspent Hit Dice up to a maximum equal to your proficiency bonus. You then regain a number of hit points equal to the total roll plus your Constitution modifier.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -72,17 +477,52 @@
     "source": "BGG",
     "page": 64,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "very rare",
     "reqAttune": "by a elf",
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": "1d8",
     "dmgType": "piercing",
+    "bonusWeapon": "+3",
     "properties": [
       "Thrown",
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Elven Thrower",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Piercing"
+        },
+        {
+          "formula": "1d8",
+          "stat": "",
+          "type": "Damage",
+          "label": "vs Giant"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (by a elf)*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 3 lb\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this magic weapon. It has the thrown property with a normal range of 20 feet and a long range of 60 feet. When you hit with a ranged attack using this weapon, it deals an extra 1d8 damage or, if the target is a Giant, 2d8 damage. Immediately after the attack, the weapon flies back to your hand.",
     "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this magic weapon. It has the thrown property with a normal range of 20 feet and a long range of 60 feet. When you hit with a ranged attack using this weapon, it deals an extra 1d8 damage or, if the target is a Giant, 2d8 damage. Immediately after the attack, the weapon flies back to your hand.</p>"
   },
   {
@@ -91,14 +531,24 @@
     "source": "BGG",
     "page": 16,
     "type": "Adventuring Gear",
+    "rawType": "G",
     "rarity": "none",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear*\n\n---\n\nWhile exploring your home, you discovered some trivial remnant of the ancient inhabitants, as determined by rolling on the Giant Trinkets table. The items in parentheses are the normal-sized objects most analogous to the described giant trinkets.\n\n| d6 | Giant Trinket |\n| --- | --- |\n| 1 | A giant's toothpick (a dagger) |\n| 2 | A giant's handkerchief (a blanket) |\n| 3 | A giant's marble (a crystal orb) |\n| 4 | A giant's match (a torch) |\n| 5 | A giant's letter opener (a longsword) |\n| 6 | A giant's thimble (an iron pot) |",
     "descriptionHtml": "<p>While exploring your home, you discovered some trivial remnant of the ancient inhabitants, as determined by rolling on the Giant Trinkets table. The items in parentheses are the normal-sized objects most analogous to the described giant trinkets.</p>\n<table class=\"item-table\"><thead><tr><th>d6</th><th>Giant Trinket</th></tr></thead><tbody><tr><td>1</td><td>A giant's toothpick (a dagger)</td></tr><tr><td>2</td><td>A giant's handkerchief (a blanket)</td></tr><tr><td>3</td><td>A giant's marble (a crystal orb)</td></tr><tr><td>4</td><td>A giant's match (a torch)</td></tr><tr><td>5</td><td>A giant's letter opener (a longsword)</td></tr><tr><td>6</td><td>A giant's thimble (an iron pot)</td></tr></tbody></table>"
   },
   {
@@ -107,14 +557,24 @@
     "source": "BGG",
     "page": 112,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, rare*\n\n---\n\nThis set of 1d4 + 2 small paint pots contains pigments mixed from crushed luminescent gemstones. This magical paint bestows temporary magical gifts on creatures with runes drawn on their skin with this paint.\n\nOne paint pot contains enough pigment to paint one rune. A creature can spend 10 minutes to paint one of the following runes onto itself or another creature:\n\n**Journey Rune.** difficult terrain||3 doesn't cost the painted creature extra movement.\n\n**Life Rune.** The painted creature gains 10 temporary hit points and has advantage on death saving throws.\n\n**Light Rune.** The painted creature gains darkvision to a range of 30 feet. If the painted creature already has darkvision from another source, the range of its darkvision increases by 30 feet.\n\n**Mountain Rune.** The painted creature is immune to being knocked prone and has advantage on Strength and Constitution saving throws.\n\n**Shield Rune.** The painted creature has advantage on Dexterity saving throws against effects that deal damage.\n\nA creature can benefit from only one painted rune at a time, so a new rune painted on a creature has no effect unless the old one is removed first. The rune's benefits last for 8 hours or until the painted creature uses its action to wipe away the rune.",
     "descriptionHtml": "<p>This set of 1d4 + 2 small paint pots contains pigments mixed from crushed luminescent gemstones. This magical paint bestows temporary magical gifts on creatures with runes drawn on their skin with this paint.</p>\n<p>One paint pot contains enough pigment to paint one rune. A creature can spend 10 minutes to paint one of the following runes onto itself or another creature:</p>\n<div class=\"item-subentry\"><strong>Journey Rune.</strong> <p>difficult terrain||3 doesn't cost the painted creature extra movement.</p></div>\n<div class=\"item-subentry\"><strong>Life Rune.</strong> <p>The painted creature gains 10 temporary hit points and has advantage on death saving throws.</p></div>\n<div class=\"item-subentry\"><strong>Light Rune.</strong> <p>The painted creature gains darkvision to a range of 30 feet. If the painted creature already has darkvision from another source, the range of its darkvision increases by 30 feet.</p></div>\n<div class=\"item-subentry\"><strong>Mountain Rune.</strong> <p>The painted creature is immune to being knocked prone and has advantage on Strength and Constitution saving throws.</p></div>\n<div class=\"item-subentry\"><strong>Shield Rune.</strong> <p>The painted creature has advantage on Dexterity saving throws against effects that deal damage.</p>\n<p>A creature can benefit from only one painted rune at a time, so a new rune painted on a creature has no effect unless the old one is removed first. The rune's benefits last for 8 hours or until the painted creature uses its action to wipe away the rune.</p></div>"
   },
   {
@@ -123,14 +583,24 @@
     "source": "BGG",
     "page": 150,
     "type": "Adventuring Gear",
+    "rawType": "G",
     "rarity": "none",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear*\n\n---\n\nSometimes, an egg laid by a giant goose inexplicably contains some kind of small trinket or minor magic item. Once it lays a golden egg, a giant goose can't do so again for a year and a day.\n\nYou can use the Goose Egg Trinket table to determine the contents of a golden egg. A giant goose's egg can be a great way to give characters an item that's important to the story of an adventure or your campaign.\n\n| d12 | Egg Contents |\n| --- | --- |\n| 1 | The egg is empty, but the inside of the shell is inscribed with a poem or an intricate illustration. |\n| 2 | The gold shell encloses a candy egg. |\n| 3 | The egg holds a small toy goose that makes a loud honking noise when squeezed. |\n| 4 | The egg contains a Potion of Hill Giant Strength with no container. |\n| 5 | The egg holds a pearl of power. |\n| 6 | The egg contains a brooch of shielding. |\n| 7 | The egg contains a Figurine of Wondrous Power, Silver Raven that activates automatically as the egg is opened, releasing what appears to be a living bird. |\n| 8–12 | The egg is empty. |",
     "descriptionHtml": "<p>Sometimes, an egg laid by a giant goose inexplicably contains some kind of small trinket or minor magic item. Once it lays a golden egg, a giant goose can't do so again for a year and a day.</p>\n<p>You can use the Goose Egg Trinket table to determine the contents of a golden egg. A giant goose's egg can be a great way to give characters an item that's important to the story of an adventure or your campaign.</p>\n<table class=\"item-table\"><thead><tr><th>d12</th><th>Egg Contents</th></tr></thead><tbody><tr><td>1</td><td>The egg is empty, but the inside of the shell is inscribed with a poem or an intricate illustration.</td></tr><tr><td>2</td><td>The gold shell encloses a candy egg.</td></tr><tr><td>3</td><td>The egg holds a small toy goose that makes a loud honking noise when squeezed.</td></tr><tr><td>4</td><td>The egg contains a Potion of Hill Giant Strength with no container.</td></tr><tr><td>5</td><td>The egg holds a pearl of power.</td></tr><tr><td>6</td><td>The egg contains a brooch of shielding.</td></tr><tr><td>7</td><td>The egg contains a Figurine of Wondrous Power, Silver Raven that activates automatically as the egg is opened, releasing what appears to be a living bird.</td></tr><tr><td>8–12</td><td>The egg is empty.</td></tr></tbody></table>"
   },
   {
@@ -139,14 +609,35 @@
     "source": "BGG",
     "page": 112,
     "type": "Wondrous Item",
+    "rawType": "INS",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Calm Emotions",
+        "cleanName": "calm emotions",
+        "castLevel": null
+      },
+      {
+        "name": "Heroes' Feast",
+        "cleanName": "heroes' feast",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, legendary (Requires Attunement)*\n\n---\n\nThis golden harp is sculpted in the image of the god Iallanis, depicted as a young cloud giant woman. When a creature comes within 5 feet of the harp, the instrument animates and is capable of speaking, singing, and playing by itself.\n\nWhenever you attempt to attune to the harp, you must first make either a 15 Charisma (Performance) check or a 20 Charisma (Persuasion) check to convince the harp that you are worthy, attuning to the harp on a success. If you fail, you can't attempt to attune to the harp again until the next dawn. Once you have successfully attuned to the harp, the harp resizes to suit you.\n\n**Stalwart Song.** Whenever you make a Charisma check while attuned to the harp, you can treat a roll of 9 or lower on the die as a 10.\n\n**Feast of Plenty.** If you spend 10 minutes playing the harp, you can cast the heroes' feast spell from it. Once this property is used, it can't be used again until 1d10 + 10 days have passed.\n\n**Soothing Melody.** As an action, you can use the harp to cast the calm emotions spell (save 19). When the spell is cast using the harp, its duration increases to 1 hour, provided you maintain concentration on the spell. This property can be used five times, and it regains all uses at dawn.\n\n**Sentience.** The harp is a sentient, chaotic good object with an Intelligence of 13, a Wisdom of 15, and a Charisma of 20. It has hearing and darkvision to a range of 120 feet.\n\nThe harp can speak, read, and understand Common and Giant. It can also communicate telepathically with the creature attuned to it.\n\nThe harp has a dramatic and pompous personality, taking extreme pride in the quality of music produced from its strings. If the harp is shorter than 6 feet tall, it bemoans its height.",
     "descriptionHtml": "<p>This golden harp is sculpted in the image of the god Iallanis, depicted as a young cloud giant woman. When a creature comes within 5 feet of the harp, the instrument animates and is capable of speaking, singing, and playing by itself.</p>\n<p>Whenever you attempt to attune to the harp, you must first make either a 15 Charisma (Performance) check or a 20 Charisma (Persuasion) check to convince the harp that you are worthy, attuning to the harp on a success. If you fail, you can't attempt to attune to the harp again until the next dawn. Once you have successfully attuned to the harp, the harp resizes to suit you.</p>\n<div class=\"item-subentry\"><strong>Stalwart Song.</strong> <p>Whenever you make a Charisma check while attuned to the harp, you can treat a roll of 9 or lower on the die as a 10.</p></div>\n<div class=\"item-subentry\"><strong>Feast of Plenty.</strong> <p>If you spend 10 minutes playing the harp, you can cast the heroes' feast spell from it. Once this property is used, it can't be used again until 1d10 + 10 days have passed.</p></div>\n<div class=\"item-subentry\"><strong>Soothing Melody.</strong> <p>As an action, you can use the harp to cast the calm emotions spell (save 19). When the spell is cast using the harp, its duration increases to 1 hour, provided you maintain concentration on the spell. This property can be used five times, and it regains all uses at dawn.</p></div>\n<div class=\"item-subentry\"><strong>Sentience.</strong> <p>The harp is a sentient, chaotic good object with an Intelligence of 13, a Wisdom of 15, and a Charisma of 20. It has hearing and darkvision to a range of 120 feet.</p>\n<p>The harp can speak, read, and understand Common and Giant. It can also communicate telepathically with the creature attuned to it.</p>\n<p>The harp has a dramatic and pompous personality, taking extreme pride in the quality of music produced from its strings. If the harp is shorter than 6 feet tall, it bemoans its height.</p></div>"
   },
   {
@@ -155,14 +646,50 @@
     "source": "BGG",
     "page": 112,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "artifact",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Elemental Weapon",
+        "cleanName": "elemental weapon",
+        "castLevel": null
+      },
+      {
+        "name": "Call Lightning",
+        "cleanName": "call lightning",
+        "castLevel": null
+      },
+      {
+        "name": "Wall Of Fire",
+        "cleanName": "wall of fire",
+        "castLevel": null
+      },
+      {
+        "name": "Conjure Elemental",
+        "cleanName": "conjure elemental",
+        "castLevel": null
+      },
+      {
+        "name": "Tsunami",
+        "cleanName": "tsunami",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, artifact (Requires Attunement)*\n\n---\n\nThis copper-hued helm contains a shard of the Elemental Chaos embedded in its forehead, surrounded by a motif of a rising sun. Legend says Annam fashioned this helm for his daughter Diancastra to hold the fragment of chaos she used to prove her worth to her father.\n\n**Random Properties.** The helm has the following random properties, determined by rolling on the appropriate table in the Dungeon Master's Guide:\n\n- 2 Artifact Properties; Minor Beneficial Properties properties\n- 1 Artifact Properties; Major Beneficial Properties property\n- 1 Artifact Properties; Minor Detrimental Properties property\n\n**Master of Guile.** While wearing the helm, you have advantage on Charisma (Deception) and Wisdom (Insight) checks.\n\n**Arrow of Elemental Havoc.** As a bonus action while wearing the helm, you can launch a bolt of searing elemental energy toward a creature you can see within 90 feet of yourself. The target must make a 20 Dexterity saving throw. On a failed save, the creature takes 4d6 acid, cold, fire, lightning, or thunder damage (your choice). On a successful save, the creature takes half as much damage.\n\n**Spellcasting.** The helm has 6 charges and regains 1d6 charges each dawn. As an action while wearing the helm, you can expend 1 or more of its charges to cast one of the following spells (save 20): elemental weapon (1 charge), call lightning (2 charges), wall of fire (3 charges), conjure elemental (4 charges), tsunami (5 charges).",
     "descriptionHtml": "<p>This copper-hued helm contains a shard of the Elemental Chaos embedded in its forehead, surrounded by a motif of a rising sun. Legend says Annam fashioned this helm for his daughter Diancastra to hold the fragment of chaos she used to prove her worth to her father.</p>\n<div class=\"item-subentry\"><strong>Random Properties.</strong> <p>The helm has the following random properties, determined by rolling on the appropriate table in the Dungeon Master's Guide:</p>\n<ul><li>2 Artifact Properties; Minor Beneficial Properties properties</li><li>1 Artifact Properties; Major Beneficial Properties property</li><li>1 Artifact Properties; Minor Detrimental Properties property</li></ul></div>\n<div class=\"item-subentry\"><strong>Master of Guile.</strong> <p>While wearing the helm, you have advantage on Charisma (Deception) and Wisdom (Insight) checks.</p></div>\n<div class=\"item-subentry\"><strong>Arrow of Elemental Havoc.</strong> <p>As a bonus action while wearing the helm, you can launch a bolt of searing elemental energy toward a creature you can see within 90 feet of yourself. The target must make a 20 Dexterity saving throw. On a failed save, the creature takes 4d6 acid, cold, fire, lightning, or thunder damage (your choice). On a successful save, the creature takes half as much damage.</p></div>\n<div class=\"item-subentry\"><strong>Spellcasting.</strong> <p>The helm has 6 charges and regains 1d6 charges each dawn. As an action while wearing the helm, you can expend 1 or more of its charges to cast one of the following spells (save 20): elemental weapon (1 charge), call lightning (2 charges), wall of fire (3 charges), conjure elemental (4 charges), tsunami (5 charges).</p></div>"
   },
   {
@@ -171,14 +698,24 @@
     "source": "BGG",
     "page": 86,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "unknown (magic)",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, unknown (magic)*\n\n---\n\nA Horizon puzzle cube is an 8-inch magical cube made of gold, iron, crystal, and copper, and it is worth 5,000 gp to a sage or collector. A functioning puzzle cube can be solved with 30 minutes of work and a successful 25 Intelligence (Investigation) check. When the cube is solved, a 30-foot-diameter portal appears before the creature who solved the cube, leading to the northeastern platform of Horizon's Edge. The portal is two-way and remains open for 10 minutes or until a creature uses an action to change the puzzle's configuration. Puzzle cubes don't function while on Horizon's Edge, but a device somewhere in the demiplane allows a cube to function in reverse while the cube is fitted into it.",
     "descriptionHtml": "<p>A Horizon puzzle cube is an 8-inch magical cube made of gold, iron, crystal, and copper, and it is worth 5,000 gp to a sage or collector. A functioning puzzle cube can be solved with 30 minutes of work and a successful 25 Intelligence (Investigation) check. When the cube is solved, a 30-foot-diameter portal appears before the creature who solved the cube, leading to the northeastern platform of Horizon's Edge. The portal is two-way and remains open for 10 minutes or until a creature uses an action to change the puzzle's configuration. Puzzle cubes don't function while on Horizon's Edge, but a device somewhere in the demiplane allows a cube to function in reverse while the cube is fitted into it.</p>"
   },
   {
@@ -187,17 +724,52 @@
     "source": "BGG",
     "page": 113,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "rare",
     "reqAttune": false,
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d4",
+    "dmg2": null,
     "dmgType": "slashing",
+    "bonusWeapon": "+1",
     "properties": [
       "Finesse",
       "Reach"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Lash of Immolation",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Slashing"
+        },
+        {
+          "formula": "1d6",
+          "stat": "",
+          "type": "Fire",
+          "label": "Extra"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, rare*\n\n**Damage:** 1d4 slashing | **Properties:** Finesse, Reach | **Weight:** 3 lb\n\n---\n\nThe handle of this dark leather whip bears the fire rune, and embers dance around the whip's tail.\n\nYou gain a +1 bonus to attack and damage rolls made with this weapon, and on a hit, the whip deals an extra 1d6 fire damage. When you score a critical hit with an attack using this whip, the target also has the restrained condition until the start of your next turn, as fiery bands lash around the target.\n\n**Invoking the Rune.** When you make an attack with the whip and hit, you can use your reaction to invoke the whip's rune. Doing so increases the extra fire damage dealt by the whip to 2d6.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>The handle of this dark leather whip bears the fire rune, and embers dance around the whip's tail.</p>\n<p>You gain a +1 bonus to attack and damage rolls made with this weapon, and on a hit, the whip deals an extra 1d6 fire damage. When you score a critical hit with an attack using this whip, the target also has the restrained condition until the start of your next turn, as fiery bands lash around the target.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you make an attack with the whip and hit, you can use your reaction to invoke the whip's rune. Doing so increases the extra fire damage dealt by the whip to 2d6.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -206,18 +778,63 @@
     "source": "BGG",
     "page": 113,
     "type": "Ranged Weapon",
+    "rawType": "R",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 2,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": null,
     "dmgType": "piercing",
+    "bonusWeapon": "+3",
     "properties": [
       "Ammunition",
       "Heavy",
       "Two-Handed"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Create Food And Water",
+        "cleanName": "create food and water",
+        "castLevel": null
+      },
+      {
+        "name": "Warding Bond",
+        "cleanName": "warding bond",
+        "castLevel": null
+      },
+      {
+        "name": "Guardian Of Faith",
+        "cleanName": "guardian of faith",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Longbow of the Healing Hearth",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, legendary (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Properties:** Ammunition, Heavy, Two-Handed | **Weight:** 2 lb\n\n---\n\nThis ivory longbow is inscribed with a prayer to the god Hiatea, the runes of which are entwined with gilded engravings of wheat stalks and deer antlers.\n\nYou gain a +3 bonus to attack and damage rolls made with this weapon. If you load no ammunition in the weapon, it produces its own, automatically creating one magic arrow when you pull back the string. The arrow created by the bow vanishes the instant after it hits or misses a target.\n\nThe bow has 8 charges for the following properties, which you can use while wielding the bow. The bow regains 1d4 + 1 charges daily at dawn.\n\n**Curative Arrow.** When you take the Attack action using the bow, you can expend 1 charge to replace one of your attacks with a blazing arrow of curative magic, which automatically hits one creature you can see within 150 feet of you. The target can then immediately spend and roll one of its unspent Hit Dice and regain a number of hit points equal to the roll plus your Wisdom modifier (minimum of +1).\n\nIf the target has no unspent Hit Dice remaining, nothing happens. You can use a curative arrow only once per turn.\n\n**Spellcasting.** While holding the bow, you can use an action to expend 1 or more of its charges to cast one of the following spells from it (save 18): create food and water (1 charge), warding bond (2 charges), guardian of faith (3 charges).",
     "descriptionHtml": "<p>This ivory longbow is inscribed with a prayer to the god Hiatea, the runes of which are entwined with gilded engravings of wheat stalks and deer antlers.</p>\n<p>You gain a +3 bonus to attack and damage rolls made with this weapon. If you load no ammunition in the weapon, it produces its own, automatically creating one magic arrow when you pull back the string. The arrow created by the bow vanishes the instant after it hits or misses a target.</p>\n<p>The bow has 8 charges for the following properties, which you can use while wielding the bow. The bow regains 1d4 + 1 charges daily at dawn.</p>\n<div class=\"item-subentry\"><strong>Curative Arrow.</strong> <p>When you take the Attack action using the bow, you can expend 1 charge to replace one of your attacks with a blazing arrow of curative magic, which automatically hits one creature you can see within 150 feet of you. The target can then immediately spend and roll one of its unspent Hit Dice and regain a number of hit points equal to the roll plus your Wisdom modifier (minimum of +1).</p>\n<p>If the target has no unspent Hit Dice remaining, nothing happens. You can use a curative arrow only once per turn.</p></div>\n<div class=\"item-subentry\"><strong>Spellcasting.</strong> <p>While holding the bow, you can use an action to expend 1 or more of its charges to cast one of the following spells from it (save 18): create food and water (1 charge), warding bond (2 charges), guardian of faith (3 charges).</p></div>"
   },
   {
@@ -226,16 +843,56 @@
     "source": "BGG",
     "page": 113,
     "type": "Ranged Weapon",
+    "rawType": "R",
     "rarity": "very rare",
     "reqAttune": "Requires Attunement",
     "weight": 10,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d12",
+    "dmg2": null,
     "dmgType": "piercing",
+    "bonusWeapon": "+1",
     "properties": [
       "Two-Handed"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Dancing Lights",
+        "cleanName": "dancing lights",
+        "castLevel": null
+      },
+      {
+        "name": "Sunbeam",
+        "cleanName": "sunbeam",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Lucent Destroyer",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d12",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d12 piercing | **Properties:** Two-Handed | **Weight:** 10 lb\n\n---\n\nThis magic weapon is a triple-barreled bronze musket. You gain a +1 bonus to attack and damage rolls made with it. It requires no ammunition, its damage is radiant instead of piercing, and it doesn't have the loading property. The base of the weapon is emblazoned with the light rune.\n\nAdditionally, while attuned to the weapon, you can cast dancing lights from the musket at will.\n\n**Invoking the Rune.** As an action, you can invoke the weapon's rune to cast the sunbeam spell (save 17) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>This magic weapon is a triple-barreled bronze musket. You gain a +1 bonus to attack and damage rolls made with it. It requires no ammunition, its damage is radiant instead of piercing, and it doesn't have the loading property. The base of the weapon is emblazoned with the light rune.</p>\n<p>Additionally, while attuned to the weapon, you can cast dancing lights from the musket at will.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the weapon's rune to cast the sunbeam spell (save 17) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -244,14 +901,30 @@
     "source": "BGG",
     "page": 114,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "very rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Sleet Storm",
+        "cleanName": "sleet storm",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, very rare (Requires Attunement)*\n\n---\n\nThis thick, fur-lined cloak has the frost rune stitched on the hem in silvery blue thread. Frigid wind swirls around the cloak, regardless of the weather.\n\nWhile wearing this cloak, you have resistance to cold damage. Additionally, when you move within 5 feet of a creature, you can cause the cloak's cold wind to buffet the creature. The creature must succeed on a 14 Dexterity saving throw or take 1d6 cold damage and have the prone condition. A creature can be affected by the mantle only once during a turn.\n\n**Invoking the Rune.** As an action, you can invoke the mantle's rune to cast the sleet storm spell (save 14) with it. When you use the mantle to cast the spell, the area of the spell isn't difficult terrain||3 for you, and you can see through the storm, ignoring the normal penalties of a Vision and Light||2||heavily obscured area.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>This thick, fur-lined cloak has the frost rune stitched on the hem in silvery blue thread. Frigid wind swirls around the cloak, regardless of the weather.</p>\n<p>While wearing this cloak, you have resistance to cold damage. Additionally, when you move within 5 feet of a creature, you can cause the cloak's cold wind to buffet the creature. The creature must succeed on a 14 Dexterity saving throw or take 1d6 cold damage and have the prone condition. A creature can be affected by the mantle only once during a turn.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the mantle's rune to cast the sleet storm spell (save 14) with it. When you use the mantle to cast the spell, the area of the spell isn't difficult terrain||3 for you, and you can see through the storm, ignoring the normal penalties of a Vision and Light||2||heavily obscured area.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -260,14 +933,24 @@
     "source": "BGG",
     "page": 114,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "very rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, very rare (Requires Attunement)*\n\n---\n\nThe design of this bronze circlet resembles swirling clouds. At its center is set a deep-blue stone, upon which is inscribed the cloud rune.\n\nWhile wearing this circlet, you take no damage from falling. Additionally, as a bonus action, you and everything you are wearing or carrying can teleport to an unoccupied space you can see within 15 feet of yourself, reappearing in a puff of shimmering clouds.\n\n**Invoking the Rune.** As an action, you can invoke the circlet's rune to assume a cloudlike form. The form lasts for 1 minute, until you are incapacitated, or until you dismiss it (no action required).\n\nWhile in cloud form, you have a flying speed of 60 feet and resistance to bludgeoning, piercing, and slashing damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>The design of this bronze circlet resembles swirling clouds. At its center is set a deep-blue stone, upon which is inscribed the cloud rune.</p>\n<p>While wearing this circlet, you take no damage from falling. Additionally, as a bonus action, you and everything you are wearing or carrying can teleport to an unoccupied space you can see within 15 feet of yourself, reappearing in a puff of shimmering clouds.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the circlet's rune to assume a cloudlike form. The form lasts for 1 minute, until you are incapacitated, or until you dismiss it (no action required).</p>\n<p>While in cloud form, you have a flying speed of 60 feet and resistance to bludgeoning, piercing, and slashing damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -276,15 +959,83 @@
     "source": "BGG",
     "page": 114,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "legendary",
     "reqAttune": "by a spellcaster",
     "weight": 8,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, legendary (by a spellcaster)*\n\n**Weight:** 8 lb\n\n---\n\nSaid to be infused with the wisdom and power of the god Skoraeus, this polished stone orb is veined with iridescent crystal that seems to glow from within. The orb is 8 inches in diameter and weighs 8 pounds, making it a palm-sized trinket for a stone giant but a more unwieldy item for a Medium creature to use.\n\nWhile holding this orb, you can use it as a spellcasting focus for your spells. You also gain the following benefits:\n\n**Abundant Components.** The orb has 3 charges and regains all expended charges at dawn. When you cast a spell while holding this orb, you can expend up to 3 charges to ignore the spell's material components with a gold piece cost, up to 300 gp per charge expended.\n\n**Astute Mind.** You gain a +2 bonus to any Constitution saving throw you make to maintain your concentration on a spell.\n\n**Divine Sight.** You can see normally in darkness, both magical and nonmagical, to a distance of 120 feet.",
     "descriptionHtml": "<p>Said to be infused with the wisdom and power of the god Skoraeus, this polished stone orb is veined with iridescent crystal that seems to glow from within. The orb is 8 inches in diameter and weighs 8 pounds, making it a palm-sized trinket for a stone giant but a more unwieldy item for a Medium creature to use.</p>\n<p>While holding this orb, you can use it as a spellcasting focus for your spells. You also gain the following benefits:</p>\n<div class=\"item-subentry\"><strong>Abundant Components.</strong> <p>The orb has 3 charges and regains all expended charges at dawn. When you cast a spell while holding this orb, you can expend up to 3 charges to ignore the spell's material components with a gold piece cost, up to 300 gp per charge expended.</p></div>\n<div class=\"item-subentry\"><strong>Astute Mind.</strong> <p>You gain a +2 bonus to any Constitution saving throw you make to maintain your concentration on a spell.</p></div>\n<div class=\"item-subentry\"><strong>Divine Sight.</strong> <p>You can see normally in darkness, both magical and nonmagical, to a distance of 120 feet.</p></div>"
+  },
+  {
+    "id": "it_plate_armor_of_safeguarding_bgg",
+    "name": "Plate Armor of Safeguarding",
+    "source": "BGG",
+    "page": 111,
+    "type": "Heavy Armor",
+    "rawType": "HA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 65,
+    "value": "1500 gp",
+    "ac": 18,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Beacon Of Hope",
+        "cleanName": "beacon of hope",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 18 | **Weight:** 65 lb | **Value:** 1500 gp\n\n---\n\nSet in the center of this armor's chest is a citrine engraved with the shield rune.\n\nWhile wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nPlate consists of shaped, interlocking metal plates to cover the entire body. A suit of plate includes gauntlets, heavy leather boots, a visored helmet, and thick layers of padding underneath the armor. Buckles and straps distribute the weight over the body.",
+    "descriptionHtml": "<p>Set in the center of this armor's chest is a citrine engraved with the shield rune.</p>\n<p>While wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>Plate consists of shaped, interlocking metal plates to cover the entire body. A suit of plate includes gauntlets, heavy leather boots, a visored helmet, and thick layers of padding underneath the armor. Buckles and straps distribute the weight over the body.</p>"
+  },
+  {
+    "id": "it_prehistoric_figurine_of_wondrous_power_bgg",
+    "name": "Prehistoric Figurine of Wondrous Power",
+    "source": "BGG",
+    "page": 114,
+    "type": "Wondrous Item",
+    "rawType": null,
+    "rarity": "varies",
+    "reqAttune": false,
+    "weight": null,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, varies*\n\n---\n\nLarger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.\n\nAs an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.\n\nThe creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.\n\nThe creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.",
+    "descriptionHtml": "<p>Larger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.</p>\n<p>As an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.</p>\n<p>The creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.</p>\n<p>The creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.</p>"
   },
   {
     "id": "it_prehistoric_figurine_of_wondrous_power__carnelian_triceratops_bgg",
@@ -292,14 +1043,24 @@
     "source": "BGG",
     "page": 114,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "very rare",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, very rare*\n\n---\n\nLarger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.\n\nAs an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.\n\nThe creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.\n\nThe creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.\n\n**triceratops.** This figurine becomes a triceratops for up to 6 hours and can be ridden as a mount. Once it has been used, it can't be used again until 10 days have passed.",
     "descriptionHtml": "<p>Larger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.</p>\n<p>As an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.</p>\n<p>The creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.</p>\n<p>The creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.</p>\n<div class=\"item-subentry\"><strong>triceratops.</strong> <p>This figurine becomes a triceratops for up to 6 hours and can be ridden as a mount. Once it has been used, it can't be used again until 10 days have passed.</p></div>"
   },
   {
@@ -308,14 +1069,24 @@
     "source": "BGG",
     "page": 114,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "legendary",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, legendary*\n\n---\n\nLarger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.\n\nAs an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.\n\nThe creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.\n\nThe creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.\n\n**tyrannosaurus rex.** This figurine, crafted from rare green jasper, becomes a tyrannosaurus rex for up to 1 hour. Once it has been used, it can't be used again until 14 days have passed.\n\nWhenever you command the figurine while it's in tyrannosaurus rex form (including commanding it to revert to figurine form), you must roll a d20. On a 1, you lose control of the figurine, and it becomes hostile to you and your companions until it is reduced to 0 hit points, at which point it reverts to figurine form.",
     "descriptionHtml": "<p>Larger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.</p>\n<p>As an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.</p>\n<p>The creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.</p>\n<p>The creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.</p>\n<div class=\"item-subentry\"><strong>tyrannosaurus rex.</strong> <p>This figurine, crafted from rare green jasper, becomes a tyrannosaurus rex for up to 1 hour. Once it has been used, it can't be used again until 14 days have passed.</p>\n<p>Whenever you command the figurine while it's in tyrannosaurus rex form (including commanding it to revert to figurine form), you must roll a d20. On a 1, you lose control of the figurine, and it becomes hostile to you and your companions until it is reduced to 0 hit points, at which point it reverts to figurine form.</p></div>"
   },
   {
@@ -324,14 +1095,24 @@
     "source": "BGG",
     "page": 114,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, rare*\n\n---\n\nLarger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.\n\nAs an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.\n\nThe creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.\n\nThe creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.\n\n**pteranodon.** This figurine becomes a pteranodon for up to 8 hours. If your size is Medium or smaller, you can ride the pteranodon as a mount. Once it has been used, it can't be used again until 7 days have passed.",
     "descriptionHtml": "<p>Larger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.</p>\n<p>As an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.</p>\n<p>The creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.</p>\n<p>The creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.</p>\n<div class=\"item-subentry\"><strong>pteranodon.</strong> <p>This figurine becomes a pteranodon for up to 8 hours. If your size is Medium or smaller, you can ride the pteranodon as a mount. Once it has been used, it can't be used again until 7 days have passed.</p></div>"
   },
   {
@@ -340,14 +1121,30 @@
     "source": "BGG",
     "page": 114,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "uncommon",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Water Breathing",
+        "cleanName": "water breathing",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, uncommon*\n\n---\n\nLarger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.\n\nAs an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.\n\nThe creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.\n\nThe creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.\n\n**plesiosaurus.** This figurine becomes a plesiosaurus for up to 12 hours and can be ridden as a mount. Once it has been used, it can't be used again until 4 days have passed.\n\nWhile you are riding the plesiosaurus, you can use it to cast water breathing at will.",
     "descriptionHtml": "<p>Larger and more roughly hewn than typical figurines of wondrous power, these statuettes depict dinosaurs and related creatures from the earliest days of the world.</p>\n<p>As an action, you can throw a prehistoric figurine of wondrous power to a point on the ground within 60 feet of yourself while speaking a command word, whereupon the figurine magically transforms into a living creature. If the space where the creature would appear is occupied by other creatures or objects, or if there isn't enough space for the creature, the figurine doesn't become a creature.</p>\n<p>The creature is friendly to you and your companions. It understands your languages and obeys your spoken commands. If you issue no commands, the creature defends itself but takes no other actions. See the Monster Manual for the creature's statistics.</p>\n<p>The creature exists for a duration specific to each figurine. At the end of the duration, the creature reverts to its statuette form. It reverts to a figurine early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature becomes a figurine again, its property can't be used again until a certain amount of time has passed, as specified in the figurine's description.</p>\n<div class=\"item-subentry\"><strong>plesiosaurus.</strong> <p>This figurine becomes a plesiosaurus for up to 12 hours and can be ridden as a mount. Once it has been used, it can't be used again until 4 days have passed.</p>\n<p>While you are riding the plesiosaurus, you can use it to cast water breathing at will.</p></div>"
   },
   {
@@ -356,15 +1153,76 @@
     "source": "BGG",
     "page": 115,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": null,
     "dmgType": "piercing",
+    "bonusWeapon": "+2",
     "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Reaper's Scream",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 2,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 2,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, legendary (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Weight:** 4 lb\n\n---\n\nThe spikes of this iron morningstar glow with sickly, pale light. The death rune is inscribed on its shaft and inlaid with pearl.\n\nYou gain a +2 bonus to attack and damage rolls made with this weapon, and attacks with this weapon deal necrotic damage instead of piercing damage.\n\nWhen you attack a creature with this weapon and roll a 20 on the attack roll, you gain 10 temporary hit points. Any creature that hits you with a melee attack while you have 1 or more of these temporary hit points takes 10 necrotic damage.\n\n**Invoking the Rune.** As a bonus action, you can invoke the weapon's rune, unleashing the screams of every creature slain by the weapon in one cacophonous burst. Each creature of your choice within 60 feet of you must succeed on a 15 Wisdom saving throw or have the stunned condition until the start of your next turn.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>The spikes of this iron morningstar glow with sickly, pale light. The death rune is inscribed on its shaft and inlaid with pearl.</p>\n<p>You gain a +2 bonus to attack and damage rolls made with this weapon, and attacks with this weapon deal necrotic damage instead of piercing damage.</p>\n<p>When you attack a creature with this weapon and roll a 20 on the attack roll, you gain 10 temporary hit points. Any creature that hits you with a melee attack while you have 1 or more of these temporary hit points takes 10 necrotic damage.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As a bonus action, you can invoke the weapon's rune, unleashing the screams of every creature slain by the weapon in one cacophonous burst. Each creature of your choice within 60 feet of you must succeed on a 15 Wisdom saving throw or have the stunned condition until the start of your next turn.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_ring_mail_of_safeguarding_bgg",
+    "name": "Ring Mail of Safeguarding",
+    "source": "BGG",
+    "page": 111,
+    "type": "Heavy Armor",
+    "rawType": "HA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 40,
+    "value": "30 gp",
+    "ac": 14,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Beacon Of Hope",
+        "cleanName": "beacon of hope",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 14 | **Weight:** 40 lb | **Value:** 30 gp\n\n---\n\nSet in the center of this armor's chest is a citrine engraved with the shield rune.\n\nWhile wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nThis armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.",
+    "descriptionHtml": "<p>Set in the center of this armor's chest is a citrine engraved with the shield rune.</p>\n<p>While wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>This armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.</p>"
   },
   {
     "id": "it_ring_of_amity_bgg",
@@ -372,14 +1230,24 @@
     "source": "BGG",
     "page": 115,
     "type": "Adventuring Gear",
+    "rawType": "RG|DMG",
     "rarity": "very rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear, very rare (Requires Attunement)*\n\n---\n\nThis ring is carved from hematite and bears an engraving of the friend rune.\n\nWhen you first attune to this ring, you can touch one willing creature and form a magical bond between the two of you. While this bond lasts, whenever you are subjected to a spell or magical effect that restores hit points, the bonded creature also receives the benefits of the spell or effect.\n\nYou can bond with a different creature whenever you finish a long rest, provided that you can touch the creature and the creature is willing.\n\nA creature can benefit from only one ring of amity's bond at a time. The bond ends if either you or the creature travels to a different plane of existence, if you bond with a different creature at the end of a long rest, or if you sever the bond as a bonus action.\n\n**Invoking the Rune.** When the bonded creature hits a target with an attack roll, you can use your reaction to invoke the ring's rune if you are within 60 feet of the bonded creature. The bonded creature's attack is then turned into a critical hit.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>This ring is carved from hematite and bears an engraving of the friend rune.</p>\n<p>When you first attune to this ring, you can touch one willing creature and form a magical bond between the two of you. While this bond lasts, whenever you are subjected to a spell or magical effect that restores hit points, the bonded creature also receives the benefits of the spell or effect.</p>\n<p>You can bond with a different creature whenever you finish a long rest, provided that you can touch the creature and the creature is willing.</p>\n<p>A creature can benefit from only one ring of amity's bond at a time. The bond ends if either you or the creature travels to a different plane of existence, if you bond with a different creature at the end of a long rest, or if you sever the bond as a bonus action.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When the bonded creature hits a target with an attack roll, you can use your reaction to invoke the ring's rune if you are within 60 feet of the bonded creature. The bonded creature's attack is then turned into a critical hit.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -388,14 +1256,30 @@
     "source": "BGG",
     "page": 116,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "very rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Spare The Dying",
+        "cleanName": "spare the dying",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, very rare (Requires Attunement)*\n\n---\n\nA black opal pendant hangs at the base of this pearlescent chain. The sacred rune is inscribed on the back of the pendant.\n\nWhile wearing this item, you have resistance to necrotic damage. Additionally, you can cast the spare the dying cantrip using either an action or a bonus action.\n\n**Invoking the Rune.** When a creature you can see within 60 feet of you is reduced to 0 hit points as a result of taking damage, you can use your reaction to invoke the item's rune, causing the pendant to flash with pale light. The creature then instead drops to 1 hit point.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>A black opal pendant hangs at the base of this pearlescent chain. The sacred rune is inscribed on the back of the pendant.</p>\n<p>While wearing this item, you have resistance to necrotic damage. Additionally, you can cast the spare the dying cantrip using either an action or a bonus action.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When a creature you can see within 60 feet of you is reduced to 0 hit points as a result of taking damage, you can use your reaction to invoke the item's rune, causing the pendant to flash with pale light. The creature then instead drops to 1 hit point.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -404,15 +1288,57 @@
     "source": "BGG",
     "page": 116,
     "type": "Shield",
+    "rawType": "S",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 6,
     "value": null,
     "ac": 2,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Shield, legendary (Requires Attunement)*\n\n**Armor Class:** 2 | **Weight:** 6 lb\n\n---\n\nModeled after the formidable spiked tower shields wielded by some fire giants, this iron shield emanates a constant warmth.\n\nYou can use a bonus action to activate the shield, causing glowing lava to flow through the shield's grooves for 1 minute. While the shield is active, you gain the following benefits:\n\n**Blazing Soul.** You have immunity to fire damage.\n\n**Cleansing Fire.** As an action, you can cause the shield to flare with the cleansing fire of the god Surtur. Choose one creature you can see within 30 feet of yourself (you can choose yourself). One disease or condition of your choice affecting this creature ends immediately; the condition can be blinded, charmed, deafened, or poisoned.\n\n**Shield Bash.** When you take the Attack action on your turn, you can replace one of your attacks with a shield bash, targeting one creature you can see within 5 feet of yourself. The target must make a Strength saving throw (DC equals 8 + your proficiency bonus + your Strength modifier). On a failed save, the target takes 3d6 bludgeoning damage plus 3d6 fire damage and is knocked prone. On a successful save, the target takes half as much damage only. You can use Shield Bash only once per turn.\n\nOnce the shield has been activated, it can't be activated again until the next dawn.",
     "descriptionHtml": "<p>Modeled after the formidable spiked tower shields wielded by some fire giants, this iron shield emanates a constant warmth.</p>\n<p>You can use a bonus action to activate the shield, causing glowing lava to flow through the shield's grooves for 1 minute. While the shield is active, you gain the following benefits:</p>\n<div class=\"item-subentry\"><strong>Blazing Soul.</strong> <p>You have immunity to fire damage.</p></div>\n<div class=\"item-subentry\"><strong>Cleansing Fire.</strong> <p>As an action, you can cause the shield to flare with the cleansing fire of the god Surtur. Choose one creature you can see within 30 feet of yourself (you can choose yourself). One disease or condition of your choice affecting this creature ends immediately; the condition can be blinded, charmed, deafened, or poisoned.</p></div>\n<div class=\"item-subentry\"><strong>Shield Bash.</strong> <p>When you take the Attack action on your turn, you can replace one of your attacks with a shield bash, targeting one creature you can see within 5 feet of yourself. The target must make a Strength saving throw (DC equals 8 + your proficiency bonus + your Strength modifier). On a failed save, the target takes 3d6 bludgeoning damage plus 3d6 fire damage and is knocked prone. On a successful save, the target takes half as much damage only. You can use Shield Bash only once per turn.</p>\n<p>Once the shield has been activated, it can't be activated again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_splint_armor_of_safeguarding_bgg",
+    "name": "Splint Armor of Safeguarding",
+    "source": "BGG",
+    "page": 111,
+    "type": "Heavy Armor",
+    "rawType": "HA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 60,
+    "value": "200 gp",
+    "ac": 17,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Beacon Of Hope",
+        "cleanName": "beacon of hope",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 17 | **Weight:** 60 lb | **Value:** 200 gp\n\n---\n\nSet in the center of this armor's chest is a citrine engraved with the shield rune.\n\nWhile wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nThis armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding. Flexible chain mail protects the joints.",
+    "descriptionHtml": "<p>Set in the center of this armor's chest is a citrine engraved with the shield rune.</p>\n<p>While wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>This armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding. Flexible chain mail protects the joints.</p>"
   },
   {
     "id": "it_staff_of_the_rooted_hills_bgg",
@@ -420,16 +1346,56 @@
     "source": "BGG",
     "page": 116,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": "1d8",
     "dmgType": "bludgeoning",
+    "bonusWeapon": "+1",
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Hold Person",
+        "cleanName": "hold person",
+        "castLevel": null
+      },
+      {
+        "name": "Speak With Plants",
+        "cleanName": "speak with plants",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Staff of the Rooted Hills",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, rare (Requires Attunement)*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 4 lb\n\n---\n\nThe hill rune is carved into this gnarled wooden staff. The staff magically resizes to match the height of any creature that attunes to it.\n\nThe staff can be wielded as a magic quarterstaff that grants a +1 bonus to attack and damage rolls made with it. The first time you hit any creature with the staff on your turn, the creature must succeed on a 12 Strength saving throw or be restrained by spectral vines until the start of your next turn.\n\n**Invoking the Rune.** As an action, you can invoke the staff's rune to cast either hold person (save 12) or speak with plants with the staff. When you cast hold person using the staff, the target is wreathed in spectral vines.\n\nOnce the rune has been invoked to cast either spell, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>The hill rune is carved into this gnarled wooden staff. The staff magically resizes to match the height of any creature that attunes to it.</p>\n<p>The staff can be wielded as a magic quarterstaff that grants a +1 bonus to attack and damage rolls made with it. The first time you hit any creature with the staff on your turn, the creature must succeed on a 12 Strength saving throw or be restrained by spectral vines until the start of your next turn.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the staff's rune to cast either hold person (save 12) or speak with plants with the staff. When you cast hold person using the staff, the target is wreathed in spectral vines.</p>\n<p>Once the rune has been invoked to cast either spell, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -438,14 +1404,30 @@
     "source": "BGG",
     "page": 116,
     "type": "Medium Armor",
+    "rawType": "MA",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 20,
     "value": null,
     "ac": 14,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Wall Of Stone",
+        "cleanName": "wall of stone",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Medium Armor, legendary (Requires Attunement)*\n\n**Armor Class:** 14 | **Weight:** 20 lb\n\n---\n\nThis breastplate is made from marbled granite, though it feels no heavier than a typical metal breastplate. Its chest is emblazoned with the stone rune.\n\nWhile wearing this breastplate, you have resistance to bludgeoning, piercing, and slashing damage and are immune to being knocked prone.\n\n**Invoking the Rune.** As an action, you can invoke the breastplate's rune to cast the wall of stone spell (save 14) with it. When you cast the spell in this way, you have advantage on saving throws made to maintain concentration on the spell.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.\n\nThis armor consists of a fitted metal chest piece worn with supple leather. Although it leaves the legs and arms relatively unprotected, this armor provides good protection for the wearer's vital organs while leaving the wearer relatively unencumbered.",
     "descriptionHtml": "<p>This breastplate is made from marbled granite, though it feels no heavier than a typical metal breastplate. Its chest is emblazoned with the stone rune.</p>\n<p>While wearing this breastplate, you have resistance to bludgeoning, piercing, and slashing damage and are immune to being knocked prone.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the breastplate's rune to cast the wall of stone spell (save 14) with it. When you cast the spell in this way, you have advantage on saving throws made to maintain concentration on the spell.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p>\n<p>This armor consists of a fitted metal chest piece worn with supple leather. Although it leaves the legs and arms relatively unprotected, this armor provides good protection for the wearer's vital organs while leaving the wearer relatively unencumbered.</p></div>"
   },
   {
@@ -454,14 +1436,43 @@
     "source": "BGG",
     "page": 116,
     "type": "Ranged Weapon",
+    "rawType": "R",
     "rarity": "very rare",
     "reqAttune": false,
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d10",
+    "dmg2": null,
     "dmgType": "piercing",
+    "bonusWeapon": "+1",
     "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Thunderbuss",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, very rare*\n\n**Damage:** 1d10 piercing | **Weight:** 3 lb\n\n---\n\nThis magic ranged weapon is a flared pistol with the storm rune engraved along the barrel. You gain a +1 bonus to attack and damage rolls made with it. It requires no ammunition, its damage is thunder instead of piercing, and it doesn't have the loading property.\n\n**Invoking the Rune.** As a bonus action, you can invoke the weapon's rune to launch a ball of energy to a point you can see within 30 feet of yourself. The energy then detonates into a 10-foot-radius sphere of turbulent wind and thunder centered on that point, and each creature in that sphere must make a 14 Constitution saving throw. On a failed save, a creature takes 3d6 thunder damage, and it can't take reactions until the end of your next turn. On a successful save, a creature takes half as much damage only.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>This magic ranged weapon is a flared pistol with the storm rune engraved along the barrel. You gain a +1 bonus to attack and damage rolls made with it. It requires no ammunition, its damage is thunder instead of piercing, and it doesn't have the loading property.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As a bonus action, you can invoke the weapon's rune to launch a ball of energy to a point you can see within 30 feet of yourself. The energy then detonates into a 10-foot-radius sphere of turbulent wind and thunder centered on that point, and each creature in that sphere must make a 14 Constitution saving throw. On a failed save, a creature takes 3d6 thunder damage, and it can't take reactions until the end of your next turn. On a successful save, a creature takes half as much damage only.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -470,14 +1481,24 @@
     "source": "BGG",
     "page": 117,
     "type": "Wondrous Item",
+    "rawType": "INS",
     "rarity": "rare",
     "reqAttune": false,
     "weight": null,
     "value": null,
-    "ac": null,
+    "ac": 1,
+    "bonusAc": "+1",
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, rare*\n\n**Armor Class:** 1\n\n---\n\nThis brass war horn is engraved with the war rune, which glows purple when the horn is blown.\n\nYou can blow the horn as a bonus action. When you do, if you have the frightened condition, you immediately end that condition on yourself. You also have advantage on saving throws against being frightened until the start of your next turn.\n\n**Invoking the Rune.** When you blow the horn, you can also invoke the rune, imbuing the horn's deep call with protective magic that affects creatures of your choice within 30 feet of yourself. You and all affected creatures gain a +1 bonus to AC until the start of your next turn.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>This brass war horn is engraved with the war rune, which glows purple when the horn is blown.</p>\n<p>You can blow the horn as a bonus action. When you do, if you have the frightened condition, you immediately end that condition on yourself. You also have advantage on saving throws against being frightened until the start of your next turn.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you blow the horn, you can also invoke the rune, imbuing the horn's deep call with protective magic that affects creatures of your choice within 30 feet of yourself. You and all affected creatures gain a +1 bonus to AC until the start of your next turn.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -486,14 +1507,30 @@
     "source": "BGG",
     "page": 117,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Expeditious Retreat",
+        "cleanName": "expeditious retreat",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, rare (Requires Attunement)*\n\n---\n\nThis pair of boots is made of durable cloth, with the journey rune stitched in golden thread above each heel. While you are wearing this item, your walking speed increases by 10 feet, and you have advantage on Wisdom (Survival) checks.\n\n**Invoking the Runes.** As a bonus action, you can invoke the boots' runes to cast the expeditious retreat spell with them. Once the runes have been invoked, they can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>This pair of boots is made of durable cloth, with the journey rune stitched in golden thread above each heel. While you are wearing this item, your walking speed increases by 10 feet, and you have advantage on Wisdom (Survival) checks.</p>\n<div class=\"item-subentry\"><strong>Invoking the Runes.</strong> <p>As a bonus action, you can invoke the boots' runes to cast the expeditious retreat spell with them. Once the runes have been invoked, they can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -502,14 +1539,120 @@
     "source": "BGG",
     "page": 117,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "very rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, very rare (Requires Attunement)*\n\n---\n\nOriginally crafted for ground-bound giant brawlers to fight against dragons and other enormous predators of the sky, these studded gauntlets are engraved with the dragon rune.\n\nWhile you are wearing these gauntlets, your unarmed strike deals an additional 1d6 force damage on a hit. Additionally, whenever you finish a long rest, choose one of the following damage types: acid, cold, fire, lightning, or poison. You have resistance to the chosen damage type until you finish another long rest.\n\n**Invoking the Runes.** As a bonus action, you can invoke the gauntlets' runes and summon two enormous spectral fists that envelop the gauntlets and mimic your hand motions. The fists can also launch themselves to strike distant opponents, returning immediately to your space after they hit or miss.\n\nThe fists last for 1 minute or until you are incapacitated. While the spectral fists are active, unarmed strikes you make on your turn have a reach of 30 feet, and when you hit a creature with an opportunity attack made with your unarmed strike, the creature must succeed on a Strength saving throw (DC equals 8 + your proficiency bonus + your Strength modifier) or have the prone condition.\n\nOnce the runes have been invoked, they can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>Originally crafted for ground-bound giant brawlers to fight against dragons and other enormous predators of the sky, these studded gauntlets are engraved with the dragon rune.</p>\n<p>While you are wearing these gauntlets, your unarmed strike deals an additional 1d6 force damage on a hit. Additionally, whenever you finish a long rest, choose one of the following damage types: acid, cold, fire, lightning, or poison. You have resistance to the chosen damage type until you finish another long rest.</p>\n<div class=\"item-subentry\"><strong>Invoking the Runes.</strong> <p>As a bonus action, you can invoke the gauntlets' runes and summon two enormous spectral fists that envelop the gauntlets and mimic your hand motions. The fists can also launch themselves to strike distant opponents, returning immediately to your space after they hit or miss.</p>\n<p>The fists last for 1 minute or until you are incapacitated. While the spectral fists are active, unarmed strikes you make on your turn have a reach of 30 feet, and when you hit a creature with an opportunity attack made with your unarmed strike, the creature must succeed on a Strength saving throw (DC equals 8 + your proficiency bonus + your Strength modifier) or have the prone condition.</p>\n<p>Once the runes have been invoked, they can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_zephyr_leather_armor_bgg",
+    "name": "Zephyr Leather Armor",
+    "source": "BGG",
+    "page": 117,
+    "type": "Light Armor",
+    "rawType": "LA",
+    "rarity": "rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 10,
+    "value": "10 gp",
+    "ac": 11,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Wind Wall",
+        "cleanName": "wind wall",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Light Armor, rare (Requires Attunement)*\n\n**Armor Class:** 11 | **Weight:** 10 lb | **Value:** 10 gp\n\n---\n\nThis fine set of white-and-silver armor bears the wind rune upon its chest.\n\nWhile wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nThe breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials.",
+    "descriptionHtml": "<p>This fine set of white-and-silver armor bears the wind rune upon its chest.</p>\n<p>While wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials.</p>"
+  },
+  {
+    "id": "it_zephyr_padded_armor_bgg",
+    "name": "Zephyr Padded Armor",
+    "source": "BGG",
+    "page": 117,
+    "type": "Light Armor",
+    "rawType": "LA",
+    "rarity": "rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 8,
+    "value": "5 gp",
+    "ac": 11,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Wind Wall",
+        "cleanName": "wind wall",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Light Armor, rare (Requires Attunement)*\n\n**Armor Class:** 11 | **Weight:** 8 lb | **Value:** 5 gp\n\n---\n\nThis fine set of white-and-silver armor bears the wind rune upon its chest.\n\nWhile wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nPadded armor consists of quilted layers of cloth and batting.",
+    "descriptionHtml": "<p>This fine set of white-and-silver armor bears the wind rune upon its chest.</p>\n<p>While wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>Padded armor consists of quilted layers of cloth and batting.</p>"
+  },
+  {
+    "id": "it_zephyr_studded_leather_armor_bgg",
+    "name": "Zephyr Studded Leather Armor",
+    "source": "BGG",
+    "page": 117,
+    "type": "Light Armor",
+    "rawType": "LA",
+    "rarity": "rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 13,
+    "value": "45 gp",
+    "ac": 12,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Wind Wall",
+        "cleanName": "wind wall",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Light Armor, rare (Requires Attunement)*\n\n**Armor Class:** 12 | **Weight:** 13 lb | **Value:** 45 gp\n\n---\n\nThis fine set of white-and-silver armor bears the wind rune upon its chest.\n\nWhile wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nMade from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes.",
+    "descriptionHtml": "<p>This fine set of white-and-silver armor bears the wind rune upon its chest.</p>\n<p>While wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes.</p>"
   }
 ]

@@ -5,14 +5,43 @@
     "source": "SDW",
     "page": 0,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "rare",
     "reqAttune": false,
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": null,
     "dmgType": "bludgeoning",
+    "bonusWeapon": "+2",
     "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bonecounter",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 2,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 2,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, rare*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb\n\n---\n\nThis weapon is a magical +2 mace called Bonecounter. Whenever this weapon is used to destroy an undead creature, a single silver piece appears in the wielder's pocket.",
     "descriptionHtml": "<p>This weapon is a magical +2 mace called Bonecounter. Whenever this weapon is used to destroy an undead creature, a single silver piece appears in the wielder's pocket.</p>"
   }
 ]

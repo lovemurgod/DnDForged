@@ -57,9 +57,50 @@
         "mod": 3
       }
     },
+    "str": 7,
+    "dex": 13,
+    "con": 10,
+    "int": 10,
+    "wis": 12,
+    "cha": 17,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "cold",
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "fire",
+      "lightning",
+      "thunder",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -73,7 +114,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ethereal_sight_zubd",
+        "id": "act_ethereal_sight_22kp",
         "name": "Ethereal Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Ebondeath can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa.</p>",
@@ -90,7 +131,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_iign",
+        "id": "act_incorporeal_movement_afha",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>Ebondeath can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -112,7 +153,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__o8zp",
+        "id": "act_legendary_resistance__3_day__1iyp",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
@@ -131,7 +172,7 @@
     ],
     "actions": [
       {
-        "id": "act_withering_touch_yujx",
+        "id": "act_withering_touch_49ig",
         "name": "Withering Touch",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}17 (4d6 + 3) necrotic damage.</p>",
@@ -153,7 +194,7 @@
         }
       },
       {
-        "id": "act_etherealness_lc5x",
+        "id": "act_etherealness_7x95",
         "name": "Etherealness",
         "actionType": "action",
         "descriptionHtml": "<p>Ebondeath enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane.</p>",
@@ -170,7 +211,7 @@
         }
       },
       {
-        "id": "act_horrifying_visage_e7d7",
+        "id": "act_horrifying_visage_d9dp",
         "name": "Horrifying Visage",
         "actionType": "action",
         "descriptionHtml": "<p>Each non-undead creature within 60 feet of Ebondeath that can see it must succeed on a DC 13 Wisdom saving throw or be frightened for 1 minute. If the save fails by 5 or more, the target also ages 1d4 × 10 years. A frightened target can repeat the saving throw at the end of each of its turns, ending the frightened condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this Ebondeath's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a greater restoration spell, but only within 24 hours of it occurring.</p>",
@@ -190,7 +231,7 @@
         }
       },
       {
-        "id": "act_possession___recharge__1lbk",
+        "id": "act_possession___recharge__zkns",
         "name": "Possession {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>One humanoid that Ebondeath can see within 5 feet of it must succeed on a DC 20 Charisma saving throw or be possessed by Ebondeath; Ebondeath then disappears, and the target is incapacitated and loses control of its body. Ebondeath now controls the body but doesn't deprive the target of awareness. Ebondeath can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target's statistics, including gaining access to the target's knowledge, class features, and proficiencies.</p><p>The possession lasts until the body drops to 0 hit points, Ebondeath ends it as a bonus action, or Ebondeath is turned or forced out by an effect like the dispel evil and good spell. When the possession ends, Ebondeath reappears in an unoccupied space within 5 feet of the body. The target is immune to Ebondeath Possession for 24 hours after succeeding on the saving throw or after the possession ends.</p>",
@@ -281,9 +322,25 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 20,
+    "con": 12,
+    "int": 14,
+    "wis": 10,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+9"
+    },
     "saves": {
       "dex": "+9"
+    },
+    "skill": {
+      "acrobatics": "+13",
+      "performance": "+6",
+      "persuasion": "+6",
+      "sleight of hand": "+9",
+      "stealth": "+13"
     },
     "skills": {
       "acrobatics": "+13",
@@ -292,6 +349,11 @@
       "sleight of hand": "+9",
       "stealth": "+13"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -306,7 +368,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_helpful_ssv1",
+        "id": "act_helpful_09qf",
         "name": "Helpful",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert can take the Help action as a bonus action, and the creature who receives the help gains a 1d6 bonus to the d20 roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target.</p>",
@@ -323,7 +385,7 @@
         }
       },
       {
-        "id": "act_evasion_11bs",
+        "id": "act_evasion_ipsc",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>When the expert is not incapacitated and subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failed.</p>",
@@ -340,7 +402,7 @@
         }
       },
       {
-        "id": "act_reliable_talent_37kk",
+        "id": "act_reliable_talent_6tm6",
         "name": "Reliable Talent",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the expert makes an ability check that includes its whole proficiency bonus, it can treat a d20 roll of 9 or lower as a 10.</p>",
@@ -357,7 +419,7 @@
         }
       },
       {
-        "id": "act_tools_9nlh",
+        "id": "act_tools_p2z6",
         "name": "Tools",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
@@ -376,7 +438,7 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_v2x2",
+        "id": "act_extra_attack_8l3t",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The expert can attack twice, instead of once, whenever it takes the attack action on its turn.</p>",
@@ -393,7 +455,7 @@
         }
       },
       {
-        "id": "act_shortsword_4vba",
+        "id": "act_shortsword_alcz",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}8 (1d6 + 5) piercing damage.</p>",
@@ -415,7 +477,7 @@
         }
       },
       {
-        "id": "act_dagger_zn5m",
+        "id": "act_dagger_0086",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +9 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}7 (1d4 + 5) piercing damage.</p>",
@@ -437,7 +499,7 @@
         }
       },
       {
-        "id": "act_shortbow_4j7v",
+        "id": "act_shortbow_hape",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +9 to hit, range 80/320 ft., one target. {@h}8 (1d6 + 5) piercing damage.</p>",
@@ -530,15 +592,34 @@
         "mod": 1
       }
     },
+    "str": 10,
+    "dex": 12,
+    "con": 10,
+    "int": 15,
+    "wis": 18,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+8"
+    },
     "saves": {
       "wis": "+8"
+    },
+    "skill": {
+      "arcana": "+6",
+      "investigation": "+6",
+      "religion": "+6"
     },
     "skills": {
       "arcana": "+6",
       "investigation": "+6",
       "religion": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -955,7 +1036,7 @@
     ],
     "traits": [
       {
-        "id": "act_empowered_spells_n7zs",
+        "id": "act_empowered_spells_dh55",
         "name": "Empowered Spells",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any.</p>",
@@ -972,7 +1053,7 @@
         }
       },
       {
-        "id": "act_potent_cantrip_g0if",
+        "id": "act_potent_cantrip_o34j",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
@@ -991,7 +1072,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_6u32",
+        "id": "act_quarterstaff_lqo8",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
@@ -1088,15 +1169,34 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 12,
+    "con": 10,
+    "int": 18,
+    "wis": 14,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+6"
+    },
     "saves": {
       "wis": "+6"
+    },
+    "skill": {
+      "arcana": "+8",
+      "investigation": "+8",
+      "religion": "+8"
     },
     "skills": {
       "arcana": "+8",
       "investigation": "+8",
       "religion": "+8"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1550,7 +1650,7 @@
     ],
     "traits": [
       {
-        "id": "act_empowered_spells_412z",
+        "id": "act_empowered_spells_bnd4",
         "name": "Empowered Spells",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any.</p>",
@@ -1567,7 +1667,7 @@
         }
       },
       {
-        "id": "act_potent_cantrip_qipi",
+        "id": "act_potent_cantrip_l3y6",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
@@ -1586,7 +1686,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_8624",
+        "id": "act_quarterstaff_s553",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
@@ -1683,14 +1783,36 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 12,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+6"
+    },
     "saves": {
       "con": "+6"
+    },
+    "skill": {
+      "athletics": "+8",
+      "perception": "+5",
+      "survival": "+5"
     },
     "skills": {
       "athletics": "+8",
       "perception": "+5",
       "survival": "+5"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
+    "initiative": {
+      "advantageMode": "adv"
     },
     "senses": {
       "passivePerception": 15,
@@ -1706,7 +1828,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_battle_readiness_5211",
+        "id": "act_battle_readiness_3vqi",
         "name": "Battle Readiness",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has advantage on initiative rolls.</p>",
@@ -1723,7 +1845,7 @@
         }
       },
       {
-        "id": "act_improved_critical_2mml",
+        "id": "act_improved_critical_dtlc",
         "name": "Improved Critical",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the d20.</p>",
@@ -1740,7 +1862,7 @@
         }
       },
       {
-        "id": "act_improved_defense_1wdd",
+        "id": "act_improved_defense_y3u4",
         "name": "Improved Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior's AC increases by 1.</p>",
@@ -1757,7 +1879,7 @@
         }
       },
       {
-        "id": "act_indomitable__1_day__ipxl",
+        "id": "act_indomitable__1_day__fnud",
         "name": "Indomitable (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior can reroll a saving throw that it fails, but it must use the new result.</p>",
@@ -1774,7 +1896,7 @@
         }
       },
       {
-        "id": "act_martial_role_qns4",
+        "id": "act_martial_role_ltgv",
         "name": "Martial Role",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
@@ -1791,7 +1913,7 @@
         }
       },
       {
-        "id": "act_second_wind__recharges_after_a_short_or_long_rest__2p6z",
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__88cb",
         "name": "Second Wind (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior can use a bonus action on its turn to regain hit points equal to 1d10 + its level.</p>",
@@ -1810,7 +1932,7 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_bvpf",
+        "id": "act_extra_attack_pazl",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The warrior can attack three times, instead of once, whenever it takes the attack action on its turn.</p>",
@@ -1827,7 +1949,7 @@
         }
       },
       {
-        "id": "act_longsword_lnzg",
+        "id": "act_longsword_z0mv",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
@@ -1853,7 +1975,7 @@
         }
       },
       {
-        "id": "act_longbow_u5zf",
+        "id": "act_longbow_rfhp",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +6 to hit, range 150/600 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
@@ -1878,7 +2000,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protection__defender_only__xrm7",
+        "id": "act_protection__defender_only__ft3t",
         "name": "Protection (Defender Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the warrior can see attacks a target other than the warrior that is within 5 feet of the warrior, the warrior can use their reaction to impose disadvantage on the attack roll. The warrior must be wielding a shield.</p>",

@@ -5,14 +5,49 @@
     "source": "UtHftLH",
     "page": 0,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "very rare",
     "reqAttune": "by a spellcaster",
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": null,
     "dmgType": "bludgeoning",
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Summon Celestial",
+        "cleanName": "summon celestial",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Niko's Mace",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (by a spellcaster)*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb\n\n---\n\nThis Mace has 6 charges and regains 1d6 expended charges daily at dawn. While holding the Mace, you can expend 1 of its charges to cast Summon Celestial (9 to hit with spell attacks).",
     "descriptionHtml": "<p>This Mace has 6 charges and regains 1d6 expended charges daily at dawn. While holding the Mace, you can expend 1 of its charges to cast Summon Celestial (9 to hit with spell attacks).</p>"
   }
 ]

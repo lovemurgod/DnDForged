@@ -57,12 +57,30 @@
         "mod": 2
       }
     },
+    "str": 11,
+    "dex": 10,
+    "con": 14,
+    "int": 11,
+    "wis": 16,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "animal handling": "+5",
+      "survival": "+5"
+    },
     "skills": {
       "animal handling": "+5",
       "survival": "+5"
     },
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 60 ft."
@@ -215,7 +233,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_bcso",
+        "id": "act_multiattack_x0sj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Alax makes two Fire Strike attacks.</p>",
@@ -232,7 +250,7 @@
         }
       },
       {
-        "id": "act_fire_strike_gshy",
+        "id": "act_fire_strike_npr9",
         "name": "Fire Strike",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +5 to hit, reach 5 ft. or range 60 ft., one target. {@h}10 (2d6 + 3) fire damage.</p>",
@@ -254,7 +272,7 @@
         }
       },
       {
-        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__z6ph",
+        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__b1y9",
         "name": "Breath Weapon (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Alax exhales a 15-foot cone of fire. Each creature in that area must make a DC 12 Dexterity saving throw, taking 14 (4d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -354,12 +372,28 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 15,
+    "con": 14,
+    "int": 11,
+    "wis": 8,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "arcana": "3",
+      "deception": "+6"
+    },
     "skills": {
       "arcana": "3",
       "deception": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": ""
@@ -537,7 +571,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_gpav",
+        "id": "act_multiattack_0o6h",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ervan uses his staff to make three Arcane Blast attacks.</p>",
@@ -554,7 +588,7 @@
         }
       },
       {
-        "id": "act_arcane_blast_tql7",
+        "id": "act_arcane_blast_c71f",
         "name": "Arcane Blast",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +6 to hit, reach 5 ft. or range 120 ft., one target. {@h}13 (3d6 + 3) force damage.</p>",
@@ -576,7 +610,7 @@
         }
       },
       {
-        "id": "act_acid_rain__recharges_after_a_short_or_long_rest__mxpx",
+        "id": "act_acid_rain__recharges_after_a_short_or_long_rest__1bk3",
         "name": "Acid Rain (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Acid falls in a 10-foot-radius, 20-foot-high cylinder centered on a point Ervan can see within 120 feet of himself. Each creature in that area must make a DC 14 Dexterity saving throw, taking 22 (4d10) acid damage on a failed save, or half as much damage on a successful one.</p>",

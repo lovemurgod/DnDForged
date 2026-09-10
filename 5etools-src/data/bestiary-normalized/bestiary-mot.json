@@ -57,16 +57,43 @@
         "mod": 3
       }
     },
+    "str": 20,
+    "dex": 18,
+    "con": 16,
+    "int": 15,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+7",
+      "cha": "+7"
+    },
     "saves": {
       "con": "+7",
       "cha": "+7"
+    },
+    "skill": {
+      "deception": "+7",
+      "intimidation": "+7",
+      "persuasion": "+7"
     },
     "skills": {
       "deception": "+7",
       "intimidation": "+7",
       "persuasion": "+7"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 120 ft."
@@ -169,7 +196,7 @@
     ],
     "traits": [
       {
-        "id": "act_insatiable_greed_dby4",
+        "id": "act_insatiable_greed_0i14",
         "name": "Insatiable Greed",
         "actionType": "trait",
         "descriptionHtml": "<p>The abhorrent overlord can sense the presence of gold within 1,000 feet of itself. It can determine which location has the greatest amount of gold and can sense the direction to that site. If the gold is being moved, it knows the direction of the movement. It can't locate gold if any thickness of clay or lead, even a thin sheet, blocks a direct path between it and the gold.</p>",
@@ -186,7 +213,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_qeba",
+        "id": "act_magic_resistance_350d",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The abhorrent overlord has advantage on saving throws against spells and other magical effects.</p>",
@@ -205,7 +232,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0fbm",
+        "id": "act_multiattack_d0zf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The abhorrent overlord makes two attacks with its claws.</p>",
@@ -222,7 +249,7 @@
         }
       },
       {
-        "id": "act_claws_y8s4",
+        "id": "act_claws_4i9m",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}14 (2d8 + 5) slashing damage plus 14 (4d6) necrotic damage. The abhorrent overlord regains hit points equal to half the amount of necrotic damage dealt if the target is a creature.</p>",
@@ -248,7 +275,7 @@
         }
       },
       {
-        "id": "act_storm_of_crows___recharge__kaf5",
+        "id": "act_storm_of_crows___recharge__d095",
         "name": "Storm of Crows {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The abhorrent overlord conjures a swarm of spectral crows and harpies in a 20-foot-radius sphere centered on a point the overlord can see within 120 feet of it. The sphere remains for 1 minute or until the overlord loses concentration (as if concentration on a spell), and its area is lightly obscured and difficult terrain.</p><p>Any creature that moves into the area for the first time on a turn or starts its turn there must make a DC 15 Constitution saving throw. A creature takes 16 (3d10) slashing damage plus 16 (3d10) psychic damage on a failed save, or half as much damage on a successful one.</p>",
@@ -348,12 +375,28 @@
         "mod": 1
       }
     },
+    "str": 16,
+    "dex": 16,
+    "con": 14,
+    "int": 11,
+    "wis": 14,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "str": "+5",
+      "dex": "+5"
+    },
     "saves": {
       "str": "+5",
       "dex": "+5"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -367,7 +410,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_the_line_njbe",
+        "id": "act_hold_the_line_45ip",
         "name": "Hold the Line",
         "actionType": "trait",
         "descriptionHtml": "<p>While the hoplite is holding a spear, other creatures provoke an opportunity attack from the hoplite when they move within 5 feet of it. When the hoplite hits a creature with an opportunity attack using its spear, the creature takes an extra 4 (1d8) piercing damage, and the creature's speed becomes 0 for the rest of the turn.</p>",
@@ -391,7 +434,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5l1p",
+        "id": "act_multiattack_4wvr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hoplite makes three melee attacks or two ranged attacks.</p>",
@@ -408,7 +451,7 @@
         }
       },
       {
-        "id": "act_spear_21aa",
+        "id": "act_spear_e3ny",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft., or range 20/60 ft., one target. {@h}6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -434,7 +477,7 @@
         }
       },
       {
-        "id": "act_shield_bash_qpnk",
+        "id": "act_shield_bash_bwj7",
         "name": "Shield Bash",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}5 (1d4 + 3) bludgeoning damage. If the target is a Medium or smaller creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -530,11 +573,34 @@
         "mod": 4
       }
     },
+    "str": 15,
+    "dex": 10,
+    "con": 12,
+    "int": 13,
+    "wis": 14,
+    "cha": 18,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "persuasion": "+6"
+    },
     "skills": {
       "persuasion": "+6"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -710,7 +776,7 @@
     ],
     "traits": [
       {
-        "id": "act_hide_in_plain_sight_91hx",
+        "id": "act_hide_in_plain_sight_7r04",
         "name": "Hide in Plain Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The alseid has advantage on Dexterity (Stealth) checks made to hide while it is in grassland.</p>",
@@ -727,7 +793,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_svap",
+        "id": "act_magic_resistance_0jj4",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The alseid has advantage on saving throws against spells and other magical effects.</p>",
@@ -746,7 +812,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2rlb",
+        "id": "act_multiattack_a0h7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The alseid makes two radiant touch attacks.</p>",
@@ -763,7 +829,7 @@
         }
       },
       {
-        "id": "act_radiant_touch_bnvs",
+        "id": "act_radiant_touch_8sva",
         "name": "Radiant Touch",
         "actionType": "action",
         "descriptionHtml": "<p>ms +6 to hit, reach 5 ft., one target. {@h}9 (1d10 + 4) radiant damage.</p>",
@@ -856,11 +922,35 @@
         "mod": -5
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 3,
+    "wis": 14,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 120 ft."
@@ -874,7 +964,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_y5xw",
+        "id": "act_keen_sight_n9n0",
         "name": "Keen Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The raptor has advantage on Wisdom (Perception) checks that rely on sight.</p>",
@@ -891,7 +981,7 @@
         }
       },
       {
-        "id": "act_recorded_mimicry_ztaa",
+        "id": "act_recorded_mimicry_vuwp",
         "name": "Recorded Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The raptor can mimic any sound, including voices, it has heard in the last 24 hours. A creature that hears the sounds can tell they are imitations with a successful DC 12 Wisdom (Insight) check.</p>",
@@ -913,7 +1003,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_x0h4",
+        "id": "act_multiattack_ergd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The raptor makes two attacks with its beak.</p>",
@@ -930,7 +1020,7 @@
         }
       },
       {
-        "id": "act_beak_d0qg",
+        "id": "act_beak_k8b8",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
@@ -1023,16 +1113,41 @@
         "mod": 3
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 15,
+    "int": 13,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+6",
+      "cha": "+6"
+    },
     "saves": {
       "dex": "+6",
       "cha": "+6"
+    },
+    "skill": {
+      "arcana": "+4",
+      "intimidation": "+6",
+      "perception": "+5"
     },
     "skills": {
       "arcana": "+4",
       "intimidation": "+6",
       "perception": "+5"
     },
+    "immune": [],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "darkvision 120 ft."
@@ -1046,7 +1161,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__9vnx",
+        "id": "act_legendary_resistance__2_day__ucqe",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Aphemia fails a saving throw, she can choose to succeed instead.</p>",
@@ -1063,7 +1178,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_4syw",
+        "id": "act_magic_resistance_801z",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Aphemia has advantage on saving throws against spells and other magical effects.</p>",
@@ -1082,7 +1197,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_lgnz",
+        "id": "act_multiattack_ncz1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Aphemia makes two attacks: one with her bite and one with her claws.</p>",
@@ -1099,7 +1214,7 @@
         }
       },
       {
-        "id": "act_bite_dm8s",
+        "id": "act_bite_flbh",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (2d4 + 3) piercing damage plus 13 (3d8) necrotic damage.</p>",
@@ -1125,7 +1240,7 @@
         }
       },
       {
-        "id": "act_claws_hpcl",
+        "id": "act_claws_b4tr",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) slashing damage.</p>",
@@ -1147,7 +1262,7 @@
         }
       },
       {
-        "id": "act_discordant_song_6kjh",
+        "id": "act_discordant_song_6c81",
         "name": "Discordant Song",
         "actionType": "action",
         "descriptionHtml": "<p>Aphemia shrieks a cacophony of magical sounds. Each humanoid within 120 feet of her must succeed on a DC 14 Wisdom saving throw or be frightened of her until the song ends. A frightened creature takes 7 (2d6) psychic damage at the start of its turn while Aphemia is singing. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to Aphemia's Discordant Song for the next 24 hours. Aphemia must take a bonus action on her subsequent turns to continue singing. She can stop singing at any time. The song ends if Aphemia is incapacitated or dies.</p>",
@@ -1172,7 +1287,7 @@
         }
       },
       {
-        "id": "act_grave_calling_song_uxy1",
+        "id": "act_grave_calling_song_e46c",
         "name": "Grave Calling Song",
         "actionType": "action",
         "descriptionHtml": "<p>Aphemia intones a low, growling magical melody. Every undead within 300 feet of her must succeed on a DC 14 Wisdom saving throw or fall under her control until the song ends. Aphemia must take a bonus action on her subsequent turns to continue singing, and she can mentally command the undead under her control as part of the same bonus action. She can stop singing at any time. The song ends if Aphemia is incapacitated or dies.</p>",
@@ -1263,11 +1378,30 @@
         "mod": 3
       }
     },
+    "str": 24,
+    "dex": 16,
+    "con": 23,
+    "int": 15,
+    "wis": 22,
+    "cha": 17,
     "proficiencyBonus": 7,
+    "save": {
+      "dex": "+10",
+      "con": "+13",
+      "wis": "+13"
+    },
     "saves": {
       "dex": "+10",
       "con": "+13",
       "wis": "+13"
+    },
+    "skill": {
+      "arcana": "+9",
+      "deception": "+10",
+      "intimidation": "+10",
+      "nature": "+9",
+      "perception": "+13",
+      "stealth": "+10"
     },
     "skills": {
       "arcana": "+9",
@@ -1277,6 +1411,26 @@
       "perception": "+13",
       "stealth": "+10"
     },
+    "immune": [
+      "acid",
+      "poison"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 23,
     "senses": {
       "passivePerception": 23,
       "sensesString": "blindsight 60 ft., darkvision 120 ft."
@@ -1292,7 +1446,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_armor_of_spiders__mythic_trait__recharges_after_a_short_or_long_rest__gdl9",
+        "id": "act_armor_of_spiders__mythic_trait__recharges_after_a_short_or_long_rest__1zg3",
         "name": "Armor of Spiders (Mythic Trait; Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Arasta is reduced to 0 hit points, she doesn't die or fall unconscious. Instead, she regains 200 hit points. In addition, Arasta's children immediately swarm over her body to protect her, granting her 100 temporary hit points.</p>",
@@ -1309,7 +1463,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__8vin",
+        "id": "act_legendary_resistance__3_day__97qr",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Arasta fails a saving throw, she can choose to succeed instead.</p>",
@@ -1326,7 +1480,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_2y9a",
+        "id": "act_magic_resistance_d5nd",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Arasta has advantage on saving throws against spells and other magical effects.</p>",
@@ -1343,7 +1497,7 @@
         }
       },
       {
-        "id": "act_spider_climb_bos1",
+        "id": "act_spider_climb_2m2y",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>Arasta can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -1360,7 +1514,7 @@
         }
       },
       {
-        "id": "act_web_walker_jagk",
+        "id": "act_web_walker_mzky",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>Arasta ignores movement restrictions caused by webbing.</p>",
@@ -1379,7 +1533,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_75ga",
+        "id": "act_multiattack_4xws",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Arasta makes three attacks: one with her bite and two with her claws.</p>",
@@ -1396,7 +1550,7 @@
         }
       },
       {
-        "id": "act_bite_rezt",
+        "id": "act_bite_lubz",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 5 ft., one creature. {@h}20 (3d8 + 7) piercing damage, and the target must make a DC 21 Constitution saving throw, taking 32 (5d12) poison damage on a failed save, or half as much damage on a successful one. If the damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
@@ -1425,7 +1579,7 @@
         }
       },
       {
-        "id": "act_claws_dceb",
+        "id": "act_claws_09fk",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 5 ft., one target. {@h}17 (3d6 + 7) slashing damage.</p>",
@@ -1447,7 +1601,7 @@
         }
       },
       {
-        "id": "act_web_of_hair__recharge_4__kbx1",
+        "id": "act_web_of_hair__recharge_4__8fjz",
         "name": "Web of Hair (Recharge 4)",
         "actionType": "action",
         "descriptionHtml": "<p>Arasta unleashes her hair in the form of webbing that fills a 30-foot cube next to her. The web is difficult terrain, its area is lightly obscured, and it lasts for 1 minute. Any creature that moves into the web or that starts its turn there must make a DC 21 Dexterity saving throw. On a failed save, the creature is restrained while in the web. A creature can use an action to make a DC 21 Strength check. On a success, it can free itself or a creature within 5 feet of it that is restrained by the web. This webbing is immune to all damage except magical fire. A 5-foot cube of the web is destroyed if it takes at least 20 fire damage from a spell or other magical source on a single turn.</p>",
@@ -1474,7 +1628,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_claws_ukvr",
+          "id": "act_claws_dux6",
           "name": "Claws",
           "actionType": "legendary",
           "descriptionHtml": "<p>Arasta makes one attack with her claws.</p>",
@@ -1491,7 +1645,7 @@
           }
         },
         {
-          "id": "act_swarm__costs_2_actions__leck",
+          "id": "act_swarm__costs_2_actions__vnk4",
           "name": "Swarm (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Arasta causes two swarm of spiders to appear in unoccupied spaces within 5 feet of her.</p>",
@@ -1508,7 +1662,7 @@
           }
         },
         {
-          "id": "act_toxic_web__costs_3_actions__4j5p",
+          "id": "act_toxic_web__costs_3_actions__ws97",
           "name": "Toxic Web (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Each creature restrained by Arasta's Web of Hair takes 18 (4d8) poison damage.</p>",
@@ -1533,7 +1687,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_wd6h",
+        "id": "act_lair_action_3ju8",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Arasta learns about any creature touching her webs. Each creature restrained by a web or Arasta's Web of Hair must make a DC 21 Intelligence saving throw. On a failed save, Arasta gains knowledge of a creature's name, race, where they consider home, and what brought them to her web.</p>",
@@ -1553,7 +1707,7 @@
         }
       },
       {
-        "id": "act_lair_action_rub8",
+        "id": "act_lair_action_gmrb",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Arasta casts the giant insect spell (spiders only). It lasts until she uses this lair action again or until she dies.</p>",
@@ -1633,12 +1787,30 @@
         "mod": 4
       }
     },
+    "str": 20,
+    "dex": 15,
+    "con": 19,
+    "int": 15,
+    "wis": 21,
+    "cha": 19,
     "proficiencyBonus": 4,
+    "save": {
+      "str": "+9",
+      "con": "+8",
+      "wis": "+9",
+      "cha": "+8"
+    },
     "saves": {
       "str": "+9",
       "con": "+8",
       "wis": "+9",
       "cha": "+8"
+    },
+    "skill": {
+      "arcana": "+6",
+      "history": "+6",
+      "insight": "+9",
+      "perception": "+9"
     },
     "skills": {
       "arcana": "+6",
@@ -1646,6 +1818,17 @@
       "insight": "+9",
       "perception": "+9"
     },
+    "immune": [
+      "radiant"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened"
+    ],
+    "passive": 19,
     "senses": {
       "passivePerception": 19,
       "sensesString": "truesight 120 ft."
@@ -1814,7 +1997,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_w56i",
+        "id": "act_magic_resistance_i8ms",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archon has advantage on saving throws against spells and other magical effects.</p>",
@@ -1831,7 +2014,7 @@
         }
       },
       {
-        "id": "act_mount_nnkx",
+        "id": "act_mount_13g5",
         "name": "Mount",
         "actionType": "trait",
         "descriptionHtml": "<p>If the archon isn't mounted, it can use a bonus action to magically teleport onto the creature serving as its mount, provided the archon and its mount are on the same plane of existence. When it teleports, the archon appears astride the mount, along with any equipment it is wearing or carrying. While mounted and not incapacitated, the archon can't be surprised, and both it and its mount have advantage on Dexterity saving throws. If the archon is reduced to 0 hit points while riding its mount, the mount is reduced to 0 hit points as well.</p>",
@@ -1848,7 +2031,7 @@
         }
       },
       {
-        "id": "act_radiant_rebirth__recharges_after_a_long_rest__q8gp",
+        "id": "act_radiant_rebirth__recharges_after_a_long_rest__soin",
         "name": "Radiant Rebirth (Recharges after a Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the archon is reduced to 0 hit points, it regains 30 hit points and springs back to its feet with a burst of radiance. Each creature of the archon's choice within 30 feet of it must succeed on a DC 16 Constitution saving throw, or the creature takes 13 (3d8) radiant damage and is blinded until the start of the archon's turn.</p>",
@@ -1875,7 +2058,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zis1",
+        "id": "act_multiattack_ooim",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archon makes two attacks with its radiant spear.</p>",
@@ -1892,7 +2075,7 @@
         }
       },
       {
-        "id": "act_radiant_spear_izqo",
+        "id": "act_radiant_spear_9fpz",
         "name": "Radiant Spear",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one target. {@h}12 (2d6 + 5) piercing damage plus 10 (3d6) radiant damage.</p>",
@@ -1925,7 +2108,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_i540",
+          "id": "act_attack_j1dj",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The archon makes a radiant spear attack or casts guiding bolt.</p>",
@@ -1942,7 +2125,7 @@
           }
         },
         {
-          "id": "act_coordinated_assault__costs_2_actions__oi3b",
+          "id": "act_coordinated_assault__costs_2_actions__4ugq",
           "name": "Coordinated Assault (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The archon makes a radiant spear attack, and then its mount can use its reaction to make a melee weapon attack.</p>",
@@ -1959,7 +2142,7 @@
           }
         },
         {
-          "id": "act_return_to_nyx__costs_3_actions__taje",
+          "id": "act_return_to_nyx__costs_3_actions__z5uk",
           "name": "Return to Nyx (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The archon causes a corpse it can see within 30 feet of it to burst into a shower of radiant stars leaving no trace of it behind. Everything it is wearing or carrying remains. Each creature within 10 feet of the corpse when it bursts must succeed on a DC 16 Dexterity saving throw or take 22 (4d10) radiant damage.</p>",
@@ -2049,18 +2232,46 @@
         "mod": 4
       }
     },
+    "str": 20,
+    "dex": 16,
+    "con": 19,
+    "int": 15,
+    "wis": 21,
+    "cha": 18,
     "proficiencyBonus": 5,
+    "save": {
+      "str": "+10",
+      "con": "+9",
+      "wis": "+10",
+      "cha": "+9"
+    },
     "saves": {
       "str": "+10",
       "con": "+9",
       "wis": "+10",
       "cha": "+9"
     },
+    "skill": {
+      "history": "+7",
+      "insight": "+10",
+      "perception": "+10"
+    },
     "skills": {
       "history": "+7",
       "insight": "+10",
       "perception": "+10"
     },
+    "immune": [
+      "thunder"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened"
+    ],
+    "passive": 20,
     "senses": {
       "passivePerception": 20,
       "sensesString": "truesight 120 ft."
@@ -2190,7 +2401,7 @@
     ],
     "traits": [
       {
-        "id": "act_aura_of_silence_g4z2",
+        "id": "act_aura_of_silence_d8pb",
         "name": "Aura of Silence",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature starts its turn within 30 feet of the ashen rider, the rider can force that creature to make a DC 18 Wisdom saving throw if the rider can see it. On a successful save, the creature is immune to this aura for the next 24 hours. On a failed save, the creature can't speak and is deafened until the start of its next turn.</p>",
@@ -2210,7 +2421,7 @@
         }
       },
       {
-        "id": "act_mount_9a7b",
+        "id": "act_mount_6olg",
         "name": "Mount",
         "actionType": "trait",
         "descriptionHtml": "<p>If the ashen rider isn't mounted, it can use a bonus action to magically teleport onto the creature serving as its mount, provided the ashen rider and its mount are on the same plane of existence. When it teleports, the ashen rider appears astride the mount along with any equipment it is wearing or carrying.</p><p>While mounted and not incapacitated, the ashen rider can't be surprised, and both it and its mount have advantage on Dexterity saving throws. If the ashen rider is reduced to 0 hit points while riding its mount, the mount is reduced to 0 hit points as well.</p>",
@@ -2229,7 +2440,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ka9k",
+        "id": "act_multiattack_c7wk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ashen rider makes three attacks with its ashen blade or two attacks with its bolt of ash.</p>",
@@ -2246,7 +2457,7 @@
         }
       },
       {
-        "id": "act_ashen_blade_7nw9",
+        "id": "act_ashen_blade_22ov",
         "name": "Ashen Blade",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}14 (2d8 + 5) slashing damage plus 13 (2d12) radiant damage.</p>",
@@ -2272,7 +2483,7 @@
         }
       },
       {
-        "id": "act_bolt_of_ash_o43m",
+        "id": "act_bolt_of_ash_yb6g",
         "name": "Bolt of Ash",
         "actionType": "action",
         "descriptionHtml": "<p>rs +10 to hit, range 120 ft., one creature. {@h}22 (4d10) necrotic damage, and the target can't regain hit points until the start of the ashen rider's next turn.</p>",
@@ -2301,7 +2512,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_xw32",
+          "id": "act_attack_ovvn",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The ashen rider makes an attack using its ashen blade or bolt of ash.</p>",
@@ -2318,7 +2529,7 @@
           }
         },
         {
-          "id": "act_coordinated_assault__costs_2_actions__k584",
+          "id": "act_coordinated_assault__costs_2_actions__a1di",
           "name": "Coordinated Assault (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The ashen rider makes an attack using its ashen blade or bolt of ash, and then its mount can use its reaction to make a melee weapon attack.</p>",
@@ -2335,7 +2546,7 @@
           }
         },
         {
-          "id": "act_reduce_to_ash__costs_3_actions__xplm",
+          "id": "act_reduce_to_ash__costs_3_actions__qa7a",
           "name": "Reduce to Ash (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The ashen rider targets a creature it can see within 60 feet of it. The target must succeed on a DC 18 Constitution saving throw, or it takes 27 (5d10) necrotic damage and its hit point maximum is reduced by an amount equal to the necrotic damage taken. This reduction lasts until the target finishes a long rest. If the target's hit point maximum is reduced to 0, its body and everything it is wearing and carrying, except for magic items, are reduced to ash. A creature reduced to ash can't be revived by any means short of a wish spell.</p>",
@@ -2425,11 +2636,26 @@
         "mod": 1
       }
     },
+    "str": 12,
+    "dex": 13,
+    "con": 10,
+    "int": 6,
+    "wis": 11,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "intimidation": "+3"
+    },
     "skills": {
       "intimidation": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -2443,7 +2669,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_nlig",
+        "id": "act_blood_frenzy_7gsb",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The harpy has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -2460,7 +2686,7 @@
         }
       },
       {
-        "id": "act_dark_devotion_ltsv",
+        "id": "act_dark_devotion_jnno",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>The harpy has advantage on saving throws against being charmed or frightened.</p>",
@@ -2479,7 +2705,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bli8",
+        "id": "act_multiattack_q7ej",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The harpy makes two melee attacks: one with its bite and one with its claws.</p>",
@@ -2496,7 +2722,7 @@
         }
       },
       {
-        "id": "act_bite_v51c",
+        "id": "act_bite_q0ig",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
@@ -2518,7 +2744,7 @@
         }
       },
       {
-        "id": "act_claws_ekxs",
+        "id": "act_claws_mqsy",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) slashing damage.</p>",
@@ -2611,11 +2837,26 @@
         "mod": -1
       }
     },
+    "str": 18,
+    "dex": 11,
+    "con": 16,
+    "int": 6,
+    "wis": 16,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+7"
+    },
     "skills": {
       "perception": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 60 ft."
@@ -2629,7 +2870,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_8o5n",
+        "id": "act_charge_8n3a",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If Antigonos moves at least 10 feet straight toward a target and then hits it with a gore attack on the same turn, the target takes an extra 9 (2d8) piercing damage. If the target is a creature, it must succeed on a DC 14 Strength saving throw or be pushed up to 10 feet away and knocked prone.</p>",
@@ -2654,7 +2895,7 @@
         }
       },
       {
-        "id": "act_labyrinthine_recall_p06d",
+        "id": "act_labyrinthine_recall_ycs5",
         "name": "Labyrinthine Recall",
         "actionType": "trait",
         "descriptionHtml": "<p>Antigonos can perfectly recall any path he has traveled.</p>",
@@ -2671,7 +2912,7 @@
         }
       },
       {
-        "id": "act_reckless_wimk",
+        "id": "act_reckless_9ozv",
         "name": "Reckless",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of his turn, Antigonos can gain advantage on all melee weapon attack rolls he makes during that turn, but attack rolls against him have advantage until the start of his next turn.</p>",
@@ -2688,7 +2929,7 @@
         }
       },
       {
-        "id": "act_decrepit_state_sqdt",
+        "id": "act_decrepit_state_sz2i",
         "name": "Decrepit State",
         "actionType": "trait",
         "descriptionHtml": "<p>Antigonos has disadvantage on his attack rolls.</p>",
@@ -2707,7 +2948,7 @@
     ],
     "actions": [
       {
-        "id": "act_greataxe_omco",
+        "id": "act_greataxe_6053",
         "name": "Greataxe",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}17 (2d12 + 4) slashing damage.</p>",
@@ -2729,7 +2970,7 @@
         }
       },
       {
-        "id": "act_gore_b4kt",
+        "id": "act_gore_4luu",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}13 (2d8 + 4) piercing damage.</p>",
@@ -2751,7 +2992,7 @@
         }
       },
       {
-        "id": "act_amphora_yy1w",
+        "id": "act_amphora_fawu",
         "name": "Amphora",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one Medium or smaller creature. {@h}8 (1d8 + 4) bludgeoning damage. If there is not already a creature inside the amphora, the target is restrained inside. As an action, the restrained creature can make a DC 14 Dexterity (Acrobatics) check, escaping from the amphora on a success. The effect also ends if the amphora is destroyed. The amphora has AC 8, 20 hit points, and immunity to poison and psychic damage.</p>",
@@ -2847,11 +3088,35 @@
         "mod": -5
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 15,
+    "int": 3,
+    "wis": 14,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+5"
+    },
     "skills": {
       "stealth": "+5"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 120 ft."
@@ -2865,7 +3130,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_3cv5",
+        "id": "act_false_appearance_0tgm",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the sable remains motionless, it is indistinguishable from a normal statue.</p>",
@@ -2882,7 +3147,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_irt4",
+        "id": "act_pack_tactics_lg4t",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The sable has advantage on an attack roll against a creature if at least one of the sable's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -2899,7 +3164,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_sros",
+        "id": "act_surprise_attack_qqps",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If the sable surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 10 (3d6) damage from the attack.</p>",
@@ -2923,7 +3188,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7u3a",
+        "id": "act_multiattack_qevp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sable makes two bite attacks.</p>",
@@ -2940,7 +3205,7 @@
         }
       },
       {
-        "id": "act_bite_h8uk",
+        "id": "act_bite_7z6q",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) piercing damage.</p>",
@@ -3033,9 +3298,31 @@
         "mod": -5
       }
     },
+    "str": 17,
+    "dex": 14,
+    "con": 16,
+    "int": 3,
+    "wis": 15,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 120 ft."
@@ -3049,7 +3336,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_p3xr",
+        "id": "act_charge_ntg4",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hart moves at least 20 feet straight toward a target and then hits it with an antlers attack on the same turn, the target takes an extra 7 (2d6) fire damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -3074,7 +3361,7 @@
         }
       },
       {
-        "id": "act_heated_body_yoar",
+        "id": "act_heated_body_tr7a",
         "name": "Heated Body",
         "actionType": "trait",
         "descriptionHtml": "<p>A creature that touches the hart or hits it with a melee attack while within 5 feet of it takes 5 (1d10) fire damage.</p>",
@@ -3096,7 +3383,7 @@
         }
       },
       {
-        "id": "act_sure_footed_fc9n",
+        "id": "act_sure_footed_i2e6",
         "name": "Sure-Footed",
         "actionType": "trait",
         "descriptionHtml": "<p>The hart has advantage on Strength and Dexterity saving throws made against effects that would knock it prone.</p>",
@@ -3115,7 +3402,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rt4u",
+        "id": "act_multiattack_q948",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hart makes two attacks: one with its antlers and one with its hooves.</p>",
@@ -3132,7 +3419,7 @@
         }
       },
       {
-        "id": "act_antlers_2j2k",
+        "id": "act_antlers_5htp",
         "name": "Antlers",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) piercing damage.</p>",
@@ -3154,7 +3441,7 @@
         }
       },
       {
-        "id": "act_hooves_hlnn",
+        "id": "act_hooves_z96k",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) bludgeoning damage plus 2 (1d4) fire damage.</p>",
@@ -3251,15 +3538,56 @@
         "mod": -5
       }
     },
+    "str": 28,
+    "dex": 10,
+    "con": 25,
+    "int": 3,
+    "wis": 11,
+    "cha": 1,
     "proficiencyBonus": 7,
+    "save": {
+      "str": "+16",
+      "con": "+14"
+    },
     "saves": {
       "str": "+16",
       "con": "+14"
+    },
+    "skill": {
+      "athletics": "+16",
+      "perception": "+7"
     },
     "skills": {
       "athletics": "+16",
       "perception": "+7"
     },
+    "immune": [
+      "fire",
+      "poison",
+      "psychic",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "stunned",
+      "unconscious"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 120 ft."
@@ -3273,7 +3601,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_crumbling_destruction_et1o",
+        "id": "act_crumbling_destruction_jyw9",
         "name": "Crumbling Destruction",
         "actionType": "trait",
         "descriptionHtml": "<p>When the colossus drops to 0 hit points, it crumbles and is destroyed. Any creature on the ground within 30 feet of the crumbling statue must make a DC 22 Dexterity saving throw, taking 22 (4d10) bludgeoning damage and 22 (4d10) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -3302,7 +3630,7 @@
         }
       },
       {
-        "id": "act_fire_absorption_bkdl",
+        "id": "act_fire_absorption_ius3",
         "name": "Fire Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the colossus is subjected to fire damage, it takes no damage and instead regains a number of hit points equal to the fire damage dealt.</p>",
@@ -3319,7 +3647,7 @@
         }
       },
       {
-        "id": "act_immutable_form_tlwq",
+        "id": "act_immutable_form_271k",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The colossus is immune to any spell or effect that would alter its form.</p>",
@@ -3336,7 +3664,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_nevu",
+        "id": "act_magic_weapons_qpna",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The colossus's weapon attacks are magical.</p>",
@@ -3353,7 +3681,7 @@
         }
       },
       {
-        "id": "act_siege_monster_5x07",
+        "id": "act_siege_monster_z6xv",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The colossus deals double damage to objects and structures.</p>",
@@ -3372,7 +3700,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dvsf",
+        "id": "act_multiattack_vbog",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The colossus of Akros makes two melee attacks.</p>",
@@ -3389,7 +3717,7 @@
         }
       },
       {
-        "id": "act_spear_1bij",
+        "id": "act_spear_fx83",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +16 to hit, reach 15 ft., or range 200/600 ft., one target. {@h}23 (4d6 + 9) piercing damage, or 27 (4d8 + 9) piercing damage if used with two hands to make a melee attack. If the colossus makes a ranged attack with this spear, the spear magically returns to its hand after the attack.</p>",
@@ -3415,7 +3743,7 @@
         }
       },
       {
-        "id": "act_sword_phaq",
+        "id": "act_sword_wj4t",
         "name": "Sword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +16 to hit, reach 15 ft., one target. {@h}36 (6d8 + 9) slashing damage.</p>",
@@ -3437,7 +3765,7 @@
         }
       },
       {
-        "id": "act_flames_of_akros___recharge__3moi",
+        "id": "act_flames_of_akros___recharge__wa82",
         "name": "Flames of Akros {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Magical flames issue from the colossus toward up to three creatures the colossus can see within 90 feet of it. Each target must make a DC 24 Dexterity saving throw, taking 36 (8d8) fire damage on a failed save, or half as much damage on a successful one. On a failed save, a target also magically catches fire for 1 minute. At the end of each of its turns thereafter, the burning target repeats the saving throw. It takes 18 (4d8) fire damage on a failed save, and the effect ends on a successful one.</p>",
@@ -3537,15 +3865,40 @@
         "mod": 3
       }
     },
+    "str": 24,
+    "dex": 12,
+    "con": 22,
+    "int": 12,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+10",
+      "wis": "+6"
+    },
     "saves": {
       "con": "+10",
       "wis": "+6"
+    },
+    "skill": {
+      "intimidation": "+7",
+      "perception": "+6"
     },
     "skills": {
       "intimidation": "+7",
       "perception": "+6"
     },
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 120 ft."
@@ -3559,7 +3912,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aura_of_erebos_205n",
+        "id": "act_aura_of_erebos_2ck9",
         "name": "Aura of Erebos",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that starts its turn within 10 feet of the giant must succeed on a DC 18 Constitution saving throw, or it takes 10 (3d6) necrotic damage and can't regain hit points until the start of its next turn. On a successful saving throw, the creature is immune to the giant's Aura of Erebos for 24 hours.</p>",
@@ -3584,7 +3937,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_nmkd",
+        "id": "act_magic_resistance_931i",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The giant has advantage on saving throws against spells and other magical effects.</p>",
@@ -3603,7 +3956,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j0hy",
+        "id": "act_multiattack_kqpx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes two slam attacks.</p>",
@@ -3620,7 +3973,7 @@
         }
       },
       {
-        "id": "act_slam_vtiq",
+        "id": "act_slam_gb1p",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 15 ft., one target. {@h}20 (3d8 + 7) bludgeoning damage plus 10 (3d6) necrotic damage.</p>",
@@ -3646,7 +3999,7 @@
         }
       },
       {
-        "id": "act_noxious_gust__recharge_5__0tx5",
+        "id": "act_noxious_gust__recharge_5__pcbs",
         "name": "Noxious Gust (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The giant exhales a mighty gust that creates a blast of deadly mist in a 60-foot line that is 10 feet wide. Each creature in that line must make a DC 18 Constitution saving throw. On a failed save, the creature takes 36 (8d8) necrotic damage and is knocked prone. On a successful save, a creature takes half as much damage and isn't knocked prone.</p>",
@@ -3742,16 +4095,43 @@
         "mod": 3
       }
     },
+    "str": 19,
+    "dex": 17,
+    "con": 14,
+    "int": 12,
+    "wis": 11,
+    "cha": 16,
     "proficiencyBonus": 3,
+    "save": {
+      "con": "+5",
+      "cha": "+6"
+    },
     "saves": {
       "con": "+5",
       "cha": "+6"
+    },
+    "skill": {
+      "deception": "+6",
+      "intimidation": "+6",
+      "persuasion": "+6"
     },
     "skills": {
       "deception": "+6",
       "intimidation": "+6",
       "persuasion": "+6"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 120 ft."
@@ -3767,7 +4147,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_insatiable_greed_w8w8",
+        "id": "act_insatiable_greed_96y7",
         "name": "Insatiable Greed",
         "actionType": "trait",
         "descriptionHtml": "<p>The eater of hope can sense the presence of gold within 1,000 feet of itself. It can determine which location has the greatest amount of gold and can sense the direction to that site. If the gold is being moved, it knows the direction of the movement. It can't locate gold if any thickness of clay or lead, even a thin sheet, blocks a direct path between it and the gold.</p>",
@@ -3784,7 +4164,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_qjm5",
+        "id": "act_magic_resistance_tdsi",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The eater of hope has advantage on saving throws against spells and other magical effects.</p>",
@@ -3803,7 +4183,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wbaq",
+        "id": "act_multiattack_wgyb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eater of hope makes two attacks with its claws.</p>",
@@ -3820,7 +4200,7 @@
         }
       },
       {
-        "id": "act_claws_wlrf",
+        "id": "act_claws_f71g",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage plus 7 (2d6) necrotic damage.</p>",
@@ -3846,7 +4226,7 @@
         }
       },
       {
-        "id": "act_breath_of_hopelessness__recharge_5__fzjq",
+        "id": "act_breath_of_hopelessness__recharge_5__awil",
         "name": "Breath of Hopelessness (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The eater of hope exhales a miasma of Underworld winds in a 30-foot cone. Each creature in that area must make a DC 14 Charisma saving throw. On a failed save, the target takes 26 (4d12) necrotic damage and is cursed for 1 minute. While cursed in this way, the target takes an extra 6 (1d12) necrotic damage whenever the eater of hope hits it with an attack. On a successful save, the target takes half as much damage and isn't cursed.</p>",
@@ -3946,15 +4326,34 @@
         "mod": 0
       }
     },
+    "str": 19,
+    "dex": 16,
+    "con": 14,
+    "int": 6,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {
+      "str": "+6",
+      "con": "+4"
+    },
     "saves": {
       "str": "+6",
       "con": "+4"
+    },
+    "skill": {
+      "perception": "+4",
+      "stealth": "+5"
     },
     "skills": {
       "perception": "+4",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -3966,7 +4365,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_g6q1",
+        "id": "act_keen_smell_tjmx",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The lion has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -3983,7 +4382,7 @@
         }
       },
       {
-        "id": "act_pounce_mmoa",
+        "id": "act_pounce_ayue",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the lion moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the lion can make one bite attack against it as a bonus action.</p>",
@@ -4003,7 +4402,7 @@
         }
       },
       {
-        "id": "act_running_leap_vc6v",
+        "id": "act_running_leap_nhxq",
         "name": "Running Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>With a 10-foot running start, the lion can long jump up to 25 feet.</p>",
@@ -4020,7 +4419,7 @@
         }
       },
       {
-        "id": "act_spell_turning_7zgu",
+        "id": "act_spell_turning_y9so",
         "name": "Spell Turning",
         "actionType": "trait",
         "descriptionHtml": "<p>The lion has advantage on saving throws against any spell that targets only the lion (not an area). If the lion's saving throw succeeds and the spell is of 4th level or lower, the spell has no effect on the lion and instead targets the caster.</p>",
@@ -4039,7 +4438,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r5ck",
+        "id": "act_multiattack_2qif",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lion makes two attacks: one with its bite and one with its claw.</p>",
@@ -4056,7 +4455,7 @@
         }
       },
       {
-        "id": "act_bite_fvv2",
+        "id": "act_bite_enro",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) piercing damage.</p>",
@@ -4078,7 +4477,7 @@
         }
       },
       {
-        "id": "act_claw_xp9p",
+        "id": "act_claw_zzc3",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) slashing damage.</p>",
@@ -4107,7 +4506,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_claw_qvnp",
+          "id": "act_claw_yvvz",
           "name": "Claw",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lion makes one claw attack.</p>",
@@ -4124,7 +4523,7 @@
           }
         },
         {
-          "id": "act_roar__costs_2_actions__u2ze",
+          "id": "act_roar__costs_2_actions__ivp2",
           "name": "Roar (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lion emits a magical roar. Each creature within 60 feet of the lion that can hear the roar must succeed on a DC 12 Wisdom saving throw or be frightened of the lion until the end of the lion's next turn.</p>",
@@ -4209,12 +4608,50 @@
         "mod": 0
       }
     },
+    "str": 8,
+    "dex": 18,
+    "con": 13,
+    "int": 11,
+    "wis": 12,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+8"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+8"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "restrained"
+    ],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -4228,7 +4665,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blurred_form_x241",
+        "id": "act_blurred_form_njf0",
         "name": "Blurred Form",
         "actionType": "trait",
         "descriptionHtml": "<p>Attack rolls against the eidolon are made with disadvantage unless the eidolon is incapacitated.</p>",
@@ -4245,7 +4682,7 @@
         }
       },
       {
-        "id": "act_evasion_yj4d",
+        "id": "act_evasion_v7l7",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the eidolon is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the eidolon instead takes no damage if it succeeds on the saving throw, and only half damage if it fails. It can't use this trait if it's incapacitated.</p>",
@@ -4262,7 +4699,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_teop",
+        "id": "act_incorporeal_movement_dj6m",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The eidolon can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -4284,7 +4721,7 @@
         }
       },
       {
-        "id": "act_turn_resistance_ejsp",
+        "id": "act_turn_resistance_tnbu",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The eidolon has advantage on saving throws against any effect that turns undead.</p>",
@@ -4303,7 +4740,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_gius",
+        "id": "act_multiattack_s93j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eidolon makes two melee attacks. Immediately before or after one of its attacks, it can use Flitterstep if it is available.</p>",
@@ -4320,7 +4757,7 @@
         }
       },
       {
-        "id": "act_flickering_dagger_1hah",
+        "id": "act_flickering_dagger_k594",
         "name": "Flickering Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}6 (1d4 + 4) piercing damage plus 3 (1d6) psychic damage.</p>",
@@ -4346,7 +4783,7 @@
         }
       },
       {
-        "id": "act_flitterstep__recharge_5__4kuz",
+        "id": "act_flitterstep__recharge_5__4esn",
         "name": "Flitterstep (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The eidolon magically teleports to an unoccupied space it can see within 30 feet of it. If it makes an attack immediately after teleporting, it has advantage on the attack roll.</p>",
@@ -4434,13 +4871,52 @@
         "mod": 2
       }
     },
+    "str": 16,
+    "dex": 15,
+    "con": 12,
+    "int": 13,
+    "wis": 12,
+    "cha": 14,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "acrobatics": "+5",
+      "athletics": "+6",
+      "perception": "+4"
+    },
     "skills": {
       "acrobatics": "+5",
       "athletics": "+6",
       "perception": "+4"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "restrained"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -4454,7 +4930,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blurred_form_bqkx",
+        "id": "act_blurred_form_rh06",
         "name": "Blurred Form",
         "actionType": "trait",
         "descriptionHtml": "<p>Attack rolls against the eidolon are made with disadvantage unless the eidolon is incapacitated.</p>",
@@ -4471,7 +4947,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_x9i9",
+        "id": "act_incorporeal_movement_0jxz",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The eidolon can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -4493,7 +4969,7 @@
         }
       },
       {
-        "id": "act_turn_resistance_7zxj",
+        "id": "act_turn_resistance_jd8e",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The eidolon has advantage on saving throws against any effect that turns undead.</p>",
@@ -4512,7 +4988,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ravd",
+        "id": "act_multiattack_ypm8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eidolon makes two ghostblade attacks.</p>",
@@ -4529,7 +5005,7 @@
         }
       },
       {
-        "id": "act_ghostblade_fq0v",
+        "id": "act_ghostblade_vv89",
         "name": "Ghostblade",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 3) slashing damage plus 11 (2d10) force damage.</p>",
@@ -4626,11 +5102,35 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 13,
+    "con": 19,
+    "int": 3,
+    "wis": 16,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+6"
+    },
     "skills": {
       "perception": "+6"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 120 ft."
@@ -4644,7 +5144,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_jcl6",
+        "id": "act_charge_ilfl",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the sentinel moves at least 20 feet straight toward a target and then hits it with a ram attack on the same turn, the target takes an extra 10 (3d6) bludgeoning damage. If the target is a creature, it must succeed on a DC 15 Strength saving throw or be knocked prone.</p>",
@@ -4669,7 +5169,7 @@
         }
       },
       {
-        "id": "act_spell_turning_nb1j",
+        "id": "act_spell_turning_ibg0",
         "name": "Spell Turning",
         "actionType": "trait",
         "descriptionHtml": "<p>The sentinel has advantage on saving throws against any spell that targets only the sentinel (not an area). If the sentinel's saving throw succeeds and the spell is of 4th level or lower, the spell has no effect on the sentinel and instead targets the caster.</p>",
@@ -4688,7 +5188,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jk5d",
+        "id": "act_multiattack_ohgc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sentinel makes two ram attacks.</p>",
@@ -4705,7 +5205,7 @@
         }
       },
       {
-        "id": "act_ram_m7v0",
+        "id": "act_ram_he5t",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}13 (2d8 + 4) bludgeoning damage.</p>",
@@ -4727,7 +5227,7 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__3vdh",
+        "id": "act_fire_breath__recharge_5__udvr",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The sentinel exhales fire in a 15-foot cone. Each creature in that area must make a DC 15 Dexterity saving throw, taking 27 (6d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -4823,9 +5323,24 @@
         "mod": -2
       }
     },
+    "str": 14,
+    "dex": 15,
+    "con": 11,
+    "int": 5,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 120 ft."
@@ -4837,7 +5352,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_0khz",
+        "id": "act_amphibious_lpvn",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The hippocamp can breathe air and water.</p>",
@@ -4854,7 +5369,7 @@
         }
       },
       {
-        "id": "act_charge_06wj",
+        "id": "act_charge_50kj",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hippocamp moves at least 20 feet straight toward a target and then hits it with a ram attack on the same turn, the target takes an extra 7 (2d6) bludgeoning damage. If the target is a creature, it must succeed on a DC 12 Strength saving throw or be knocked prone.</p>",
@@ -4881,7 +5396,7 @@
     ],
     "actions": [
       {
-        "id": "act_hooves_rr7p",
+        "id": "act_hooves_8q53",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}9 (2d6 + 2) bludgeoning damage.</p>",
@@ -4903,7 +5418,7 @@
         }
       },
       {
-        "id": "act_ram_ernf",
+        "id": "act_ram_j145",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
@@ -4996,15 +5511,36 @@
         "mod": 3
       }
     },
+    "str": 26,
+    "dex": 15,
+    "con": 25,
+    "int": 14,
+    "wis": 16,
+    "cha": 16,
     "proficiencyBonus": 5,
+    "save": {
+      "con": "+12",
+      "wis": "+8"
+    },
     "saves": {
       "con": "+12",
       "wis": "+8"
+    },
+    "skill": {
+      "intimidation": "+8",
+      "perception": "+8"
     },
     "skills": {
       "intimidation": "+8",
       "perception": "+8"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "frightened"
+    ],
+    "passive": 18,
     "senses": {
       "passivePerception": 18,
       "sensesString": "darkvision 120 ft."
@@ -5018,7 +5554,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reactive_ruv4",
+        "id": "act_reactive_rb9h",
         "name": "Reactive",
         "actionType": "trait",
         "descriptionHtml": "<p>The giant can take one reaction on every turn in a combat.</p>",
@@ -5035,7 +5571,7 @@
         }
       },
       {
-        "id": "act_vigilant_rbgg",
+        "id": "act_vigilant_le8e",
         "name": "Vigilant",
         "actionType": "trait",
         "descriptionHtml": "<p>The giant can't be surprised.</p>",
@@ -5054,7 +5590,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_naqs",
+        "id": "act_multiattack_oa6e",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes four longsword attacks or two rock attacks.</p>",
@@ -5071,7 +5607,7 @@
         }
       },
       {
-        "id": "act_longsword_roap",
+        "id": "act_longsword_kt70",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +13 to hit, reach 15 ft., one target. {@h}21 (3d8 + 8) slashing damage.</p>",
@@ -5093,7 +5629,7 @@
         }
       },
       {
-        "id": "act_rock_hotr",
+        "id": "act_rock_ajmv",
         "name": "Rock",
         "actionType": "action",
         "descriptionHtml": "<p>rw +13 to hit, range 60/240 ft., one target. {@h}30 (4d10 + 8) bludgeoning damage. If the target is a creature, it must succeed on a DC 21 Strength saving throw or be knocked prone.</p>",
@@ -5121,7 +5657,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_attack_84gj",
+        "id": "act_deflect_attack_bxo8",
         "name": "Deflect Attack",
         "actionType": "reaction",
         "descriptionHtml": "<p>The giant adds 5 to its AC against one weapon attack that would hit it. To do so, the giant must see the attacker and be wielding a melee weapon.</p>",
@@ -5207,11 +5743,28 @@
         "mod": 4
       }
     },
+    "str": 21,
+    "dex": 17,
+    "con": 19,
+    "int": 14,
+    "wis": 16,
+    "cha": 18,
     "proficiencyBonus": 6,
+    "save": {
+      "str": "+11",
+      "con": "+10",
+      "cha": "+10"
+    },
     "saves": {
       "str": "+11",
       "con": "+10",
       "cha": "+10"
+    },
+    "skill": {
+      "deception": "+10",
+      "insight": "+9",
+      "perception": "+9",
+      "stealth": "+9"
     },
     "skills": {
       "deception": "+10",
@@ -5219,6 +5772,17 @@
       "perception": "+9",
       "stealth": "+9"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 19,
     "senses": {
       "passivePerception": 19,
       "sensesString": "darkvision 120 ft."
@@ -5275,7 +5839,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__1fxd",
+        "id": "act_legendary_resistance__3_day__ktkd",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Hythonia fails a saving throw, she can choose to succeed instead.</p>",
@@ -5292,7 +5856,7 @@
         }
       },
       {
-        "id": "act_petrifying_gaze_b0y0",
+        "id": "act_petrifying_gaze_ntyj",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see Hythonia's eyes starts its turn within 30 feet of her, Hythonia can force it to make a DC 18 Constitution saving throw if she isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, on a failed save the creature begins to turn to stone and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic. Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see Hythonia until the start of its next turn, when it can avert its eyes again. If the creature looks at Hythonia in the meantime, it must immediately make the save. If Hythonia sees herself reflected on a polished surface within 30 feet of her and in an area of bright light, she is affected by her own gaze.</p>",
@@ -5312,7 +5876,7 @@
         }
       },
       {
-        "id": "act_shed_skin__mythic_trait__recharges_after_a_short_or_long_rest__ft1o",
+        "id": "act_shed_skin__mythic_trait__recharges_after_a_short_or_long_rest__rkip",
         "name": "Shed Skin (Mythic Trait; Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Hythonia is reduced to 0 hit points, she doesn't die or fall unconscious. Instead, she sheds her skin, regains 199 hit points, and moves up to her speed without provoking opportunity attacks.</p>",
@@ -5331,7 +5895,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hizs",
+        "id": "act_multiattack_igxf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hythonia makes three attacks: one with her claws, one to constrict, and one with her snaky hair.</p>",
@@ -5348,7 +5912,7 @@
         }
       },
       {
-        "id": "act_claws_e50g",
+        "id": "act_claws_pmzb",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 5 ft., one target. {@h}9 (1d8 + 5) slashing damage plus 4 (1d8) poison damage.</p>",
@@ -5374,7 +5938,7 @@
         }
       },
       {
-        "id": "act_constrict_lf54",
+        "id": "act_constrict_754s",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 15 ft., one Large or smaller creature. {@h}16 (2d10 + 5) bludgeoning damage, and the target is grappled (escape DC 19). Until this grapple ends, the target is restrained and takes 15 (3d6 + 5) bludgeoning damage at the start of each of its turns, and Hythonia can't constrict another target.</p>",
@@ -5403,7 +5967,7 @@
         }
       },
       {
-        "id": "act_snaky_hair_xpqy",
+        "id": "act_snaky_hair_iuxb",
         "name": "Snaky Hair",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}31 (4d12 + 5) bludgeoning damage, and Hythonia can pull the target up to 5 feet closer to her if it is a Large or smaller creature.</p>",
@@ -5432,7 +5996,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_bkfz",
+          "id": "act_move_vc18",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hythonia moves up to her speed without provoking opportunity attacks.</p>",
@@ -5449,7 +6013,7 @@
           }
         },
         {
-          "id": "act_snaky_hair_2j19",
+          "id": "act_snaky_hair_nlsw",
           "name": "Snaky Hair",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hythonia makes one attack with her snaky hair.</p>",
@@ -5466,7 +6030,7 @@
           }
         },
         {
-          "id": "act_petrified_earth__costs_2_actions__34vl",
+          "id": "act_petrified_earth__costs_2_actions__5jwg",
           "name": "Petrified Earth (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hythonia causes stone spikes to erupt from the ground in a 30-foot radius centered on her. The area becomes difficult terrain until the start of her next turn. Any creature, other than Hythonia, takes 9 (2d8) piercing damage for every 5 feet it moves on those spikes.</p>",
@@ -5491,7 +6055,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_rhyi",
+        "id": "act_lair_action_r3hd",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Hythonia briefly animates creatures that have been petrified by her gaze. Each statue attacks one creature within 5 feet of it, with a +11 bonus to hit and dealing 10 (3d6) bludgeoning damage on a hit. If a Medium or smaller creature takes this damage, it is also grappled (escape DC 15).</p>",
@@ -5516,7 +6080,7 @@
         }
       },
       {
-        "id": "act_lair_action_05qg",
+        "id": "act_lair_action_3qri",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Hythonia causes spectral snakes to erupt from a point she can see within 150 feet of her. Each creature within 20 feet of that point must succeed on a DC 19 Constitution saving throw or take 5 (2d4) piercing damage and become poisoned until the end of its next turn. While poisoned in this way, the creature has disadvantage on Intelligence checks and Intelligence saving throws, and it behaves as if under the effect of the confusion spell.</p>",
@@ -5604,11 +6168,28 @@
         "mod": -2
       }
     },
+    "str": 22,
+    "dex": 10,
+    "con": 22,
+    "int": 2,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 4,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+8"
+    },
     "skills": {
       "perception": "+8"
     },
+    "immune": [
+      "acid"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 18,
     "senses": {
       "passivePerception": 18,
       "sensesString": "darkvision 60 ft."
@@ -5620,7 +6201,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_acidic_blood_qfai",
+        "id": "act_acidic_blood_qudh",
         "name": "Acidic Blood",
         "actionType": "trait",
         "descriptionHtml": "<p>When the hydra takes piercing or slashing damage, each creature within 5 feet of the hydra takes 9 (2d8) acid damage.</p>",
@@ -5642,7 +6223,7 @@
         }
       },
       {
-        "id": "act_hold_breath_y6gd",
+        "id": "act_hold_breath_wdsg",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The hydra can hold its breath for 1 hour.</p>",
@@ -5659,7 +6240,7 @@
         }
       },
       {
-        "id": "act_multiple_heads_q9bq",
+        "id": "act_multiple_heads_6dyo",
         "name": "Multiple Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>The hydra has five heads. While it has more than one head, the hydra has advantage on saving throws against being blinded, charmed, deafened, frightened, stunned, or knocked unconscious. Whenever the hydra takes 35 or more damage in a single turn, one of its heads dies. If all its heads die, the hydra dies. At the end of its turn, it grows two heads for each of its heads that died since its last turn, unless it has taken fire damage since its last turn. The hydra regains 10 hit points for each head regrown in this way.</p>",
@@ -5676,7 +6257,7 @@
         }
       },
       {
-        "id": "act_reactive_heads_1ejr",
+        "id": "act_reactive_heads_x6tp",
         "name": "Reactive Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>For each head the hydra has beyond one, it gets an extra reaction that can be used only for opportunity attacks.</p>",
@@ -5693,7 +6274,7 @@
         }
       },
       {
-        "id": "act_wakeful_rcsn",
+        "id": "act_wakeful_ehqa",
         "name": "Wakeful",
         "actionType": "trait",
         "descriptionHtml": "<p>While the hydra sleeps, at least one of its heads is awake.</p>",
@@ -5712,7 +6293,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9hab",
+        "id": "act_multiattack_0agy",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hydra makes as many bite attacks as it has heads.</p>",
@@ -5729,7 +6310,7 @@
         }
       },
       {
-        "id": "act_bite_k077",
+        "id": "act_bite_mhas",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 15 ft., one target. {@h}17 (2d10 + 6) piercing damage.</p>",
@@ -5822,12 +6403,36 @@
         "mod": 4
       }
     },
+    "str": 12,
+    "dex": 13,
+    "con": 14,
+    "int": 11,
+    "wis": 12,
+    "cha": 18,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+6",
+      "intimidation": "+6"
+    },
     "skills": {
       "deception": "+6",
       "intimidation": "+6"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -5911,7 +6516,7 @@
     ],
     "traits": [
       {
-        "id": "act_corpse_stride_e15o",
+        "id": "act_corpse_stride_lbue",
         "name": "Corpse Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on its turn, the lampad can use 10 feet of its movement to step magically into one creature's corpse within its reach and emerge from a second creature's corpse within 60 feet of the first corpse, appearing in an unoccupied space within 5 feet of the second corpse. Both corpses must be Medium or bigger.</p>",
@@ -5928,7 +6533,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_glj5",
+        "id": "act_magic_resistance_55pf",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The lampad has advantage on saving throws against spells and other magical effects.</p>",
@@ -5947,7 +6552,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6uec",
+        "id": "act_multiattack_ce6y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lampad attacks twice with its necrotic touch or chill touch.</p>",
@@ -5964,7 +6569,7 @@
         }
       },
       {
-        "id": "act_necrotic_touch_kwyj",
+        "id": "act_necrotic_touch_2wy2",
         "name": "Necrotic Touch",
         "actionType": "action",
         "descriptionHtml": "<p>ms +6 to hit, reach 5 ft., one target. {@h}9 (1d10 + 4) necrotic damage.</p>",
@@ -5986,7 +6591,7 @@
         }
       },
       {
-        "id": "act_chill_touch__cantrip__wmiy",
+        "id": "act_chill_touch__cantrip__7djf",
         "name": "Chill Touch (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>rs +6 to hit, range 120 ft., one creature. {@h}9 (2d8) necrotic damage, and the target can't regain hit points until the start of the lampad's next turn. If the target is undead, it has disadvantage on attack rolls against the lampad until the end of the lampad's next turn.</p>",
@@ -6079,10 +6684,27 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 18,
+    "con": 16,
+    "int": 13,
+    "wis": 17,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+7",
+      "wis": "+6"
+    },
     "saves": {
       "dex": "+7",
       "wis": "+6"
+    },
+    "skill": {
+      "arcana": "+4",
+      "insight": "+6",
+      "intimidation": "+3",
+      "stealth": "+7",
+      "survival": "+6"
     },
     "skills": {
       "arcana": "+4",
@@ -6091,6 +6713,11 @@
       "stealth": "+7",
       "survival": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 60 ft."
@@ -6170,7 +6797,7 @@
     ],
     "traits": [
       {
-        "id": "act_evasion_3pvi",
+        "id": "act_evasion_twe2",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the leonin is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails. It can't use this trait if it's incapacitated.</p>",
@@ -6187,7 +6814,7 @@
         }
       },
       {
-        "id": "act_unarmored_defense_a3al",
+        "id": "act_unarmored_defense_vlnw",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While the leonin is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -6206,7 +6833,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_gvq2",
+        "id": "act_multiattack_gdm3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The leonin makes three weapon attacks.</p>",
@@ -6223,7 +6850,7 @@
         }
       },
       {
-        "id": "act_claws_ran0",
+        "id": "act_claws_s2y8",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage plus 7 (2d6) force damage.</p>",
@@ -6249,7 +6876,7 @@
         }
       },
       {
-        "id": "act_dart_z1fs",
+        "id": "act_dart_m4tp",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>rw +7 to hit, range 20/60 ft., one target. {@h}6 (1d4 + 4) piercing damage.</p>",
@@ -6342,14 +6969,32 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 15,
+    "con": 16,
+    "int": 12,
+    "wis": 13,
+    "cha": 15,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+5",
+      "insight": "+4",
+      "perception": "+4",
+      "stealth": "+5"
+    },
     "skills": {
       "deception": "+5",
       "insight": "+4",
       "perception": "+4",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -6363,7 +7008,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_petrifying_gaze_hwto",
+        "id": "act_petrifying_gaze_5dnt",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see the medusa's eyes starts its turn within 30 feet of the medusa, the medusa can force it to make a DC 14 Constitution saving throw if the medusa isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, a creature that fails the save begins to turn to stone and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.</p><p>Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see the medusa until the start of its next turn, when it can avert its eyes again. If the creature looks at the medusa in the meantime, it must immediately make the save.</p><p>If the medusa sees itself reflected on a polished surface within 30 feet of it and in an area of bright light, the medusa is, due to its curse, affected by its own gaze.</p>",
@@ -6385,7 +7030,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_o71h",
+        "id": "act_multiattack_fiou",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The medusa makes either three melee attacks—one with its snake hair and two with its shortsword—or two ranged attacks with its longbow.</p>",
@@ -6402,7 +7047,7 @@
         }
       },
       {
-        "id": "act_snake_hair_ox0v",
+        "id": "act_snake_hair_8bph",
         "name": "Snake Hair",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}4 (1d4 + 2) piercing damage plus 14 (4d6) poison damage.</p>",
@@ -6428,7 +7073,7 @@
         }
       },
       {
-        "id": "act_shortsword_zwr4",
+        "id": "act_shortsword_6vdr",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -6450,7 +7095,7 @@
         }
       },
       {
-        "id": "act_longbow_rtie",
+        "id": "act_longbow_mwm0",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 150/600 ft., one target. {@h}6 (1d8 + 2) piercing damage plus 7 (2d6) poison damage.</p>",
@@ -6547,16 +7192,36 @@
         "mod": 0
       }
     },
+    "str": 16,
+    "dex": 14,
+    "con": 12,
+    "int": 16,
+    "wis": 13,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+4",
+      "int": "+5"
+    },
     "saves": {
       "dex": "+4",
       "int": "+5"
+    },
+    "skill": {
+      "arcana": "+5",
+      "history": "+5",
+      "perception": "+3"
     },
     "skills": {
       "arcana": "+5",
       "history": "+5",
       "perception": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -6790,7 +7455,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_wba9",
+        "id": "act_multiattack_0rrc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hoplite makes three weapon attacks. It can replace one weapon attack with ray of frost.</p>",
@@ -6807,7 +7472,7 @@
         }
       },
       {
-        "id": "act_spear_686f",
+        "id": "act_spear_vvjo",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -6833,7 +7498,7 @@
         }
       },
       {
-        "id": "act_shield_bash_8go9",
+        "id": "act_shield_bash_jz4x",
         "name": "Shield Bash",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}5 (1d4 + 3) bludgeoning damage. If the target is a Medium or smaller creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -6858,7 +7523,7 @@
         }
       },
       {
-        "id": "act_ray_of_frost__cantrip__72p4",
+        "id": "act_ray_of_frost__cantrip__fl7r",
         "name": "Ray of Frost (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>rs +5 to hit, range 60 ft., one creature. {@h}4 (1d8) cold damage, and the target's speed is reduced by 10 feet until the start of the hoplite's next turn.</p>",
@@ -6951,12 +7616,36 @@
         "mod": 4
       }
     },
+    "str": 10,
+    "dex": 16,
+    "con": 11,
+    "int": 15,
+    "wis": 10,
+    "cha": 18,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "persuasion": "+6",
+      "sleight of hand": "+5"
+    },
     "skills": {
       "persuasion": "+6",
       "sleight of hand": "+5"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -7090,7 +7779,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_lzew",
+        "id": "act_amphibious_r7om",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The naiad can breathe air and water.</p>",
@@ -7107,7 +7796,7 @@
         }
       },
       {
-        "id": "act_invisible_in_water_18j5",
+        "id": "act_invisible_in_water_a931",
         "name": "Invisible in Water",
         "actionType": "trait",
         "descriptionHtml": "<p>The naiad is invisible while fully immersed in water.</p>",
@@ -7124,7 +7813,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_4lxu",
+        "id": "act_magic_resistance_29k7",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The naiad has advantage on saving throws against spells and other magical effects.</p>",
@@ -7143,7 +7832,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_79zn",
+        "id": "act_multiattack_vgxd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The naiad makes two psychic touch attacks.</p>",
@@ -7160,7 +7849,7 @@
         }
       },
       {
-        "id": "act_psychic_touch_42c4",
+        "id": "act_psychic_touch_2k4e",
         "name": "Psychic Touch",
         "actionType": "action",
         "descriptionHtml": "<p>ms +6 to hit, reach 5 ft., one target. {@h}9 (1d10 + 4) psychic damage.</p>",
@@ -7253,10 +7942,26 @@
         "mod": 5
       }
     },
+    "str": 19,
+    "dex": 15,
+    "con": 18,
+    "int": 14,
+    "wis": 17,
+    "cha": 20,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+8",
+      "wis": "+7"
+    },
     "saves": {
       "con": "+8",
       "wis": "+7"
+    },
+    "skill": {
+      "arcana": "+6",
+      "deception": "+9",
+      "perception": "+7",
+      "persuasion": "+9"
     },
     "skills": {
       "arcana": "+6",
@@ -7264,6 +7969,18 @@
       "perception": "+7",
       "persuasion": "+9"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 120 ft."
@@ -7388,7 +8105,7 @@
     ],
     "traits": [
       {
-        "id": "act_aura_of_nightmares_27mn",
+        "id": "act_aura_of_nightmares_a2lj",
         "name": "Aura of Nightmares",
         "actionType": "trait",
         "descriptionHtml": "<p>Undead creatures within 30 feet of the shepherd gain a +5 bonus to attack and damage rolls. When any other creature that isn't undead or a construct starts its turn within 30 feet of the shepherd, that creature must succeed on a DC 17 Wisdom saving throw or take 11 (2d10) psychic damage.</p>",
@@ -7413,7 +8130,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_4pv4",
+        "id": "act_magic_resistance_btej",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The shepherd has advantage on saving throws against spells and other magical effects.</p>",
@@ -7432,7 +8149,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_eocl",
+        "id": "act_multiattack_hy2v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The shepherd makes two attacks: one with its claws and one with its staff.</p>",
@@ -7449,7 +8166,7 @@
         }
       },
       {
-        "id": "act_claws_yt24",
+        "id": "act_claws_3h3k",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}13 (2d8 + 4) slashing damage plus 16 (3d10) necrotic damage.</p>",
@@ -7475,7 +8192,7 @@
         }
       },
       {
-        "id": "act_staff_2j16",
+        "id": "act_staff_saww",
         "name": "Staff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage, or 13 (2d8 + 4) bludgeoning damage if used with two hands, plus 26 (4d12) psychic damage.</p>",
@@ -7505,7 +8222,7 @@
         }
       },
       {
-        "id": "act_herd_the_underworld__recharges_after_a_short_or_long_rest__qx01",
+        "id": "act_herd_the_underworld__recharges_after_a_short_or_long_rest__x04h",
         "name": "Herd the Underworld (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>The shepherd pulls twisted souls from the Underworld; 1d6 shadow (without Sunlight Weakness) arise in unoccupied spaces within 20 feet of the shepherd. The shadows act right after the shepherd on the same initiative count and fight until they're destroyed. They disappear when the shepherd dies.</p>",
@@ -7593,9 +8310,22 @@
         "mod": 0
       }
     },
+    "str": 16,
+    "dex": 14,
+    "con": 12,
+    "int": 3,
+    "wis": 13,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -7607,7 +8337,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_5qav",
+        "id": "act_charge_8yhr",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the ram moves at least 20 feet straight toward a target and then hits it with a ram attack on the same turn, the target takes an extra 5 (2d4) bludgeoning damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -7632,7 +8362,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_y9b6",
+        "id": "act_magic_resistance_2vwu",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The ram has advantage on saving throws against spells and other magical effects.</p>",
@@ -7649,7 +8379,7 @@
         }
       },
       {
-        "id": "act_sure_footed_7b78",
+        "id": "act_sure_footed_62kk",
         "name": "Sure-Footed",
         "actionType": "trait",
         "descriptionHtml": "<p>The ram has advantage on Strength and Dexterity saving throws against effects that would knock it prone.</p>",
@@ -7668,7 +8398,7 @@
     ],
     "actions": [
       {
-        "id": "act_ram_0c3q",
+        "id": "act_ram_hke3",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}8 (2d4 + 3) bludgeoning damage plus 3 (1d6) force damage.</p>",
@@ -7765,16 +8495,36 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 13,
+    "wis": 16,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+5",
+      "cha": "+4"
+    },
     "saves": {
       "wis": "+5",
       "cha": "+4"
+    },
+    "skill": {
+      "insight": "+5",
+      "persuasion": "+4",
+      "religion": "+5"
     },
     "skills": {
       "insight": "+5",
       "persuasion": "+4",
       "religion": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -8022,7 +8772,7 @@
     ],
     "traits": [
       {
-        "id": "act_blessings_of_the_gods_30ba",
+        "id": "act_blessings_of_the_gods_b2ct",
         "name": "Blessings of the Gods",
         "actionType": "trait",
         "descriptionHtml": "<p>While the oracle is wearing no armor and wielding no shield, its AC includes its Wisdom modifier. In addition, a creature that hits the oracle with a melee attack while within 5 feet of it takes 9 (2d8) force damage.</p>",
@@ -8046,7 +8796,7 @@
     ],
     "actions": [
       {
-        "id": "act_eldritch_touch_1c2x",
+        "id": "act_eldritch_touch_oprd",
         "name": "Eldritch Touch",
         "actionType": "action",
         "descriptionHtml": "<p>ms +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) force damage.</p>",
@@ -8071,7 +8821,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_divine_insight__3_day__8rna",
+        "id": "act_divine_insight__3_day__pg19",
         "name": "Divine Insight (3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the oracle or a creature it can see makes an attack roll, a saving throw, or an ability check, the oracle can cause the roll to be made with advantage or disadvantage.</p>",
@@ -8157,13 +8907,37 @@
         "mod": 4
       }
     },
+    "str": 14,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 13,
+    "cha": 18,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "acrobatics": "+4",
+      "athletics": "+4",
+      "performance": "+6"
+    },
     "skills": {
       "acrobatics": "+4",
       "athletics": "+4",
       "performance": "+6"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -8318,7 +9092,7 @@
     ],
     "traits": [
       {
-        "id": "act_invisible_in_fire_yts1",
+        "id": "act_invisible_in_fire_191d",
         "name": "Invisible in Fire",
         "actionType": "trait",
         "descriptionHtml": "<p>The oread is invisible while fully immersed in fire.</p>",
@@ -8335,7 +9109,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_vtef",
+        "id": "act_magic_resistance_h9uw",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The oread has advantage on saving throws against spells and other magical effects.</p>",
@@ -8354,7 +9128,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8rfw",
+        "id": "act_multiattack_hyac",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The oread attacks twice with its fiery touch or fire bolt.</p>",
@@ -8371,7 +9145,7 @@
         }
       },
       {
-        "id": "act_fiery_touch_h9et",
+        "id": "act_fiery_touch_4113",
         "name": "Fiery Touch",
         "actionType": "action",
         "descriptionHtml": "<p>ms +6 to hit, reach 5 ft., one target. {@h}9 (1d10 + 4) fire damage.</p>",
@@ -8393,7 +9167,7 @@
         }
       },
       {
-        "id": "act_fire_bolt__cantrip__uyc5",
+        "id": "act_fire_bolt__cantrip__2rvk",
         "name": "Fire Bolt (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>rs +6 to hit, range 120 ft., one target. {@h}5 (1d10) fire damage.</p>",
@@ -8418,7 +9192,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_hellish_rebuke__2nd_level_spell__1_day__muvo",
+        "id": "act_hellish_rebuke__2nd_level_spell__1_day__hbgi",
         "name": "Hellish Rebuke (2nd-Level Spell; 1/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the oread is damaged by a creature within 60 feet of the oread that it can see, the creature that damaged the oread must make a DC 14 Dexterity saving throw, taking 16 (3d10) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -8512,15 +9286,44 @@
         "mod": 2
       }
     },
+    "str": 20,
+    "dex": 15,
+    "con": 18,
+    "int": 10,
+    "wis": 16,
+    "cha": 14,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+8",
+      "wis": "+7"
+    },
     "saves": {
       "con": "+8",
       "wis": "+7"
+    },
+    "skill": {
+      "insight": "+7",
+      "perception": "+7"
     },
     "skills": {
       "insight": "+7",
       "perception": "+7"
     },
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "truesight 120 ft."
@@ -8534,7 +9337,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_gatekeeper_s_aura_kti2",
+        "id": "act_gatekeeper_s_aura_38gi",
         "name": "Gatekeeper's Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that starts its turn within 10 feet of the phylaskia must make a DC 15 Wisdom saving throw. On a successful save, the creature is immune to this aura for the next 24 hours. On a failed save, the creature has disadvantage on saving throws and its speed is halved until the start of its next turn.</p>",
@@ -8554,7 +9357,7 @@
         }
       },
       {
-        "id": "act_undead_fortitude_jkra",
+        "id": "act_undead_fortitude_uvvw",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the phylaskia to 0 hit points, it must make a Constitution saving throw with a DC equal to 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the phylaskia drops to 1 hit point instead.</p>",
@@ -8571,7 +9374,7 @@
         }
       },
       {
-        "id": "act_vigilant_zo9r",
+        "id": "act_vigilant_7k62",
         "name": "Vigilant",
         "actionType": "trait",
         "descriptionHtml": "<p>The phylaskia can't be surprised.</p>",
@@ -8590,7 +9393,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jwgm",
+        "id": "act_multiattack_gryf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The phylaskia makes two longsword attacks and uses its Strength Drain once.</p>",
@@ -8607,7 +9410,7 @@
         }
       },
       {
-        "id": "act_longsword_wgwh",
+        "id": "act_longsword_quge",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one target. {@h}14 (2d8 + 5) slashing damage, or 16 (2d10 + 5) slashing damage if used with two hands, plus 11 (2d10) necrotic damage.</p>",
@@ -8637,7 +9440,7 @@
         }
       },
       {
-        "id": "act_strength_drain_s5i9",
+        "id": "act_strength_drain_moew",
         "name": "Strength Drain",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one creature. {@h}12 (2d6 + 5) necrotic damage. Unless the target is immune to necrotic damage, its Strength score is reduced by 1d4. The target dies if this reduces its Strength to 0. Otherwise, the reduction lasts until the target finishes a short or long rest.</p>",
@@ -8730,11 +9533,28 @@
         "mod": 0
       }
     },
+    "str": 25,
+    "dex": 15,
+    "con": 21,
+    "int": 4,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 6,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+14"
+    },
     "skills": {
       "perception": "+14"
     },
+    "immune": [
+      "acid"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 24,
     "senses": {
       "passivePerception": 24,
       "sensesString": "darkvision 120 ft."
@@ -8746,7 +9566,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_acidic_blood_q7re",
+        "id": "act_acidic_blood_k7te",
         "name": "Acidic Blood",
         "actionType": "trait",
         "descriptionHtml": "<p>When Polukranos takes piercing or slashing damage, each creature within 5 feet of Polukranos takes 10 (3d6) acid damage.</p>",
@@ -8768,7 +9588,7 @@
         }
       },
       {
-        "id": "act_hold_breath_bvbg",
+        "id": "act_hold_breath_5ibu",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>Polukranos can hold its breath for 1 hour.</p>",
@@ -8785,7 +9605,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__i7w8",
+        "id": "act_legendary_resistance__3_day__61z1",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Polukranos fails a saving throw, it can choose to succeed instead.</p>",
@@ -8802,7 +9622,7 @@
         }
       },
       {
-        "id": "act_multiple_heads_r0qg",
+        "id": "act_multiple_heads_9h5l",
         "name": "Multiple Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>Polukranos has five heads. While it has more than one head, Polukranos has advantage on saving throws against being blinded, charmed, deafened, frightened, stunned, or knocked unconscious. Whenever Polukranos takes 40 or more damage in a single turn, one of its heads dies. If all its heads die, Polukranos dies. At the end of its turn, it grows two heads for each of its heads that died since its last turn, unless it has taken 40 or more fire damage since its last turn. Polukranos regains 20 hit points for each head regrown in this way.</p>",
@@ -8819,7 +9639,7 @@
         }
       },
       {
-        "id": "act_reactive_heads_gwon",
+        "id": "act_reactive_heads_v0fq",
         "name": "Reactive Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>For each head Polukranos has beyond one, it gets an extra reaction that can be used only to make opportunity attacks.</p>",
@@ -8836,7 +9656,7 @@
         }
       },
       {
-        "id": "act_siege_monster_rjqv",
+        "id": "act_siege_monster_8zhr",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>Polukranos deals double damage to objects and structures.</p>",
@@ -8853,7 +9673,7 @@
         }
       },
       {
-        "id": "act_wakeful_961u",
+        "id": "act_wakeful_udel",
         "name": "Wakeful",
         "actionType": "trait",
         "descriptionHtml": "<p>While Polukranos sleeps, at least one of its heads is awake.</p>",
@@ -8872,7 +9692,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_gq8g",
+        "id": "act_multiattack_5tnu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Polukranos makes as many bite attacks as it has heads.</p>",
@@ -8889,7 +9709,7 @@
         }
       },
       {
-        "id": "act_bite_06n3",
+        "id": "act_bite_4s89",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +13 to hit, reach 15 ft., one target. {@h}18 (2d10 + 7) piercing damage.</p>",
@@ -8911,7 +9731,7 @@
         }
       },
       {
-        "id": "act_stomp_osoq",
+        "id": "act_stomp_xbzr",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +13 to hit, reach 15 ft., one target. {@h}16 (2d8 + 7) bludgeoning damage.</p>",
@@ -8933,7 +9753,7 @@
         }
       },
       {
-        "id": "act_tail_y6m5",
+        "id": "act_tail_2813",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +13 to hit, reach 15 ft., one target. {@h}18 (2d10 + 7) bludgeoning damage. If the target is a creature, it must succeed on a DC 21 Strength saving throw or be pushed up to 20 feet away from Polukranos.</p>",
@@ -8965,7 +9785,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_w4t3",
+          "id": "act_detect_98ja",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>Polukranos makes a Wisdom (Perception) check.</p>",
@@ -8982,7 +9802,7 @@
           }
         },
         {
-          "id": "act_tail_swipe_j5on",
+          "id": "act_tail_swipe_o3is",
           "name": "Tail Swipe",
           "actionType": "legendary",
           "descriptionHtml": "<p>Polukranos makes a tail attack.</p>",
@@ -8999,7 +9819,7 @@
           }
         },
         {
-          "id": "act_trampling_charge__costs_3_actions__e82m",
+          "id": "act_trampling_charge__costs_3_actions__j4f4",
           "name": "Trampling Charge (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Polukranos moves up to 50 feet in a straight line and can move through the space of any creature Huge or smaller. The first time it enters each creature's space during this move, it can make a stomp attack against that creature.</p>",
@@ -9081,9 +9901,28 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 15,
+    "con": 12,
+    "int": 10,
+    "wis": 12,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -9097,7 +9936,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_turn_resistance_s1hv",
+        "id": "act_turn_resistance_w2nb",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned has advantage on saving throws against any effect that turns undead.</p>",
@@ -9114,7 +9953,7 @@
         }
       },
       {
-        "id": "act_unreadable_face_yspq",
+        "id": "act_unreadable_face_kb4r",
         "name": "Unreadable Face",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned is immune to any effect that would sense its emotions or read its thoughts. Wisdom (Insight) checks to ascertain the Returned's intentions or sincerity are made with disadvantage.</p>",
@@ -9133,7 +9972,7 @@
     ],
     "actions": [
       {
-        "id": "act_scimitar_2676",
+        "id": "act_scimitar_eaml",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) slashing damage plus 3 (1d6) poison damage.</p>",
@@ -9159,7 +9998,7 @@
         }
       },
       {
-        "id": "act_sling_x81o",
+        "id": "act_sling_wh4z",
         "name": "Sling",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}4 (1d4 + 2) bludgeoning damage.</p>",
@@ -9252,13 +10091,36 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 17,
+    "con": 14,
+    "int": 13,
+    "wis": 12,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "acrobatics": "+5",
+      "athletics": "+2",
+      "stealth": "+5"
+    },
     "skills": {
       "acrobatics": "+5",
       "athletics": "+2",
       "stealth": "+5"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -9272,7 +10134,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fleeting_anger_x80z",
+        "id": "act_fleeting_anger_d5pd",
         "name": "Fleeting Anger",
         "actionType": "trait",
         "descriptionHtml": "<p>If another creature deals damage to the Returned, the Returned makes attack rolls with advantage until the end of its next turn.</p>",
@@ -9289,7 +10151,7 @@
         }
       },
       {
-        "id": "act_turn_resistance_kr7e",
+        "id": "act_turn_resistance_lhv0",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned has advantage on saving throws against any effect that turns undead.</p>",
@@ -9306,7 +10168,7 @@
         }
       },
       {
-        "id": "act_unreadable_face_bplq",
+        "id": "act_unreadable_face_5kg0",
         "name": "Unreadable Face",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned is immune to any effect that would sense its emotions or read its thoughts. Wisdom (Insight) checks to ascertain the Returned's intentions or sincerity are made with disadvantage.</p>",
@@ -9325,7 +10187,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_s8o3",
+        "id": "act_shortsword_qtfd",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -9351,7 +10213,7 @@
         }
       },
       {
-        "id": "act_underworld_bolt_6ia4",
+        "id": "act_underworld_bolt_6b6h",
         "name": "Underworld Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>rs +4 to hit, range 120 ft., one creature. {@h}13 (2d8 + 2) necrotic damage, and the target can't regain hit points until the start of the Returned's next turn. If the target is missing any of its hit points, it instead takes 17 (2d12 + 2) necrotic damage.</p>",
@@ -9448,13 +10310,36 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 17,
+    "con": 14,
+    "int": 13,
+    "wis": 12,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "acrobatics": "+5",
+      "athletics": "+2",
+      "stealth": "+5"
+    },
     "skills": {
       "acrobatics": "+5",
       "athletics": "+2",
       "stealth": "+5"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -9468,7 +10353,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fleeting_anger_cb4f",
+        "id": "act_fleeting_anger_f0nx",
         "name": "Fleeting Anger",
         "actionType": "trait",
         "descriptionHtml": "<p>If another creature deals damage to the Returned, the Returned makes attack rolls with advantage until the end of its next turn.</p>",
@@ -9485,7 +10370,7 @@
         }
       },
       {
-        "id": "act_turn_resistance_khmd",
+        "id": "act_turn_resistance_r8a0",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned has advantage on saving throws against any effect that turns undead.</p>",
@@ -9502,7 +10387,7 @@
         }
       },
       {
-        "id": "act_unreadable_face_3d9q",
+        "id": "act_unreadable_face_uanl",
         "name": "Unreadable Face",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned is immune to any effect that would sense its emotions or read its thoughts. Wisdom (Insight) checks to ascertain the Returned's intentions or sincerity are made with disadvantage.</p>",
@@ -9521,7 +10406,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_cl3n",
+        "id": "act_multiattack_2vr3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Returned makes two shortsword attacks.</p>",
@@ -9538,7 +10423,7 @@
         }
       },
       {
-        "id": "act_shortsword_9hoq",
+        "id": "act_shortsword_s4wb",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -9635,9 +10520,28 @@
         "mod": 0
       }
     },
+    "str": 16,
+    "dex": 15,
+    "con": 12,
+    "int": 10,
+    "wis": 12,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -9651,7 +10555,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_byr1",
+        "id": "act_pack_tactics_c4d5",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned has advantage on an attack roll against a creature if at least one of the Returned's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -9668,7 +10572,7 @@
         }
       },
       {
-        "id": "act_turn_resistance_rznl",
+        "id": "act_turn_resistance_qget",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned has advantage on saving throws against any effect that turns undead.</p>",
@@ -9685,7 +10589,7 @@
         }
       },
       {
-        "id": "act_unreadable_face_syq6",
+        "id": "act_unreadable_face_tku1",
         "name": "Unreadable Face",
         "actionType": "trait",
         "descriptionHtml": "<p>The Returned is immune to any effect that would sense its emotions or read its thoughts. Wisdom (Insight) checks to ascertain the Returned's intentions or sincerity are made with disadvantage.</p>",
@@ -9704,7 +10608,7 @@
     ],
     "actions": [
       {
-        "id": "act_spear_mnl8",
+        "id": "act_spear_iyy2",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack, plus 7 (2d6) poison damage.</p>",
@@ -9734,7 +10638,7 @@
         }
       },
       {
-        "id": "act_sling_q8gg",
+        "id": "act_sling_7hfp",
         "name": "Sling",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}4 (1d4 + 2) bludgeoning damage.</p>",
@@ -9827,13 +10731,30 @@
         "mod": 3
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 13,
+    "int": 12,
+    "wis": 10,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "acrobatics": "+5",
+      "performance": "+7",
+      "stealth": "+5"
+    },
     "skills": {
       "acrobatics": "+5",
       "performance": "+7",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -9848,7 +10769,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_enthralling_performance_t4sk",
+        "id": "act_enthralling_performance_h91l",
         "name": "Enthralling Performance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the satyr performs for at least 1 minute, it chooses up to four humanoids within 60 feet of it who watched or listened to the entire performance. Each target must succeed on a DC 13 Wisdom saving throw or be charmed. While charmed in this way, the target idolizes the satyr and will take part in the satyr's revels. The charmed condition ends for the creature after 1 hour, if it takes any damage, if the satyr attacks the target, or if the target witnesses the satyr attacking or damaging any of the target's allies.</p>",
@@ -9868,7 +10789,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_9g3i",
+        "id": "act_magic_resistance_hotu",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The satyr has advantage on saving throws against spells and other magical effects.</p>",
@@ -9885,7 +10806,7 @@
         }
       },
       {
-        "id": "act_sleepless_reveler_hhej",
+        "id": "act_sleepless_reveler_le8r",
         "name": "Sleepless Reveler",
         "actionType": "trait",
         "descriptionHtml": "<p>Magic can't put the satyr to sleep.</p>",
@@ -9904,7 +10825,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_657d",
+        "id": "act_multiattack_nk05",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The satyr makes two ram attacks or two shortbow attacks.</p>",
@@ -9921,7 +10842,7 @@
         }
       },
       {
-        "id": "act_ram_oa8f",
+        "id": "act_ram_qnen",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}6 (2d4 + 1) bludgeoning damage.</p>",
@@ -9943,7 +10864,7 @@
         }
       },
       {
-        "id": "act_shortbow_3eh2",
+        "id": "act_shortbow_j9md",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 80/320 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
@@ -10036,13 +10957,30 @@
         "mod": 2
       }
     },
+    "str": 12,
+    "dex": 18,
+    "con": 12,
+    "int": 11,
+    "wis": 13,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+5",
+      "performance": "+6",
+      "stealth": "+6"
+    },
     "skills": {
       "perception": "+5",
       "performance": "+6",
       "stealth": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": ""
@@ -10057,7 +10995,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_6csm",
+        "id": "act_magic_resistance_m0mo",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The satyr has advantage on saving throws against spells and other magical effects.</p>",
@@ -10074,7 +11012,7 @@
         }
       },
       {
-        "id": "act_sleepless_reveler_lmz5",
+        "id": "act_sleepless_reveler_gi3o",
         "name": "Sleepless Reveler",
         "actionType": "trait",
         "descriptionHtml": "<p>Magic can't put the satyr to sleep.</p>",
@@ -10093,7 +11031,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ygbq",
+        "id": "act_multiattack_2s2x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The satyr makes three ram attacks or three shortbow attacks.</p>",
@@ -10110,7 +11048,7 @@
         }
       },
       {
-        "id": "act_ram_og9e",
+        "id": "act_ram_mrej",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}6 (2d4 + 1) bludgeoning damage.</p>",
@@ -10132,7 +11070,7 @@
         }
       },
       {
-        "id": "act_shortbow_np6j",
+        "id": "act_shortbow_v78p",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +6 to hit, range 80/320 ft., one target. {@h}7 (1d6 + 4) piercing damage.</p>",
@@ -10154,7 +11092,7 @@
         }
       },
       {
-        "id": "act_hail_of_arrows__recharges_after_a_short_or_long_rest__896v",
+        "id": "act_hail_of_arrows__recharges_after_a_short_or_long_rest__tirv",
         "name": "Hail of Arrows (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>The satyr fires an arrow that magically transforms into a flurry of missiles in a 30-foot cone. Each creature in that area must make a DC 14 Dexterity saving throw, taking 17 (5d6) piercing damage on a failed save, or half as much damage on a successful one.</p>",
@@ -10250,16 +11188,36 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 16,
+    "con": 14,
+    "int": 13,
+    "wis": 16,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5",
+      "wis": "+5"
+    },
     "saves": {
       "dex": "+5",
       "wis": "+5"
+    },
+    "skill": {
+      "acrobatics": "+5",
+      "perception": "+5",
+      "survival": "+5"
     },
     "skills": {
       "acrobatics": "+5",
       "perception": "+5",
       "survival": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": ""
@@ -10273,7 +11231,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_t3cp",
+        "id": "act_pack_tactics_6e61",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The hoplite has advantage on an attack roll against a creature if at least one of the hoplite's allies is within 5 feet of the hoplite and the ally isn't incapacitated.</p>",
@@ -10292,7 +11250,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7wny",
+        "id": "act_multiattack_ook8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hoplite makes two scimitar attacks or two longbow attacks.</p>",
@@ -10309,7 +11267,7 @@
         }
       },
       {
-        "id": "act_scimitar_u2t4",
+        "id": "act_scimitar_b0ok",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) slashing damage plus 10 (3d6) poison damage.</p>",
@@ -10335,7 +11293,7 @@
         }
       },
       {
-        "id": "act_longbow_6l01",
+        "id": "act_longbow_uapq",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 150/600 ft., one target. {@h}7 (1d8 + 3) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -10432,14 +11390,32 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 13,
+    "con": 19,
+    "int": 3,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "con": "+7",
+      "wis": "+5"
+    },
     "saves": {
       "con": "+7",
       "wis": "+5"
     },
+    "skill": {
+      "perception": "+5"
+    },
     "skills": {
       "perception": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "darkvision 60 ft."
@@ -10453,7 +11429,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spell_turning_nw4f",
+        "id": "act_spell_turning_k4fo",
         "name": "Spell Turning",
         "actionType": "trait",
         "descriptionHtml": "<p>The chimera has advantage on a saving throw against any spell that targets only the chimera (not an area). If the chimera's saving throw is successful and the spell is of 4th level or lower, the spell has no effect on the chimera and instead targets the caster.</p>",
@@ -10472,7 +11448,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ift4",
+        "id": "act_multiattack_ne7o",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The chimera makes three attacks: one with its claws, one with its head, and one with its tail. When its breath weapon is available, it can use the breath in place of its head or its claws.</p>",
@@ -10489,7 +11465,7 @@
         }
       },
       {
-        "id": "act_claws_zyju",
+        "id": "act_claws_qfz4",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}13 (2d8 + 4) slashing damage.</p>",
@@ -10511,7 +11487,7 @@
         }
       },
       {
-        "id": "act_head_h24q",
+        "id": "act_head_jn10",
         "name": "Head",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}10 (1d12 + 4) piercing damage.</p>",
@@ -10533,7 +11509,7 @@
         }
       },
       {
-        "id": "act_tail_te6g",
+        "id": "act_tail_xzx2",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage.</p>",
@@ -10555,7 +11531,7 @@
         }
       },
       {
-        "id": "act_breath_weapon__recharge_5__6q4w",
+        "id": "act_breath_weapon__recharge_5__lhyf",
         "name": "Breath Weapon (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The chimera exhales fire in a 15-foot cone. Each creature in that area must make a DC 15 Dexterity saving throw, taking 32 (5d12) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -10651,17 +11627,41 @@
         "mod": 4
       }
     },
+    "str": 16,
+    "dex": 11,
+    "con": 16,
+    "int": 10,
+    "wis": 12,
+    "cha": 19,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+3",
+      "int": "+3",
+      "cha": "+7"
+    },
     "saves": {
       "dex": "+3",
       "int": "+3",
       "cha": "+7"
+    },
+    "skill": {
+      "athletics": "+6",
+      "nature": "+6",
+      "survival": "+4"
     },
     "skills": {
       "athletics": "+6",
       "nature": "+6",
       "survival": "+4"
     },
+    "immune": [],
+    "resist": [
+      "cold",
+      "fire"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -10831,7 +11831,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_8tfa",
+        "id": "act_amphibious_0kyu",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The triton can breathe air and water.</p>",
@@ -10848,7 +11848,7 @@
         }
       },
       {
-        "id": "act_summon_water_weird__recharges_after_a_short_or_long_rest__8aqr",
+        "id": "act_summon_water_weird__recharges_after_a_short_or_long_rest__lr9a",
         "name": "Summon Water Weird (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, the triton magically summons 1d4 water weird. The summoned weirds appear in unoccupied spaces in water within 60 feet of the triton. The water weirds act immediately after the triton on the same initiative count and fight until they're destroyed. They disappear if the triton dies.</p>",
@@ -10867,7 +11867,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4f0p",
+        "id": "act_multiattack_3pj7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The triton makes two attacks using Wave Touch and casts ray of frost.</p>",
@@ -10884,7 +11884,7 @@
         }
       },
       {
-        "id": "act_wave_touch_o0yv",
+        "id": "act_wave_touch_mkry",
         "name": "Wave Touch",
         "actionType": "action",
         "descriptionHtml": "<p>ms +7 to hit, reach 5 ft., one target. {@h}22 (4d10) cold damage.</p>",
@@ -10906,7 +11906,7 @@
         }
       },
       {
-        "id": "act_ray_of_frost__cantrip__72d7",
+        "id": "act_ray_of_frost__cantrip__8hwm",
         "name": "Ray of Frost (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>rs +7 to hit, range 60 ft., one creature. {@h}13 (3d8) cold damage, and the target's speed is reduced by 10 feet until the start of the triton's next turn.</p>",
@@ -10931,7 +11931,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_frigid_shield_8zr8",
+        "id": "act_frigid_shield_jkbn",
         "name": "Frigid Shield",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the triton can see targets the triton with an attack, the triton gains 10 temporary hit points. If the attack hits and reduces the temporary hit points to 0, each creature within 5 feet of the triton takes 9 (2d8) cold damage.</p>",
@@ -11022,13 +12022,32 @@
         "mod": 0
       }
     },
+    "str": 11,
+    "dex": 16,
+    "con": 14,
+    "int": 10,
+    "wis": 15,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "nature": "+4",
+      "perception": "+4",
+      "stealth": "+5"
+    },
     "skills": {
       "nature": "+4",
       "perception": "+4",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -11108,7 +12127,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_pyyy",
+        "id": "act_amphibious_qeiz",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The triton can breathe air and water.</p>",
@@ -11125,7 +12144,7 @@
         }
       },
       {
-        "id": "act_nimble_escape_ssse",
+        "id": "act_nimble_escape_3g84",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>The triton can take the Disengage or Hide actions as a bonus action on each of its turns.</p>",
@@ -11144,7 +12163,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8vj4",
+        "id": "act_multiattack_ccw2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The triton makes two urchin-spine shortsword attacks.</p>",
@@ -11161,7 +12180,7 @@
         }
       },
       {
-        "id": "act_urchin_spine_shortsword_w2z0",
+        "id": "act_urchin_spine_shortsword_9ifh",
         "name": "Urchin-Spine Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage plus 10 (3d6) poison damage. If the damage reduces a creature to 0 hit points, that creature is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
@@ -11187,7 +12206,7 @@
         }
       },
       {
-        "id": "act_poisoned_spine_1g42",
+        "id": "act_poisoned_spine_qo3j",
         "name": "Poisoned Spine",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 30/60 ft., one target. {@h}5 (1d4 + 3) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -11284,12 +12303,48 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 11,
+    "con": 29,
+    "int": 22,
+    "wis": 11,
+    "cha": 10,
     "proficiencyBonus": 8,
+    "save": {
+      "int": "+14",
+      "wis": "+8"
+    },
     "saves": {
       "int": "+14",
       "wis": "+8"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [
+      "cold",
+      "lightning",
+      "thunder"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "paralyzed",
+      "restrained"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 120 ft."
@@ -11301,7 +12356,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_uz5g",
+        "id": "act_amphibious_ofvn",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Tromokratis can breathe air and water.</p>",
@@ -11318,7 +12373,7 @@
         }
       },
       {
-        "id": "act_hearts_of_the_kraken__mythic_trait__recharges_after_a_short_or_long_rest__c09u",
+        "id": "act_hearts_of_the_kraken__mythic_trait__recharges_after_a_short_or_long_rest__3vm8",
         "name": "Hearts of the Kraken (Mythic Trait; Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>When Tromokratis is reduced to 0 hit points, it doesn't die or fall unconscious. Instead, the damage creates cracks in its carapace, revealing its hearts. Tromokratis has four hearts: two on its chest, one on its back, and one at the base of its tail. A heart has an AC of 22 and 100 hit points. It is immune to bludgeoning, piercing, and slashing damage from nonmagical attacks, and it is immune to all conditions. If it is forced to make a saving throw, treat its ability scores as 10 (+0). If it finishes a short or long rest, the carapace heals, any destroyed hearts regenerate, and the hearts are covered again. Tromokratis dies when all the hearts are destroyed.</p>",
@@ -11335,7 +12390,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__qx2r",
+        "id": "act_legendary_resistance__3_day__a5jl",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Tromokratis fails a saving throw, it can choose to succeed instead.</p>",
@@ -11352,7 +12407,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_gber",
+        "id": "act_magic_weapons_qn56",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>Tromokratis's weapon attacks are magical.</p>",
@@ -11369,7 +12424,7 @@
         }
       },
       {
-        "id": "act_siege_monster_wwzr",
+        "id": "act_siege_monster_5jyg",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>Tromokratis deals double damage to objects and structures.</p>",
@@ -11386,7 +12441,7 @@
         }
       },
       {
-        "id": "act_spell_resistant_carapace_419b",
+        "id": "act_spell_resistant_carapace_j9jt",
         "name": "Spell-Resistant Carapace",
         "actionType": "trait",
         "descriptionHtml": "<p>Tromokratis has advantage on saving throws against spells, and any creature that makes a spell attack against Tromokratis has disadvantage on the attack roll.</p>",
@@ -11405,7 +12460,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mf03",
+        "id": "act_multiattack_98s0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Tromokratis makes three attacks: one with its pincer, one with its tail, and one with its tentacle grasp.</p>",
@@ -11422,7 +12477,7 @@
         }
       },
       {
-        "id": "act_pincer_thdi",
+        "id": "act_pincer_c53b",
         "name": "Pincer",
         "actionType": "action",
         "descriptionHtml": "<p>mw +18 to hit, reach 20 ft., one target. {@h}20 (3d6 + 10) bludgeoning damage, and if the target is a creature, it is grappled (escape DC 26). Until the grapple ends, the target is restrained, and Tromokratis can't use this attack on anyone else.</p>",
@@ -11447,7 +12502,7 @@
         }
       },
       {
-        "id": "act_tail_u6yh",
+        "id": "act_tail_aiod",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +18 to hit, reach 20 ft., one target. {@h}23 (3d8 + 10) bludgeoning damage, and if the target is a creature, it is knocked prone.</p>",
@@ -11469,7 +12524,7 @@
         }
       },
       {
-        "id": "act_tentacle_grasp_ae8d",
+        "id": "act_tentacle_grasp_0mvg",
         "name": "Tentacle Grasp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +18 to hit, reach 20 ft., one creature. {@h}20 (3d6 + 10) bludgeoning damage, and the target is grappled (escape DC 26). If the target doesn't escape by the end of its next turn, Tromokratis throws the target up to 60 feet in a straight line. The target lands prone and takes 21 (6d6) bludgeoning damage.</p>",
@@ -11498,7 +12553,7 @@
         }
       },
       {
-        "id": "act_bite_7g8c",
+        "id": "act_bite_hr8c",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +18 to hit, reach 5 ft., one target. {@h}29 (3d12 + 10) piercing damage. If the target is a Large or smaller creature grappled by Tromokratis, that creature is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside Tromokratis, and it takes 42 (12d6) acid damage at the start of each of Tromokratis's turns. If Tromokratis takes 50 damage or more on a single turn from a creature inside it, Tromokratis must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of Tromokratis. If Tromokratis dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
@@ -11534,7 +12589,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_8447",
+          "id": "act_move_okh0",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tromokratis moves up to half its speed.</p>",
@@ -11551,7 +12606,7 @@
           }
         },
         {
-          "id": "act_tail_l3wq",
+          "id": "act_tail_8425",
           "name": "Tail",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tromokratis makes one tail attack.</p>",
@@ -11568,7 +12623,7 @@
           }
         },
         {
-          "id": "act_bite__costs_3_actions__uxng",
+          "id": "act_bite__costs_3_actions__i9ld",
           "name": "Bite (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tromokratis makes one bite attack.</p>",
@@ -11650,12 +12705,38 @@
         "mod": -2
       }
     },
+    "str": 15,
+    "dex": 14,
+    "con": 14,
+    "int": 3,
+    "wis": 13,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+5",
+      "stealth": "+4"
+    },
     "skills": {
       "perception": "+5",
       "stealth": "+4"
     },
+    "immune": [
+      "fire",
+      "necrotic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "stunned"
+    ],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "darkvision 60 ft."
@@ -11667,7 +12748,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aggressive_01m6",
+        "id": "act_aggressive_gg6w",
         "name": "Aggressive",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, the cerberus can move up to its speed toward a hostile creature that it can see.</p>",
@@ -11684,7 +12765,7 @@
         }
       },
       {
-        "id": "act_multiheaded_imhy",
+        "id": "act_multiheaded_utj2",
         "name": "Multiheaded",
         "actionType": "trait",
         "descriptionHtml": "<p>The cerberus can't be surprised, and it has advantage on saving throws against being knocked unconscious.</p>",
@@ -11701,7 +12782,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_32pu",
+        "id": "act_pack_tactics_98tr",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The cerberus has advantage on an attack roll against a creature if at least one of the cerberus's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -11720,7 +12801,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rzwc",
+        "id": "act_multiattack_elj2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The cerberus makes two bite attacks.</p>",
@@ -11737,7 +12818,7 @@
         }
       },
       {
-        "id": "act_bite_nubk",
+        "id": "act_bite_kd5s",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage plus 2 (1d4) fire damage.</p>",
@@ -11763,7 +12844,7 @@
         }
       },
       {
-        "id": "act_breath_weapon__recharge_5__wbp5",
+        "id": "act_breath_weapon__recharge_5__6f9k",
         "name": "Breath Weapon (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The cerberus exhales a 15-foot cone of molten rock. Each creature in the cone must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed save, or half as much damage on a successful one. On a failed save, a creature is also restrained by the hardening rock. A creature can make a DC 12 Strength (Athletics) check as an action, freeing itself or a creature within reach from the rock on a success. The rock has AC 17 and 10 hit points, and it is immune to fire, poison, and psychic damage.</p>",
@@ -11859,11 +12940,29 @@
         "mod": 1
       }
     },
+    "str": 24,
+    "dex": 10,
+    "con": 20,
+    "int": 7,
+    "wis": 12,
+    "cha": 13,
     "proficiencyBonus": 5,
+    "save": {
+      "con": "+10"
+    },
     "saves": {
       "con": "+10"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "acid",
+      "necrotic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -11877,7 +12976,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_21rs",
+        "id": "act_keen_smell_mv3n",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The typhon has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -11894,7 +12993,7 @@
         }
       },
       {
-        "id": "act_regeneration_dabe",
+        "id": "act_regeneration_3mss",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The typhon regains 20 hit points at the start of its turn. If it takes radiant damage, this trait doesn't function at the start of its next turn. The typhon dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -11913,7 +13012,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j5w1",
+        "id": "act_multiattack_c288",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The typhon makes three attacks: one with its Flurry of Bites, one to constrict, and one with its maw.</p>",
@@ -11930,7 +13029,7 @@
         }
       },
       {
-        "id": "act_flurry_of_bites_zzbx",
+        "id": "act_flurry_of_bites_s9gw",
         "name": "Flurry of Bites",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 10 ft., one target. {@h}35 (8d6 + 7) piercing damage.</p>",
@@ -11952,7 +13051,7 @@
         }
       },
       {
-        "id": "act_constrict_l9c0",
+        "id": "act_constrict_z68k",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 15 ft., one Large or smaller creature. {@h}17 (3d6 + 7) bludgeoning damage, and the target is grappled (escape DC 19). Until this grapple ends, the target is restrained and takes 17 (3d6 + 7) bludgeoning damage at the start of each of its turns. The typhon can have up to two creatures constricted.</p>",
@@ -11981,7 +13080,7 @@
         }
       },
       {
-        "id": "act_maw_q4z5",
+        "id": "act_maw_yfij",
         "name": "Maw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 10 ft., one target. {@h}26 (3d12 + 7) piercing damage plus 19 (3d12) acid damage.</p>",
@@ -12078,13 +13177,40 @@
         "mod": -1
       }
     },
+    "str": 19,
+    "dex": 12,
+    "con": 18,
+    "int": 10,
+    "wis": 16,
+    "cha": 9,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "athletics": "+7",
+      "perception": "+9",
+      "stealth": "+4"
+    },
     "skills": {
       "athletics": "+7",
       "perception": "+9",
       "stealth": "+4"
     },
+    "immune": [
+      "fire",
+      "necrotic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "stunned"
+    ],
+    "passive": 19,
     "senses": {
       "passivePerception": 19,
       "sensesString": "truesight 30 ft."
@@ -12098,7 +13224,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aggressive_mbtb",
+        "id": "act_aggressive_1lai",
         "name": "Aggressive",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, the cerberus can move up to its speed toward a hostile creature that it can see.</p>",
@@ -12115,7 +13241,7 @@
         }
       },
       {
-        "id": "act_multiheaded_s8v6",
+        "id": "act_multiheaded_j7a5",
         "name": "Multiheaded",
         "actionType": "trait",
         "descriptionHtml": "<p>The cerberus can't be surprised, and it has advantage on saving throws against being knocked unconscious.</p>",
@@ -12132,7 +13258,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_d341",
+        "id": "act_pack_tactics_ln0y",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The cerberus has advantage on an attack roll against a creature if at least one of the cerberus's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -12151,7 +13277,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_q35z",
+        "id": "act_multiattack_lj4f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The cerberus makes three bite attacks.</p>",
@@ -12168,7 +13294,7 @@
         }
       },
       {
-        "id": "act_bite_qa8j",
+        "id": "act_bite_tqgw",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) piercing damage plus 3 (1d6) fire damage.</p>",
@@ -12194,7 +13320,7 @@
         }
       },
       {
-        "id": "act_breath_weapon__recharge_5__gk1k",
+        "id": "act_breath_weapon__recharge_5__17su",
         "name": "Breath Weapon (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The cerberus exhales a 30-foot cone of molten rock. Each creature in the cone must make a DC 15 Dexterity saving throw, taking 21 (6d6) fire damage on a failed save, or half as much damage on a successful one. On a failed save, a creature is also restrained by the hardening rock. A creature can make a DC 15 Strength (Athletics) check as an action, freeing itself or a creature within reach from the rock on a success. The rock has AC 17 and 20 hit points, and it is immune to fire, poison, and psychic damage.</p>",
@@ -12290,9 +13416,22 @@
         "mod": -3
       }
     },
+    "str": 20,
+    "dex": 14,
+    "con": 18,
+    "int": 6,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -12306,7 +13445,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_1bsg",
+        "id": "act_charge_if45",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the bull moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, the target takes an extra 19 (3d12) piercing damage.</p>",
@@ -12330,7 +13469,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_8xi7",
+        "id": "act_gore_8hv5",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}18 (2d12 + 5) piercing damage.</p>",
@@ -12423,9 +13562,22 @@
         "mod": -3
       }
     },
+    "str": 20,
+    "dex": 16,
+    "con": 18,
+    "int": 6,
+    "wis": 14,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -12439,7 +13591,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pounce_cd42",
+        "id": "act_pounce_d2x5",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the lion moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 15 Strength saving throw or be knocked prone. If the target is prone, the lion can make one bite attack against it as a bonus action.</p>",
@@ -12461,7 +13613,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_h7mw",
+        "id": "act_bite_va70",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}16 (2d10 + 5) piercing damage.</p>",
@@ -12483,7 +13635,7 @@
         }
       },
       {
-        "id": "act_claw_w6kg",
+        "id": "act_claw_xamg",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}14 (2d8 + 5) slashing damage.</p>",
@@ -12576,12 +13728,30 @@
         "mod": 2
       }
     },
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 8,
+    "wis": 14,
+    "cha": 14,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "intimidation": "+5",
+      "perception": "+5"
+    },
     "skills": {
       "intimidation": "+5",
       "perception": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "frightened"
+    ],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "darkvision 120 ft."
@@ -12595,7 +13765,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_cone_tp9j",
+        "id": "act_antimagic_cone_c9vr",
         "name": "Antimagic Cone",
         "actionType": "trait",
         "descriptionHtml": "<p>The woe strider's open mouth creates an area of antimagic, as in the antimagic field spell, in a 60-foot cone. At the start of each of its turns, the woe strider decides which way the cone faces and whether its mouth is open or closed.</p>",
@@ -12614,7 +13784,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ebn7",
+        "id": "act_multiattack_wf3l",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The woe strider makes two claw attacks and one bite attack. If both claws hit the same creature, the target is grappled (escape DC 14).</p>",
@@ -12634,7 +13804,7 @@
         }
       },
       {
-        "id": "act_claw_7e8z",
+        "id": "act_claw_yod1",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}7 (1d6 + 4) slashing damage plus 3 (1d6) psychic damage.</p>",
@@ -12660,7 +13830,7 @@
         }
       },
       {
-        "id": "act_bite_ndb0",
+        "id": "act_bite_hbqb",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one creature that is grappled, incapacitated, or restrained. {@h}13 (2d8 + 4) piercing damage plus 16 (3d10) psychic damage. In addition, each magic item the creature is carrying that isn't an artifact has its magical properties suppressed for 1 minute.</p>",

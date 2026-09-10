@@ -57,12 +57,38 @@
         "mod": 1
       }
     },
+    "str": 23,
+    "dex": 16,
+    "con": 18,
+    "int": 7,
+    "wis": 14,
+    "cha": 12,
     "proficiencyBonus": 4,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+6",
+      "stealth": "+7"
+    },
     "skills": {
       "perception": "+6",
       "stealth": "+7"
     },
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 90 ft."
@@ -77,7 +103,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_5hts",
+        "id": "act_multiattack_p6qr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes two attacks: one with its bite and one to constrict.</p>",
@@ -94,7 +120,7 @@
         }
       },
       {
-        "id": "act_bite_0br3",
+        "id": "act_bite_6n4h",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}22 (3d10 + 6) piercing damage.</p>",
@@ -116,7 +142,7 @@
         }
       },
       {
-        "id": "act_constrict_oa1u",
+        "id": "act_constrict_zz13",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one Large or smaller creature. {@h}17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the behir isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
@@ -145,7 +171,7 @@
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__gnmt",
+        "id": "act_lightning_breath__recharge_5__fsco",
         "name": "Lightning Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The behir exhales a line of lightning that is 20 feet long and 5 feet wide. Each creature in that line must make a DC 16 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -170,7 +196,7 @@
         }
       },
       {
-        "id": "act_swallow_fu2s",
+        "id": "act_swallow_a84v",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the behir, and it takes 21 (6d6) acid damage at the start of each of the behir's turns. A behir can have only one creature swallowed at a time.</p><p>If the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the behir. If the behir dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
@@ -266,13 +292,30 @@
         "mod": 1
       }
     },
+    "str": 10,
+    "dex": 10,
+    "con": 12,
+    "int": 13,
+    "wis": 16,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "medicine": "+7",
+      "persuasion": "+3",
+      "religion": "+5"
+    },
     "skills": {
       "medicine": "+7",
       "persuasion": "+3",
       "religion": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -553,7 +596,7 @@
     ],
     "traits": [
       {
-        "id": "act_divine_eminence_z94k",
+        "id": "act_divine_eminence_l1p7",
         "name": "Divine Eminence",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, the priest can expend a spell slot to cause its melee weapon attacks to magically deal an extra 10 (3d6) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If the priest expends a spell slot of 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>",
@@ -581,7 +624,7 @@
     ],
     "actions": [
       {
-        "id": "act_mace_kcv0",
+        "id": "act_mace_zavf",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage.</p>",
@@ -674,12 +717,28 @@
         "mod": 0
       }
     },
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "medicine": "+4",
+      "religion": "+2"
+    },
     "skills": {
       "medicine": "+4",
       "religion": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -850,7 +909,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_k342",
+        "id": "act_club_lqf5",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
@@ -943,11 +1002,26 @@
         "mod": -4
       }
     },
+    "str": 19,
+    "dex": 14,
+    "con": 12,
+    "int": 1,
+    "wis": 10,
+    "cha": 3,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+2"
+    },
     "skills": {
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "blindsight 10 ft."
@@ -959,7 +1033,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reach_a62h",
+        "id": "act_reach_ttun",
         "name": "Reach",
         "actionType": "trait",
         "descriptionHtml": "<p>The tentacle can reach anywhere in the room.</p>",
@@ -978,7 +1052,7 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_jlo7",
+        "id": "act_constrict_5ceq",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 35 ft., one creature. {@h}13 (2d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained, and the tentacle can't constrict another target.</p>",
@@ -1074,12 +1148,28 @@
         "mod": 0
       }
     },
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "medicine": "+4",
+      "religion": "+2"
+    },
     "skills": {
       "medicine": "+4",
       "religion": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1250,7 +1340,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_4pii",
+        "id": "act_club_oa58",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
@@ -1343,9 +1433,22 @@
         "mod": -1
       }
     },
+    "str": 13,
+    "dex": 12,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -1360,7 +1463,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_martial_advantage_2vcc",
+        "id": "act_martial_advantage_xru8",
         "name": "Martial Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, the hobgoblin can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the hobgoblin that isn't incapacitated.</p>",
@@ -1384,7 +1487,7 @@
     ],
     "actions": [
       {
-        "id": "act_longsword_dpcn",
+        "id": "act_longsword_eosy",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
@@ -1410,7 +1513,7 @@
         }
       },
       {
-        "id": "act_longbow_s5kj",
+        "id": "act_longbow_mwwp",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +3 to hit, range 150/600 ft., one target. {@h}5 (1d8 + 1) piercing damage.</p>",
@@ -1503,9 +1606,29 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 14,
+    "con": 15,
+    "int": 14,
+    "wis": 8,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [
+      "bludgeoning"
+    ],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": "darkvision 60 ft."
@@ -1520,7 +1643,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_shortsword_0c4b",
+        "id": "act_shortsword_ehjk",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -1542,7 +1665,7 @@
         }
       },
       {
-        "id": "act_shortbow_xt18",
+        "id": "act_shortbow_6tya",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -1635,11 +1758,29 @@
         "mod": 0
       }
     },
+    "str": 19,
+    "dex": 11,
+    "con": 19,
+    "int": 3,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+8"
+    },
     "skills": {
       "perception": "+8"
     },
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 18,
     "senses": {
       "passivePerception": 18,
       "sensesString": "darkvision 60 ft."
@@ -1654,7 +1795,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_nw71",
+        "id": "act_multiattack_nvqb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The chimera makes three attacks: one with its bite, one with its horns, and one with its claws. When its fire breath is available, it can use the breath in place of its bite or horns.</p>",
@@ -1671,7 +1812,7 @@
         }
       },
       {
-        "id": "act_bite_lmnr",
+        "id": "act_bite_n6sg",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) piercing damage.</p>",
@@ -1693,7 +1834,7 @@
         }
       },
       {
-        "id": "act_horns_h005",
+        "id": "act_horns_ss5b",
         "name": "Horns",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}10 (1d12 + 4) bludgeoning damage.</p>",
@@ -1715,7 +1856,7 @@
         }
       },
       {
-        "id": "act_claws_gb9k",
+        "id": "act_claws_rics",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
@@ -1737,7 +1878,7 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__25np",
+        "id": "act_fire_breath__recharge_5__g9ew",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon head exhales fire in a 15-foot cone. Each creature in that area must make a DC 15 Dexterity saving throw, taking 31 (7d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1833,12 +1974,28 @@
         "mod": -2
       }
     },
+    "str": 3,
+    "dex": 15,
+    "con": 10,
+    "int": 3,
+    "wis": 12,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+4"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -1850,7 +2007,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_o33m",
+        "id": "act_keen_smell_6jxw",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The cat has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -1869,7 +2026,7 @@
     ],
     "actions": [
       {
-        "id": "act_claws_pvat",
+        "id": "act_claws_311r",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 20 ft., one target. {@h}11 (2d10) slashing damage.</p>",
@@ -1962,9 +2119,22 @@
         "mod": -2
       }
     },
+    "str": 11,
+    "dex": 13,
+    "con": 12,
+    "int": 6,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -1979,7 +2149,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_b5sd",
+        "id": "act_axiomatic_mind_kxdu",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The duodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -1996,7 +2166,7 @@
         }
       },
       {
-        "id": "act_disintegration_kn1n",
+        "id": "act_disintegration_mmox",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the duodrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -2015,7 +2185,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bo9o",
+        "id": "act_multiattack_9viw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The duodrone makes two fist attacks or two javelin attacks.</p>",
@@ -2032,7 +2202,7 @@
         }
       },
       {
-        "id": "act_fist_n1o2",
+        "id": "act_fist_k8fh",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
@@ -2054,7 +2224,7 @@
         }
       },
       {
-        "id": "act_javelin_47c4",
+        "id": "act_javelin_zg2n",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +3 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}4 (1d6 + 1) piercing damage.</p>",
@@ -2147,9 +2317,22 @@
         "mod": -3
       }
     },
+    "str": 10,
+    "dex": 13,
+    "con": 12,
+    "int": 4,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -2164,7 +2347,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_cm7n",
+        "id": "act_axiomatic_mind_xdxs",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The monodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2181,7 +2364,7 @@
         }
       },
       {
-        "id": "act_disintegration_ss84",
+        "id": "act_disintegration_rgab",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the monodrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -2200,7 +2383,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_59x2",
+        "id": "act_dagger_90zf",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
@@ -2222,7 +2405,7 @@
         }
       },
       {
-        "id": "act_javelin_njnq",
+        "id": "act_javelin_0lwk",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +2 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}3 (1d6) piercing damage.</p>",
@@ -2315,11 +2498,26 @@
         "mod": 1
       }
     },
+    "str": 15,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -2334,7 +2532,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_g6uu",
+        "id": "act_axiomatic_mind_74uv",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The pentadrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2351,7 +2549,7 @@
         }
       },
       {
-        "id": "act_disintegration_bzjv",
+        "id": "act_disintegration_rzd8",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the pentadrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -2370,7 +2568,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uh4n",
+        "id": "act_multiattack_ka96",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The pentadrone makes five arm attacks.</p>",
@@ -2387,7 +2585,7 @@
         }
       },
       {
-        "id": "act_arm_6zov",
+        "id": "act_arm_y5x2",
         "name": "Arm",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
@@ -2409,7 +2607,7 @@
         }
       },
       {
-        "id": "act_paralysis_gas__recharge_5__vydi",
+        "id": "act_paralysis_gas__recharge_5__3233",
         "name": "Paralysis Gas (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The pentadrone exhales a 30-foot cone of gas. Each creature in that area must succeed on a DC 11 Constitution saving throw or be paralyzed for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -2500,11 +2698,26 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+2"
+    },
     "skills": {
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -2519,7 +2732,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_ecel",
+        "id": "act_axiomatic_mind_tlr3",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The quadrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2536,7 +2749,7 @@
         }
       },
       {
-        "id": "act_disintegration_8fyn",
+        "id": "act_disintegration_n9r1",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the quadrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -2555,7 +2768,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0n64",
+        "id": "act_multiattack_7h1n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The quadrone makes two fist attacks or four shortbow attacks.</p>",
@@ -2572,7 +2785,7 @@
         }
       },
       {
-        "id": "act_fist_px3g",
+        "id": "act_fist_aqc2",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
@@ -2594,7 +2807,7 @@
         }
       },
       {
-        "id": "act_shortbow_z1dn",
+        "id": "act_shortbow_2vr1",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -2687,9 +2900,22 @@
         "mod": -1
       }
     },
+    "str": 12,
+    "dex": 13,
+    "con": 12,
+    "int": 9,
+    "wis": 10,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -2704,7 +2930,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_c8so",
+        "id": "act_axiomatic_mind_nr9a",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The tridrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2721,7 +2947,7 @@
         }
       },
       {
-        "id": "act_disintegration_bszd",
+        "id": "act_disintegration_ta0x",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the tridrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -2740,7 +2966,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xylx",
+        "id": "act_multiattack_esie",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The tridrone makes three fist attacks or three javelin attacks.</p>",
@@ -2757,7 +2983,7 @@
         }
       },
       {
-        "id": "act_fist_3bp5",
+        "id": "act_fist_kt0f",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
@@ -2779,7 +3005,7 @@
         }
       },
       {
-        "id": "act_javelin_8r2c",
+        "id": "act_javelin_doo3",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +3 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}4 (1d6 + 1) piercing damage.</p>",
@@ -2872,9 +3098,28 @@
         "mod": -3
       }
     },
+    "str": 13,
+    "dex": 14,
+    "con": 11,
+    "int": 5,
+    "wis": 10,
+    "cha": 4,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 30 ft. (blind beyond this radius)"
@@ -2888,7 +3133,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_turn_immunity_40c0",
+        "id": "act_turn_immunity_p35q",
         "name": "Turn Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The claw is immune to effects that turn undead.</p>",
@@ -2907,7 +3152,7 @@
     ],
     "actions": [
       {
-        "id": "act_stomp_9ic2",
+        "id": "act_stomp_ggua",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
@@ -3000,8 +3245,24 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 15,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+5",
+      "insight": "+4",
+      "investigation": "+5",
+      "perception": "+6",
+      "persuasion": "+5",
+      "sleight of hand": "+4",
+      "stealth": "+4"
+    },
     "skills": {
       "deception": "+5",
       "insight": "+4",
@@ -3011,6 +3272,11 @@
       "sleight of hand": "+4",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": ""
@@ -3024,7 +3290,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_3gd3",
+        "id": "act_cunning_action_vu0q",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of its turns, the spy can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -3041,7 +3307,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__8ddj",
+        "id": "act_sneak_attack__1_turn__jy9b",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spy deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
@@ -3065,7 +3331,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hyvk",
+        "id": "act_multiattack_c64x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spy makes two melee attacks.</p>",
@@ -3082,7 +3348,7 @@
         }
       },
       {
-        "id": "act_shortsword_yhi2",
+        "id": "act_shortsword_ibxt",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -3104,7 +3370,7 @@
         }
       },
       {
-        "id": "act_hand_crossbow_jvpj",
+        "id": "act_hand_crossbow_z7qq",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -3197,9 +3463,26 @@
         "mod": -3
       }
     },
+    "str": 6,
+    "dex": 12,
+    "con": 12,
+    "int": 2,
+    "wis": 13,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -3212,7 +3495,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_3zce",
+        "id": "act_bite_rvm5",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one creature. {@h}3 (1d4 + 1) piercing damage, and the target must succeed on a DC 11 Constitution saving throw against being magically petrified. On a failed save, the creature begins to turn to stone and is restrained. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is petrified for 24 hours.</p>",

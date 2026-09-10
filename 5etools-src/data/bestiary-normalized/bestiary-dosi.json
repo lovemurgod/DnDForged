@@ -57,9 +57,27 @@
         "mod": 0
       }
     },
+    "str": 6,
+    "dex": 14,
+    "con": 12,
+    "int": 6,
+    "wis": 10,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -74,7 +92,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_udbe",
+        "id": "act_death_burst_m35x",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>When the fume drake dies, it explodes in a cloud of noxious fumes. Each creature within 5 feet of the fume drake must succeed on a DC 11 Constitution saving throw or take 4 (1d8) poison damage.</p>",
@@ -99,7 +117,7 @@
         }
       },
       {
-        "id": "act_unusual_nature_lpug",
+        "id": "act_unusual_nature_7qc1",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The fume drake doesn't require food, drink, or sleep.</p>",
@@ -118,7 +136,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_dcmg",
+        "id": "act_bite_ffvq",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) fire damage.</p>",
@@ -140,7 +158,7 @@
         }
       },
       {
-        "id": "act_scalding_breath___recharge__bbes",
+        "id": "act_scalding_breath___recharge__9goj",
         "name": "Scalding Breath {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The fume drake exhales a 15-foot cone of scalding steam. Each creature in that area must make a DC 11 Dexterity saving throw, taking 4 (1d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -236,12 +254,28 @@
         "mod": -1
       }
     },
+    "str": 7,
+    "dex": 14,
+    "con": 10,
+    "int": 15,
+    "wis": 7,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "arcana": "+4",
+      "perception": "+0"
+    },
     "skills": {
       "arcana": "+4",
       "perception": "+0"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -256,7 +290,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inquiring_mind__1_day__4vwa",
+        "id": "act_inquiring_mind__1_day__1s2x",
         "name": "Inquiring Mind (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold can cast detect magic, requiring no spell components and using Intelligence as the spellcasting ability.</p>",
@@ -273,7 +307,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_fk8z",
+        "id": "act_pack_tactics_29kr",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -290,7 +324,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_5c0p",
+        "id": "act_sunlight_sensitivity_jwaf",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the kobold has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -309,7 +343,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_rp9r",
+        "id": "act_dagger_tp1i",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
@@ -331,7 +365,7 @@
         }
       },
       {
-        "id": "act_alchemical_flame___recharge__3sl4",
+        "id": "act_alchemical_flame___recharge__fw7z",
         "name": "Alchemical Flame {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The kobold unleashes fire in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed saving throw, or half as much damage on a successful one.</p>",
@@ -427,9 +461,22 @@
         "mod": -1
       }
     },
+    "str": 16,
+    "dex": 10,
+    "con": 15,
+    "int": 8,
+    "wis": 10,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -445,7 +492,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_at7l",
+        "id": "act_amphibious_1sip",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
@@ -464,7 +511,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_33qq",
+        "id": "act_multiattack_1yd4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes two Rend attacks.</p>",
@@ -481,7 +528,7 @@
         }
       },
       {
-        "id": "act_rend_9rtg",
+        "id": "act_rend_53t2",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 10 ft., one target. {@h}8 (2d4 + 3) piercing damage.</p>",
@@ -574,12 +621,28 @@
         "mod": -1
       }
     },
+    "str": 7,
+    "dex": 14,
+    "con": 10,
+    "int": 15,
+    "wis": 7,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "arcana": "+4",
+      "perception": "+0"
+    },
     "skills": {
       "arcana": "+4",
       "perception": "+0"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -594,7 +657,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inquiring_mind__1_day__dx8q",
+        "id": "act_inquiring_mind__1_day__q9s7",
         "name": "Inquiring Mind (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold can cast detect magic, requiring no spell components and using Intelligence as the spellcasting ability.</p>",
@@ -611,7 +674,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_pj7c",
+        "id": "act_pack_tactics_t864",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -628,7 +691,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_dzp0",
+        "id": "act_sunlight_sensitivity_25a1",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the kobold has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -647,7 +710,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_5mun",
+        "id": "act_dagger_phv2",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
@@ -669,7 +732,7 @@
         }
       },
       {
-        "id": "act_alchemical_flame___recharge__d1fn",
+        "id": "act_alchemical_flame___recharge__em0t",
         "name": "Alchemical Flame {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The kobold unleashes fire in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed saving throw, or half as much damage on a successful one.</p>",
@@ -765,18 +828,42 @@
         "mod": 4
       }
     },
+    "str": 25,
+    "dex": 10,
+    "con": 23,
+    "int": 16,
+    "wis": 15,
+    "cha": 19,
     "proficiencyBonus": 5,
+    "save": {
+      "dex": "+5",
+      "con": "+11",
+      "wis": "+7",
+      "cha": "+9"
+    },
     "saves": {
       "dex": "+5",
       "con": "+11",
       "wis": "+7",
       "cha": "+9"
     },
+    "skill": {
+      "insight": "+7",
+      "perception": "+12",
+      "stealth": "+5"
+    },
     "skills": {
       "insight": "+7",
       "perception": "+12",
       "stealth": "+5"
     },
+    "immune": [
+      "lightning"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 22,
     "senses": {
       "passivePerception": 22,
       "sensesString": "blindsight 60 ft., darkvision 120 ft."
@@ -791,7 +878,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_9ze3",
+        "id": "act_amphibious_tv3k",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragon can breathe air and water.</p>",
@@ -808,7 +895,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__2c9q",
+        "id": "act_legendary_resistance__3_day__go2b",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
@@ -827,7 +914,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ozdp",
+        "id": "act_multiattack_7zbk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -844,7 +931,7 @@
         }
       },
       {
-        "id": "act_bite_qske",
+        "id": "act_bite_vn89",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 10 ft., one target. {@h}18 (2d10 + 7) piercing damage.</p>",
@@ -866,7 +953,7 @@
         }
       },
       {
-        "id": "act_claw_t91t",
+        "id": "act_claw_mdgf",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}14 (2d6 + 7) slashing damage.</p>",
@@ -888,7 +975,7 @@
         }
       },
       {
-        "id": "act_tail_p3fa",
+        "id": "act_tail_sp4u",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 15 ft., one target. {@h}16 (2d8 + 7) bludgeoning damage.</p>",
@@ -910,7 +997,7 @@
         }
       },
       {
-        "id": "act_frightful_presence_9ux3",
+        "id": "act_frightful_presence_4bkf",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
@@ -930,7 +1017,7 @@
         }
       },
       {
-        "id": "act_breath_weapons__recharge_5__hftw",
+        "id": "act_breath_weapons__recharge_5__di92",
         "name": "Breath Weapons (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon uses one of the following breath weapons.</p><ul><li><strong><em>Lightning Breath.</em></strong> <p>The dragon exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a DC 19 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p></li><li><strong><em>Repulsion Breath.</em></strong> <p>The dragon exhales repulsion energy in a 30-foot cone. Each creature in that area must succeed on a DC 19 Strength saving throw. On a failed save, the creature is pushed 60 feet away from the dragon.</p></li></ul>",
@@ -947,7 +1034,7 @@
         }
       },
       {
-        "id": "act_change_shape_q2ea",
+        "id": "act_change_shape_2h04",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon magically polymorphs into a humanoid or beast that has a challenge rating no higher than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the dragon's choice).</p><p>In a new form, the dragon retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.</p>",
@@ -973,7 +1060,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_tbex",
+        "id": "act_lair_action_81ue",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon creates fog as though it had cast the fog cloud spell. The fog lasts until initiative count 20 on the next round.</p>",
@@ -990,7 +1077,7 @@
         }
       },
       {
-        "id": "act_lair_action_4kry",
+        "id": "act_lair_action_njez",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>A thunderclap originates at a point the dragon can see within 120 feet of it. Each creature within a 20-foot radius centered on that point must make a DC 15 Constitution saving throw or take 5 (1d10) thunder damage and be deafened until the end of its next turn.</p>",
@@ -1015,7 +1102,7 @@
         }
       },
       {
-        "id": "act_additional_lair_actions_aewx",
+        "id": "act_additional_lair_actions_plen",
         "name": "Additional Lair Actions",
         "actionType": "lair",
         "descriptionHtml": "<p>At your discretion, a legendary (Adult Bronze Dragon or Ancient Bronze Dragon) bronze dragon can use one or more of the following additional lair actions while in its lair:</p><ul><li><strong><em>Ocean's Call.</em></strong> <p>The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a DC 15 Dexterity saving throw or take 5 (1d10) slashing damage; then the swarm vanishes.</p></li><li><strong><em>Salt Burst.</em></strong> <p>The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a DC 15 Dexterity saving throw or take 10 (3d6) slashing damage.</p></li><li><strong><em>Whelming Water.</em></strong> <p>The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a DC 15 Strength saving throw or be knocked prone.</p></li></ul>",
@@ -1095,9 +1182,22 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 10,
+    "con": 14,
+    "int": 13,
+    "wis": 15,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 120 ft."
@@ -1109,7 +1209,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_distress_spores_qxba",
+        "id": "act_distress_spores_udli",
         "name": "Distress Spores",
         "actionType": "trait",
         "descriptionHtml": "<p>When the myconid takes damage, all other myconids within 240 feet of it can sense its pain.</p>",
@@ -1126,7 +1226,7 @@
         }
       },
       {
-        "id": "act_sun_sickness_k3rz",
+        "id": "act_sun_sickness_89zx",
         "name": "Sun Sickness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the myconid has disadvantage on ability checks, attack rolls, and saving throws. The myconid dies if it spends more than 1 hour in direct sunlight.</p>",
@@ -1145,7 +1245,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_a3t3",
+        "id": "act_multiattack_1iam",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The myconid uses either its Hallucination Spores or its Pacifying Spores, then makes a fist attack.</p>",
@@ -1162,7 +1262,7 @@
         }
       },
       {
-        "id": "act_fist_vbwj",
+        "id": "act_fist_xtom",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}8 (3d4 + 1) bludgeoning damage plus 7 (3d4) poison damage.</p>",
@@ -1188,7 +1288,7 @@
         }
       },
       {
-        "id": "act_animating_spores__3_day__n4jw",
+        "id": "act_animating_spores__3_day__h8zx",
         "name": "Animating Spores (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The myconid targets one corpse of a humanoid or a Large or smaller beast within 5 feet of it and releases spores at the corpse. In 24 hours, the corpse rises as a spore servant. The corpse stays animated for 1d4 + 1 weeks or until destroyed, and it can't be animated again in this way.</p>",
@@ -1205,7 +1305,7 @@
         }
       },
       {
-        "id": "act_hallucination_spores_ofms",
+        "id": "act_hallucination_spores_zgm3",
         "name": "Hallucination Spores",
         "actionType": "action",
         "descriptionHtml": "<p>The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. The poisoned target is incapacitated while it hallucinates. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -1225,7 +1325,7 @@
         }
       },
       {
-        "id": "act_pacifying_spores_80k0",
+        "id": "act_pacifying_spores_3ia9",
         "name": "Pacifying Spores",
         "actionType": "action",
         "descriptionHtml": "<p>The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be stunned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -1245,7 +1345,7 @@
         }
       },
       {
-        "id": "act_rapport_spores_zw3u",
+        "id": "act_rapport_spores_yn3j",
         "name": "Rapport Spores",
         "actionType": "action",
         "descriptionHtml": "<p>A 30-foot radius of spores extends from the myconid. These spores can go around corners and affect only creatures with an Intelligence of 2 or higher that aren't undead, constructs, or elementals. Affected creatures can communicate telepathically with one another while they are within 30 feet of each other. The effect lasts for 1 hour.</p>",
@@ -1333,9 +1433,27 @@
         "mod": -5
       }
     },
+    "str": 17,
+    "dex": 13,
+    "con": 13,
+    "int": 2,
+    "wis": 6,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "frightened",
+      "paralyzed"
+    ],
+    "passive": 8,
     "senses": {
       "passivePerception": 8,
       "sensesString": "blindsight 30 ft. (blind beyond this radius)"
@@ -1347,7 +1465,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_8k3a",
+        "id": "act_hold_breath_nqbf",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>While out of water, the octopus can hold its breath for 1 hour.</p>",
@@ -1364,7 +1482,7 @@
         }
       },
       {
-        "id": "act_water_breathing_bxer",
+        "id": "act_water_breathing_v0yy",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>The octopus can breathe only underwater.</p>",
@@ -1383,7 +1501,7 @@
     ],
     "actions": [
       {
-        "id": "act_tentacles_h937",
+        "id": "act_tentacles_gbof",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 15 ft., one target {@h}7 (1d8 + 3) bludgeoning damage.</p>",
@@ -1476,14 +1594,32 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 16,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+5",
+      "insight": "+4",
+      "medicine": "+4",
+      "nature": "+3"
+    },
     "skills": {
       "deception": "+5",
       "insight": "+4",
       "medicine": "+4",
       "nature": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1500,7 +1636,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_frea",
+        "id": "act_multiattack_5s8x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Tarak makes three Dagger attacks.</p>",
@@ -1517,7 +1653,7 @@
         }
       },
       {
-        "id": "act_dagger_os8t",
+        "id": "act_dagger_vltg",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
@@ -1541,7 +1677,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_cunning_action_dl78",
+        "id": "act_cunning_action_y0c3",
         "name": "Cunning Action",
         "actionType": "bonus",
         "descriptionHtml": "<p>Tarak takes the Dash, Disengage, or Hide action.</p>",
@@ -1628,14 +1764,32 @@
         "mod": 0
       }
     },
+    "str": 16,
+    "dex": 13,
+    "con": 14,
+    "int": 10,
+    "wis": 11,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "athletics": "+5",
+      "history": "+2",
+      "perception": "+2",
+      "religion": "+2"
+    },
     "skills": {
       "athletics": "+5",
       "history": "+2",
       "perception": "+2",
       "religion": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1650,7 +1804,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_1ea6",
+        "id": "act_multiattack_g14j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Varnoth makes three Shortsword attacks.</p>",
@@ -1667,7 +1821,7 @@
         }
       },
       {
-        "id": "act_shortsword_6c54",
+        "id": "act_shortsword_21ru",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
@@ -1760,9 +1914,26 @@
         "mod": -5
       }
     },
+    "str": 3,
+    "dex": 1,
+    "con": 10,
+    "int": 1,
+    "wis": 3,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "deafened",
+      "frightened"
+    ],
+    "passive": 6,
     "senses": {
       "passivePerception": 6,
       "sensesString": "blindsight 30 ft. (blind beyond this radius)"
@@ -1774,7 +1945,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_t2o1",
+        "id": "act_false_appearance_425r",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the violet fungus remains motionless, it is indistinguishable from an ordinary fungus.</p>",
@@ -1793,7 +1964,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dudr",
+        "id": "act_multiattack_llww",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fungus makes 1d4 Rotting Touch attacks.</p>",
@@ -1810,7 +1981,7 @@
         }
       },
       {
-        "id": "act_rotting_touch_uaq9",
+        "id": "act_rotting_touch_j96z",
         "name": "Rotting Touch",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 10 ft., one creature. {@h}4 (1d8) necrotic damage.</p>",

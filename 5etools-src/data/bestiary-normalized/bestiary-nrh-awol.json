@@ -57,12 +57,28 @@
         "mod": -3
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 13,
+    "int": 8,
+    "wis": 12,
+    "cha": 4,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+7"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "blindsight 10 ft., darkvision 60 ft."
@@ -74,7 +90,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spider_climb_te53",
+        "id": "act_spider_climb_nmv3",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -91,7 +107,7 @@
         }
       },
       {
-        "id": "act_web_sense_5do6",
+        "id": "act_web_sense_8pc2",
         "name": "Web Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>While in contact with a web, the spider knows the exact location of any other creature in contact with the same web.</p>",
@@ -108,7 +124,7 @@
         }
       },
       {
-        "id": "act_web_walker_3hpt",
+        "id": "act_web_walker_s48a",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider ignores movement restrictions caused by webbing.</p>",
@@ -127,7 +143,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_cdsb",
+        "id": "act_bite_ilbb",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one creature. {@h}4 (1d6 + 1) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",

@@ -10,7 +10,7 @@ import zlib from 'zlib';
 
 import multer from 'multer';
 import cors from 'cors';
-import { createCampaignTemplate, updateMapProperty, isValidAssetPath } from './utils.js';
+import { createCampaignTemplate, updateMapProperty, isValidAssetPath, verifyPassword, hashPassword } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,25 +24,66 @@ const io = new Server(httpServer, {
   }
 });
 
+process.on('uncaughtException', (err) => {
+  console.error('[Server Error] Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Server Error] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Campaign data persistence directories
-const DATA_DIR = process.env.FORGEDVTT_DATA_DIR || path.join(__dirname, '.dndforged-data');
-const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
-const CAMPAIGNS_FILE = path.join(DATA_DIR, 'campaigns.json');
-const CHAT_FILE = path.join(DATA_DIR, 'chat-log.json');
+// Campaign data persistence directories (dynamic & changeable)
+let DATA_DIR = process.env.FORGEDVTT_DATA_DIR || path.join(__dirname, '.dndforged-data');
+let UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
+let CAMPAIGNS_FILE = path.join(DATA_DIR, 'campaigns.json');
+let CHAT_FILE = path.join(DATA_DIR, 'chat-log.json');
+let ASSETS_DIR = path.join(DATA_DIR, 'assets');
+let DISCORD_CACHE_DIR = path.join(DATA_DIR, 'discord-cache');
 
-// Ensure directories exist
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+function ensureDirectories() {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  if (!fs.existsSync(ASSETS_DIR)) fs.mkdirSync(ASSETS_DIR, { recursive: true });
+  if (!fs.existsSync(DISCORD_CACHE_DIR)) fs.mkdirSync(DISCORD_CACHE_DIR, { recursive: true });
+}
+ensureDirectories();
 
-const ASSETS_DIR = path.join(DATA_DIR, 'assets');
-if (!fs.existsSync(ASSETS_DIR)) fs.mkdirSync(ASSETS_DIR, { recursive: true });
+// Launcher configuration file & state
+let CONFIG_FILE = process.env.FORGEDVTT_CONFIG_FILE || path.join(path.dirname(DATA_DIR), 'forge-config.json');
+let serverConfig = {
+  gmCredentials: null
+};
 
-const DISCORD_CACHE_DIR = path.join(DATA_DIR, 'discord-cache');
-if (!fs.existsSync(DISCORD_CACHE_DIR)) fs.mkdirSync(DISCORD_CACHE_DIR, { recursive: true });
+function loadServerConfig() {
+  try {
+    if (fs.existsSync(CONFIG_FILE)) {
+      const parsed = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+      if (parsed.gmCredentials) serverConfig.gmCredentials = parsed.gmCredentials;
+    }
+  } catch (err) {
+    console.warn('[Server] Notice reading config:', err.message);
+  }
+}
+loadServerConfig();
+
+function setDatabaseDirectory(newDir) {
+  if (!newDir) return;
+  saveCampaigns(true);
+  saveChat(true);
+  DATA_DIR = newDir;
+  UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
+  CAMPAIGNS_FILE = path.join(DATA_DIR, 'campaigns.json');
+  CHAT_FILE = path.join(DATA_DIR, 'chat-log.json');
+  ASSETS_DIR = path.join(DATA_DIR, 'assets');
+  DISCORD_CACHE_DIR = path.join(DATA_DIR, 'discord-cache');
+  ensureDirectories();
+  loadDatabase();
+  console.log(`[Database] Dynamically switched active DATA_DIR to: ${DATA_DIR}`);
+}
+
 
 // Helper to extract subdomain slug from Host header
 function extractSubdomain(hostHeader) {
@@ -156,10 +197,12 @@ app.use('/vtt-uploads', (req, res, next) => {
   res.status(404).send('Upload file not found');
 });
 
-app.use('/assets', express.static(ASSETS_DIR));
+app.use('/assets', (req, res, next) => {
+  express.static(ASSETS_DIR)(req, res, next);
+});
 
-// Local Image Route for /img/* (Tokens, Bestiary, Items, Adventure Maps)
-app.get('/img/*', (req, res, next) => {
+// Local Image Route for /img/* (Tokens, Bestiary, Items, Adventure Maps) with On-Demand Mirror Fallback
+app.get('/img/*', async (req, res, next) => {
   let decodedPath;
   try {
     decodedPath = decodeURIComponent(req.path);
@@ -196,6 +239,57 @@ app.get('/img/*', (req, res, next) => {
     if (fs.existsSync(spaceVariant) && fs.statSync(spaceVariant).isFile()) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
       return res.sendFile(spaceVariant);
+    }
+  }
+
+  // 4. On-demand Mirror Fetch & Cache:
+  // Strip '/img/' or 'img/' prefix to get repo-relative path (e.g., 'bestiary/tokens/GGR/Horncaller.webp')
+  const cleanRel = safePath.replace(/^[\\/]?img[\\/]/i, '').replace(/\\/g, '/');
+  const candidates = [
+    `https://raw.githubusercontent.com/5etools-mirror-2/5etools-img/main/${encodeURI(cleanRel)}`,
+    `https://5e.tools/img/${encodeURI(cleanRel)}`,
+    `https://raw.githubusercontent.com/5etools-mirror-1/5etools-img/main/${encodeURI(cleanRel)}`
+  ];
+
+  if (cleanRel.includes(' ')) {
+    const hyp = cleanRel.replace(/ /g, '-');
+    candidates.push(`https://raw.githubusercontent.com/5etools-mirror-2/5etools-img/main/${encodeURI(hyp)}`);
+    candidates.push(`https://5e.tools/img/${encodeURI(hyp)}`);
+  } else if (cleanRel.includes('-')) {
+    const spc = cleanRel.replace(/-/g, ' ');
+    candidates.push(`https://raw.githubusercontent.com/5etools-mirror-2/5etools-img/main/${encodeURI(spc)}`);
+    candidates.push(`https://5e.tools/img/${encodeURI(spc)}`);
+  }
+
+  for (const mirrorUrl of candidates) {
+    try {
+      const response = await fetch(mirrorUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(8000)
+      });
+
+      if (response.ok) {
+        const buf = Buffer.from(await response.arrayBuffer());
+        if (buf.length > 50) {
+          const dir = path.dirname(localTarget);
+          if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+          fs.writeFileSync(localTarget, buf);
+
+          const ext = path.extname(localTarget).toLowerCase();
+          const mimeType = ext === '.webp' ? 'image/webp'
+            : ext === '.png' ? 'image/png'
+            : ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg'
+            : ext === '.svg' ? 'image/svg+xml'
+            : ext === '.gif' ? 'image/gif'
+            : response.headers.get('content-type') || 'application/octet-stream';
+
+          res.setHeader('Content-Type', mimeType);
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          return res.send(buf);
+        }
+      }
+    } catch (e) {
+      // Try next mirror candidate
     }
   }
 
@@ -782,6 +876,50 @@ function getOrCreateCampaign(campId) {
   return campaigns[campId];
 }
 
+// Server Config Sync & Data Directory API
+app.get('/api/server/data-dir', (req, res) => {
+  res.json({ success: true, activeDataDir: DATA_DIR });
+});
+
+app.post('/api/server/data-dir', (req, res) => {
+  const { dataDir } = req.body;
+  if (!dataDir) return res.status(400).json({ error: "dataDir required" });
+  try {
+    setDatabaseDirectory(dataDir);
+    res.json({ success: true, activeDataDir: DATA_DIR });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/server/sync-config', (req, res) => {
+  const { gmCredentials } = req.body;
+  if (gmCredentials !== undefined) {
+    serverConfig.gmCredentials = gmCredentials;
+    console.log('[Server] Synced GM credentials from launcher:', gmCredentials?.username ? `GM user=${gmCredentials.username}` : 'Cleared');
+  }
+  res.json({ success: true });
+});
+
+// Check if username requires GM password
+app.get('/api/gm-auth-required', (req, res) => {
+  const checkUser = (req.query.username || '').trim().toLowerCase();
+  const gmUser = (serverConfig.gmCredentials?.username || '').trim().toLowerCase();
+  const hasGmPassword = !!serverConfig.gmCredentials?.hash;
+
+  if (gmUser && checkUser === gmUser) {
+    return res.json({
+      required: true,
+      hasPassword: hasGmPassword,
+      gmUsername: serverConfig.gmCredentials.username
+    });
+  }
+  return res.json({
+    required: false,
+    hasPassword: false
+  });
+});
+
 // REST APIs
 // Get campaign list
 app.get('/api/campaigns', (req, res) => {
@@ -789,7 +927,16 @@ app.get('/api/campaigns', (req, res) => {
   if (sub) {
     getOrCreateCampaign(sub);
   }
-  const campaignsList = Object.values(campaigns).map(c => ({ id: c.id, name: c.name }));
+  const campaignsList = Object.values(campaigns).map(c => ({
+    id: c.id,
+    name: c.name,
+    description: c.description || '',
+    allowedUsers: c.allowedUsers || [],
+    knownPlayers: c.knownPlayers || [],
+    activeMapId: c.activeMapId,
+    mapsCount: Object.keys(c.maps || {}).length,
+    playersCount: (c.knownPlayers || []).length
+  }));
   res.json({
     activeSubdomain: sub || null,
     campaigns: campaignsList
@@ -804,12 +951,52 @@ app.get('/api/campaigns/:id', (req, res) => {
 
 // Create new campaign
 app.post('/api/campaigns', (req, res) => {
-  const { name } = req.body;
-  if (!name) return res.status(400).json({ error: "Campaign name required" });
-  const id = name.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
-  campaigns[id] = createCampaignTemplate(id, name);
+  const { name, description, allowedUsers } = req.body;
+  if (!name || !name.trim()) return res.status(400).json({ error: "Campaign name required" });
+  const id = name.trim().toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
+  const newCamp = createCampaignTemplate(id, name.trim());
+  if (description) newCamp.description = description;
+  if (Array.isArray(allowedUsers)) newCamp.allowedUsers = allowedUsers;
+  campaigns[id] = newCamp;
   saveCampaigns();
   res.json(campaigns[id]);
+});
+
+// Update existing campaign metadata
+app.put('/api/campaigns/:id', (req, res) => {
+  const campId = req.params.id;
+  const campaign = campaigns[campId];
+  if (!campaign) return res.status(404).json({ error: "Campaign not found" });
+
+  const { name, description, allowedUsers } = req.body;
+  if (name && name.trim()) {
+    campaign.name = name.trim();
+  }
+  if (description !== undefined) {
+    campaign.description = description;
+  }
+  if (Array.isArray(allowedUsers)) {
+    campaign.allowedUsers = allowedUsers;
+  }
+  saveCampaigns();
+  broadcastCampaignSync(campId);
+  res.json(campaign);
+});
+
+// Delete campaign
+app.delete('/api/campaigns/:id', (req, res) => {
+  const campId = req.params.id;
+  if (!campaigns[campId]) return res.status(404).json({ error: "Campaign not found" });
+
+  // Prevent deleting if it's the only campaign
+  const keys = Object.keys(campaigns);
+  if (keys.length <= 1) {
+    return res.status(400).json({ error: "Cannot delete the only campaign. Create another campaign first." });
+  }
+
+  delete campaigns[campId];
+  saveCampaigns(true);
+  res.json({ success: true, deletedId: campId });
 });
 
 // Upload media file (map/token image)
@@ -1126,6 +1313,70 @@ app.get('/api/chat', (req, res) => {
   res.json(log.slice(-100)); // Send last 100 entries
 });
 
+// Returns a minimal, high-performance campaign state slice tailored to the client's role.
+// Inactive maps have heavy collections (walls, notes, non-background tokens, lights, shapes)
+// stripped, ensuring payloads stay far below Cloudflare's 1MB WebSocket frame limit (<50KB).
+function getSanitizedCampaignSync(camp, role, username) {
+  if (!camp) return null;
+  const cloned = JSON.parse(JSON.stringify(camp));
+
+  // Determine which map IDs need full data for this user
+  const activeIds = new Set();
+  if (camp.activeMapId) activeIds.add(camp.activeMapId);
+  if (role === 'GM' && camp.activeGMMapId) activeIds.add(camp.activeGMMapId);
+  if (role !== 'GM' && camp.playerMapOverrides && camp.playerMapOverrides[username]) {
+    activeIds.add(camp.playerMapOverrides[username]);
+  }
+
+  if (cloned.maps) {
+    for (const mapId in cloned.maps) {
+      if (!activeIds.has(mapId)) {
+        const m = cloned.maps[mapId];
+        // Retain background token if present so thumbnail / dimensions work
+        const bgTokens = {};
+        if (m.tokens) {
+          for (const tid in m.tokens) {
+            const tok = m.tokens[tid];
+            if (tok.layer === 'map' || tok.isBackground) {
+              bgTokens[tid] = tok;
+            }
+          }
+        }
+        cloned.maps[mapId] = {
+          id: m.id,
+          name: m.name,
+          mapImage: m.mapImage || '',
+          thumbnail: m.thumbnail || m.mapImage || '',
+          gridWidth: m.gridWidth,
+          gridHeight: m.gridHeight,
+          grid: m.grid,
+          lightingSettings: m.lightingSettings,
+          tokens: bgTokens,
+          walls: [],
+          notes: [],
+          lights: [],
+          shapes: {}
+        };
+      }
+    }
+  }
+  return cloned;
+}
+
+// Broadcasts campaign:state-sync to each client in the room tailored to their view
+function broadcastCampaignSync(campaignId) {
+  const camp = campaigns[campaignId];
+  if (!camp) return;
+  const room = io.sockets.adapter.rooms.get(campaignId);
+  if (!room) return;
+  for (const socketId of room) {
+    const s = io.sockets.sockets.get(socketId);
+    if (s) {
+      s.emit('campaign:state-sync', getSanitizedCampaignSync(camp, s.role, s.username));
+    }
+  }
+}
+
 // WebSocket Synchronizer
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
@@ -1133,7 +1384,7 @@ io.on('connection', (socket) => {
   const socketSubdomain = extractSubdomain(socket.handshake.headers.host);
 
   // Handle player/GM registration to a campaign room
-  socket.on('join', ({ campaignId, username, role, isSubWindow }) => {
+  socket.on('join', ({ campaignId, username, role, isSubWindow, gmPassword }) => {
     let targetCampaignId = campaignId || socketSubdomain || 'default';
 
     if (!campaigns[targetCampaignId]) {
@@ -1141,24 +1392,55 @@ io.on('connection', (socket) => {
     }
     const activeCampId = targetCampaignId;
 
-    // Auto-GM logic: first GM to join the campaign sets gmUsername
-    if (!campaigns[activeCampId].gmUsername) {
-        if (role === 'GM') {
-            campaigns[activeCampId].gmUsername = username;
-            saveCampaigns();
+    const globalGmUser = (serverConfig.gmCredentials?.username || '').trim();
+    const hasGlobalGm = !!globalGmUser;
+
+    // GM Role verification
+    if (role === 'GM') {
+      if (hasGlobalGm) {
+        if (username.trim().toLowerCase() !== globalGmUser.toLowerCase()) {
+          socket.emit('join_rejected', { reason: "You are not the designated Game Master for this server." });
+          socket.disconnect(true);
+          return;
         }
+        if (serverConfig.gmCredentials?.hash) {
+          const isValid = verifyPassword(gmPassword || '', serverConfig.gmCredentials.salt, serverConfig.gmCredentials.hash);
+          if (!isValid) {
+            socket.emit('join_rejected', { reason: "Incorrect GM Password.", code: "INVALID_PASSWORD" });
+            socket.disconnect(true);
+            return;
+          }
+        }
+        // Authoritative GM: update campaign's assigned GM username to authenticated GM
+        if (campaigns[activeCampId].gmUsername !== username) {
+          campaigns[activeCampId].gmUsername = username;
+          saveCampaigns();
+        }
+      } else {
+        // Fallback to per-campaign auto-GM logic if no global GM is set
+        if (!campaigns[activeCampId].gmUsername) {
+          campaigns[activeCampId].gmUsername = username;
+          saveCampaigns();
+        } else if (username !== campaigns[activeCampId].gmUsername) {
+          socket.emit('join_rejected', { reason: "You are not the Game Master for this campaign." });
+          socket.disconnect(true);
+          return;
+        }
+      }
     }
 
-    if (role === 'GM' && campaigns[activeCampId].gmUsername && username !== campaigns[activeCampId].gmUsername) {
-        socket.emit('join_rejected', { reason: "You are not the Game Master for this campaign." });
-        socket.disconnect(true);
-        return;
-    }
-
-    if (role === 'Player' && username === campaigns[activeCampId].gmUsername) {
+    // Prevent players from taking the GM's username
+    if (role === 'Player') {
+      if (hasGlobalGm && username.trim().toLowerCase() === globalGmUser.toLowerCase()) {
         socket.emit('join_rejected', { reason: "That username is reserved for the Game Master." });
         socket.disconnect(true);
         return;
+      }
+      if (campaigns[activeCampId].gmUsername && username === campaigns[activeCampId].gmUsername) {
+        socket.emit('join_rejected', { reason: "That username is reserved for the Game Master." });
+        socket.disconnect(true);
+        return;
+      }
     }
 
     let finalRole = role;
@@ -1188,9 +1470,11 @@ io.on('connection', (socket) => {
     
     console.log(`${username} joined campaign ${activeCampId} as ${finalRole}${socket.isSubWindow ? ' (Sub-Window)' : ''}`);
 
-    // Welcome user and send current state
+    // Welcome user and send current state (sanitized to avoid 1MB websocket limit)
     socket.emit('joined', {
-      campaignState: campaigns[activeCampId] || null,
+      role: finalRole,
+      userRole: finalRole,
+      campaignState: getSanitizedCampaignSync(campaigns[activeCampId], finalRole, username),
       chatHistory: (chatLogs[activeCampId] || []).slice(-50)
     });
 
@@ -1249,7 +1533,21 @@ io.on('connection', (socket) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
     
-    const mapId = data.mapId || campaigns[campaignId].activeMapId;
+    const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
+
+    // Handle single token format { token } gracefully
+    if (data.token && data.token.id && !data.tokens) {
+      if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
+        if (!campaigns[campaignId].maps[mapId].tokens) campaigns[campaignId].maps[mapId].tokens = {};
+        const cloned = JSON.parse(JSON.stringify(data.token));
+        if (cloned._animReq) delete cloned._animReq;
+        campaigns[campaignId].maps[mapId].tokens[data.token.id] = cloned;
+        saveCampaigns();
+      }
+      io.to(campaignId).emit('token:updated_delta', { mapId, tokenId: data.token.id, changes: data.token, origin: socket.id });
+      return;
+    }
+
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
       const cloned = JSON.parse(JSON.stringify(data.tokens || {}));
       for (const id in cloned) {
@@ -1268,7 +1566,7 @@ io.on('connection', (socket) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
     
-    const mapId = data.mapId || campaigns[campaignId].activeMapId;
+    const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
       const cloned = JSON.parse(JSON.stringify(data.token || {}));
       if (cloned._animReq) delete cloned._animReq;
@@ -1284,7 +1582,7 @@ io.on('connection', (socket) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
     
-    const mapId = data.mapId || campaigns[campaignId].activeMapId;
+    const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
       const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
       if (existingToken) {
@@ -1302,7 +1600,7 @@ io.on('connection', (socket) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
     
-    const mapId = data.mapId || campaigns[campaignId].activeMapId;
+    const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
       delete campaigns[campaignId].maps[mapId].tokens[data.tokenId];
       saveCampaigns();
@@ -1344,7 +1642,7 @@ io.on('connection', (socket) => {
     if (data.mapId && data.updates && campaigns[campaignId].maps[data.mapId]) {
       Object.assign(campaigns[campaignId].maps[data.mapId], data.updates);
       saveCampaigns();
-      io.to(campaignId).emit('campaign:state-sync', campaigns[campaignId]);
+      broadcastCampaignSync(campaignId);
     }
   });
 
@@ -1478,7 +1776,7 @@ io.on('connection', (socket) => {
     saveCampaigns();
 
     console.log(`[map:create] SUCCESS: created map "${newMap.name}" (${mapId}), broadcasting campaign:state-sync to room ${campaignId}`);
-    io.to(campaignId).emit('campaign:state-sync', campaigns[campaignId]);
+    broadcastCampaignSync(campaignId);
   });
 
   // Rename a map (GM only)
@@ -1493,7 +1791,7 @@ io.on('connection', (socket) => {
       saveCampaigns();
     }
 
-    io.to(campaignId).emit('campaign:state-sync', campaigns[campaignId]);
+    broadcastCampaignSync(campaignId);
   });
 
   // Delete a map (GM only)
@@ -1515,7 +1813,7 @@ io.on('connection', (socket) => {
       saveCampaigns();
     }
 
-    io.to(campaignId).emit('campaign:state-sync', camp);
+    broadcastCampaignSync(campaignId);
   });
 
   // GM switches local viewed map (GM only)
@@ -1531,7 +1829,7 @@ io.on('connection', (socket) => {
       saveCampaigns();
     }
 
-    socket.emit('campaign:state-sync', camp);
+    socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username));
   });
 
   // Activate map for players (GM only)
@@ -1559,7 +1857,17 @@ io.on('connection', (socket) => {
       saveCampaigns();
     }
 
-    io.to(campaignId).emit('campaign:state-sync', camp);
+    broadcastCampaignSync(campaignId);
+  });
+
+  // Client requests full data for a specific map
+  socket.on('map:request_sync', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    const targetMapId = data?.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
+    if (campaigns[campaignId].maps && campaigns[campaignId].maps[targetMapId]) {
+      socket.emit('map:full_data', { mapId: targetMapId, map: campaigns[campaignId].maps[targetMapId] });
+    }
   });
 
     // Sync chat message & dice rolls

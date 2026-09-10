@@ -57,12 +57,30 @@
         "mod": 4
       }
     },
+    "str": 23,
+    "dex": 16,
+    "con": 21,
+    "int": 18,
+    "wis": 17,
+    "cha": 18,
     "proficiencyBonus": 5,
+    "save": {
+      "dex": "+8",
+      "con": "+10",
+      "wis": "+8",
+      "cha": "+9"
+    },
     "saves": {
       "dex": "+8",
       "con": "+10",
       "wis": "+8",
       "cha": "+9"
+    },
+    "skill": {
+      "history": "+9",
+      "perception": "+13",
+      "persuasion": "+14",
+      "stealth": "+8"
     },
     "skills": {
       "history": "+9",
@@ -70,6 +88,15 @@
       "persuasion": "+14",
       "stealth": "+8"
     },
+    "immune": [
+      "thunder"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "frightened"
+    ],
+    "passive": 23,
     "senses": {
       "passivePerception": 23,
       "sensesString": "blindsight 60 ft., darkvision 120 ft."
@@ -172,7 +199,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__x3ht",
+        "id": "act_legendary_resistance__2_day__qate",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
@@ -189,7 +216,7 @@
         }
       },
       {
-        "id": "act_spider_climb_5myy",
+        "id": "act_spider_climb_u64t",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragon can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -206,7 +233,7 @@
         }
       },
       {
-        "id": "act_tunneler_o3lz",
+        "id": "act_tunneler_ubga",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragon can burrow through solid rock at half its burrow speed and can choose to leave a 10-foot-diameter tunnel in its wake.</p>",
@@ -225,7 +252,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_e29s",
+        "id": "act_multiattack_r69e",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes two melee attacks, one with its bite and one with its claws.</p>",
@@ -242,7 +269,7 @@
         }
       },
       {
-        "id": "act_bite_5l6f",
+        "id": "act_bite_ka2f",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}17 (2d10 + 6) piercing damage plus 3 (1d6) thunder damage.</p>",
@@ -268,7 +295,7 @@
         }
       },
       {
-        "id": "act_claws_56xd",
+        "id": "act_claws_8dem",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}19 (3d8 + 6) slashing damage.</p>",
@@ -290,7 +317,7 @@
         }
       },
       {
-        "id": "act_tail_va28",
+        "id": "act_tail_wgxa",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}15 (2d8 + 6) bludgeoning damage.</p>",
@@ -312,7 +339,7 @@
         }
       },
       {
-        "id": "act_frightful_presence_t48a",
+        "id": "act_frightful_presence_xrs5",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
@@ -332,7 +359,7 @@
         }
       },
       {
-        "id": "act_debilitating_breath__recharge_5__gw7g",
+        "id": "act_debilitating_breath__recharge_5__rqu3",
         "name": "Debilitating Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales a pulse of high-pitched, nearly inaudible sound in a 60-foot-cone. Each creature in that cone must make a DC 18 Constitution saving throw. On a failed save, the creature takes 45 (13d6) thunder damage and is incapacitated until the end of its next turn. On a successful save, the creature takes half as much damage and isn't incapacitated.</p>",
@@ -364,7 +391,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_tail_attack_xt3u",
+          "id": "act_tail_attack_fyi6",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a tail attack.</p>",
@@ -381,7 +408,7 @@
           }
         },
         {
-          "id": "act_telekinetic_fling_t851",
+          "id": "act_telekinetic_fling_528s",
           "name": "Telekinetic Fling",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon chooses a Small or smaller object that isn't being worn or carried that it can see within 60 feet of it, and magically hurls the object at a creature it can see within 60 feet of the object. The target must succeed on a DC 17 Dexterity saving throw or take 15 (4d6) bludgeoning damage.</p>",
@@ -406,7 +433,7 @@
           }
         },
         {
-          "id": "act_teleport__costs_2_actions__tn37",
+          "id": "act_teleport__costs_2_actions__agm3",
           "name": "Teleport (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon magically teleports to an unoccupied space it can see within 30 feet of it.</p>",
@@ -426,7 +453,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_1f6i",
+        "id": "act_lair_action_xpbx",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon targets a creature within 120 feet of it that can hear and understand it. The creature must succeed on a DC 15 Wisdom saving throw or be charmed by the dragon until initiative count 20 on the following round. A creature charmed in this way obeys to the best of its ability any command the dragon issues that isn't directly harmful to itself.</p>",
@@ -446,7 +473,7 @@
         }
       },
       {
-        "id": "act_lair_action_dqcp",
+        "id": "act_lair_action_kgrj",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon touches a section of stone up to 10 feet in any dimension. The dragon can form the stone into any shape that suits its purpose.</p>",
@@ -463,7 +490,7 @@
         }
       },
       {
-        "id": "act_lair_action_xx11",
+        "id": "act_lair_action_bom7",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>A wall of stone springs into existence on a solid surface within 120 feet of the dragon. The wall is up to 60 feet long, 10 feet high, and 1 foot thick. When the wall appears, each creature in its space is pushed to either side of the wall the creature wants. Each 5-foot section of wall has AC 17, 20 hit points, vulnerability to thunder damage, and immunity to poison and psychic damage. The wall vanishes when the dragon uses this lair action again or when the dragon dies.</p>",

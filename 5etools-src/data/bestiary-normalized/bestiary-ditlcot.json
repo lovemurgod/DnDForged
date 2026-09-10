@@ -57,16 +57,38 @@
         "mod": 0
       }
     },
+    "str": 19,
+    "dex": 11,
+    "con": 18,
+    "int": 11,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+6",
+      "wis": "+4"
+    },
     "saves": {
       "con": "+6",
       "wis": "+4"
+    },
+    "skill": {
+      "athletics": "+6",
+      "perception": "+4",
+      "survival": "+4"
     },
     "skills": {
       "athletics": "+6",
       "perception": "+4",
       "survival": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "petrified"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 120 ft., tremorsense 120 ft."
@@ -188,7 +210,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_n7hq",
+        "id": "act_magic_resistance_4w90",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The pech has advantage on saving throws against spells and other magical effects.</p>",
@@ -205,7 +227,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_cn2f",
+        "id": "act_sunlight_sensitivity_zbok",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the pech has disadvantage on attack rolls.</p>",
@@ -224,7 +246,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_icoo",
+        "id": "act_multiattack_8fhk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The pech makes two Fortified Pickaxe attacks. If it hits a Large or smaller creature with both attacks, the target must succeed on a DC 14 Strength saving throw or have the prone condition.</p>",
@@ -244,7 +266,7 @@
         }
       },
       {
-        "id": "act_fortified_pickaxe_4vqn",
+        "id": "act_fortified_pickaxe_md9z",
         "name": "Fortified Pickaxe",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) force damage. If the target is a Construct or an object, the attack is automatically a critical hit.</p>",

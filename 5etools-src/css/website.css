@@ -138,6 +138,19 @@ body {
     transform: scale(1.06);
 }
 
+.nav-brand-text-logo {
+    height: 38px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+    transition: transform 0.25s ease;
+}
+
+.nav-brand:hover .nav-brand-text-logo {
+    transform: scale(1.04);
+}
+
 .nav-brand-text {
     font-family: var(--font-heading);
     font-size: 1.35rem;
@@ -503,8 +516,9 @@ body {
 }
 
 .hero-logo-img {
-    max-width: 480px;
-    width: 90%;
+    max-width: 260px;
+    max-height: 260px;
+    width: 80%;
     height: auto;
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 25px rgba(223, 160, 30, 0.25));
     animation: heroFloat 6s ease-in-out infinite alternate;
@@ -1467,7 +1481,8 @@ body {
         margin-bottom: 25px;
     }
     .hero-logo-img {
-        max-width: 320px;
+        max-width: 200px;
+        max-height: 200px;
     }
     .connect-box {
         padding: 18px;

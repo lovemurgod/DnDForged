@@ -57,9 +57,24 @@
         "mod": -1
       }
     },
+    "str": 16,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 10,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 120 ft."
@@ -74,7 +89,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_duergar_resilience_9i3c",
+        "id": "act_duergar_resilience_itua",
         "name": "Duergar Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>The Dankwood duergar has advantage on saving throws against poison, spells, and illusions, as well as to resist being charmed or paralyzed.</p>",
@@ -91,7 +106,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_x28c",
+        "id": "act_sunlight_sensitivity_bhxt",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Dankwood duergar has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -110,7 +125,7 @@
     ],
     "actions": [
       {
-        "id": "act_verbal_jab_30il",
+        "id": "act_verbal_jab_1tft",
         "name": "Verbal Jab",
         "actionType": "action",
         "descriptionHtml": "<p>The duergar unleashes a string of insults laced with subtle enchantments at a creature they can see within 60 feet. If the creature can hear them (it doesn't need to understand them), it must succeed on a DC 12 Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn.</p>",
@@ -135,7 +150,7 @@
         }
       },
       {
-        "id": "act_haymaker_w2hj",
+        "id": "act_haymaker_1mkb",
         "name": "Haymaker",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}9 (1d6 + 6) bludgeoning damage. If the duergar is enlarged, increase their damage to 10 (2d6 + 3) bludgeoning damage.</p>",
@@ -232,9 +247,24 @@
         "mod": 2
       }
     },
+    "str": 7,
+    "dex": 16,
+    "con": 15,
+    "int": 10,
+    "wis": 11,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5"
+    },
     "saves": {
       "dex": "+5"
+    },
+    "skill": {
+      "athletics": "+2",
+      "intimidation": "+4",
+      "perception": "+2",
+      "stealth": "+5"
     },
     "skills": {
       "athletics": "+2",
@@ -242,6 +272,15 @@
       "perception": "+2",
       "stealth": "+5"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -255,7 +294,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_3mdx",
+        "id": "act_amphibious_7f8d",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung can breathe air and water.</p>",
@@ -272,7 +311,7 @@
         }
       },
       {
-        "id": "act_poisonous_skin_ym51",
+        "id": "act_poisonous_skin_hzuj",
         "name": "Poisonous Skin",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. A poisoned creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -292,7 +331,7 @@
         }
       },
       {
-        "id": "act_standing_leap_0fy1",
+        "id": "act_standing_leap_c3l4",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start.</p>",
@@ -311,7 +350,7 @@
     ],
     "actions": [
       {
-        "id": "act_grumpy_grung_growl_izpz",
+        "id": "act_grumpy_grung_growl_sdwy",
         "name": "Grumpy Grung Growl",
         "actionType": "action",
         "descriptionHtml": "<p>A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a DC 12 Charisma saving throw or be frightened until the end of their next turn.</p>",
@@ -331,7 +370,7 @@
         }
       },
       {
-        "id": "act_dagger_wq6l",
+        "id": "act_dagger_mb3t",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +0 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
@@ -435,9 +474,24 @@
         "mod": 2
       }
     },
+    "str": 7,
+    "dex": 16,
+    "con": 15,
+    "int": 10,
+    "wis": 11,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5"
+    },
     "saves": {
       "dex": "+5"
+    },
+    "skill": {
+      "athletics": "+2",
+      "intimidation": "+4",
+      "perception": "+2",
+      "stealth": "+5"
     },
     "skills": {
       "athletics": "+2",
@@ -445,6 +499,16 @@
       "perception": "+2",
       "stealth": "+5"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -458,7 +522,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_x3gy",
+        "id": "act_amphibious_10f5",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung can breathe air and water.</p>",
@@ -475,7 +539,7 @@
         }
       },
       {
-        "id": "act_poisonous_skin_3etq",
+        "id": "act_poisonous_skin_2zo9",
         "name": "Poisonous Skin",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. A poisoned creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -495,7 +559,7 @@
         }
       },
       {
-        "id": "act_standing_leap_brr3",
+        "id": "act_standing_leap_4aa7",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start.</p>",
@@ -514,7 +578,7 @@
     ],
     "actions": [
       {
-        "id": "act_grumpy_grung_growl_37w9",
+        "id": "act_grumpy_grung_growl_9nwa",
         "name": "Grumpy Grung Growl",
         "actionType": "action",
         "descriptionHtml": "<p>A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a DC 12 Charisma saving throw or be frightened until the end of their next turn.</p>",
@@ -534,7 +598,7 @@
         }
       },
       {
-        "id": "act_dagger_3irs",
+        "id": "act_dagger_uvmk",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +0 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
@@ -567,7 +631,7 @@
         }
       },
       {
-        "id": "act_shortbow_vo3w",
+        "id": "act_shortbow_5pve",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 80/320 ft., one target. {@h}9 (1d6 + 6) piercing damage. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
@@ -667,14 +731,32 @@
         "mod": 2
       }
     },
+    "str": 18,
+    "dex": 12,
+    "con": 16,
+    "int": 13,
+    "wis": 14,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "arcana": "+3",
+      "deception": "+4",
+      "perception": "+4",
+      "stealth": "+3"
+    },
     "skills": {
       "arcana": "+3",
       "deception": "+4",
       "perception": "+4",
       "stealth": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -780,7 +862,7 @@
     ],
     "traits": [
       {
-        "id": "act_amorphous_stwz",
+        "id": "act_amorphous_qtea",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The sludge hag can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -797,7 +879,7 @@
         }
       },
       {
-        "id": "act_amphibious_x9kp",
+        "id": "act_amphibious_u6bh",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The sludge hag can breathe air and water.</p>",
@@ -816,7 +898,7 @@
     ],
     "actions": [
       {
-        "id": "act_false_appearance_bup5",
+        "id": "act_false_appearance_d2mf",
         "name": "False Appearance",
         "actionType": "action",
         "descriptionHtml": "<p>The sludge hag collapses into a oily pool of sludge. While motionless, the sludge hag is indistinguishable from any other oily pool of oozy drippiness.</p>",
@@ -833,7 +915,7 @@
         }
       },
       {
-        "id": "act_sludge_slap_k4ts",
+        "id": "act_sludge_slap_c52t",
         "name": "Sludge Slap",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}12 (1d8 + 8) bludgeoning damage, plus 4 (1d8) acid damage. Sludge Slap does both bludgeoning and acid damage.</p>",
@@ -930,12 +1012,28 @@
         "mod": -3
       }
     },
+    "str": 10,
+    "dex": 16,
+    "con": 14,
+    "int": 3,
+    "wis": 12,
+    "cha": 4,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+7"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "blindsight 10 ft., darkvision 60 ft."
@@ -947,7 +1045,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_wl88",
+        "id": "act_amphibious_rtuq",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The spiderfrog can breathe air and water.</p>",
@@ -964,7 +1062,7 @@
         }
       },
       {
-        "id": "act_spider_climb_1i56",
+        "id": "act_spider_climb_hjpr",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The spiderfrog can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -981,7 +1079,7 @@
         }
       },
       {
-        "id": "act_standing_leap_72iy",
+        "id": "act_standing_leap_p8vj",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>Spiderfrog's long jump is up to 20 feet and its high jump is up to 10 feet, with or without a running start.</p>",
@@ -1000,7 +1098,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_68na",
+        "id": "act_bite_6wqy",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) piercing damage. Target is grappled (escape DC 11). Until this grapple ends, the target is restrained, and spiderfrog can't bite another target.</p>",
@@ -1096,9 +1194,24 @@
         "mod": -3
       }
     },
+    "str": 10,
+    "dex": 11,
+    "con": 12,
+    "int": 6,
+    "wis": 8,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "cold"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": "darkvision 60 ft."
@@ -1112,7 +1225,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_1v2c",
+        "id": "act_keen_smell_mcef",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The yeti tyke has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -1129,7 +1242,7 @@
         }
       },
       {
-        "id": "act_snow_camouflage_ykpb",
+        "id": "act_snow_camouflage_wxys",
         "name": "Snow Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>The yeti tyke has advantage on Dexterity (Stealth) checks made to hide in snowy terrain.</p>",
@@ -1148,7 +1261,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_s5p4",
+        "id": "act_claw_4ysy",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) slashing damage, plus 2 (1d4) cold damage. Claw does both slashing and cold damage.</p>",

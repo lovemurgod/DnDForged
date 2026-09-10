@@ -57,9 +57,24 @@
         "mod": -2
       }
     },
+    "str": 16,
+    "dex": 10,
+    "con": 15,
+    "int": 16,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -74,7 +89,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration__slaad_only__obgv",
+        "id": "act_regeneration__slaad_only__28ua",
         "name": "Regeneration (Slaad Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The aberration regains 5 hit points at the start of its turn if it has at least 1 hit point.</p>",
@@ -91,7 +106,7 @@
         }
       },
       {
-        "id": "act_whispering_aura__star_spawn_only__51i7",
+        "id": "act_whispering_aura__star_spawn_only__k2ns",
         "name": "Whispering Aura (Star Spawn Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of the aberration's turns, each creature within 5 feet of the aberration must succeed on a Wisdom saving throw against your spell save DC or take 2d6 psychic damage, provided that the aberration isn't incapacitated.</p>",
@@ -115,7 +130,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1qwv",
+        "id": "act_multiattack_52my",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The aberration makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -132,7 +147,7 @@
         }
       },
       {
-        "id": "act_eye_ray__beholderkin_only__2oqe",
+        "id": "act_eye_ray__beholderkin_only__0v9m",
         "name": "Eye Ray (Beholderkin Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rs {@hitYourSpellAttack} to hit, range 150 ft., one creature. {@h}1d8 + 3 + summonSpellLevel psychic damage.</p>",
@@ -154,7 +169,7 @@
         }
       },
       {
-        "id": "act_claws__slaad_only__s9wz",
+        "id": "act_claws__slaad_only__6hmk",
         "name": "Claws (Slaad Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d10 + 3 + summonSpellLevel slashing damage. If the target is a creature, it can't regain hit points until the start of the aberration's next turn.</p>",
@@ -176,7 +191,7 @@
         }
       },
       {
-        "id": "act_psychic_slam__star_spawn_only__pgah",
+        "id": "act_psychic_slam__star_spawn_only__ocj7",
         "name": "Psychic Slam (Star Spawn Only)",
         "actionType": "action",
         "descriptionHtml": "<p>ms {@hitYourSpellAttack} to hit, reach 5 ft., one creature. {@h}1d8 + 3 + summonSpellLevel psychic damage.</p>",
@@ -269,17 +284,40 @@
         "mod": 5
       }
     },
+    "str": 27,
+    "dex": 10,
+    "con": 25,
+    "int": 16,
+    "wis": 13,
+    "cha": 21,
     "proficiencyBonus": 6,
+    "save": {
+      "dex": "+6",
+      "con": "+13",
+      "wis": "+7",
+      "cha": "+11"
+    },
     "saves": {
       "dex": "+6",
       "con": "+13",
       "wis": "+7",
       "cha": "+11"
     },
+    "skill": {
+      "perception": "+13",
+      "stealth": "+6"
+    },
     "skills": {
       "perception": "+13",
       "stealth": "+6"
     },
+    "immune": [
+      "fire"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 23,
     "senses": {
       "passivePerception": 23,
       "sensesString": "blindsight 60 ft., darkvision 120 ft."
@@ -294,7 +332,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__hqw1",
+        "id": "act_legendary_resistance__3_day__90ib",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
@@ -313,7 +351,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tz6u",
+        "id": "act_multiattack_mfj6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -330,7 +368,7 @@
         }
       },
       {
-        "id": "act_bite_ract",
+        "id": "act_bite_rcem",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 10 ft., one target. {@h}19 (2d10 + 8) piercing damage plus 7 (2d6) fire damage.</p>",
@@ -356,7 +394,7 @@
         }
       },
       {
-        "id": "act_claw_sei6",
+        "id": "act_claw_qsq9",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 5 ft., one target. {@h}15 (2d6 + 8) slashing damage.</p>",
@@ -378,7 +416,7 @@
         }
       },
       {
-        "id": "act_tail_63jz",
+        "id": "act_tail_5d4k",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 15 ft., one target. {@h}17 (2d8 + 8) bludgeoning damage.</p>",
@@ -400,7 +438,7 @@
         }
       },
       {
-        "id": "act_frightful_presence_edll",
+        "id": "act_frightful_presence_3llo",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
@@ -420,7 +458,7 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__b5wg",
+        "id": "act_fire_breath__recharge_5__t1ej",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales fire in a 60-foot cone. Each creature in that area must make a DC 21 Dexterity saving throw, taking 63 (18d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -452,7 +490,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_0f5u",
+          "id": "act_detect_w8jn",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a Wisdom (Perception) check.</p>",
@@ -469,7 +507,7 @@
           }
         },
         {
-          "id": "act_tail_attack_mtj3",
+          "id": "act_tail_attack_oujn",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a tail attack.</p>",
@@ -486,7 +524,7 @@
           }
         },
         {
-          "id": "act_wing_attack__costs_2_actions__na65",
+          "id": "act_wing_attack__costs_2_actions__2syp",
           "name": "Wing Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon beats its wings. Each creature within 10 feet of the dragon must succeed on a DC 22 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed.</p>",
@@ -514,7 +552,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_4dqe",
+        "id": "act_lair_action_vhkb",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Magma erupts from a point on the ground the dragon can see within 120 feet of it, creating a 20-foot-high, 5-foot-radius geyser. Each creature in the geyser's area must make a DC 15 Dexterity saving throw, taking 21 (6d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -539,7 +577,7 @@
         }
       },
       {
-        "id": "act_lair_action_51bm",
+        "id": "act_lair_action_ndx3",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>A tremor shakes the lair in a 60-foot radius around the dragon. Each creature other than the dragon on the ground in that area must succeed on a DC 15 Dexterity saving throw or be knocked prone.</p>",
@@ -559,7 +597,7 @@
         }
       },
       {
-        "id": "act_lair_action_wg93",
+        "id": "act_lair_action_fyug",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>Volcanic gases form a cloud in a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is lightly obscured. It lasts until initiative count 20 on the next round. Each creature that starts its turn in the cloud must succeed on a DC 13 Constitution saving throw or be poisoned until the end of its turn. While poisoned in this way, a creature is incapacitated.</p>",
@@ -579,7 +617,7 @@
         }
       },
       {
-        "id": "act_additional_lair_actions_85ae",
+        "id": "act_additional_lair_actions_d0ff",
         "name": "Additional Lair Actions",
         "actionType": "lair",
         "descriptionHtml": "<p>At your discretion, a legendary (Adult Red Dragon or Ancient Red Dragon) red dragon can use one or both of the following additional lair actions while in its lair:</p><ul><li><strong><em>Noxious Smoke.</em></strong> <p>A cloud of thick, dark smoke fills a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is Vision and Light. A creature other than the dragon that starts its turn in the cloud or enters it for the first time on its turn must succeed on a DC 15 Constitution saving throw or be poisoned until the end of its turn. The cloud lasts until initiative count 20 on the next round.</p></li><li><strong><em>Searing Heat.</em></strong> <p>Searing heat spreads out in a 15-foot-radius sphere centered on a point the dragon can see within 120 feet of it. Any creature that enters the affected area or starts its turn there must make a DC 15 Constitution saving throw, taking 10 (3d6) fire damage on a failed save, or half as much damage on a successful one. The heat lasts until initiative count 20 on the next round.</p></li></ul>",
@@ -659,9 +697,22 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -675,7 +726,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_lqnn",
+        "id": "act_charge_ekuq",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the beast moves at least 20 feet straight toward a target and then hits it with a maul attack on the same turn, the target takes an extra 1d6 slashing damage. If the target is a creature, it must succeed on a Strength saving throw against your spell save DC or be knocked prone.</p>",
@@ -697,7 +748,7 @@
         }
       },
       {
-        "id": "act_primal_bond_6ers",
+        "id": "act_primal_bond_los1",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your proficiency bonus to any ability check or saving throw that the beast makes.</p>",
@@ -716,7 +767,7 @@
     ],
     "actions": [
       {
-        "id": "act_maul_mokw",
+        "id": "act_maul_tou4",
         "name": "Maul",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 2 + PB slashing damage.</p>",
@@ -809,9 +860,22 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -825,7 +889,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_qoa9",
+        "id": "act_amphibious_cnuy",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast can breathe both air and water.</p>",
@@ -842,7 +906,7 @@
         }
       },
       {
-        "id": "act_primal_bond_zbew",
+        "id": "act_primal_bond_p1xp",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your proficiency bonus to any ability check or saving throw that the beast makes.</p>",
@@ -861,7 +925,7 @@
     ],
     "actions": [
       {
-        "id": "act_binding_strike_4c1r",
+        "id": "act_binding_strike_91w7",
         "name": "Binding Strike",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d6 + 2 + PB piercing damage or 1d6 + 2 + PB bludgeoning damage (your choice), and the target is grappled (escape DC equal to your spellcasting save DC). Until this grapple ends, the beast can't use this attack on another target.</p>",
@@ -958,9 +1022,22 @@
         "mod": 0
       }
     },
+    "str": 6,
+    "dex": 16,
+    "con": 13,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -974,7 +1051,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_0p2m",
+        "id": "act_flyby_2i56",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -991,7 +1068,7 @@
         }
       },
       {
-        "id": "act_primal_bond_qx0z",
+        "id": "act_primal_bond_1quh",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your proficiency bonus to any ability check or saving throw that the beast makes.</p>",
@@ -1010,7 +1087,7 @@
     ],
     "actions": [
       {
-        "id": "act_shred_rxyr",
+        "id": "act_shred_92db",
         "name": "Shred",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d4 + 3 + PB slashing damage.</p>",
@@ -1103,9 +1180,22 @@
         "mod": -3
       }
     },
+    "str": 18,
+    "dex": 11,
+    "con": 16,
+    "int": 4,
+    "wis": 14,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -1119,7 +1209,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_water_breathing__water_only__2dwn",
+        "id": "act_water_breathing__water_only__0s49",
         "name": "Water Breathing (Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast can breathe only underwater.</p>",
@@ -1136,7 +1226,7 @@
         }
       },
       {
-        "id": "act_flyby__air_only__fr9f",
+        "id": "act_flyby__air_only__7qco",
         "name": "Flyby (Air Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -1153,7 +1243,7 @@
         }
       },
       {
-        "id": "act_pack_tactics__land_and_water_only__m9te",
+        "id": "act_pack_tactics__land_and_water_only__tuef",
         "name": "Pack Tactics (Land and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast has advantage on an attack roll against a creature if at least one of the beast's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -1172,7 +1262,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ka2w",
+        "id": "act_multiattack_74sw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The beast makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1189,7 +1279,7 @@
         }
       },
       {
-        "id": "act_maul_t9e4",
+        "id": "act_maul_ixii",
         "name": "Maul",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 4 + summonSpellLevel piercing damage.</p>",
@@ -1282,9 +1372,27 @@
         "mod": 3
       }
     },
+    "str": 16,
+    "dex": 14,
+    "con": 16,
+    "int": 10,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -1300,7 +1408,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_xewy",
+        "id": "act_multiattack_kmgp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The celestial makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1317,7 +1425,7 @@
         }
       },
       {
-        "id": "act_radiant_bow__avenger_only__riy8",
+        "id": "act_radiant_bow__avenger_only__i3bu",
         "name": "Radiant Bow (Avenger Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rw {@hitYourSpellAttack} to hit, range 150/600 ft., one target. {@h}2d6 + 2 + summonSpellLevel radiant damage.</p>",
@@ -1339,7 +1447,7 @@
         }
       },
       {
-        "id": "act_radiant_mace__defender_only__wxj4",
+        "id": "act_radiant_mace__defender_only__5ry9",
         "name": "Radiant Mace (Defender Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d10 + 3 + summonSpellLevel radiant damage, and the celestial can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains 1d10 temporary hit points.</p>",
@@ -1361,7 +1469,7 @@
         }
       },
       {
-        "id": "act_healing_touch__1_day__i04n",
+        "id": "act_healing_touch__1_day__26mu",
         "name": "Healing Touch (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The celestial touches another creature. The target magically regains hit points equal to 2d8 + summonSpellLevel.</p>",
@@ -1449,9 +1557,32 @@
         "mod": -3
       }
     },
+    "str": 18,
+    "dex": 10,
+    "con": 18,
+    "int": 14,
+    "wis": 11,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "incapacitated",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -1465,7 +1596,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_heated_body__metal_only__gfki",
+        "id": "act_heated_body__metal_only__z9kn",
         "name": "Heated Body (Metal Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>A creature that touches the construct or hits it with a melee attack while within 5 feet of it takes 1d10 fire damage.</p>",
@@ -1487,7 +1618,7 @@
         }
       },
       {
-        "id": "act_stony_lethargy__stone_only__of21",
+        "id": "act_stony_lethargy__stone_only__aikh",
         "name": "Stony Lethargy (Stone Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature the construct can see starts its turn within 10 feet of the construct, the construct can force it to make a Wisdom saving throw against your spell save DC. On a failed save, the target can't use reactions and its speed is halved until the start of its next turn.</p>",
@@ -1506,7 +1637,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_b89d",
+        "id": "act_multiattack_wpz8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The construct makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1523,7 +1654,7 @@
         }
       },
       {
-        "id": "act_slam_9bq2",
+        "id": "act_slam_yaec",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 4 + summonSpellLevel bludgeoning damage.</p>",
@@ -1548,7 +1679,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_berserk_lashing__clay_only__p8gm",
+        "id": "act_berserk_lashing__clay_only__otbz",
         "name": "Berserk Lashing (Clay Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the construct takes damage, it makes a slam attack against a random creature within 5 feet of it. If no creature is within reach, the construct moves up to half its speed toward an enemy it can see, without provoking opportunity attacks.</p>",
@@ -1634,9 +1765,30 @@
         "mod": -2
       }
     },
+    "str": 18,
+    "dex": 14,
+    "con": 16,
+    "int": 4,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned",
+      "frightened"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -1650,7 +1802,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_form_wv9g",
+        "id": "act_immutable_form_zkjw",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The item is immune to any spell or effect that would alter its form.</p>",
@@ -1667,7 +1819,7 @@
         }
       },
       {
-        "id": "act_irrepressible_dance_3zsm",
+        "id": "act_irrepressible_dance_s9ht",
         "name": "Irrepressible Dance",
         "actionType": "trait",
         "descriptionHtml": "<p>When any creature starts its turn within 10 feet of the item, the item can increase or decrease (your choice) the walking speed of that creature by 10 feet until the end of the turn, provided the item isn't incapacitated.</p>",
@@ -1686,7 +1838,7 @@
     ],
     "actions": [
       {
-        "id": "act_force_empowered_slam_ojls",
+        "id": "act_force_empowered_slam_gwx1",
         "name": "Force-Empowered Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. {@h}1d10 + PB force damage.</p>",
@@ -1779,9 +1931,61 @@
         "mod": 3
       }
     },
+    "str": 18,
+    "dex": 15,
+    "con": 17,
+    "int": 4,
+    "wis": 10,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      {
+        "immune": [
+          "fire"
+        ],
+        "cond": true,
+        "note": "(Fire only)"
+      }
+    ],
+    "resist": [
+      {
+        "resist": [
+          "lightning",
+          "thunder"
+        ],
+        "cond": true,
+        "note": "(Air only)"
+      },
+      {
+        "resist": [
+          "piercing",
+          "slashing"
+        ],
+        "cond": true,
+        "note": "(Earth only)"
+      },
+      {
+        "resist": [
+          "acid"
+        ],
+        "cond": true,
+        "note": "(Water only)"
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "unconscious"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -1796,7 +2000,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_form__air__fire__and_water_only__obet",
+        "id": "act_amorphous_form__air__fire__and_water_only__wz0b",
         "name": "Amorphous Form (Air, Fire, and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -1815,7 +2019,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zhvp",
+        "id": "act_multiattack_eb6r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1832,7 +2036,7 @@
         }
       },
       {
-        "id": "act_slam_1dh6",
+        "id": "act_slam_oa0c",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d10 + 4 + summonSpellLevel bludgeoning damage (Air, Earth, and Water only) or fire damage (Fire only).</p>",
@@ -1925,9 +2129,24 @@
         "mod": 3
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 14,
+    "int": 14,
+    "wis": 11,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -1943,7 +2162,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_hlcd",
+        "id": "act_multiattack_50br",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fey makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1960,7 +2179,7 @@
         }
       },
       {
-        "id": "act_shortsword_5ty8",
+        "id": "act_shortsword_wp2u",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d6 + 3 + summonSpellLevel piercing damage + 1d6 force damage.</p>",
@@ -1988,7 +2207,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_fey_step_1e6b",
+        "id": "act_fey_step_ljoy",
         "name": "Fey Step",
         "actionType": "bonus",
         "descriptionHtml": "<p>The fey magically teleports up to 30 feet to an unoccupied space it can see. Then one of the following effects occurs, based on the fey's chosen mood:</p><ul><li><strong><em>Fuming.</em></strong> <p>The fey has advantage on the next attack roll it makes before the end of this turn.</p></li><li><strong><em>Mirthful.</em></strong> <p>The fey can force one creature it can see within 10 feet of it to make a Wisdom saving throw against your spell save DC. Unless the save succeeds, the target is charmed by you and the fey for 1 minute or until the target takes any damage.</p></li><li><strong><em>Tricksy.</em></strong> <p>The fey can fill a 5-foot cube within 5 feet of it with magical darkness, which lasts until the end of its next turn.</p></li></ul>",
@@ -2075,9 +2294,28 @@
         "mod": 3
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 15,
+    "int": 10,
+    "wis": 10,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "fire"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -2093,7 +2331,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_y61y",
+        "id": "act_magic_resistance_jlbk",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The fiend has advantage on saving throws against spells and other magical effects.</p>",
@@ -2110,7 +2348,7 @@
         }
       },
       {
-        "id": "act_death_throes__demon_only__vbzp",
+        "id": "act_death_throes__demon_only__enuy",
         "name": "Death Throes (Demon Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When the fiend drops to 0 hit points or the spell ends, the fiend explodes, and each creature within 10 feet of it must make a Dexterity saving throw against your spell save DC. A creature takes 2d10 + summonSpellLevel fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -2132,7 +2370,7 @@
         }
       },
       {
-        "id": "act_devil_s_sight__devil_only__0dvz",
+        "id": "act_devil_s_sight__devil_only__8luy",
         "name": "Devil's Sight (Devil Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede the fiend's darkvision.</p>",
@@ -2151,7 +2389,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_owcu",
+        "id": "act_multiattack_ph3s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fiend makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -2168,7 +2406,7 @@
         }
       },
       {
-        "id": "act_bite__demon_only__s69n",
+        "id": "act_bite__demon_only__b5wn",
         "name": "Bite (Demon Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d12 + 3 + summonSpellLevel necrotic damage.</p>",
@@ -2190,7 +2428,7 @@
         }
       },
       {
-        "id": "act_claws__yugoloth_only__j6vg",
+        "id": "act_claws__yugoloth_only__0o7t",
         "name": "Claws (Yugoloth Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 3 + summonSpellLevel slashing damage. Immediately after the attack hits or misses, the fiend can magically teleport up to 30 feet to an unoccupied space it can see.</p>",
@@ -2212,7 +2450,7 @@
         }
       },
       {
-        "id": "act_hurl_flame__devil_only__4u4v",
+        "id": "act_hurl_flame__devil_only__rqld",
         "name": "Hurl Flame (Devil Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rs {@hitYourSpellAttack} to hit, range 150 ft., one target. {@h}2d6 + 3 + summonSpellLevel fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire.</p>",
@@ -2305,14 +2543,37 @@
         "mod": -2
       }
     },
+    "str": 4,
+    "dex": 15,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+2 plus PB"
+    },
     "saves": {
       "dex": "+2 plus PB"
+    },
+    "skill": {
+      "perception": "+0 plus PB × 2",
+      "stealth": "+2 plus PB"
     },
     "skills": {
       "perception": "+0 plus PB × 2",
       "stealth": "+2 plus PB"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": "10 + (PB × 2)",
     "senses": {
       "passivePerception": "10 + (PB × 2)",
       "sensesString": "darkvision 60 ft."
@@ -2326,7 +2587,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_evasion_cs82",
+        "id": "act_evasion_ykcq",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the homunculus is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails. It can't use this trait if it's incapacitated.</p>",
@@ -2345,7 +2606,7 @@
     ],
     "actions": [
       {
-        "id": "act_force_strike_9vkk",
+        "id": "act_force_strike_vgce",
         "name": "Force Strike",
         "actionType": "action",
         "descriptionHtml": "<p>rw {@hitYourSpellAttack} to hit, range 30 ft., one target you can see. {@h}1d4 + PB force damage.</p>",
@@ -2370,7 +2631,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_channel_magic_6e61",
+        "id": "act_channel_magic_hlo6",
         "name": "Channel Magic",
         "actionType": "reaction",
         "descriptionHtml": "<p>The homunculus delivers a spell you cast that has a range of touch. The homunculus must be within 120 feet of you.</p>",
@@ -2456,11 +2717,30 @@
         "mod": 0
       }
     },
+    "str": 1,
+    "dex": 12,
+    "con": 13,
+    "int": 10,
+    "wis": 13,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+3"
+    },
     "skills": {
       "stealth": "+3"
     },
+    "immune": [
+      "acid"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "prone"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -2476,7 +2756,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance__object_form_only__9xv2",
+        "id": "act_false_appearance__object_form_only__3yet",
         "name": "False Appearance (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While the mimic remains motionless, it is indistinguishable from an ordinary object.</p>",
@@ -2493,7 +2773,7 @@
         }
       },
       {
-        "id": "act_spider_climb_jmap",
+        "id": "act_spider_climb_4j3m",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -2512,7 +2792,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_8pin",
+        "id": "act_bite_dm7t",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}1 piercing damage plus 2 (1d4) acid damage.</p>",
@@ -2534,7 +2814,7 @@
         }
       },
       {
-        "id": "act_shape_shift_ay9h",
+        "id": "act_shape_shift_8g4m",
         "name": "Shape-Shift",
         "actionType": "action",
         "descriptionHtml": "<p>The mimic polymorphs into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -2622,14 +2902,59 @@
         "mod": 0
       }
     },
+    "str": 30,
+    "dex": 14,
+    "con": 20,
+    "int": 1,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+9",
+      "cha": "+7"
+    },
     "saves": {
       "wis": "+9",
       "cha": "+7"
     },
+    "skill": {
+      "perception": "+9"
+    },
     "skills": {
       "perception": "+9"
     },
+    "immune": [
+      "acid",
+      "bludgeoning",
+      "cold",
+      "fire",
+      "lightning",
+      "necrotic",
+      "poison",
+      "psychic",
+      "radiant"
+    ],
+    "resist": [
+      "piercing",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "incapacitated",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "restrained",
+      "stunned",
+      "unconscious"
+    ],
+    "passive": 19,
     "senses": {
       "passivePerception": 19,
       "sensesString": "blindsight 120 ft."
@@ -2643,7 +2968,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_existence_6pet",
+        "id": "act_immutable_existence_88jj",
         "name": "Immutable Existence",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant is immune to any spell or effect that would alter its form or send it to another plane of existence.</p>",
@@ -2660,7 +2985,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_sym4",
+        "id": "act_magic_resistance_583n",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant has advantage on saving throws against spells and other magical effects, and spell attacks made against it have disadvantage.</p>",
@@ -2677,7 +3002,7 @@
         }
       },
       {
-        "id": "act_regeneration_ksq1",
+        "id": "act_regeneration_1gqu",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant regains 10 hit points at the start of its turn. If it is reduced to 0 hit points, this trait doesn't function until an attuned creature spends 24 hours repairing the artifact or until the artifact is subjected to lightning damage.</p>",
@@ -2694,7 +3019,7 @@
         }
       },
       {
-        "id": "act_standing_leap_6ngb",
+        "id": "act_standing_leap_wowc",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant's long jump is up to 50 feet and its high jump is up to 25 feet, with or without a running start.</p>",
@@ -2711,7 +3036,7 @@
         }
       },
       {
-        "id": "act_unusual_nature_74em",
+        "id": "act_unusual_nature_pggp",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant doesn't require air, food, drink, or sleep.</p>",
@@ -2730,7 +3055,7 @@
     ],
     "actions": [
       {
-        "id": "act_destructive_fist_0brd",
+        "id": "act_destructive_fist_hp9x",
         "name": "Destructive Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +17 to hit, reach 10 ft., one target. {@h}36 (4d12 + 10) force damage. Or Ranged Weapon Attack: +17 to hit, range 120 ft., one target. {@h}36 (4d12 + 10) force damage. If the target is an object, it takes triple damage.</p>",
@@ -2756,7 +3081,7 @@
         }
       },
       {
-        "id": "act_crushing_leap_nu79",
+        "id": "act_crushing_leap_0evd",
         "name": "Crushing Leap",
         "actionType": "action",
         "descriptionHtml": "<p>If the servant jumps at least 25 feet as part of its movement, it can then use this action to land on its feet in a space that contains one or more other creatures. Each of those creatures is pushed to an unoccupied space within 5 feet of the servant and must make a DC 25 Dexterity saving throw. On a failed save, a creature takes 26 (4d12) bludgeoning damage and is knocked prone. On a successful save, a creature takes half as much damage and isn't knocked prone.</p>",
@@ -2852,11 +3177,54 @@
         "mod": -1
       }
     },
+    "str": 6,
+    "dex": 14,
+    "con": 13,
+    "int": 6,
+    "wis": 10,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+4"
+    },
     "skills": {
       "stealth": "+4"
     },
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "thunder",
+      {
+        "resist": [
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [
+      "bludgeoning"
+    ],
+    "conditionImmune": [
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -2868,7 +3236,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_fuwa",
+        "id": "act_amorphous_ubb1",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The shadow can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -2885,7 +3253,7 @@
         }
       },
       {
-        "id": "act_shadow_stealth_wwa4",
+        "id": "act_shadow_stealth_ihhz",
         "name": "Shadow Stealth",
         "actionType": "trait",
         "descriptionHtml": "<p>While in dim light or darkness, the shadow can take the Hide action as a bonus action. Its stealth bonus is also improved to +6.</p>",
@@ -2902,7 +3270,7 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_24xv",
+        "id": "act_sunlight_weakness_h7s8",
         "name": "Sunlight Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the shadow has disadvantage on attack rolls, ability checks, and saving throws.</p>",
@@ -2921,7 +3289,7 @@
     ],
     "actions": [
       {
-        "id": "act_strength_drain_tu1q",
+        "id": "act_strength_drain_sx6e",
         "name": "Strength Drain",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}9 (2d6 + 2) necrotic damage, and the target's Strength score is reduced by 1d4. The target dies if this reduces its Strength to 0. Otherwise, the reduction lasts until the target finishes a short or long rest.</p><p>If a non-evil humanoid dies from this attack, a new shadow rises from the corpse 1d4 hours later.</p>",
@@ -3014,9 +3382,26 @@
         "mod": 3
       }
     },
+    "str": 13,
+    "dex": 16,
+    "con": 15,
+    "int": 4,
+    "wis": 10,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "frightened"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 120 ft."
@@ -3030,7 +3415,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_terror_frenzy__fury_only__lvz1",
+        "id": "act_terror_frenzy__fury_only__jbwt",
         "name": "Terror Frenzy (Fury Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit has advantage on attack rolls against frightened creatures.</p>",
@@ -3047,7 +3432,7 @@
         }
       },
       {
-        "id": "act_weight_of_sorrow__despair_only__u4ke",
+        "id": "act_weight_of_sorrow__despair_only__4qw1",
         "name": "Weight of Sorrow (Despair Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature, other than you, that starts its turn within 5 feet of the spirit has its speed reduced by 20 feet until the start of that creature's next turn.</p>",
@@ -3066,7 +3451,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xisa",
+        "id": "act_multiattack_5l3n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -3083,7 +3468,7 @@
         }
       },
       {
-        "id": "act_chilling_rend_sqmy",
+        "id": "act_chilling_rend_rz6b",
         "name": "Chilling Rend",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d12 + 3 + summonSpellLevel cold damage.</p>",
@@ -3105,7 +3490,7 @@
         }
       },
       {
-        "id": "act_dreadful_scream__1_day__d08q",
+        "id": "act_dreadful_scream__1_day__ufdf",
         "name": "Dreadful Scream (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit screams. Each creature within 30 feet of it must succeed on a Wisdom saving throw against your spell save DC or be frightened for 1 minute. The frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -3124,7 +3509,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_stealth__fear_only__1t8r",
+        "id": "act_shadow_stealth__fear_only__v983",
         "name": "Shadow Stealth (Fear Only)",
         "actionType": "bonus",
         "descriptionHtml": "<p>While in dim light or darkness, the spirit takes the Hide action.</p>",
@@ -3211,15 +3596,40 @@
         "mod": -2
       }
     },
+    "str": 14,
+    "dex": 12,
+    "con": 14,
+    "int": 4,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+1 plus PB",
+      "con": "+2 plus PB"
+    },
     "saves": {
       "dex": "+1 plus PB",
       "con": "+2 plus PB"
+    },
+    "skill": {
+      "athletics": "+2 plus PB",
+      "perception": "+0 plus PB × 2"
     },
     "skills": {
       "athletics": "+2 plus PB",
       "perception": "+0 plus PB × 2"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": "10 + (PB × 2)",
     "senses": {
       "passivePerception": "10 + (PB × 2)",
       "sensesString": "darkvision 60 ft."
@@ -3233,7 +3643,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_vigilant_habd",
+        "id": "act_vigilant_xe0r",
         "name": "Vigilant",
         "actionType": "trait",
         "descriptionHtml": "<p>The defender can't be surprised.</p>",
@@ -3252,7 +3662,7 @@
     ],
     "actions": [
       {
-        "id": "act_force_empowered_rend_jjda",
+        "id": "act_force_empowered_rend_rx6b",
         "name": "Force-Empowered Rend",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. {@h}1d8 + PB force damage.</p>",
@@ -3274,7 +3684,7 @@
         }
       },
       {
-        "id": "act_repair__3_day__ljel",
+        "id": "act_repair__3_day__6ijh",
         "name": "Repair (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The magical mechanisms inside the defender restore 2d8 + PB hit points to itself or to one construct or object within 5 feet of it.</p>",
@@ -3294,7 +3704,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_attack_r4c5",
+        "id": "act_deflect_attack_1x26",
         "name": "Deflect Attack",
         "actionType": "reaction",
         "descriptionHtml": "<p>The defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the defender.</p>",
@@ -3380,9 +3790,30 @@
         "mod": -1
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 15,
+    "int": 4,
+    "wis": 10,
+    "cha": 9,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -3396,7 +3827,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_passage__ghostly_only__3zqa",
+        "id": "act_incorporeal_passage__ghostly_only__3lyu",
         "name": "Incorporeal Passage (Ghostly Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can move through other creatures and objects as if they were difficult terrain. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes 1d10 force damage for every 5 feet traveled.</p>",
@@ -3418,7 +3849,7 @@
         }
       },
       {
-        "id": "act_festering_aura__putrid_only__q3oc",
+        "id": "act_festering_aura__putrid_only__hhnq",
         "name": "Festering Aura (Putrid Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature, other than you, that starts its turn within 5 feet of the spirit must succeed on a Constitution saving throw against your spell save DC or be poisoned until the start of its next turn.</p>",
@@ -3437,7 +3868,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8fzb",
+        "id": "act_multiattack_konm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -3454,7 +3885,7 @@
         }
       },
       {
-        "id": "act_deathly_touch__ghostly_only__2hwt",
+        "id": "act_deathly_touch__ghostly_only__pv6j",
         "name": "Deathly Touch (Ghostly Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one creature. {@h}1d8 + 3 + summonSpellLevel necrotic damage, and the creature must succeed on a Wisdom saving throw against your spell save DC or be frightened of the undead until the end of the target's next turn.</p>",
@@ -3476,7 +3907,7 @@
         }
       },
       {
-        "id": "act_grave_bolt__skeletal_only__e8b0",
+        "id": "act_grave_bolt__skeletal_only__1zog",
         "name": "Grave Bolt (Skeletal Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rs {@hitYourSpellAttack} to hit, range 150 ft., one target. {@h}2d4 + 3 + summonSpellLevel necrotic damage.</p>",
@@ -3498,7 +3929,7 @@
         }
       },
       {
-        "id": "act_rotting_claw__putrid_only__ecgd",
+        "id": "act_rotting_claw__putrid_only__1bk5",
         "name": "Rotting Claw (Putrid Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d6 + 3 + summonSpellLevel slashing damage. If the target is poisoned, it must succeed on a Constitution saving throw against your spell save DC or be paralyzed until the end of its next turn.</p>",
@@ -3591,9 +4022,30 @@
         "mod": 0
       }
     },
+    "str": 10,
+    "dex": 14,
+    "con": 14,
+    "int": 13,
+    "wis": 15,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "grappled",
+      "prone",
+      "restrained"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -3608,7 +4060,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_flame_seed_95bg",
+        "id": "act_flame_seed_aikk",
         "name": "Flame Seed",
         "actionType": "action",
         "descriptionHtml": "<p>rw {@hitYourSpellAttack} to hit, range 60 ft., one target you can see. {@h}1d6 + PB fire damage.</p>",
@@ -3630,7 +4082,7 @@
         }
       },
       {
-        "id": "act_fiery_teleportation_whag",
+        "id": "act_fiery_teleportation_u6ud",
         "name": "Fiery Teleportation",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit and each willing creature of your choice within 5 feet of it teleport up to 15 feet to unoccupied spaces you can see. Then each creature within 5 feet of the space that the spirit left must succeed on a Dexterity saving throw against your spell save DC or take 1d6 + PB fire damage.</p>",

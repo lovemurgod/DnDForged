@@ -57,12 +57,38 @@
         "mod": -1
       }
     },
+    "str": 10,
+    "dex": 15,
+    "con": 12,
+    "int": 11,
+    "wis": 10,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+2",
+      "stealth": "+4"
+    },
     "skills": {
       "perception": "+2",
       "stealth": "+4"
     },
+    "immune": [
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks that aren't silvered",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft. (rat form only)"
@@ -76,7 +102,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_6lhi",
+        "id": "act_shapechanger_bfr6",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The wererat can use its action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into its true form, which is humanoid. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -93,7 +119,7 @@
         }
       },
       {
-        "id": "act_keen_smell_4v3d",
+        "id": "act_keen_smell_f63n",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The wererat has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -112,7 +138,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__humanoid_or_hybrid_form_only__j500",
+        "id": "act_multiattack__humanoid_or_hybrid_form_only__cup1",
         "name": "Multiattack (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The wererat makes two attacks, only one of which can be a bite.</p>",
@@ -129,7 +155,7 @@
         }
       },
       {
-        "id": "act_bite__rat_or_hybrid_form_only__6gvd",
+        "id": "act_bite__rat_or_hybrid_form_only__9q6w",
         "name": "Bite (Rat or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) piercing damage. If the target is a humanoid, it must succeed on a DC 11 Constitution saving throw or be cursed with wererat Player Characters as Lycanthropes.</p>",
@@ -154,7 +180,7 @@
         }
       },
       {
-        "id": "act_shortsword__humanoid_or_hybrid_form_only__tiyq",
+        "id": "act_shortsword__humanoid_or_hybrid_form_only__j034",
         "name": "Shortsword (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -176,7 +202,7 @@
         }
       },
       {
-        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__d8qm",
+        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__gumj",
         "name": "Hand Crossbow (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -269,11 +295,26 @@
         "mod": -1
       }
     },
+    "str": 8,
+    "dex": 14,
+    "con": 12,
+    "int": 8,
+    "wis": 14,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -287,7 +328,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_k5vl",
+        "id": "act_nimble_escape_morm",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>Slurmy can take the Disengage or Hide action as a bonus action on each of their turns.</p>",
@@ -306,7 +347,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_qhea",
+        "id": "act_claw_1s5r",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) slashing damage.</p>",

@@ -57,11 +57,30 @@
         "mod": -3
       }
     },
+    "str": 13,
+    "dex": 6,
+    "con": 16,
+    "int": 3,
+    "wis": 6,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+0"
+    },
     "saves": {
       "wis": "+0"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 8,
     "senses": {
       "passivePerception": 8,
       "sensesString": "darkvision 60 ft."
@@ -75,7 +94,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_pc9l",
+        "id": "act_undead_fortitude_3a1m",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead.</p>",
@@ -92,7 +111,7 @@
         }
       },
       {
-        "id": "act_ash_puff_4k8q",
+        "id": "act_ash_puff_t94f",
         "name": "Ash Puff",
         "actionType": "trait",
         "descriptionHtml": "<p>The first time the zombie takes damage, any living creature within 5 feet of the zombie must succeed on a DC 10 Constitution saving throw or gain disadvantage on attack rolls, saving throws, and ability checks for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on it early with a successful save.</p>",
@@ -114,7 +133,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_m0m2",
+        "id": "act_slam_0v52",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) bludgeoning damage.</p>",
@@ -207,15 +226,34 @@
         "mod": 0
       }
     },
+    "str": 9,
+    "dex": 14,
+    "con": 11,
+    "int": 17,
+    "wis": 12,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "int": "+5",
+      "wis": "+3"
+    },
     "saves": {
       "int": "+5",
       "wis": "+3"
+    },
+    "skill": {
+      "arcana": "+5",
+      "history": "+5"
     },
     "skills": {
       "arcana": "+5",
       "history": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -414,7 +452,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_os6t",
+        "id": "act_quarterstaff_qdru",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}3 (1d8 - 1) bludgeoning damage.</p>",
@@ -507,9 +545,22 @@
         "mod": 0
       }
     },
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -524,7 +575,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_2bmo",
+        "id": "act_club_ztku",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
@@ -617,9 +668,48 @@
         "mod": 2
       }
     },
+    "str": 6,
+    "dex": 16,
+    "con": 16,
+    "int": 12,
+    "wis": 14,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "thunder",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks that aren't silvered",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -634,7 +724,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_kaxz",
+        "id": "act_incorporeal_movement_803a",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The wraith can move through an object or another creature, but can't stop there.</p>",
@@ -651,7 +741,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_lfxh",
+        "id": "act_sunlight_sensitivity_p3yz",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the wraith has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.</p>",
@@ -670,7 +760,7 @@
     ],
     "actions": [
       {
-        "id": "act_life_drain_hmcx",
+        "id": "act_life_drain_7ngz",
         "name": "Life Drain",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}16 (3d8 + 3) necrotic damage, and the target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. If this attack reduces the target's hit point maximum to 0, the target dies. This reduction to the target's hit point maximum lasts until the target finishes a long rest.</p>",
@@ -770,16 +860,36 @@
         "mod": 1
       }
     },
+    "str": 9,
+    "dex": 13,
+    "con": 10,
+    "int": 16,
+    "wis": 14,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "int": "+5",
+      "wis": "+4"
+    },
     "saves": {
       "int": "+5",
       "wis": "+4"
+    },
+    "skill": {
+      "arcana": "+5",
+      "perception": "+4",
+      "stealth": "+3"
     },
     "skills": {
       "arcana": "+5",
       "perception": "+4",
       "stealth": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 120 ft."
@@ -1088,7 +1198,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_voho",
+        "id": "act_special_equipment_hbg9",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has a spider staff.</p>",
@@ -1105,7 +1215,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_gsrq",
+        "id": "act_fey_ancestry_znoi",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -1122,7 +1232,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_5vmt",
+        "id": "act_sunlight_sensitivity_4ho0",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has disadvantage on attack rolls when he or his target is in sunlight.</p>",
@@ -1141,7 +1251,7 @@
     ],
     "actions": [
       {
-        "id": "act_spider_staff_6gd4",
+        "id": "act_spider_staff_by9q",
         "name": "Spider Staff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}2 (1d6 - 1) bludgeoning damage plus 3 (1d6) poison damage.</p>",
@@ -1238,9 +1348,22 @@
         "mod": 0
       }
     },
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -1255,7 +1378,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_o8ay",
+        "id": "act_club_n55w",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
@@ -1348,11 +1471,26 @@
         "mod": 0
       }
     },
+    "str": 11,
+    "dex": 14,
+    "con": 12,
+    "int": 9,
+    "wis": 9,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "intimidation": "+2"
+    },
     "skills": {
       "intimidation": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": ""
@@ -1367,7 +1505,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_7g3l",
+        "id": "act_multiattack_d9qs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ruffian makes two melee attacks.</p>",
@@ -1384,7 +1522,7 @@
         }
       },
       {
-        "id": "act_shortsword_c509",
+        "id": "act_shortsword_w29h",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -1477,14 +1615,32 @@
         "mod": 0
       }
     },
+    "str": 13,
+    "dex": 10,
+    "con": 12,
+    "int": 10,
+    "wis": 11,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {
+      "str": "+3",
+      "con": "+3"
+    },
     "saves": {
       "str": "+3",
       "con": "+3"
     },
+    "skill": {
+      "perception": "+2"
+    },
     "skills": {
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1499,7 +1655,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_ohnh",
+        "id": "act_multiattack_e4ml",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Sildar makes two melee attacks.</p>",
@@ -1516,7 +1672,7 @@
         }
       },
       {
-        "id": "act_longsword_pkox",
+        "id": "act_longsword_qt15",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (1d8 + 1) slashing damage.</p>",
@@ -1538,7 +1694,7 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_k3cw",
+        "id": "act_heavy_crossbow_moaf",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +2 to hit, range 100/400 ft., one target. {@h}5 (1d10) piercing damage.</p>",
@@ -1563,7 +1719,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_bk01",
+        "id": "act_parry_6c4d",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker hits Sildar with a melee attack and Sildar can see the attacker, he can roll 1d6 and add the number rolled to his AC against the triggering attack, provided that he's wielding a melee weapon.</p>",
@@ -1649,18 +1805,44 @@
         "mod": 2
       }
     },
+    "str": 19,
+    "dex": 12,
+    "con": 17,
+    "int": 16,
+    "wis": 13,
+    "cha": 15,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+4",
+      "con": "+6",
+      "wis": "+4",
+      "cha": "+5"
+    },
     "saves": {
       "dex": "+4",
       "con": "+6",
       "wis": "+4",
       "cha": "+5"
     },
+    "skill": {
+      "deception": "+5",
+      "perception": "+7",
+      "stealth": "+4"
+    },
     "skills": {
       "deception": "+5",
       "perception": "+7",
       "stealth": "+4"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "blindsight 30 ft., darkvision 120 ft."
@@ -1675,7 +1857,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_d3a4",
+        "id": "act_amphibious_4amc",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragon can breathe air and water.</p>",
@@ -1694,7 +1876,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_d21r",
+        "id": "act_multiattack_zluq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon makes three attacks: one with its bite and two with its claws.</p>",
@@ -1711,7 +1893,7 @@
         }
       },
       {
-        "id": "act_bite_4cn4",
+        "id": "act_bite_dzel",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}15 (2d10 + 4) piercing damage plus 7 (2d6) poison damage.</p>",
@@ -1737,7 +1919,7 @@
         }
       },
       {
-        "id": "act_claw_aen8",
+        "id": "act_claw_l34s",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
@@ -1759,7 +1941,7 @@
         }
       },
       {
-        "id": "act_poison_breath__recharge_5__cjio",
+        "id": "act_poison_breath__recharge_5__y5w5",
         "name": "Poison Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales poisonous gas in a 30-foot cone. Each creature in that area must make a DC 14 Constitution saving throw, taking 42 (12d6) poison damage on a failed save, or half as much damage on a successful one.</p>",

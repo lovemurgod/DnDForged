@@ -57,9 +57,33 @@
         "mod": 3
       }
     },
+    "str": 16,
+    "dex": 16,
+    "con": 16,
+    "int": 16,
+    "wis": 16,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "unconscious"
+    ],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "Truesight 60 ft."
@@ -73,7 +97,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_jq9v",
+        "id": "act_incorporeal_movement_2k17",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The avatar can move through other creatures and objects as if they were Difficult Terrain. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
@@ -97,7 +121,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_86wp",
+        "id": "act_multiattack_ji5j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The avatar makes a number of Reaping Scythe attacks equal to half the summoner's Proficiency Bonus (rounded up).</p>",
@@ -114,7 +138,7 @@
         }
       },
       {
-        "id": "act_reaping_scythe_yrdr",
+        "id": "act_reaping_scythe_2o4j",
         "name": "Reaping Scythe",
         "actionType": "action",
         "descriptionHtml": "<p>m Automatic hit, reach 5 ft. {@h}7 (1d8 + 3) Slashing damage plus 4 (1d8) Necrotic damage.</p>",
@@ -211,9 +235,22 @@
         "mod": -4
       }
     },
+    "str": 14,
+    "dex": 13,
+    "con": 13,
+    "int": 2,
+    "wis": 10,
+    "cha": 3,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."

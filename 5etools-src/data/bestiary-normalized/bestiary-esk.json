@@ -57,9 +57,25 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 15,
+    "con": 12,
+    "int": 13,
+    "wis": 10,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+4"
+    },
     "saves": {
       "dex": "+4"
+    },
+    "skill": {
+      "acrobatics": "+4",
+      "performance": "+4",
+      "persuasion": "+4",
+      "sleight of hand": "+4",
+      "stealth": "+4"
     },
     "skills": {
       "acrobatics": "+4",
@@ -68,6 +84,11 @@
       "sleight of hand": "+4",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -82,7 +103,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_helpful_1nn0",
+        "id": "act_helpful_mqho",
         "name": "Helpful",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert can take the Help action as a bonus action.</p>",
@@ -99,7 +120,7 @@
         }
       },
       {
-        "id": "act_tools_9uqr",
+        "id": "act_tools_erk6",
         "name": "Tools",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
@@ -118,7 +139,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_dkba",
+        "id": "act_shortsword_b2g0",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -140,7 +161,7 @@
         }
       },
       {
-        "id": "act_dagger_syoj",
+        "id": "act_dagger_893g",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
@@ -162,7 +183,7 @@
         }
       },
       {
-        "id": "act_shortbow_0hyw",
+        "id": "act_shortbow_45e7",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -255,15 +276,34 @@
         "mod": 1
       }
     },
+    "str": 10,
+    "dex": 12,
+    "con": 10,
+    "int": 15,
+    "wis": 14,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+4"
+    },
     "saves": {
       "wis": "+4"
+    },
+    "skill": {
+      "arcana": "+4",
+      "investigation": "+4",
+      "religion": "+4"
     },
     "skills": {
       "arcana": "+4",
       "investigation": "+4",
       "religion": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -469,7 +509,7 @@
     ],
     "traits": [
       {
-        "id": "act_magical_role_mkpw",
+        "id": "act_magical_role_469j",
         "name": "Magical Role",
         "actionType": "trait",
         "descriptionHtml": "<p>Choose a role for the spellcaster: healer or mage. Your choice determines which Spellcasting trait to use below.</p>",
@@ -488,7 +528,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_g6ia",
+        "id": "act_quarterstaff_vyov",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
@@ -585,15 +625,34 @@
         "mod": 0
       }
     },
+    "str": 15,
+    "dex": 13,
+    "con": 14,
+    "int": 10,
+    "wis": 12,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+4"
+    },
     "saves": {
       "con": "+4"
+    },
+    "skill": {
+      "athletics": "+4",
+      "perception": "+3",
+      "survival": "+3"
     },
     "skills": {
       "athletics": "+4",
       "perception": "+3",
       "survival": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -608,7 +667,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_martial_role_78x0",
+        "id": "act_martial_role_o92u",
         "name": "Martial Role",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
@@ -627,7 +686,7 @@
     ],
     "actions": [
       {
-        "id": "act_longsword_mxpt",
+        "id": "act_longsword_cecg",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
@@ -653,7 +712,7 @@
         }
       },
       {
-        "id": "act_longbow_jz8c",
+        "id": "act_longbow_wzbi",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +3 to hit, range 150/600 ft., one target. {@h}5 (1d8 + 1) piercing damage.</p>",
@@ -678,7 +737,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protection__defender_only__9h17",
+        "id": "act_protection__defender_only__4f6y",
         "name": "Protection (Defender Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>The warrior imposes disadvantage on the attack roll of a creature within 5 feet of it whose target isn't the warrior. The warrior must be able to see the attacker.</p>",

@@ -57,11 +57,37 @@
         "mod": -2
       }
     },
+    "str": 15,
+    "dex": 12,
+    "con": 13,
+    "int": 6,
+    "wis": 11,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+5"
+    },
     "skills": {
       "stealth": "+5"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60"
@@ -75,7 +101,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_ey3k",
+        "id": "act_magic_resistance_togz",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The icon has Advantage on saving throws against spells and other magical effects.</p>",
@@ -94,7 +120,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6dl3",
+        "id": "act_multiattack_7eob",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The icon makes two Slam attacks and uses Fiery Eruption.</p>",
@@ -111,7 +137,7 @@
         }
       },
       {
-        "id": "act_slam_h8ax",
+        "id": "act_slam_h2g9",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}4 (1d4 + 2) Bludgeoning damage.</p>",
@@ -133,7 +159,7 @@
         }
       },
       {
-        "id": "act_fiery_eruption_zalq",
+        "id": "act_fiery_eruption_n1gc",
         "name": "Fiery Eruption",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 11, each creature in a 5-foot Emanation [Area of Effect] originating from the icon. {@actSaveFail} 7 (2d6) Fire damage.</p>",
@@ -229,16 +255,44 @@
         "mod": 4
       }
     },
+    "str": 12,
+    "dex": 17,
+    "con": 14,
+    "int": 14,
+    "wis": 13,
+    "cha": 19,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+4",
+      "wis": "+3"
+    },
     "saves": {
       "con": "+4",
       "wis": "+3"
+    },
+    "skill": {
+      "perception": "+3",
+      "persuasion": "+8",
+      "stealth": "+5"
     },
     "skills": {
       "perception": "+3",
       "persuasion": "+8",
       "stealth": "+5"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "poisoned"
+    ],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "Darkvision 120 ft. (unimpeded by magical {@variantrule Darkness|XPHB})"
@@ -253,7 +307,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_diabolic_ward_rqgp",
+        "id": "act_diabolic_ward_9guv",
         "name": "Diabolic Ward",
         "actionType": "trait",
         "descriptionHtml": "<p>Attack rolls against the devil have Disadvantage. If the devil makes an attack roll, this trait is suppressed until the start of its next turn.</p>",
@@ -270,7 +324,7 @@
         }
       },
       {
-        "id": "act_diabolical_restoration_qm4z",
+        "id": "act_diabolical_restoration_vgms",
         "name": "Diabolical Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
@@ -287,7 +341,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_m5fz",
+        "id": "act_magic_resistance_jm3w",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
@@ -306,7 +360,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mzty",
+        "id": "act_multiattack_u1kp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes two attacks, using Infernal Blade or Confounding Ray in any combination.</p>",
@@ -323,7 +377,7 @@
         }
       },
       {
-        "id": "act_infernal_blade_ev09",
+        "id": "act_infernal_blade_gu6a",
         "name": "Infernal Blade",
         "actionType": "action",
         "descriptionHtml": "<p>m +5, reach 5 ft. {@h}6 (1d6 + 3) Slashing damage and 7 (2d6) Fire damage.</p>",
@@ -349,7 +403,7 @@
         }
       },
       {
-        "id": "act_confounding_ray_umj5",
+        "id": "act_confounding_ray_8cir",
         "name": "Confounding Ray",
         "actionType": "action",
         "descriptionHtml": "<p>r +5, range 120 ft. {@h}13 (2d12) Psychic damage. If the target is a creature, it can't make Opportunity Attack until the start of the devil's next turn.</p>",
@@ -371,7 +425,7 @@
         }
       },
       {
-        "id": "act_compelling_contract__1_day__r27b",
+        "id": "act_compelling_contract__1_day__2ex0",
         "name": "Compelling Contract (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>cha DC 14, one creature within 30 feet of the devil. {@actSaveFail} The target has the Charmed condition. While it is Charmed, it has the Stunned condition, except the target can speak. If the target agrees to the devil's contract, the effect ends. Otherwise, the target repeats the save whenever it takes damage and at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -462,18 +516,47 @@
         "mod": 3
       }
     },
+    "str": 21,
+    "dex": 19,
+    "con": 20,
+    "int": 22,
+    "wis": 18,
+    "cha": 17,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+9",
+      "int": "+10",
+      "wis": "+8",
+      "cha": "+7"
+    },
     "saves": {
       "con": "+9",
       "int": "+10",
       "wis": "+8",
       "cha": "+7"
     },
+    "skill": {
+      "arcana": "+10",
+      "history": "+10",
+      "perception": "+8"
+    },
     "skills": {
       "arcana": "+10",
       "history": "+10",
       "perception": "+8"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 18,
     "senses": {
       "passivePerception": 18,
       "sensesString": "Darkvision 120 ft."
@@ -603,7 +686,7 @@
     ],
     "traits": [
       {
-        "id": "act_diabolical_restoration_cawt",
+        "id": "act_diabolical_restoration_9c1o",
         "name": "Diabolical Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
@@ -620,7 +703,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_wpd8",
+        "id": "act_magic_resistance_c9nu",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
@@ -639,7 +722,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ducx",
+        "id": "act_multiattack_kbm6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes two Thundering Halberd attacks.</p>",
@@ -656,7 +739,7 @@
         }
       },
       {
-        "id": "act_thundering_halberd_1v2e",
+        "id": "act_thundering_halberd_wjow",
         "name": "Thundering Halberd",
         "actionType": "action",
         "descriptionHtml": "<p>m +9, reach 10 ft. {@h}16 (2d10 + 5) Slashing damage plus 14 (4d6) Thunder damage.</p>",
@@ -684,7 +767,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_utterance_of_pain_k8ng",
+        "id": "act_utterance_of_pain_3lga",
         "name": "Utterance of Pain",
         "actionType": "bonus",
         "descriptionHtml": "<p>wis DC 18, each creature in a 20-foot Emanation [Area of Effect] originating from the devil. {@actSaveFail} The target has the Stunned condition until the end of the devil's next turn.</p>",
@@ -704,7 +787,7 @@
         }
       },
       {
-        "id": "act_utterance_of_unmaking_2ej4",
+        "id": "act_utterance_of_unmaking_f9iq",
         "name": "Utterance of Unmaking",
         "actionType": "bonus",
         "descriptionHtml": "<p>con DC 18, each creature in a 20-foot Emanation [Area of Effect] originating from the devil. {@actSaveFail} 22 (4d10) Force damage. {@actSaveSuccess} Half damage.</p>",
@@ -799,16 +882,46 @@
         "mod": 4
       }
     },
+    "str": 19,
+    "dex": 16,
+    "con": 17,
+    "int": 20,
+    "wis": 16,
+    "cha": 18,
     "proficiencyBonus": 5,
+    "save": {
+      "con": "+8",
+      "int": "+10"
+    },
     "saves": {
       "con": "+8",
       "int": "+10"
+    },
+    "skill": {
+      "arcana": "+10",
+      "perception": "+8",
+      "religion": "+10",
+      "stealth": "+8"
     },
     "skills": {
       "arcana": "+10",
       "perception": "+8",
       "religion": "+10",
       "stealth": "+8"
+    },
+    "immune": [],
+    "resist": [
+      "fire",
+      "necrotic",
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 18,
+    "initiative": {
+      "proficiency": 2
     },
     "senses": {
       "passivePerception": 18,
@@ -1039,7 +1152,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__p41g",
+        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__h7ee",
         "name": "Legendary Resistance (3/Day, or 4/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the vampire fails a saving throw, it can choose to succeed instead.</p>",
@@ -1056,7 +1169,7 @@
         }
       },
       {
-        "id": "act_misty_escape_ex57",
+        "id": "act_misty_escape_f2u9",
         "name": "Misty Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>If the vampire drops to 0 Hit Points outside its resting place, the vampire uses Shape-Shift to become mist (no action required). If it can't use Shape-Shift, it is destroyed.</p><p>While it has 0 Hit Points in mist form, it can't return to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it returns to its vampire form and has the Paralyzed condition until it regains any Hit Points, and it regains 1 Hit Points after spending 1 hour there.</p>",
@@ -1073,7 +1186,7 @@
         }
       },
       {
-        "id": "act_vampire_weakness_g0ur",
+        "id": "act_vampire_weakness_th1x",
         "name": "Vampire Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire has these weaknesses:</p><ul><li></li><li></li><li></li><li></li></ul>",
@@ -1092,7 +1205,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__vampire_form_only__okfb",
+        "id": "act_multiattack__vampire_form_only__69y3",
         "name": "Multiattack (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire makes two Hellfire Claw attacks and uses Bite.</p>",
@@ -1109,7 +1222,7 @@
         }
       },
       {
-        "id": "act_hellfire_claw__vampire_form_only__phu0",
+        "id": "act_hellfire_claw__vampire_form_only__mcpm",
         "name": "Hellfire Claw (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>m +9, reach 5 ft. {@h}13 (2d8 + 4) Slashing damage plus 10 (3d6) Fire damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 17) from one of two claws.</p>",
@@ -1138,7 +1251,7 @@
         }
       },
       {
-        "id": "act_bite__imp_or_vampire_form_only__zez6",
+        "id": "act_bite__imp_or_vampire_form_only__lez6",
         "name": "Bite (Imp or Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 18, one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition. {@actSaveFail} 6 (1d4 + 4) Piercing damage plus 16 (3d10) Necrotic damage and the creature loses its highest-level available spell slot (if any). The target's Hit Points maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount. A Humanoid reduced to 0 Hit Points by this damage and then buried rises the following sunset as a Vampire Spawn under the vampire's control.</p>",
@@ -1169,7 +1282,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_owws",
+        "id": "act_shape_shift_wbsx",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>If the vampire isn't in sunlight or running water, it shape-shifts into a Tiny imp (Speed 20 ft., Fly Speed 40 ft.), or a Medium cloud of mist (Speed 5 ft., Fly Speed 20 ft. [hover]), or it returns to its vampire form. Anything it is wearing transforms with it.</p><p>While in imp form, the vampire's game statistics, other than its size and Speed, are unchanged.</p><p>While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless and can enter an enemy's space and stop there. If air can pass through a space, the mist can do so, but it can't pass through liquid. It has Resistance to all damage, except the damage it takes from sunlight.</p>",
@@ -1192,7 +1305,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_hellfire_strike_ktdx",
+          "id": "act_hellfire_strike_pvdq",
           "name": "Hellfire Strike",
           "actionType": "legendary",
           "descriptionHtml": "<p>The vampire moves up to half its Speed, and it makes one Hellfire Claw attack.</p>",
@@ -1209,7 +1322,7 @@
           }
         },
         {
-          "id": "act_infernal_majesty_fw4q",
+          "id": "act_infernal_majesty_qrd2",
           "name": "Infernal Majesty",
           "actionType": "legendary",
           "descriptionHtml": "<p>cha DC 17, each creature in a 20-foot Emanation [Area of Effect] originating from the vampire. {@actSaveFail} 9 (2d8) Psychic damage, and the target has the Frightened condition until the start of its next turn. {@actSaveSuccess} Half damage only. {@actSaveSuccessOrFail} The vampire can't take this action again until the start of its next turn.</p>",
@@ -1234,7 +1347,7 @@
           }
         },
         {
-          "id": "act_teleport_xf5r",
+          "id": "act_teleport_6oql",
           "name": "Teleport",
           "actionType": "legendary",
           "descriptionHtml": "<p>The vampire teleports up to 30 feet to an unoccupied space it can see.</p>",
@@ -1316,14 +1429,41 @@
         "mod": 3
       }
     },
+    "str": 21,
+    "dex": 15,
+    "con": 18,
+    "int": 10,
+    "wis": 14,
+    "cha": 17,
     "proficiencyBonus": 4,
+    "save": {
+      "con": "+8",
+      "wis": "+6"
+    },
     "saves": {
       "con": "+8",
       "wis": "+6"
     },
+    "skill": {
+      "athletics": "+9",
+      "perception": "+10"
+    },
     "skills": {
       "athletics": "+9",
       "perception": "+10"
+    },
+    "immune": [],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "frightened"
+    ],
+    "passive": 20,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 20,
@@ -1379,7 +1519,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_hpjp",
+        "id": "act_magic_resistance_wof3",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1396,7 +1536,7 @@
         }
       },
       {
-        "id": "act_vampire_weakness_6onn",
+        "id": "act_vampire_weakness_nb7g",
         "name": "Vampire Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire has these weaknesses:</p><ul><li></li><li></li><li></li><li></li><li></li></ul>",
@@ -1415,7 +1555,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yrft",
+        "id": "act_multiattack_jfmr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire makes two Claw attacks and uses Bite or Guardian's Command.</p>",
@@ -1432,7 +1572,7 @@
         }
       },
       {
-        "id": "act_claw_iced",
+        "id": "act_claw_hb72",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>m +9, reach 5 ft. {@h}14 (2d8 + 5) Slashing damage plus 7 (2d6) Necrotic damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 16) from one of two claws.</p>",
@@ -1461,7 +1601,7 @@
         }
       },
       {
-        "id": "act_bite_hetw",
+        "id": "act_bite_w5s8",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 16, one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition. {@actSaveFail} 7 (1d4 + 5) Piercing damage plus 7 (2d6) Necrotic damage. The target's Hit Points maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount.</p>",
@@ -1493,7 +1633,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_resilient_flesh_xfak",
+        "id": "act_resilient_flesh_ch84",
         "name": "Resilient Flesh",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The vampire is hit by a melee attack roll from an attacker the vampire can see. {@actResponse} The vampire reduces the damage it takes from the attack by 11 (2d6 + 4).</p>",

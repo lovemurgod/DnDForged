@@ -5,14 +5,24 @@
     "source": "HotDQ",
     "page": 94,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, legendary (Requires Attunement)*\n\n---\n\nThis horned mask of glossy ebony has horns and a skull-like mien. The mask reshapes to fit a wearer attuned to it. While you are wearing the mask and attuned to it, you can access the following properties.\n\n**Damage Absorption.** You have resistance to acid damage. If you already have damage resistance to acid from another source, you gain immunity to acid damage. If you already have immunity to acid damage from another source, you regain hit points equal to half of any acid damage you are dealt.\n\n**Draconic Majesty.** While you are wearing no armor, you can add your Charisma bonus to your Armor Class.\n\n**Dragon Breath.** If you have a breath weapon that requires rest to recharge, it gains a recharge of 6.\n\n**Dragon Sight.** You gain darkvision with a radius of 60 feet, or an additional 60 feet of darkvision if you already have that sense. Once per day, you can gain blindsight out to a range of 30 feet for 5 minutes.\n\n**Dragon Tongue.** You can speak and understand Draconic. You also have advantage on any Charisma check you make against Black dragons.\n\n**Legendary Resistance.** (1/Day) If you fail a saving throw, you can choose to succeed instead.\n\n**Water Breathing.** You can breathe underwater.",
     "descriptionHtml": "<p>This horned mask of glossy ebony has horns and a skull-like mien. The mask reshapes to fit a wearer attuned to it. While you are wearing the mask and attuned to it, you can access the following properties.</p>\n<div class=\"item-subentry\"><strong>Damage Absorption.</strong> <p>You have resistance to acid damage. If you already have damage resistance to acid from another source, you gain immunity to acid damage. If you already have immunity to acid damage from another source, you regain hit points equal to half of any acid damage you are dealt.</p></div>\n<div class=\"item-subentry\"><strong>Draconic Majesty.</strong> <p>While you are wearing no armor, you can add your Charisma bonus to your Armor Class.</p></div>\n<div class=\"item-subentry\"><strong>Dragon Breath.</strong> <p>If you have a breath weapon that requires rest to recharge, it gains a recharge of 6.</p></div>\n<div class=\"item-subentry\"><strong>Dragon Sight.</strong> <p>You gain darkvision with a radius of 60 feet, or an additional 60 feet of darkvision if you already have that sense. Once per day, you can gain blindsight out to a range of 30 feet for 5 minutes.</p></div>\n<div class=\"item-subentry\"><strong>Dragon Tongue.</strong> <p>You can speak and understand Draconic. You also have advantage on any Charisma check you make against Black dragons.</p></div>\n<div class=\"item-subentry\"><strong>Legendary Resistance.</strong> <p>(1/Day) If you fail a saving throw, you can choose to succeed instead.</p></div>\n<div class=\"item-subentry\"><strong>Water Breathing.</strong> <p>You can breathe underwater.</p></div>"
   },
   {
@@ -21,17 +31,52 @@
     "source": "HotDQ",
     "page": 84,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "unknown (magic)",
     "reqAttune": false,
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": "1d8",
     "dmgType": "piercing",
+    "bonusWeapon": null,
     "properties": [
       "Thrown",
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Daylight",
+        "cleanName": "daylight",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Dragongleam",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, unknown (magic)*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 3 lb\n\n---\n\nThis spear is enchanted with 10 charges of a daylight spell for use in twilight or dark forest underbrush. The command phrase is \"Tiamat's eyes shine,\" written in Draconic runes on the spear's crossguard.",
     "descriptionHtml": "<p>This spear is enchanted with 10 charges of a daylight spell for use in twilight or dark forest underbrush. The command phrase is \"Tiamat's eyes shine,\" written in Draconic runes on the spear's crossguard.</p>"
   },
   {
@@ -40,17 +85,68 @@
     "source": "HotDQ",
     "page": 94,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 6,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "2d6",
+    "dmg2": null,
     "dmgType": "slashing",
+    "bonusWeapon": "+1",
     "properties": [
       "Heavy",
       "Two-Handed"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Detect Evil And Good",
+        "cleanName": "detect evil and good",
+        "castLevel": null
+      },
+      {
+        "name": "Detect Magic",
+        "cleanName": "detect magic",
+        "castLevel": null
+      },
+      {
+        "name": "Detect Thoughts",
+        "cleanName": "detect thoughts",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Hazirawn",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Slashing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Necrotic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, legendary (Requires Attunement)*\n\n**Damage:** 2d6 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 6 lb\n\n---\n\nA sentient (neutral evil) greatsword, Hazirawn is capable of speech in Common and Netherese. Even if you aren't attuned to the sword, you gain a +1 bonus to attack and damage rolls made with this weapon. If you are not attuned to Hazirawn, you deal an extra 1d6 necrotic damage when you hit with the weapon.\n\n**Increased Potency.** While you are attuned to this weapon, its bonus on attack and damage rolls increases to +2, and a hit deals an extra 2d6 necrotic damage (instead of 1d6).\n\n**Spells.** Hazirawn has 4 charges to cast spells. As long as the sword is attuned to you and you are holding it in your hand, you can cast detect magic (1 charge), detect evil and good (1 charge), or detect thoughts (2 charges). Each night at midnight, Hazirawn regains 1d4 expended charges.\n\n**Wounding.** While you are attuned to the weapon, any creature that you hit with Hazirawn can't regain hit points for 1 minute. The target can make a 15 Constitution saving throw at the end of each of its turns, ending this effect early on a success.",
     "descriptionHtml": "<p>A sentient (neutral evil) greatsword, Hazirawn is capable of speech in Common and Netherese. Even if you aren't attuned to the sword, you gain a +1 bonus to attack and damage rolls made with this weapon. If you are not attuned to Hazirawn, you deal an extra 1d6 necrotic damage when you hit with the weapon.</p>\n<div class=\"item-subentry\"><strong>Increased Potency.</strong> <p>While you are attuned to this weapon, its bonus on attack and damage rolls increases to +2, and a hit deals an extra 2d6 necrotic damage (instead of 1d6).</p></div>\n<div class=\"item-subentry\"><strong>Spells.</strong> <p>Hazirawn has 4 charges to cast spells. As long as the sword is attuned to you and you are holding it in your hand, you can cast detect magic (1 charge), detect evil and good (1 charge), or detect thoughts (2 charges). Each night at midnight, Hazirawn regains 1d4 expended charges.</p></div>\n<div class=\"item-subentry\"><strong>Wounding.</strong> <p>While you are attuned to the weapon, any creature that you hit with Hazirawn can't regain hit points for 1 minute. The target can make a 15 Constitution saving throw at the end of each of its turns, ending this effect early on a success.</p></div>"
   },
   {
@@ -59,14 +155,24 @@
     "source": "HotDQ",
     "page": 94,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "uncommon",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": "+1",
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, uncommon*\n\n---\n\nThe jewels in the insignia of the Cult of the Dragon flare with purple light when you enter combat, empowering your natural fists or natural weapons.\n\nWhile wearing the insignia you gain a +1 bonus to the attack rolls and the damage rolls you make with unarmed strikes and natural weapons. Such attacks are considered to be magical.",
     "descriptionHtml": "<p>The jewels in the insignia of the Cult of the Dragon flare with purple light when you enter combat, empowering your natural fists or natural weapons.</p>\n<p>While wearing the insignia you gain a +1 bonus to the attack rolls and the damage rolls you make with unarmed strikes and natural weapons. Such attacks are considered to be magical.</p>"
   },
   {
@@ -75,14 +181,24 @@
     "source": "HotDQ",
     "page": 74,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "common",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, common*\n\n---\n\nThis golden stein is decorated with dancing dwarves and grain patterns.\n\nSpeaking the command word (\"Illefarn\") while grasping the handle fills the tankard with three pints of rich dwarven ale. This power can be used up to three times per day.",
     "descriptionHtml": "<p>This golden stein is decorated with dancing dwarves and grain patterns.</p>\n<p>Speaking the command word (\"Illefarn\") while grasping the handle fills the tankard with three pints of rich dwarven ale. This power can be used up to three times per day.</p>"
   },
   {
@@ -91,14 +207,40 @@
     "source": "HotDQ",
     "page": 94,
     "type": "Adventuring Gear",
+    "rawType": "WD|DMG",
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": 1,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Ray Of Frost",
+        "cleanName": "ray of frost",
+        "castLevel": null
+      },
+      {
+        "name": "Sleet Storm",
+        "cleanName": "sleet storm",
+        "castLevel": null
+      },
+      {
+        "name": "Ice Storm",
+        "cleanName": "ice storm",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear, rare (Requires Attunement)*\n\n**Weight:** 1 lb\n\n---\n\nThis wand looks and feels like an icicle. You must be attuned to the wand to use it.\n\nThe wand has 7 charges, which are used to fuel the spells within it. With the wand in hand, you can use your action to cast one of the following spells from the wand, even if you are incapable of casting spells: ray of frost (no charges, or 1 charge to cast at 5th level; 5 to hit with ranged spell attack), sleet storm (3 charges; spell save 15), or ice storm (4 charges; spell save 15). No components are required. The wand regains 1d6 + 1 expended charges each day at dawn. If you expend the wand's last charge, roll a d20. On a 20, the wand melts away, forever destroyed.",
     "descriptionHtml": "<p>This wand looks and feels like an icicle. You must be attuned to the wand to use it.</p>\n<p>The wand has 7 charges, which are used to fuel the spells within it. With the wand in hand, you can use your action to cast one of the following spells from the wand, even if you are incapable of casting spells: ray of frost (no charges, or 1 charge to cast at 5th level; 5 to hit with ranged spell attack), sleet storm (3 charges; spell save 15), or ice storm (4 charges; spell save 15). No components are required. The wand regains 1d6 + 1 expended charges each day at dawn. If you expend the wand's last charge, roll a d20. On a 20, the wand melts away, forever destroyed.</p>"
   }
 ]

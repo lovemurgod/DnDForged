@@ -57,12 +57,36 @@
         "mod": 2
       }
     },
+    "str": 1,
+    "dex": 1,
+    "con": 15,
+    "int": 19,
+    "wis": 10,
+    "cha": 15,
     "proficiencyBonus": 3,
+    "save": {
+      "int": "+7",
+      "cha": "+5"
+    },
     "saves": {
       "int": "+7",
       "cha": "+5"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "necrotic",
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -316,7 +340,7 @@
     ],
     "traits": [
       {
-        "id": "act_detect_sentience_n58w",
+        "id": "act_detect_sentience_ahdw",
         "name": "Detect Sentience",
         "actionType": "trait",
         "descriptionHtml": "<p>The brain in a jar can sense the presence and location of any creature within 300 feet of it that has an Intelligence of 3 or higher, regardless of interposing barriers, unless the creature is protected by a mind blank spell.</p>",
@@ -333,7 +357,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ehtx",
+        "id": "act_magic_resistance_z3ho",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The brain in a jar has advantage on saving throws against spells and other magical effects.</p>",
@@ -352,7 +376,7 @@
     ],
     "actions": [
       {
-        "id": "act_mind_blast__recharge_5__jlzv",
+        "id": "act_mind_blast__recharge_5__5ldm",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The brain in a jar magically emits psychic energy in a 60-foot cone. Each creature in that area must succeed on a DC 15 Intelligence saving throw or take 13 (2d8 + 4) psychic damage and be stunned for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -448,9 +472,43 @@
         "mod": -5
       }
     },
+    "str": 20,
+    "dex": 12,
+    "con": 18,
+    "int": 3,
+    "wis": 11,
+    "cha": 1,
     "proficiencyBonus": 4,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [
+      "fire",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 120 ft."
@@ -464,7 +522,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_y3li",
+        "id": "act_magic_resistance_uy5c",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The clockwork kraken has advantage on saving throws against spells and other magical effects.</p>",
@@ -481,7 +539,7 @@
         }
       },
       {
-        "id": "act_independent_tentacles_j6zs",
+        "id": "act_independent_tentacles_rhsr",
         "name": "Independent Tentacles",
         "actionType": "trait",
         "descriptionHtml": "<p>The clockwork kraken has eight tentacles, each of which is treated as a Medium creature, moves independently on the construct's turn, and has a flying speed of 40 feet. The clockwork kraken's senses operate through its tentacles as well as its main body. Each tentacle can be attacked independently, with damage dealt to tentacles applied to the clockwork kraken's hit point total. A tentacle is destroyed if it takes more than 20 damage.</p><p>Reducing the construct to three or fewer tentacles reduces its attacks accordingly. A clockwork kraken can regrow any destroyed tentacles at the end of a long rest.</p>",
@@ -500,7 +558,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_417i",
+        "id": "act_multiattack_jelz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The clockwork kraken makes four tentacle slam attacks.</p>",
@@ -517,7 +575,7 @@
         }
       },
       {
-        "id": "act_tentacle_slam_e1qr",
+        "id": "act_tentacle_slam_8r7p",
         "name": "Tentacle Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}12 (2d6 + 5) bludgeoning damage.</p>",
@@ -610,16 +668,47 @@
         "mod": 4
       }
     },
+    "str": 18,
+    "dex": 18,
+    "con": 18,
+    "int": 17,
+    "wis": 15,
+    "cha": 18,
     "proficiencyBonus": 5,
+    "save": {
+      "dex": "+9",
+      "wis": "+7",
+      "cha": "+9"
+    },
     "saves": {
       "dex": "+9",
       "wis": "+7",
       "cha": "+9"
     },
+    "skill": {
+      "perception": "+7",
+      "stealth": "+9"
+    },
     "skills": {
       "perception": "+7",
       "stealth": "+9"
     },
+    "immune": [],
+    "resist": [
+      "necrotic",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 120 ft."
@@ -633,7 +722,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_bahx",
+        "id": "act_shapechanger_lvtp",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>If the vampire isn't in sunlight or running water, it can use its action to polymorph into a Tiny bat or a Medium cloud of mist, or back into its true form.</p><p>While in bat form, the vampire can't speak, its walking speed is 5 feet, and it has a flying speed of 30 feet. Its statistics, other than its size and speed, are unchanged. Anything it is wearing transforms with it, but nothing it is carrying does. It reverts to its true form if it dies.</p><p>While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and it can't pass through water. It has advantage on Strength, Dexterity, and Constitution saving throws, and it is immune to all nonmagical damage, except the damage it takes from sunlight.</p>",
@@ -650,7 +739,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__6phq",
+        "id": "act_legendary_resistance__3_day__4o3u",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the vampire fails a saving throw, it can choose to succeed instead.</p>",
@@ -667,7 +756,7 @@
         }
       },
       {
-        "id": "act_misty_escape_a9ix",
+        "id": "act_misty_escape_ezlq",
         "name": "Misty Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>When it drops to 0 hit points outside its resting place, the vampire transforms into a cloud of mist (as in the Shapechanger trait) instead of falling unconscious, provided that it isn't in sunlight or running water. If it can't transform, it is destroyed.</p><p>While it has 0 hit points in mist form, it can't revert to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it reverts to its vampire form. It is then paralyzed until it regains at least 1 hit point. After spending 1 hour in its resting place with 0 hit points, it regains 1 hit point.</p>",
@@ -684,7 +773,7 @@
         }
       },
       {
-        "id": "act_regeneration_po1l",
+        "id": "act_regeneration_slgc",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire regains 20 hit points at the start of its turn if it has at least 1 hit point and isn't in sunlight or running water. If the vampire takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of the vampire's next turn.</p>",
@@ -701,7 +790,7 @@
         }
       },
       {
-        "id": "act_spider_climb_3hrx",
+        "id": "act_spider_climb_v3mb",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -718,7 +807,7 @@
         }
       },
       {
-        "id": "act_vampire_weaknesses_1s5f",
+        "id": "act_vampire_weaknesses_rhvl",
         "name": "Vampire Weaknesses",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire has the following flaws:</p><ul><li></li><li></li><li></li><li></li></ul>",
@@ -737,7 +826,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__vampire_form_only__428q",
+        "id": "act_multiattack__vampire_form_only__ri9r",
         "name": "Multiattack (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire makes two attacks, only one of which can be a bite attack.</p>",
@@ -754,7 +843,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike__vampire_form_only__wumc",
+        "id": "act_unarmed_strike__vampire_form_only__u8or",
         "name": "Unarmed Strike (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one creature. {@h}8 (1d8 + 4) bludgeoning damage. Instead of dealing damage, the vampire can grapple the target (escape DC 18).</p>",
@@ -779,7 +868,7 @@
         }
       },
       {
-        "id": "act_bite__bat_or_vampire_form_only__a65x",
+        "id": "act_bite__bat_or_vampire_form_only__3k12",
         "name": "Bite (Bat or Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by the vampire, incapacitated, or restrained. {@h}7 (1d6 + 4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under the vampire's control.</p>",
@@ -805,7 +894,7 @@
         }
       },
       {
-        "id": "act_charm_phhj",
+        "id": "act_charm_addy",
         "name": "Charm",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be charmed by the vampire. The charmed target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.</p><p>Each time the vampire or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect.</p>",
@@ -825,7 +914,7 @@
         }
       },
       {
-        "id": "act_children_of_the_night__1_day__kluy",
+        "id": "act_children_of_the_night__1_day__ljod",
         "name": "Children of the Night (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire magically calls 2d4 swarms of swarm of bats or swarm of rats, provided that the sun isn't up. While outdoors, the vampire can call 3d6 wolf instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action.</p>",
@@ -849,7 +938,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_xfy0",
+          "id": "act_move_vh59",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The vampire moves up to its speed without provoking opportunity attacks.</p>",
@@ -866,7 +955,7 @@
           }
         },
         {
-          "id": "act_unarmed_strike_1ksc",
+          "id": "act_unarmed_strike_kyya",
           "name": "Unarmed Strike",
           "actionType": "legendary",
           "descriptionHtml": "<p>The vampire makes one unarmed strike.</p>",
@@ -883,7 +972,7 @@
           }
         },
         {
-          "id": "act_bite__costs_2_actions__xtac",
+          "id": "act_bite__costs_2_actions__mqrn",
           "name": "Bite (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The vampire makes one bite attack.</p>",
@@ -965,13 +1054,30 @@
         "mod": 0
       }
     },
+    "str": 11,
+    "dex": 17,
+    "con": 13,
+    "int": 11,
+    "wis": 16,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "acrobatics": "+5",
+      "insight": "+5",
+      "stealth": "+5"
+    },
     "skills": {
       "acrobatics": "+5",
       "insight": "+5",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -985,7 +1091,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unarmored_defense_5et9",
+        "id": "act_unarmored_defense_kejd",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While the adept is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -1004,7 +1110,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xv7e",
+        "id": "act_multiattack_o35d",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The adept makes three unarmed strikes or three dart attacks.</p>",
@@ -1021,7 +1127,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_r770",
+        "id": "act_unarmed_strike_wuri",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage. If the target is a creature, the adept can choose one of the following additional effects:</p><ul><li>The target must succeed on a DC 13 Strength saving throw or drop one item it is holding (adept's choice).</li><li>The target must succeed on a DC 13 Dexterity saving throw or be knocked prone.</li><li>The target must succeed on a DC 13 Constitution saving throw or be stunned until the end of the adept's next turn.</li></ul>",
@@ -1046,7 +1152,7 @@
         }
       },
       {
-        "id": "act_dart_qj2b",
+        "id": "act_dart_hlwu",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
@@ -1071,7 +1177,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_c0r7",
+        "id": "act_deflect_missile_f3y3",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, the adept deflects the missile. The damage it takes from the attack is reduced by 1d10 + 3. If the damage is reduced to 0, the adept catches the missile if it's small enough to hold in one hand and the adept has a hand free.</p>",
@@ -1157,13 +1263,30 @@
         "mod": 2
       }
     },
+    "str": 11,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 13,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+4",
+      "persuasion": "+4",
+      "religion": "+2"
+    },
     "skills": {
       "deception": "+4",
       "persuasion": "+4",
       "religion": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -1384,7 +1507,7 @@
     ],
     "traits": [
       {
-        "id": "act_dark_devotion_6i6n",
+        "id": "act_dark_devotion_yqny",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>The fanatic has advantage on saving throws against being charmed or frightened.</p>",
@@ -1403,7 +1526,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fnit",
+        "id": "act_multiattack_291b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fanatic makes two melee attacks.</p>",
@@ -1420,7 +1543,7 @@
         }
       },
       {
-        "id": "act_dagger_74kw",
+        "id": "act_dagger_uxog",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one creature. {@h}4 (1d4 + 2) piercing damage.</p>",
@@ -1513,14 +1636,32 @@
         "mod": 3
       }
     },
+    "str": 11,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 12,
+    "cha": 17,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+7",
+      "investigation": "+4",
+      "performance": "+5",
+      "persuasion": "+5"
+    },
     "skills": {
       "deception": "+7",
       "investigation": "+4",
       "performance": "+5",
       "persuasion": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -1706,7 +1847,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_3hwm",
+        "id": "act_special_equipment_lto3",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Garret wears a Ring of Warmth (included in his statistics) and wields a Gambler's Blade longsword.</p>",
@@ -1723,7 +1864,7 @@
         }
       },
       {
-        "id": "act_bardic_inspiration__3_day__gzp7",
+        "id": "act_bardic_inspiration__3_day__uvpx",
         "name": "Bardic Inspiration (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Garret can give one chosen creature (other than him) a d6 inspiration die. The chosen creature must be within 60 feet of Garret and able to hear him. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can use the inspiration die after the roll is made but before the DM says whether it succeeds or fails. Once the inspiration die is rolled, it is lost. A creature can have only one inspiration die at a time.</p>",
@@ -1740,7 +1881,7 @@
         }
       },
       {
-        "id": "act_cunning_action_vei6",
+        "id": "act_cunning_action_6dqi",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of his turns, Garret can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -1757,7 +1898,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__6a5x",
+        "id": "act_sneak_attack__1_turn__412b",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Garret deals an extra 7 (2d6) damage when he hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of Garret that isn't incapacitated and Garret doesn't have disadvantage on the attack roll.</p>",
@@ -1781,7 +1922,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_bqt3",
+        "id": "act_shortsword_0qq2",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -1874,9 +2015,22 @@
         "mod": -3
       }
     },
+    "str": 10,
+    "dex": 13,
+    "con": 12,
+    "int": 4,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "truesight 120 ft."
@@ -1933,7 +2087,7 @@
     ],
     "traits": [
       {
-        "id": "act_axiomatic_mind_z6it",
+        "id": "act_axiomatic_mind_1xr5",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The monodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -1950,7 +2104,7 @@
         }
       },
       {
-        "id": "act_disintegration_hi9j",
+        "id": "act_disintegration_d0o2",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the monodrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -1969,7 +2123,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_jofq",
+        "id": "act_dagger_9ptm",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
@@ -1991,7 +2145,7 @@
         }
       },
       {
-        "id": "act_javelin_65kp",
+        "id": "act_javelin_u0ji",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +2 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}3 (1d6) piercing damage.</p>",
@@ -2084,14 +2238,38 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 15,
+    "con": 16,
+    "int": 12,
+    "wis": 13,
+    "cha": 15,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+5",
+      "insight": "+4",
+      "perception": "+4",
+      "stealth": "+5"
+    },
     "skills": {
       "deception": "+5",
       "insight": "+4",
       "perception": "+4",
       "stealth": "+5"
     },
+    "immune": [
+      "poison",
+      "necrotic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -2105,7 +2283,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_petrifying_gaze_cmu2",
+        "id": "act_petrifying_gaze_adnu",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see the medusa's eyes starts its turn within 30 feet of the medusa, the medusa can force it to make a DC 14 Constitution saving throw if the medusa isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, a creature that fails the save begins to turn to glass and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.</p><p>Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see the medusa until the start of its next turn, when it can avert its eyes again. If the creature looks at the medusa in the meantime, it must immediately make the save.</p><p>If the medusa sees itself reflected on a polished surface within 30 feet of it and in an area of bright light, the medusa is, due to its curse, affected by its own gaze.</p>",
@@ -2127,7 +2305,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_meqj",
+        "id": "act_multiattack_k9i7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The medusa makes either three melee attacks—one with its snake hair and two with its shortsword—or two ranged attacks with its longbow.</p>",
@@ -2144,7 +2322,7 @@
         }
       },
       {
-        "id": "act_snake_hair_4nj5",
+        "id": "act_snake_hair_v927",
         "name": "Snake Hair",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}4 (1d4 + 2) piercing damage plus 14 (4d6) poison damage.</p>",
@@ -2170,7 +2348,7 @@
         }
       },
       {
-        "id": "act_shortsword_u54x",
+        "id": "act_shortsword_564a",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -2192,7 +2370,7 @@
         }
       },
       {
-        "id": "act_longbow_u6qa",
+        "id": "act_longbow_qvsv",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 150/600 ft., one target. {@h}6 (1d8 + 2) piercing damage plus 7 (2d6) poison damage.</p>",
@@ -2289,10 +2467,26 @@
         "mod": 2
       }
     },
+    "str": 10,
+    "dex": 12,
+    "con": 10,
+    "int": 14,
+    "wis": 14,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+4",
+      "cha": "+4"
+    },
     "saves": {
       "wis": "+4",
       "cha": "+4"
+    },
+    "skill": {
+      "arcana": "+4",
+      "medicine": "+4",
+      "nature": "+4",
+      "religion": "+4"
     },
     "skills": {
       "arcana": "+4",
@@ -2300,6 +2494,11 @@
       "nature": "+4",
       "religion": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -2546,7 +2745,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_887g",
+        "id": "act_special_equipment_4rgs",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Mary wears Bracers of Defense and a Ring of Protection, and carries a Deck of Several Things</p>",
@@ -2563,7 +2762,7 @@
         }
       },
       {
-        "id": "act_fey_presence__recharges_after_a_short_rest__o0s3",
+        "id": "act_fey_presence__recharges_after_a_short_rest__wch7",
         "name": "Fey Presence (Recharges after a Short Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>Mary can cause each creature within 10 feet of her to succeed on a DC 12 Wisdom saving throw or become charmed or frightened by her (Mary's choice) until the end of her next turn.</p>",
@@ -2583,7 +2782,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_h1qo",
+        "id": "act_fey_ancestry_ll2u",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Mary has advantage on saving throws against being charmed, and magic can't put her to sleep.</p>",
@@ -2602,7 +2801,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_9k4u",
+        "id": "act_quarterstaff_6dj0",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage.</p>",
@@ -2695,16 +2894,52 @@
         "mod": 3
       }
     },
+    "str": 18,
+    "dex": 16,
+    "con": 18,
+    "int": 13,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 4,
+    "save": {
+      "int": "+5",
+      "wis": "+6",
+      "cha": "+7"
+    },
     "saves": {
       "int": "+5",
       "wis": "+6",
       "cha": "+7"
     },
+    "skill": {
+      "deception": "+7",
+      "insight": "+6"
+    },
     "skills": {
       "deception": "+7",
       "insight": "+6"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks that aren't silvered",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 120 ft."
@@ -2719,7 +2954,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_devil_s_sight_jp71",
+        "id": "act_devil_s_sight_wmeq",
         "name": "Devil's Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede the devil's darkvision.</p>",
@@ -2736,7 +2971,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_xrur",
+        "id": "act_magic_resistance_b11j",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has advantage on saving throws against spells and other magical effects.</p>",
@@ -2755,7 +2990,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ejdt",
+        "id": "act_multiattack_em3f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes three attacks: two with its claws and one with its sting.</p>",
@@ -2772,7 +3007,7 @@
         }
       },
       {
-        "id": "act_claw_soo7",
+        "id": "act_claw_ab2t",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}8 (1d8 + 4) slashing damage.</p>",
@@ -2794,7 +3029,7 @@
         }
       },
       {
-        "id": "act_sting_9z8k",
+        "id": "act_sting_d2q8",
         "name": "Sting",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}13 (2d8 + 4) piercing damage plus 17 (5d6) poison damage, and the target must succeed on a DC 14 Constitution saving throw or become poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -2894,12 +3129,28 @@
         "mod": 0
       }
     },
+    "str": 11,
+    "dex": 12,
+    "con": 10,
+    "int": 10,
+    "wis": 11,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+2",
+      "religion": "+2"
+    },
     "skills": {
       "deception": "+2",
       "religion": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -2913,7 +3164,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dark_devotion_zz32",
+        "id": "act_dark_devotion_4mn4",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>The cultist has advantage on saving throws against being charmed or frightened.</p>",
@@ -2932,7 +3183,7 @@
     ],
     "actions": [
       {
-        "id": "act_scimitar_oimw",
+        "id": "act_scimitar_x4bh",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one creature. {@h}4 (1d6 + 1) slashing damage.</p>",
@@ -3025,9 +3276,29 @@
         "mod": -5
       }
     },
+    "str": 14,
+    "dex": 3,
+    "con": 20,
+    "int": 1,
+    "wis": 6,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "prone"
+    ],
+    "passive": 8,
     "senses": {
       "passivePerception": 8,
       "sensesString": "blindsight 60 ft."
@@ -3039,7 +3310,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_transparent_n81w",
+        "id": "act_transparent_h4h5",
         "name": "Transparent",
         "actionType": "trait",
         "descriptionHtml": "<p>Even when an ooze-folk is in plain sight, it takes a DC 12 Wisdom (Perception) check to spot an ooze-folk that has neither moved nor attacked. A creature that tries to enter the ooze-folk's space while unaware of the ooze-folk is surprised by the ooze-folk.</p>",
@@ -3059,7 +3330,7 @@
         }
       },
       {
-        "id": "act_fragile_bones_3jax",
+        "id": "act_fragile_bones_2myq",
         "name": "Fragile Bones",
         "actionType": "trait",
         "descriptionHtml": "<p>For each 5 damage it takes, the ooze-folk's walking speed is reduced by 5 feet.</p>",
@@ -3078,7 +3349,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7np2",
+        "id": "act_multiattack_wc3k",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ooze folk makes one glass longsword attack and one pseudopod attack.</p>",
@@ -3095,7 +3366,7 @@
         }
       },
       {
-        "id": "act_glass_longsword_ujl1",
+        "id": "act_glass_longsword_5x0f",
         "name": "Glass Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}6 (1d8 + 2) slashing damage. If a 1 is rolled on an attack roll with a glass longsword, it shatters and can no longer be used.</p>",
@@ -3117,7 +3388,7 @@
         }
       },
       {
-        "id": "act_pseudopod_kqvl",
+        "id": "act_pseudopod_m0kq",
         "name": "Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}5 (1d6 + 2) acid damage. </p>",
@@ -3210,13 +3481,30 @@
         "mod": 0
       }
     },
+    "str": 11,
+    "dex": 17,
+    "con": 13,
+    "int": 11,
+    "wis": 16,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "acrobatics": "+5",
+      "insight": "+5",
+      "stealth": "+5"
+    },
     "skills": {
       "acrobatics": "+5",
       "insight": "+5",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -3230,7 +3518,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unarmored_defense_sgt6",
+        "id": "act_unarmored_defense_d4lu",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While the adept is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -3249,7 +3537,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_34cx",
+        "id": "act_multiattack_320y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The adept makes three unarmed strikes or three dart attacks.</p>",
@@ -3266,7 +3554,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_wrpg",
+        "id": "act_unarmed_strike_5gjk",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage. If the target is a creature, the adept can choose one of the following additional effects:</p><ul><li>The target must succeed on a DC 13 Strength saving throw or drop one item it is holding (adept's choice).</li><li>The target must succeed on a DC 13 Dexterity saving throw or be knocked prone.</li><li>The target must succeed on a DC 13 Constitution saving throw or be stunned until the end of the adept's next turn.</li></ul>",
@@ -3291,7 +3579,7 @@
         }
       },
       {
-        "id": "act_dart_x1o1",
+        "id": "act_dart_tpvh",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
@@ -3316,7 +3604,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_0p3f",
+        "id": "act_deflect_missile_kwwz",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, the adept deflects the missile. The damage it takes from the attack is reduced by 1d10 + 3. If the damage is reduced to 0, the adept catches the missile if it's small enough to hold in one hand and the adept has a hand free.</p>",

@@ -57,12 +57,30 @@
         "mod": 3
       }
     },
+    "str": 22,
+    "dex": 12,
+    "con": 24,
+    "int": 16,
+    "wis": 15,
+    "cha": 16,
     "proficiencyBonus": 4,
+    "save": {
+      "int": "+7",
+      "cha": "+7"
+    },
     "saves": {
       "int": "+7",
       "cha": "+7"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 120 ft."
@@ -304,7 +322,7 @@
     ],
     "traits": [
       {
-        "id": "act_elemental_demise_hl22",
+        "id": "act_elemental_demise_xvyp",
         "name": "Elemental Demise",
         "actionType": "trait",
         "descriptionHtml": "<p>If Exul dies, his body disintegrates in a flash of fire and puff of smoke, leaving behind only the equipment he was wearing or carrying.</p>",
@@ -323,7 +341,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_747i",
+        "id": "act_multiattack_xaoh",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Exul makes two handaxe attacks or uses his Hurl Flame twice.</p>",
@@ -340,7 +358,7 @@
         }
       },
       {
-        "id": "act_handaxe_eebb",
+        "id": "act_handaxe_7jdv",
         "name": "Handaxe",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) slashing damage plus 3 (1d6) fire damage.</p>",
@@ -366,7 +384,7 @@
         }
       },
       {
-        "id": "act_hurl_flame_z7tu",
+        "id": "act_hurl_flame_qu96",
         "name": "Hurl Flame",
         "actionType": "action",
         "descriptionHtml": "<p>rs +7 to hit, range 120 ft., one target. {@h}17 (5d6) fire damage.</p>",
@@ -459,15 +477,34 @@
         "mod": 3
       }
     },
+    "str": 9,
+    "dex": 14,
+    "con": 11,
+    "int": 17,
+    "wis": 12,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "int": "+6",
+      "wis": "+4"
+    },
     "saves": {
       "int": "+6",
       "wis": "+4"
+    },
+    "skill": {
+      "arcana": "+6",
+      "history": "+6"
     },
     "skills": {
       "arcana": "+6",
       "history": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -913,7 +950,7 @@
     ],
     "traits": [
       {
-        "id": "act_benign_transportation__recharges_after_malivar_casts_a_conjuration_spell_of_1st_level_or_higher__hl70",
+        "id": "act_benign_transportation__recharges_after_malivar_casts_a_conjuration_spell_of_1st_level_or_higher__qtts",
         "name": "Benign Transportation (Recharges after Malivar Casts a Conjuration Spell of 1st Level or Higher)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Malivar teleports up to 30 feet to an unoccupied space that he can see.</p><p>If he instead chooses a space within range that is occupied by a willing Small or Medium creature, they both teleport, swapping places.</p>",
@@ -932,7 +969,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_pwrr",
+        "id": "act_dagger_dkq7",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",

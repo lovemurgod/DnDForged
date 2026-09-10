@@ -155,10 +155,22 @@ function simulateRoll(formula, critRange = 20) {
         if (rollMode === 'dis') isDisadvantage = true;
     }
 
-    let strippedFormula = formula.replace(/\[.*?\]/g, '');
+    let strippedFormula = formula.replace(/\[.*?\]/g, '').trim();
+    if (strippedFormula.startsWith('+')) strippedFormula = strippedFormula.slice(1).trim();
     
     if (isAdvantage) strippedFormula = strippedFormula.replace(/^1d20/i, '2d20kh1');
     if (isDisadvantage) strippedFormula = strippedFormula.replace(/^1d20/i, '2d20kl1');
+
+    if (!strippedFormula) {
+        return {
+            formula,
+            diceList: [],
+            total: 0,
+            breakdownStr: '',
+            isCritSuccess: false,
+            isCritFail: false
+        };
+    }
 
     let wrpTree;
     try {
@@ -1679,6 +1691,10 @@ function simulateRoll(formula, critRange = 20) {
 
                 if (canvasUpdated) {
                     window.VTT.canvasEngine.setTokens(tokens); // this broadcasts token:update internally
+                    if (window.VTT?.chatEngine?.updateCombatantTokenArt) {
+                        const activeImageUrl = (currentChar.tokenImages && currentChar.tokenImages.length > 0 && currentChar.activeTokenIndex >= 0 && currentChar.activeTokenIndex < currentChar.tokenImages.length) ? currentChar.tokenImages[currentChar.activeTokenIndex].url : 'favicon.svg';
+                        window.VTT.chatEngine.updateCombatantTokenArt(null, activeImageUrl, currentChar.id);
+                    }
                 }
             }
 
@@ -1902,6 +1918,24 @@ function simulateRoll(formula, critRange = 20) {
                     <button id="pc-custom-item-modal-add" class="btn btn-primary btn-xs">Save Item</button>
                 </div>
             </div>
+
+            <!-- Item Automation Wizard Modal -->
+            <div id="pc-item-automation-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); backdrop-filter:blur(3px); z-index:1004;"></div>
+            <div id="pc-item-automation-modal" class="vtt-hidden glassmorphism" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#18181b; border:1px solid var(--color-gold-base); border-radius:10px; z-index:1005; width:480px; max-width:92vw; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.7); overflow:hidden; font-family:var(--font-primary, sans-serif);">
+                <div style="padding:14px 18px; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.35); display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <i id="pc-automation-icon" class="fa-solid fa-wand-magic-sparkles text-gradient-gold" style="font-size:1.15rem;"></i>
+                        <h3 id="pc-automation-title" style="margin:0; font-size:1.05rem; color:var(--color-gold-base); font-family:var(--font-heading);">Item Automation</h3>
+                    </div>
+                    <span id="pc-automation-step-indicator" style="font-size:0.75rem; color:var(--color-text-muted); background:rgba(255,255,255,0.08); padding:2px 8px; border-radius:10px;">Step 1 of 1</span>
+                </div>
+                <div id="pc-automation-body" style="padding:18px; font-size:0.875rem; line-height:1.5; color:var(--color-text-primary);">
+                    <!-- Injected step content -->
+                </div>
+                <div id="pc-automation-actions" style="padding:12px 18px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:flex-end; gap:8px; background:rgba(0,0,0,0.25);">
+                    <!-- Injected step action buttons -->
+                </div>
+            </div>
         `;
         document.body.appendChild(container);
 
@@ -1985,44 +2019,531 @@ function simulateRoll(formula, critRange = 20) {
         document.getElementById('pc-item-modal-add').addEventListener('click', async () => {
             if (!currentChar) return;
             const checkboxes = Array.from(document.querySelectorAll('.pc-item-select:checked'));
+            if (!checkboxes.length) return;
+
+            const selectedList = [];
             for (const cb of checkboxes) {
+                const idx = parseInt(cb.dataset.idx);
+                let catItem = (window._vttCurrentSortedItems && !isNaN(idx)) ? window._vttCurrentSortedItems[idx] : null;
+                if (!catItem && itemCache && itemCache.items) {
+                    catItem = itemCache.items.find(it => (cb.dataset.id && it.id === cb.dataset.id) || it.name.toLowerCase() === (cb.dataset.name || '').toLowerCase());
+                }
                 const name = cb.dataset.name;
-                const weight = cb.dataset.weight;
+                const weight = cb.dataset.weight || '0';
                 let desc = cb.dataset.desc ? decodeURIComponent(cb.dataset.desc) : '';
                 const source = cb.dataset.source || '';
                 const itemId = cb.dataset.id || '';
 
-                if (!desc && source && itemId) {
-                    try {
-                        const res = await fetch(`/api/item/${encodeURIComponent(source)}/${encodeURIComponent(itemId)}`);
-                        if (res.ok) {
-                            const fullItem = await res.json();
-                            desc = fullItem.descriptionHtml || (Array.isArray(fullItem.entries) ? fullItem.entries.map(e => typeof e === 'string' ? e : JSON.stringify(e)).join('\n\n') : '');
-                        }
-                    } catch(e) {}
-                }
-
-                currentChar.equipment.push({
-                    id: 'eq_' + Date.now() + Math.random().toString(36).substr(2, 5),
-                    name: name,
-                    qty: 1,
-                    weight: weight,
-                    description: desc,
-                    source: source
+                selectedList.push({
+                    name,
+                    weight,
+                    desc,
+                    source,
+                    itemId,
+                    catItem: catItem || { name, weight, source, id: itemId }
                 });
                 cb.checked = false;
             }
             updateItemSelectedCount();
-            saveAndEmit(currentChar);
-            renderSheetData(currentChar);
             document.getElementById('pc-item-modal').classList.add('vtt-hidden');
             document.getElementById('pc-item-overlay').classList.add('vtt-hidden');
+
+            const automationQueue = [];
+
+            for (const sel of selectedList) {
+                const catItem = sel.catItem;
+
+                // ─── 1. Automatic Pack Unpacking ─────────────────────────────
+                if (catItem && Array.isArray(catItem.packContents) && catItem.packContents.length > 0) {
+                    for (const packEntry of catItem.packContents) {
+                        if (typeof packEntry === 'string') {
+                            const [pName, pSrc] = packEntry.split('|');
+                            const found = itemCache?.items?.find(it => it.name.toLowerCase() === pName.toLowerCase());
+                            currentChar.equipment.push({
+                                id: 'eq_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                                name: found ? found.name : (pName.charAt(0).toUpperCase() + pName.slice(1)),
+                                qty: 1,
+                                weight: found ? (found.weight || 0) : 0,
+                                description: found ? (found.descriptionMarkdown || found.descriptionHtml || '') : '',
+                                source: found?.source || pSrc || sel.source
+                            });
+                        } else if (typeof packEntry === 'object' && packEntry !== null) {
+                            if (packEntry.item) {
+                                const [pName, pSrc] = packEntry.item.split('|');
+                                const found = itemCache?.items?.find(it => it.name.toLowerCase() === pName.toLowerCase());
+                                currentChar.equipment.push({
+                                    id: 'eq_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                                    name: found ? found.name : (pName.charAt(0).toUpperCase() + pName.slice(1)),
+                                    qty: packEntry.quantity || 1,
+                                    weight: found ? (found.weight || 0) : 0,
+                                    description: found ? (found.descriptionMarkdown || found.descriptionHtml || '') : '',
+                                    source: found?.source || pSrc || sel.source
+                                });
+                            } else if (packEntry.special) {
+                                currentChar.equipment.push({
+                                    id: 'eq_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                                    name: packEntry.special,
+                                    qty: packEntry.quantity || 1,
+                                    weight: 0,
+                                    description: '',
+                                    source: sel.source
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    // Standard item
+                    let fullDesc = catItem?.descriptionMarkdown || sel.desc || catItem?.descriptionHtml || '';
+                    if (!fullDesc && sel.source && sel.itemId) {
+                        try {
+                            const res = await fetch(`/api/item/${encodeURIComponent(sel.source)}/${encodeURIComponent(sel.itemId)}`);
+                            if (res.ok) {
+                                const fullItem = await res.json();
+                                fullDesc = fullItem.descriptionMarkdown || fullItem.descriptionHtml || (Array.isArray(fullItem.entries) ? fullItem.entries.map(e => typeof e === 'string' ? e : JSON.stringify(e)).join('\n\n') : '');
+                            }
+                        } catch(e) {}
+                    }
+
+                    currentChar.equipment.push({
+                        id: 'eq_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        name: sel.name,
+                        qty: 1,
+                        weight: sel.weight,
+                        description: fullDesc,
+                        source: sel.source
+                    });
+
+                    // ─── 2. Detect Weapon Macro Automation ───────────────────
+                    const isWeap = !!(catItem.macroTemplate || catItem.isWeapon || catItem.dmg1 || catItem.weaponCategory || catItem.rawType === 'M' || catItem.rawType === 'R' || (catItem.type && catItem.type.toLowerCase().includes('weapon')));
+                    if (isWeap) {
+                        automationQueue.push({
+                            type: 'weapon',
+                            item: catItem,
+                            name: sel.name,
+                            desc: fullDesc
+                        });
+                    }
+
+                    // ─── 3. Detect AC Modification Automation ────────────────
+                    const isArm = !!(catItem.isArmor || (catItem.ac !== null && catItem.ac !== undefined) || catItem.bonusAc || catItem.armor || catItem.rawType === 'LA' || catItem.rawType === 'MA' || catItem.rawType === 'HA' || catItem.rawType === 'S' || (catItem.type && (catItem.type.toLowerCase().includes('armor') || catItem.type === 'Shield')));
+                    if (isArm) {
+                        automationQueue.push({
+                            type: 'ac',
+                            item: catItem,
+                            name: sel.name,
+                            desc: fullDesc
+                        });
+                    }
+
+                    // ─── 4. Detect Granted Spells Automation ────────────────
+                    let hasSpells = false;
+                    let spellsList = [];
+                    if (catItem.attachedSpells) {
+                        if (Array.isArray(catItem.attachedSpells)) {
+                            spellsList = catItem.attachedSpells;
+                        } else if (typeof catItem.attachedSpells === 'object') {
+                            function extractSpells(obj) {
+                                const res = [];
+                                for (const k in obj) {
+                                    if (typeof obj[k] === 'string') res.push(obj[k]);
+                                    else if (Array.isArray(obj[k])) {
+                                        for (const sub of obj[k]) {
+                                            if (typeof sub === 'string') res.push(sub);
+                                            else if (typeof sub === 'object') res.push(...extractSpells(sub));
+                                        }
+                                    } else if (typeof obj[k] === 'object' && obj[k] !== null) {
+                                        res.push(...extractSpells(obj[k]));
+                                    }
+                                }
+                                return res;
+                            }
+                            spellsList = Array.from(new Set(extractSpells(catItem.attachedSpells)));
+                        }
+                        if (spellsList.length > 0) hasSpells = true;
+                    }
+
+                    if (hasSpells) {
+                        automationQueue.push({
+                            type: 'spells',
+                            item: catItem,
+                            name: sel.name,
+                            desc: fullDesc,
+                            spells: spellsList
+                        });
+                    }
+                }
+            }
+
+            saveAndEmit(currentChar);
+            renderSheetData(currentChar);
+
+            if (automationQueue.length > 0) {
+                runItemAutomationWizard(automationQueue);
+            }
         });
     }
 
     function updateItemSelectedCount() {
         const count = document.querySelectorAll('.pc-item-select:checked').length;
         document.getElementById('pc-item-selected-count').textContent = count + ' item(s) selected';
+    }
+
+    async function runItemAutomationWizard(queue) {
+        if (!queue || !queue.length || !currentChar) return;
+        ensureItemModalsExist();
+
+        const overlay = document.getElementById('pc-item-automation-overlay');
+        const modal = document.getElementById('pc-item-automation-modal');
+        const iconEl = document.getElementById('pc-automation-icon');
+        const titleEl = document.getElementById('pc-automation-title');
+        const stepIndEl = document.getElementById('pc-automation-step-indicator');
+        const bodyEl = document.getElementById('pc-automation-body');
+        const actionsEl = document.getElementById('pc-automation-actions');
+
+        if (!overlay || !modal) return;
+
+        overlay.classList.remove('vtt-hidden');
+        modal.classList.remove('vtt-hidden');
+
+        let stepIndex = 0;
+
+        function nextStep() {
+            stepIndex++;
+            if (stepIndex < queue.length) {
+                renderStep(queue[stepIndex]);
+            } else {
+                overlay.classList.add('vtt-hidden');
+                modal.classList.add('vtt-hidden');
+                saveAndEmit(currentChar);
+                renderSheetData(currentChar);
+            }
+        }
+
+        async function renderStep(step) {
+            stepIndEl.textContent = `Step ${stepIndex + 1} of ${queue.length}`;
+
+            if (step.type === 'weapon') {
+                iconEl.className = 'fa-solid fa-burst text-gradient-gold';
+                titleEl.textContent = 'Create Weapon Macro?';
+
+                const tmpl = step.item.macroTemplate || {};
+                const rawProps = Array.isArray(step.item.properties) ? step.item.properties : [];
+                const props = rawProps.map(p => typeof p === 'string' ? p.toLowerCase() : '');
+                const isFinesse = tmpl.isFinesse !== undefined ? tmpl.isFinesse : props.some(p => p.includes('finesse'));
+                const isRanged = tmpl.isRanged !== undefined ? tmpl.isRanged : (step.item.rawType === 'R' || (step.item.type || '').toLowerCase().includes('ranged') || props.some(p => p.includes('ammunition')));
+
+                const strVal = parseInt(currentChar.stats?.str) || 10;
+                const dexVal = parseInt(currentChar.stats?.dex) || 10;
+                let chosenStat = 'str';
+                if (isRanged) chosenStat = 'dex';
+                else if (isFinesse) chosenStat = dexVal >= strVal ? 'dex' : 'str';
+                else if (tmpl.attackStat && tmpl.attackStat !== 'auto') chosenStat = tmpl.attackStat;
+
+                let bonusVal = tmpl.attackExtra !== undefined ? tmpl.attackExtra : 0;
+                if (!bonusVal && step.item.bonusWeapon) {
+                    bonusVal = parseInt(step.item.bonusWeapon) || 0;
+                } else if (!bonusVal) {
+                    const match = step.name.match(/\+(\d+)/);
+                    if (match) bonusVal = parseInt(match[1]) || 0;
+                }
+
+                const rangeVal = tmpl.range || '5 ft';
+                const targetVal = tmpl.target || '1 target';
+
+                // Zero-parsing: Build dmgRows directly using pre-compiled database template
+                const dmgRows = (tmpl.damageRows && tmpl.damageRows.length > 0)
+                    ? tmpl.damageRows.map((r, rIdx) => ({
+                        id: 'dmg_' + Date.now() + '_' + rIdx,
+                        formula: r.formula,
+                        stat: r.stat === 'auto' ? chosenStat : (r.stat || ''),
+                        extra: r.extra !== undefined ? r.extra : (rIdx === 0 ? bonusVal : 0),
+                        type: r.type || '',
+                        label: r.label || ''
+                    }))
+                    : [{
+                        id: 'dmg_' + Date.now(),
+                        formula: step.item.dmg1 || '1d6',
+                        stat: chosenStat,
+                        extra: bonusVal,
+                        type: step.item.dmgType ? (step.item.dmgType.charAt(0).toUpperCase() + step.item.dmgType.slice(1)) : 'Slashing',
+                        label: ''
+                    }];
+
+                const damageDisplay = dmgRows.map(r => {
+                    let s = `${r.formula}`;
+                    if (r.stat) s += ` + ${r.stat.toUpperCase()}`;
+                    if (r.extra) s += ` + ${r.extra}`;
+                    s += ` ${r.type}`;
+                    if (r.label) s += ` (${r.label})`;
+                    return s;
+                }).join(' + ');
+
+                const versatileVal = tmpl.versatile || step.item.dmg2;
+                const versatileText = versatileVal ? `<span style="color:var(--color-text-muted); font-size:0.75rem;">(Versatile: ${versatileVal})</span>` : '';
+
+                bodyEl.innerHTML = `
+                    <div style="margin-bottom:12px;">
+                        Would you like to generate an attack macro for <strong style="color:var(--color-gold-light); font-size:1rem;">${step.name}</strong> in the <strong>Attacks & Macros</strong> section?
+                    </div>
+                    <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--color-text-secondary);">Optimal Stat:</span>
+                            <span style="font-weight:bold; color:var(--color-gold-light);">${chosenStat.toUpperCase()} ${isFinesse ? '(Finesse)' : (isRanged ? '(Ranged)' : '(Melee)')}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--color-text-secondary);">Attack Bonus:</span>
+                            <span style="font-weight:bold; color:#4caf50;">Proficiency + ${chosenStat.toUpperCase()} Mod ${bonusVal > 0 ? `+ ${bonusVal}` : ''}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--color-text-secondary);">Base Damage:</span>
+                            <span style="font-weight:bold; color:var(--color-text-primary);">${damageDisplay} ${versatileText}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--color-text-secondary);">Target Category:</span>
+                            <span style="font-weight:bold; color:var(--color-gold-base);"><i class="fa-solid fa-folder"></i> Weapons</span>
+                        </div>
+                    </div>
+                `;
+
+                actionsEl.innerHTML = `
+                    <button id="pc-auto-weapon-skip" class="btn btn-secondary btn-sm">Skip</button>
+                    <button id="pc-auto-weapon-create" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Create Macro</button>
+                `;
+
+                document.getElementById('pc-auto-weapon-skip').onclick = () => nextStep();
+                document.getElementById('pc-auto-weapon-create').onclick = () => {
+                    let descNote = step.desc || '';
+                    if (versatileVal) {
+                        descNote += (descNote ? '\n\n' : '') + `*Versatile:* Two-handed attack deals ${versatileVal} damage.`;
+                    }
+
+                    if (!currentChar.macroCategories) currentChar.macroCategories = [];
+                    let weapCat = currentChar.macroCategories.find(c => c.name.toLowerCase() === 'weapons');
+                    if (!weapCat) {
+                        weapCat = { id: 'cat_weapons', name: 'Weapons', collapsed: false };
+                        currentChar.macroCategories.unshift(weapCat);
+                    }
+
+                    if (!currentChar.macros) currentChar.macros = [];
+                    currentChar.macros.push({
+                        id: 'mac_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        name: step.name,
+                        categoryId: weapCat.id,
+                        description: descNote,
+                        range: rangeVal,
+                        target: targetVal,
+                        attackStat: chosenStat,
+                        attackProf: true,
+                        attackExtra: bonusVal,
+                        critRange: 20,
+                        attackBonus: '',
+                        saveAbility: '',
+                        saveDcStat: 'none',
+                        saveDcExtra: 0,
+                        saveDcCustom: null,
+                        damage: dmgRows
+                    });
+
+                    saveAndEmit(currentChar);
+                    renderSheetData(currentChar);
+                    nextStep();
+                };
+
+            } else if (step.type === 'ac') {
+                iconEl.className = 'fa-solid fa-shield-halved text-gradient-gold';
+                titleEl.textContent = 'Update AC?';
+
+                const currentAC = parseInt(currentChar.ac) || 10;
+                const dexMod = Math.floor(((parseInt(currentChar.stats?.dex) || 10) - 10) / 2);
+
+                const itemType = (step.item.rawType || step.item.type || '').toUpperCase();
+                const bonusAc = step.item.bonusAc ? (parseInt(step.item.bonusAc) || 0) : 0;
+
+                let overwriteAC = currentAC;
+                let addAC = currentAC;
+                let calcDetail = '';
+
+                if (itemType === 'HA' || itemType.includes('HEAVY')) {
+                    const baseAc = (step.item.ac !== null && step.item.ac !== undefined) ? step.item.ac : 16;
+                    overwriteAC = baseAc + bonusAc;
+                    addAC = currentAC + (bonusAc || 0);
+                    calcDetail = `Heavy Armor (Base ${baseAc}${bonusAc ? ` + ${bonusAc}` : ''}, no DEX mod)`;
+                } else if (itemType === 'MA' || itemType.includes('MEDIUM')) {
+                    const baseAc = (step.item.ac !== null && step.item.ac !== undefined) ? step.item.ac : 14;
+                    const cappedDex = Math.min(2, Math.max(0, dexMod));
+                    overwriteAC = baseAc + cappedDex + bonusAc;
+                    addAC = currentAC + (bonusAc || 0);
+                    calcDetail = `Medium Armor (Base ${baseAc} + DEX max 2 [${cappedDex}]${bonusAc ? ` + ${bonusAc}` : ''})`;
+                } else if (itemType === 'LA' || itemType.includes('LIGHT')) {
+                    const baseAc = (step.item.ac !== null && step.item.ac !== undefined) ? step.item.ac : 11;
+                    const uncappedDex = Math.max(0, dexMod);
+                    overwriteAC = baseAc + uncappedDex + bonusAc;
+                    addAC = currentAC + (bonusAc || 0);
+                    calcDetail = `Light Armor (Base ${baseAc} + DEX [${uncappedDex}]${bonusAc ? ` + ${bonusAc}` : ''})`;
+                } else if (itemType === 'S' || itemType.includes('SHIELD')) {
+                    const shieldBonus = (step.item.ac !== null && step.item.ac !== undefined) ? step.item.ac : (2 + bonusAc);
+                    addAC = currentAC + shieldBonus;
+                    overwriteAC = addAC;
+                    calcDetail = `Shield (+${shieldBonus} AC)`;
+                } else {
+                    const bonus = bonusAc || (step.item.ac || 1);
+                    addAC = currentAC + bonus;
+                    overwriteAC = addAC;
+                    calcDetail = `AC Bonus Item (+${bonus} AC)`;
+                }
+
+                bodyEl.innerHTML = `
+                    <div style="margin-bottom:12px;">
+                        <strong style="color:var(--color-gold-light); font-size:1rem;">${step.name}</strong> modifies Armor Class. How would you like to update your AC?
+                    </div>
+                    <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; margin-bottom:12px; font-size:0.85rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <span style="color:var(--color-text-secondary);">Current AC:</span>
+                            <span style="font-size:1.15rem; font-weight:bold; color:var(--color-gold-base);">${currentAC}</span>
+                        </div>
+                        <div style="font-size:0.75rem; color:var(--color-text-muted);">${calcDetail}</div>
+                    </div>
+                `;
+
+                actionsEl.innerHTML = `
+                    <button id="pc-auto-ac-skip" class="btn btn-secondary btn-sm">Keep Current (${currentAC})</button>
+                    <button id="pc-auto-ac-add" class="btn btn-secondary btn-sm" style="border-color:var(--color-gold-base);"><i class="fa-solid fa-plus"></i> Add (${addAC})</button>
+                    <button id="pc-auto-ac-overwrite" class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i> Overwrite (${overwriteAC})</button>
+                `;
+
+                document.getElementById('pc-auto-ac-skip').onclick = () => nextStep();
+                document.getElementById('pc-auto-ac-add').onclick = () => {
+                    currentChar.ac = addAC;
+                    saveAndEmit(currentChar);
+                    renderSheetData(currentChar);
+                    nextStep();
+                };
+                document.getElementById('pc-auto-ac-overwrite').onclick = () => {
+                    currentChar.ac = overwriteAC;
+                    saveAndEmit(currentChar);
+                    renderSheetData(currentChar);
+                    nextStep();
+                };
+
+            } else if (step.type === 'spells') {
+                iconEl.className = 'fa-solid fa-wand-magic-sparkles text-gradient-gold';
+                titleEl.textContent = 'Add Spells?';
+
+                const dcMatch = (step.desc || '').match(/(?:save DC|DC)\s*(\d+)/i);
+                const fixedDc = dcMatch ? parseInt(dcMatch[1]) : null;
+                const atkMatch = (step.desc || '').match(/(?:spell attack bonus of|spell attack bonus)\s*\+?(\d+)/i);
+                const fixedAtk = atkMatch ? parseInt(atkMatch[1]) : null;
+
+                const spellNamesFormatted = (step.spells || []).map(s => {
+                    if (typeof s === 'object' && s !== null) {
+                        return s.name + (s.castLevel ? ` (${s.castLevel}th-level)` : '');
+                    }
+                    const str = String(s).split('|')[0];
+                    const [b, u] = str.split('#');
+                    return (b.charAt(0).toUpperCase() + b.slice(1)) + (u ? ` (${u}th-level)` : '');
+                });
+
+                bodyEl.innerHTML = `
+                    <div style="margin-bottom:12px;">
+                        <strong style="color:var(--color-gold-light); font-size:1rem;">${step.name}</strong> grants the following spell(s):
+                    </div>
+                    <div style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; margin-bottom:12px;">
+                        <ul style="margin:0 0 0 16px; padding:0; font-size:0.85rem; color:var(--color-text-primary);">
+                            ${spellNamesFormatted.map(s => `<li style="margin-bottom:2px; font-weight:600;">${s}</li>`).join('')}
+                        </ul>
+                        <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); font-size:0.75rem; color:var(--color-text-muted); display:flex; justify-content:space-between;">
+                            <span>Spell Save DC:</span>
+                            <span style="font-weight:bold; color:var(--color-gold-light);">${fixedDc ? `Fixed DC ${fixedDc}` : `Character Spell DC (${currentChar.spellSettings?.ability || 'INT'})`}</span>
+                        </div>
+                    </div>
+                `;
+
+                actionsEl.innerHTML = `
+                    <button id="pc-auto-spells-skip" class="btn btn-secondary btn-sm">Skip</button>
+                    <button id="pc-auto-spells-add" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Spells</button>
+                `;
+
+                document.getElementById('pc-auto-spells-skip').onclick = () => nextStep();
+                document.getElementById('pc-auto-spells-add').onclick = async () => {
+                    let spellsCatalog = window.vttPlayerSheetAPI?.getSpellCache ? window.vttPlayerSheetAPI.getSpellCache() : null;
+                    if (!spellsCatalog) {
+                        try {
+                            const res = await fetch('/data/spells-catalog.json?v=' + Date.now());
+                            if (res.ok) {
+                                spellsCatalog = await res.json();
+                                if (window.vttPlayerSheetAPI?.setSpellCache) window.vttPlayerSheetAPI.setSpellCache(spellsCatalog);
+                            }
+                        } catch(e) {}
+                    }
+
+                    if (!currentChar.spells || typeof currentChar.spells !== 'object' || Array.isArray(currentChar.spells)) {
+                        currentChar.spells = { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [] };
+                    }
+
+                    for (const sItem of step.spells) {
+                        let cleanSName = '';
+                        let castLvl = null;
+                        let displayName = '';
+                        if (typeof sItem === 'object' && sItem !== null) {
+                            cleanSName = (sItem.cleanName || sItem.name || '').trim().toLowerCase();
+                            castLvl = sItem.castLevel || null;
+                            displayName = sItem.name || cleanSName;
+                        } else {
+                            const rawStr = String(sItem).trim();
+                            const [cleanPart] = rawStr.split('|');
+                            const [basePart, upcastPart] = cleanPart.split('#');
+                            cleanSName = basePart.trim().toLowerCase();
+                            castLvl = upcastPart ? parseInt(upcastPart) : null;
+                            displayName = basePart.trim();
+                        }
+
+                        const spData = spellsCatalog ? spellsCatalog.find(s => (s.name || '').toLowerCase() === cleanSName) : null;
+
+                        const baseLvl = spData?.level !== undefined ? spData.level : 1;
+                        const levelKey = baseLvl === 0 ? 'cantrip' : `level${baseLvl}`;
+                        if (!currentChar.spells[levelKey]) currentChar.spells[levelKey] = [];
+
+                        const existing = currentChar.spells[levelKey].find(s => (s.name || '').toLowerCase() === cleanSName);
+                        if (!existing) {
+                            const castTime = spData?.time ? (typeof spData.time === 'string' ? spData.time : `${spData.time[0]?.number || 1} ${spData.time[0]?.unit || 'action'}`) : '1 action';
+                            const rangeStr = spData?.range ? (typeof spData.range === 'string' ? spData.range : (spData.range.type || '')) : '';
+                            const compStr = spData?.components ? (typeof spData.components === 'string' ? spData.components : Object.keys(spData.components).join(', ').toUpperCase()) : '';
+                            const durStr = spData?.duration ? (typeof spData.duration === 'string' ? spData.duration : (spData.duration[0]?.type === 'timed' ? `${spData.duration[0]?.duration?.amount} ${spData.duration[0]?.duration?.type}` : spData.duration[0]?.type)) : 'Instantaneous';
+
+                            const note = `*(Granted by item: ${step.name}${castLvl ? `, cast as ${castLvl}th-level spell` : ''})*`;
+                            currentChar.spells[levelKey].push({
+                                id: 'sp_item_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                                name: spData ? spData.name : (displayName.charAt(0).toUpperCase() + displayName.slice(1)),
+                                school: spData?.school || '',
+                                castingTime: castTime,
+                                range: rangeStr,
+                                components: compStr,
+                                duration: durStr,
+                                concentration: !!spData?.concentration,
+                                ritual: !!spData?.meta?.ritual,
+                                description: (spData?.entriesHtml || (Array.isArray(spData?.entries) ? spData.entries.join('\n\n') : '')) + `\n\n${note}`,
+                                saveAbility: spData?.savingThrow ? (spData.savingThrow[0]?.toUpperCase() || '') : '',
+                                saveDcStat: fixedDc ? 'custom' : 'none',
+                                saveDcCustom: fixedDc || null,
+                                attackBonus: fixedAtk ? `+${fixedAtk}` : '',
+                                damageList: spData?.damageList || [],
+                                castLvl: castLvl || baseLvl,
+                                itemOrigin: step.name
+                            });
+                        }
+                    }
+
+                    saveAndEmit(currentChar);
+                    renderSheetData(currentChar);
+                    if (window.VTTSpellManager?.renderSpellbookTab) {
+                        try { window.VTTSpellManager.renderSpellbookTab(currentChar); } catch(e) {}
+                    }
+                    nextStep();
+                };
+            }
+        }
+
+        renderStep(queue[0]);
     }
     window.openCustomItemModal = function (editIdx = null) {
         if (!currentChar) return;
@@ -2226,8 +2747,10 @@ function simulateRoll(formula, critRange = 20) {
             return '';
         }
 
+        window._vttCurrentSortedItems = sortedItems;
         let html = '';
-        for (const item of sortedItems) {
+        for (let i = 0; i < sortedItems.length; i++) {
+            const item = sortedItems[i];
             const weight = item.weight || 0;
             const source = item.source || '';
             const val = item.value ? (item.value / 100) + ' gp' : '';
@@ -2334,7 +2857,7 @@ function simulateRoll(formula, critRange = 20) {
                 }
             }
 
-            let descText = mechText + parts.filter(Boolean).join('\n\n');
+            let descText = item.descriptionMarkdown || (mechText + parts.filter(Boolean).join('\n\n'));
 
             const is2024 = (source || '').toUpperCase() === 'XPHB' || (source || '').toUpperCase() === 'XDMG';
             const badgeBg = is2024 ? '#059669' : ((source || '').toUpperCase() === 'PHB' ? '#2563eb' : '#475569');
@@ -2342,7 +2865,7 @@ function simulateRoll(formula, critRange = 20) {
             html += `
                 <label class="pc-item-row glassmorphism" data-name="${item.name.replace(/"/g, '&quot;')}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; cursor:pointer;">
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="checkbox" class="pc-item-select" data-name="${item.name.replace(/"/g, '&quot;')}" data-weight="${weight}" data-desc="${encodeURIComponent(descText)}" data-source="${item.source || ''}" data-id="${item.id || ''}" style="cursor:pointer; width:16px; height:16px;">
+                        <input type="checkbox" class="pc-item-select" data-idx="${i}" data-name="${item.name.replace(/"/g, '&quot;')}" data-weight="${weight}" data-desc="${encodeURIComponent(descText)}" data-source="${item.source || ''}" data-id="${item.id || ''}" style="cursor:pointer; width:16px; height:16px;">
                         <div style="display:flex; flex-direction:column;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-weight:bold; color:var(--color-gold-light);">${item.name}</span>
@@ -4594,16 +5117,76 @@ function simulateRoll(formula, critRange = 20) {
                 roll: rollData
             });
 
-            // Automatically add selected token to Initiative tracker if it matches this character
-            if (window.VTT && window.VTT.canvasEngine && window.VTT.chatEngine) {
-                const selectedIds = window.VTT.canvasEngine.getSelectedTokenIds();
-                const tokens = window.VTT.canvasEngine.getTokens();
-                selectedIds.forEach(tokenId => {
-                    const t = tokens[tokenId];
-                    if (t && t.isPlayer && t.characterId === char.id) {
-                        window.VTT.chatEngine.addToInitiative(t.name, rollData.total, t.id);
+            // Automatically link or auto-spawn token on canvas and register to Initiative tracker
+            if (window.VTT && window.VTT.chatEngine) {
+                const canvasEngine = window.VTT.canvasEngine;
+                let linkedToken = null;
+
+                if (canvasEngine) {
+                    const tokens = canvasEngine.getTokens ? canvasEngine.getTokens() : {};
+                    const selectedIds = canvasEngine.getSelectedTokenIds ? canvasEngine.getSelectedTokenIds() : [];
+
+                    // 1. Check if an active selected token belongs to this character
+                    for (const id of selectedIds) {
+                        const t = tokens[id];
+                        if (t && (t.characterId === char.id || (t.isPlayer && t.name === char.name))) {
+                            linkedToken = t;
+                            break;
+                        }
                     }
-                });
+
+                    // 2. If not selected, check if any token on the canvas belongs to this character
+                    if (!linkedToken) {
+                        for (const id in tokens) {
+                            const t = tokens[id];
+                            if (t && (t.characterId === char.id || (t.isPlayer && t.name === char.name))) {
+                                linkedToken = t;
+                                break;
+                            }
+                        }
+                    }
+
+                    // 3. If still no token exists on the canvas, auto-spawn one at canvas viewport center
+                    if (!linkedToken && canvasEngine.addToken) {
+                        let spawnX = 200;
+                        let spawnY = 200;
+                        if (canvasEngine.getCanvasMouseCoords) {
+                            const center = canvasEngine.getCanvasMouseCoords({
+                                clientX: window.innerWidth / 2,
+                                clientY: window.innerHeight / 2
+                            });
+                            if (center && Number.isFinite(center.x) && Number.isFinite(center.y)) {
+                                spawnX = Math.round(center.x);
+                                spawnY = Math.round(center.y);
+                            }
+                        }
+
+                        const activeImg = char.tokenImage || char.avatar || char.img || 'favicon.svg';
+                        const newToken = {
+                            id: 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                            name: char.name,
+                            characterId: char.id,
+                            isPlayer: true,
+                            layer: 'token',
+                            x: spawnX,
+                            y: spawnY,
+                            hp: char.hpCurrent !== undefined ? char.hpCurrent : (char.hp?.current || 10),
+                            maxHp: char.hpMax !== undefined ? char.hpMax : (char.hp?.max || 10),
+                            tempHp: char.tempHp || 0,
+                            size: char.tokenSize || 1,
+                            sightRange: char.tokenSight !== undefined ? char.tokenSight : 60,
+                            img: activeImg
+                        };
+
+                        canvasEngine.addToken(newToken);
+                        linkedToken = newToken;
+                    }
+                }
+
+                // Register into initiative roster
+                const tokenId = linkedToken ? linkedToken.id : null;
+                const tokenImg = linkedToken ? linkedToken.img : (char.tokenImage || char.avatar || char.img || null);
+                window.VTT.chatEngine.addToInitiative(char.name, rollData.total, tokenId, tokenImg);
             }
         });
 
@@ -4959,7 +5542,7 @@ function simulateRoll(formula, critRange = 20) {
             const dmgTypes = ["Slashing", "Piercing", "Bludgeoning", "Fire", "Cold", "Lightning", "Thunder", "Poison", "Acid", "Necrotic", "Radiant", "Force", "Psychic", "Healing"];
             list.innerHTML = modalDamageRows.map((d, i) => `
                 <div style="display:flex; gap:4px; align-items:center; margin-bottom:4px;">
-                    <input type="text" class="modal-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="1d8" style="width:30%; padding:4px; font-size:0.8rem;">
+                    <input type="text" class="modal-dmg-formula" data-idx="${i}" value="${d.formula || d.dice || ''}" placeholder="1d8" style="width:30%; padding:4px; font-size:0.8rem;">
                     <select class="modal-dmg-stat" data-idx="${i}" style="width:25%; padding:4px; font-size:0.8rem;">
                         <option value="">+ None</option>
                         <option value="str" ${d.stat === 'str' ? 'selected' : ''}>+ STR</option>
@@ -4970,15 +5553,18 @@ function simulateRoll(formula, critRange = 20) {
                         <option value="cha" ${d.stat === 'cha' ? 'selected' : ''}>+ CHA</option>
                     </select>
                     <select class="modal-dmg-type" data-idx="${i}" style="width:30%; padding:4px; font-size:0.8rem;">
-                        ${dmgTypes.map(t => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('')}
+                        ${dmgTypes.map(t => `<option value="${t}" ${(d.type || '').toLowerCase() === t.toLowerCase() ? 'selected' : ''}>${t}</option>`).join('')}
                     </select>
                     <button class="btn btn-xxs btn-danger modal-dmg-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
 
-            document.querySelectorAll('.modal-dmg-formula').forEach(el => el.addEventListener('change', (e) => modalDamageRows[e.target.dataset.idx].formula = e.target.value));
-            document.querySelectorAll('.modal-dmg-stat').forEach(el => el.addEventListener('change', (e) => modalDamageRows[e.target.dataset.idx].stat = e.target.value));
-            document.querySelectorAll('.modal-dmg-type').forEach(el => el.addEventListener('change', (e) => modalDamageRows[e.target.dataset.idx].type = e.target.value));
+            document.querySelectorAll('.modal-dmg-formula').forEach(el => {
+                el.addEventListener('input', (e) => { if (modalDamageRows[e.target.dataset.idx]) modalDamageRows[e.target.dataset.idx].formula = e.target.value; });
+                el.addEventListener('change', (e) => { if (modalDamageRows[e.target.dataset.idx]) modalDamageRows[e.target.dataset.idx].formula = e.target.value; });
+            });
+            document.querySelectorAll('.modal-dmg-stat').forEach(el => el.addEventListener('change', (e) => { if (modalDamageRows[e.target.dataset.idx]) modalDamageRows[e.target.dataset.idx].stat = e.target.value; }));
+            document.querySelectorAll('.modal-dmg-type').forEach(el => el.addEventListener('change', (e) => { if (modalDamageRows[e.target.dataset.idx]) modalDamageRows[e.target.dataset.idx].type = e.target.value; }));
             document.querySelectorAll('.modal-dmg-del').forEach(el => el.addEventListener('click', (e) => {
                 modalDamageRows.splice(e.currentTarget.dataset.idx, 1);
                 renderModalDamage();
@@ -5031,6 +5617,9 @@ function simulateRoll(formula, critRange = 20) {
                 document.getElementById('modal-macro-save-dc').value = m.saveDcCustom !== undefined ? m.saveDcCustom : (m.saveDcBase || '');
 
                 modalDamageRows = m.damage ? JSON.parse(JSON.stringify(m.damage)) : [];
+                modalDamageRows.forEach(r => {
+                    if (!r.formula && r.dice) r.formula = r.dice;
+                });
             } else {
                 document.getElementById('modal-macro-name').value = '';
                 const catSel = document.getElementById('modal-macro-category');
@@ -5050,6 +5639,7 @@ function simulateRoll(formula, critRange = 20) {
 
                 document.getElementById('modal-macro-save-ab').value = '';
                 document.getElementById('modal-macro-save-dc-stat').value = 'none';
+                document.getElementById('modal-macro-save-dc-extra').value = 0;
                 document.getElementById('modal-macro-save-dc-extra').value = 0;
                 document.getElementById('modal-macro-save-dc').value = '';
 
@@ -5082,6 +5672,23 @@ function simulateRoll(formula, critRange = 20) {
             const atkStat = document.getElementById('modal-macro-atk-stat').value;
             const dcStat = document.getElementById('modal-macro-save-dc-stat').value;
 
+            // Synchronously harvest live DOM values for damage rows
+            const updatedDamageRows = [];
+            document.querySelectorAll('#modal-macro-dmg-list > div').forEach((rowEl, i) => {
+                const formulaInp = rowEl.querySelector('.modal-dmg-formula');
+                const statSel = rowEl.querySelector('.modal-dmg-stat');
+                const typeSel = rowEl.querySelector('.modal-dmg-type');
+                const prev = modalDamageRows[i] || {};
+                updatedDamageRows.push({
+                    id: prev.id || ('dmg_' + Date.now() + '_' + i),
+                    formula: formulaInp ? formulaInp.value.trim() : (prev.formula || prev.dice || ''),
+                    stat: statSel ? statSel.value : (prev.stat || ''),
+                    extra: prev.extra !== undefined ? prev.extra : 0,
+                    type: typeSel ? typeSel.value : (prev.type || ''),
+                    label: prev.label || ''
+                });
+            });
+
             const m = {
                 id: idx >= 0 ? char.macros[idx].id : 'mac_' + Date.now(),
                 name: document.getElementById('modal-macro-name').value || 'New Macro',
@@ -5103,7 +5710,7 @@ function simulateRoll(formula, critRange = 20) {
                 saveDcExtra: parseInt(document.getElementById('modal-macro-save-dc-extra').value) || 0,
                 saveDcCustom: document.getElementById('modal-macro-save-dc').value ? parseInt(document.getElementById('modal-macro-save-dc').value) : null,
 
-                damage: modalDamageRows
+                damage: updatedDamageRows.length ? updatedDamageRows : modalDamageRows
             };
             if (idx >= 0) char.macros[idx] = m;
             else char.macros.push(m);
@@ -5293,11 +5900,14 @@ function simulateRoll(formula, critRange = 20) {
             }
 
             let results = m.damage.map(d => {
-                let formula = (d.formula || '').trim();
+                let formula = (d.formula || d.dice || '').trim();
                 let statMod = 0;
 
-                if (d.stat && d.stat !== 'none' && d.stat !== '') {
-                    let statKey = d.stat.toLowerCase();
+                let statKey = (d.stat || '').replace(/^\+/, '').trim().toLowerCase();
+                if (statKey === 'auto') {
+                    statKey = (m.attackStat || 'str').toLowerCase();
+                }
+                if (statKey && statKey !== 'none') {
                     if (statKey === 'spell') {
                         statKey = (char.spellSettings?.ability || char.spellcastingAbility || 'int').toLowerCase();
                     }
@@ -5307,7 +5917,11 @@ function simulateRoll(formula, critRange = 20) {
 
                 let rollFormula = formula;
                 if (statMod !== 0) {
-                    rollFormula += `${statMod >= 0 ? '+' : ''}${statMod}[${(d.stat || 'STAT').toUpperCase()}]`;
+                    rollFormula += `${statMod >= 0 ? '+' : ''}${statMod}[${(statKey || 'STAT').toUpperCase()}]`;
+                }
+                if (d.extra && parseInt(d.extra)) {
+                    const ex = parseInt(d.extra);
+                    rollFormula += `${ex >= 0 ? '+' : ''}${ex}[Bonus]`;
                 }
                 if (d.custom && d.custom.trim() !== '') {
                     let c = d.custom.trim();
@@ -5323,7 +5937,7 @@ function simulateRoll(formula, critRange = 20) {
                     rollFormula = rollFormula.replace(/(\d+)\s*[dD]\s*(\d+)/g, (match, count, faces) => `${parseInt(count) * 2}d${faces}`);
                 }
                 const r = simulateRoll(rollFormula);
-                return { formula: d.formula, type: d.type || '', roll: r };
+                return { formula: d.formula || d.dice || formula, type: d.type || '', roll: r, label: d.label || '' };
             });
 
             typedToggles.forEach(t => {

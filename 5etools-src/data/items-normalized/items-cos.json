@@ -5,17 +5,46 @@
     "source": "CoS",
     "page": 221,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "uncommon",
     "reqAttune": "Requires Attunement",
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": "1d8",
     "dmgType": "piercing",
+    "bonusWeapon": "+2",
     "properties": [
       "Thrown",
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Blood Spear",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 2,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 2,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon (Requires Attunement)*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 3 lb\n\n---\n\nKavan was a ruthless chieftain whose tribe lived in the Balinok Mountains centuries before the arrival of Strahd von Zarovich. Although he was very much alive, Kavan had some traits in common with vampires: he slept during the day and hunted at night, he drank the blood of his prey, and he lived underground. In battle, he wielded a spear stained with blood. His was the first blood spear, a weapon that drains life from those it kills and transfers that life to its wielder, imbuing that individual with the stamina to keep fighting.\n\nWhen you hit with a melee attack using this magic spear and reduce the target to 0 hit points, you gain 2d6 temporary hit points.\n\nAny creature can wield the spear, but only the character chosen by Kavan|CoS|15|Blood Spear of Kavan to wield it gains a +2 bonus to attack and damage rolls made with this magic weapon.",
     "descriptionHtml": "<p>Kavan was a ruthless chieftain whose tribe lived in the Balinok Mountains centuries before the arrival of Strahd von Zarovich. Although he was very much alive, Kavan had some traits in common with vampires: he slept during the day and hunted at night, he drank the blood of his prey, and he lived underground. In battle, he wielded a spear stained with blood. His was the first blood spear, a weapon that drains life from those it kills and transfers that life to its wielder, imbuing that individual with the stamina to keep fighting.</p>\n<p>When you hit with a melee attack using this magic spear and reduce the target to 0 hit points, you gain 2d6 temporary hit points.</p>\n<p>Any creature can wield the spear, but only the character chosen by Kavan|CoS|15|Blood Spear of Kavan to wield it gains a +2 bonus to attack and damage rolls made with this magic weapon.</p>"
   },
   {
@@ -24,17 +53,52 @@
     "source": "CoS",
     "page": 81,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "unknown (magic)",
     "reqAttune": "Requires Attunement",
     "weight": 2,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": null,
     "dmgType": "piercing",
+    "bonusWeapon": "+1",
     "properties": [
       "Finesse",
       "Light"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Crusader's Mantle",
+        "cleanName": "crusader's mantle",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Crusader's Shortsword",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, unknown (magic) (Requires Attunement)*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb\n\n---\n\nThe Crusader's Shortsword is a sentient lawful good +1 shortsword (Intelligence 11, Wisdom 13, Charisma 13). It has hearing and normal vision out to a range of 120 feet. It communicates by transmitting emotion to the creature carrying or wielding it.\n\nThe sword's purpose is to fight evil. The sword has the following additional properties:\n\n- The sword continually sheds bright light in a 15-foot radius and dim light for an additional 15 feet. Only by destroying the sword can this light be extinguished.\n- A lawful good creature can attune itself to the sword in 1 minute.\n- While attuned to the weapon, the sword's wielder can use the sword to cast the crusader's mantle spell. Once used, this property of the sword can't be used again until the next dawn.",
     "descriptionHtml": "<p>The Crusader's Shortsword is a sentient lawful good +1 shortsword (Intelligence 11, Wisdom 13, Charisma 13). It has hearing and normal vision out to a range of 120 feet. It communicates by transmitting emotion to the creature carrying or wielding it.</p>\n<p>The sword's purpose is to fight evil. The sword has the following additional properties:</p>\n<ul><li>The sword continually sheds bright light in a 15-foot radius and dim light for an additional 15 feet. Only by destroying the sword can this light be extinguished.</li><li>A lawful good creature can attune itself to the sword in 1 minute.</li><li>While attuned to the weapon, the sword's wielder can use the sword to cast the crusader's mantle spell. Once used, this property of the sword can't be used again until the next dawn.</li></ul>"
   },
   {
@@ -43,14 +107,24 @@
     "source": "CoS",
     "page": 188,
     "type": "Other",
+    "rawType": "OTH",
     "rarity": "unknown (magic)",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Other, unknown (magic)*\n\n---\n\nAny poisonous liquid poured into the ewer is instantly transformed into an equal amount of sweet wine. Furthermore, a creature that grasps the ewer's handle can command the ewer to fill with 1 gallon of wine, and it can't produce more wine until the next dawn.",
     "descriptionHtml": "<p>Any poisonous liquid poured into the ewer is instantly transformed into an equal amount of sweet wine. Furthermore, a creature that grasps the ewer's handle can command the ewer to fill with 1 gallon of wine, and it can't produce more wine until the next dawn.</p>"
   },
   {
@@ -58,17 +132,46 @@
     "name": "Gulthias Staff",
     "source": "CoS",
     "page": 221,
-    "type": "simple Weapon",
+    "type": "Simple Weapon",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": "1d8",
     "dmgType": "bludgeoning",
+    "bonusWeapon": null,
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Gulthias Staff",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Simple Weapon, rare (Requires Attunement)*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 4 lb\n\n---\n\nMade from the branch of a Gulthias tree (see the twig blight entry of the Monster Manual), a Gulthias staff is a spongy, black length of wood. Its evil makes beasts visibly uncomfortable while within 30 feet of it. The staff has 10 charges and regains 1d6 + 4 of its expended charges daily at dusk.\n\nIf the staff is broken or burned to ashes, its wood releases a terrible, inhuman scream that can be heard out to a range of 300 feet. All blights that can hear the scream immediately wither and die.\n\n**Vampiric Strike.** The staff can be wielded as a magic quarterstaff. On a hit, it deals damage as a normal quarterstaff, and you can expend 1 charge to regain a number of hit points equal to the damage dealt by the weapon. Each time a charge is spent, red blood oozes from the staff's pores, and you must succeed on a 12 Wisdom saving throw or be afflicted with Short-Term Madness (see \"Madness|DMG\" in chapter 8 of the Dungeon Master's Guide).\n\n**Blight Bane.** While you are attuned to the staff, blights and other evil plant creatures don't regard you as hostile unless you harm them.",
     "descriptionHtml": "<p>Made from the branch of a Gulthias tree (see the twig blight entry of the Monster Manual), a Gulthias staff is a spongy, black length of wood. Its evil makes beasts visibly uncomfortable while within 30 feet of it. The staff has 10 charges and regains 1d6 + 4 of its expended charges daily at dusk.</p>\n<p>If the staff is broken or burned to ashes, its wood releases a terrible, inhuman scream that can be heard out to a range of 300 feet. All blights that can hear the scream immediately wither and die.</p>\n<div class=\"item-subentry\"><strong>Vampiric Strike.</strong> <p>The staff can be wielded as a magic quarterstaff. On a hit, it deals damage as a normal quarterstaff, and you can expend 1 charge to regain a number of hit points equal to the damage dealt by the weapon. Each time a charge is spent, red blood oozes from the staff's pores, and you must succeed on a 12 Wisdom saving throw or be afflicted with Short-Term Madness (see \"Madness|DMG\" in chapter 8 of the Dungeon Master's Guide).</p></div>\n<div class=\"item-subentry\"><strong>Blight Bane.</strong> <p>While you are attuned to the staff, blights and other evil plant creatures don't regard you as hostile unless you harm them.</p></div>"
   },
   {
@@ -77,14 +180,24 @@
     "source": "CoS",
     "page": 222,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "legendary",
     "reqAttune": "by a cleric or paladin of good alignment",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, legendary (by a cleric or paladin of good alignment)*\n\n---\n\nThe Holy Symbol of Ravenkind is a unique holy symbol sacred to the good-hearted faithful of Barovia. It predates the establishment of any church in Barovia. According to legend, it was delivered to a paladin named Lugdana by a giant raven—or an angel in the form of a giant raven. Lugdana used the holy symbol to root out and destroy nests of vampires until her death. The high priests of Ravenloft kept and wore the holy symbol after Lugdana's passing.\n\nThe holy symbol is a platinum amulet shaped like the sun, with a large crystal embedded in its center.\n\nThe holy symbol has 10 charges for the following properties. It regains 1d6 + 4 charges daily at dawn.\n\n**Hold Vampires.** As an action, you can expend 1 charge and present the holy symbol to make it flare with holy power. Vampires and vampire spawn within 30 feet of the holy symbol when it flares must make a 15 Wisdom saving throw. On a failed save, a target is paralyzed for 1 minute. It can repeat the saving throw at the end of its turns to end the effect on itself.\n\n**Turn Undead.** If you have the Turn Undead or the Turn the Unholy feature, you can expend 3 charges when you present the holy symbol while using that feature. When you do so, undead have disadvantage on their saving throws against the effect.\n\n**Sunlight.** As an action, you can expend 5 charges while presenting the holy symbol to make it shed bright light in a 30-foot radius and dim light for an additional 30 feet. The light is sunlight and lasts for 10 minutes or until you end the effect (no action required).",
     "descriptionHtml": "<p>The Holy Symbol of Ravenkind is a unique holy symbol sacred to the good-hearted faithful of Barovia. It predates the establishment of any church in Barovia. According to legend, it was delivered to a paladin named Lugdana by a giant raven—or an angel in the form of a giant raven. Lugdana used the holy symbol to root out and destroy nests of vampires until her death. The high priests of Ravenloft kept and wore the holy symbol after Lugdana's passing.</p>\n<p>The holy symbol is a platinum amulet shaped like the sun, with a large crystal embedded in its center.</p>\n<p>The holy symbol has 10 charges for the following properties. It regains 1d6 + 4 charges daily at dawn.</p>\n<div class=\"item-subentry\"><strong>Hold Vampires.</strong> <p>As an action, you can expend 1 charge and present the holy symbol to make it flare with holy power. Vampires and vampire spawn within 30 feet of the holy symbol when it flares must make a 15 Wisdom saving throw. On a failed save, a target is paralyzed for 1 minute. It can repeat the saving throw at the end of its turns to end the effect on itself.</p></div>\n<div class=\"item-subentry\"><strong>Turn Undead.</strong> <p>If you have the Turn Undead or the Turn the Unholy feature, you can expend 3 charges when you present the holy symbol while using that feature. When you do so, undead have disadvantage on their saving throws against the effect.</p></div>\n<div class=\"item-subentry\"><strong>Sunlight.</strong> <p>As an action, you can expend 5 charges while presenting the holy symbol to make it shed bright light in a 30-foot radius and dim light for an additional 30 feet. The light is sunlight and lasts for 10 minutes or until you end the effect (no action required).</p></div>"
   },
   {
@@ -93,14 +206,35 @@
     "source": "CoS",
     "page": 222,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "legendary",
     "reqAttune": "by a creature of good alignment",
     "weight": 10,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Protection From Evil And Good",
+        "cleanName": "protection from evil and good",
+        "castLevel": null
+      },
+      {
+        "name": "Augury",
+        "cleanName": "augury",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, legendary (by a creature of good alignment)*\n\n**Weight:** 10 lb\n\n---\n\nThe Icon of Ravenloft is a 12-inch tall statuette made of the purest silver, weighing 10 pounds. It depicts a cleric kneeling in supplication.\n\nThe icon was given to Strahd by the archpriest Ciril Romulich, an old family friend, to consecrate the castle and its chapel.\n\nWhile within 30 feet of the icon, a creature is under the effect of a protection from evil and good spell against fiends and undead. Only a creature attuned to the icon can use its other properties.\n\n**Augury.** You can use an action to cast an augury spell from the icon, with no material components required. Once used, this property can't be used again until the next dawn.\n\n**Bane of the Undead.** You can use the icon as a holy symbol while using the Turn Undead or Turn the Unholy feature. If you do so, increase the save DC by 2.\n\n**Cure Wounds.** While holding the icon, you can take an action to heal one creature that you can see within 30 feet of you. The target regains 3d8 + 3 hit points, unless it is an undead, a construct, or a fiend. Once used, this property can't be used again until the next dawn.",
     "descriptionHtml": "<p>The Icon of Ravenloft is a 12-inch tall statuette made of the purest silver, weighing 10 pounds. It depicts a cleric kneeling in supplication.</p>\n<p>The icon was given to Strahd by the archpriest Ciril Romulich, an old family friend, to consecrate the castle and its chapel.</p>\n<p>While within 30 feet of the icon, a creature is under the effect of a protection from evil and good spell against fiends and undead. Only a creature attuned to the icon can use its other properties.</p>\n<div class=\"item-subentry\"><strong>Augury.</strong> <p>You can use an action to cast an augury spell from the icon, with no material components required. Once used, this property can't be used again until the next dawn.</p></div>\n<div class=\"item-subentry\"><strong>Bane of the Undead.</strong> <p>You can use the icon as a holy symbol while using the Turn Undead or Turn the Unholy feature. If you do so, increase the save DC by 2.</p></div>\n<div class=\"item-subentry\"><strong>Cure Wounds.</strong> <p>While holding the icon, you can take an action to heal one creature that you can see within 30 feet of you. The target regains 3d8 + 3 hit points, unless it is an undead, a construct, or a fiend. Once used, this property can't be used again until the next dawn.</p></div>"
   },
   {
@@ -109,14 +243,24 @@
     "source": "CoS",
     "page": 187,
     "type": "Adventuring Gear",
+    "rawType": null,
     "rarity": "none",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear*\n\n---",
     "descriptionHtml": ""
   },
   {
@@ -125,14 +269,49 @@
     "source": "CoS",
     "page": 222,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": null,
     "dmgType": "bludgeoning",
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Saint Markovia's Thighbone",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Radiant",
+          "label": "vs Fiend/Undead"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, rare (Requires Attunement)*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb\n\n---\n\nSaint Markovia's thighbone has the properties of a mace of disruption. If it scores one or more hits against a vampire or a vampire spawn in the course of a single battle, the thighbone crumbles into dust once the battle concludes.\n\nAs a youth, Markovia followed her heart and became a priest of the Morninglord soon after her eighteenth birthday. She proved to be a charismatic proselytizer and, before the age of thirty, had gained a reputation for allowing no evil to stand before her.\n\nMarkovia had long considered Strahd a mad tyrant, but only after his transformation into a vampire did she dare to challenge him. As she rallied her followers and prepared to march on Castle Ravenloft, Strahd sent a group of vampire spawn to her abbey. They confronted Markovia and were destroyed to a one.\n\nSuffused with confidence born of a righteous victory, Markovia advanced on Castle Ravenloft. A great battle raged from the catacombs to the parapets. In the end, Markovia never returned to Barovia, and Strahd long afterward walked with a limp and a grimace of pain. It is said that he trapped Markovia in a crypt beneath his castle, and her remains linger there yet.\n\nThe essence of Markovia's saintliness passed partly into her bones as the rest of her body decomposed. Her remaining thighbone is imbued with power that inflicts grievous injury on the undead.\n\nMace of Disruption. When you hit a fiend or an undead with this magic weapon, that creature takes an extra 2d6 radiant damage. If the target has 25 hit points or fewer after taking this damage, it must succeed on a 15 Wisdom saving throw or be destroyed. On a successful save, the creature becomes frightened of you until the end of your next turn.\n\nWhile you hold this weapon, it sheds bright light in a 20-foot radius and dim light for an additional 20 feet.",
     "descriptionHtml": "<p>Saint Markovia's thighbone has the properties of a mace of disruption. If it scores one or more hits against a vampire or a vampire spawn in the course of a single battle, the thighbone crumbles into dust once the battle concludes.</p>\n<p>As a youth, Markovia followed her heart and became a priest of the Morninglord soon after her eighteenth birthday. She proved to be a charismatic proselytizer and, before the age of thirty, had gained a reputation for allowing no evil to stand before her.</p>\n<p>Markovia had long considered Strahd a mad tyrant, but only after his transformation into a vampire did she dare to challenge him. As she rallied her followers and prepared to march on Castle Ravenloft, Strahd sent a group of vampire spawn to her abbey. They confronted Markovia and were destroyed to a one.</p>\n<p>Suffused with confidence born of a righteous victory, Markovia advanced on Castle Ravenloft. A great battle raged from the catacombs to the parapets. In the end, Markovia never returned to Barovia, and Strahd long afterward walked with a limp and a grimace of pain. It is said that he trapped Markovia in a crypt beneath his castle, and her remains linger there yet.</p>\n<p>The essence of Markovia's saintliness passed partly into her bones as the rest of her body decomposed. Her remaining thighbone is imbued with power that inflicts grievous injury on the undead.</p>\n<p>Mace of Disruption. When you hit a fiend or an undead with this magic weapon, that creature takes an extra 2d6 radiant damage. If the target has 25 hit points or fewer after taking this damage, it must succeed on a 15 Wisdom saving throw or be destroyed. On a successful save, the creature becomes frightened of you until the end of your next turn.</p>\n<p>While you hold this weapon, it sheds bright light in a 20-foot radius and dim light for an additional 20 feet.</p>"
   },
   {
@@ -141,14 +320,24 @@
     "source": "CoS",
     "page": 68,
     "type": "Shield",
+    "rawType": "S",
     "rarity": "rare",
     "reqAttune": false,
     "weight": 6,
     "value": null,
     "ac": 2,
+    "bonusAc": "+2",
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Shield, rare*\n\n**Armor Class:** 2 | **Weight:** 6 lb\n\n---\n\nWhile holding this shield, you have a +2 bonus to AC. This bonus is in addition to the shield's normal bonus to AC.\n\nThe shield is emblazoned with a stylized silver dragon that is the emblem of the Order of the Silver Dragon (see *Curse of Strahd*, chapter 7|CoS|8|The Order of the Silver Dragon). The shield whispers warnings to its bearer, granting a +2 bonus to initiative if the bearer isn't incapacitated.\n\nA shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time.",
     "descriptionHtml": "<p>While holding this shield, you have a +2 bonus to AC. This bonus is in addition to the shield's normal bonus to AC.</p>\n<p>The shield is emblazoned with a stylized silver dragon that is the emblem of the Order of the Silver Dragon (see <em>Curse of Strahd</em>, chapter 7|CoS|8|The Order of the Silver Dragon). The shield whispers warnings to its bearer, granting a +2 bonus to initiative if the bearer isn't incapacitated.</p>\n<p>A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time.</p>"
   },
   {
@@ -157,14 +346,24 @@
     "source": "CoS",
     "page": 152,
     "type": "Other",
+    "rawType": "OTH",
     "rarity": "unknown (magic)",
     "reqAttune": false,
     "weight": null,
     "value": "250 gp",
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Other, unknown (magic)*\n\n**Value:** 250 gp\n\n---\n\nThis golden statuette grants any good-aligned creature that carries it a +1 bonus to saving throws.",
     "descriptionHtml": "<p>This golden statuette grants any good-aligned creature that carries it a +1 bonus to saving throws.</p>"
   },
   {
@@ -173,17 +372,52 @@
     "source": "CoS",
     "page": 223,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
-    "dmgType": "R",
+    "dmg2": "1d10",
+    "dmgType": "radiant",
+    "bonusWeapon": "+2",
     "properties": [
       "Finesse",
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Sunsword",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 2,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 2,
+          "type": "Radiant"
+        },
+        {
+          "formula": "1d8",
+          "stat": "",
+          "type": "Radiant",
+          "label": "vs Undead"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, legendary (Requires Attunement)*\n\n**Damage:** 1d8 radiant (or 1d10 radiant versatile) | **Properties:** Finesse, Versatile | **Weight:** 3 lb\n\n---\n\nThe Sunsword is a unique blade once possessed by Strahd's brother, Sergei von Zarovich. In its original form, it had a platinum hilt and guard, and a thin crystal blade as strong as steel.\n\nStrahd employed a powerful wizard named Khazan to destroy the weapon after Sergei's death. The first part of the process required the hilt and the blade to be separated, which Khazan accomplished. While Khazan was busying himself destroying the blade, his apprentice stole the hilt and fled. Khazan later located his apprentice's mutilated corpse in the Svalich Woods, but the hilt was nowhere to be found. To avoid the vampire's wrath, Khazan told Strahd that the entire weapon had been destroyed.\n\nThe hilt, which is sentient, knows that it can never be reunited with its original crystal blade. It has, however, gained the properties of a sun blade:\n\n- While grasping the hilt, you can use a bonus action to cause a blade of pure radiance to spring into existence, or make the blade disappear. While the blade exists, this magic longsword has the finesse property. If you are proficient with shortswords or longswords, you are proficient with the Sunsword.\n- You gain a +2 bonus to attack and damage rolls made with this weapon, which deals radiant damage instead of slashing damage. When you hit an undead with it, that target takes an extra 1d8 radiant damage.\n- The sword's luminous blade emits bright light in a 15-foot radius and dim light for an additional 15 feet. The light is sunlight. While the blade persists, you can use an action to expand or reduce its radius of bright and dim light by 5 feet each, to a maximum of 30 feet each or a minimum of 10 feet each.\n\n**Sentience.** The Sunsword is a sentient chaotic good weapon with an Intelligence of 11, a Wisdom of 17, and a Charisma of 16. It has hearing and normal vision out to a range of 60 feet. The weapon communicates by transmitting emotions to the creature carrying it or wielding it.\n\n**Personality.** The Sunsword's special purpose is to destroy Strahd, not so much because it wants to free the land of Barovia from evil but because it wants revenge for the loss of its crystal blade. The weapon secretly fears its own destruction.",
     "descriptionHtml": "<p>The Sunsword is a unique blade once possessed by Strahd's brother, Sergei von Zarovich. In its original form, it had a platinum hilt and guard, and a thin crystal blade as strong as steel.</p>\n<p>Strahd employed a powerful wizard named Khazan to destroy the weapon after Sergei's death. The first part of the process required the hilt and the blade to be separated, which Khazan accomplished. While Khazan was busying himself destroying the blade, his apprentice stole the hilt and fled. Khazan later located his apprentice's mutilated corpse in the Svalich Woods, but the hilt was nowhere to be found. To avoid the vampire's wrath, Khazan told Strahd that the entire weapon had been destroyed.</p>\n<p>The hilt, which is sentient, knows that it can never be reunited with its original crystal blade. It has, however, gained the properties of a sun blade:</p>\n<ul><li>While grasping the hilt, you can use a bonus action to cause a blade of pure radiance to spring into existence, or make the blade disappear. While the blade exists, this magic longsword has the finesse property. If you are proficient with shortswords or longswords, you are proficient with the Sunsword.</li><li>You gain a +2 bonus to attack and damage rolls made with this weapon, which deals radiant damage instead of slashing damage. When you hit an undead with it, that target takes an extra 1d8 radiant damage.</li><li>The sword's luminous blade emits bright light in a 15-foot radius and dim light for an additional 15 feet. The light is sunlight. While the blade persists, you can use an action to expand or reduce its radius of bright and dim light by 5 feet each, to a maximum of 30 feet each or a minimum of 10 feet each.</li></ul>\n<div class=\"item-subentry\"><strong>Sentience.</strong> <p>The Sunsword is a sentient chaotic good weapon with an Intelligence of 11, a Wisdom of 17, and a Charisma of 16. It has hearing and normal vision out to a range of 60 feet. The weapon communicates by transmitting emotions to the creature carrying it or wielding it.</p></div>\n<div class=\"item-subentry\"><strong>Personality.</strong> <p>The Sunsword's special purpose is to destroy Strahd, not so much because it wants to free the land of Barovia from evil but because it wants revenge for the loss of its crystal blade. The weapon secretly fears its own destruction.</p></div>"
   },
   {
@@ -192,14 +426,24 @@
     "source": "CoS",
     "page": 221,
     "type": "Adventuring Gear",
+    "rawType": "G",
     "rarity": "none",
     "reqAttune": false,
     "weight": 5,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear*\n\n**Weight:** 5 lb\n\n---\n\nThe Tome of Strahd is an ancient work penned by Strahd, a tragic tale of how he came to his fallen state. The book is bound in a thick leather cover with steel hinges and fastenings. The pages are of parchment and very brittle. Most of the book is written in the curious shorthand that only Strahd employs. Stains and age have made most of the work illegible, but several paragraphs remain intact.",
     "descriptionHtml": "<p>The Tome of Strahd is an ancient work penned by Strahd, a tragic tale of how he came to his fallen state. The book is bound in a thick leather cover with steel hinges and fastenings. The pages are of parchment and very brittle. Most of the book is written in the curious shorthand that only Strahd employs. Stains and age have made most of the work illegible, but several paragraphs remain intact.</p>"
   },
   {
@@ -208,14 +452,24 @@
     "source": "CoS",
     "page": 2,
     "type": "Adventuring Gear",
+    "rawType": "G",
     "rarity": "none",
     "reqAttune": false,
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear*\n\n---\n\nWhen you make your character, you can roll once on the Trinkets table to gain a trinket, a simple item lightly touched by mystery. The DM might also use this table. It can help stock a room in a dungeon or fill a creatures pockets.\n\n| d100 | Trinket |\n| --- | --- |\n| 01-02 | A picture you drew as a child of your imaginary friend |\n| 03-04 | A lock that opens when blood is dripped in its keyhole |\n| 05-06 | Clothes stolen from a scarecrow |\n| 07-08 | A spinning top carved with four faces: happy, sad, wrathful, and dead |\n| 09-10 | The necklace of a sibling who died on the day you were born |\n| 11-12 | A wig from someone executed by beheading |\n| 13-14 | The unopened letter to you from your dying father |\n| 15-16 | A pocket watch that runs backward for an hour every midnight |\n| 17-18 | A winter coat stolen from a dying soldier |\n| 19-20 | A bottle of invisible ink that can only be read at sunset |\n| 21-22 | A wineskin that refills when interred with a dead person for a night |\n| 23-24 | A set of silverware used by a king for his last meal |\n| 25-26 | A spyglass that always shows the world suffering a terrible storm |\n| 27-28 | A cameo with the profile's face scratched away |\n| 29-30 | A lantern with a black candle that never runs out and that burns with green flame |\n| 31-32 | A teacup from a child's tea set, stained with blood |\n| 33-34 | A little black book that records your dreams, and yours alone, when you sleep |\n| 35-36 | A necklace formed of the interlinked holy symbols of a dozen deities |\n| 37-38 | A hangman's noose that feels heavier than it should |\n| 39-40 | A birdcage into which small birds fly but once inside never eat or leave |\n| 41-42 | A lepidopterist's box filled dead moths with skull-like patterns on their wings |\n| 43-44 | A jar of pickled ghouls' tongues |\n| 45-46 | The wooden hand of a notorious pirate |\n| 47-48 | An urn with the ashes of a dead relative |\n| 49-50 | A hand mirror backed with a bronze depiction of a medusa |\n| 51-52 | Pallid leather gloves crafted with ivory fingernails |\n| 53-54 | Dice made from the knuckles of a notorious charlatan |\n| 55-56 | A ring of keys for forgotten locks |\n| 57-58 | Nails from the coffin of a murderer |\n| 59-60 | A key to the family crypt |\n| 61-62 | A bouquet of funerary flowers that always looks and smells fresh |\n| 63-64 | A switch used to discipline you as a child |\n| 65-66 | A music box that plays by itself whenever someone holding it dances |\n| 67-68 | A walking cane with an iron ferrule that strikes sparks on stone |\n| 69-70 | A flag from a ship lost at sea |\n| 71-72 | Porcelain doll's head that always seems to be looking at you |\n| 73-74 | A wolf's head wrought in silver that is also a whistle |\n| 75-76 | A small mirror that shows a much older version of the viewer |\n| 77-78 | Small, worn book of children's nursery rhymes |\n| 79-80 | A mummified raven claw |\n| 81-82 | A broken pendent of a silver dragon that's always cold to the touch |\n| 83-84 | A small locked box that quietly hums a lovely melody at night but you always forget it in the morning |\n| 85-86 | An inkwell that makes one a little nauseous when staring at it |\n| 87-88 | An old little doll made from a dark, dense wood and missing a hand and a foot |\n| 89-90 | A black executioner's hood |\n| 91-92 | A pouch made of flesh, with a sinew drawstring |\n| 93-94 | A tiny spool of black thread that never runs out |\n| 95-96 | A tiny clockwork figurine of a dancer that's missing a gear and doesn't work |\n| 97-98 | A black wooden pipe that creates puffs of smoke that look like skulls |\n| 99-00 | A vial of perfume, the scent of which only certain creatures can detect |",
     "descriptionHtml": "<p>When you make your character, you can roll once on the Trinkets table to gain a trinket, a simple item lightly touched by mystery. The DM might also use this table. It can help stock a room in a dungeon or fill a creatures pockets.</p>\n<table class=\"item-table\"><thead><tr><th>d100</th><th>Trinket</th></tr></thead><tbody><tr><td>01-02</td><td>A picture you drew as a child of your imaginary friend</td></tr><tr><td>03-04</td><td>A lock that opens when blood is dripped in its keyhole</td></tr><tr><td>05-06</td><td>Clothes stolen from a scarecrow</td></tr><tr><td>07-08</td><td>A spinning top carved with four faces: happy, sad, wrathful, and dead</td></tr><tr><td>09-10</td><td>The necklace of a sibling who died on the day you were born</td></tr><tr><td>11-12</td><td>A wig from someone executed by beheading</td></tr><tr><td>13-14</td><td>The unopened letter to you from your dying father</td></tr><tr><td>15-16</td><td>A pocket watch that runs backward for an hour every midnight</td></tr><tr><td>17-18</td><td>A winter coat stolen from a dying soldier</td></tr><tr><td>19-20</td><td>A bottle of invisible ink that can only be read at sunset</td></tr><tr><td>21-22</td><td>A wineskin that refills when interred with a dead person for a night</td></tr><tr><td>23-24</td><td>A set of silverware used by a king for his last meal</td></tr><tr><td>25-26</td><td>A spyglass that always shows the world suffering a terrible storm</td></tr><tr><td>27-28</td><td>A cameo with the profile's face scratched away</td></tr><tr><td>29-30</td><td>A lantern with a black candle that never runs out and that burns with green flame</td></tr><tr><td>31-32</td><td>A teacup from a child's tea set, stained with blood</td></tr><tr><td>33-34</td><td>A little black book that records your dreams, and yours alone, when you sleep</td></tr><tr><td>35-36</td><td>A necklace formed of the interlinked holy symbols of a dozen deities</td></tr><tr><td>37-38</td><td>A hangman's noose that feels heavier than it should</td></tr><tr><td>39-40</td><td>A birdcage into which small birds fly but once inside never eat or leave</td></tr><tr><td>41-42</td><td>A lepidopterist's box filled dead moths with skull-like patterns on their wings</td></tr><tr><td>43-44</td><td>A jar of pickled ghouls' tongues</td></tr><tr><td>45-46</td><td>The wooden hand of a notorious pirate</td></tr><tr><td>47-48</td><td>An urn with the ashes of a dead relative</td></tr><tr><td>49-50</td><td>A hand mirror backed with a bronze depiction of a medusa</td></tr><tr><td>51-52</td><td>Pallid leather gloves crafted with ivory fingernails</td></tr><tr><td>53-54</td><td>Dice made from the knuckles of a notorious charlatan</td></tr><tr><td>55-56</td><td>A ring of keys for forgotten locks</td></tr><tr><td>57-58</td><td>Nails from the coffin of a murderer</td></tr><tr><td>59-60</td><td>A key to the family crypt</td></tr><tr><td>61-62</td><td>A bouquet of funerary flowers that always looks and smells fresh</td></tr><tr><td>63-64</td><td>A switch used to discipline you as a child</td></tr><tr><td>65-66</td><td>A music box that plays by itself whenever someone holding it dances</td></tr><tr><td>67-68</td><td>A walking cane with an iron ferrule that strikes sparks on stone</td></tr><tr><td>69-70</td><td>A flag from a ship lost at sea</td></tr><tr><td>71-72</td><td>Porcelain doll's head that always seems to be looking at you</td></tr><tr><td>73-74</td><td>A wolf's head wrought in silver that is also a whistle</td></tr><tr><td>75-76</td><td>A small mirror that shows a much older version of the viewer</td></tr><tr><td>77-78</td><td>Small, worn book of children's nursery rhymes</td></tr><tr><td>79-80</td><td>A mummified raven claw</td></tr><tr><td>81-82</td><td>A broken pendent of a silver dragon that's always cold to the touch</td></tr><tr><td>83-84</td><td>A small locked box that quietly hums a lovely melody at night but you always forget it in the morning</td></tr><tr><td>85-86</td><td>An inkwell that makes one a little nauseous when staring at it</td></tr><tr><td>87-88</td><td>An old little doll made from a dark, dense wood and missing a hand and a foot</td></tr><tr><td>89-90</td><td>A black executioner's hood</td></tr><tr><td>91-92</td><td>A pouch made of flesh, with a sinew drawstring</td></tr><tr><td>93-94</td><td>A tiny spool of black thread that never runs out</td></tr><tr><td>95-96</td><td>A tiny clockwork figurine of a dancer that's missing a gear and doesn't work</td></tr><tr><td>97-98</td><td>A black wooden pipe that creates puffs of smoke that look like skulls</td></tr><tr><td>99-00</td><td>A vial of perfume, the scent of which only certain creatures can detect</td></tr></tbody></table>"
   },
   {
@@ -224,16 +478,51 @@
     "source": "CoS",
     "page": 198,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "unknown (magic)",
     "reqAttune": false,
     "weight": 2,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": "1d10",
     "dmgType": "slashing",
+    "bonusWeapon": null,
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Yester Hill Axe",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        },
+        {
+          "formula": "1d8",
+          "stat": "",
+          "type": "Slashing",
+          "label": "Extra"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, unknown (magic)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 2 lb\n\n---\n\nThe axe's handle is carved with leaves and vines, and it weighs half as much as a normal battleaxe. When the axe hits a plant, whether an ordinary plant or a plant creature, the target takes an extra 1d8 slashing damage. When a creature of non-good alignment wields the axe, it sprouts thorns whenever its wielder makes an attack with it. These thorns prick the wielder for 1 piercing damage after the attack is made, and this damage is considered magical.",
     "descriptionHtml": "<p>The axe's handle is carved with leaves and vines, and it weighs half as much as a normal battleaxe. When the axe hits a plant, whether an ordinary plant or a plant creature, the target takes an extra 1d8 slashing damage. When a creature of non-good alignment wields the axe, it sprouts thorns whenever its wielder makes an attack with it. These thorns prick the wielder for 1 piercing damage after the attack is made, and this damage is considered magical.</p>"
   }
 ]

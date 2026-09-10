@@ -13,10 +13,20 @@ export function initVttChat(vtt, chatHistory) {
     
     // Combat initiative DOM bindings
     const initContainer = document.getElementById('vtt-initiative-carousel-container');
-    const initMinTab = document.getElementById('vtt-initiative-minimized-tab');
+    const initMinBar = document.getElementById('init-minimized-bar');
     const initMinName = document.getElementById('init-min-name');
+    const initMinHp = document.getElementById('init-min-hp');
+    const initMinAvatar = document.getElementById('init-min-avatar');
+    const initMinRoundNum = document.getElementById('init-min-round-num');
+    const btnInitMinDrag = document.getElementById('btn-init-min-drag');
+    const btnInitMinPrev = document.getElementById('btn-init-min-prev');
+    const btnInitMinNext = document.getElementById('btn-init-min-next');
+    const btnInitMinExpand = document.getElementById('btn-init-min-expand');
+    const initMinCombatant = document.getElementById('init-min-combatant');
     const initList = document.getElementById('init-list');
     const roundDisplay = document.getElementById('init-round-num');
+    const btnToggleGlobalInit = document.getElementById('btn-toggle-initiative');
+    let updateScrollButtonsFn = null;
     
     // Combat state
     let combatants = [];
@@ -27,10 +37,17 @@ export function initVttChat(vtt, chatHistory) {
 
     // Load initial persistent state
     if (vtt.campaignState && vtt.campaignState.initiative) {
-        combatants = vtt.campaignState.initiative.combatants || [];
-        currentRound = vtt.campaignState.initiative.currentRound || 1;
-        activeTurnIndex = vtt.campaignState.initiative.activeTurnIndex !== undefined ? vtt.campaignState.initiative.activeTurnIndex : -1;
-        initiativeVisible = vtt.campaignState.initiative.isVisible !== undefined ? vtt.campaignState.initiative.isVisible : true;
+        if (Array.isArray(vtt.campaignState.initiative)) {
+            combatants = vtt.campaignState.initiative;
+            currentRound = 1;
+            activeTurnIndex = combatants.length > 0 ? 0 : -1;
+            initiativeVisible = true;
+        } else {
+            combatants = vtt.campaignState.initiative.combatants || [];
+            currentRound = vtt.campaignState.initiative.currentRound || 1;
+            activeTurnIndex = vtt.campaignState.initiative.activeTurnIndex !== undefined ? vtt.campaignState.initiative.activeTurnIndex : -1;
+            initiativeVisible = vtt.campaignState.initiative.isVisible !== undefined ? vtt.campaignState.initiative.isVisible : true;
+        }
     }
 
     // Load initial chat history
@@ -103,11 +120,15 @@ export function initVttChat(vtt, chatHistory) {
                 if (!vtt.campaignState) vtt.campaignState = {};
                 vtt.campaignState.initiative = data.initiative;
                 
-                combatants = data.initiative.combatants || [];
-                currentRound = data.initiative.currentRound || 1;
-                activeTurnIndex = data.initiative.activeTurnIndex !== undefined ? data.initiative.activeTurnIndex : -1;
-                if (data.initiative.isVisible !== undefined) {
-                    initiativeVisible = data.initiative.isVisible;
+                if (Array.isArray(data.initiative)) {
+                    combatants = data.initiative;
+                } else {
+                    combatants = data.initiative.combatants || [];
+                    currentRound = data.initiative.currentRound || 1;
+                    activeTurnIndex = data.initiative.activeTurnIndex !== undefined ? data.initiative.activeTurnIndex : -1;
+                    if (data.initiative.isVisible !== undefined) {
+                        initiativeVisible = data.initiative.isVisible;
+                    }
                 }
                 renderInitiativeList();
             }
@@ -676,6 +697,7 @@ export function initVttChat(vtt, chatHistory) {
         const btnClear = document.getElementById('btn-init-clear');
         const btnNext = document.getElementById('btn-init-next');
         const btnPrev = document.getElementById('btn-init-prev');
+        const btnAdd = document.getElementById('btn-init-add');
         const btnMinimize = document.getElementById('btn-init-minimize');
         
         // Position settings
@@ -686,14 +708,44 @@ export function initVttChat(vtt, chatHistory) {
             document.querySelectorAll('.init-turn-controls.gm-only, .init-carousel-header .header-actions .gm-only').forEach(el => el.classList.add('vtt-hidden'));
         }
 
-        btnClear.addEventListener('click', () => {
-            combatants = [];
-            currentRound = 1;
-            activeTurnIndex = -1;
-            broadcastInitiative();
-        });
+        if (btnAdd) {
+            btnAdd.addEventListener('click', () => {
+                // Check if any tokens are selected on canvas
+                const canvasEngine = window.VTT?.canvasEngine;
+                const selectedTokenIds = canvasEngine ? (canvasEngine.getSelectedTokenIds ? canvasEngine.getSelectedTokenIds() : (canvasEngine.getSelectedTokens ? canvasEngine.getSelectedTokens() : [])) : [];
+                if (selectedTokenIds.length > 0) {
+                    const canvasTokens = canvasEngine.getTokens ? canvasEngine.getTokens() : {};
+                    selectedTokenIds.forEach(id => {
+                        const tok = canvasTokens[id];
+                        if (tok) {
+                            const roll = Math.floor(Math.random() * 20) + 1;
+                            const dexMod = tok.dexMod || tok.attributes?.dex?.mod || 0;
+                            addToInitiative(tok.name || 'Token', roll + dexMod, tok.id, tok.img);
+                        }
+                    });
+                    return;
+                }
 
-        btnNext.addEventListener('click', () => {
+                // If no tokens selected, prompt GM for creature name and score
+                const name = window.prompt("Enter creature or character name:", "Combatant");
+                if (!name || !name.trim()) return;
+                const d20 = Math.floor(Math.random() * 20) + 1;
+                const scoreStr = window.prompt(`Enter initiative score for "${name.trim()}":`, d20);
+                const score = parseFloat(scoreStr);
+                addToInitiative(name.trim(), !isNaN(score) ? score : d20);
+            });
+        }
+
+        if (btnClear) {
+            btnClear.addEventListener('click', () => {
+                combatants = [];
+                currentRound = 1;
+                activeTurnIndex = -1;
+                broadcastInitiative();
+            });
+        }
+
+        const nextTurn = () => {
             if (combatants.length === 0) return;
             activeTurnIndex++;
             if (activeTurnIndex >= combatants.length) {
@@ -701,9 +753,9 @@ export function initVttChat(vtt, chatHistory) {
                 currentRound++;
             }
             broadcastInitiative();
-        });
+        };
 
-        btnPrev.addEventListener('click', () => {
+        const prevTurn = () => {
             if (combatants.length === 0) return;
             activeTurnIndex--;
             if (activeTurnIndex < 0) {
@@ -711,25 +763,60 @@ export function initVttChat(vtt, chatHistory) {
                 currentRound = Math.max(1, currentRound - 1);
             }
             broadcastInitiative();
-        });
+        };
+
+        if (btnNext) btnNext.addEventListener('click', nextTurn);
+        if (btnPrev) btnPrev.addEventListener('click', prevTurn);
+        if (btnInitMinNext) btnInitMinNext.addEventListener('click', nextTurn);
+        if (btnInitMinPrev) btnInitMinPrev.addEventListener('click', prevTurn);
 
         // Global GM Toggle
-        const btnToggleGlobalInit = document.getElementById('btn-toggle-initiative');
         if (btnToggleGlobalInit && vtt.role === 'GM') {
             btnToggleGlobalInit.title = "Toggle Initiative Tracker";
             btnToggleGlobalInit.addEventListener('click', () => {
                 initiativeVisible = !initiativeVisible;
-                // vtt.socket.emit('chat:msg', {
-                //     text: `GM has ${initiativeVisible ? 'opened' : 'closed'} the initiative tracker.`
-                // });
                 broadcastInitiative();
             });
         }
 
         // Minimize / Maximize logic
-        btnMinimize.addEventListener('click', () => {
+        const updateMinimizeState = () => {
+            if (!initContainer) return;
+            const isMin = initContainer.classList.contains('is-minimized');
+            if (btnMinimize) {
+                const icon = btnMinimize.querySelector('i');
+                if (icon) icon.className = isMin ? 'fa-solid fa-expand' : 'fa-solid fa-compress';
+                btnMinimize.title = isMin ? 'Expand Tracker' : 'Minimize Tracker';
+            }
+        };
+
+        const setMinimized = (minimized) => {
+            if (!initContainer) return;
+            initContainer.classList.toggle('is-minimized', !!minimized);
+            localStorage.setItem('vtt_initiative_minimized', minimized ? 'true' : 'false');
+            updateMinimizeState();
+        };
+
+        if (btnMinimize) {
+            btnMinimize.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isMin = !initContainer.classList.contains('is-minimized');
+                setMinimized(isMin);
+            });
+        }
+
+        if (btnInitMinExpand) {
+            btnInitMinExpand.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setMinimized(false);
+            });
+        }
+
+        // Restore saved minimized state
+        if (localStorage.getItem('vtt_initiative_minimized') === 'true') {
             initContainer.classList.add('is-minimized');
-        });
+            updateMinimizeState();
+        }
 
         // Position, Orientation & Free-Drag settings
         const hudPosition = document.getElementById('hud-init-position');
@@ -774,6 +861,7 @@ export function initVttChat(vtt, chatHistory) {
             btnScrollLeft.style.display = initList.scrollLeft > 5 ? 'flex' : 'none';
             btnScrollRight.style.display = (initList.scrollLeft + initList.clientWidth < initList.scrollWidth - 5) ? 'flex' : 'none';
         }
+        updateScrollButtonsFn = updateScrollButtons;
 
         function setOrientation(orientation, forceCustom = false) {
             currentOrientation = orientation;
@@ -981,7 +1069,9 @@ export function initVttChat(vtt, chatHistory) {
                 updateScrollButtons();
             };
 
-            btnDrag.addEventListener('pointerdown', onPointerDown);
+            [btnDrag, btnInitMinDrag].filter(Boolean).forEach(btn => {
+                btn.addEventListener('pointerdown', onPointerDown);
+            });
         }
 
         // Corner resizing implementation in free-drag mode
@@ -1081,27 +1171,98 @@ export function initVttChat(vtt, chatHistory) {
         
         vtt.socket.on('initiative:settings', (settings) => {
             if (vtt.role !== 'GM') {
-                if (settings.visible) {
-                    initContainer.style.display = '';
-                    initMinTab.style.display = '';
+                if (settings && settings.visible) {
+                    if (initContainer) initContainer.style.display = '';
                 } else {
-                    initContainer.style.display = 'none';
-                    initMinTab.style.display = 'none';
+                    if (initContainer) initContainer.style.display = 'none';
                 }
             }
         });
     }
 
-    function addToInitiative(name, score, tokenId) {
-        combatants.push({ name, score, tokenId });
-        
-        // Sort descending by initiative score
-        combatants.sort((a, b) => b.score - a.score);
+    function addToInitiative(name, score, tokenId, customImg) {
+        if (!name) return;
 
-        if (activeTurnIndex === -1) activeTurnIndex = 0;
+        // Sanitize score to numeric value
+        let numScore = parseFloat(score);
+        if (isNaN(numScore)) {
+            if (score && typeof score === 'object') {
+                numScore = parseFloat(score.total ?? score.value ?? score.result);
+            }
+        }
+        if (isNaN(numScore)) {
+            numScore = Math.floor(Math.random() * 20) + 1;
+        }
+
+        const safeName = String(name).trim();
+
+        // Deduplicate: check if token or creature already exists in combatants
+        const existingIdx = combatants.findIndex(c => 
+            (tokenId && c.tokenId === tokenId) || 
+            (!tokenId && !c.tokenId && c.name === safeName)
+        );
+
+        let initImg = customImg || null;
+        if (!initImg && tokenId && window.VTT?.canvasEngine) {
+            const t = window.VTT.canvasEngine.getTokens()?.[tokenId];
+            if (t && t.img) initImg = t.img;
+        }
+
+        if (existingIdx !== -1) {
+            // Update existing combatant
+            combatants[existingIdx].score = numScore;
+            combatants[existingIdx].name = safeName;
+            if (initImg) combatants[existingIdx].img = initImg;
+            if (tokenId) combatants[existingIdx].tokenId = tokenId;
+        } else {
+            const id = 'init_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+            combatants.push({
+                id,
+                name: safeName,
+                score: numScore,
+                tokenId: tokenId || null,
+                img: initImg
+            });
+        }
+
+        // Sort descending by initiative score
+        combatants.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
+
+        if (activeTurnIndex === -1 || activeTurnIndex >= combatants.length) {
+            activeTurnIndex = 0;
+        }
+
+        initiativeVisible = true;
 
         broadcastInitiative();
         renderInitiativeList();
+    }
+
+    function updateCombatantTokenArt(tokenId, newUrl, characterId = null) {
+        if (!combatants || combatants.length === 0 || !newUrl) return;
+        let updated = false;
+
+        combatants.forEach(c => {
+            const matchesToken = tokenId && (c.tokenId === tokenId || c.id === tokenId);
+            let matchesChar = false;
+            if (characterId && !c.tokenId && window.VTT?.campaignState?.characters?.[characterId]) {
+                const charName = window.VTT.campaignState.characters[characterId]?.name;
+                if (charName && c.name && c.name.toLowerCase() === charName.toLowerCase()) {
+                    matchesChar = true;
+                }
+            }
+            if (matchesToken || matchesChar) {
+                c.img = newUrl;
+                if (tokenId && !c.tokenId) c.tokenId = tokenId;
+                if (characterId && !c.characterId) c.characterId = characterId;
+                updated = true;
+            }
+        });
+
+        if (updated) {
+            broadcastInitiative();
+            renderInitiativeList();
+        }
     }
 
     function broadcastInitiative() {
@@ -1119,9 +1280,13 @@ export function initVttChat(vtt, chatHistory) {
         renderInitiativeList();
     }
 
-    function removeFromInitiative(tokenId) {
+    function removeFromInitiative(combatantId) {
         if (!combatants || combatants.length === 0) return;
-        const index = combatants.findIndex(c => c.tokenId === tokenId);
+        const index = combatants.findIndex(c => 
+            c.id === combatantId || 
+            (c.tokenId && c.tokenId === combatantId) || 
+            c.name === combatantId
+        );
         if (index === -1) return;
 
         combatants.splice(index, 1);
@@ -1131,13 +1296,34 @@ export function initVttChat(vtt, chatHistory) {
         } else if (index < activeTurnIndex) {
             activeTurnIndex--;
         } else if (index === activeTurnIndex) {
-            // Keep same index, but wrap around if it was the last element
             if (activeTurnIndex >= combatants.length) {
                 activeTurnIndex = 0;
                 currentRound++;
             }
         }
         broadcastInitiative();
+    }
+
+    function getCombatantMonogram(name) {
+        const cleanName = (name || '?').trim();
+        const words = cleanName.split(/\s+/).filter(Boolean);
+        let letters = '?';
+        if (words.length >= 2) {
+            letters = (words[0][0] + words[1][0]).toUpperCase();
+        } else if (words.length === 1) {
+            letters = words[0].substring(0, Math.min(2, words[0].length)).toUpperCase();
+        }
+        let hash = 0;
+        for (let i = 0; i < cleanName.length; i++) {
+            hash = cleanName.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = Math.abs(hash) % 360;
+        return {
+            letters,
+            bg: `hsl(${hue}, 42%, 25%)`,
+            border: `hsl(${hue}, 60%, 45%)`,
+            color: `hsl(${hue}, 90%, 88%)`
+        };
     }
 
     function renderInitiativeList() {
@@ -1149,7 +1335,11 @@ export function initVttChat(vtt, chatHistory) {
         });
         
         initList.innerHTML = '';
-        roundDisplay.textContent = currentRound;
+        if (roundDisplay) roundDisplay.textContent = currentRound;
+        if (btnToggleGlobalInit) {
+            btnToggleGlobalInit.classList.toggle('active', !!initiativeVisible);
+            btnToggleGlobalInit.title = initiativeVisible ? "Hide Initiative Tracker" : "Show Initiative Tracker";
+        }
 
         if (!initiativeVisible) {
             initContainer.classList.add('vtt-hidden');
@@ -1157,8 +1347,19 @@ export function initVttChat(vtt, chatHistory) {
         }
 
         if (combatants.length === 0) {
-            initList.innerHTML = '<div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "Add".</div>';
+            initList.innerHTML = '<div class="init-empty-state">No creatures in combat yet. Drag creatures onto map or click "+" to add.</div>';
             initContainer.classList.remove('vtt-hidden');
+            if (initMinRoundNum) initMinRoundNum.textContent = currentRound;
+            if (initMinName) initMinName.textContent = "No Combat";
+            if (initMinHp) initMinHp.style.display = 'none';
+            if (initMinAvatar) initMinAvatar.innerHTML = '<i class="fa-solid fa-shield-halved"></i>';
+            if (initMinCombatant) {
+                initMinCombatant.onclick = null;
+                initMinCombatant.ondblclick = null;
+                initMinCombatant.style.cursor = 'default';
+            }
+            if (btnInitMinPrev) btnInitMinPrev.disabled = true;
+            if (btnInitMinNext) btnInitMinNext.disabled = true;
             return;
         }
 
@@ -1176,28 +1377,98 @@ export function initVttChat(vtt, chatHistory) {
         
         const visualActiveIndex = renderList.length > 0 ? 0 : -1;
 
+        // Populate Minimized HUD Bar
+        if (initMinRoundNum) initMinRoundNum.textContent = currentRound;
+        if (btnInitMinPrev) btnInitMinPrev.disabled = false;
+        if (btnInitMinNext) btnInitMinNext.disabled = false;
+
+        const activeCombatant = visualActiveIndex >= 0 ? renderList[visualActiveIndex] : null;
+        if (activeCombatant) {
+            const actName = activeCombatant.name || 'Unknown';
+            const actToken = canvasEngine ? canvasEngine.getTokens()[activeCombatant.tokenId] : null;
+
+            if (initMinName) initMinName.textContent = actName;
+
+            // HP
+            if (initMinHp) {
+                let actHpText = '';
+                let actHpColor = '#22c55e';
+                if (actToken && actToken.maxHp) {
+                    const gmHideHp = document.getElementById('config-monster-hp-visible')?.value === 'never' && vtt.role !== 'GM' && !actToken.isPlayer;
+                    if (!gmHideHp) {
+                        actHpText = `${actToken.hp}/${actToken.maxHp}`;
+                        const ratio = actToken.hp / (actToken.maxHp || 1);
+                        if (ratio > 0.5) actHpColor = '#22c55e';
+                        else if (ratio > 0.2) actHpColor = '#eab308';
+                        else actHpColor = '#ef4444';
+                    }
+                }
+                if (actHpText) {
+                    initMinHp.textContent = actHpText;
+                    initMinHp.style.color = actHpColor;
+                    initMinHp.style.borderColor = actHpColor;
+                    initMinHp.style.display = 'inline-block';
+                } else {
+                    initMinHp.style.display = 'none';
+                }
+            }
+
+            // Avatar
+            if (initMinAvatar) {
+                const actMonogram = getCombatantMonogram(actName);
+                const actTargetImg = (actToken && actToken.img) || activeCombatant.img;
+                if (actTargetImg) {
+                    const cleanTarget = actTargetImg.split('?')[0].toLowerCase();
+                    const isTargetVideo = (actToken && actToken.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
+                    const isTargetYt = actTargetImg.includes('youtube.com') || actTargetImg.includes('youtu.be');
+                    if (isTargetYt) {
+                        initMinAvatar.innerHTML = '📺';
+                    } else if (isTargetVideo) {
+                        initMinAvatar.innerHTML = `<video src="${actTargetImg}" muted loop playsinline preload="metadata"></video>`;
+                    } else {
+                        initMinAvatar.innerHTML = `<img src="${actTargetImg}" alt="${actName}" onerror="this.parentElement.innerHTML='<div class=\\'init-monogram-avatar\\' style=\\'background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};\\'>${actMonogram.letters}</div>';">`;
+                    }
+                } else {
+                    initMinAvatar.innerHTML = `<div class="init-monogram-avatar" style="background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};">${actMonogram.letters}</div>`;
+                }
+            }
+
+            // Interacting with minimized combatant chip
+            if (initMinCombatant) {
+                initMinCombatant.style.cursor = 'pointer';
+                initMinCombatant.onclick = (e) => {
+                    e.stopPropagation();
+                    if (actToken && window.VTT?.canvasEngine) {
+                        window.VTT.canvasEngine.panTo(actToken.x, actToken.y);
+                        if (e.shiftKey && vtt.role === 'GM') {
+                            window.VTT.canvasEngine.selectToken(actToken.id);
+                        }
+                    }
+                };
+                initMinCombatant.ondblclick = (e) => {
+                    e.stopPropagation();
+                    if (actToken && window.VTT?.canvasEngine) {
+                        window.VTT.canvasEngine.panTo(actToken.x, actToken.y, null, 350);
+                        window.VTT.canvasEngine.selectToken(actToken.id);
+                    }
+                };
+            }
+        }
+
         renderList.forEach((c, idx) => {
             const row = document.createElement('div');
-            row.className = `init-carousel-card ${idx === visualActiveIndex ? 'init-carousel-card--active' : ''}`;
-            row.style.position = 'relative'; // For absolute positioning the delete button
+            const isActive = (idx === visualActiveIndex);
+            row.className = `init-carousel-card ${isActive ? 'init-carousel-card--active' : ''}`;
+            row.dataset.id = c.id || c.tokenId || '';
             
-            let name = c.name;
+            const name = c.name || 'Unknown';
             let hpText = '';
-            let hpColor = '#333';
-            let imgHtml = '';
+            let hpColor = '#22c55e';
             
-            let token = canvasEngine ? canvasEngine.getTokens()[c.tokenId] : null;
+            const token = canvasEngine ? canvasEngine.getTokens()[c.tokenId] : null;
             
-            // Allow clicking token to pan canvas or open sheet, and un-minimize if active
+            // Allow clicking token to pan canvas or open sheet
             row.addEventListener('click', (e) => {
-                if (initContainer.classList.contains('is-minimized')) {
-                    if (idx === visualActiveIndex) {
-                        initContainer.classList.remove('is-minimized');
-                        e.stopPropagation();
-                    }
-                    return;
-                }
-                
                 if (token && window.VTT?.canvasEngine) {
                     window.VTT.canvasEngine.panTo(token.x, token.y);
                     if (e.shiftKey && vtt.role === 'GM') {
@@ -1214,28 +1485,42 @@ export function initVttChat(vtt, chatHistory) {
                 }
             });
 
-            imgHtml = `<div style="width: 36px; height: 36px; border-radius: 50%; background: #333; margin: 0; border: 2px solid #555; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #aaa;">?</div>`;
-            if (token) {
-                // If GM config hides HP, we don't set hpText.
+            // HP Calculation
+            if (token && token.maxHp) {
                 const gmHideHp = document.getElementById('config-monster-hp-visible')?.value === 'never' && vtt.role !== 'GM' && !token.isPlayer;
                 if (!gmHideHp) {
                     hpText = `${token.hp}/${token.maxHp}`;
                     const ratio = token.hp / (token.maxHp || 1);
-                    if (ratio > 0.5) hpColor = '#28a745';
-                    else if (ratio > 0.15) hpColor = '#ffc107';
-                    else hpColor = '#dc3545';
+                    if (ratio > 0.5) hpColor = '#22c55e';
+                    else if (ratio > 0.2) hpColor = '#eab308';
+                    else hpColor = '#ef4444';
                 }
-                
-                const needsIframe = token.img && token.img.includes('youtube.com');
-                const needsImg = token.img && !needsIframe && (!token.isVideo || token.img.split('?')[0].toLowerCase().endsWith('.gif'));
-                const needsVideo = token.img && !needsIframe && !needsImg && token.isVideo;
-                
-                if (needsIframe) {
-                    imgHtml = `<div style="width: 36px; height: 36px; border-radius: 50%; background: #222; margin: 0; border: 2px solid ${hpColor}; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #aaa;" title="YouTube Token">📺</div>`;
-                } else if (needsVideo) {
-                    imgHtml = `<video src="${token.img}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; margin: 0; border: 2px solid ${hpColor}" muted loop playsinline preload="metadata"></video>`;
+            }
+
+            // Avatar construction
+            const monogram = getCombatantMonogram(name);
+            const monogramHtml = `<div class="init-monogram-avatar" style="background: ${monogram.bg}; border-color: ${monogram.border}; color: ${monogram.color};">${monogram.letters}</div>`;
+
+            let avatarHtml = monogramHtml;
+            const targetImg = (token && token.img) || c.img;
+
+            if (targetImg) {
+                const cleanTarget = targetImg.split('?')[0].toLowerCase();
+                const isTargetVideo = (token && token.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
+                const isTargetYt = targetImg.includes('youtube.com') || targetImg.includes('youtu.be');
+
+                if (isTargetYt) {
+                    avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
+                } else if (isTargetVideo) {
+                    avatarHtml = `
+                        <div class="init-token-avatar-wrap">
+                            <video class="init-token-avatar" src="${targetImg}" muted loop playsinline preload="metadata"></video>
+                        </div>`;
                 } else {
-                    imgHtml = `<img src="${token.img}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; margin: 0; border: 2px solid ${hpColor}">`;
+                    avatarHtml = `
+                        <div class="init-token-avatar-wrap">
+                            <img class="init-token-avatar" src="${targetImg}" alt="${name}" onerror="this.parentElement.innerHTML = '<div class=\\'init-monogram-avatar\\' style=\\'background: ${monogram.bg}; border-color: ${monogram.border}; color: ${monogram.color};\\'>${monogram.letters}</div>';">
+                        </div>`;
                 }
             }
 
@@ -1243,18 +1528,21 @@ export function initVttChat(vtt, chatHistory) {
             
             let delBtnHtml = '';
             if (vtt.role === 'GM') {
-                delBtnHtml = `<button class="init-card-del-btn" data-token-id="${c.tokenId}" title="Remove from Tracker"><i class="fa-solid fa-times"></i></button>`;
+                delBtnHtml = `<button class="init-card-del-btn" data-id="${c.id || c.tokenId}" title="Remove from Tracker"><i class="fa-solid fa-xmark"></i></button>`;
             }
+
+            const scoreNum = parseFloat(c.score);
+            const displayScore = !isNaN(scoreNum) ? (Number.isInteger(scoreNum) ? scoreNum : scoreNum.toFixed(1)) : '—';
 
             row.innerHTML = `
                 ${delBtnHtml}
-                <div class="init-card-content" style="display: flex; flex-direction: row; align-items: center; width: 100%;">
-                    <div class="init-card-img" style="flex-shrink: 0; margin-right: 6px;">${imgHtml}</div>
-                    <div class="init-card-details" style="display: flex; flex-direction: column; flex-grow: 1; align-items: flex-start; overflow: hidden;">
-                        <div class="init-card-name" style="font-weight: bold; font-size: 0.85rem; color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;">${name}</div>
+                <div class="init-card-content">
+                    <div class="init-card-img">${avatarHtml}</div>
+                    <div class="init-card-details">
+                        <div class="init-card-name" title="${name}">${name}</div>
                         ${hpPillHtml}
                     </div>
-                    <div class="init-card-score" style="flex-shrink: 0; margin-left: auto;" ${vtt.role === 'GM' ? 'title="Right-click to edit"' : ''}>${c.score}</div>
+                    <div class="init-card-score" ${vtt.role === 'GM' ? 'title="Right-click to edit score"' : ''}>${displayScore}</div>
                 </div>
             `;
             
@@ -1264,7 +1552,7 @@ export function initVttChat(vtt, chatHistory) {
                 if (delBtn) {
                     delBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        removeFromInitiative(c.tokenId);
+                        removeFromInitiative(c.id || c.tokenId || c.name);
                     });
                 }
 
@@ -1278,8 +1566,8 @@ export function initVttChat(vtt, chatHistory) {
 
                         if (scoreEl.querySelector('input')) return; // Already editing
 
-                        const currentScore = c.score;
-                        scoreEl.innerHTML = `<input type="number" step="any" class="init-score-edit-input" value="${currentScore}" style="width: 52px; text-align: center; background: rgba(0,0,0,0.5); border: 1px solid var(--color-gold-base, #cca35a); color: var(--color-text-primary, white); border-radius: 4px; padding: 2px; font-weight: bold; outline: none;">`;
+                        const currentScore = parseFloat(c.score) || 0;
+                        scoreEl.innerHTML = `<input type="number" step="any" class="init-score-edit-input" value="${currentScore}">`;
                         
                         const inputEl = scoreEl.querySelector('input');
                         inputEl.focus();
@@ -1292,34 +1580,24 @@ export function initVttChat(vtt, chatHistory) {
                             isSaved = true;
                             const newScore = parseFloat(inputEl.value);
                             if (!isNaN(newScore) && newScore !== currentScore) {
-                                // Explicitly find and update in the master array to avoid stale closures
-                                const targetIdx = combatants.findIndex(cb => cb.tokenId === c.tokenId);
+                                const targetIdx = combatants.findIndex(cb => (c.id && cb.id === c.id) || (c.tokenId && cb.tokenId === c.tokenId) || cb.name === c.name);
                                 if (targetIdx !== -1) {
                                     combatants[targetIdx].score = newScore;
                                 } else {
                                     c.score = newScore;
                                 }
                                 
-                                // Keep track of active token
-                                let activeTokenId = null;
-                                if (combatants.length > 0 && activeTurnIndex >= 0 && activeTurnIndex < combatants.length) {
-                                    activeTokenId = combatants[activeTurnIndex].tokenId;
-                                }
+                                let activeId = combatants[activeTurnIndex]?.id || combatants[activeTurnIndex]?.tokenId;
+                                combatants.sort((a, b) => (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0));
 
-                                // Sort descending by initiative score
-                                combatants.sort((a, b) => b.score - a.score);
-
-                                // Find new active index
-                                if (activeTokenId !== null) {
-                                    const newIdx = combatants.findIndex(cb => cb.tokenId === activeTokenId);
-                                    if (newIdx !== -1) {
-                                        activeTurnIndex = newIdx;
-                                    }
+                                if (activeId) {
+                                    const newIdx = combatants.findIndex(cb => cb.id === activeId || (cb.tokenId && cb.tokenId === activeId));
+                                    if (newIdx !== -1) activeTurnIndex = newIdx;
                                 }
 
                                 broadcastInitiative();
                             } else {
-                                scoreEl.innerHTML = currentScore;
+                                scoreEl.textContent = displayScore;
                             }
                         };
 
@@ -1329,11 +1607,10 @@ export function initVttChat(vtt, chatHistory) {
                                 saveEdit();
                             } else if (ke.key === 'Escape') {
                                 isSaved = true;
-                                scoreEl.innerHTML = currentScore;
+                                scoreEl.textContent = displayScore;
                             }
                         });
                         
-                        // Prevent click on input from triggering token pan
                         inputEl.addEventListener('click', (ce) => {
                             ce.stopPropagation();
                         });
@@ -1363,8 +1640,8 @@ export function initVttChat(vtt, chatHistory) {
             initList.appendChild(row);
         });
 
-        if (typeof updateScrollButtons === 'function') {
-            setTimeout(updateScrollButtons, 50);
+        if (typeof updateScrollButtonsFn === 'function') {
+            setTimeout(updateScrollButtonsFn, 50);
         }
     }
 
@@ -1544,6 +1821,11 @@ export function initVttChat(vtt, chatHistory) {
         appendWhisperMessage,
         addToInitiative,
         removeFromInitiative,
-        refreshInitiative: renderInitiativeList
+        updateCombatantTokenArt,
+        refreshInitiative: renderInitiativeList,
+        toggleInitiative: (visible) => {
+            initiativeVisible = (visible !== undefined) ? visible : !initiativeVisible;
+            broadcastInitiative();
+        }
     };
 }

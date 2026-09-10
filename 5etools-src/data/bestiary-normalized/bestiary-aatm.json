@@ -57,9 +57,34 @@
         "mod": -4
       }
     },
+    "str": 16,
+    "dex": 12,
+    "con": 15,
+    "int": 3,
+    "wis": 11,
+    "cha": 3,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 60 ft. (can't see beyond this radius)"
@@ -73,7 +98,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_8z4i",
+        "id": "act_false_appearance_de8f",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the animated coffin is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the coffin move or act, that creature must succeed on a DC 18 Intelligence (Investigation) check to discern that the coffin is animate.</p>",
@@ -93,7 +118,7 @@
         }
       },
       {
-        "id": "act_spider_climb_obe7",
+        "id": "act_spider_climb_0p1o",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The animated coffin can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -112,7 +137,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ztmc",
+        "id": "act_multiattack_z4wl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The animated coffin makes two Slam attacks.</p>",
@@ -129,7 +154,7 @@
         }
       },
       {
-        "id": "act_slam_mk5f",
+        "id": "act_slam_h62e",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}12 (2d8 + 3) bludgeoning damage.</p>",
@@ -151,7 +176,7 @@
         }
       },
       {
-        "id": "act_entrap_sj6o",
+        "id": "act_entrap_l2af",
         "name": "Entrap",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one Large or smaller creature. {@h}The target has the grappled condition (escape DC 13). Until this grapple ends, if the target is not an Undead, the target has the restrained condition and takes 14 (4d6) piercing damage at the start of each of its turns. The animated coffin can grapple only one creature at a time.</p>",
@@ -247,11 +272,28 @@
         "mod": 3
       }
     },
+    "str": 11,
+    "dex": 16,
+    "con": 16,
+    "int": 20,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 6,
+    "save": {
+      "con": "+9",
+      "int": "+11",
+      "wis": "+8"
+    },
     "saves": {
       "con": "+9",
       "int": "+11",
       "wis": "+8"
+    },
+    "skill": {
+      "arcana": "+17",
+      "history": "+11",
+      "medicine": "+8",
+      "perception": "+8"
     },
     "skills": {
       "arcana": "+17",
@@ -259,6 +301,32 @@
       "medicine": "+8",
       "perception": "+8"
     },
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned",
+      "stunned"
+    ],
+    "passive": 18,
     "senses": {
       "passivePerception": 18,
       "sensesString": "truesight 120 ft."
@@ -499,7 +567,7 @@
     ],
     "traits": [
       {
-        "id": "act_aura_of_death_2g1h",
+        "id": "act_aura_of_death_fwl0",
         "name": "Aura of Death",
         "actionType": "trait",
         "descriptionHtml": "<p>Creatures within 30 feet of Skall have disadvantage on death saving throws.</p>",
@@ -516,7 +584,7 @@
         }
       },
       {
-        "id": "act_cosmic_annihilation_n6wt",
+        "id": "act_cosmic_annihilation_1768",
         "name": "Cosmic Annihilation",
         "actionType": "trait",
         "descriptionHtml": "<p>A creature killed by Skall can be restored to life only by means of a true resurrection or wish spell.</p>",
@@ -533,7 +601,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__5458",
+        "id": "act_legendary_resistance__4_day__6uk0",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Skall fails a saving throw, he can choose to succeed instead.</p>",
@@ -550,7 +618,7 @@
         }
       },
       {
-        "id": "act_rejuvenation_jlik",
+        "id": "act_rejuvenation_5vir",
         "name": "Rejuvenation",
         "actionType": "trait",
         "descriptionHtml": "<p>If Skall dies, he turns to dust. If his orrery of souls hasn't been destroyed, Skall re-forms within the Mortuary in 1d10 days. He appears within 5 feet of the orrery.</p>",
@@ -567,7 +635,7 @@
         }
       },
       {
-        "id": "act_turn_resistance_001w",
+        "id": "act_turn_resistance_8qvq",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Skall has advantage on saving throws against any effect that turns Undead.</p>",
@@ -586,7 +654,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_u5pg",
+        "id": "act_multiattack_u3z1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Skall makes one Withering Touch attack or uses Spellcasting. He also uses Death Knell twice.</p>",
@@ -603,7 +671,7 @@
         }
       },
       {
-        "id": "act_withering_touch_5ozd",
+        "id": "act_withering_touch_8hii",
         "name": "Withering Touch",
         "actionType": "action",
         "descriptionHtml": "<p>ms +11 to hit, reach 5 ft., one target. {@h}32 (6d8 + 5) cold damage plus 31 (7d8) necrotic damage, and if the target is a creature, it can't regain hit points until the start of Skall's next turn.</p>",
@@ -629,7 +697,7 @@
         }
       },
       {
-        "id": "act_death_knell_x3id",
+        "id": "act_death_knell_27nb",
         "name": "Death Knell",
         "actionType": "action",
         "descriptionHtml": "<p>Skall points his finger at a creature he can see within 120 feet of himself, filling the target's mind with visions of death and the plangent toll of an iron bell. The target must succeed on a DC 19 Wisdom saving throw or take 14 (4d6) psychic damage and have the frightened condition until the start of Skall's next turn.</p>",
@@ -654,7 +722,7 @@
         }
       },
       {
-        "id": "act_fog_of_death__1_day__tzz2",
+        "id": "act_fog_of_death__1_day__kzi7",
         "name": "Fog of Death (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Skall exudes a killing fog in a 30-foot-radius sphere centered on himself. The sphere spreads around corners, and its area is Vision and Light. The fog lasts until the start of Skall's next turn, and it can't be dispersed by wind. It does not move with him.</p><p>Each creature that enters the fog for the first time on a turn or starts its turn there must make a DC 19 Constitution saving throw, taking 28 (8d6) necrotic damage and 28 (8d6) poison damage on a failed save, or half as much damage on a successful one. A Medium or smaller Humanoid killed by this damage becomes a zombie under Skall's control. The zombie acts on Skall's initiative but immediately after his turn. Absent any other command, the zombie tries to kill any non-Undead creature it encounters.</p>",
@@ -686,7 +754,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_baleful_counterspell_vb3x",
+        "id": "act_baleful_counterspell_6bi2",
         "name": "Baleful Counterspell",
         "actionType": "reaction",
         "descriptionHtml": "<p>Skall chatters his teeth to interrupt a creature he can see within 60 feet of himself that is casting a spell. If the spell is 4th level or lower, it fails and has no effect. If the spell is 5th level or higher, Skall makes an Intelligence check (DC 10 + the spell's level). On a successful check, the spell fails and has no effect. Whatever the spell's level, the caster takes 10 (3d6) necrotic damage if the spell fails.</p>",
@@ -711,7 +779,7 @@
         }
       },
       {
-        "id": "act_near_death_experience_ojvj",
+        "id": "act_near_death_experience_j7mx",
         "name": "Near-Death Experience",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by an attack, Skall teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see.</p>",
@@ -801,17 +869,43 @@
         "mod": 0
       }
     },
+    "str": 8,
+    "dex": 16,
+    "con": 16,
+    "int": 17,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 3,
+    "save": {
+      "int": "+6",
+      "wis": "+5",
+      "cha": "+3"
+    },
     "saves": {
       "int": "+6",
       "wis": "+5",
       "cha": "+3"
+    },
+    "skill": {
+      "arcana": "+6",
+      "perception": "+5",
+      "religion": "+6"
     },
     "skills": {
       "arcana": "+6",
       "perception": "+5",
       "religion": "+6"
     },
+    "immune": [],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "truesight 60 ft."
@@ -1023,7 +1117,7 @@
     ],
     "traits": [
       {
-        "id": "act_incorruptible_vessel_l3p3",
+        "id": "act_incorruptible_vessel_lt3b",
         "name": "Incorruptible Vessel",
         "actionType": "trait",
         "descriptionHtml": "<p>The exorcist can't be possessed by Celestials, Fiends, or Undead.</p>",
@@ -1042,7 +1136,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rciw",
+        "id": "act_multiattack_g3ig",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The exorcist makes two Grave Burst attacks.</p>",
@@ -1059,7 +1153,7 @@
         }
       },
       {
-        "id": "act_grave_burst_g4e3",
+        "id": "act_grave_burst_ugi8",
         "name": "Grave Burst",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +6 to hit, reach 5 ft. or range 120 ft., one target. {@h}19 (3d10 + 3) necrotic or radiant damage (exorcist's choice).</p>",
@@ -1081,7 +1175,7 @@
         }
       },
       {
-        "id": "act_admit_entity__recharge_5__cgow",
+        "id": "act_admit_entity__recharge_5__kbr3",
         "name": "Admit Entity (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The exorcist thins the veil of death for a creature it can see within 60 feet of itself, exposing the target to malevolent entities. The target must make a DC 14 Charisma saving throw. On a failed save, the target takes 36 (8d8) psychic damage and has the incapacitated condition for 1 minute, during which time it retches and babbles incoherently in a voice that is not its own. On a successful save, the target takes half as much damage only. An incapacitated target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",

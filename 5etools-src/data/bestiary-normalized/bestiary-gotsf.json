@@ -57,9 +57,46 @@
         "mod": -2
       }
     },
+    "str": 14,
+    "dex": 20,
+    "con": 14,
+    "int": 6,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "acid",
+      "poison"
+    ],
+    "resist": [
+      "lightning",
+      "thunder",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "unconscious"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -73,7 +110,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_air_form_7vsp",
+        "id": "act_air_form_ceqi",
         "name": "Air Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -92,7 +129,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1kjd",
+        "id": "act_multiattack_7imc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes two slam attacks.</p>",
@@ -109,7 +146,7 @@
         }
       },
       {
-        "id": "act_slam_f2ya",
+        "id": "act_slam_2xmq",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}14 (2d8 + 5) bludgeoning damage.</p>",
@@ -131,7 +168,7 @@
         }
       },
       {
-        "id": "act_whirlwind__recharge_4__80wn",
+        "id": "act_whirlwind__recharge_4__nmco",
         "name": "Whirlwind (Recharge 4)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature in the elemental's space must make a DC 13 Strength saving throw. On a failure, a target takes 15 (3d8 + 2) bludgeoning damage and is flung up 20 feet away from the elemental in a random direction and knocked prone. If a thrown target strikes an object, such as a wall or floor, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 13 Dexterity saving throw or take the same damage and be knocked prone.</p><p>If the saving throw is successful, the target takes half the bludgeoning damage and isn't flung away or knocked prone.</p>",

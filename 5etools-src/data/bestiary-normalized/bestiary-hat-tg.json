@@ -57,10 +57,26 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 16,
+    "wis": 19,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "int": "+6",
+      "wis": "+7"
+    },
     "saves": {
       "int": "+6",
       "wis": "+7"
+    },
+    "skill": {
+      "insight": "+7",
+      "nature": "+6",
+      "perception": "+7",
+      "survival": "+7"
     },
     "skills": {
       "insight": "+7",
@@ -68,6 +84,13 @@
       "perception": "+7",
       "survival": "+7"
     },
+    "immune": [],
+    "resist": [
+      "fire"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 60 ft."
@@ -273,7 +296,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_5d6k",
+        "id": "act_multiattack_rdv7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Doric makes two Shaped Claw or Sling attacks. She can replace one attack with a use of Spellcasting.</p>",
@@ -290,7 +313,7 @@
         }
       },
       {
-        "id": "act_shaped_claw_pxvc",
+        "id": "act_shaped_claw_9lg1",
         "name": "Shaped Claw",
         "actionType": "action",
         "descriptionHtml": "<p>ms +7 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage.</p>",
@@ -312,7 +335,7 @@
         }
       },
       {
-        "id": "act_sling_ebup",
+        "id": "act_sling_zxis",
         "name": "Sling",
         "actionType": "action",
         "descriptionHtml": "<p>rw +6 to hit, range 30/120 ft., one target. {@h}8 (2d4 + 3) bludgeoning damage.</p>",
@@ -336,7 +359,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape__5_day__b1km",
+        "id": "act_change_shape__5_day__s8c0",
         "name": "Change Shape (5/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Doric magically transforms into a Beast with a challenge rating of 3 or less or into an owlbear (see the Monster Manual).</p><p>Doric can remain in that form for up to 2 hours. She can choose whether her equipment falls to the ground, melds with her new form, or is worn by the new form. Doric reverts to her true form if she is incapacitated or dies. She can revert to her true form using a bonus action.</p><p>While Doric is transformed, her stat block is replaced by the stat block of that form, except she keeps her current hit points, her hit point maximum, this bonus action, her alignment, and her Intelligence, Wisdom, and Charisma scores.</p>",
@@ -355,7 +378,7 @@
     ],
     "reactions": [
       {
-        "id": "act_fiery_rebuke__3_day__274a",
+        "id": "act_fiery_rebuke__3_day__xm40",
         "name": "Fiery Rebuke (3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When Doric is damaged by a creature that she can see within 60 feet of herself, she magically engulfs the creature in flames. The creature must make a DC 15 Dexterity saving throw, taking 16 (3d10) fire damage on failed save, or half as much damage on a successful one.</p>",
@@ -449,10 +472,26 @@
         "mod": 4
       }
     },
+    "str": 14,
+    "dex": 16,
+    "con": 14,
+    "int": 14,
+    "wis": 16,
+    "cha": 18,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+6",
+      "cha": "+7"
+    },
     "saves": {
       "dex": "+6",
       "cha": "+7"
+    },
+    "skill": {
+      "deception": "+7",
+      "performance": "+10",
+      "persuasion": "+10",
+      "sleight of hand": "+6"
     },
     "skills": {
       "deception": "+7",
@@ -460,6 +499,11 @@
       "persuasion": "+10",
       "sleight of hand": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -607,7 +651,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_ihbp",
+        "id": "act_multiattack_8o32",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Edgin makes two Reinforced Lute or Shortsword attacks.</p>",
@@ -624,7 +668,7 @@
         }
       },
       {
-        "id": "act_reinforced_lute_w1cv",
+        "id": "act_reinforced_lute_ats6",
         "name": "Reinforced Lute",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) bludgeoning damage plus 11 (2d10) thunder damage.</p>",
@@ -650,7 +694,7 @@
         }
       },
       {
-        "id": "act_shortsword_igmn",
+        "id": "act_shortsword_spkn",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage plus 11 (2d10) thunder damage.</p>",
@@ -676,7 +720,7 @@
         }
       },
       {
-        "id": "act_disorienting_words_p3fs",
+        "id": "act_disorienting_words_ki8x",
         "name": "Disorienting Words",
         "actionType": "action",
         "descriptionHtml": "<p>Edgin magically taunts up to three creatures he can see within 60 feet of himself. Each creature must succeed on a DC 15 Wisdom saving throw or take 10 (3d6) psychic damage and have disadvantage on the next attack roll it makes before the start of Edgin's next turn.</p>",
@@ -704,7 +748,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_inspiring_words__3_day__hj5s",
+        "id": "act_inspiring_words__3_day__c4ut",
         "name": "Inspiring Words (3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature Edgin can see within 60 feet of himself fails an ability check, an attack roll, or a saving throw, Edgin grants the creature magical encouragement. The creature can roll a d8 and add the number rolled to the total, potentially turning the failure into a success.</p>",
@@ -790,10 +834,28 @@
         "mod": 5
       }
     },
+    "str": 11,
+    "dex": 14,
+    "con": 13,
+    "int": 15,
+    "wis": 17,
+    "cha": 20,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+5",
+      "int": "+5"
+    },
     "saves": {
       "dex": "+5",
       "int": "+5"
+    },
+    "skill": {
+      "acrobatics": "+5",
+      "deception": "+11",
+      "investigation": "+8",
+      "persuasion": "+11",
+      "sleight of hand": "+5",
+      "stealth": "+8"
     },
     "skills": {
       "acrobatics": "+5",
@@ -803,6 +865,11 @@
       "sleight of hand": "+5",
       "stealth": "+8"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -817,7 +884,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_disarming_charm_j2f1",
+        "id": "act_disarming_charm_16dt",
         "name": "Disarming Charm",
         "actionType": "trait",
         "descriptionHtml": "<p>While Forge isn't wearing armor, his AC includes his Charisma modifier.</p>",
@@ -834,7 +901,7 @@
         }
       },
       {
-        "id": "act_double_cross_iesy",
+        "id": "act_double_cross_tlxp",
         "name": "Double-Cross",
         "actionType": "trait",
         "descriptionHtml": "<p>If Forge hits a creature friendly to him with an attack roll, the attack is automatically a critical hit.</p>",
@@ -851,7 +918,7 @@
         }
       },
       {
-        "id": "act_evasion_199e",
+        "id": "act_evasion_0030",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If Forge is subjected to an effect that allows him to make a Dexterity saving throw to take only half damage, he takes no damage if he succeeds on the saving throw, and only half damage if he fails, provided he isn't incapacitated.</p>",
@@ -870,7 +937,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hfhe",
+        "id": "act_multiattack_g17f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Forge makes two Dagger attacks, two Heavy Crossbow attacks, or one of each.</p>",
@@ -887,7 +954,7 @@
         }
       },
       {
-        "id": "act_dagger_t704",
+        "id": "act_dagger_golw",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage plus 24 (7d6) poison damage, and the target is poisoned until the end of its next turn.</p>",
@@ -913,7 +980,7 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_qmih",
+        "id": "act_heavy_crossbow_1ome",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +5 to hit, range 100/400 ft., one target. {@h}7 (1d10 + 2) piercing damage plus 24 (7d6) poison damage. {@hom}If the target is a creature, it has disadvantage on the next attack roll it makes before the start of Forge's next turn.</p>",
@@ -941,7 +1008,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_cunning_uque",
+        "id": "act_cunning_k9q8",
         "name": "Cunning",
         "actionType": "bonus",
         "descriptionHtml": "<p>Forge takes the Dash, Disengage, or Hide action, or he gives himself advantage on the next attack roll he makes before the end of this turn.</p>",
@@ -960,7 +1027,7 @@
     ],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_0lc9",
+        "id": "act_uncanny_dodge_n769",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>Forge halves the damage he takes from an attack that hits him. He must be able to see the attacker.</p>",
@@ -1046,10 +1113,26 @@
         "mod": 1
       }
     },
+    "str": 19,
+    "dex": 14,
+    "con": 16,
+    "int": 11,
+    "wis": 16,
+    "cha": 13,
     "proficiencyBonus": 3,
+    "save": {
+      "str": "+7",
+      "con": "+6"
+    },
     "saves": {
       "str": "+7",
       "con": "+6"
+    },
+    "skill": {
+      "athletics": "+7",
+      "intimidation": "+4",
+      "nature": "+3",
+      "survival": "+6"
     },
     "skills": {
       "athletics": "+7",
@@ -1057,6 +1140,18 @@
       "nature": "+3",
       "survival": "+6"
     },
+    "immune": [],
+    "resist": [
+      {
+        "resist": [
+          "lightning"
+        ],
+        "note": "(granted by darksteel greataxe)"
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -1071,7 +1166,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reckless_2lwf",
+        "id": "act_reckless_z322",
         "name": "Reckless",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of her turn, Holga can gain advantage on melee weapon attack rolls during that turn, but attack rolls against her have advantage until the start of her next turn.</p>",
@@ -1088,7 +1183,7 @@
         }
       },
       {
-        "id": "act_special_equipment_cyiq",
+        "id": "act_special_equipment_1efr",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Holga carries a darksteel greataxe, a magic weapon that grants her resistance to lightning damage while she carries it (included above).</p>",
@@ -1105,7 +1200,7 @@
         }
       },
       {
-        "id": "act_unarmored_defense_93ac",
+        "id": "act_unarmored_defense_p1bk",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While Holga isn't wearing armor, her AC includes her Constitution modifier.</p>",
@@ -1124,7 +1219,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_v1kl",
+        "id": "act_multiattack_p3xe",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Holga makes three Darksteel Greataxe or Improvised Weapon attacks, in any combination.</p>",
@@ -1141,7 +1236,7 @@
         }
       },
       {
-        "id": "act_darksteel_greataxe_f5ue",
+        "id": "act_darksteel_greataxe_md1g",
         "name": "Darksteel Greataxe",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}10 (1d12 + 4) slashing damage.</p>",
@@ -1163,7 +1258,7 @@
         }
       },
       {
-        "id": "act_improvised_weapon_6x5u",
+        "id": "act_improvised_weapon_05l8",
         "name": "Improvised Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +7 to hit, reach 5 ft., or range 20/60 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage.</p>",
@@ -1187,7 +1282,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_wrestle_tnx2",
+        "id": "act_wrestle_7p5w",
         "name": "Wrestle",
         "actionType": "bonus",
         "descriptionHtml": "<p>Holga shoves a creature within 5 feet of herself. That creature must succeed on a DC 15 Strength saving throw or be moved 5 feet into an unoccupied space of Holga's choice.</p>",
@@ -1277,10 +1372,27 @@
         "mod": 3
       }
     },
+    "str": 8,
+    "dex": 14,
+    "con": 13,
+    "int": 16,
+    "wis": 12,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "con": "+4",
+      "cha": "+6"
+    },
     "saves": {
       "con": "+4",
       "cha": "+6"
+    },
+    "skill": {
+      "arcana": "+6",
+      "deception": "+6",
+      "history": "+6",
+      "religion": "+6",
+      "survival": "+4"
     },
     "skills": {
       "arcana": "+6",
@@ -1289,6 +1401,11 @@
       "religion": "+6",
       "survival": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -1558,7 +1675,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_60t0",
+        "id": "act_fey_ancestry_l33x",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Simon has advantage on saving throws he makes to avoid or end the charmed condition on himself, and magic can't put him to sleep.</p>",
@@ -1575,7 +1692,7 @@
         }
       },
       {
-        "id": "act_special_equipment_9uns",
+        "id": "act_special_equipment_xju5",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Simon carries a bag of holding, two pairs of sending stones, and a deathly token (see Spellcasting).</p>",
@@ -1592,7 +1709,7 @@
         }
       },
       {
-        "id": "act_wild_magic_99yw",
+        "id": "act_wild_magic_po16",
         "name": "Wild Magic",
         "actionType": "trait",
         "descriptionHtml": "<p>When Simon takes 20 or more damage from a single source or takes damage from a critical hit, he must roll on the Wild Magic Surge table in the Player's Handbook.</p>",
@@ -1611,7 +1728,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hdag",
+        "id": "act_multiattack_6utf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Simon makes three Quarterstaff or Chaos Bolt attacks. He can replace one attack with one use of Spellcasting.</p>",
@@ -1628,7 +1745,7 @@
         }
       },
       {
-        "id": "act_quarterstaff_lvf5",
+        "id": "act_quarterstaff_ho9w",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands, plus 11 (2d10) force damage.</p>",
@@ -1658,7 +1775,7 @@
         }
       },
       {
-        "id": "act_chaos_bolt_01el",
+        "id": "act_chaos_bolt_rxt3",
         "name": "Chaos Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>rs +6 to hit, range 60 ft., one target. {@h}14 (2d10 + 3) damage of a random type determined by rolling a d8: 1, acid; 2, cold; 3, fire; 4, force; 5, lightning; 6, poison; 7, psychic; 8, thunder.</p>",
@@ -1683,7 +1800,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_sheltering_shield__3_day__ij2i",
+        "id": "act_sheltering_shield__3_day__7jkz",
         "name": "Sheltering Shield (3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When Simon or another creature he can see within 10 feet of himself would take damage, he conjures a shimmering, 10-foot-radius sphere of magical force centered on himself. Creatures inside the sphere have resistance to the damage that triggered this reaction.</p>",
@@ -1769,16 +1886,38 @@
         "mod": -1
       }
     },
+    "str": 12,
+    "dex": 14,
+    "con": 18,
+    "int": 20,
+    "wis": 14,
+    "cha": 8,
     "proficiencyBonus": 5,
+    "save": {
+      "int": "+10",
+      "wis": "+7"
+    },
     "saves": {
       "int": "+10",
       "wis": "+7"
+    },
+    "skill": {
+      "arcana": "+10",
+      "history": "+10",
+      "insight": "+7"
     },
     "skills": {
       "arcana": "+10",
       "history": "+10",
       "insight": "+7"
     },
+    "immune": [],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -2123,7 +2262,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_t9um",
+        "id": "act_special_equipment_ghzm",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Sofina wears a magic robe that grants her a +2 bonus to AC and a +1 bonus to saving throws (included above).</p>",
@@ -2142,7 +2281,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zmeu",
+        "id": "act_multiattack_neqx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Sofina makes three Necrotic Strike attacks.</p>",
@@ -2159,7 +2298,7 @@
         }
       },
       {
-        "id": "act_necrotic_strike_amdv",
+        "id": "act_necrotic_strike_3kqz",
         "name": "Necrotic Strike",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +10 to hit, reach 5 ft. or range 120 ft., one target. {@h}32 (5d10 + 5) necrotic damage.</p>",
@@ -2181,7 +2320,7 @@
         }
       },
       {
-        "id": "act_swarm_of_meteors__1_day__70wt",
+        "id": "act_swarm_of_meteors__1_day__28i5",
         "name": "Swarm of Meteors (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Sofina magically calls down a meteor swarm that detonates in four 40-foot-radius spheres, each one centered on a point she can see within 1 mile of herself. These spheres can overlap. Each creature in one or more of these spheres must make a DC 18 Dexterity saving throw, taking 35 (10d6) fire damage and 35 (10d6) bludgeoning damage on a failed saving throw, or half as much damage on a successful one. A creature in multiple spheres takes this damage only once.</p>",
@@ -2212,7 +2351,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_summon_wraith__1_day__c83n",
+        "id": "act_summon_wraith__1_day__4sl2",
         "name": "Summon Wraith (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Sofina magically summons the spirit of a Thayan assassin, which appears as a wraith (see the Monster Manual). The summoned wraith appears in an unoccupied space within 60 feet of Sofina, whom it obeys. The summoned wraith takes its turn immediately after Sofina. It lasts for 1 hour, until it or Sofina dies, or until Sofina dismisses it as a bonus action.</p>",
@@ -2299,10 +2438,26 @@
         "mod": 3
       }
     },
+    "str": 19,
+    "dex": 11,
+    "con": 16,
+    "int": 14,
+    "wis": 16,
+    "cha": 17,
     "proficiencyBonus": 4,
+    "save": {
+      "str": "+8",
+      "cha": "+7"
+    },
     "saves": {
       "str": "+8",
       "cha": "+7"
+    },
+    "skill": {
+      "athletics": "+8",
+      "history": "+6",
+      "insight": "+7",
+      "survival": "+7"
     },
     "skills": {
       "athletics": "+8",
@@ -2310,6 +2465,15 @@
       "insight": "+7",
       "survival": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 60 ft."
@@ -2325,7 +2489,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aura_of_protection_h41s",
+        "id": "act_aura_of_protection_2cbl",
         "name": "Aura of Protection",
         "actionType": "trait",
         "descriptionHtml": "<p>Xenk and his allies within 10 feet of him have advantage on saving throws.</p>",
@@ -2344,7 +2508,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zh3z",
+        "id": "act_multiattack_qk5y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Xenk makes three Daggersword attacks and uses Daggersword Flourish. He can replace Daggersword Flourish with Cleansing Touch if it's available.</p>",
@@ -2361,7 +2525,7 @@
         }
       },
       {
-        "id": "act_daggersword_2qeo",
+        "id": "act_daggersword_7pcy",
         "name": "Daggersword",
         "actionType": "action",
         "descriptionHtml": "<p>Choose the attack that corresponds to the daggersword's current form (see Daggersword Shift below):</p>",
@@ -2378,7 +2542,7 @@
         }
       },
       {
-        "id": "act_longsword_n564",
+        "id": "act_longsword_ohmq",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands, plus 6 (1d12) radiant damage.</p>",
@@ -2408,7 +2572,7 @@
         }
       },
       {
-        "id": "act_shortsword_and_dagger_94fw",
+        "id": "act_shortsword_and_dagger_bfsy",
         "name": "Shortsword and Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) piercing damage plus 6 (1d12) radiant damage.</p>",
@@ -2434,7 +2598,7 @@
         }
       },
       {
-        "id": "act_daggersword_flourish_onw7",
+        "id": "act_daggersword_flourish_h98i",
         "name": "Daggersword Flourish",
         "actionType": "action",
         "descriptionHtml": "<p>Choose the option that corresponds to the daggersword's current form (see Daggersword Shift below):</p>",
@@ -2451,7 +2615,7 @@
         }
       },
       {
-        "id": "act_longsword_kx6n",
+        "id": "act_longsword_n5fy",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Xenk magically detaches the longsword's blade from its hilt, launching the blade at a creature he can see within 30 feet of himself. The target must make a DC 16 Dexterity saving throw. On a failed save, the target is impaled by the blade, taking 14 (3d6 + 4) piercing damage, and is knocked prone. At the end of the current turn, the blade magically reattaches to its hilt.</p>",
@@ -2476,7 +2640,7 @@
         }
       },
       {
-        "id": "act_shortsword_and_dagger_406p",
+        "id": "act_shortsword_and_dagger_mu9r",
         "name": "Shortsword and Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Xenk lashes out with both weapons. Each creature of his choice within 10 feet of him must make a DC 16 Dexterity throw. On a failed save, the creature takes 7 (2d6) piercing damage and has disadvantage on attack rolls until the start of Xenk's next turn. On a successful save, the creature takes half as much damage and suffers no other effect.</p>",
@@ -2501,7 +2665,7 @@
         }
       },
       {
-        "id": "act_cleansing_touch__1_day__8yo6",
+        "id": "act_cleansing_touch__1_day__x9tu",
         "name": "Cleansing Touch (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Xenk touches a creature within 5 feet of himself. The target magically regains 27 (6d8) hit points and gains the benefit of a lesser restoration spell.</p>",
@@ -2520,7 +2684,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_daggersword_shift_xfr7",
+        "id": "act_daggersword_shift_9hja",
         "name": "Daggersword Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>Xenk changes the form of his daggersword, choosing one of the following forms: a longsword, or a shortsword in one hand and a dagger in the other.</p>",

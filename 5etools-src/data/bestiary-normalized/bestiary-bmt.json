@@ -57,9 +57,30 @@
         "mod": -4
       }
     },
+    "str": 18,
+    "dex": 8,
+    "con": 18,
+    "int": 7,
+    "wis": 10,
+    "cha": 3,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 10 ft., darkvision 60 ft."
@@ -73,7 +94,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bound_mamp",
+        "id": "act_bound_73gn",
         "name": "Bound",
         "actionType": "trait",
         "descriptionHtml": "<p>The shield guardian is magically bound to an amulet. As long as the guardian and its amulet are on the same plane of existence, the amulet's wearer can telepathically call the guardian to travel to it, and the guardian knows the distance and direction to the amulet. If the guardian is within 60 feet of the amulet's wearer, half of any damage the wearer takes (rounded up) is transferred to the guardian.</p>",
@@ -90,7 +111,7 @@
         }
       },
       {
-        "id": "act_regeneration_dac8",
+        "id": "act_regeneration_7k8s",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The shield guardian regains 10 hit points at the start of its turn if it has at least 1 hit point.</p>",
@@ -107,7 +128,7 @@
         }
       },
       {
-        "id": "act_spell_storing_my0z",
+        "id": "act_spell_storing_9bcu",
         "name": "Spell Storing",
         "actionType": "trait",
         "descriptionHtml": "<p>A spellcaster who wears the shield guardian's amulet can cause the guardian to store one spell of 4th level or lower. To do so, the wearer must cast the spell on the guardian. The spell has no effect but is stored within the guardian. When commanded to do so by the wearer or when a situation arises that was predefined by the spellcaster, the guardian casts the stored spell with any parameters set by the original caster, requiring no components. When the spell is cast or a new spell is stored, any previously stored spell is lost.</p>",
@@ -126,7 +147,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6kk7",
+        "id": "act_multiattack_9tmk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The guardian makes two fist attacks.</p>",
@@ -143,7 +164,7 @@
         }
       },
       {
-        "id": "act_fist_dqxu",
+        "id": "act_fist_ilfw",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage.</p>",
@@ -168,7 +189,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shield_y6zi",
+        "id": "act_shield_ax5z",
         "name": "Shield",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature makes an attack against the wearer of the guardian's amulet, the guardian grants a +2 bonus to the wearer's AC if the guardian is within 5 feet of the wearer.</p>",
@@ -254,16 +275,39 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 18,
+    "con": 15,
+    "int": 18,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+7",
+      "int": "+7"
+    },
     "saves": {
       "dex": "+7",
       "int": "+7"
+    },
+    "skill": {
+      "deception": "+9",
+      "perception": "+5",
+      "stealth": "+10"
     },
     "skills": {
       "deception": "+9",
       "perception": "+5",
       "stealth": "+10"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "blindsight 10 ft."
@@ -279,7 +323,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__5lfw",
+        "id": "act_legendary_resistance__2_day__q2cp",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the assassin fails a saving throw, it can choose to succeed instead.</p>",
@@ -298,7 +342,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4tup",
+        "id": "act_multiattack_c66w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The assassin makes two Poison Blade attacks.</p>",
@@ -315,7 +359,7 @@
         }
       },
       {
-        "id": "act_poison_blade_hg3f",
+        "id": "act_poison_blade_4rnx",
         "name": "Poison Blade",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +7 to hit, reach 5 ft. or range 60 ft., one target. {@h}6 (1d4 + 4) piercing damage plus 5 (1d10) poison damage.</p>",
@@ -344,7 +388,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_pbe8",
+        "id": "act_uncanny_dodge_yyuj",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker the assassin can see hits the assassin with an attack, the assassin halves the attack's damage against it.</p>",
@@ -366,7 +410,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_cunning_927h",
+          "id": "act_cunning_hbd4",
           "name": "Cunning",
           "actionType": "legendary",
           "descriptionHtml": "<p>The assassin escapes nonmagical restraints and ends the grappled condition on itself, then moves up to its speed without provoking opportunity attacks.</p>",
@@ -383,7 +427,7 @@
           }
         },
         {
-          "id": "act_stab__costs_2_actions__vysk",
+          "id": "act_stab__costs_2_actions__0kvt",
           "name": "Stab (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The assassin makes one Poison Blade attack.</p>",
@@ -400,7 +444,7 @@
           }
         },
         {
-          "id": "act_vanishing_escape__costs_3_actions__0mrn",
+          "id": "act_vanishing_escape__costs_3_actions__2qdc",
           "name": "Vanishing Escape (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The assassin creates a sudden distraction, such as a cloud of disorienting smoke or flash of dazzling light, filling a 10-foot cube within 5 feet of the assassin. Each creature of the assassin's choice in that area takes 9 (2d8) psychic damage, and the assassin has the invisible condition. This invisibility lasts until the end of the assassin's next turn.</p>",
@@ -425,7 +469,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_lh8v",
+        "id": "act_lair_action_4yec",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Distraction\",\"entry\":\"A shrill sound fills the lair. Creatures that can hear it must succeed on a DC 15 Constitution saving throw or lose concentration.\"}</p>",
@@ -445,7 +489,7 @@
         }
       },
       {
-        "id": "act_lair_action_63gp",
+        "id": "act_lair_action_x630",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Snares\",\"entry\":\"Hidden snares target up to three creatures the villain can see in the lair. Each creature must succeed on a DC 15 Strength saving throw or have the grappled condition (escape DC 15) and the restrained condition until it escapes or the snare holding it is destroyed. Each snare has AC 11, 10 hit points, and immunity to poison and psychic damage.\"}</p>",
@@ -465,7 +509,7 @@
         }
       },
       {
-        "id": "act_lair_action_27ap",
+        "id": "act_lair_action_qtud",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Traps\",\"entry\":\"Traps target up to two creatures the villain can see in the lair. Each target must succeed on a DC 15 Dexterity saving throw or be struck by a trap. The villain rolls a number of d6s equal to its proficiency bonus, and struck targets take damage equal to the total. The damage is bludgeoning, piercing, slashing, fire, or poison, chosen by the villain when the villain uses this action.\"}</p>",
@@ -548,9 +592,34 @@
         "mod": -5
       }
     },
+    "str": 14,
+    "dex": 11,
+    "con": 13,
+    "int": 1,
+    "wis": 3,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 6,
     "senses": {
       "passivePerception": 6,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -562,7 +631,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_susceptibility_5e5b",
+        "id": "act_antimagic_susceptibility_y940",
         "name": "Antimagic Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The armor is incapacitated while in the area of an antimagic field. If targeted by dispel magic, the armor must succeed on a Constitution saving throw against the caster's spell save DC or fall unconscious for 1 minute.</p>",
@@ -579,7 +648,7 @@
         }
       },
       {
-        "id": "act_false_appearance_wh7z",
+        "id": "act_false_appearance_f3fz",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the armor remains motionless, it is indistinguishable from a normal suit of armor.</p>",
@@ -598,7 +667,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8ndn",
+        "id": "act_multiattack_di82",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The armor makes two melee attacks.</p>",
@@ -615,7 +684,7 @@
         }
       },
       {
-        "id": "act_slam_fqrx",
+        "id": "act_slam_0ftz",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
@@ -708,9 +777,22 @@
         "mod": 1
       }
     },
+    "str": 13,
+    "dex": 12,
+    "con": 12,
+    "int": 11,
+    "wis": 10,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -724,7 +806,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hunger_of_the_void_0v4i",
+        "id": "act_hunger_of_the_void_yxf1",
         "name": "Hunger of the Void",
         "actionType": "trait",
         "descriptionHtml": "<p>When the aspirant is reduced to 0 hit points, its body and everything it is wearing or carrying, except for magic items, are sucked into a void and destroyed. Creatures in a 15-foot-radius sphere centered on the aspirant must make a DC 11 Strength saving throw. On a failed save, a creature takes 10 (3d6) necrotic damage and is pulled 10 feet straight toward the aspirant's space. On a successful save, a creature takes half as much damage only.</p>",
@@ -749,7 +831,7 @@
         }
       },
       {
-        "id": "act_sinister_devotion_7jk6",
+        "id": "act_sinister_devotion_ktbi",
         "name": "Sinister Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>The aspirant has advantage on saving throws against the charmed and frightened conditions.</p>",
@@ -768,7 +850,7 @@
     ],
     "actions": [
       {
-        "id": "act_spear_jj68",
+        "id": "act_spear_cwly",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +3 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d6 + 1) piercing damage, or 5 (1d8 + 1) piercing damage if used with two hands to make a melee attack.</p>",
@@ -865,12 +947,32 @@
         "mod": 5
       }
     },
+    "str": 12,
+    "dex": 21,
+    "con": 17,
+    "int": 15,
+    "wis": 11,
+    "cha": 20,
     "proficiencyBonus": 6,
+    "save": {
+      "dex": "+11",
+      "con": "+9",
+      "wis": "+6",
+      "cha": "+11"
+    },
     "saves": {
       "dex": "+11",
       "con": "+9",
       "wis": "+6",
       "cha": "+11"
+    },
+    "skill": {
+      "acrobatics": "+11",
+      "arcana": "+14",
+      "investigation": "+8",
+      "perception": "+12",
+      "persuasion": "+11",
+      "survival": "+6"
     },
     "skills": {
       "acrobatics": "+11",
@@ -880,6 +982,18 @@
       "persuasion": "+11",
       "survival": "+6"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 22,
     "senses": {
       "passivePerception": 22,
       "sensesString": ""
@@ -1112,7 +1226,7 @@
     ],
     "traits": [
       {
-        "id": "act_guardian_aura_0z7j",
+        "id": "act_guardian_aura_jxtb",
         "name": "Guardian Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever a creature of Asteria's choice within 30 feet of her makes a saving throw, Asteria can give the creature advantage on the saving throw (no action required). This trait doesn't function if Asteria has the incapacitated condition.</p>",
@@ -1129,7 +1243,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__c37s",
+        "id": "act_legendary_resistance__3_day__2lgy",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Asteria fails a saving throw, she can choose to succeed instead.</p>",
@@ -1146,7 +1260,7 @@
         }
       },
       {
-        "id": "act_special_equipment_rftl",
+        "id": "act_special_equipment_wz2d",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Asteria wears Winged Boots, which grant her a flying speed (included in her statistics). She also carries one half of a pair of Sending Stones; the other half of the pair is held by Euryale.</p>",
@@ -1165,7 +1279,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_phhj",
+        "id": "act_multiattack_mwm6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Asteria makes two Radiant Blade attacks and uses Bursting Benediction.</p>",
@@ -1182,7 +1296,7 @@
         }
       },
       {
-        "id": "act_radiant_blade_rc05",
+        "id": "act_radiant_blade_arbl",
         "name": "Radiant Blade",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 5 ft., one target. {@h}9 (1d8 + 5) slashing damage plus 13 (3d8) radiant damage.</p>",
@@ -1208,7 +1322,7 @@
         }
       },
       {
-        "id": "act_bursting_benediction_lseb",
+        "id": "act_bursting_benediction_9h4a",
         "name": "Bursting Benediction",
         "actionType": "action",
         "descriptionHtml": "<p>Asteria causes a burst of magical energy to envelop one creature she can see within 60 feet of herself. The target must make a DC 19 Dexterity saving throw, taking 40 (9d8) force damage on a failed save, or half as much damage on a successful one. Asteria or another creature that she can see within 60 feet of herself then regains 10 hit points.</p>",
@@ -1235,7 +1349,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_empowering_aegis__recharge_4__69zu",
+        "id": "act_empowering_aegis__recharge_4__ddfu",
         "name": "Empowering Aegis (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Asteria summons a spectral version of her shield, which orbits and bolsters one creature of Asteria's choice that she can see within 60 feet of herself. The spectral shield lasts until the start of Asteria's next turn. While the shield is orbiting the creature, the creature has Cover, is immune to the frightened condition, and makes weapon attack rolls with advantage.</p>",
@@ -1258,7 +1372,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_brazen_strike_b893",
+          "id": "act_brazen_strike_48km",
           "name": "Brazen Strike",
           "actionType": "legendary",
           "descriptionHtml": "<p>Asteria makes one Radiant Blade attack.</p>",
@@ -1275,7 +1389,7 @@
           }
         },
         {
-          "id": "act_nimble_sprint_4gv3",
+          "id": "act_nimble_sprint_in03",
           "name": "Nimble Sprint",
           "actionType": "legendary",
           "descriptionHtml": "<p>Asteria moves up to her speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -1292,7 +1406,7 @@
           }
         },
         {
-          "id": "act_cast_a_spell__costs_2_actions__y6d4",
+          "id": "act_cast_a_spell__costs_2_actions__p43a",
           "name": "Cast a Spell (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Asteria uses Spellcasting.</p>",
@@ -1374,12 +1488,49 @@
         "mod": 4
       }
     },
+    "str": 27,
+    "dex": 20,
+    "con": 26,
+    "int": 6,
+    "wis": 21,
+    "cha": 19,
     "proficiencyBonus": 7,
+    "save": {
+      "str": "+15",
+      "con": "+15"
+    },
     "saves": {
       "str": "+15",
       "con": "+15"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "acid",
+      "fire",
+      "poison",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [
+      "cold",
+      "lightning"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "truesight 120 ft."
@@ -1532,7 +1683,7 @@
     ],
     "traits": [
       {
-        "id": "act_heat_regeneration_zjef",
+        "id": "act_heat_regeneration_ipmc",
         "name": "Heat Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the temperature around it is 100 degrees Fahrenheit or higher, Aurnozci regains 15 hit points at the start of its turn. If it takes cold or radiant damage, this trait doesn't function at the start of its next turn. Aurnozci dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -1549,7 +1700,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__pkwc",
+        "id": "act_legendary_resistance__3_day__jvxy",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Aurnozci fails a saving throw, it can choose to succeed instead.</p>",
@@ -1566,7 +1717,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_zi66",
+        "id": "act_magic_resistance_fvad",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Aurnozci has advantage on saving throws against spells and other magical effects.</p>",
@@ -1585,7 +1736,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5p8d",
+        "id": "act_multiattack_4ggs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Aurnozci makes one Bite attack and two Tail attacks.</p>",
@@ -1602,7 +1753,7 @@
         }
       },
       {
-        "id": "act_bite_yplp",
+        "id": "act_bite_2efd",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +15 to hit, reach 10 ft., one target. {@h}21 (2d12 + 8) slashing damage plus 9 (2d8) fire damage.</p>",
@@ -1628,7 +1779,7 @@
         }
       },
       {
-        "id": "act_tail_jlc6",
+        "id": "act_tail_8t6j",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +15 to hit, reach 10 ft., one target. {@h}17 (2d8 + 8) bludgeoning damage.</p>",
@@ -1650,7 +1801,7 @@
         }
       },
       {
-        "id": "act_mucus_spray__recharge_5__ch1d",
+        "id": "act_mucus_spray__recharge_5__s7jj",
         "name": "Mucus Spray (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Aurnozci sprays mucus in a 60-foot cone. Each creature in that cone must make a DC 20 Dexterity saving throw, taking 42 (12d6) acid damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1682,7 +1833,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_v5i0",
+          "id": "act_move_jeni",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>Aurnozci moves up to its speed.</p>",
@@ -1699,7 +1850,7 @@
           }
         },
         {
-          "id": "act_tail_8ekm",
+          "id": "act_tail_r59p",
           "name": "Tail",
           "actionType": "legendary",
           "descriptionHtml": "<p>Aurnozci makes one Tail attack.</p>",
@@ -1716,7 +1867,7 @@
           }
         },
         {
-          "id": "act_cast_a_spell__costs_2_actions__8hdr",
+          "id": "act_cast_a_spell__costs_2_actions__8hxa",
           "name": "Cast a Spell (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Aurnozci uses Spellcasting.</p>",
@@ -1733,7 +1884,7 @@
           }
         },
         {
-          "id": "act_conflagration__costs_2_actions__tfsv",
+          "id": "act_conflagration__costs_2_actions__n9rw",
           "name": "Conflagration (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Flames momentarily surround Aurnozci. Each creature within 15 feet of Aurnozci must make a DC 20 Dexterity saving throw, taking 18 (4d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1761,7 +1912,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_e25e",
+        "id": "act_lair_action_5y7x",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Cocoon\",\"entry\":\"Aurnozci targets one Medium or smaller creature it can see within 60 feet of itself and encases the creature in a constricting cocoon. The target must succeed on a DC 23 Strength saving throw or have the restrained condition for 1 minute. A target that starts its turn restrained in this way takes 9 (2d8) bludgeoning damage. A creature can use its action to try to tear apart the cocoon, ending the cocoon's effect with a successful DC 23 Strength (Athletics) check.\"}</p>",
@@ -1786,7 +1937,7 @@
         }
       },
       {
-        "id": "act_lair_action_xzan",
+        "id": "act_lair_action_4j29",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Insect Swarm\",\"entry\":\"Aurnozci creates a 30-foot-radius sphere of stinging wasps centered on a point within 300 feet of itself. The sphere spreads around corners. The sphere remains for 10 minutes or until Aurnozci uses this lair action again. The sphere's area is heavily obscured and is difficult terrain. When the sphere appears, each creature in it must make a DC 20 Constitution saving throw, taking 16 (3d10) piercing damage and 16 (3d10) poison damage on a failed save, or half as much damage on a successful one. A creature must also make this saving throw when it enters the sphere's area for the first time on a turn or starts its turn there.\"}</p>",
@@ -1878,16 +2029,36 @@
         "mod": 1
       }
     },
+    "str": 18,
+    "dex": 16,
+    "con": 17,
+    "int": 14,
+    "wis": 15,
+    "cha": 12,
     "proficiencyBonus": 4,
+    "save": {
+      "str": "+8",
+      "dex": "+7"
+    },
     "saves": {
       "str": "+8",
       "dex": "+7"
+    },
+    "skill": {
+      "perception": "+10",
+      "sleight of hand": "+7",
+      "stealth": "+7"
     },
     "skills": {
       "perception": "+10",
       "sleight of hand": "+7",
       "stealth": "+7"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 20,
     "senses": {
       "passivePerception": 20,
       "sensesString": ""
@@ -1902,7 +2073,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration_umpa",
+        "id": "act_regeneration_q31i",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Augustus regains 10 hit points at the start of his turn. If he takes damage from a silver weapon, this trait doesn't function at the start of his next turn. Augustus dies only if he starts his turn with 0 hit points and doesn't regenerate.</p>",
@@ -1919,7 +2090,7 @@
         }
       },
       {
-        "id": "act_special_equipment_8vbh",
+        "id": "act_special_equipment_1m2w",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Augustus wields a +2 Longsword.</p>",
@@ -1938,7 +2109,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zhxv",
+        "id": "act_multiattack_wyzv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Augustus makes any combination of two Bite, Claw, or Magic Longsword attacks.</p>",
@@ -1955,7 +2126,7 @@
         }
       },
       {
-        "id": "act_bite__wolf_or_hybrid_form_only__667w",
+        "id": "act_bite__wolf_or_hybrid_form_only__nctx",
         "name": "Bite (Wolf or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}26 (5d8 + 4) piercing damage. If the target is a Humanoid, it must succeed on a DC 15 Constitution saving throw or be cursed with Player Characters as Lycanthropes. While cursed in this way, the target retains its alignment, languages, and equipment but otherwise uses the werewolf stat block, excluding actions that require equipment the target doesn't have. During any night when there's a full moon in the sky, the target becomes an NPC under the DM's control and remains so until the night ends. A Remove Curse spell or similar magic ends this curse.</p>",
@@ -1980,7 +2151,7 @@
         }
       },
       {
-        "id": "act_claw__wolf_or_hybrid_form_only__voal",
+        "id": "act_claw__wolf_or_hybrid_form_only__updg",
         "name": "Claw (Wolf or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}21 (5d6 + 4) piercing damage. If the target is a creature, it must succeed on a DC 16 Strength saving throw or have the prone condition.</p>",
@@ -2005,7 +2176,7 @@
         }
       },
       {
-        "id": "act_magic_longsword__humanoid_or_hybrid_form_only__1rfq",
+        "id": "act_magic_longsword__humanoid_or_hybrid_form_only__6pfn",
         "name": "Magic Longsword (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one target. {@h}28 (4d10 + 6) slashing damage.</p>",
@@ -2029,7 +2200,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_gwhg",
+        "id": "act_change_shape_ai1e",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Augustus polymorphs into a wolf-humanoid hybrid, a wolf, or his humanoid form. His statistics, other than his speed, are the same in each form. Any equipment he is wearing or carrying isn't transformed. He reverts to his humanoid form if he dies.</p>",
@@ -2046,7 +2217,7 @@
         }
       },
       {
-        "id": "act_cunning_action_crcz",
+        "id": "act_cunning_action_r05i",
         "name": "Cunning Action",
         "actionType": "bonus",
         "descriptionHtml": "<p>Augustus takes the Dash, Disengage, or Hide action.</p>",
@@ -2133,10 +2304,26 @@
         "mod": 3
       }
     },
+    "str": 12,
+    "dex": 18,
+    "con": 15,
+    "int": 17,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 4,
+    "save": {
+      "dex": "+8",
+      "int": "+7"
+    },
     "saves": {
       "dex": "+8",
       "int": "+7"
+    },
+    "skill": {
+      "deception": "+11",
+      "perception": "+10",
+      "sleight of hand": "+8",
+      "stealth": "+8"
     },
     "skills": {
       "deception": "+11",
@@ -2144,6 +2331,11 @@
       "sleight of hand": "+8",
       "stealth": "+8"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 20,
     "senses": {
       "passivePerception": 20,
       "sensesString": "darkvision 60 ft."
@@ -2158,7 +2350,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_evasion_s2yb",
+        "id": "act_evasion_ynjx",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If Delour is subjected to an effect that allows him to make a Dexterity saving throw to take only half damage, he instead takes no damage if he succeeds on the saving throw and only half damage if he fails, provided he doesn't have the incapacitated condition.</p>",
@@ -2175,7 +2367,7 @@
         }
       },
       {
-        "id": "act_nimbleness_8u2u",
+        "id": "act_nimbleness_jntz",
         "name": "Nimbleness",
         "actionType": "trait",
         "descriptionHtml": "<p>Delour can move through the space of a Medium or larger creature.</p>",
@@ -2192,7 +2384,7 @@
         }
       },
       {
-        "id": "act_regeneration_fd9k",
+        "id": "act_regeneration_3tjx",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Delour regains 10 hit points at the start of his turn. If he takes damage from a silver weapon, this trait doesn't function at the start of his next turn. Delour dies only if he starts his turn with 0 hit points and doesn't regenerate.</p>",
@@ -2211,7 +2403,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nmww",
+        "id": "act_multiattack_2q9u",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Delour makes any combination of three Bite, Shortsword, or Hand Crossbow attacks.</p>",
@@ -2228,7 +2420,7 @@
         }
       },
       {
-        "id": "act_bite__rat_or_hybrid_form_only__jnb2",
+        "id": "act_bite__rat_or_hybrid_form_only__4u68",
         "name": "Bite (Rat or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}26 (5d8 + 4) piercing damage. If the target is a Humanoid, it must succeed on a DC 14 Constitution saving throw or be cursed with Player Characters as Lycanthropes. While cursed in this way, the target retains its alignment, languages, and equipment but otherwise uses the wererat stat block, excluding actions that require equipment the target doesn't have. During any night when there's a full moon in the sky, the target becomes an NPC under the DM's control and remains so until the night ends. A Remove Curse spell or similar magic ends this curse.</p>",
@@ -2253,7 +2445,7 @@
         }
       },
       {
-        "id": "act_shortsword__humanoid_or_hybrid_form_only__q1yj",
+        "id": "act_shortsword__humanoid_or_hybrid_form_only__2nlf",
         "name": "Shortsword (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -2279,7 +2471,7 @@
         }
       },
       {
-        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__3isl",
+        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__2npj",
         "name": "Hand Crossbow (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rw +8 to hit, range 30/120 ft., one target. {@h}11 (2d6 + 4) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -2307,7 +2499,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_qm0g",
+        "id": "act_change_shape_f157",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Delour polymorphs into a rat-humanoid hybrid, a Medium giant rat, or his humanoid form. His statistics, other than his size and speed, are the same in each form. Any equipment he is wearing or carrying isn't transformed. He reverts to his humanoid form if he dies.</p>",
@@ -2324,7 +2516,7 @@
         }
       },
       {
-        "id": "act_cunning_action_8pmc",
+        "id": "act_cunning_action_keuk",
         "name": "Cunning Action",
         "actionType": "bonus",
         "descriptionHtml": "<p>Delour takes the Dash, Disengage, or Hide action.</p>",
@@ -2411,16 +2603,63 @@
         "mod": 5
       }
     },
+    "str": 5,
+    "dex": 18,
+    "con": 16,
+    "int": 11,
+    "wis": 15,
+    "cha": 20,
     "proficiencyBonus": 5,
+    "save": {
+      "int": "+5",
+      "wis": "+7"
+    },
     "saves": {
       "int": "+5",
       "wis": "+7"
+    },
+    "skill": {
+      "perception": "+7",
+      "stealth": "+9",
+      "survival": "+7"
     },
     "skills": {
       "perception": "+7",
       "stealth": "+9",
       "survival": "+7"
     },
+    "immune": [
+      "poison",
+      "radiant"
+    ],
+    "resist": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "thunder",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [
+      "necrotic"
+    ],
+    "conditionImmune": [
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "blindsight 60 ft."
@@ -2435,7 +2674,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_gk73",
+        "id": "act_incorporeal_movement_j57a",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The breath drinker can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -2457,7 +2696,7 @@
         }
       },
       {
-        "id": "act_radiant_absorption_idkt",
+        "id": "act_radiant_absorption_gtov",
         "name": "Radiant Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>When the breath drinker is subjected to radiant damage, it takes no damage and instead regains a number of hit points equal to the radiant damage dealt.</p>",
@@ -2476,7 +2715,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dvdj",
+        "id": "act_multiattack_6b8p",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The breath drinker makes two Enervating Claw attacks. It can also use Drink Breath.</p>",
@@ -2493,7 +2732,7 @@
         }
       },
       {
-        "id": "act_enervating_claw_ogx8",
+        "id": "act_enervating_claw_ih0m",
         "name": "Enervating Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one creature. {@h}12 (2d6 + 5) necrotic damage, and if the target is Large or smaller, it has the grappled condition (escape DC 18). The target must succeed on a DC 18 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>",
@@ -2518,7 +2757,7 @@
         }
       },
       {
-        "id": "act_drink_breath_qea6",
+        "id": "act_drink_breath_jhk1",
         "name": "Drink Breath",
         "actionType": "action",
         "descriptionHtml": "<p>The breath drinker targets a creature that has the incapacitated condition or that the breath drinker is grappling and that isn't a Construct or an Undead. The target must make a DC 18 Charisma saving throw. On a failed save, the target takes 36 (8d8) necrotic damage, and its Charisma score is reduced by 1d6. This reduction lasts until the target finishes a short or long rest. If this reduces the target's Charisma to 0, the target dies. Until the breath drinker dies, the dead target can't be returned to life by any means short of divine intervention. On a successful save, the target takes half as much necrotic damage only. On a successful or failed save, the breath drinker regains a number of hit points equal to the necrotic damage dealt.</p>",
@@ -2543,7 +2782,7 @@
         }
       },
       {
-        "id": "act_invisibility_7m2c",
+        "id": "act_invisibility_ely2",
         "name": "Invisibility",
         "actionType": "action",
         "descriptionHtml": "<p>The breath drinker has the invisible condition. This invisibility ends immediately after the breath drinker hits or misses with an attack roll or uses Drink Breath.</p>",
@@ -2631,16 +2870,36 @@
         "mod": 3
       }
     },
+    "str": 18,
+    "dex": 11,
+    "con": 16,
+    "int": 12,
+    "wis": 16,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+5",
+      "cha": "+5"
+    },
     "saves": {
       "wis": "+5",
       "cha": "+5"
+    },
+    "skill": {
+      "deception": "+5",
+      "perception": "+7",
+      "religion": "+3"
     },
     "skills": {
       "deception": "+5",
       "perception": "+7",
       "religion": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 60 ft."
@@ -2793,7 +3052,7 @@
     ],
     "traits": [
       {
-        "id": "act_demonic_ritual_1cak",
+        "id": "act_demonic_ritual_pz5u",
         "name": "Demonic Ritual",
         "actionType": "trait",
         "descriptionHtml": "<p>Brusipha can spend 3 hours performing a ritual that summons 1d3 + 1 barlguras or 1 hezrou. She must sacrifice a Medium or larger living creature to Baphomet during this ritual, and the ritual can be performed only at night. The demons vanish at dawn.</p>",
@@ -2810,7 +3069,7 @@
         }
       },
       {
-        "id": "act_labyrinthine_recall_xshv",
+        "id": "act_labyrinthine_recall_5f25",
         "name": "Labyrinthine Recall",
         "actionType": "trait",
         "descriptionHtml": "<p>Brusipha can perfectly recall any path she has traveled.</p>",
@@ -2829,7 +3088,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bxvf",
+        "id": "act_multiattack_u7ig",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Brusipha makes two Eldritch Blast attacks.</p>",
@@ -2846,7 +3105,7 @@
         }
       },
       {
-        "id": "act_eldritch_blast_jpij",
+        "id": "act_eldritch_blast_q1w9",
         "name": "Eldritch Blast",
         "actionType": "action",
         "descriptionHtml": "<p>rs +5 to hit, range 120 ft., one target. {@h}8 (1d10 + 3) force damage.</p>",
@@ -2868,7 +3127,7 @@
         }
       },
       {
-        "id": "act_gore_i36i",
+        "id": "act_gore_h1qp",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) piercing damage plus 4 (1d8) necrotic damage. If Brusipha moved at least 10 feet straight toward the target immediately before she hit, the target takes an extra 4 (1d8) piercing damage, and if the target is a creature, it must succeed on a DC 15 Strength saving throw or be pushed up to 10 feet from Brusipha and have the prone condition.</p>",
@@ -2901,7 +3160,7 @@
         }
       },
       {
-        "id": "act_incite_the_hunters__recharges_after_a_short_or_long_rest__wruk",
+        "id": "act_incite_the_hunters__recharges_after_a_short_or_long_rest__bt6m",
         "name": "Incite the Hunters (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Brusipha allows each ally within 30 feet of herself that has the Unerring Tracker trait to make one weapon attack as a reaction against the target of that ally's Unerring Tracker.</p>",
@@ -2920,7 +3179,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_unerring_tracker_74hi",
+        "id": "act_unerring_tracker_cqak",
         "name": "Unerring Tracker",
         "actionType": "bonus",
         "descriptionHtml": "<p>Brusipha magically creates a psychic link with one creature she can see. For the next hour, Brusipha knows the current distance and direction to the target if it is on the same plane of existence. The link ends if Brusipha has the incapacitated condition or uses this ability on a different target.</p>",
@@ -2939,7 +3198,7 @@
     ],
     "reactions": [
       {
-        "id": "act_baphomet_s_blessing_g4pz",
+        "id": "act_baphomet_s_blessing_9ikm",
         "name": "Baphomet's Blessing",
         "actionType": "reaction",
         "descriptionHtml": "<p>When Brusipha reduces a hostile creature to 0 hit points, she gains 8 temporary hit points.</p>",
@@ -3025,9 +3284,33 @@
         "mod": -5
       }
     },
+    "str": 16,
+    "dex": 16,
+    "con": 14,
+    "int": 3,
+    "wis": 10,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "blindsight 60 ft. (can't see beyond this radius)"
@@ -3041,7 +3324,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_allied_knight_2sbw",
+        "id": "act_allied_knight_38ru",
         "name": "Allied Knight",
         "actionType": "trait",
         "descriptionHtml": "<p>Some of the deck defender's statistics are based on the character who drew the Knight card. Where the deck defender stat block refers to \"you,\" it refers to that character.</p>",
@@ -3058,7 +3341,7 @@
         }
       },
       {
-        "id": "act_folded_versatility_ty98",
+        "id": "act_folded_versatility_gax5",
         "name": "Folded Versatility",
         "actionType": "trait",
         "descriptionHtml": "<p>After finishing a long rest, you can refold the deck defender's shape, changing it to acrobat form, berserker form, or guardian form.</p>",
@@ -3075,7 +3358,7 @@
         }
       },
       {
-        "id": "act_fragile_pj3c",
+        "id": "act_fragile_34nw",
         "name": "Fragile",
         "actionType": "trait",
         "descriptionHtml": "<p>If the deck defender is reduced to 0 hit points, it collapses into a haphazard pile of nonmagical playing cards and can't be resurrected or reconstructed.</p>",
@@ -3094,7 +3377,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_sa91",
+        "id": "act_multiattack_g43u",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The deck defender makes a number of attacks equal to half its proficiency bonus (rounded down).</p>",
@@ -3111,7 +3394,7 @@
         }
       },
       {
-        "id": "act_paper_cut_oymi",
+        "id": "act_paper_cut_lvw3",
         "name": "Paper Cut",
         "actionType": "action",
         "descriptionHtml": "<p>mw PB + +3 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) slashing damage.</p>",
@@ -3133,7 +3416,7 @@
         }
       },
       {
-        "id": "act_reckless_strike__berserker_form_only__368l",
+        "id": "act_reckless_strike__berserker_form_only__ts85",
         "name": "Reckless Strike (Berserker Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw PB + +3 to hit (with advantage), reach 5 ft., one target. {@h}10 (2d6 + 3) slashing damage, and attacks made against the deck defender until the start of its next turn have advantage.</p>",
@@ -3157,7 +3440,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_swift_step__acrobat_form_only__zlgd",
+        "id": "act_swift_step__acrobat_form_only__h9ub",
         "name": "Swift Step (Acrobat Form Only)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The deck defender takes the Dash or Disengage action.</p>",
@@ -3176,7 +3459,7 @@
     ],
     "reactions": [
       {
-        "id": "act_protection__guardian_form_only__etwk",
+        "id": "act_protection__guardian_form_only__10ca",
         "name": "Protection (Guardian Form Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the deck defender can see attacks a target other than the deck defender and is within 5 feet of the deck defender, the deck defender imposes disadvantage on the attack roll.</p>",
@@ -3262,16 +3545,39 @@
         "mod": 4
       }
     },
+    "str": 10,
+    "dex": 20,
+    "con": 15,
+    "int": 20,
+    "wis": 16,
+    "cha": 18,
     "proficiencyBonus": 4,
+    "save": {
+      "dex": "+9",
+      "int": "+9"
+    },
     "saves": {
       "dex": "+9",
       "int": "+9"
+    },
+    "skill": {
+      "deception": "+12",
+      "perception": "+7",
+      "stealth": "+13"
     },
     "skills": {
       "deception": "+12",
       "perception": "+7",
       "stealth": "+13"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "blindsight 30 ft."
@@ -3287,7 +3593,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__1swg",
+        "id": "act_legendary_resistance__3_day__4tjx",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the infiltrator fails a saving throw, it can choose to succeed instead.</p>",
@@ -3304,7 +3610,7 @@
         }
       },
       {
-        "id": "act_veiled_presence_byxg",
+        "id": "act_veiled_presence_86r6",
         "name": "Veiled Presence",
         "actionType": "trait",
         "descriptionHtml": "<p>The infiltrator's AC includes its Wisdom modifier, and the infiltrator can't be targeted by divination magic or features that would read its mind or determine its creature type.</p>",
@@ -3323,7 +3629,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8n17",
+        "id": "act_multiattack_u2nt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The infiltrator makes two Poison Blade attacks and can use Beguiling Whisper.</p>",
@@ -3340,7 +3646,7 @@
         }
       },
       {
-        "id": "act_poison_blade_56i4",
+        "id": "act_poison_blade_cwrn",
         "name": "Poison Blade",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +9 to hit, reach 5 ft. or range 60 ft., one target. {@h}7 (1d4 + 5) piercing damage plus 11 (2d10) poison damage.</p>",
@@ -3366,7 +3672,7 @@
         }
       },
       {
-        "id": "act_beguiling_whisper_36st",
+        "id": "act_beguiling_whisper_436b",
         "name": "Beguiling Whisper",
         "actionType": "action",
         "descriptionHtml": "<p>The infiltrator magically whispers to a creature it can see within 30 feet of itself. The target must succeed on a DC 17 Wisdom saving throw or have the stunned condition due to fear or delight (the infiltrator's choice) until the end of the target's next turn, after which the target is immune to this Beguiling Whisper for 24 hours.</p>",
@@ -3389,7 +3695,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_7x25",
+        "id": "act_uncanny_dodge_9ziq",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker the infiltrator can see hits the infiltrator with an attack, the infiltrator halves the attack's damage against it.</p>",
@@ -3411,7 +3717,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_cunning_h0bc",
+          "id": "act_cunning_q1ki",
           "name": "Cunning",
           "actionType": "legendary",
           "descriptionHtml": "<p>The infiltrator escapes nonmagical restraints and ends the grappled condition on itself, then moves up to its speed without provoking opportunity attacks.</p>",
@@ -3428,7 +3734,7 @@
           }
         },
         {
-          "id": "act_stab__costs_2_actions__ulzq",
+          "id": "act_stab__costs_2_actions__s6i0",
           "name": "Stab (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The infiltrator makes one Poison Blade attack.</p>",
@@ -3445,7 +3751,7 @@
           }
         },
         {
-          "id": "act_misdirecting_escape__costs_3_actions__bb46",
+          "id": "act_misdirecting_escape__costs_3_actions__hixj",
           "name": "Misdirecting Escape (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The infiltrator magically has the invisible condition and creates an illusory duplicate of itself in its space, then teleports, along with any equipment it is wearing or carrying, to an unoccupied space within 15 feet of itself. The image flings illusory blades at two creatures of the infiltrator's choice within 20 feet of the image. Each target must make a DC 17 Wisdom saving throw, taking 13 (3d8) psychic damage on a failed save, or half as much damage on a successful one. The invisibility lasts until the end of the infiltrator's next turn.</p>",
@@ -3473,7 +3779,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_up2s",
+        "id": "act_lair_action_qw6s",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Distraction\",\"entry\":\"A shrill sound fills the lair. Creatures that can hear it must succeed on a DC 15 Constitution saving throw or lose concentration.\"}</p>",
@@ -3493,7 +3799,7 @@
         }
       },
       {
-        "id": "act_lair_action_d1gd",
+        "id": "act_lair_action_npzo",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Snares\",\"entry\":\"Hidden snares target up to three creatures the villain can see in the lair. Each creature must succeed on a DC 15 Strength saving throw or have the grappled condition (escape DC 15) and the restrained condition until it escapes or the snare holding it is destroyed. Each snare has AC 11, 10 hit points, and immunity to poison and psychic damage.\"}</p>",
@@ -3513,7 +3819,7 @@
         }
       },
       {
-        "id": "act_lair_action_26i2",
+        "id": "act_lair_action_776w",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Traps\",\"entry\":\"Traps target up to two creatures the villain can see in the lair. Each target must succeed on a DC 15 Dexterity saving throw or be struck by a trap. The villain rolls a number of d6s equal to its proficiency bonus, and struck targets take damage equal to the total. The damage is bludgeoning, piercing, slashing, fire, or poison, chosen by the villain when the villain uses this action.\"}</p>",
@@ -3596,12 +3902,31 @@
         "mod": 2
       }
     },
+    "str": 21,
+    "dex": 16,
+    "con": 18,
+    "int": 12,
+    "wis": 20,
+    "cha": 15,
     "proficiencyBonus": 6,
+    "save": {
+      "dex": "+9",
+      "con": "+10",
+      "int": "+7",
+      "wis": "+11"
+    },
     "saves": {
       "dex": "+9",
       "con": "+10",
       "int": "+7",
       "wis": "+11"
+    },
+    "skill": {
+      "animal handling": "+11",
+      "insight": "+17",
+      "medicine": "+11",
+      "nature": "+13",
+      "perception": "+11"
     },
     "skills": {
       "animal handling": "+11",
@@ -3610,6 +3935,28 @@
       "nature": "+13",
       "perception": "+11"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 21,
     "senses": {
       "passivePerception": 21,
       "sensesString": "darkvision 60 ft."
@@ -3799,7 +4146,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__n4ua",
+        "id": "act_legendary_resistance__3_day__568t",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Euryale fails a saving throw, she can choose to succeed instead.</p>",
@@ -3816,7 +4163,7 @@
         }
       },
       {
-        "id": "act_special_equipment_ust1",
+        "id": "act_special_equipment_2mbm",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Euryale carries one half of a pair of Sending Stones; the other half of the pair is held by Asteria.</p>",
@@ -3835,7 +4182,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yl6c",
+        "id": "act_multiattack_xbw2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Euryale makes three attacks. If she is in serpent form, only one of these attacks can be Constrict.</p>",
@@ -3852,7 +4199,7 @@
         }
       },
       {
-        "id": "act_constrict__serpent_form_only__nk2p",
+        "id": "act_constrict__serpent_form_only__2ydi",
         "name": "Constrict (Serpent Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 15 ft., one Large or smaller creature. {@h}16 (2d10 + 5) bludgeoning damage, and the target has the grappled condition (escape DC 19). Until this grapple ends, the target takes 11 (2d10) bludgeoning damage at the start of each of its turns, and Euryale can't constrict another target.</p>",
@@ -3881,7 +4228,7 @@
         }
       },
       {
-        "id": "act_snake_bite_z5se",
+        "id": "act_snake_bite_8wu5",
         "name": "Snake Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}12 (2d6 + 5) piercing damage, and the target must succeed on a DC 18 Constitution saving throw or have the poisoned condition until the start of Euryale's next turn.</p>",
@@ -3906,7 +4253,7 @@
         }
       },
       {
-        "id": "act_verdant_bolt__medusa_form_only__100i",
+        "id": "act_verdant_bolt__medusa_form_only__ff5f",
         "name": "Verdant Bolt (Medusa Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rs +11 to hit, range 120 ft., one target. {@h}18 (4d8) acid damage.</p>",
@@ -3930,7 +4277,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_33y8",
+        "id": "act_change_shape_aril",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Euryale changes shape into her Huge serpent form or back into her Medium medusa form. Euryale's game statistics are the same in each form except where noted in this stat block. Any equipment she is wearing or carrying isn't transformed. Euryale reverts to her medusa form if she dies.</p>",
@@ -3947,7 +4294,7 @@
         }
       },
       {
-        "id": "act_petrifying_gaze__recharge_4__bjip",
+        "id": "act_petrifying_gaze__recharge_4__cuxn",
         "name": "Petrifying Gaze (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Euryale unleashes petrifying magic from her eyes in a 30-foot cone. Each creature in that area must make a DC 18 Constitution saving throw if it doesn't have the blinded condition. If the saving throw fails by 5 or more, the creature has the petrified condition. Otherwise, on a failed save, the creature takes 14 (4d6) force damage, begins to turn to stone, and has the restrained condition. The restrained creature must repeat the saving throw at the end of its next turn. On a failed save, it has the petrified condition, and on a successful save, the effect ends on it, The petrification lasts until the creature is freed by the Greater Restoration spell or other magic A creature can use its reaction, if available, to shut its eyes to avoid the saving throw. If the creature does so, it has the blinded condition until the end of its next turn.</p>",
@@ -3978,7 +4325,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_h0i5",
+          "id": "act_move_kfes",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>Euryale moves up to her speed.</p>",
@@ -3995,7 +4342,7 @@
           }
         },
         {
-          "id": "act_venomous_strike__costs_2_actions__8fmg",
+          "id": "act_venomous_strike__costs_2_actions__4x15",
           "name": "Venomous Strike (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Euryale makes one Snake Bite attack. If the target has the poisoned condition, the attack deals an extra 16 (3d10) poison damage.</p>",
@@ -4082,10 +4429,26 @@
         "mod": 2
       }
     },
+    "str": 12,
+    "dex": 14,
+    "con": 13,
+    "int": 12,
+    "wis": 18,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+3",
+      "wis": "+6"
+    },
     "saves": {
       "con": "+3",
       "wis": "+6"
+    },
+    "skill": {
+      "arcana": "+5",
+      "deception": "+6",
+      "history": "+5",
+      "perception": "+6"
     },
     "skills": {
       "arcana": "+5",
@@ -4093,6 +4456,13 @@
       "history": "+5",
       "perception": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "truesight 60 ft."
@@ -4287,7 +4657,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__4swj",
+        "id": "act_legendary_resistance__2_day__pwwh",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hag fails a saving throw, it can choose to succeed instead.</p>",
@@ -4304,7 +4674,7 @@
         }
       },
       {
-        "id": "act_trace_the_threads__1_day__u5ba",
+        "id": "act_trace_the_threads__1_day__mseu",
         "name": "Trace the Threads (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The hag can cast the Legend Lore spell, requiring no material components and using Wisdom as the spellcasting ability.</p>",
@@ -4323,7 +4693,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_62mc",
+        "id": "act_multiattack_dol9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hag makes two Shears attacks. It can replace one attack with a use of Spellcasting.</p>",
@@ -4340,7 +4710,7 @@
         }
       },
       {
-        "id": "act_shears_oh1b",
+        "id": "act_shears_iice",
         "name": "Shears",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) force damage. If the target is a creature, it has disadvantage on attack rolls until the end of the hag's next turn.</p>",
@@ -4369,7 +4739,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_destined_jaunt_qsij",
+          "id": "act_destined_jaunt_wioy",
           "name": "Destined Jaunt",
           "actionType": "legendary",
           "descriptionHtml": "<p>The hag magically teleports, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 30 feet of itself.</p>",
@@ -4386,7 +4756,7 @@
           }
         },
         {
-          "id": "act_tangle_threads_fesg",
+          "id": "act_tangle_threads_e2m6",
           "name": "Tangle Threads",
           "actionType": "legendary",
           "descriptionHtml": "<p>The hag magically tangles a creature it can see within 60 feet of itself in spectral silver threads. The creature must succeed on a DC 14 Strength saving throw, or its speed is reduced to 0 until the end of its next turn.</p>",
@@ -4406,7 +4776,7 @@
           }
         },
         {
-          "id": "act_destiny_curse__costs_2_actions__rhtf",
+          "id": "act_destiny_curse__costs_2_actions__jclc",
           "name": "Destiny Curse (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The hag magically curses a creature it can see within 60 feet of itself. The creature must make a DC 14 Wisdom saving throw, and the creature has disadvantage on this save if it has damaged the hag within the last minute. On a failed save, the creature has disadvantage on ability checks, attack rolls, and saving throws until the curse ends. Once per turn, when the cursed creature fails one of those d20 rolls, it takes 7 (2d6) force damage. The curse ends after 1 minute; when the creature succeeds on a total of three ability checks, attack rolls, or saving throws in any combination; or when the hag uses this action again.</p>",
@@ -4496,15 +4866,62 @@
         "mod": 3
       }
     },
+    "str": 7,
+    "dex": 14,
+    "con": 12,
+    "int": 18,
+    "wis": 12,
+    "cha": 17,
     "proficiencyBonus": 4,
+    "save": {
+      "int": "+8",
+      "wis": "+5"
+    },
     "saves": {
       "int": "+8",
       "wis": "+5"
+    },
+    "skill": {
+      "arcana": "+8",
+      "history": "+8"
     },
     "skills": {
       "arcana": "+8",
       "history": "+8"
     },
+    "immune": [
+      "cold",
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "fire",
+      "lightning",
+      "thunder",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -4682,7 +5099,7 @@
     ],
     "traits": [
       {
-        "id": "act_ethereal_sight_4cy7",
+        "id": "act_ethereal_sight_m3eq",
         "name": "Ethereal Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Gremorly can see 60 feet into the Ethereal Plane when he is on the Material Plane, and vice versa.</p>",
@@ -4699,7 +5116,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_fb64",
+        "id": "act_incorporeal_movement_mz68",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>Gremorly can move through other creatures and objects as if they were difficult terrain. He takes 5 (1d10) force damage if he ends his turn inside an object.</p>",
@@ -4721,7 +5138,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__187g",
+        "id": "act_legendary_resistance__3_day__ki6n",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gremorly fails a saving throw, he can choose to succeed instead.</p>",
@@ -4740,7 +5157,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_juju",
+        "id": "act_multiattack_dql0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gremorly makes three Withering Strike attacks.</p>",
@@ -4757,7 +5174,7 @@
         }
       },
       {
-        "id": "act_withering_strike_dia5",
+        "id": "act_withering_strike_mw7j",
         "name": "Withering Strike",
         "actionType": "action",
         "descriptionHtml": "<p>ms +8 to hit, reach 5 ft., one target. {@h}19 (3d12) necrotic damage.</p>",
@@ -4779,7 +5196,7 @@
         }
       },
       {
-        "id": "act_fell_necromancy_dx0u",
+        "id": "act_fell_necromancy_dhmd",
         "name": "Fell Necromancy",
         "actionType": "action",
         "descriptionHtml": "<p>Gremorly targets one creature he can see within 60 feet of himself. The target must make a DC 16 Constitution saving throw, taking 61 (7d8 + 30) necrotic damage on a failed save, or half as much damage on a successful one. In addition, Gremorly regains 9 (2d8) hit points.</p>",
@@ -4804,7 +5221,7 @@
         }
       },
       {
-        "id": "act_possession___recharge__7fwk",
+        "id": "act_possession___recharge__d5l3",
         "name": "Possession {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>One Humanoid Gremorly can see within 5 feet of himself must succeed on a DC 15 Charisma saving throw or be possessed by him; Gremorly disappears, and the target has the incapacitated condition and loses control of its body. Gremorly can't be targeted by any attack, spell, or other effect, except ones that turn Undead, and he retains his alignment, Intelligence, Wisdom, Charisma, and immunity to the charmed and frightened conditions. He otherwise uses the target's game statistics, but Gremorly doesn't gain access to the target's knowledge, class features, or proficiencies.</p><p>The possession lasts until the target drops to 0 hit points, Gremorly ends it as a bonus action, or Gremorly is turned or forced out by an effect like the Dispel Evil and Good spell. When the possession ends, Gremorly reappears in an unoccupied space within 5 feet of the target. The target is immune to this Possession for 24 hours after succeeding on the saving throw or after the possession ends.</p>",
@@ -4826,7 +5243,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_ethereal_step__recharge_4__lvnw",
+        "id": "act_ethereal_step__recharge_4__155j",
         "name": "Ethereal Step (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Gremorly teleports up to 30 feet to an unoccupied space he can see.</p>",
@@ -4913,17 +5330,61 @@
         "mod": 5
       }
     },
+    "str": 23,
+    "dex": 12,
+    "con": 18,
+    "int": 10,
+    "wis": 17,
+    "cha": 21,
     "proficiencyBonus": 6,
+    "save": {
+      "str": "+12",
+      "dex": "+7",
+      "con": "+10"
+    },
     "saves": {
       "str": "+12",
       "dex": "+7",
       "con": "+10"
+    },
+    "skill": {
+      "athletics": "+12",
+      "intimidation": "+11",
+      "perception": "+9"
     },
     "skills": {
       "athletics": "+12",
       "intimidation": "+11",
       "perception": "+9"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "necrotic",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "poisoned",
+      "stunned",
+      "unconscious"
+    ],
+    "passive": 19,
     "senses": {
       "passivePerception": 19,
       "sensesString": "darkvision 60 ft."
@@ -4937,7 +5398,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__chrw",
+        "id": "act_legendary_resistance__3_day__2ehn",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the champion fails a saving throw, it can choose to succeed instead.</p>",
@@ -4956,7 +5417,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_f2w8",
+        "id": "act_multiattack_onf1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The champion makes four Blazing Morningstar attacks. It can replace one of these attacks with Blade Storm, if available.</p>",
@@ -4973,7 +5434,7 @@
         }
       },
       {
-        "id": "act_blazing_morningstar_h2nn",
+        "id": "act_blazing_morningstar_70md",
         "name": "Blazing Morningstar",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}10 (1d8 + 6) piercing damage plus 14 (4d6) fire damage.</p>",
@@ -4999,7 +5460,7 @@
         }
       },
       {
-        "id": "act_blade_storm__recharge_5__g8e2",
+        "id": "act_blade_storm__recharge_5__1soc",
         "name": "Blade Storm (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The champion conjures a churning storm of spectral blades that fills a 20-foot cube centered on a point it can see within 120 feet of itself. The storm lasts until the start of the champion's next turn. While the storm is active, the area of the storm is difficult terrain. Whenever a creature enters the storm for the first time on a turn or starts its turn there, it must make a DC 19 Dexterity saving throw, taking 27 (6d8) slashing damage on a failed saving throw, or half as much damage on a successful one.</p>",
@@ -5031,7 +5492,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_furious_pursuit_w2ws",
+          "id": "act_furious_pursuit_6x68",
           "name": "Furious Pursuit",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion moves up to its speed or commands its mount to move up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -5048,7 +5509,7 @@
           }
         },
         {
-          "id": "act_induce_violence_hfl3",
+          "id": "act_induce_violence_qe6c",
           "name": "Induce Violence",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion targets one creature it can see within 60 feet of itself. The target must succeed on a DC 19 Wisdom saving throw or immediately make one melee weapon attack against another creature of the champion's choice that is within the target's reach. If no creature is within the target's reach or if the target has the incapacitated condition, the target instead takes 11 (2d10) psychic damage.</p>",
@@ -5073,7 +5534,7 @@
           }
         },
         {
-          "id": "act_menace__costs_2_actions__1vbq",
+          "id": "act_menace__costs_2_actions__ky8q",
           "name": "Menace (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion chooses any number of creatures it can see within 30 feet of itself. Each target must succeed on a DC 19 Wisdom saving throw or have the frightened condition until the end of its next turn.</p>",
@@ -5158,11 +5619,28 @@
         "mod": 4
       }
     },
+    "str": 22,
+    "dex": 23,
+    "con": 18,
+    "int": 12,
+    "wis": 20,
+    "cha": 19,
     "proficiencyBonus": 8,
+    "save": {
+      "dex": "+14",
+      "con": "+12",
+      "wis": "+13"
+    },
     "saves": {
       "dex": "+14",
       "con": "+12",
       "wis": "+13"
+    },
+    "skill": {
+      "deception": "+12",
+      "insight": "+13",
+      "perception": "+13",
+      "stealth": "+14"
     },
     "skills": {
       "deception": "+12",
@@ -5170,6 +5648,34 @@
       "perception": "+13",
       "stealth": "+14"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "necrotic",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "poisoned",
+      "stunned",
+      "unconscious"
+    ],
+    "passive": 23,
     "senses": {
       "passivePerception": 23,
       "sensesString": "darkvision 60 ft."
@@ -5184,7 +5690,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__vqf5",
+        "id": "act_legendary_resistance__3_day__m2a8",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the champion fails a saving throw, it can choose to succeed instead.</p>",
@@ -5203,7 +5709,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_k8og",
+        "id": "act_multiattack_xibm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The champion makes two Leeching Blade attacks and uses Hollow Void.</p>",
@@ -5220,7 +5726,7 @@
         }
       },
       {
-        "id": "act_leeching_blade_nmtg",
+        "id": "act_leeching_blade_tf0o",
         "name": "Leeching Blade",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) slashing damage plus 33 (6d10) cold damage, and the champion regains 10 hit points.</p>",
@@ -5246,7 +5752,7 @@
         }
       },
       {
-        "id": "act_hollow_void_5xb7",
+        "id": "act_hollow_void_cl96",
         "name": "Hollow Void",
         "actionType": "action",
         "descriptionHtml": "<p>The champion summons a hungering rift around a creature it can see within 120 feet of itself. The creature must make a DC 22 Constitution saving throw. On a failed save, the creature takes 49 (11d8) force damage and has the stunned condition until the start of the champion's next turn. On a successful save, the creature takes half as much damage only. If a creature is reduced to 0 hit points by this effect, the creature dies, and its body crumbles to dust.</p>",
@@ -5273,7 +5779,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_step_into_nothing__recharge_4__o7xe",
+        "id": "act_step_into_nothing__recharge_4__psd0",
         "name": "Step into Nothing (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The champion, along with any equipment it is wearing or carrying, has the invisible condition and teleports to an unoccupied space it can see within 30 feet of itself. The champion remains invisible until the start of its next turn or immediately after it deals damage.</p>",
@@ -5296,7 +5802,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_crush_8vcc",
+          "id": "act_crush_52wm",
           "name": "Crush",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion unleashes a burst of crushing force on a creature it can see within 30 feet of itself. The creature must succeed on a DC 22 Strength saving throw or take 14 (4d6) force damage and have the prone condition.</p>",
@@ -5321,7 +5827,7 @@
           }
         },
         {
-          "id": "act_fearsome_pursuit_gnj8",
+          "id": "act_fearsome_pursuit_jqja",
           "name": "Fearsome Pursuit",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion moves up to its speed or commands its mount to move up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -5338,7 +5844,7 @@
           }
         },
         {
-          "id": "act_nullify__costs_2_actions__ub4q",
+          "id": "act_nullify__costs_2_actions__tvr2",
           "name": "Nullify (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion emits a magic wave in a 60-foot cone. Every spell of 5th level or lower ends on creatures and objects of the champion's choice in that area.</p>",
@@ -5424,16 +5930,59 @@
         "mod": 5
       }
     },
+    "str": 10,
+    "dex": 18,
+    "con": 16,
+    "int": 17,
+    "wis": 15,
+    "cha": 21,
     "proficiencyBonus": 5,
+    "save": {
+      "dex": "+9",
+      "cha": "+10"
+    },
     "saves": {
       "dex": "+9",
       "cha": "+10"
+    },
+    "skill": {
+      "arcana": "+8",
+      "perception": "+7",
+      "stealth": "+9"
     },
     "skills": {
       "arcana": "+8",
       "perception": "+7",
       "stealth": "+9"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "necrotic",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "poisoned",
+      "stunned",
+      "unconscious"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 60 ft."
@@ -5624,7 +6173,7 @@
     ],
     "traits": [
       {
-        "id": "act_halo_of_pestilence_dxo9",
+        "id": "act_halo_of_pestilence_kxhx",
         "name": "Halo of Pestilence",
         "actionType": "trait",
         "descriptionHtml": "<p>The champion is surrounded by an aura of deadly magic that takes the form of a host of glowing white insects. Each creature that starts its turn within 10 feet of the champion must succeed on a DC 18 Constitution saving throw or have the incapacitated condition until the start of its next turn, as the insects ravage its body.</p>",
@@ -5644,7 +6193,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__rnqg",
+        "id": "act_legendary_resistance__3_day__7m7v",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the champion fails a saving throw, it can choose to succeed instead.</p>",
@@ -5663,7 +6212,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nyq7",
+        "id": "act_multiattack_vyvb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The champion makes two Blight Staff attacks, two Plague Bolt attacks, or one of each.</p>",
@@ -5680,7 +6229,7 @@
         }
       },
       {
-        "id": "act_blight_staff_u3os",
+        "id": "act_blight_staff_cfhb",
         "name": "Blight Staff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) bludgeoning damage plus 21 (6d6) necrotic damage.</p>",
@@ -5706,7 +6255,7 @@
         }
       },
       {
-        "id": "act_plague_bolt_m3n8",
+        "id": "act_plague_bolt_biwp",
         "name": "Plague Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>rs +10 to hit, range 120 ft., one target. {@h}23 (4d8 + 5) poison damage, and the target has the poisoned condition until the start of the champion's next turn.</p>",
@@ -5735,7 +6284,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_tzdt",
+          "id": "act_attack_fs45",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion makes one Blight Staff or Plague Bolt attack.</p>",
@@ -5752,7 +6301,7 @@
           }
         },
         {
-          "id": "act_furious_pursuit_3u3t",
+          "id": "act_furious_pursuit_djk9",
           "name": "Furious Pursuit",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion moves up to its speed or commands its mount to move up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -5769,7 +6318,7 @@
           }
         },
         {
-          "id": "act_cast_a_spell__costs_2_actions__44ai",
+          "id": "act_cast_a_spell__costs_2_actions__ecfm",
           "name": "Cast a Spell (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The champion uses Spellcasting.</p>",
@@ -5851,12 +6400,33 @@
         "mod": -2
       }
     },
+    "str": 5,
+    "dex": 16,
+    "con": 10,
+    "int": 2,
+    "wis": 14,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+6",
+      "stealth": "+5"
+    },
     "skills": {
       "perception": "+6",
       "stealth": "+5"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 120 ft."
@@ -5869,7 +6439,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_talons_b1mg",
+        "id": "act_talons_miuo",
         "name": "Talons",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}8 (2d4 + 3) slashing damage plus 3 (1d6) necrotic damage.</p>",
@@ -5895,7 +6465,7 @@
         }
       },
       {
-        "id": "act_plane_shift__2_day__g9iy",
+        "id": "act_plane_shift__2_day__p5sn",
         "name": "Plane Shift (2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The hawk casts Plane Shift on itself, requiring no spell components and using Wisdom as the spellcasting ability.</p>",
@@ -5914,7 +6484,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_dash_gxxd",
+        "id": "act_shadow_dash_2btn",
         "name": "Shadow Dash",
         "actionType": "bonus",
         "descriptionHtml": "<p>When the hawk is in dim light or darkness, it teleports up to 30 feet to an unoccupied space it can see that is also in dim light or darkness. The hawk then has advantage on the first melee attack it makes before the end of the turn.</p>",
@@ -6001,12 +6571,45 @@
         "mod": 1
       }
     },
+    "str": 16,
+    "dex": 19,
+    "con": 16,
+    "int": 8,
+    "wis": 15,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+6",
+      "stealth": "+6"
+    },
     "skills": {
       "perception": "+6",
       "stealth": "+6"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic",
+      "psychic",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 60 ft."
@@ -6021,7 +6624,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_m4ui",
+        "id": "act_pack_tactics_oh4u",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The hound has advantage on attack rolls against a creature if at least one of the hound's allies is within 5 feet of the target and the ally doesn't have the incapacitated condition.</p>",
@@ -6038,7 +6641,7 @@
         }
       },
       {
-        "id": "act_supernatural_tracker_i5jn",
+        "id": "act_supernatural_tracker_p34b",
         "name": "Supernatural Tracker",
         "actionType": "trait",
         "descriptionHtml": "<p>The hound knows the distance to and direction of any creature that has come within 30 feet of it, even if that creature is on a different plane of existence. If the creature being tracked by the hound dies, the hound knows.</p>",
@@ -6057,7 +6660,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_f6p6",
+        "id": "act_bite_1762",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) piercing damage plus 3 (1d6) necrotic damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or have the prone condition.</p>",
@@ -6088,7 +6691,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_step__recharge_4__vxqi",
+        "id": "act_shadow_step__recharge_4__kw9c",
         "name": "Shadow Step (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The hound magically teleports, along with any equipment it is wearing or carrying, up to 40 feet to an unoccupied space it can see.</p>",
@@ -6175,11 +6778,49 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 10,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [
+      "force",
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks that aren't adamantine",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "stunned"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "blindsight 60 ft. (blind beyond this radius)"
@@ -6193,7 +6834,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_z3jc",
+        "id": "act_magic_resistance_5rqr",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The helmed horror has advantage on saving throws against spells and other magical effects.</p>",
@@ -6210,7 +6851,7 @@
         }
       },
       {
-        "id": "act_spell_immunity_a3ul",
+        "id": "act_spell_immunity_iae6",
         "name": "Spell Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The helmed horror is immune to three spells chosen by its creator. Typical immunities include fireball, heat metal, and lightning bolt.</p>",
@@ -6229,7 +6870,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tznm",
+        "id": "act_multiattack_kusw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The helmed horror makes two longsword attacks.</p>",
@@ -6246,7 +6887,7 @@
         }
       },
       {
-        "id": "act_longsword_a27y",
+        "id": "act_longsword_7bbe",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
@@ -6343,10 +6984,27 @@
         "mod": 6
       }
     },
+    "str": 22,
+    "dex": 20,
+    "con": 18,
+    "int": 15,
+    "wis": 23,
+    "cha": 22,
     "proficiencyBonus": 6,
+    "save": {
+      "con": "+10",
+      "wis": "+12"
+    },
     "saves": {
       "con": "+10",
       "wis": "+12"
+    },
+    "skill": {
+      "insight": "+12",
+      "perception": "+12",
+      "persuasion": "+12",
+      "religion": "+8",
+      "stealth": "+11"
     },
     "skills": {
       "insight": "+12",
@@ -6355,6 +7013,18 @@
       "religion": "+8",
       "stealth": "+11"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 22,
     "senses": {
       "passivePerception": 22,
       "sensesString": ""
@@ -6557,7 +7227,7 @@
     ],
     "traits": [
       {
-        "id": "act_devotion_s_call__1_day__9dbj",
+        "id": "act_devotion_s_call__1_day__fz6x",
         "name": "Devotion's Call (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The medusa can cast the Resurrection spell, requiring no material components and using Wisdom as the spellcasting ability.</p>",
@@ -6574,7 +7244,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__sxtz",
+        "id": "act_legendary_resistance__4_day__il1h",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the medusa fails a saving throw, it can choose to succeed instead.</p>",
@@ -6593,7 +7263,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2q20",
+        "id": "act_multiattack_h311",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The medusa makes one Constrict attack, one Final Blade attack, and one Snake Hair attack. Alternatively, it makes two Wrathful Strike attacks.</p>",
@@ -6610,7 +7280,7 @@
         }
       },
       {
-        "id": "act_constrict_x92i",
+        "id": "act_constrict_ckbo",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 10 ft., one target. {@h}16 (3d6 + 6) bludgeoning damage, and if the target is a Medium or smaller creature, it has the grappled condition (escape DC 20). Until this grapple ends, the target has the restrained condition, and the medusa can't constrict another creature.</p>",
@@ -6635,7 +7305,7 @@
         }
       },
       {
-        "id": "act_final_blade_9tyn",
+        "id": "act_final_blade_arpb",
         "name": "Final Blade",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) slashing damage plus 21 (6d6) force damage. If the target has at least one head and the medusa rolled a 20 on the attack roll, the target is decapitated and dies if it fails a DC 20 Constitution saving throw and can't survive without that head. A target is immune to this effect if it takes none of the damage, has legendary actions, or is Huge or larger. Such a creature takes an extra 28 (8d6) force damage from the hit.</p>",
@@ -6668,7 +7338,7 @@
         }
       },
       {
-        "id": "act_snake_hair_ztug",
+        "id": "act_snake_hair_oudl",
         "name": "Snake Hair",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}11 (1d10 + 6) piercing damage plus 5 (1d10) poison damage.</p>",
@@ -6694,7 +7364,7 @@
         }
       },
       {
-        "id": "act_wrathful_strike_outp",
+        "id": "act_wrathful_strike_j1s3",
         "name": "Wrathful Strike",
         "actionType": "action",
         "descriptionHtml": "<p>rs +12 to hit, range 120 ft., one creature. {@h}22 (3d10 + 6) radiant damage, and the target has the blinded condition until the end of its next turn.</p>",
@@ -6718,7 +7388,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_petrifying_gaze__recharge_4__l0xx",
+        "id": "act_petrifying_gaze__recharge_4__5kpv",
         "name": "Petrifying Gaze (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The medusa unleashes petrifying magic from its eyes in a 30-foot cone. Each creature in that area must make a DC 18 Constitution saving throw if it doesn't have the blinded condition. If the saving throw fails by 5 or more, the creature has the petrified condition. Otherwise, on a failed save, the creature takes 10 (3d6) force damage, begins to turn to stone, and has the restrained condition. The restrained creature must repeat the saving throw at the end of its next turn. On a failed save, it has the petrified condition, and on a successful save, the effect ends on it. The petrification lasts until the creature is freed by the Greater Restoration spell or other magic.</p><p>A creature can use its reaction, if available, to shut its eyes to avoid the saving throw. If the creature does so, it has the blinded condition until the end of its next turn.</p>",
@@ -6749,7 +7419,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_r2c5",
+          "id": "act_move_7nsq",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The medusa moves up to its speed without provoking opportunity attacks.</p>",
@@ -6766,7 +7436,7 @@
           }
         },
         {
-          "id": "act_wrathful_blast__costs_2_actions__twwp",
+          "id": "act_wrathful_blast__costs_2_actions__4r0o",
           "name": "Wrathful Blast (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The medusa makes one Wrathful Strike attack.</p>",
@@ -6783,7 +7453,7 @@
           }
         },
         {
-          "id": "act_final_slash__costs_3_actions__o8li",
+          "id": "act_final_slash__costs_3_actions__8irx",
           "name": "Final Slash (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The medusa makes one Final Blade attack with advantage.</p>",
@@ -6803,7 +7473,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_rt6s",
+        "id": "act_lair_action_nuoi",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Petrifying Wave\",\"entry\":\"Up to three creatures the medusa can see within the lair are partially turned to stone. Each target must make a DC 15 Constitution saving throw. On a failed save, a target's speed is reduced to 0 and can't increase. On a successful save, its speed is halved. The target's speed returns to normal on initiative count 20 on the following round.\"}</p>",
@@ -6823,7 +7493,7 @@
         }
       },
       {
-        "id": "act_lair_action_k700",
+        "id": "act_lair_action_sfwh",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Sudden Stonework\",\"entry\":\"The medusa creates a wall of stone on a solid surface it can see within the lair. The wall can be up to 60 feet long, 20 feet high, and 1 foot thick. Each 5-foot section of the wall has an AC of 17; 30 hit points; vulnerability to thunder damage; and immunity to poison, psychic, and slashing damage. A creature in the wall's space when the wall appears is pushed to the nearest unoccupied space on one side of the wall and must make a DC 15 Dexterity saving throw. On a failed save, the medusa chooses the side. On a successful save, the creature chooses the side. The wall disappears when the medusa uses this lair action again or when the medusa dies.\"}</p>",
@@ -6843,7 +7513,7 @@
         }
       },
       {
-        "id": "act_lair_action_wfv8",
+        "id": "act_lair_action_5arh",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Undulating Surface\",\"entry\":\"Solid surfaces within the lair ripple like a snake's coils. Up to three creatures the medusa can see within the lair can move up to 30 feet along solid surfaces without provoking opportunity attacks. If a creature moves along a surface such as a ceiling with no way to remain there (for example, sufficient handholds), it falls at the end of this movement.\"}</p>",
@@ -6923,10 +7593,26 @@
         "mod": 5
       }
     },
+    "str": 12,
+    "dex": 13,
+    "con": 18,
+    "int": 15,
+    "wis": 17,
+    "cha": 20,
     "proficiencyBonus": 4,
+    "save": {
+      "wis": "+7",
+      "cha": "+9"
+    },
     "saves": {
       "wis": "+7",
       "cha": "+9"
+    },
+    "skill": {
+      "arcana": "+10",
+      "deception": "+9",
+      "persuasion": "+9",
+      "religion": "+6"
     },
     "skills": {
       "arcana": "+10",
@@ -6934,6 +7620,13 @@
       "persuasion": "+9",
       "religion": "+6"
     },
+    "immune": [],
+    "resist": [
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "truesight 30 ft."
@@ -7085,7 +7778,7 @@
     ],
     "traits": [
       {
-        "id": "act_comet_s_voice__1_day__9x9e",
+        "id": "act_comet_s_voice__1_day__2bxw",
         "name": "Comet's Voice (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The hierophant can cast Contact Other Plane, using Charisma as the spellcasting ability.</p>",
@@ -7102,7 +7795,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_u79n",
+        "id": "act_magic_resistance_4njx",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The hierophant has advantage on saving throws against spells and other magical effects.</p>",
@@ -7119,7 +7812,7 @@
         }
       },
       {
-        "id": "act_thought_shield_q5zp",
+        "id": "act_thought_shield_zsh4",
         "name": "Thought Shield",
         "actionType": "trait",
         "descriptionHtml": "<p>The hierophant's thoughts can't be read by any means unless the hierophant allows it.</p>",
@@ -7138,7 +7831,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_w17z",
+        "id": "act_multiattack_shcm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hierophant makes two Herald's Axe attacks or three Comet Blast attacks.</p>",
@@ -7155,7 +7848,7 @@
         }
       },
       {
-        "id": "act_herald_s_axe_7trh",
+        "id": "act_herald_s_axe_twps",
         "name": "Herald's Axe",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}11 (1d12 + 5) slashing damage plus 10 (3d6) necrotic damage.</p>",
@@ -7181,7 +7874,7 @@
         }
       },
       {
-        "id": "act_comet_blast_nzrr",
+        "id": "act_comet_blast_g69j",
         "name": "Comet Blast",
         "actionType": "action",
         "descriptionHtml": "<p>rs +9 to hit, range 120 ft., one target. {@h}16 (2d10 + 5) force damage.</p>",
@@ -7203,7 +7896,7 @@
         }
       },
       {
-        "id": "act_all_consuming_star___recharge__lunw",
+        "id": "act_all_consuming_star___recharge__dcy4",
         "name": "All-Consuming Star {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The hierophant conjures a manifestation of the All-Consuming Star: brilliant light and haunting screams that fill a 20-foot-radius sphere centered on a point the hierophant can see within 60 feet of itself. Each creature within the sphere has the blinded and deafened conditions. Each creature that enters the sphere for the first time on a turn or starts its turn there must make a DC 17 Wisdom saving throw. On a failed save, a creature takes 27 (6d8) psychic damage and has the incapacitated condition until the start of its next turn. On a successful save, a creature takes half as much damage only. The manifestation persists until the hierophant dies, has the incapacitated condition, uses a bonus action to end the effect, or uses this action again.</p>",
@@ -7230,7 +7923,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_star_s_hunger_txtd",
+        "id": "act_star_s_hunger_uvcm",
         "name": "Star's Hunger",
         "actionType": "bonus",
         "descriptionHtml": "<p>The hierophant targets one creature within 30 feet of the center of its All-Consuming Star. The target must succeed on a DC 17 Strength saving throw or be pulled up to 30 feet toward the center of the All-Consuming Star.</p>",
@@ -7320,10 +8013,26 @@
         "mod": 5
       }
     },
+    "str": 17,
+    "dex": 10,
+    "con": 18,
+    "int": 14,
+    "wis": 15,
+    "cha": 20,
     "proficiencyBonus": 5,
+    "save": {
+      "wis": "+7",
+      "cha": "+10"
+    },
     "saves": {
       "wis": "+7",
       "cha": "+10"
+    },
+    "skill": {
+      "deception": "+10",
+      "insight": "+7",
+      "perception": "+7",
+      "persuasion": "+10"
     },
     "skills": {
       "deception": "+10",
@@ -7331,6 +8040,29 @@
       "perception": "+7",
       "persuasion": "+10"
     },
+    "immune": [
+      "fire",
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "cold",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks that aren't silvered",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "poisoned"
+    ],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "truesight 120 ft."
@@ -7465,7 +8197,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__tt6y",
+        "id": "act_legendary_resistance__3_day__rv90",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Hulgaz fails a saving throw, she can choose to succeed instead.</p>",
@@ -7482,7 +8214,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_qvkp",
+        "id": "act_magic_resistance_gvvo",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Hulgaz has advantage on saving throws against spells and other magical effects.</p>",
@@ -7501,7 +8233,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_44nn",
+        "id": "act_multiattack_c4pu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hulgaz makes two Claw attacks and one Intoxicating Sting attack.</p>",
@@ -7518,7 +8250,7 @@
         }
       },
       {
-        "id": "act_claw_nhll",
+        "id": "act_claw_9b5t",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}12 (2d8 + 3) slashing damage.</p>",
@@ -7540,7 +8272,7 @@
         }
       },
       {
-        "id": "act_intoxicating_sting_m7cj",
+        "id": "act_intoxicating_sting_gs2l",
         "name": "Intoxicating Sting",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one creature. {@h}8 (1d10 + 3) piercing damage plus 10 (3d6) poison damage, and the target must succeed on a DC 17 Wisdom saving throw or have the charmed condition until the start of Hulgaz's next turn.</p>",
@@ -7569,7 +8301,7 @@
         }
       },
       {
-        "id": "act_brimstone_vapor__recharge_5__qksc",
+        "id": "act_brimstone_vapor__recharge_5__o3nb",
         "name": "Brimstone Vapor (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Hulgaz exhales a 30-foot cone of noxious, scorching-hot vapor. Each creature in that area must succeed on a DC 17 Constitution saving throw or have the poisoned condition for 1 minute. While poisoned in this way, a creature takes 31 (7d8) fire damage at the start of each of its turns and has disadvantage on Wisdom saving throws. A target can repeat the Constitution saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -7601,7 +8333,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_spgp",
+          "id": "act_attack_75zq",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hulgaz makes one Claw attack.</p>",
@@ -7618,7 +8350,7 @@
           }
         },
         {
-          "id": "act_charm_qd3n",
+          "id": "act_charm_5nj6",
           "name": "Charm",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hulgaz uses Spellcasting to cast Charm Person.</p>",
@@ -7635,7 +8367,7 @@
           }
         },
         {
-          "id": "act_curdle_heart__costs_2_actions__iqbm",
+          "id": "act_curdle_heart__costs_2_actions__7r1v",
           "name": "Curdle Heart (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hulgaz sours the good feelings of her charmed victims. She chooses any number of creatures she can see who are charmed by her. Each target takes 17 (5d6) psychic damage as the charmed condition applied by Hulgaz ends on it.</p>",
@@ -7722,14 +8454,32 @@
         "mod": 3
       }
     },
+    "str": 12,
+    "dex": 14,
+    "con": 16,
+    "int": 11,
+    "wis": 13,
+    "cha": 17,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+3",
+      "cha": "+5"
+    },
     "saves": {
       "wis": "+3",
       "cha": "+5"
     },
+    "skill": {
+      "arcana": "+2"
+    },
     "skills": {
       "arcana": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -7881,7 +8631,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_f2od",
+        "id": "act_magic_resistance_87i0",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The initiate has advantage on saving throws against spells and other magical effects.</p>",
@@ -7900,7 +8650,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hu7l",
+        "id": "act_multiattack_mk1p",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The initiate makes two Comet Strike attacks.</p>",
@@ -7917,7 +8667,7 @@
         }
       },
       {
-        "id": "act_comet_strike_nvx3",
+        "id": "act_comet_strike_3yee",
         "name": "Comet Strike",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +5 to hit, reach 5 ft. or range 120 ft., one target. {@h}14 (2d10 + 3) force damage.</p>",
@@ -7942,7 +8692,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_moment_of_foresight__1_day__fdjw",
+        "id": "act_moment_of_foresight__1_day__1vwq",
         "name": "Moment of Foresight (1/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When hit by an attack roll, the initiate can force the attacker to reroll it and use the new roll, possibly causing the attack to miss.</p>",
@@ -8028,10 +8778,26 @@
         "mod": 2
       }
     },
+    "str": 14,
+    "dex": 16,
+    "con": 14,
+    "int": 14,
+    "wis": 16,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5",
+      "wis": "+5"
+    },
     "saves": {
       "dex": "+5",
       "wis": "+5"
+    },
+    "skill": {
+      "arcana": "+6",
+      "history": "+6",
+      "insight": "+5",
+      "perception": "+5"
     },
     "skills": {
       "arcana": "+6",
@@ -8039,6 +8805,15 @@
       "insight": "+5",
       "perception": "+5"
     },
+    "immune": [
+      "radiant"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion"
+    ],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "darkvision 120 ft."
@@ -8147,7 +8922,7 @@
     ],
     "traits": [
       {
-        "id": "act_brilliance__true_form_only__87oa",
+        "id": "act_brilliance__true_form_only__ty5o",
         "name": "Brilliance (True Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The living portent sheds bright light for 30 feet and dim light for an additional 30 feet.</p>",
@@ -8166,7 +8941,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1be7",
+        "id": "act_multiattack_rxkz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The living portent makes two Radiant Strike attacks.</p>",
@@ -8183,7 +8958,7 @@
         }
       },
       {
-        "id": "act_radiant_strike_1i1d",
+        "id": "act_radiant_strike_9rdf",
         "name": "Radiant Strike",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +5 to hit, reach 5 ft. or range 120 ft., one target. {@h}9 (1d12 + 3) radiant damage.</p>",
@@ -8205,7 +8980,7 @@
         }
       },
       {
-        "id": "act_prophetic_blessing_tfvq",
+        "id": "act_prophetic_blessing_ib31",
         "name": "Prophetic Blessing",
         "actionType": "action",
         "descriptionHtml": "<p>The living portent magically infuses the power of its prophecy into another willing creature the living portent can see within 30 feet of itself. The target's hit point maximum and current hit points increase by 7 (1d8 + 3), and it gains a prophecy die, a d8. Once during each of the creature's turns, when it fails an ability check or saving throw or misses an attack roll, it can roll the prophecy die and add the number rolled to the total, potentially changing the outcome. The blessing ends after 1 hour or when the living portent ends the blessing (no action required) or uses this action again.</p>",
@@ -8224,7 +8999,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_eegx",
+        "id": "act_change_shape_adt2",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The living portent magically transforms into a Humanoid while retaining its game statistics (other than its size and Brilliance trait). The transformation ends if the living portent is reduced to 0 hit points or uses a bonus action to end it.</p>",
@@ -8243,7 +9018,7 @@
     ],
     "reactions": [
       {
-        "id": "act_price_of_defiance_6euq",
+        "id": "act_price_of_defiance_hz17",
         "name": "Price of Defiance",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the living portent is damaged by a creature that it can see within 120 feet of itself, radiant power sears the creature. The creature must make a DC 13 Constitution saving throw, taking 10 (3d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
@@ -8337,16 +9112,57 @@
         "mod": 4
       }
     },
+    "str": 23,
+    "dex": 16,
+    "con": 22,
+    "int": 22,
+    "wis": 20,
+    "cha": 18,
     "proficiencyBonus": 6,
+    "save": {
+      "str": "+12",
+      "con": "+12"
+    },
     "saves": {
       "str": "+12",
       "con": "+12"
+    },
+    "skill": {
+      "arcana": "+12",
+      "athletics": "+12",
+      "perception": "+11"
     },
     "skills": {
       "arcana": "+12",
       "athletics": "+12",
       "perception": "+11"
     },
+    "immune": [
+      "acid",
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "fire",
+      "lightning",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 21,
     "senses": {
       "passivePerception": 21,
       "sensesString": "truesight 120 ft."
@@ -8362,7 +9178,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__9crm",
+        "id": "act_legendary_resistance__3_day__aklb",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Malaxxix fails a saving throw, it can choose to succeed instead.</p>",
@@ -8379,7 +9195,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_u6da",
+        "id": "act_magic_resistance_7aq4",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Malaxxix has advantage on saving throws against spells and other magical effects.</p>",
@@ -8398,7 +9214,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zie6",
+        "id": "act_multiattack_8fqq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Malaxxix makes two Forge Hammer or Whip attacks in any combination.</p>",
@@ -8415,7 +9231,7 @@
         }
       },
       {
-        "id": "act_forge_hammer_r5gc",
+        "id": "act_forge_hammer_sa7m",
         "name": "Forge Hammer",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +12 to hit, reach 10 ft. or range 60/180 ft., one target. {@h}28 (4d10 + 6) bludgeoning damage, and the target can't take reactions until the end of Malaxxix's next turn. {@hom}The hammer then magically returns to Malaxxix's hand.</p>",
@@ -8437,7 +9253,7 @@
         }
       },
       {
-        "id": "act_whip_76jm",
+        "id": "act_whip_c08c",
         "name": "Whip",
         "actionType": "action",
         "descriptionHtml": "<p>mw +12 to hit, reach 30 ft., one creature. {@h}15 (2d8 + 6) slashing damage, and the target has the restrained condition for 1 minute. The restrained target can make a DC 20 Strength saving throw at the end of each of its turns, ending the effect on itself on a success. Only one creature can be restrained by the whip at a time.</p>",
@@ -8462,7 +9278,7 @@
         }
       },
       {
-        "id": "act_mezzoloth_vortex__recharge_5__9jsr",
+        "id": "act_mezzoloth_vortex__recharge_5__wuwe",
         "name": "Mezzoloth Vortex (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Malaxxix summons a vortex of whirling mezzoloths at a point it can see within 90 feet of itself. The vortex is a 30-foot-radius, 100-foot-high cylinder centered on that point. Each creature other than Malaxxix in that area must make a DC 20 Dexterity saving throw. On a failed save, a creature takes 35 (10d6) force damage and has the restrained condition while within the cylinder. On a successful save, a creature takes half as much damage and is pushed to the nearest unoccupied space outside the cylinder. The vortex lasts until the start of Malaxxix's next turn.</p>",
@@ -8494,7 +9310,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_fiendish_stride_yw3y",
+          "id": "act_fiendish_stride_xen1",
           "name": "Fiendish Stride",
           "actionType": "legendary",
           "descriptionHtml": "<p>Malaxxix moves up to its speed. This movement doesn't provoke opportunity attacks. When Malaxxix moves within 5 feet of a creature during this movement, that creature takes 5 (1d10) lightning damage. A creature can take this damage only once per turn.</p>",
@@ -8516,7 +9332,7 @@
           }
         },
         {
-          "id": "act_attack__costs_2_actions__z9il",
+          "id": "act_attack__costs_2_actions__ddnd",
           "name": "Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Malaxxix makes one Forge Hammer or Whip attack.</p>",
@@ -8536,7 +9352,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_8v07",
+        "id": "act_lair_action_o20o",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Reassemble\",\"entry\":\"Malaxxix chooses either itself or the palanquin. The target gains 19 (3d12) temporary hit points.\"}</p>",
@@ -8553,7 +9369,7 @@
         }
       },
       {
-        "id": "act_lair_action_dvd8",
+        "id": "act_lair_action_hgy5",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Slam\",\"entry\":\"Malaxxix commands the palanquin to slam the ground. Each creature within 15 feet of the palanquin must make a DC 20 Strength saving throw. On a failed save, a creature takes 11 (2d10) bludgeoning damage and has the prone condition. On a successful save, a creature takes half as much damage only.\"}</p>",
@@ -8578,7 +9394,7 @@
         }
       },
       {
-        "id": "act_lair_action_hchy",
+        "id": "act_lair_action_vgaf",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Surge\",\"entry\":\"Malaxxix commands the palanquin to move up to its speed.\"}</p>",
@@ -8658,14 +9474,32 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 10,
+    "con": 11,
+    "int": 13,
+    "wis": 12,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "arcana": "+3",
+      "history": "+5",
+      "perception": "+5",
+      "religion": "+3"
+    },
     "skills": {
       "arcana": "+3",
       "history": "+5",
       "perception": "+5",
       "religion": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": ""
@@ -8679,7 +9513,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_labyrinthine_recall_emuf",
+        "id": "act_labyrinthine_recall_d92s",
         "name": "Labyrinthine Recall",
         "actionType": "trait",
         "descriptionHtml": "<p>The minotaur can perfectly recall any path it has traveled.</p>",
@@ -8698,7 +9532,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_jnhd",
+        "id": "act_gore_rzm9",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) piercing damage. If the minotaur moved at least 10 feet straight toward the target immediately before it hit, the target takes an extra 3 (1d6) piercing damage, and if the target is a Large or smaller creature, it must succeed on a DC 11 Strength saving throw or be pushed up to 10 feet from the minotaur and have the prone condition.</p>",
@@ -8798,13 +9632,30 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 11,
+    "con": 14,
+    "int": 8,
+    "wis": 16,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+2",
+      "perception": "+7",
+      "religion": "+1"
+    },
     "skills": {
       "deception": "+2",
       "perception": "+7",
       "religion": "+1"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
     "senses": {
       "passivePerception": 17,
       "sensesString": "darkvision 60 ft."
@@ -8819,7 +9670,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_labyrinthine_recall_xaou",
+        "id": "act_labyrinthine_recall_ejja",
         "name": "Labyrinthine Recall",
         "actionType": "trait",
         "descriptionHtml": "<p>The minotaur can perfectly recall any path it has traveled.</p>",
@@ -8838,7 +9689,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_364f",
+        "id": "act_gore_0gol",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) piercing damage, or 13 (2d8 + 4) piercing damage while enlarged. If the minotaur moved at least 10 feet straight toward the target immediately before it hit, the target takes an extra 4 (1d8) piercing damage, or 9 (2d8) piercing damage if the minotaur is enlarged. If the target is a creature, it must succeed on a DC 14 Strength saving throw or be pushed up to 10 feet from the minotaur and have the prone condition.</p>",
@@ -8875,7 +9726,7 @@
         }
       },
       {
-        "id": "act_mattock_fbnn",
+        "id": "act_mattock_9rgl",
         "name": "Mattock",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one target. {@h}10 (1d12 + 4) bludgeoning damage, or 17 (2d12 + 4) bludgeoning damage while enlarged. If the target is a creature and the minotaur is enlarged, the target must succeed on a DC 14 Strength saving throw or have the prone condition.</p>",
@@ -8904,7 +9755,7 @@
         }
       },
       {
-        "id": "act_enlarge__recharges_after_a_short_or_long_rest__usgz",
+        "id": "act_enlarge__recharges_after_a_short_or_long_rest__us0t",
         "name": "Enlarge (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>For 1 minute, the minotaur magically increases in size, along with anything it is wearing or carrying. While enlarged, the minotaur is Large, doubles its damage dice on Strength-based weapon attacks (included in the attacks), and makes Strength checks and Strength saving throws with advantage. If the minotaur lacks the room to become Large, the minotaur doesn't change size.</p>",
@@ -8923,7 +9774,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_unerring_tracker_oio5",
+        "id": "act_unerring_tracker_d4vi",
         "name": "Unerring Tracker",
         "actionType": "bonus",
         "descriptionHtml": "<p>The minotaur magically creates a psychic link with one creature it can see. For the next hour, the minotaur knows the current distance and direction to the target if it is on the same plane of existence. The link ends if the minotaur has the incapacitated condition or uses this ability on a different target.</p>",
@@ -9010,12 +9861,30 @@
         "mod": 2
       }
     },
+    "str": 8,
+    "dex": 14,
+    "con": 10,
+    "int": 10,
+    "wis": 16,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "performance": "+4",
+      "stealth": "+6"
+    },
     "skills": {
       "performance": "+4",
       "stealth": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 60 ft."
@@ -9093,7 +9962,7 @@
     ],
     "traits": [
       {
-        "id": "act_fortune_teller_wwct",
+        "id": "act_fortune_teller_ym1w",
         "name": "Fortune Teller",
         "actionType": "trait",
         "descriptionHtml": "<p>Oddlewin can cast the Augury spell as a ritual, using cards as the material component.</p>",
@@ -9110,7 +9979,7 @@
         }
       },
       {
-        "id": "act_nilbogism_fird",
+        "id": "act_nilbogism_8gsq",
         "name": "Nilbogism",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that attempts to damage Oddlewin must first succeed on a DC 12 Charisma saving throw or have the charmed condition until the end of the creature's next turn. The creature must use its action praising Oddlewin.</p><p>Oddlewin can't regain hit points, including through magical healing, except through his Reversal of Fortune reaction.</p>",
@@ -9132,7 +10001,7 @@
     ],
     "actions": [
       {
-        "id": "act_fool_s_scepter_qxar",
+        "id": "act_fool_s_scepter_pfty",
         "name": "Fool's Scepter",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
@@ -9154,7 +10023,7 @@
         }
       },
       {
-        "id": "act_cloud_of_cards_zrs9",
+        "id": "act_cloud_of_cards_u0wg",
         "name": "Cloud of Cards",
         "actionType": "action",
         "descriptionHtml": "<p>Oddlewin conjures magical cards that slash at the air in a 5-foot cube within 60 feet of Oddlewin until the start of Oddlewin's next turn. A creature that starts its turn in the cube or that enters that area for the first time on a turn takes 10 (4d4) slashing damage.</p>",
@@ -9178,7 +10047,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_607p",
+        "id": "act_nimble_escape_7cbt",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Oddlewin takes the Disengage or Hide action.</p>",
@@ -9197,7 +10066,7 @@
     ],
     "reactions": [
       {
-        "id": "act_reversal_of_fortune_8z5q",
+        "id": "act_reversal_of_fortune_x5gr",
         "name": "Reversal of Fortune",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to another creature dealing damage to Oddlewin, Oddlewin reduces the damage to 0 and regains 9 (2d8) hit points.</p>",
@@ -9283,15 +10152,39 @@
         "mod": 5
       }
     },
+    "str": 12,
+    "dex": 22,
+    "con": 16,
+    "int": 22,
+    "wis": 18,
+    "cha": 20,
     "proficiencyBonus": 6,
+    "save": {
+      "dex": "+12",
+      "int": "+12"
+    },
     "saves": {
       "dex": "+12",
       "int": "+12"
+    },
+    "skill": {
+      "perception": "+10",
+      "stealth": "+18"
     },
     "skills": {
       "perception": "+10",
       "stealth": "+18"
     },
+    "immune": [],
+    "resist": [
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 20,
     "senses": {
       "passivePerception": 20,
       "sensesString": "blindsight 30 ft."
@@ -9307,7 +10200,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_alien_mind_7xlj",
+        "id": "act_alien_mind_udfy",
         "name": "Alien Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>Magic and other features can't determine the corrupter's creature type. If a creature tries to read the corrupter's thoughts, that creature must succeed on a DC 20 Intelligence saving throw or have the stunned condition for 1 minute. The stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -9327,7 +10220,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__gnyh",
+        "id": "act_legendary_resistance__3_day__pu1o",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the corrupter fails a saving throw, it can choose to succeed instead.</p>",
@@ -9344,7 +10237,7 @@
         }
       },
       {
-        "id": "act_spider_climb_l3dm",
+        "id": "act_spider_climb_h4g3",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The corrupter can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -9363,7 +10256,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0z5s",
+        "id": "act_multiattack_wqr9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The corrupter makes three Whispering Blade attacks and can use Debilitating Touch.</p>",
@@ -9380,7 +10273,7 @@
         }
       },
       {
-        "id": "act_whispering_blade_o1z4",
+        "id": "act_whispering_blade_6xky",
         "name": "Whispering Blade",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +12 to hit, reach 5 ft. or range 60 ft., one target. {@h}10 (1d8 + 6) piercing damage plus 14 (4d6) psychic damage. If the target is a creature, it must succeed on a DC 20 Wisdom saving throw or be unable to speak until the start of the corrupter's next turn.</p>",
@@ -9409,7 +10302,7 @@
         }
       },
       {
-        "id": "act_debilitating_touch_xwtb",
+        "id": "act_debilitating_touch_09q6",
         "name": "Debilitating Touch",
         "actionType": "action",
         "descriptionHtml": "<p>The corrupter's squirming tentacle lashes out at a creature the corrupter can see within 30 feet of itself. The target must succeed on a DC 20 Constitution saving throw or have the paralyzed condition until the end of its next turn, after which the target is immune to this Debilitating Touch for 24 hours.</p>",
@@ -9431,7 +10324,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_lvqj",
+        "id": "act_change_shape_tx4q",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The corrupter magically transforms into any creature that is Small or Medium, while retaining its game statistics (other than its size). This transformation ends if the corrupter is reduced to 0 hit points or uses a bonus action to end it.</p>",
@@ -9450,7 +10343,7 @@
     ],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_x9kq",
+        "id": "act_uncanny_dodge_y05u",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker the corrupter can see hits the corrupter with an attack, the corrupter halves the attack's damage against it.</p>",
@@ -9472,7 +10365,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_cunning_wm8z",
+          "id": "act_cunning_qqef",
           "name": "Cunning",
           "actionType": "legendary",
           "descriptionHtml": "<p>The corrupter escapes nonmagical restraints and ends the grappled and restrained conditions on itself, then moves up to its speed without provoking opportunity attacks.</p>",
@@ -9489,7 +10382,7 @@
           }
         },
         {
-          "id": "act_stab__costs_2_actions__gi1b",
+          "id": "act_stab__costs_2_actions__qjb0",
           "name": "Stab (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The corrupter makes one Whispering Blade attack.</p>",
@@ -9506,7 +10399,7 @@
           }
         },
         {
-          "id": "act_amorphous_escape__costs_3_actions__wy9m",
+          "id": "act_amorphous_escape__costs_3_actions__xcfg",
           "name": "Amorphous Escape (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The corrupter dissolves into a shifting mass of flesh, tentacles, eyes, claws, and mouths. Up to two creatures the corrupter can see within 20 feet of itself must make a DC 20 Intelligence saving throw, taking 18 (4d8) psychic damage on a failed save, or half as much damage on a successful one. This transformation lasts until the end of the corrupter's next turn. While transformed, the corrupter has advantage on attack rolls, attack rolls made against it have disadvantage, and it can move through spaces at least 1 inch wide without squeezing.</p>",
@@ -9534,7 +10427,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_g4iy",
+        "id": "act_lair_action_e20w",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Distraction\",\"entry\":\"A shrill sound fills the lair. Creatures that can hear it must succeed on a DC 15 Constitution saving throw or lose concentration.\"}</p>",
@@ -9554,7 +10447,7 @@
         }
       },
       {
-        "id": "act_lair_action_b95y",
+        "id": "act_lair_action_lt39",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Snares\",\"entry\":\"Hidden snares target up to three creatures the villain can see in the lair. Each creature must succeed on a DC 15 Strength saving throw or have the grappled condition (escape DC 15) and the restrained condition until it escapes or the snare holding it is destroyed. Each snare has AC 11, 10 hit points, and immunity to poison and psychic damage.\"}</p>",
@@ -9574,7 +10467,7 @@
         }
       },
       {
-        "id": "act_lair_action_pl2s",
+        "id": "act_lair_action_j9ml",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Traps\",\"entry\":\"Traps target up to two creatures the villain can see in the lair. Each target must succeed on a DC 15 Dexterity saving throw or be struck by a trap. The villain rolls a number of d6s equal to its proficiency bonus, and struck targets take damage equal to the total. The damage is bludgeoning, piercing, slashing, fire, or poison, chosen by the villain when the villain uses this action.\"}</p>",
@@ -9657,17 +10550,40 @@
         "mod": 8
       }
     },
+    "str": 22,
+    "dex": 18,
+    "con": 23,
+    "int": 20,
+    "wis": 22,
+    "cha": 26,
     "proficiencyBonus": 7,
+    "save": {
+      "int": "+12",
+      "wis": "+13",
+      "cha": "+15"
+    },
     "saves": {
       "int": "+12",
       "wis": "+13",
       "cha": "+15"
+    },
+    "skill": {
+      "perception": "+13",
+      "persuasion": "+15",
+      "stealth": "+11"
     },
     "skills": {
       "perception": "+13",
       "persuasion": "+15",
       "stealth": "+11"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 23,
     "senses": {
       "passivePerception": 23,
       "sensesString": "truesight 120 ft."
@@ -9844,7 +10760,7 @@
     ],
     "traits": [
       {
-        "id": "act_guardian_of_the_market_cbpb",
+        "id": "act_guardian_of_the_market_g1m9",
         "name": "Guardian of the Market",
         "actionType": "trait",
         "descriptionHtml": "<p>Pazrodine can sense when an item is stolen from Seelie Market. She knows the distance and direction to stolen items, as if by the Locate Object spell.</p>",
@@ -9861,7 +10777,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__4gyj",
+        "id": "act_legendary_resistance__3_day__ktbm",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Pazrodine fails a saving throw, she can choose to succeed instead.</p>",
@@ -9880,7 +10796,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wu1o",
+        "id": "act_multiattack_95ki",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Pazrodine makes one Bite attack and two Claw attacks.</p>",
@@ -9897,7 +10813,7 @@
         }
       },
       {
-        "id": "act_bite_hgrh",
+        "id": "act_bite_wb8v",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +13 to hit, reach 15 ft., one target. {@h}17 (2d10 + 6) piercing damage plus 11 (2d10) radiant damage.</p>",
@@ -9923,7 +10839,7 @@
         }
       },
       {
-        "id": "act_claw_t26d",
+        "id": "act_claw_zky3",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +13 to hit, reach 10 ft., one target. {@h}13 (2d6 + 6) slashing damage.</p>",
@@ -9945,7 +10861,7 @@
         }
       },
       {
-        "id": "act_tail_6k3f",
+        "id": "act_tail_jwul",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +13 to hit, reach 20 ft., one target. {@h}10 (1d8 + 6) bludgeoning damage. If the target is a creature, it must succeed on a DC 21 Strength saving throw or have the prone condition.</p>",
@@ -9970,7 +10886,7 @@
         }
       },
       {
-        "id": "act_breath_weapon__recharge_5__o01z",
+        "id": "act_breath_weapon__recharge_5__c0pz",
         "name": "Breath Weapon (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Pazrodine uses one of the following breath weapons:</p><ul><li><strong><em>Dream Breath.</em></strong> <p>Pazrodine exhales mist in a 90-foot cone. Each creature in that area must succeed on a DC 21 Constitution saving throw or have the unconscious condition for 10 minutes. This effect ends for a creature if the creature takes damage or someone uses an action to wake it.</p></li><li><strong><em>Moonlight Breath.</em></strong> <p>Pazrodine exhales a beam of moonlight in a 120-foot line that is 10 feet wide. Each creature in that area must make a DC 21 Dexterity saving throw, taking 60 (11d10) radiant damage on a failed save, or half as much damage on a successful one.</p></li></ul>",
@@ -10002,7 +10918,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_tail_q5le",
+          "id": "act_tail_yb9j",
           "name": "Tail",
           "actionType": "legendary",
           "descriptionHtml": "<p>Pazrodine makes one Tail attack.</p>",
@@ -10019,7 +10935,7 @@
           }
         },
         {
-          "id": "act_cast_a_spell__costs_2_actions__hn4u",
+          "id": "act_cast_a_spell__costs_2_actions__sbem",
           "name": "Cast a Spell (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Pazrodine uses Spellcasting.</p>",
@@ -10039,7 +10955,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_lncf",
+        "id": "act_lair_action_kaht",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>The entire Seelie Market is Pazrodine's lair. Pazrodine's challenge rating is 22 (41,000 XP) when she's encountered in Seelie Market.</p>",
@@ -10056,7 +10972,7 @@
         }
       },
       {
-        "id": "act_lair_action_w0v4",
+        "id": "act_lair_action_mbe0",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Banish into Dream\",\"entry\":\"Pazrodine targets a creature she can see within 120 feet of herself and attempts to send that creature to a dream plane. The target must succeed on a DC 15 Charisma saving throw or be banished to a harmless demiplane until initiative count 20 on the next round. While there, the target has the stunned condition. When the effect ends, the target reappears in the space it left or in the nearest unoccupied space.\"}</p>",
@@ -10076,7 +10992,7 @@
         }
       },
       {
-        "id": "act_lair_action_iwrw",
+        "id": "act_lair_action_yz55",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Overwhelm the Senses\",\"entry\":\"Pazrodine targets up to three creatures she can see within 30 feet of herself. The sounds, sights, and scents of the market intensify for these creatures, overwhelming them with bright colors, echoey chatters, and sweet smells. Each target must succeed on a DC 15 Wisdom saving throw or have the incapacitated condition until the end of its next turn.\"}</p>",
@@ -10096,7 +11012,7 @@
         }
       },
       {
-        "id": "act_lair_action_l674",
+        "id": "act_lair_action_u8sk",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Whirlwind of Fruit\",\"entry\":\"Fey fruit flies out from nearby carts, creating a whirlwind of fruit in a 10-foot-radius, 30-foot-high cylinder centered on a point within 60 feet of Pazrodine until initiative count 20 on the next round. When a creature enters the whirlwind's area for the first time on its turn or starts its turn there, it must make a DC 15 Dexterity saving throw, taking 11 (2d10) bludgeoning damage on a failed save, or half as much damage on a successful one.\"}</p>",
@@ -10184,11 +11100,26 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+2"
+    },
     "skills": {
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "truesight 120 ft."
@@ -10202,7 +11133,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_hkf8",
+        "id": "act_axiomatic_mind_b1cq",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The quadrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -10219,7 +11150,7 @@
         }
       },
       {
-        "id": "act_disintegration_7phd",
+        "id": "act_disintegration_sw88",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the quadrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -10238,7 +11169,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_g10i",
+        "id": "act_multiattack_6fvx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The quadrone makes two fist attacks or four shortbow attacks.</p>",
@@ -10255,7 +11186,7 @@
         }
       },
       {
-        "id": "act_fist_ywye",
+        "id": "act_fist_fpcn",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
@@ -10277,7 +11208,7 @@
         }
       },
       {
-        "id": "act_shortbow_s3lv",
+        "id": "act_shortbow_ldmz",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -10370,9 +11301,31 @@
         "mod": 3
       }
     },
+    "str": 16,
+    "dex": 16,
+    "con": 16,
+    "int": 16,
+    "wis": 16,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 60 ft."
@@ -10386,7 +11339,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_txl4",
+        "id": "act_incorporeal_movement_bgdr",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can move through other creatures and objects as if they were difficult terrain. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes 1d10 force damage for every 5 feet shunted.</p>",
@@ -10410,7 +11363,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_q5rb",
+        "id": "act_multiattack_pdy7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of Reaping Scythe attacks equal to half the level of the spell (rounded down).</p>",
@@ -10427,7 +11380,7 @@
         }
       },
       {
-        "id": "act_reaping_scythe_6xgb",
+        "id": "act_reaping_scythe_tr4u",
         "name": "Reaping Scythe",
         "actionType": "action",
         "descriptionHtml": "<p>mw your spell attack modifier to hit (with advantage), reach 5 ft., the creature haunted by Haunt Creature. {@h}1d8 + 3 + summonSpellLevel necrotic damage.</p>",
@@ -10451,7 +11404,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_haunt_creature_f5o0",
+        "id": "act_haunt_creature_5ln8",
         "name": "Haunt Creature",
         "actionType": "bonus",
         "descriptionHtml": "<p>The spirit targets a creature it can see within 10 feet of itself and begins haunting it. While the target is haunted, you and the spirit sense the direction and distance to the target if it is on the same plane of existence as you. Additionally, if the target starts its turn within 10 feet of the spirit, the target must succeed on a Wisdom saving throw against your spell save DC or have the frightened condition until the start of the target's next turn. The target remains haunted until it dies, the spirit disappears, or the spirit uses this action again.</p>",
@@ -10538,10 +11491,26 @@
         "mod": 3
       }
     },
+    "str": 8,
+    "dex": 16,
+    "con": 12,
+    "int": 11,
+    "wis": 15,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+6",
+      "cha": "+6"
+    },
     "saves": {
       "dex": "+6",
       "cha": "+6"
+    },
+    "skill": {
+      "arcana": "+6",
+      "insight": "+5",
+      "sleight of hand": "+9",
+      "stealth": "+6"
     },
     "skills": {
       "arcana": "+6",
@@ -10549,6 +11518,14 @@
       "sleight of hand": "+9",
       "stealth": "+6"
     },
+    "immune": [],
+    "resist": [
+      "necrotic",
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "darkvision 60 ft."
@@ -10563,7 +11540,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_card_sense_9gx5",
+        "id": "act_card_sense_r8x4",
         "name": "Card Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>The riffler can smell the presence of magical cards, including Decks of Many Things and other magical decks, within 1 mile of itself. It knows the direction to any such cards in that range. Effects that protect a target from divination magic block this sense.</p>",
@@ -10580,7 +11557,7 @@
         }
       },
       {
-        "id": "act_riffling_step_2voa",
+        "id": "act_riffling_step_k7oe",
         "name": "Riffling Step",
         "actionType": "trait",
         "descriptionHtml": "<p>The riffler can burrow through any nonmagical material that isn't iron, shuffling the substance through which the riffler moves aside like cards to form a tunnel that closes behind the riffler.</p>",
@@ -10599,7 +11576,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_93eg",
+        "id": "act_multiattack_xwcq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The riffler makes two Spectral Card attacks.</p>",
@@ -10616,7 +11593,7 @@
         }
       },
       {
-        "id": "act_spectral_card_w8yi",
+        "id": "act_spectral_card_9t8u",
         "name": "Spectral Card",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +6 to hit, reach 5 ft. or range 60 ft., one target. {@h}8 (1d10 + 3) force damage plus 5 (1d10) damage that is radiant if the d10 roll is an even number and necrotic if it's odd.</p>",
@@ -10642,7 +11619,7 @@
         }
       },
       {
-        "id": "act_card_spray__recharge_5__pum4",
+        "id": "act_card_spray__recharge_5__taie",
         "name": "Card Spray (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The riffler magically unleashes a spray of spectral cards in a 30-foot cone. Each creature in that area must make a DC 14 Dexterity saving throw. On a failed save, a creature takes 27 (5d10) force damage and has the restrained condition for 1 minute as cards bind it. On a successful save, a creature takes half as much damage only. A restrained creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -10667,7 +11644,7 @@
         }
       },
       {
-        "id": "act_plane_shift_ijbg",
+        "id": "act_plane_shift_esty",
         "name": "Plane Shift",
         "actionType": "action",
         "descriptionHtml": "<p>The riffler casts the Plane Shift spell targeting only itself, requiring no material components and using Charisma as the spellcasting ability.</p>",
@@ -10687,7 +11664,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shuffle_destiny_77vk",
+        "id": "act_shuffle_destiny_j8pf",
         "name": "Shuffle Destiny",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the riffler can see within 30 feet of itself makes an ability check, an attack roll, or a saving throw, the riffler can magically force that creature to roll a d6 and either add the number rolled to the total or subtract it from the total (riffler's choice), potentially changing the outcome.</p>",
@@ -10773,11 +11750,28 @@
         "mod": -3
       }
     },
+    "str": 16,
+    "dex": 18,
+    "con": 14,
+    "int": 2,
+    "wis": 13,
+    "cha": 4,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+10"
+    },
     "skills": {
       "stealth": "+10"
     },
+    "immune": [
+      "acid"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -10789,7 +11783,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ruinous_acid_pv9d",
+        "id": "act_ruinous_acid_27up",
         "name": "Ruinous Acid",
         "actionType": "trait",
         "descriptionHtml": "<p>Any nonmagical weapon that hits the spider corrodes. After dealing damage, the weapon takes a permanent and cumulative -1 penalty to damage rolls. If its penalty drops to -5, the weapon is destroyed. Nonmagical ammunition made of metal that hits the spider is destroyed after dealing damage.</p>",
@@ -10806,7 +11800,7 @@
         }
       },
       {
-        "id": "act_spider_climb_9ebr",
+        "id": "act_spider_climb_d0ml",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -10823,7 +11817,7 @@
         }
       },
       {
-        "id": "act_web_sense_63tr",
+        "id": "act_web_sense_i1o8",
         "name": "Web Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>While in contact with a web, the spider knows the exact location of any other creature in contact with the same web.</p>",
@@ -10840,7 +11834,7 @@
         }
       },
       {
-        "id": "act_web_walker_pgww",
+        "id": "act_web_walker_0j4r",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider ignores movement restrictions caused by webbing.</p>",
@@ -10859,7 +11853,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_25sv",
+        "id": "act_multiattack_zagp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spider makes two Ruinous Bite attacks. It can replace one attack with a use of Web.</p>",
@@ -10876,7 +11870,7 @@
         }
       },
       {
-        "id": "act_ruinous_bite_ybfu",
+        "id": "act_ruinous_bite_svzo",
         "name": "Ruinous Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) piercing damage and 9 (2d8) acid damage. In addition, if the target is a creature wearing nonmagical armor, the armor takes a permanent and cumulative -1 penalty to the AC it offers. Armor reduced to an Armor Class of 10 is destroyed.</p>",
@@ -10902,7 +11896,7 @@
         }
       },
       {
-        "id": "act_web__recharge_5__iknn",
+        "id": "act_web__recharge_5__1o6m",
         "name": "Web (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>rw +7 to hit, range 30/60 ft., one creature. {@h}The target has the restrained condition. As an action, a restrained target can make a DC 13 Strength check, bursting the webbing on a successful check. The webbing can also be destroyed (AC 10; 5 hit points; vulnerability to fire damage; immunity to acid, bludgeoning, poison, and psychic damage).</p>",
@@ -10993,10 +11987,26 @@
         "mod": 3
       }
     },
+    "str": 18,
+    "dex": 12,
+    "con": 17,
+    "int": 13,
+    "wis": 14,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "str": "+7",
+      "con": "+6"
+    },
     "saves": {
       "str": "+7",
       "con": "+6"
+    },
+    "skill": {
+      "arcana": "+4",
+      "athletics": "+7",
+      "persuasion": "+6",
+      "survival": "+5"
     },
     "skills": {
       "arcana": "+4",
@@ -11004,6 +12014,15 @@
       "persuasion": "+6",
       "survival": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "frightened"
+    ],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -11019,7 +12038,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_lktd",
+        "id": "act_multiattack_1jcj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jared makes three Longsword attacks.</p>",
@@ -11036,7 +12055,7 @@
         }
       },
       {
-        "id": "act_longsword_al7r",
+        "id": "act_longsword_gqez",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage plus 4 (1d8) radiant damage. On a roll of 19 or 20, Jared scores a critical hit.</p>",
@@ -11065,7 +12084,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protect_ally_n6s3",
+        "id": "act_protect_ally_txl1",
         "name": "Protect Ally",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature Jared can see attacks a target other than Jared that is within 5 feet of him, Jared imposes disadvantage on the attack roll.</p>",
@@ -11151,15 +12170,38 @@
         "mod": 3
       }
     },
+    "str": 18,
+    "dex": 10,
+    "con": 17,
+    "int": 15,
+    "wis": 16,
+    "cha": 17,
     "proficiencyBonus": 4,
+    "save": {
+      "wis": "+7",
+      "cha": "+7"
+    },
     "saves": {
       "wis": "+7",
       "cha": "+7"
+    },
+    "skill": {
+      "arcana": "+6",
+      "history": "+6"
     },
     "skills": {
       "arcana": "+6",
       "history": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "frightened"
+    ],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -11260,7 +12302,7 @@
     ],
     "traits": [
       {
-        "id": "act_aura_of_protection_8mw7",
+        "id": "act_aura_of_protection_ymzl",
         "name": "Aura of Protection",
         "actionType": "trait",
         "descriptionHtml": "<p>The knight and each ally within 10 feet of it have advantage on saving throws. This trait is suppressed while the knight has the incapacitated condition.</p>",
@@ -11279,7 +12321,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xbnu",
+        "id": "act_multiattack_zt3f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The knight makes three Sunspear attacks.</p>",
@@ -11296,7 +12338,7 @@
         }
       },
       {
-        "id": "act_sunspear_wdjb",
+        "id": "act_sunspear_afpg",
         "name": "Sunspear",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +8 to hit, reach 5 ft. or range 120 ft., one target. {@h}14 (3d6 + 4) radiant damage, or 21 (5d6 + 4) radiant damage if the target is a Fiend or an Undead.</p>",
@@ -11322,7 +12364,7 @@
         }
       },
       {
-        "id": "act_solar_flare__recharge_5__piys",
+        "id": "act_solar_flare__recharge_5__g32l",
         "name": "Solar Flare (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The knight unleashes a blaze of brilliant energy that fills a 30-foot-radius sphere centered on the knight. Each creature of the knight's choice in that area must make a DC 15 Dexterity saving throw. On a failed save, a creature takes 22 (4d10) radiant damage and has the blinded condition until the end of its next turn. On a successful save, a creature takes half as much damage only. For the next minute, the affected area is filled with bright light that is sunlight.</p>",
@@ -11418,11 +12460,28 @@
         "mod": -3
       }
     },
+    "str": 22,
+    "dex": 14,
+    "con": 19,
+    "int": 5,
+    "wis": 12,
+    "cha": 5,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "frightened"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -11434,7 +12493,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_kblt",
+        "id": "act_magic_resistance_xtkt",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The talon beast has advantage on saving throws against spells and other magical effects.</p>",
@@ -11451,7 +12510,7 @@
         }
       },
       {
-        "id": "act_sense_magic_yj1p",
+        "id": "act_sense_magic_80q3",
         "name": "Sense Magic",
         "actionType": "trait",
         "descriptionHtml": "<p>The talon beast can detect and pinpoint the location of magic within 120 feet of itself.</p>",
@@ -11470,7 +12529,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5fqk",
+        "id": "act_multiattack_eqzq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The talon beast makes two Talon attacks or a Talon attack and a Beak attack.</p>",
@@ -11487,7 +12546,7 @@
         }
       },
       {
-        "id": "act_beak_jhzr",
+        "id": "act_beak_3i5w",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}17 (2d10 + 6) piercing damage, and if the target has any spell effects on itself or any magic items in its possession, the target must make a DC 15 Charisma saving throw. On a failed save, a random spell effect on the target ends. If the target has no spell effects on it, one random magic item in its possession has its magical properties suppressed for 1 minute. If the item is a potion or scroll, it becomes nonmagical instead.</p>",
@@ -11512,7 +12571,7 @@
         }
       },
       {
-        "id": "act_talon_ywnw",
+        "id": "act_talon_y1ni",
         "name": "Talon",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one target. {@h}15 (2d8 + 6) slashing damage, and the target has the grappled condition (escape DC 17). Until the grapple ends, the target has the restrained condition, and the talon beast can't use Talon on another target.</p>",
@@ -11608,15 +12667,40 @@
         "mod": 6
       }
     },
+    "str": 14,
+    "dex": 24,
+    "con": 16,
+    "int": 24,
+    "wis": 20,
+    "cha": 22,
     "proficiencyBonus": 7,
+    "save": {
+      "dex": "+14",
+      "int": "+14"
+    },
     "saves": {
       "dex": "+14",
       "int": "+14"
+    },
+    "skill": {
+      "perception": "+12",
+      "stealth": "+21"
     },
     "skills": {
       "perception": "+12",
       "stealth": "+21"
     },
+    "immune": [],
+    "resist": [
+      "necrotic",
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 22,
     "senses": {
       "passivePerception": 22,
       "sensesString": "truesight 30 ft."
@@ -11630,7 +12714,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inviolate_presence_thrf",
+        "id": "act_inviolate_presence_ul0t",
         "name": "Inviolate Presence",
         "actionType": "trait",
         "descriptionHtml": "<p>The veiled presence can't be targeted by divination magic or by features that would read its mind or determine its creature type.</p>",
@@ -11647,7 +12731,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__sza5",
+        "id": "act_legendary_resistance__3_day__6o9q",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the veiled presence fails a saving throw, it can choose to succeed instead.</p>",
@@ -11666,7 +12750,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fd2q",
+        "id": "act_multiattack_5svz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The veiled presence makes two Blade of Judgment attacks and can use Revelation.</p>",
@@ -11683,7 +12767,7 @@
         }
       },
       {
-        "id": "act_blade_of_judgment_jkfh",
+        "id": "act_blade_of_judgment_9skz",
         "name": "Blade of Judgment",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +14 to hit, reach 5 ft. or range 60 ft., one target. {@h}10 (1d6 + 7) piercing damage plus 27 (6d8) radiant damage. If the target is a creature, it must succeed on a DC 22 Charisma saving throw, or on its next turn, it can either move or take an action, but not both.</p>",
@@ -11712,7 +12796,7 @@
         }
       },
       {
-        "id": "act_revelation_t3go",
+        "id": "act_revelation_j8o3",
         "name": "Revelation",
         "actionType": "action",
         "descriptionHtml": "<p>The veiled presence reveals a glimpse of its otherworldly nature to a creature it can see within 30 feet of itself. The target must succeed on a DC 22 Wisdom saving throw or have the paralyzed condition until the end of its next turn, after which the target is immune to this Revelation for 24 hours.</p>",
@@ -11735,7 +12819,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_ixau",
+        "id": "act_uncanny_dodge_kg29",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker the veiled presence can see hits the veiled presence with an attack, the veiled presence halves the attack's damage against it.</p>",
@@ -11757,7 +12841,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_flash_step_utph",
+          "id": "act_flash_step_37pf",
           "name": "Flash Step",
           "actionType": "legendary",
           "descriptionHtml": "<p>The veiled presence magically teleports, along with any equipment it is wearing or carrying, up to 40 feet to an unoccupied space that it can see.</p>",
@@ -11774,7 +12858,7 @@
           }
         },
         {
-          "id": "act_stab__costs_2_actions__1mxg",
+          "id": "act_stab__costs_2_actions__noef",
           "name": "Stab (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The veiled presence makes one Blade of Judgment attack.</p>",
@@ -11791,7 +12875,7 @@
           }
         },
         {
-          "id": "act_searing_radiance__costs_3_actions__u9g7",
+          "id": "act_searing_radiance__costs_3_actions__9cst",
           "name": "Searing Radiance (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The veiled presence magically emanates dazzling light in a 10-foot-radius sphere centered on itself until the end of its next turn, during which time attack rolls against it have disadvantage and it has advantage on attack rolls. The sphere moves with the veiled presence. When another creature starts its turn in the light or enters the light for the first time on its turn, that creature must make a DC 22 Constitution saving throw, taking 18 (4d8) radiant damage on a failed save, or half as much damage on a successful one.</p>",
@@ -11819,7 +12903,7 @@
     },
     "lairActions": [
       {
-        "id": "act_lair_action_uumy",
+        "id": "act_lair_action_dcya",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Distraction\",\"entry\":\"A shrill sound fills the lair. Creatures that can hear it must succeed on a DC 15 Constitution saving throw or lose concentration.\"}</p>",
@@ -11839,7 +12923,7 @@
         }
       },
       {
-        "id": "act_lair_action_h9qd",
+        "id": "act_lair_action_b2hi",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Snares\",\"entry\":\"Hidden snares target up to three creatures the villain can see in the lair. Each creature must succeed on a DC 15 Strength saving throw or have the grappled condition (escape DC 15) and the restrained condition until it escapes or the snare holding it is destroyed. Each snare has AC 11, 10 hit points, and immunity to poison and psychic damage.\"}</p>",
@@ -11859,7 +12943,7 @@
         }
       },
       {
-        "id": "act_lair_action_klhr",
+        "id": "act_lair_action_lg7c",
         "name": "Lair Action",
         "actionType": "lair",
         "descriptionHtml": "<p>{\"type\":\"item\",\"name\":\"Traps\",\"entry\":\"Traps target up to two creatures the villain can see in the lair. Each target must succeed on a DC 15 Dexterity saving throw or be struck by a trap. The villain rolls a number of d6s equal to its proficiency bonus, and struck targets take damage equal to the total. The damage is bludgeoning, piercing, slashing, fire, or poison, chosen by the villain when the villain uses this action.\"}</p>",
@@ -11942,11 +13026,26 @@
         "mod": -1
       }
     },
+    "str": 16,
+    "dex": 14,
+    "con": 17,
+    "int": 11,
+    "wis": 13,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+5"
+    },
     "skills": {
       "perception": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": ""
@@ -11960,7 +13059,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration_1hcb",
+        "id": "act_regeneration_z7m6",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The werevulture regains 10 hit points at the start of its turn. If the werevulture takes radiant damage, this trait doesn't function at the start of the werevulture's next turn. The werevulture dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -11979,7 +13078,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7q6x",
+        "id": "act_multiattack_fjz9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The werevulture makes two Talon attacks, or it makes a Beak attack and a Talon attack.</p>",
@@ -11996,7 +13095,7 @@
         }
       },
       {
-        "id": "act_beak__vulture_or_hybrid_form_only__6w5e",
+        "id": "act_beak__vulture_or_hybrid_form_only__vdny",
         "name": "Beak (Vulture or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) piercing damage. If the target is a Humanoid, it must succeed on a DC 13 Constitution saving throw or be cursed until targeted by the Remove Curse spell or a similar effect. If the cursed target drops to 0 hit points, it becomes a werevulture under the DM's control and regains 10 hit points.</p>",
@@ -12021,7 +13120,7 @@
         }
       },
       {
-        "id": "act_talon_stze",
+        "id": "act_talon_1ifn",
         "name": "Talon",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}13 (4d4 + 3) slashing damage.</p>",
@@ -12043,7 +13142,7 @@
         }
       },
       {
-        "id": "act_longbow__humanoid_or_hybrid_form_only__osb7",
+        "id": "act_longbow__humanoid_or_hybrid_form_only__rtzn",
         "name": "Longbow (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 150/600 ft., one target. {@h}11 (2d8 + 2) piercing damage.</p>",
@@ -12067,7 +13166,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_7sac",
+        "id": "act_change_shape_g9sy",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The werevulture polymorphs into a vulture-humanoid hybrid, into a vulture, or back into its humanoid form. Its game statistics, other than its speed, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its humanoid form if it dies.</p>",

@@ -57,12 +57,28 @@
         "mod": -3
       }
     },
+    "str": 16,
+    "dex": 12,
+    "con": 16,
+    "int": 3,
+    "wis": 12,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+5"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "blindsight 60 ft."
@@ -74,7 +90,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_jy8w",
+        "id": "act_keen_smell_rpr8",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The demogorgon has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -91,7 +107,7 @@
         }
       },
       {
-        "id": "act_blood_frenzy_pt49",
+        "id": "act_blood_frenzy_c9tj",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The demogorgon has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -108,7 +124,7 @@
         }
       },
       {
-        "id": "act_regeneration_2jvn",
+        "id": "act_regeneration_tvxq",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The demogorgon regains 10 hit points at the start of its turn. If the demogorgon takes acid or fire damage, this trait doesn't function at the start of the demogorgon's next turn. The demogorgon dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -127,7 +143,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_piia",
+        "id": "act_multiattack_c6bx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The demogorgon makes three attacks: one with its bite and two with its claws.</p>",
@@ -144,7 +160,7 @@
         }
       },
       {
-        "id": "act_bite_y8os",
+        "id": "act_bite_zltl",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) piercing damage.</p>",
@@ -166,7 +182,7 @@
         }
       },
       {
-        "id": "act_claw_v8x5",
+        "id": "act_claw_q5m8",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}12 (2d8 + 3) slashing damage.</p>",
@@ -259,15 +275,34 @@
         "mod": 0
       }
     },
+    "str": 9,
+    "dex": 14,
+    "con": 11,
+    "int": 17,
+    "wis": 12,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "int": "+5",
+      "wis": "+3"
+    },
     "saves": {
       "int": "+5",
       "wis": "+3"
+    },
+    "skill": {
+      "arcana": "+5",
+      "history": "+5"
     },
     "skills": {
       "arcana": "+5",
       "history": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -466,7 +501,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_gqvx",
+        "id": "act_quarterstaff_jsq6",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}3 (1d8 -1) bludgeoning damage.</p>",
@@ -559,11 +594,34 @@
         "mod": -2
       }
     },
+    "str": 19,
+    "dex": 12,
+    "con": 20,
+    "int": 5,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [
+      "acid"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "frightened",
+      "stunned"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "darkvision 60 ft."
@@ -576,7 +634,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_2wn5",
+        "id": "act_multiattack_p6pq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The thessalhydra makes one maw attack and one Flurry of Bites.</p>",
@@ -593,7 +651,7 @@
         }
       },
       {
-        "id": "act_flurry_of_bites_coba",
+        "id": "act_flurry_of_bites_5481",
         "name": "Flurry of Bites",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}7 (1d6 + 4) piercing damage plus 10 (4d4) poison damage.</p>",
@@ -619,7 +677,7 @@
         }
       },
       {
-        "id": "act_maw_sy8c",
+        "id": "act_maw_2lty",
         "name": "Maw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}9 (1d10 + 4) piercing damage plus 5 (1d10) acid damage.</p>",
@@ -645,7 +703,7 @@
         }
       },
       {
-        "id": "act_tail_pincer_ir57",
+        "id": "act_tail_pincer_vtb5",
         "name": "Tail Pincer",
         "actionType": "action",
         "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}10 (1d12 + 4) slashing damage, and the target is grappled. As an action, the target can escape the grapple by succeeding on a DC 14 Strength (Athletics) or Dexterity (Acrobatics) check (its choice). Until this grapple ends, the thessalhydra can't use its tail pincer.</p>",
@@ -670,7 +728,7 @@
         }
       },
       {
-        "id": "act_acid_saliva__recharge_5__4z68",
+        "id": "act_acid_saliva__recharge_5__c0x6",
         "name": "Acid Saliva (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The thessalhydra spits a glob of acid at a point it can see within 30 feet of it. Each creature within 10 feet of that point must make a DC 15 Dexterity saving throw, taking 18 (4d8) acid damage on a failed save, or half as much damage on a successful one.</p>",
@@ -702,7 +760,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_hvvn",
+          "id": "act_detect_ow51",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>The thessalhydra makes a Wisdom (Perception) check with advantage.</p>",
@@ -719,7 +777,7 @@
           }
         },
         {
-          "id": "act_tail_swipe_tpbf",
+          "id": "act_tail_swipe_jla0",
           "name": "Tail Swipe",
           "actionType": "legendary",
           "descriptionHtml": "<p>The thessalhydra makes a tail pincer attack.</p>",

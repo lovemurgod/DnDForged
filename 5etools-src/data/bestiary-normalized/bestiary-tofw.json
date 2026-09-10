@@ -57,10 +57,26 @@
         "mod": 3
       }
     },
+    "str": 8,
+    "dex": 16,
+    "con": 12,
+    "int": 15,
+    "wis": 14,
+    "cha": 17,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5",
+      "cha": "+5"
+    },
     "saves": {
       "dex": "+5",
       "cha": "+5"
+    },
+    "skill": {
+      "insight": "+4",
+      "perception": "+4",
+      "performance": "+7",
+      "stealth": "+5"
     },
     "skills": {
       "insight": "+4",
@@ -68,6 +84,11 @@
       "performance": "+7",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -170,7 +191,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_tz5v",
+        "id": "act_multiattack_atbi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The muse makes two Beguiling Resonance attacks.</p>",
@@ -187,7 +208,7 @@
         }
       },
       {
-        "id": "act_beguiling_resonance_mvo0",
+        "id": "act_beguiling_resonance_j2sp",
         "name": "Beguiling Resonance",
         "actionType": "action",
         "descriptionHtml": "<p>ms,rs +5 to hit, reach 5 ft. or range 90 ft., one target. {@h}9 (2d8) psychic damage. If the target is a creature, it must succeed on a DC 13 Charisma saving throw or have disadvantage on the next attack roll it makes until the end of its next turn.</p>",
@@ -214,7 +235,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_enchanting_presence_k70h",
+        "id": "act_enchanting_presence_xlr0",
         "name": "Enchanting Presence",
         "actionType": "bonus",
         "descriptionHtml": "<p>Each creature within 30 feet of the muse must make a DC 13 Wisdom saving throw. On a failed save, the creature has the charmed condition for 1 minute. On a successful save, the creature becomes immune to any muse's Enchanting Presence for 24 hours.</p><p>Whenever the muse deals damage to the charmed creature, the charmed creature can repeat the saving throw, ending the effect on itself on a success.</p>",
@@ -304,12 +325,28 @@
         "mod": -1
       }
     },
+    "str": 18,
+    "dex": 14,
+    "con": 15,
+    "int": 3,
+    "wis": 12,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+6"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -321,7 +358,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_lfb7",
+        "id": "act_keen_smell_jwe9",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The tiger has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -338,7 +375,7 @@
         }
       },
       {
-        "id": "act_pounce_xma1",
+        "id": "act_pounce_r0c7",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the tiger moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the tiger can make one bite attack against it as a bonus action.</p>",
@@ -360,7 +397,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_vf5p",
+        "id": "act_bite_55u3",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}10 (1d10 + 5) piercing damage.</p>",
@@ -382,7 +419,7 @@
         }
       },
       {
-        "id": "act_claw_8842",
+        "id": "act_claw_5kd0",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}12 (2d6 + 5) slashing damage.</p>",
@@ -475,12 +512,28 @@
         "mod": -3
       }
     },
+    "str": 28,
+    "dex": 7,
+    "con": 22,
+    "int": 1,
+    "wis": 8,
+    "cha": 4,
     "proficiencyBonus": 5,
+    "save": {
+      "con": "+11",
+      "wis": "+4"
+    },
     "saves": {
       "con": "+11",
       "wis": "+4"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": "blindsight 30 ft., tremorsense 60 ft."
@@ -492,7 +545,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_tunneler_7em8",
+        "id": "act_tunneler_q5xn",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The worm can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
@@ -511,7 +564,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vnsb",
+        "id": "act_multiattack_6lc1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The worm makes two attacks: one with its bite and one with its stinger.</p>",
@@ -528,7 +581,7 @@
         }
       },
       {
-        "id": "act_bite_ok5m",
+        "id": "act_bite_884l",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 10 ft., one target. {@h}22 (3d8 + 9) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or be swallowed by the worm. A swallowed creature is blinded and restrained, it has Cover against attacks and other effects outside the worm, and it takes 21 (6d6) acid damage at the start of each of the worm's turns.</p><p>If the worm takes 30 damage or more on a single turn from a creature inside it, the worm must succeed on a DC 21 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of the worm. If the worm dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -557,7 +610,7 @@
         }
       },
       {
-        "id": "act_tail_stinger_5xc6",
+        "id": "act_tail_stinger_np43",
         "name": "Tail Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>mw +14 to hit, reach 10 ft., one creature. {@h}19 (3d6 + 9) piercing damage, and the target must make a DC 19 Constitution saving throw, taking 42 (12d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -657,8 +710,24 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 15,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+5",
+      "insight": "+4",
+      "investigation": "+5",
+      "perception": "+6",
+      "persuasion": "+5",
+      "sleight of hand": "+4",
+      "stealth": "+4"
+    },
     "skills": {
       "deception": "+5",
       "insight": "+4",
@@ -668,6 +737,11 @@
       "sleight of hand": "+4",
       "stealth": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": ""
@@ -681,7 +755,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_55xk",
+        "id": "act_cunning_action_xomj",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of its turns, the spy can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -698,7 +772,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__dxll",
+        "id": "act_sneak_attack__1_turn__65tw",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spy deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
@@ -722,7 +796,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nqpy",
+        "id": "act_multiattack_a62m",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spy makes two melee attacks.</p>",
@@ -739,7 +813,7 @@
         }
       },
       {
-        "id": "act_shortsword_ulez",
+        "id": "act_shortsword_bj8v",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -761,7 +835,7 @@
         }
       },
       {
-        "id": "act_hand_crossbow_vxt4",
+        "id": "act_hand_crossbow_dnm0",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
@@ -854,11 +928,26 @@
         "mod": 0
       }
     },
+    "str": 15,
+    "dex": 11,
+    "con": 14,
+    "int": 10,
+    "wis": 10,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "intimidation": "+2"
+    },
     "skills": {
       "intimidation": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -872,7 +961,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_6peu",
+        "id": "act_pack_tactics_dac4",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The thug has advantage on an attack roll against a creature if at least one of the thug's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -891,7 +980,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ekmd",
+        "id": "act_multiattack_iupi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The thug makes two melee attacks.</p>",
@@ -908,7 +997,7 @@
         }
       },
       {
-        "id": "act_mace_e4a4",
+        "id": "act_mace_pzo8",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
@@ -930,7 +1019,7 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_43we",
+        "id": "act_heavy_crossbow_nh91",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>rw +2 to hit, range 100/400 ft., one target. {@h}5 (1d10) piercing damage.</p>",
@@ -1023,12 +1112,30 @@
         "mod": 1
       }
     },
+    "str": 23,
+    "dex": 16,
+    "con": 18,
+    "int": 7,
+    "wis": 14,
+    "cha": 12,
     "proficiencyBonus": 4,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+6",
+      "stealth": "+7"
+    },
     "skills": {
       "perception": "+6",
       "stealth": "+7"
     },
+    "immune": [
+      "lightning"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "darkvision 90 ft."
@@ -1043,7 +1150,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_b3kk",
+        "id": "act_multiattack_hktj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes two attacks: one with its bite and one to constrict.</p>",
@@ -1060,7 +1167,7 @@
         }
       },
       {
-        "id": "act_bite_o4up",
+        "id": "act_bite_uwrd",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}22 (3d10 + 6) piercing damage.</p>",
@@ -1082,7 +1189,7 @@
         }
       },
       {
-        "id": "act_constrict_g266",
+        "id": "act_constrict_5ihv",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one Large or smaller creature. {@h}17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the behir isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
@@ -1111,7 +1218,7 @@
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__1217",
+        "id": "act_lightning_breath__recharge_5__hnpk",
         "name": "Lightning Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The behir exhales a line of lightning that is 20 feet long and 5 feet wide. Each creature in that line must make a DC 16 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1136,7 +1243,7 @@
         }
       },
       {
-        "id": "act_swallow_xsbw",
+        "id": "act_swallow_egid",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the behir, and it takes 21 (6d6) acid damage at the start of each of the behir's turns. A behir can have only one creature swallowed at a time.</p><p>If the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the behir. If the behir dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
@@ -1232,11 +1339,26 @@
         "mod": 0
       }
     },
+    "str": 16,
+    "dex": 10,
+    "con": 14,
+    "int": 12,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -1250,7 +1372,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_ty9u",
+        "id": "act_pack_tactics_pmeo",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The peacekeeper has advantage on an attack roll against a creature if at least one of the peacekeeper's allies is within 5 feet of the creature and the ally doesn't have the incapacitated condition.</p>",
@@ -1269,7 +1391,7 @@
     ],
     "actions": [
       {
-        "id": "act_electrified_mancatcher_rp4u",
+        "id": "act_electrified_mancatcher_x1u2",
         "name": "Electrified Mancatcher",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 10 ft., one target. {@h}8 (1d10 + 3) piercing damage plus 4 (1d8) lightning damage. If the target is a Large or smaller creature, it has the grappled condition (escape DC 13). Until the grappled condition ends, the target has the restrained condition and can't teleport, the peacekeeper can't make Electrified Mancatcher attacks, and the target takes 8 (1d10 + 3) lightning damage at the start of each of its turns.</p>",
@@ -1373,12 +1495,30 @@
         "mod": 0
       }
     },
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 16,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "str": "+5",
+      "con": "+4"
+    },
     "saves": {
       "str": "+5",
       "con": "+4"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [
+      "fire"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -1393,7 +1533,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_iqvx",
+        "id": "act_multiattack_md2p",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fire starter makes two Havoc Hammer or Havoc Flask attacks.</p>",
@@ -1410,7 +1550,7 @@
         }
       },
       {
-        "id": "act_havoc_hammer_cpwv",
+        "id": "act_havoc_hammer_td5c",
         "name": "Havoc Hammer",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage plus 9 (2d8) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 (1d6) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 13 Dexterity saving throw, ending the effect on itself on a successful save.</p>",
@@ -1443,7 +1583,7 @@
         }
       },
       {
-        "id": "act_havoc_flask_zryy",
+        "id": "act_havoc_flask_3cxq",
         "name": "Havoc Flask",
         "actionType": "action",
         "descriptionHtml": "<p>rw +4 to hit, range 30/90 ft., one target. {@h}13 (2d12) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 (1d6) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 13 Dexterity saving throw, ending the effect on itself on a successful save.</p><p>After the fire starter throws the flask, roll a d6; on a 3 or lower, the fire starter has no more flasks to throw.</p>",
@@ -1543,17 +1683,48 @@
         "mod": 8
       }
     },
+    "str": 30,
+    "dex": 21,
+    "con": 30,
+    "int": 21,
+    "wis": 22,
+    "cha": 27,
     "proficiencyBonus": 7,
+    "save": {
+      "str": "+17",
+      "int": "+12",
+      "wis": "+13",
+      "cha": "+15"
+    },
     "saves": {
       "str": "+17",
       "int": "+12",
       "wis": "+13",
       "cha": "+15"
     },
+    "skill": {
+      "insight": "+13",
+      "persuasion": "+15"
+    },
     "skills": {
       "insight": "+13",
       "persuasion": "+15"
     },
+    "immune": [
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "truesight 120 ft."
@@ -1798,7 +1969,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__73i4",
+        "id": "act_legendary_resistance__3_day__0pzw",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the empyrean fails a saving throw, it can choose to succeed instead.</p>",
@@ -1815,7 +1986,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_aah8",
+        "id": "act_magic_resistance_krpm",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The empyrean has advantage on saving throws against spells and other magical effects.</p>",
@@ -1832,7 +2003,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_m5ue",
+        "id": "act_magic_weapons_4i9x",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The empyrean's weapon attacks are magical.</p>",
@@ -1851,7 +2022,7 @@
     ],
     "actions": [
       {
-        "id": "act_maul_nzxa",
+        "id": "act_maul_p8lx",
         "name": "Maul",
         "actionType": "action",
         "descriptionHtml": "<p>mw +17 to hit, reach 10 ft., one target. {@h}31 (6d6 + 10) bludgeoning damage. If the target is a creature, it must succeed on a DC 15 Constitution saving throw or be stunned until the end of the empyrean's next turn.</p>",
@@ -1876,7 +2047,7 @@
         }
       },
       {
-        "id": "act_bolt_wnxx",
+        "id": "act_bolt_4lkb",
         "name": "Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>rs +15 to hit, range 600 ft., one target. {@h}24 (7d6) damage of one of the following types (empyrean's choice): acid, cold, fire, force, lightning, radiant, or thunder.</p>",
@@ -1905,7 +2076,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_uk2i",
+          "id": "act_attack_ccb9",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The empyrean makes one attack.</p>",
@@ -1922,7 +2093,7 @@
           }
         },
         {
-          "id": "act_bolster_6hzy",
+          "id": "act_bolster_2qyh",
           "name": "Bolster",
           "actionType": "legendary",
           "descriptionHtml": "<p>The empyrean bolsters all nonhostile creatures within 120 feet of it until the end of its next turn. Bolstered creatures can't be charmed or frightened, and they gain advantage on ability checks and saving throws until the end of the empyrean's next turn.</p>",
@@ -1939,7 +2110,7 @@
           }
         },
         {
-          "id": "act_trembling_strike__costs_2_actions__1fo6",
+          "id": "act_trembling_strike__costs_2_actions__4lo2",
           "name": "Trembling Strike (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The empyrean strikes the ground with its maul, triggering an earth tremor. All other creatures on the ground within 60 feet of the empyrean must succeed on a DC 25 Strength saving throw or be knocked prone.</p>",
@@ -2024,11 +2195,50 @@
         "mod": 5
       }
     },
+    "str": 27,
+    "dex": 10,
+    "con": 26,
+    "int": 15,
+    "wis": 20,
+    "cha": 20,
     "proficiencyBonus": 7,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+12"
+    },
     "skills": {
       "perception": "+12"
     },
+    "immune": [
+      "necrotic",
+      "poison",
+      "radiant",
+      {
+        "immune": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "restrained",
+      "stunned",
+      "unconscious"
+    ],
+    "passive": 22,
     "senses": {
       "passivePerception": 22,
       "sensesString": "truesight 120 ft."
@@ -2042,7 +2252,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__prk2",
+        "id": "act_legendary_resistance__3_day__lmc6",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the incarnate fails a saving throw, it can choose to succeed instead.</p>",
@@ -2059,7 +2269,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_igd7",
+        "id": "act_magic_resistance_iyh9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnate has advantage on saving throws against spells and other magical effects.</p>",
@@ -2076,7 +2286,7 @@
         }
       },
       {
-        "id": "act_planar_form_2cy8",
+        "id": "act_planar_form_2aou",
         "name": "Planar Form",
         "actionType": "trait",
         "descriptionHtml": "<p>An incarnate on the Upper Planes is a Celestial. An incarnate on the Lower Planes is a Fiend.</p>",
@@ -2093,7 +2303,7 @@
         }
       },
       {
-        "id": "act_siege_monster_tvok",
+        "id": "act_siege_monster_e6d1",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnate deals double damage to objects and structures.</p>",
@@ -2112,7 +2322,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_870r",
+        "id": "act_multiattack_d08s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnate makes two Slam or Energy Bolt attacks.</p>",
@@ -2129,7 +2339,7 @@
         }
       },
       {
-        "id": "act_slam_uvw8",
+        "id": "act_slam_1eqj",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +15 to hit, reach 15 ft., one target. {@h}27 (3d12 + 8) force damage.</p>",
@@ -2151,7 +2361,7 @@
         }
       },
       {
-        "id": "act_energy_bolt_f30e",
+        "id": "act_energy_bolt_3w3a",
         "name": "Energy Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>rs +12 to hit, range 120 ft., one target. {@h}32 (5d12) necrotic damage if the incarnate is a Fiend or radiant damage if the incarnate is a Celestial.</p>",
@@ -2173,7 +2383,7 @@
         }
       },
       {
-        "id": "act_planar_exhalation__recharge_5__fsfl",
+        "id": "act_planar_exhalation__recharge_5__pbfp",
         "name": "Planar Exhalation (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnate exhales concentrated energy native to its plane in a 60-foot cone. Each creature in that area must make a DC 23 Constitution saving throw. On a failed save, a creature takes 52 (8d12) necrotic damage if the incarnate is a Fiend or radiant damage if the incarnate is a Celestial, and the creature has the blinded condition until the end of the incarnate's next turn. On a successful save, a creature takes half as much damage only.</p>",
@@ -2201,7 +2411,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_searing_gaze_rnjr",
+        "id": "act_searing_gaze_qaw3",
         "name": "Searing Gaze",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by an attack roll, the incarnate turns its magical gaze toward one creature it can see within 120 feet of itself and commands it to combust. The target must succeed on a DC 20 Wisdom saving throw or take 16 (3d10) fire damage.</p>",
@@ -2226,7 +2436,7 @@
         }
       },
       {
-        "id": "act_teleport_o6ps",
+        "id": "act_teleport_g9if",
         "name": "Teleport",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after a creature the incarnate sees ends its turn, the incarnate teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -2312,12 +2522,35 @@
         "mod": 1
       }
     },
+    "str": 10,
+    "dex": 16,
+    "con": 16,
+    "int": 13,
+    "wis": 10,
+    "cha": 12,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "arcana": "+3",
+      "stealth": "+5"
+    },
     "skills": {
       "arcana": "+3",
       "stealth": "+5"
     },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [
+      "bludgeoning"
+    ],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "darkvision 60 ft."
@@ -2332,7 +2565,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_2472",
+        "id": "act_bite_6ftv",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
@@ -2425,9 +2658,22 @@
         "mod": 2
       }
     },
+    "str": 22,
+    "dex": 9,
+    "con": 17,
+    "int": 10,
+    "wis": 14,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -2441,7 +2687,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_trampling_charge_g9yr",
+        "id": "act_trampling_charge_lvqu",
         "name": "Trampling Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elephant moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 12 Strength saving throw or be knocked prone. If the target is prone, the elephant can make one stomp attack against it as a bonus action.</p>",
@@ -2463,7 +2709,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_v17d",
+        "id": "act_gore_nex2",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}19 (3d8 + 6) piercing damage.</p>",
@@ -2485,7 +2731,7 @@
         }
       },
       {
-        "id": "act_stomp_zird",
+        "id": "act_stomp_6zrd",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one prone creature. {@h}22 (3d10 + 6) bludgeoning damage.</p>",
@@ -2578,11 +2824,26 @@
         "mod": 2
       }
     },
+    "str": 16,
+    "dex": 17,
+    "con": 13,
+    "int": 16,
+    "wis": 14,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -2596,7 +2857,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_obxt",
+        "id": "act_keen_sight_oi3m",
         "name": "Keen Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The eagle has advantage on Wisdom (Perception) checks that rely on sight.</p>",
@@ -2615,7 +2876,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_lsij",
+        "id": "act_multiattack_kt4s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eagle makes two attacks: one with its beak and one with its talons.</p>",
@@ -2632,7 +2893,7 @@
         }
       },
       {
-        "id": "act_beak_zqww",
+        "id": "act_beak_gdej",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
@@ -2654,7 +2915,7 @@
         }
       },
       {
-        "id": "act_talons_hjzm",
+        "id": "act_talons_89q3",
         "name": "Talons",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) slashing damage.</p>",
@@ -2747,9 +3008,22 @@
         "mod": -3
       }
     },
+    "str": 10,
+    "dex": 13,
+    "con": 12,
+    "int": 8,
+    "wis": 10,
+    "cha": 5,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "truesight 120 ft."
@@ -2764,7 +3038,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_ijw7",
+        "id": "act_axiomatic_mind_fs04",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The monodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2781,7 +3055,7 @@
         }
       },
       {
-        "id": "act_disintegration_mlc3",
+        "id": "act_disintegration_ythj",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the monodrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -2800,7 +3074,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_q3s7",
+        "id": "act_dagger_nxyk",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
@@ -2822,7 +3096,7 @@
         }
       },
       {
-        "id": "act_javelin_rqgg",
+        "id": "act_javelin_ivp4",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>mw,rw +2 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}3 (1d6) piercing damage.</p>",
@@ -2915,15 +3189,49 @@
         "mod": 5
       }
     },
+    "str": 18,
+    "dex": 18,
+    "con": 18,
+    "int": 17,
+    "wis": 20,
+    "cha": 20,
     "proficiencyBonus": 4,
+    "save": {
+      "wis": "+9",
+      "cha": "+9"
+    },
     "saves": {
       "wis": "+9",
       "cha": "+9"
+    },
+    "skill": {
+      "insight": "+9",
+      "perception": "+9"
     },
     "skills": {
       "insight": "+9",
       "perception": "+9"
     },
+    "immune": [],
+    "resist": [
+      "radiant",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened"
+    ],
+    "passive": 19,
     "senses": {
       "passivePerception": 19,
       "sensesString": "darkvision 120 ft."
@@ -3026,7 +3334,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_yd67",
+        "id": "act_angelic_weapons_fe5w",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The deva's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
@@ -3048,7 +3356,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_zmjr",
+        "id": "act_magic_resistance_r920",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The deva has advantage on saving throws against spells and other magical effects.</p>",
@@ -3067,7 +3375,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qxwi",
+        "id": "act_multiattack_uvl9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The deva makes two melee attacks.</p>",
@@ -3084,7 +3392,7 @@
         }
       },
       {
-        "id": "act_mace_6kq1",
+        "id": "act_mace_58bg",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
@@ -3110,7 +3418,7 @@
         }
       },
       {
-        "id": "act_healing_touch__3_day__1mq6",
+        "id": "act_healing_touch__3_day__ekwy",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The deva touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -3127,7 +3435,7 @@
         }
       },
       {
-        "id": "act_change_shape_1gpn",
+        "id": "act_change_shape_qfqq",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The deva magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the deva retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
@@ -3215,12 +3523,30 @@
         "mod": 2
       }
     },
+    "str": 11,
+    "dex": 18,
+    "con": 14,
+    "int": 11,
+    "wis": 12,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+6",
+      "insight": "+3"
+    },
     "skills": {
       "deception": "+6",
       "insight": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "darkvision 60 ft."
@@ -3234,7 +3560,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_8kc5",
+        "id": "act_shapechanger_1rrz",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The doppelganger can use its action to polymorph into a Small or Medium humanoid it has seen, or back into its true form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -3251,7 +3577,7 @@
         }
       },
       {
-        "id": "act_ambusher_jep9",
+        "id": "act_ambusher_yxnz",
         "name": "Ambusher",
         "actionType": "trait",
         "descriptionHtml": "<p>In the first round of a combat, the doppelganger has advantage on attack rolls against any creature it surprised.</p>",
@@ -3268,7 +3594,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_825g",
+        "id": "act_surprise_attack_ovvw",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If the doppelganger surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 10 (3d6) damage from the attack.</p>",
@@ -3292,7 +3618,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_cbty",
+        "id": "act_multiattack_bj8p",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The doppelganger makes two melee attacks.</p>",
@@ -3309,7 +3635,7 @@
         }
       },
       {
-        "id": "act_slam_hmgo",
+        "id": "act_slam_20l0",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage.</p>",
@@ -3331,7 +3657,7 @@
         }
       },
       {
-        "id": "act_read_thoughts_ge6w",
+        "id": "act_read_thoughts_4nrf",
         "name": "Read Thoughts",
         "actionType": "action",
         "descriptionHtml": "<p>The doppelganger magically reads the surface thoughts of one creature within 60 feet of it. The effect can penetrate barriers, but 3 feet of wood or dirt, 2 feet of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, the doppelganger can continue reading its thoughts, as long as the doppelganger's concentration isn't broken (as if concentration on a spell). While reading the target's mind, the doppelganger has advantage on Wisdom (Insight) and Charisma (Deception, Intimidation, and Persuasion) checks against the target.</p>",
@@ -3419,11 +3745,26 @@
         "mod": -2
       }
     },
+    "str": 21,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+5"
+    },
     "skills": {
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -3435,7 +3776,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_agbe",
+        "id": "act_hold_breath_zzhh",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The crocodile can hold its breath for 30 minutes.</p>",
@@ -3454,7 +3795,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9hx0",
+        "id": "act_multiattack_sars",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The crocodile makes two attacks: one with its bite and one with its tail.</p>",
@@ -3471,7 +3812,7 @@
         }
       },
       {
-        "id": "act_bite_v3d6",
+        "id": "act_bite_omum",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}21 (3d10 + 5) piercing damage, and the target is grappled (escape DC 16). Until this grapple ends, the target is restrained, and the crocodile can't bite another target.</p>",
@@ -3496,7 +3837,7 @@
         }
       },
       {
-        "id": "act_tail_6zv0",
+        "id": "act_tail_wchz",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target not grappled by the crocodile. {@h}14 (2d8 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 16 Strength saving throw or be knocked prone.</p>",
@@ -3592,13 +3933,40 @@
         "mod": 2
       }
     },
+    "str": 19,
+    "dex": 16,
+    "con": 17,
+    "int": 19,
+    "wis": 17,
+    "cha": 15,
     "proficiencyBonus": 5,
+    "save": {
+      "int": "+9",
+      "wis": "+8"
+    },
     "saves": {
       "int": "+9",
       "wis": "+8"
     },
+    "skill": {
+      "perception": "+13"
+    },
     "skills": {
       "perception": "+13"
+    },
+    "immune": [],
+    "resist": [
+      "lightning",
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 23,
+    "initiative": {
+      "advantageMode": "adv"
     },
     "senses": {
       "passivePerception": 23,
@@ -3744,7 +4112,7 @@
     ],
     "traits": [
       {
-        "id": "act_axiomatic_mind_p8lh",
+        "id": "act_axiomatic_mind_7btm",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The hexton can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -3761,7 +4129,7 @@
         }
       },
       {
-        "id": "act_combat_ready_gada",
+        "id": "act_combat_ready_5oir",
         "name": "Combat Ready",
         "actionType": "trait",
         "descriptionHtml": "<p>The hexton has advantage on initiative rolls.</p>",
@@ -3778,7 +4146,7 @@
         }
       },
       {
-        "id": "act_disintegration_z5ld",
+        "id": "act_disintegration_38xl",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hexton dies, its body disintegrates into dust, leaving behind anything it was carrying.</p>",
@@ -3795,7 +4163,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__6l5k",
+        "id": "act_legendary_resistance__4_day__fipb",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hexton fails a saving throw, it can choose to succeed instead.</p>",
@@ -3814,7 +4182,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r5sa",
+        "id": "act_multiattack_en3j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hexton makes one Pincer attack and two Tentacle attacks.</p>",
@@ -3831,7 +4199,7 @@
         }
       },
       {
-        "id": "act_pincer_3tng",
+        "id": "act_pincer_t1te",
         "name": "Pincer",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one target. {@h}13 (2d8 + 4) bludgeoning damage plus 10 (3d6) force damage. If the target is a creature, it must succeed on a DC 17 Constitution saving throw or have the incapacitated condition until the end of its next turn.</p>",
@@ -3860,7 +4228,7 @@
         }
       },
       {
-        "id": "act_tentacle_j7cn",
+        "id": "act_tentacle_9pk7",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one target. {@h}15 (2d10 + 4) piercing damage, and if the target is a Medium or smaller creature, it has the grappled condition (escape DC 14). Until this grapple ends, the hexton can't use this tentacle against other targets. The hexton has six tentacles, each of which can grapple one target.</p>",
@@ -3888,7 +4256,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_counter_magic_aht7",
+        "id": "act_counter_magic_ltyw",
         "name": "Counter Magic",
         "actionType": "reaction",
         "descriptionHtml": "<p>The hexton attempts to interrupt a creature it can see that is casting a spell. If the spell is 3rd level or lower, it fails and has no effect. If the spell is 4th level or higher, the hexton makes an Intelligence check (DC 10 + the spell's level). On a success, the spell fails and has no effect.</p>",
@@ -3908,7 +4276,7 @@
         }
       },
       {
-        "id": "act_lightning_rebuke_rrct",
+        "id": "act_lightning_rebuke_2v6y",
         "name": "Lightning Rebuke",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature within 120 feet of the hexton damages it, the hexton magically retaliates with an arc of lightning. The creature must make a DC 17 Dexterity saving throw, taking 11 (2d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -4002,17 +4370,38 @@
         "mod": 3
       }
     },
+    "str": 13,
+    "dex": 17,
+    "con": 15,
+    "int": 15,
+    "wis": 17,
+    "cha": 16,
     "proficiencyBonus": 3,
+    "save": {
+      "str": "+4",
+      "dex": "+6",
+      "int": "+5",
+      "wis": "+6"
+    },
     "saves": {
       "str": "+4",
       "dex": "+6",
       "int": "+5",
       "wis": "+6"
     },
+    "skill": {
+      "insight": "+6",
+      "perception": "+6"
+    },
     "skills": {
       "insight": "+6",
       "perception": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": ""
@@ -4136,7 +4525,7 @@
     ],
     "traits": [
       {
-        "id": "act_psychic_defense_5z9w",
+        "id": "act_psychic_defense_cn9b",
         "name": "Psychic Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While the githzerai is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -4155,7 +4544,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zjc2",
+        "id": "act_multiattack_lpr7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The githzerai makes three Unarmed Strike or Psychic Bolt attacks. It can replace any of these attacks with one use of its Pacifying Touch.</p>",
@@ -4172,7 +4561,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_m5h6",
+        "id": "act_unarmed_strike_qavn",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage plus 10 (3d6) psychic damage.</p>",
@@ -4198,7 +4587,7 @@
         }
       },
       {
-        "id": "act_psychic_bolt_mwrw",
+        "id": "act_psychic_bolt_4xrt",
         "name": "Psychic Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>rs +6 to hit, range 60 ft., one creature. {@h}17 (5d6) psychic damage.</p>",
@@ -4220,7 +4609,7 @@
         }
       },
       {
-        "id": "act_pacifying_touch_ckqk",
+        "id": "act_pacifying_touch_sa9y",
         "name": "Pacifying Touch",
         "actionType": "action",
         "descriptionHtml": "<p>The githzerai touches one creature it can see within 5 feet of itself. The target must succeed on a DC 14 Intelligence saving throw, or the githzerai chooses an action for that target: Attack, Cast a Spell, or Dash. The affected target can't take that action for 1 minute. At the end of each of the target's turns, it can repeat the saving throw, ending the effect on itself on a successful save. A target that succeeds on the saving throw becomes immune to this githzerai's Pacifying Touch for 24 hours.</p>",

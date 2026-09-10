@@ -57,10 +57,40 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 10,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
+    },
+    "immune": [
+      "acid",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 14,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 14,
@@ -75,7 +105,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_disintegration_g0iq",
+        "id": "act_disintegration_5xq1",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
@@ -92,7 +122,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_9xui",
+        "id": "act_magic_resistance_pt0c",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
@@ -111,7 +141,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_81kv",
+        "id": "act_multiattack_63r6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two attacks, using Extended Fist or Acid Spittle in any combination.</p>",
@@ -128,7 +158,7 @@
         }
       },
       {
-        "id": "act_extended_fist_wmgf",
+        "id": "act_extended_fist_tj5w",
         "name": "Extended Fist",
         "actionType": "action",
         "descriptionHtml": "<p>m +6, reach 15 ft. {@h}8 (1d8 + 4) Bludgeoning damage plus 5 (1d10) Acid damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 14) from one of two fists.</p>",
@@ -157,7 +187,7 @@
         }
       },
       {
-        "id": "act_acid_spittle_jmhs",
+        "id": "act_acid_spittle_cb3o",
         "name": "Acid Spittle",
         "actionType": "action",
         "descriptionHtml": "<p>r +6, range 60 ft. {@h}13 (2d8 + 4) Acid damage.</p>",
@@ -250,13 +280,42 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 12,
+    "con": 16,
+    "int": 12,
+    "wis": 9,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+4",
+      "int": "+4",
+      "cha": "+6"
+    },
     "saves": {
       "dex": "+4",
       "int": "+4",
       "cha": "+6"
     },
+    "skill": {},
     "skills": {},
+    "immune": [
+      "fire",
+      "lightning"
+    ],
+    "resist": [
+      "force"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 9,
     "senses": {
       "passivePerception": 9,
       "sensesString": "Blindsight 60 ft."
@@ -270,7 +329,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_uyy5",
+        "id": "act_magic_resistance_j6pz",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The eddy has Advantage on saving throws against spells and other magical effects.</p>",
@@ -289,7 +348,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_za3p",
+        "id": "act_multiattack_1ld1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eddy makes two attacks, using Searing Swipe or Arcane Bolt in any combination.</p>",
@@ -306,7 +365,7 @@
         }
       },
       {
-        "id": "act_searing_swipe_ybm5",
+        "id": "act_searing_swipe_2hj8",
         "name": "Searing Swipe",
         "actionType": "action",
         "descriptionHtml": "<p>m +6, reach 10 ft. {@h}13 (3d6 + 3) Fire or Lightning damage (eddy's choice).</p>",
@@ -328,7 +387,7 @@
         }
       },
       {
-        "id": "act_arcane_bolt_7tsl",
+        "id": "act_arcane_bolt_huqm",
         "name": "Arcane Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>r +6, range 120 ft. {@h}14 (2d10 + 3) Force damage.</p>",
@@ -353,7 +412,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_eldritch_overload_mnc4",
+        "id": "act_eldritch_overload_m771",
         "name": "Eldritch Overload",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The eddy takes damage. dstr DC 14, each creature of the eddy's choice in a 5-foot Emanation [Area of Effect] originating from the eddy. {@actSaveFail} 7 (2d6) Force damage, and the target has the Prone condition.</p>",
@@ -447,17 +506,45 @@
         "mod": 4
       }
     },
+    "str": 18,
+    "dex": 16,
+    "con": 17,
+    "int": 17,
+    "wis": 16,
+    "cha": 18,
     "proficiencyBonus": 5,
+    "save": {
+      "con": "+8",
+      "int": "+8",
+      "wis": "+8",
+      "cha": "+9"
+    },
     "saves": {
       "con": "+8",
       "int": "+8",
       "wis": "+8",
       "cha": "+9"
     },
+    "skill": {
+      "arcana": "+13",
+      "insight": "+8",
+      "perception": "+8"
+    },
     "skills": {
       "arcana": "+13",
       "insight": "+8",
       "perception": "+8"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 18,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 18,
@@ -738,7 +825,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_xq0l",
+        "id": "act_magic_resistance_02gf",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
@@ -757,7 +844,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8dmf",
+        "id": "act_multiattack_n20a",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm makes three Mind Lash attacks. It can replace one attack with either (A) a Vicious Stinger attack or (B) a use of Spellcasting to cast Command (level 3 version).</p>",
@@ -774,7 +861,7 @@
         }
       },
       {
-        "id": "act_mind_lash_sxzi",
+        "id": "act_mind_lash_r5l3",
         "name": "Mind Lash",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +9, reach 10 ft. or range 120 ft. {@h}32 (6d8 + 4) Psychic damage.</p>",
@@ -796,7 +883,7 @@
         }
       },
       {
-        "id": "act_vicious_stinger_4ert",
+        "id": "act_vicious_stinger_db18",
         "name": "Vicious Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>m +9, reach 5 ft. {@h}11 (2d6 + 4) Piercing damage plus 26 (4d12) Poison damage, and the target's Speed is reduced to 0 feet until the start of the phaerimm's next turn.</p>",
@@ -822,7 +909,7 @@
         }
       },
       {
-        "id": "act_siphon_magic__recharge_5__g2ad",
+        "id": "act_siphon_magic__recharge_5__bnj9",
         "name": "Siphon Magic (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm focuses on a magic item it can see within 10 feet. When it does, the phaerimm drains the magic item of any charges. Regardless of whether charges are drained, the phaerimm can cast Clairvoyance, Geas, Major Image, and Mirage Arcane one additional time that day.</p>",
@@ -841,7 +928,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_teleport_w0pi",
+        "id": "act_teleport_ko6z",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>The phaerimm teleports up to 30 feet to an unoccupied space it can see.</p>",
@@ -928,13 +1015,36 @@
         "mod": 3
       }
     },
+    "str": 12,
+    "dex": 13,
+    "con": 12,
+    "int": 15,
+    "wis": 16,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {
+      "int": "+4",
+      "cha": "+5"
+    },
     "saves": {
       "int": "+4",
       "cha": "+5"
     },
+    "skill": {
+      "perception": "+5"
+    },
     "skills": {
       "perception": "+5"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed"
+    ],
+    "passive": 15,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 15,
@@ -1057,7 +1167,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_hnx0",
+        "id": "act_magic_resistance_586m",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1076,7 +1186,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4bv1",
+        "id": "act_multiattack_3y4g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm makes two attacks, using Stinger or Mindwarp Ray in any combination.</p>",
@@ -1093,7 +1203,7 @@
         }
       },
       {
-        "id": "act_stinger_arcq",
+        "id": "act_stinger_qxm6",
         "name": "Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>m +3, reach 5 ft. {@h}4 (1d6 + 1) Piercing damage plus 9 (2d8) Poison damage.</p>",
@@ -1119,7 +1229,7 @@
         }
       },
       {
-        "id": "act_mindwarp_ray_3lwb",
+        "id": "act_mindwarp_ray_gmn0",
         "name": "Mindwarp Ray",
         "actionType": "action",
         "descriptionHtml": "<p>r +5, range 120 ft. {@h}6 (1d6 + 3) Psychic damage, and the target has the Charmed condition until the start of the phaerimm's next turn.</p>",
@@ -1144,7 +1254,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_ern0",
+        "id": "act_uncanny_dodge_gl3v",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The phaerimm is hit by an attack roll. {@actResponse} The phaerimm halves the damage (round down) it takes from that attack.</p>",
@@ -1230,12 +1340,44 @@
         "mod": 0
       }
     },
+    "str": 16,
+    "dex": 10,
+    "con": 12,
+    "int": 10,
+    "wis": 18,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "wis": "+7"
+    },
     "saves": {
       "wis": "+7"
     },
+    "skill": {
+      "perception": "+7"
+    },
     "skills": {
       "perception": "+7"
+    },
+    "immune": [
+      "poison",
+      "thunder"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 17,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 17,
@@ -1409,7 +1551,7 @@
     ],
     "traits": [
       {
-        "id": "act_disintegration_56h8",
+        "id": "act_disintegration_eyda",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
@@ -1426,7 +1568,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_q1fs",
+        "id": "act_magic_resistance_kq1a",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1445,7 +1587,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_365x",
+        "id": "act_multiattack_x7vh",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two attacks, using Hammer Fist or Thunderous Boom in any combination.</p>",
@@ -1462,7 +1604,7 @@
         }
       },
       {
-        "id": "act_hammer_fist_4tyi",
+        "id": "act_hammer_fist_ps8c",
         "name": "Hammer Fist",
         "actionType": "action",
         "descriptionHtml": "<p>m +6, reach 5 ft. {@h}16 (3d8 + 3) Bludgeoning damage plus 13 (3d8) Force damage.</p>",
@@ -1488,7 +1630,7 @@
         }
       },
       {
-        "id": "act_thunderous_boom_0ibh",
+        "id": "act_thunderous_boom_83jn",
         "name": "Thunderous Boom",
         "actionType": "action",
         "descriptionHtml": "<p>r +7, range 60 ft. {@h}28 (8d6) Thunder damage.</p>",
@@ -1581,10 +1723,40 @@
         "mod": 3
       }
     },
+    "str": 12,
+    "dex": 10,
+    "con": 14,
+    "int": 10,
+    "wis": 10,
+    "cha": 16,
     "proficiencyBonus": 3,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+6"
+    },
     "skills": {
       "perception": "+6"
+    },
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 16,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 16,
@@ -1708,7 +1880,7 @@
     ],
     "traits": [
       {
-        "id": "act_disintegration_slsk",
+        "id": "act_disintegration_9o29",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
@@ -1725,7 +1897,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_e4qe",
+        "id": "act_magic_resistance_oh1c",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1744,7 +1916,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zyav",
+        "id": "act_multiattack_6ryg",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two Psychic Blast attacks.</p>",
@@ -1761,7 +1933,7 @@
         }
       },
       {
-        "id": "act_psychic_blast_0cdn",
+        "id": "act_psychic_blast_28qb",
         "name": "Psychic Blast",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 60 ft. {@h}21 (6d6) Psychic damage.</p>",

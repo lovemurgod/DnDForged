@@ -57,15 +57,38 @@
         "mod": 2
       }
     },
+    "str": 11,
+    "dex": 15,
+    "con": 12,
+    "int": 11,
+    "wis": 10,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+4",
+      "wis": "+2"
+    },
     "saves": {
       "dex": "+4",
       "wis": "+2"
+    },
+    "skill": {
+      "perception": "+2",
+      "sleight of hand": "+6",
+      "stealth": "+6"
     },
     "skills": {
       "perception": "+2",
       "sleight of hand": "+6",
       "stealth": "+6"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 12,
@@ -82,7 +105,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hustle_xc3l",
+        "id": "act_hustle_0ck7",
         "name": "Hustle",
         "actionType": "trait",
         "descriptionHtml": "<p>The smuggler can move through the space of any creature that is of a larger size, but it can't stop there.</p>",
@@ -101,7 +124,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_sc9j",
+        "id": "act_shortsword_4zw4",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Piercing damage plus 2 (1d4) Poison damage.</p>",
@@ -127,7 +150,7 @@
         }
       },
       {
-        "id": "act_pistol_6l0e",
+        "id": "act_pistol_9j61",
         "name": "Pistol",
         "actionType": "action",
         "descriptionHtml": "<p>r +4, range 30/90 ft. {@h}7 (1d10 + 2) Piercing damage.</p>",
@@ -220,16 +243,42 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 18,
+    "con": 15,
+    "int": 12,
+    "wis": 14,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+7",
+      "con": "+5",
+      "wis": "+5"
+    },
     "saves": {
       "dex": "+7",
       "con": "+5",
       "wis": "+5"
     },
+    "skill": {
+      "insight": "+5",
+      "perception": "+8",
+      "sleight of hand": "+10"
+    },
     "skills": {
       "insight": "+5",
       "perception": "+8",
       "sleight of hand": "+10"
+    },
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 18,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 18,
@@ -246,7 +295,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hustle_mgno",
+        "id": "act_hustle_cwjr",
         "name": "Hustle",
         "actionType": "trait",
         "descriptionHtml": "<p>The underboss can move through the space of any creature that is of a larger size, but it can't stop there.</p>",
@@ -265,7 +314,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rv2l",
+        "id": "act_multiattack_upnc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The underboss makes three attacks, using Poisoned Blade or Arcane Firearm in any combination.</p>",
@@ -282,7 +331,7 @@
         }
       },
       {
-        "id": "act_poisoned_blade_wo9m",
+        "id": "act_poisoned_blade_u888",
         "name": "Poisoned Blade",
         "actionType": "action",
         "descriptionHtml": "<p>m +7, reach 5 ft. {@h}13 (2d8 + 4) Slashing damage plus 7 (2d6) Poison damage, and the target has the Poisoned condition until the start of the underboss's next turn. If the target is already Poisoned, it instead takes an extra 7 (2d6) Poison damage.</p>",
@@ -312,7 +361,7 @@
         }
       },
       {
-        "id": "act_arcane_firearm_be5h",
+        "id": "act_arcane_firearm_1bzl",
         "name": "Arcane Firearm",
         "actionType": "action",
         "descriptionHtml": "<p>r +7, range 30/90 ft. {@h}26 (4d10 + 4) Force damage.</p>",
@@ -337,7 +386,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_r35d",
+        "id": "act_uncanny_dodge_w0gs",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The underboss is hit by an attack roll. {@actResponse} The underboss halves the damage (round down) it takes from that attack.</p>",
@@ -423,16 +472,36 @@
         "mod": 0
       }
     },
+    "str": 13,
+    "dex": 13,
+    "con": 14,
+    "int": 18,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+4",
+      "int": "+6"
+    },
     "saves": {
       "con": "+4",
       "int": "+6"
+    },
+    "skill": {
+      "arcana": "+6",
+      "perception": "+4",
+      "sleight of hand": "+3"
     },
     "skills": {
       "arcana": "+6",
       "perception": "+4",
       "sleight of hand": "+3"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -597,7 +666,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_0pjv",
+        "id": "act_multiattack_r4c5",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The artificer makes two attacks, using Battering Mace or Artillery Strike in any combination.</p>",
@@ -614,7 +683,7 @@
         }
       },
       {
-        "id": "act_battering_mace_pn8w",
+        "id": "act_battering_mace_wjyz",
         "name": "Battering Mace",
         "actionType": "action",
         "descriptionHtml": "<p>m +6, reach 5 ft. {@h}14 (3d6 + 4) Bludgeoning damage, and if the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -636,7 +705,7 @@
         }
       },
       {
-        "id": "act_artillery_strike_0nz3",
+        "id": "act_artillery_strike_4uhn",
         "name": "Artillery Strike",
         "actionType": "action",
         "descriptionHtml": "<p>r +6, range 120 ft. {@h}22 (4d8 + 4) Force damage.</p>",
@@ -729,16 +798,40 @@
         "mod": 2
       }
     },
+    "str": 20,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 12,
+    "cha": 14,
     "proficiencyBonus": 4,
+    "save": {
+      "str": "+9",
+      "con": "+7",
+      "wis": "+5"
+    },
     "saves": {
       "str": "+9",
       "con": "+7",
       "wis": "+5"
     },
+    "skill": {
+      "athletics": "+9",
+      "intimidation": "+6",
+      "perception": "+5"
+    },
     "skills": {
       "athletics": "+9",
       "intimidation": "+6",
       "perception": "+5"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 15,
@@ -754,7 +847,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_pcz3",
+        "id": "act_blood_frenzy_y9od",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The bruiser has Advantage on attack rolls against any creature that doesn't have all its Hit Points.</p>",
@@ -773,7 +866,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dolz",
+        "id": "act_multiattack_ct9j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The bruiser makes three Pummel attacks and uses Glare.</p>",
@@ -790,7 +883,7 @@
         }
       },
       {
-        "id": "act_pummel_lxn2",
+        "id": "act_pummel_7997",
         "name": "Pummel",
         "actionType": "action",
         "descriptionHtml": "<p>m +9, reach 5 ft. {@h}12 (2d6 + 5) Bludgeoning damage.</p>",
@@ -812,7 +905,7 @@
         }
       },
       {
-        "id": "act_glare_wl26",
+        "id": "act_glare_lima",
         "name": "Glare",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 14, one creature the bruiser can see within 30 feet. {@actSaveFail} The target has the Frightened condition until the start of the bruiser's next turn.</p>",
@@ -835,7 +928,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_smackback_hq01",
+        "id": "act_smackback_yj60",
         "name": "Smackback",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The bruiser takes damage from a creature within 5 feet. {@actResponse} The bruiser makes one Pummel attack, targeting the triggering creature.</p>",
@@ -921,14 +1014,32 @@
         "mod": -1
       }
     },
+    "str": 16,
+    "dex": 12,
+    "con": 13,
+    "int": 10,
+    "wis": 11,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {
+      "str": "+5"
+    },
     "saves": {
       "str": "+5"
+    },
+    "skill": {
+      "athletics": "+5",
+      "perception": "+2"
     },
     "skills": {
       "athletics": "+5",
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": "Darkvision 60 ft."
@@ -943,7 +1054,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_pd01",
+        "id": "act_pack_tactics_balt",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The raider has Advantage on an attack roll against a creature if at least one of the raider's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
@@ -962,7 +1073,7 @@
     ],
     "actions": [
       {
-        "id": "act_pummel_1sib",
+        "id": "act_pummel_b9n9",
         "name": "Pummel",
         "actionType": "action",
         "descriptionHtml": "<p>m +5, reach 5 ft. {@h}5 (1d4 + 3) Bludgeoning damage.</p>",
@@ -987,7 +1098,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_smackback_dic8",
+        "id": "act_smackback_pidn",
         "name": "Smackback",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The raider takes damage from a creature within 5 feet. {@actResponse} The raider makes one Pummel attack, targeting the triggering creature.</p>",
@@ -1073,17 +1184,40 @@
         "mod": 3
       }
     },
+    "str": 14,
+    "dex": 17,
+    "con": 15,
+    "int": 18,
+    "wis": 16,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "int": "+7",
+      "wis": "+6",
+      "cha": "+6"
+    },
     "saves": {
       "int": "+7",
       "wis": "+6",
       "cha": "+6"
+    },
+    "skill": {
+      "deception": "+6",
+      "insight": "+6",
+      "stealth": "+6"
     },
     "skills": {
       "deception": "+6",
       "insight": "+6",
       "stealth": "+6"
     },
+    "immune": [],
+    "resist": [
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "Truesight 30 ft."
@@ -1173,7 +1307,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_z3vd",
+        "id": "act_multiattack_k3ac",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The infiltrator makes three Mind Blade attacks.</p>",
@@ -1190,7 +1324,7 @@
         }
       },
       {
-        "id": "act_mind_blade_9c5f",
+        "id": "act_mind_blade_bpwk",
         "name": "Mind Blade",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +7, reach 5 ft. or range 30 ft. {@h}14 (3d6 + 4) Psychic damage.</p>",
@@ -1214,7 +1348,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_mind_curse_o7ao",
+        "id": "act_mind_curse_rjly",
         "name": "Mind Curse",
         "actionType": "bonus",
         "descriptionHtml": "<p>wis DC 15, one creature hit by the infiltrator's Mind Blade attack this turn. {@actSaveFail} The target takes 14 (4d6) Psychic damage and is cursed. While cursed in this way, it has Disadvantage on attack rolls against the infiltrator, and the infiltrator always knows its location while it and the infiltrator are on the same plane of existence. A cursed creature repeats the save whenever it finishes a Short Rest or Long Rest, ending the effect on itself on a success. {@actSaveSuccess} Half damage only.</p>",
@@ -1309,12 +1443,30 @@
         "mod": 3
       }
     },
+    "str": 15,
+    "dex": 19,
+    "con": 16,
+    "int": 21,
+    "wis": 18,
+    "cha": 17,
     "proficiencyBonus": 4,
+    "save": {
+      "dex": "+8",
+      "int": "+9",
+      "wis": "+8",
+      "cha": "+7"
+    },
     "saves": {
       "dex": "+8",
       "int": "+9",
       "wis": "+8",
       "cha": "+7"
+    },
+    "skill": {
+      "deception": "+7",
+      "insight": "+8",
+      "perception": "+8",
+      "stealth": "+8"
     },
     "skills": {
       "deception": "+7",
@@ -1322,6 +1474,16 @@
       "perception": "+8",
       "stealth": "+8"
     },
+    "immune": [],
+    "resist": [
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 18,
     "senses": {
       "passivePerception": 18,
       "sensesString": "Truesight 30 ft."
@@ -1380,7 +1542,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_3d85",
+        "id": "act_multiattack_4zis",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mindkiller makes two Nightmare Whisper attacks.</p>",
@@ -1397,7 +1559,7 @@
         }
       },
       {
-        "id": "act_nightmare_whisper_zf3v",
+        "id": "act_nightmare_whisper_kckd",
         "name": "Nightmare Whisper",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +9, reach 5 ft. or range 30 ft. {@h}27 (5d8 + 5) Psychic damage, and the target has the Frightened condition until the start of the mindkiller's next turn. If the target is already Frightened, it instead takes an extra 10 (3d6) Psychic damage.</p>",
@@ -1423,7 +1585,7 @@
         }
       },
       {
-        "id": "act_primal_fear__1_day__jv76",
+        "id": "act_primal_fear__1_day__oc23",
         "name": "Primal Fear (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 17, each creature in a 30-foot-radius Sphere [Area of Effect] centered on a point the mindkiller can see within 120 feet. {@actSaveFail} 35 (10d6) Psychic damage, and the target has the Frightened condition until the start of the mindkiller's next turn. While Frightened in this way, the target can do only one of the following on each of its turns: move, take an action, or take a Bonus Action. {@actSaveSuccess} Half damage only.</p>",
@@ -1519,15 +1681,38 @@
         "mod": 2
       }
     },
+    "str": 18,
+    "dex": 11,
+    "con": 15,
+    "int": 15,
+    "wis": 12,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+4",
+      "wis": "+3"
+    },
     "saves": {
       "con": "+4",
       "wis": "+3"
+    },
+    "skill": {
+      "athletics": "+6",
+      "intimidation": "+4",
+      "perception": "+3"
     },
     "skills": {
       "athletics": "+6",
       "intimidation": "+4",
       "perception": "+3"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 13,
@@ -1543,7 +1728,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aura_of_authority_tmro",
+        "id": "act_aura_of_authority_3m5s",
         "name": "Aura of Authority",
         "actionType": "trait",
         "descriptionHtml": "<p>While in a 30-foot Emanation [Area of Effect] originating from the commander, the commander and its allies have Advantage on attack rolls and saving throws, provided the commander doesn't have the Incapacitated condition.</p>",
@@ -1562,7 +1747,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bi9i",
+        "id": "act_multiattack_s81g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The commander makes two attacks, using Flail or Javelin in any combination.</p>",
@@ -1579,7 +1764,7 @@
         }
       },
       {
-        "id": "act_flail_jc8f",
+        "id": "act_flail_1alq",
         "name": "Flail",
         "actionType": "action",
         "descriptionHtml": "<p>m +6, reach 5 ft. {@h}8 (1d8 + 4) Bludgeoning damage—plus 7 (2d6) Necrotic damage if the commander is Bloodied—and the target has Disadvantage on its next attack roll before the start of the commander's next turn.</p>",
@@ -1605,7 +1790,7 @@
         }
       },
       {
-        "id": "act_javelin_1mkb",
+        "id": "act_javelin_pnen",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 30/120 ft. {@h}7 (1d6 + 4) Piercing damage—plus 7 (2d6) Necrotic damage if the commander is Bloodied.</p>",
@@ -1702,14 +1887,32 @@
         "mod": 1
       }
     },
+    "str": 17,
+    "dex": 11,
+    "con": 14,
+    "int": 13,
+    "wis": 10,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+2"
+    },
     "saves": {
       "wis": "+2"
+    },
+    "skill": {
+      "athletics": "+5",
+      "perception": "+2"
     },
     "skills": {
       "athletics": "+5",
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1725,7 +1928,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_p207",
+        "id": "act_multiattack_ks0l",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The knight makes two attacks, using Flail or Javelin in any combination.</p>",
@@ -1742,7 +1945,7 @@
         }
       },
       {
-        "id": "act_flail_t7j3",
+        "id": "act_flail_whgh",
         "name": "Flail",
         "actionType": "action",
         "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Bludgeoning damage—plus 4 (1d8) Necrotic damage if the knight is Bloodied—and the target has Disadvantage on its next attack roll before the start of the knight's next turn.</p>",
@@ -1768,7 +1971,7 @@
         }
       },
       {
-        "id": "act_javelin_f2l1",
+        "id": "act_javelin_th84",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 30/120 ft. {@h}6 (1d6 + 3) Piercing damage—plus 4 (1d8) Necrotic damage if the knight is Bloodied.</p>",
@@ -1865,18 +2068,42 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 16,
+    "con": 17,
+    "int": 13,
+    "wis": 14,
+    "cha": 17,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5",
+      "con": "+5",
+      "wis": "+4",
+      "cha": "+5"
+    },
     "saves": {
       "dex": "+5",
       "con": "+5",
       "wis": "+4",
       "cha": "+5"
     },
+    "skill": {
+      "insight": "+4",
+      "perception": "+4",
+      "stealth": "+5"
+    },
     "skills": {
       "insight": "+4",
       "perception": "+4",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "frightened"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -1956,7 +2183,7 @@
     ],
     "traits": [
       {
-        "id": "act_hustle_bki9",
+        "id": "act_hustle_i851",
         "name": "Hustle",
         "actionType": "trait",
         "descriptionHtml": "<p>The troubleshooter can move through the space of any creature that is of a larger size, but it can't stop there.</p>",
@@ -1975,7 +2202,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_izwu",
+        "id": "act_multiattack_p5jw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The troubleshooter makes two Poisoned Dagger attacks.</p>",
@@ -1992,7 +2219,7 @@
         }
       },
       {
-        "id": "act_poisoned_dagger_kzys",
+        "id": "act_poisoned_dagger_2z6q",
         "name": "Poisoned Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 20/60 ft. {@h}5 (1d4 + 3) Piercing damage, and the target has the Poisoned condition until the start of the troubleshooter's next turn.</p>",
@@ -2016,7 +2243,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_sj1x",
+        "id": "act_nimble_escape_te5x",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The troubleshooter takes the Disengage or Hide action.</p>",
@@ -2103,9 +2330,28 @@
         "mod": -2
       }
     },
+    "str": 4,
+    "dex": 15,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 7,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 10,
+    "initiative": 0,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -2119,7 +2365,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_evasion_lmih",
+        "id": "act_evasion_5zqy",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the homunculus is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the homunculus instead takes no damage if it succeeds on the save and only half damage if it fails. It can't use this trait if it has the Incapacitated condition.</p>",
@@ -2136,7 +2382,7 @@
         }
       },
       {
-        "id": "act_magic_bond_luay",
+        "id": "act_magic_bond_xzf9",
         "name": "Magic Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add the spell's level to any ability check or saving throw the homunculus makes.</p>",
@@ -2155,7 +2401,7 @@
     ],
     "actions": [
       {
-        "id": "act_force_strike_uk0e",
+        "id": "act_force_strike_wi7f",
         "name": "Force Strike",
         "actionType": "action",
         "descriptionHtml": "<p>m,r Bonus equals your spell attack modifier, reach 5 ft. or range 30 ft. {@h}1d6 + summonSpellLevel Force damage.</p>",
@@ -2175,7 +2421,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_channel_magic_bze7",
+        "id": "act_channel_magic_zo7s",
         "name": "Channel Magic",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} You cast a spell that has a range of touch while the homunculus is within 120 feet of you. {@actResponse} The homunculus delivers the spell through its touch.</p>",
@@ -2261,16 +2507,40 @@
         "mod": 2
       }
     },
+    "str": 12,
+    "dex": 15,
+    "con": 16,
+    "int": 14,
+    "wis": 17,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+5",
+      "wis": "+5"
+    },
     "saves": {
       "con": "+5",
       "wis": "+5"
+    },
+    "skill": {
+      "insight": "+5",
+      "medicine": "+5",
+      "perception": "+5",
+      "stealth": "+4"
     },
     "skills": {
       "insight": "+5",
       "medicine": "+5",
       "perception": "+5",
       "stealth": "+4"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 15,
@@ -2357,7 +2627,7 @@
     ],
     "traits": [
       {
-        "id": "act_lucky_mxl1",
+        "id": "act_lucky_scq6",
         "name": "Lucky",
         "actionType": "trait",
         "descriptionHtml": "<p>When the medic rolls a 1 on the d20 of a D20 Test, it can reroll the die, and it must use the new roll.</p>",
@@ -2376,7 +2646,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hhbs",
+        "id": "act_multiattack_uv5o",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The medic makes two Radiant Burst attacks.</p>",
@@ -2393,7 +2663,7 @@
         }
       },
       {
-        "id": "act_radiant_burst_72ht",
+        "id": "act_radiant_burst_epcs",
         "name": "Radiant Burst",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 30 ft. {@h}7 (2d6) Radiant damage, and the creature has the Blinded condition until the start of the medic's next turn.</p>",
@@ -2486,7 +2756,20 @@
         "mod": 0
       }
     },
+    "str": 15,
+    "dex": 12,
+    "con": 16,
+    "int": 17,
+    "wis": 13,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "str": "+5",
+      "dex": "+4",
+      "con": "+6",
+      "int": "+6",
+      "wis": "+4"
+    },
     "saves": {
       "str": "+5",
       "dex": "+4",
@@ -2494,7 +2777,13 @@
       "int": "+6",
       "wis": "+4"
     },
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "Darkvision 120 ft."
@@ -2681,7 +2970,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_jkrf",
+        "id": "act_magic_resistance_hrw3",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The warden has Advantage on saving throws against spells and other magical effects.</p>",
@@ -2700,7 +2989,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_l67n",
+        "id": "act_multiattack_plca",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The warden makes two Arcane Whip attacks. It can replace one attack with a use of Shackling Glyph if available.</p>",
@@ -2717,7 +3006,7 @@
         }
       },
       {
-        "id": "act_arcane_whip_pbxf",
+        "id": "act_arcane_whip_cx0k",
         "name": "Arcane Whip",
         "actionType": "action",
         "descriptionHtml": "<p>m +6, reach 10 ft. {@h}13 (3d6 + 3) Force damage, and if the target is a Medium or smaller creature, it has the Prone condition. If the target already has the Prone condition, the attack deals an extra 7 (2d6) Force damage.</p>",
@@ -2743,7 +3032,7 @@
         }
       },
       {
-        "id": "act_shackling_glyph___recharge__aefd",
+        "id": "act_shackling_glyph___recharge__vt11",
         "name": "Shackling Glyph {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>str DC 14, one creature the warden can see within 60 feet. {@actSaveFail} The creature has the Grappled condition (escape DC 14). While Grappled, the creature has the Restrained condition.</p>",
@@ -2834,15 +3123,37 @@
         "mod": 4
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 13,
+    "int": 12,
+    "wis": 15,
+    "cha": 18,
     "proficiencyBonus": 2,
+    "save": {
+      "str": "+3",
+      "dex": "+5"
+    },
     "saves": {
       "str": "+3",
       "dex": "+5"
+    },
+    "skill": {
+      "acrobatics": "+5",
+      "perception": "+4"
     },
     "skills": {
       "acrobatics": "+5",
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [
+      "lightning",
+      "thunder"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "Darkvision 60 ft."
@@ -3032,7 +3343,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_3rr2",
+        "id": "act_multiattack_y0tp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The scion makes two Thunderbolt attacks and uses Spellcasting.</p>",
@@ -3049,7 +3360,7 @@
         }
       },
       {
-        "id": "act_thunderbolt_fjs4",
+        "id": "act_thunderbolt_jksh",
         "name": "Thunderbolt",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 30 ft. {@h}11 (2d6 + 4) Lightning damage plus 9 (2d8) Thunder damage. Critical {@h}The creature also has the Deafened condition for 1 minute.</p>",
@@ -3146,15 +3457,34 @@
         "mod": 2
       }
     },
+    "str": 14,
+    "dex": 10,
+    "con": 14,
+    "int": 15,
+    "wis": 16,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+4",
+      "wis": "+5"
+    },
     "saves": {
       "con": "+4",
       "wis": "+5"
+    },
+    "skill": {
+      "insight": "+5",
+      "investigation": "+4"
     },
     "skills": {
       "insight": "+5",
       "investigation": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "Darkvision 60 ft."
@@ -3258,7 +3588,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_seev",
+        "id": "act_multiattack_pv90",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The inquisitive makes three Crooked Staff attacks. It can replace one attack with a use of Inquisitive Eye.</p>",
@@ -3275,7 +3605,7 @@
         }
       },
       {
-        "id": "act_crooked_staff_qf85",
+        "id": "act_crooked_staff_bime",
         "name": "Crooked Staff",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}6 (1d8 + 2) Bludgeoning damage. If the target is a Medium or smaller creature, it has the Prone condition. If the target already has the Prone condition, the attack deals an extra 7 (2d6) Radiant damage.</p>",
@@ -3301,7 +3631,7 @@
         }
       },
       {
-        "id": "act_inquisitive_eye_rhrp",
+        "id": "act_inquisitive_eye_rq8h",
         "name": "Inquisitive Eye",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 13, one creature the inquisitive can see within 60 feet. {@actSaveFail} 10 (3d6) Psychic damage, and the target is marked. The inquisitive has Advantage on attack rolls against a target it has marked. While marked, the target can't become hidden from the inquisitive, and if it has the Invisible condition, it gains no benefit from that condition against the inquisitive. The mark disappears after 1 minute or when the inquisitive uses this action again. {@actSaveSuccess} Half damage only.</p>",
@@ -3329,7 +3659,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_spontaneous_barrier__recharge_4__u573",
+        "id": "act_spontaneous_barrier__recharge_4__6o2a",
         "name": "Spontaneous Barrier (Recharge 4)",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The inquisitive or an ally it can see is hit with an attack roll. {@actResponse} The inquisitive adds 2 to its or the ally's AC against that attack, possibly causing it to miss.</p>",
@@ -3415,14 +3745,36 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 18,
+    "con": 13,
+    "int": 16,
+    "wis": 14,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+6",
+      "wis": "+4"
+    },
     "saves": {
       "dex": "+6",
       "wis": "+4"
     },
+    "skill": {
+      "acrobatics": "+6",
+      "perception": "+4"
+    },
     "skills": {
       "acrobatics": "+6",
       "perception": "+4"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 14,
@@ -3481,7 +3833,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_05i2",
+        "id": "act_multiattack_f19r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The enforcer makes three Dagger attacks. It can replace one attack with a use of Lightning Cage if available.</p>",
@@ -3498,7 +3850,7 @@
         }
       },
       {
-        "id": "act_dagger_ex1h",
+        "id": "act_dagger_kgdv",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 20/60 ft. {@h}9 (2d4 + 4) Piercing damage plus 7 (2d6) Poison damage.</p>",
@@ -3524,7 +3876,7 @@
         }
       },
       {
-        "id": "act_lightning_cage__recharge_5__6jqc",
+        "id": "act_lightning_cage__recharge_5__oa5b",
         "name": "Lightning Cage (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 13, each creature in a 20-foot-radius Sphere [Area of Effect] centered on a point the enforcer can see within 60 feet. {@actSaveFail} 13 (3d8) Lightning damage, and the creature can't take Reactions until the end of the enforcer's next turn. {@actSaveSuccess} Half damage only.</p>",
@@ -3552,7 +3904,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_temporal_disruption__1_day__c85k",
+        "id": "act_temporal_disruption__1_day__8mbu",
         "name": "Temporal Disruption (1/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The enforcer takes damage from a melee attack. {@actResponse} The enforcer teleports up to 30 feet to an unoccupied space it can see. Each creature within 10 feet of the space the enforcer left must succeed on a DC 13 Constitution saving throw, or its Speed is halved until the start of the enforcer's next turn.</p>",
@@ -3641,15 +3993,38 @@
         "mod": 0
       }
     },
+    "str": 18,
+    "dex": 19,
+    "con": 12,
+    "int": 11,
+    "wis": 15,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+7",
+      "con": "+4"
+    },
     "saves": {
       "dex": "+7",
       "con": "+4"
+    },
+    "skill": {
+      "athletics": "+7",
+      "insight": "+5",
+      "perception": "+8"
     },
     "skills": {
       "athletics": "+7",
       "insight": "+5",
       "perception": "+8"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 18,
+    "initiative": {
+      "proficiency": 2
     },
     "senses": {
       "passivePerception": 18,
@@ -3708,7 +4083,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_i6nc",
+        "id": "act_multiattack_mduj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The marshal makes three attacks, using Longsword or Pistol in any combination.</p>",
@@ -3725,7 +4100,7 @@
         }
       },
       {
-        "id": "act_longsword_1sxe",
+        "id": "act_longsword_i0br",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>m +7, reach 5 ft. {@h}13 (2d8 + 4) Slashing damage, and the target has Disadvantage on the next attack roll it makes before the start of the marshal's next turn.</p>",
@@ -3747,7 +4122,7 @@
         }
       },
       {
-        "id": "act_pistol_9mtt",
+        "id": "act_pistol_253b",
         "name": "Pistol",
         "actionType": "action",
         "descriptionHtml": "<p>r +7, range 30/90 ft. {@h}15 (2d10 + 4) Piercing damage.</p>",
@@ -3840,16 +4215,40 @@
         "mod": 3
       }
     },
+    "str": 12,
+    "dex": 20,
+    "con": 12,
+    "int": 11,
+    "wis": 16,
+    "cha": 17,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+8",
+      "wis": "+6"
+    },
     "saves": {
       "dex": "+8",
       "wis": "+6"
+    },
+    "skill": {
+      "perception": "+6",
+      "performance": "+6",
+      "sleight of hand": "+8",
+      "stealth": "+11"
     },
     "skills": {
       "perception": "+6",
       "performance": "+6",
       "sleight of hand": "+8",
       "stealth": "+11"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 16,
@@ -3954,7 +4353,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_gq2j",
+        "id": "act_multiattack_dcre",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The agent makes two Shadow Knife attacks.</p>",
@@ -3971,7 +4370,7 @@
         }
       },
       {
-        "id": "act_shadow_knife_5cyw",
+        "id": "act_shadow_knife_1vta",
         "name": "Shadow Knife",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +8, reach 5 ft. or range 20/60 ft. {@h}10 (2d4 + 5) Piercing damage plus 14 (4d6) Necrotic damage, and the target's Speed is reduced by 10 feet until the end of its next turn.</p>",
@@ -3999,7 +4398,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_cloak_bcwp",
+        "id": "act_shadow_cloak_1f0l",
         "name": "Shadow Cloak",
         "actionType": "bonus",
         "descriptionHtml": "<p>The agent has the Invisible condition until the start of its next turn. This invisibility ends early immediately after the agent makes an attack roll.</p>",
@@ -4086,14 +4485,32 @@
         "mod": 0
       }
     },
+    "str": 11,
+    "dex": 15,
+    "con": 10,
+    "int": 16,
+    "wis": 12,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {
+      "wis": "+3"
+    },
     "saves": {
       "wis": "+3"
+    },
+    "skill": {
+      "arcana": "+5",
+      "sleight of hand": "+4"
     },
     "skills": {
       "arcana": "+5",
       "sleight of hand": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": "Darkvision 60 ft."
@@ -4216,7 +4633,7 @@
     ],
     "traits": [
       {
-        "id": "act_words_of_reason_2v3j",
+        "id": "act_words_of_reason_tzkp",
         "name": "Words of Reason",
         "actionType": "trait",
         "descriptionHtml": "<p>Allies in a 10-foot Emanation [Area of Effect] originating from the scribe have Advantage on saving throws to avoid or end the Charmed or Frightened condition. This trait doesn't function if the scribe has the Incapacitated condition.</p>",
@@ -4235,7 +4652,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ucqv",
+        "id": "act_multiattack_ll26",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The scribe makes two Bursting Sigil attacks.</p>",
@@ -4252,7 +4669,7 @@
         }
       },
       {
-        "id": "act_bursting_sigil_e2cp",
+        "id": "act_bursting_sigil_y37y",
         "name": "Bursting Sigil",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 60 ft. {@h}13 (3d6 + 3) Radiant damage.</p>",
@@ -4277,7 +4694,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_word_of_stasis__recharge_5__no11",
+        "id": "act_word_of_stasis__recharge_5__dhf2",
         "name": "Word of Stasis (Recharge 5)",
         "actionType": "reaction",
         "descriptionHtml": "<p>con DC 13, each creature in a 20-foot-radius Sphere [Area of Effect] centered on a point the scribe can see within 60 feet. {@actSaveFail} The target has the Incapacitated condition until the start of the scribe's next turn. While the target is Incapacitated, its Speed is 0 and can't increase.</p>",
@@ -4366,9 +4783,28 @@
         "mod": -2
       }
     },
+    "str": 14,
+    "dex": 12,
+    "con": 14,
+    "int": 4,
+    "wis": 10,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": "Darkvision 60 ft."
@@ -4382,7 +4818,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_steel_bond_skjn",
+        "id": "act_steel_bond_xcwe",
         "name": "Steel Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency to any ability check or saving throw the defender makes.</p>",
@@ -4401,7 +4837,7 @@
     ],
     "actions": [
       {
-        "id": "act_force_empowered_rend_p46b",
+        "id": "act_force_empowered_rend_yh34",
         "name": "Force-Empowered Rend",
         "actionType": "action",
         "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 2 plus your Intelligence modifier Force damage.</p>",
@@ -4418,7 +4854,7 @@
         }
       },
       {
-        "id": "act_repair__3_day__qez0",
+        "id": "act_repair__3_day__jxk7",
         "name": "Repair (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The defender, or one Construct or object it can see within 5 feet of itself, regains a number of Hit Points equal to 2d8 plus your Intelligence modifier.</p>",
@@ -4438,7 +4874,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_attack_kxpl",
+        "id": "act_deflect_attack_jzjx",
         "name": "Deflect Attack",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature the defender can see within 5 feet of itself makes an attack roll against a creature other than the defender. {@actResponse} The triggering creature makes the attack roll with Disadvantage.</p>",
@@ -4524,16 +4960,40 @@
         "mod": 1
       }
     },
+    "str": 15,
+    "dex": 17,
+    "con": 20,
+    "int": 16,
+    "wis": 15,
+    "cha": 13,
     "proficiencyBonus": 4,
+    "save": {
+      "dex": "+7",
+      "con": "+9",
+      "wis": "+6"
+    },
     "saves": {
       "dex": "+7",
       "con": "+9",
       "wis": "+6"
     },
+    "skill": {
+      "deception": "+5",
+      "perception": "+6",
+      "stealth": "+7"
+    },
     "skills": {
       "deception": "+5",
       "perception": "+6",
       "stealth": "+7"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 16,
@@ -4622,7 +5082,7 @@
     ],
     "traits": [
       {
-        "id": "act_evasion_df1s",
+        "id": "act_evasion_hfea",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the marauder is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the marauder instead takes no damage if it succeeds on the save and only half as much damage if it fails. It can't use this trait if it has the Incapacitated condition.</p>",
@@ -4641,7 +5101,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_t0oh",
+        "id": "act_multiattack_3tsg",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The marauder makes three Aberrant Strike attacks.</p>",
@@ -4658,7 +5118,7 @@
         }
       },
       {
-        "id": "act_aberrant_strike_ssp6",
+        "id": "act_aberrant_strike_jcsv",
         "name": "Aberrant Strike",
         "actionType": "action",
         "descriptionHtml": "<p>m +7, reach 5 ft. {@h}13 (3d6 + 3) Piercing damage, plus 21 (6d6) Force damage if the marauder had Advantage on the attack roll.</p>",
@@ -4686,7 +5146,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_tear_through_space_paa3",
+        "id": "act_tear_through_space_mt17",
         "name": "Tear Through Space",
         "actionType": "bonus",
         "descriptionHtml": "<p>The marauder teleports to a space it can see within 30 feet, appearing in a dazzling flash. con DC 17, each creature in a 5-foot Emanation [Area of Effect] originating from the marauder when it appears. {@actSaveFail} The target has the Blinded condition until the end of the marauder's next turn.</p>",
@@ -4776,15 +5236,34 @@
         "mod": 1
       }
     },
+    "str": 14,
+    "dex": 13,
+    "con": 15,
+    "int": 11,
+    "wis": 10,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+3",
+      "con": "+4"
+    },
     "saves": {
       "dex": "+3",
       "con": "+4"
+    },
+    "skill": {
+      "intimidation": "+3",
+      "perception": "+2"
     },
     "skills": {
       "intimidation": "+3",
       "perception": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -4878,7 +5357,7 @@
     ],
     "traits": [
       {
-        "id": "act_aberrant_surge_utpo",
+        "id": "act_aberrant_surge_5r59",
         "name": "Aberrant Surge",
         "actionType": "trait",
         "descriptionHtml": "<p>When the ruffian casts Witch Bolt, roll 1d8. On an even number, the ruffian gains a number of Temporary Hit Points equal to the number rolled. On an odd number, one creature of the ruffian's choice within 30 feet of it takes Force damage equal to the number rolled; if no other creatures are in range, it takes the damage.</p>",
@@ -4897,7 +5376,7 @@
     ],
     "actions": [
       {
-        "id": "act_spear_2xw0",
+        "id": "act_spear_a3m4",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +4, reach 5 ft. or range 20/60 ft. {@h}6 (1d8 + 2) Piercing damage.</p>",
@@ -4990,16 +5469,36 @@
         "mod": 0
       }
     },
+    "str": 12,
+    "dex": 19,
+    "con": 15,
+    "int": 11,
+    "wis": 16,
+    "cha": 10,
     "proficiencyBonus": 3,
+    "save": {
+      "dex": "+7",
+      "con": "+5"
+    },
     "saves": {
       "dex": "+7",
       "con": "+5"
+    },
+    "skill": {
+      "perception": "+6",
+      "stealth": "+7",
+      "survival": "+6"
     },
     "skills": {
       "perception": "+6",
       "stealth": "+7",
       "survival": "+6"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "Darkvision 60 ft."
@@ -5015,7 +5514,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_ihny",
+        "id": "act_multiattack_9n57",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hunter makes three attacks, using Shortsword or Longbow in any combination.</p>",
@@ -5032,7 +5531,7 @@
         }
       },
       {
-        "id": "act_shortsword_yznn",
+        "id": "act_shortsword_k5oh",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>m +7, reach 5 ft. {@h}11 (2d6 + 4) Piercing damage, and the target has Disadvantage on attack rolls and ability checks until the end of its next turn.</p>",
@@ -5054,7 +5553,7 @@
         }
       },
       {
-        "id": "act_longbow_i80t",
+        "id": "act_longbow_8ewu",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>r +7, range 150/600 ft. {@h}17 (3d8 + 4) Piercing damage, and the target's Speed is reduced by 10 feet until the end of its next turn.</p>",
@@ -5078,7 +5577,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_mark_of_tharashk_v0jq",
+        "id": "act_mark_of_tharashk_u6v3",
         "name": "Mark of Tharashk",
         "actionType": "bonus",
         "descriptionHtml": "<p>The hunter magically marks one creature it can see within 150 feet. The mark lasts for 1 hour, until the target dies, or until the hunter uses this Bonus Action again. While the target is marked in this way, the hunter has Advantage on attack rolls against the target, and the target gains no benefit from the Invisible condition against the hunter.</p>",
@@ -5097,7 +5596,7 @@
     ],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_dirb",
+        "id": "act_uncanny_dodge_uizo",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The hunter is hit by an attack roll. {@actResponse} The hunter halves the damage (round down) it takes from that attack.</p>",
@@ -5183,16 +5682,38 @@
         "mod": 5
       }
     },
+    "str": 12,
+    "dex": 19,
+    "con": 14,
+    "int": 13,
+    "wis": 15,
+    "cha": 20,
     "proficiencyBonus": 4,
+    "save": {
+      "dex": "+8",
+      "wis": "+6"
+    },
     "saves": {
       "dex": "+8",
       "wis": "+6"
+    },
+    "skill": {
+      "arcana": "+5",
+      "perception": "+6",
+      "stealth": "+8"
     },
     "skills": {
       "arcana": "+5",
       "perception": "+6",
       "stealth": "+8"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [
+      "radiant"
+    ],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": "Darkvision 120 ft."
@@ -5291,7 +5812,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_rfnc",
+        "id": "act_fey_ancestry_yfjk",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Magic can't put the shadow walker to sleep.</p>",
@@ -5308,7 +5829,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_ahyu",
+        "id": "act_sunlight_sensitivity_9r3e",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the shadow walker has Disadvantage on ability checks and attack rolls.</p>",
@@ -5327,7 +5848,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5idq",
+        "id": "act_multiattack_uc5b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The shadow walker makes three Gloom Burst attacks and uses Shadow Cowl.</p>",
@@ -5344,7 +5865,7 @@
         }
       },
       {
-        "id": "act_gloom_burst_14wj",
+        "id": "act_gloom_burst_t4hx",
         "name": "Gloom Burst",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +9, reach 5 ft. or range 120 ft. {@h}14 (2d8 + 5) Psychic damage.</p>",
@@ -5366,7 +5887,7 @@
         }
       },
       {
-        "id": "act_shadow_cowl_idlz",
+        "id": "act_shadow_cowl_r5r8",
         "name": "Shadow Cowl",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 17, one creature the shadow walker can see within 120 feet. {@actSaveFail} 14 (4d6) Necrotic damage, and the target has the Blinded condition until the start of the shadow walker's next turn.</p>",
@@ -5462,17 +5983,38 @@
         "mod": 1
       }
     },
+    "str": 12,
+    "dex": 16,
+    "con": 15,
+    "int": 10,
+    "wis": 17,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5",
+      "con": "+4",
+      "wis": "+5"
+    },
     "saves": {
       "dex": "+5",
       "con": "+4",
       "wis": "+5"
+    },
+    "skill": {
+      "animal handling": "+7",
+      "nature": "+4",
+      "stealth": "+5"
     },
     "skills": {
       "animal handling": "+7",
       "nature": "+4",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -5652,7 +6194,7 @@
     ],
     "traits": [
       {
-        "id": "act_pack_tactics_7j8e",
+        "id": "act_pack_tactics_ivb8",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The heir has Advantage on an attack roll against a creature if at least one of the heir's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
@@ -5671,7 +6213,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4u7j",
+        "id": "act_multiattack_69o7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The heir makes four attacks, using Scimitar or Lunar Wisp in any combination.</p>",
@@ -5688,7 +6230,7 @@
         }
       },
       {
-        "id": "act_scimitar_y72a",
+        "id": "act_scimitar_gbms",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>m +5, reach 5 ft. {@h}6 (1d6 + 3) Slashing damage plus 3 (1d6) Poison damage.</p>",
@@ -5714,7 +6256,7 @@
         }
       },
       {
-        "id": "act_lunar_wisp_n4ox",
+        "id": "act_lunar_wisp_vrd0",
         "name": "Lunar Wisp",
         "actionType": "action",
         "descriptionHtml": "<p>r +5, range 60 ft. {@h}9 (2d8) Radiant damage, and the target emits Dim Light in a 10-foot radius and can't benefit from the Invisible condition until the end of the heir's next turn.</p>",
@@ -5738,7 +6280,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_spur_beast_bfj7",
+        "id": "act_spur_beast_ahf5",
         "name": "Spur Beast",
         "actionType": "bonus",
         "descriptionHtml": "<p>The heir targets a Beast it can see within 30 feet. The target can take a Reaction to move up to half its Speed and make one melee attack.</p>",
@@ -5825,13 +6367,36 @@
         "mod": 1
       }
     },
+    "str": 11,
+    "dex": 15,
+    "con": 10,
+    "int": 11,
+    "wis": 12,
+    "cha": 12,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+4"
+    },
     "saves": {
       "dex": "+4"
+    },
+    "skill": {
+      "perception": "+3",
+      "stealth": "+4"
     },
     "skills": {
       "perception": "+3",
       "stealth": "+4"
+    },
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 13,
@@ -5848,7 +6413,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fey_ancestry_0vas",
+        "id": "act_fey_ancestry_a878",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Magic can't put the stingblade to sleep.</p>",
@@ -5867,7 +6432,7 @@
     ],
     "actions": [
       {
-        "id": "act_stingblade_o9qd",
+        "id": "act_stingblade_iczm",
         "name": "Stingblade",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Piercing damage plus 2 (1d4) Poison damage.</p>",
@@ -5893,7 +6458,7 @@
         }
       },
       {
-        "id": "act_boomerang_jq9a",
+        "id": "act_boomerang_v3ec",
         "name": "Boomerang",
         "actionType": "action",
         "descriptionHtml": "<p>r +4, reach 30/120 ft. {@h}7 (2d4 + 2) Bludgeoning damage.</p>",
@@ -5986,16 +6551,38 @@
         "mod": 1
       }
     },
+    "str": 15,
+    "dex": 16,
+    "con": 12,
+    "int": 10,
+    "wis": 16,
+    "cha": 13,
     "proficiencyBonus": 2,
+    "save": {
+      "con": "+3",
+      "wis": "+5"
+    },
     "saves": {
       "con": "+3",
       "wis": "+5"
+    },
+    "skill": {
+      "perception": "+5",
+      "religion": "+2",
+      "stealth": "+5"
     },
     "skills": {
       "perception": "+5",
       "religion": "+2",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": "Darkvision 120 ft."
@@ -6176,7 +6763,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_38oe",
+        "id": "act_fey_ancestry_v9w9",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Magic can't put the priest to sleep.</p>",
@@ -6195,7 +6782,7 @@
     ],
     "actions": [
       {
-        "id": "act_venom_staff_kv6c",
+        "id": "act_venom_staff_m9n3",
         "name": "Venom Staff",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}9 (2d6 + 2) Bludgeoning damage, and the target has the Poisoned condition until the end of the priest's next turn.</p>",
@@ -6219,7 +6806,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_intensify_poison_m0jd",
+        "id": "act_intensify_poison_a2aa",
         "name": "Intensify Poison",
         "actionType": "bonus",
         "descriptionHtml": "<p>Each creature with the Poisoned condition within a 30-foot Emanation [Area of Effect] originating from the priest takes 3 (1d6) Poison damage.</p>",

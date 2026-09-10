@@ -57,16 +57,39 @@
         "mod": 2
       }
     },
+    "str": 8,
+    "dex": 14,
+    "con": 14,
+    "int": 14,
+    "wis": 18,
+    "cha": 14,
     "proficiencyBonus": 3,
+    "save": {
+      "int": "+5",
+      "wis": "+7",
+      "cha": "+5"
+    },
     "saves": {
       "int": "+5",
       "wis": "+7",
       "cha": "+5"
     },
+    "skill": {
+      "persuasion": "+5",
+      "religion": "+5"
+    },
     "skills": {
       "persuasion": "+5",
       "religion": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": ""
@@ -81,7 +104,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_7kof",
+        "id": "act_magic_resistance_mrgq",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The curate has Advantage on saving throws against spells and other magical effects.</p>",
@@ -98,7 +121,7 @@
         }
       },
       {
-        "id": "act_raise_the_dead__1_day__1wpz",
+        "id": "act_raise_the_dead__1_day__q9yn",
         "name": "Raise the Dead (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>In a ritual that takes 8 hours, the curate touches a creature that has died within the past 7 days. That creature returns to life with 1 Hit Points. The curate can't revive a creature that died of old age.</p>",
@@ -117,7 +140,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mxbm",
+        "id": "act_multiattack_pt5a",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The curate makes three Celestial Radiance attacks.</p>",
@@ -134,7 +157,7 @@
         }
       },
       {
-        "id": "act_celestial_radiance_e9w1",
+        "id": "act_celestial_radiance_rpid",
         "name": "Celestial Radiance",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +7, reach 5 ft. or range 60 ft. {@h}18 (4d8) Radiant damage.</p>",
@@ -156,7 +179,7 @@
         }
       },
       {
-        "id": "act_healer_s_touch__2_day__jzb6",
+        "id": "act_healer_s_touch__2_day__hvkj",
         "name": "Healer's Touch (2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The curate touches another creature. That creature regains 13 (2d8 + 4) Hit Points.</p>",
@@ -244,11 +267,39 @@
         "mod": -4
       }
     },
+    "str": 12,
+    "dex": 6,
+    "con": 16,
+    "int": 1,
+    "wis": 6,
+    "cha": 2,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+2"
+    },
     "skills": {
       "stealth": "+2"
     },
+    "immune": [],
+    "resist": [
+      "acid",
+      "cold",
+      "fire"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "prone",
+      "restrained"
+    ],
+    "passive": 8,
     "senses": {
       "passivePerception": 8,
       "sensesString": "Blindsight 60 ft."
@@ -260,7 +311,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_baiy",
+        "id": "act_amorphous_bp45",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The ooze can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
@@ -277,7 +328,7 @@
         }
       },
       {
-        "id": "act_corrosive_form_covi",
+        "id": "act_corrosive_form_lu87",
         "name": "Corrosive Form",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever a creature hits the ooze with a melee attack, that creature takes 2 Acid damage.</p>",
@@ -296,7 +347,7 @@
     ],
     "actions": [
       {
-        "id": "act_pseudopod_1ogj",
+        "id": "act_pseudopod_e7db",
         "name": "Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>m +3, reach 5 ft. {@h}10 (2d8 + 1) Acid damage.</p>",
@@ -389,12 +440,28 @@
         "mod": 2
       }
     },
+    "str": 11,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 14,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "deception": "+4",
+      "persuasion": "+4"
+    },
     "skills": {
       "deception": "+4",
       "persuasion": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -409,7 +476,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_wjgo",
+        "id": "act_multiattack_qb3u",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ivlis makes three Chaos Blast attacks. She can replace one attack with a use of Sinister Command if available.</p>",
@@ -426,7 +493,7 @@
         }
       },
       {
-        "id": "act_chaos_blast_uge2",
+        "id": "act_chaos_blast_h22n",
         "name": "Chaos Blast",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +4, reach 5 ft. or range 60 ft. {@h}7 (2d6) damage. Roll 1d4 to determine the damage type: 1, Acid; 2, Cold; 3, Fire; 4, Lightning.</p>",
@@ -448,7 +515,7 @@
         }
       },
       {
-        "id": "act_sinister_command__recharge_5__67fa",
+        "id": "act_sinister_command__recharge_5__sdr8",
         "name": "Sinister Command (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 12, one creature Ivlis can see within 60 feet. {@actSaveFail} The target has the Charmed condition until the end of its next turn. While Charmed, the target has the Incapacitated condition.</p>",
@@ -539,12 +606,28 @@
         "mod": 3
       }
     },
+    "str": 10,
+    "dex": 16,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 16,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+6",
+      "stealth": "+5"
+    },
     "skills": {
       "perception": "+6",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
     "senses": {
       "passivePerception": 16,
       "sensesString": ""
@@ -559,7 +642,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_quick_disguise_izwz",
+        "id": "act_quick_disguise_c3i6",
         "name": "Quick Disguise",
         "actionType": "trait",
         "descriptionHtml": "<p>Jacko spends 1 minute to disguise himself as a different Humanoid of approximately his height and weight. While Jacko is disguised, a creature that takes the Study action to inspect Jacko's appearance can make a DC 13 Intelligence (Investigation) check, discerning his disguise on a successful check.</p>",
@@ -581,7 +664,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_y3sp",
+        "id": "act_multiattack_1wzj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jacko makes two Poison Dagger attacks.</p>",
@@ -598,7 +681,7 @@
         }
       },
       {
-        "id": "act_poison_dagger_7eq4",
+        "id": "act_poison_dagger_pd58",
         "name": "Poison Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 20/60 ft. {@h}5 (1d4 + 3) Piercing damage plus 3 (1d6) Poison damage.</p>",
@@ -626,7 +709,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_cunning_action_vo63",
+        "id": "act_cunning_action_tjz6",
         "name": "Cunning Action",
         "actionType": "bonus",
         "descriptionHtml": "<p>Jacko takes the Dash, Disengage, or Hide action.</p>",
@@ -713,11 +796,26 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 10,
+    "con": 12,
+    "int": 10,
+    "wis": 11,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
     "skills": {
       "perception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
     "senses": {
       "passivePerception": 14,
       "sensesString": "Darkvision 120 ft., Truesight 30 ft."
@@ -732,7 +830,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_so8m",
+        "id": "act_amphibious_thdm",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The kuo-toa can breathe air and water.</p>",
@@ -749,7 +847,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_36yq",
+        "id": "act_sunlight_sensitivity_d0nv",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the kuo-toa has Disadvantage on ability checks and attack rolls.</p>",
@@ -768,7 +866,7 @@
     ],
     "actions": [
       {
-        "id": "act_brine_slicer_sh8l",
+        "id": "act_brine_slicer_86wr",
         "name": "Brine Slicer",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}9 (2d6 + 2) Slashing damage.</p>",
@@ -792,7 +890,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_slippery_fpkq",
+        "id": "act_slippery_h479",
         "name": "Slippery",
         "actionType": "bonus",
         "descriptionHtml": "<p>The kuo-toa takes the Disengage action.</p>",
@@ -879,12 +977,28 @@
         "mod": -1
       }
     },
+    "str": 15,
+    "dex": 12,
+    "con": 14,
+    "int": 10,
+    "wis": 12,
+    "cha": 8,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "stealth": "+5",
+      "survival": "+5"
+    },
     "skills": {
       "stealth": "+5",
       "survival": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
     "senses": {
       "passivePerception": 11,
       "sensesString": ""
@@ -899,7 +1013,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_etqd",
+        "id": "act_hold_breath_9fr5",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The lizardfolk can hold its breath for 15 minutes.</p>",
@@ -918,7 +1032,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_drrq",
+        "id": "act_multiattack_j9nv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lizardfolk makes one Bite attack and one Bone Pike attack.</p>",
@@ -935,7 +1049,7 @@
         }
       },
       {
-        "id": "act_bite_vnx1",
+        "id": "act_bite_wn2g",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Piercing damage plus 3 (1d6) Poison damage.</p>",
@@ -961,7 +1075,7 @@
         }
       },
       {
-        "id": "act_bone_pike_o4fl",
+        "id": "act_bone_pike_ydud",
         "name": "Bone Pike",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 10 ft. {@h}7 (1d10 + 2) Piercing damage.</p>",
@@ -983,7 +1097,7 @@
         }
       },
       {
-        "id": "act_poison_spit_onz9",
+        "id": "act_poison_spit_rjev",
         "name": "Poison Spit",
         "actionType": "action",
         "descriptionHtml": "<p>r +4, range 60 ft. {@h}12 (3d6 + 2) Poison damage.</p>",
@@ -1076,12 +1190,28 @@
         "mod": 0
       }
     },
+    "str": 14,
+    "dex": 11,
+    "con": 12,
+    "int": 10,
+    "wis": 14,
+    "cha": 10,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "medicine": "+4",
+      "religion": "+2"
+    },
     "skills": {
       "medicine": "+4",
       "religion": "+2"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
     "senses": {
       "passivePerception": 12,
       "sensesString": ""
@@ -1096,7 +1226,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_1yme",
+        "id": "act_multiattack_nctt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Narthus makes two attacks using Vile Mace or Fateful Bolt in any combination.</p>",
@@ -1113,7 +1243,7 @@
         }
       },
       {
-        "id": "act_vile_mace_0kv1",
+        "id": "act_vile_mace_ddb3",
         "name": "Vile Mace",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Bludgeoning damage plus 3 (1d6) Necrotic damage.</p>",
@@ -1139,7 +1269,7 @@
         }
       },
       {
-        "id": "act_fateful_bolt_ubam",
+        "id": "act_fateful_bolt_j24p",
         "name": "Fateful Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>r +4, range 120 ft. {@h}8 (1d12 + 2) Necrotic damage, and the next attack roll made against the target before the end of Narthus's next turn has Advantage.</p>",
@@ -1232,14 +1362,32 @@
         "mod": 2
       }
     },
+    "str": 15,
+    "dex": 16,
+    "con": 14,
+    "int": 14,
+    "wis": 11,
+    "cha": 14,
     "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5"
+    },
     "saves": {
       "dex": "+5"
+    },
+    "skill": {
+      "athletics": "+4",
+      "deception": "+4"
     },
     "skills": {
       "athletics": "+4",
       "deception": "+4"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
     "senses": {
       "passivePerception": 10,
       "sensesString": ""
@@ -1254,7 +1402,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_rapier_xghc",
+        "id": "act_rapier_xmd9",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Piercing damage.</p>",
@@ -1276,7 +1424,7 @@
         }
       },
       {
-        "id": "act_light_crossbow_ev5a",
+        "id": "act_light_crossbow_vydz",
         "name": "Light Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>r +5, range 80/320 ft. {@h}7 (1d8 + 3) Piercing damage.</p>",
@@ -1301,7 +1449,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_56t2",
+        "id": "act_parry_b8hy",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} Pral is hit with a melee attack roll while holding a weapon. {@actResponse} Pral adds 2 to his AC against that attack, potentially causing the attack to miss.</p>",
@@ -1387,12 +1535,28 @@
         "mod": 0
       }
     },
+    "str": 3,
+    "dex": 18,
+    "con": 10,
+    "int": 14,
+    "wis": 13,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+8"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+8"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": ""
@@ -1409,7 +1573,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_needle_sword_bi1r",
+        "id": "act_needle_sword_9dgt",
         "name": "Needle Sword",
         "actionType": "action",
         "descriptionHtml": "<p>m +6, reach 5 ft. {@h}6 (1d4 + 4) Piercing damage.</p>",
@@ -1431,7 +1595,7 @@
         }
       },
       {
-        "id": "act_enchanting_bow_7wfh",
+        "id": "act_enchanting_bow_ppne",
         "name": "Enchanting Bow",
         "actionType": "action",
         "descriptionHtml": "<p>r +6, range 40/160 ft. {@h}1 Piercing damage, and the target has the Charmed condition until the start of the sprite's next turn.</p>",
@@ -1448,7 +1612,7 @@
         }
       },
       {
-        "id": "act_heart_sight_1x32",
+        "id": "act_heart_sight_y280",
         "name": "Heart Sight",
         "actionType": "action",
         "descriptionHtml": "<p>cha DC 10, one creature within 5 feet the sprite can see (Celestials, Fiends, Undead automatically fail the save). {@actSaveFail} The sprite knows the target's emotions.</p>",
@@ -1468,7 +1632,7 @@
         }
       },
       {
-        "id": "act_invisibility_p92g",
+        "id": "act_invisibility_8637",
         "name": "Invisibility",
         "actionType": "action",
         "descriptionHtml": "<p>The sprite has the Invisible condition for 1 minute. This effect ends early immediately after the sprite makes an attack roll or deals damage, or if the sprite has the Incapacitated condition.</p>",
@@ -1556,13 +1720,30 @@
         "mod": 0
       }
     },
+    "str": 11,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 13,
+    "cha": 11,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+5",
+      "stealth": "+6",
+      "survival": "+5"
+    },
     "skills": {
       "perception": "+5",
       "stealth": "+6",
       "survival": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
     "senses": {
       "passivePerception": 15,
       "sensesString": ""
@@ -1578,7 +1759,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_y5ec",
+        "id": "act_multiattack_7po1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Vinx makes two attacks, using Shortsword and Sling in any combination.</p>",
@@ -1595,7 +1776,7 @@
         }
       },
       {
-        "id": "act_shortsword_0ty7",
+        "id": "act_shortsword_ulp0",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Piercing damage.</p>",
@@ -1617,7 +1798,7 @@
         }
       },
       {
-        "id": "act_sling_ztzg",
+        "id": "act_sling_652b",
         "name": "Sling",
         "actionType": "action",
         "descriptionHtml": "<p>r +4, range 30/120 ft. {@h}4 (1d4 + 2) Bludgeoning damage.</p>",
@@ -1710,11 +1891,37 @@
         "mod": 2
       }
     },
+    "str": 15,
+    "dex": 14,
+    "con": 16,
+    "int": 10,
+    "wis": 13,
+    "cha": 15,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+4"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+4"
+    },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "necrotic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 13,
+    "initiative": {
+      "proficiency": 1
     },
     "senses": {
       "passivePerception": 13,
@@ -1729,7 +1936,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_sensitivity_v4du",
+        "id": "act_sunlight_sensitivity_ew53",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the wight has Disadvantage on ability checks and attack rolls.</p>",
@@ -1748,7 +1955,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_a1qf",
+        "id": "act_multiattack_draj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The wight makes two attacks, using Necrotic Sword or Necrotic Bow in any combination. It can replace one attack with a use of Drink Life.</p>",
@@ -1765,7 +1972,7 @@
         }
       },
       {
-        "id": "act_necrotic_sword_khqa",
+        "id": "act_necrotic_sword_xib0",
         "name": "Necrotic Sword",
         "actionType": "action",
         "descriptionHtml": "<p>m +4, reach 5 ft. {@h}6 (1d8 + 2) Slashing damage plus 4 (1d8) Necrotic damage.</p>",
@@ -1791,7 +1998,7 @@
         }
       },
       {
-        "id": "act_necrotic_bow_0xs9",
+        "id": "act_necrotic_bow_0sek",
         "name": "Necrotic Bow",
         "actionType": "action",
         "descriptionHtml": "<p>r +4, range 150/600 ft. {@h}6 (1d8 + 2) Piercing damage plus 4 (1d8) Necrotic damage.</p>",
@@ -1817,7 +2024,7 @@
         }
       },
       {
-        "id": "act_drink_life__recharge_5__lvj7",
+        "id": "act_drink_life__recharge_5__8oyi",
         "name": "Drink Life (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 13, one creature within 5 feet. {@actSaveFail} 6 (1d8 + 2) Necrotic damage, and the wight regains a number of Hit Points equal to the Necrotic damage taken.</p>",

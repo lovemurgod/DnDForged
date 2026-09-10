@@ -5,14 +5,24 @@
     "source": "BGDIA",
     "page": 223,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "very rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, very rare (Requires Attunement)*\n\n---\n\nThis hell-forged battle standard is made of infernal iron and fitted with a small, unopenable cage containing a quasit. The trapped quasit is incapacitated, and its cage has AC 19, 10 hit points, and immunity to all types of damage except force damage. If killed or somehow released, the quasit disappears in a cloud of smoke, and a new one appears in the cage, provided the cage is intact.\n\nWhile you hold the banner, your weapon attacks and those of all allied creatures within 300 feet of you count as magical for the purposes of overcoming damage immunities and resistances.",
     "descriptionHtml": "<p>This hell-forged battle standard is made of infernal iron and fitted with a small, unopenable cage containing a quasit. The trapped quasit is incapacitated, and its cage has AC 19, 10 hit points, and immunity to all types of damage except force damage. If killed or somehow released, the quasit disappears in a cloud of smoke, and a new one appears in the cage, provided the cage is intact.</p>\n<p>While you hold the banner, your weapon attacks and those of all allied creatures within 300 feet of you count as magical for the purposes of overcoming damage immunities and resistances.</p>"
   },
   {
@@ -21,16 +31,57 @@
     "source": "BGDIA",
     "page": 150,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "artifact",
     "reqAttune": "Requires Attunement",
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": "1d10",
     "dmgType": "slashing",
+    "bonusWeapon": "+3",
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Word Of Recall",
+        "cleanName": "word of recall",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": {
+      "name": "Blade of Avernus",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        },
+        {
+          "formula": "6d8",
+          "stat": "",
+          "type": "Slashing",
+          "label": "Extra"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, artifact (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this magic weapon. In addition, the weapon ignores resistance to slashing damage.\n\nWhen you attack a creature that has at least one head with this weapon and roll a 20 on the attack roll, you cut off one of the creature's heads. The creature dies if it can't survive without the lost head. A creature is immune to this effect if it is immune to slashing damage, doesn't have or need a head, has legendary actions, or the DM decides that the creature is too big for its head to be cut off with this weapon. Such a creature instead takes an extra 6d8 slashing damage from the hit.\n\n**Random Properties.** The sword has the following randomly determined properties, as described in chapter 7 of the Dungeon Master's Guide:\n\n- 2 Artifact Properties; Minor Beneficial Properties\n- 1 Artifact Properties; Major Beneficial Properties\n- 1 Artifact Properties; Major Detrimental Properties, which is suppressed while the sword is attuned to an archdevil\n\n**Ruler of Avernus.** As an action, you can point this sword at one devil you can see within 60 feet of you. That devil must succeed on a 22 Charisma saving throw or be charmed by you for 1 hour. While charmed in this way, the devil follows your orders to the best of its ability. If you command the devil to do something it perceives as suicidal, the effect ends and you can no longer use this power of the sword against that devil.\n\n**Infernal Recall.** As an action, you can use the sword to cast word of recall. Creatures transported by this spell appear in an unoccupied space within 30 feet of the current ruler of Avernus, or a sanctuary you designate if you rule Avernus.\n\n**Destroying the Sword.** The sword can be destroyed by casting it into the River Styx or melting it down in the forge that created it.",
     "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this magic weapon. In addition, the weapon ignores resistance to slashing damage.</p>\n<p>When you attack a creature that has at least one head with this weapon and roll a 20 on the attack roll, you cut off one of the creature's heads. The creature dies if it can't survive without the lost head. A creature is immune to this effect if it is immune to slashing damage, doesn't have or need a head, has legendary actions, or the DM decides that the creature is too big for its head to be cut off with this weapon. Such a creature instead takes an extra 6d8 slashing damage from the hit.</p>\n<div class=\"item-subentry\"><strong>Random Properties.</strong> <p>The sword has the following randomly determined properties, as described in chapter 7 of the Dungeon Master's Guide:</p>\n<ul><li>2 Artifact Properties; Minor Beneficial Properties</li><li>1 Artifact Properties; Major Beneficial Properties</li><li>1 Artifact Properties; Major Detrimental Properties, which is suppressed while the sword is attuned to an archdevil</li></ul></div>\n<div class=\"item-subentry\"><strong>Ruler of Avernus.</strong> <p>As an action, you can point this sword at one devil you can see within 60 feet of you. That devil must succeed on a 22 Charisma saving throw or be charmed by you for 1 hour. While charmed in this way, the devil follows your orders to the best of its ability. If you command the devil to do something it perceives as suicidal, the effect ends and you can no longer use this power of the sword against that devil.</p></div>\n<div class=\"item-subentry\"><strong>Infernal Recall.</strong> <p>As an action, you can use the sword to cast word of recall. Creatures transported by this spell appear in an unoccupied space within 30 feet of the current ruler of Avernus, or a sanctuary you designate if you rule Avernus.</p></div>\n<div class=\"item-subentry\"><strong>Destroying the Sword.</strong> <p>The sword can be destroyed by casting it into the River Styx or melting it down in the forge that created it.</p></div>"
   },
   {
@@ -39,14 +90,43 @@
     "source": "BGDIA",
     "page": 39,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "unknown (magic)",
     "reqAttune": false,
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d6",
+    "dmg2": null,
     "dmgType": "bludgeoning",
+    "bonusWeapon": "+1",
     "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Candle Mace",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 1,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 1,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, unknown (magic)*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb\n\n---\n\nYou have a +1 bonus to attack and damage rolls made with this magic weapon. The head of this mace sheds bright light in a 5-foot-radius and dim light for an additional 5 feet. When you wield this mace, you can extinguish or ignite its light as an action.",
     "descriptionHtml": "<p>You have a +1 bonus to attack and damage rolls made with this magic weapon. The head of this mace sheds bright light in a 5-foot-radius and dim light for an additional 5 feet. When you wield this mace, you can extinguish or ignite its light as an action.</p>"
   },
   {
@@ -55,16 +135,51 @@
     "source": "BGDIA",
     "page": 223,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "legendary",
     "reqAttune": "by an evil cleric or paladin",
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": "1d10",
     "dmgType": "slashing",
+    "bonusWeapon": "+3",
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Fane-Eater",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        },
+        {
+          "formula": "2d8",
+          "stat": "",
+          "type": "Necrotic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, legendary (by an evil cleric or paladin)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 4 lb\n\n---\n\nFane-Eater is a battleaxe belonging to Arkhan the Cruel.\n\nYou gain a +3 bonus to attack and damage rolls with Fane-Eater. If you attack a creature with this weapon and roll a 20 on the attack roll, the creature takes an extra 2d8 necrotic damage, and you regain a number of hit points equal to the necrotic damage taken.",
     "descriptionHtml": "<p>Fane-Eater is a battleaxe belonging to Arkhan the Cruel.</p>\n<p>You gain a +3 bonus to attack and damage rolls with Fane-Eater. If you attack a creature with this weapon and roll a 20 on the attack roll, the creature takes an extra 2d8 necrotic damage, and you regain a number of hit points equal to the necrotic damage taken.</p>"
   },
   {
@@ -73,15 +188,2657 @@
     "source": "BGDIA",
     "page": 223,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "rare",
     "reqAttune": "Requires Attunement",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, rare (Requires Attunement)*\n\n---\n\nWhile you wear both of these steel gauntlets, any non-magical weapon you grasp with either gauntlet is treated as a magic weapon. As a bonus action, you can use the gauntlets to cause magical flames to envelop one or two melee weapons in your grasp. Each flaming weapon deals an extra 1d6 fire damage on a hit. The flames last until you sheath or let go of either weapon. Once used, this property can't be used again until the next dawn.",
     "descriptionHtml": "<p>While you wear both of these steel gauntlets, any non-magical weapon you grasp with either gauntlet is treated as a magic weapon. As a bonus action, you can use the gauntlets to cause magical flames to envelop one or two melee weapons in your grasp. Each flaming weapon deals an extra 1d6 fire damage on a hit. The flames last until you sheath or let go of either weapon. Once used, this property can't be used again until the next dawn.</p>"
+  },
+  {
+    "id": "it_hellfire_antimatter_rifle_bgdia",
+    "name": "Hellfire Antimatter Rifle",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 10,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "6d8",
+    "dmg2": null,
+    "dmgType": "necrotic",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Antimatter Rifle",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "6d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Necrotic"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 6d8 necrotic | **Properties:** AF, RLD, Two-Handed | **Weight:** 10 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_automatic_pistol_bgdia",
+    "name": "Hellfire Automatic Pistol",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Automatic Pistol",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 2d6 piercing | **Properties:** AF, RLD | **Weight:** 3 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_automatic_rifle_bgdia",
+    "name": "Hellfire Automatic Rifle",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 8,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "BF",
+      "RLD",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Automatic Rifle",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 2d8 piercing | **Properties:** AF, BF, RLD, Two-Handed | **Weight:** 8 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_battleaxe_bgdia",
+    "name": "Hellfire Battleaxe",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 4,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Battleaxe",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 4 lb | **Value:** 10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_blowgun_bgdia",
+    "name": "Hellfire Blowgun",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 1,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Loading"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Blowgun",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1 piercing | **Properties:** Ammunition, Loading | **Weight:** 1 lb | **Value:** 10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_club_bgdia",
+    "name": "Hellfire Club",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "0.10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Club",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d4 bludgeoning | **Properties:** Light | **Weight:** 2 lb | **Value:** 0.10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_dagger_bgdia",
+    "name": "Hellfire Dagger",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 1,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light",
+      "Thrown"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Dagger",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d4 piercing | **Properties:** Finesse, Light, Thrown | **Weight:** 1 lb | **Value:** 2 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_dart_bgdia",
+    "name": "Hellfire Dart",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 0.25,
+    "value": "0.05 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Thrown"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Dart",
+      "attackStat": "dex",
+      "isFinesse": true,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d4 piercing | **Properties:** Finesse, Thrown | **Weight:** 0.25 lb | **Value:** 0.05 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_double_bladed_scimitar_bgdia",
+    "name": "Hellfire Double-Bladed Scimitar",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 6,
+    "value": "100 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d4",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Special",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Double-Bladed Scimitar",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 2d4 slashing | **Properties:** Special, Two-Handed | **Weight:** 6 lb | **Value:** 100 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.\n\n**Special.** If you attack with a double-bladed scimitar as part of the Attack action on your turn, you can use a bonus action immediately after to make a melee attack with it. This attack deals 1d4 slashing damage on a hit, instead of 2d4.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>\n<div class=\"item-subentry\"><strong>Special.</strong> <p>If you attack with a double-bladed scimitar as part of the Attack action on your turn, you can use a bonus action immediately after to make a melee attack with it. This attack deals 1d4 slashing damage on a hit, instead of 2d4.</p></div>"
+  },
+  {
+    "id": "it_hellfire_flail_bgdia",
+    "name": "Hellfire Flail",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Flail",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 bludgeoning | **Weight:** 2 lb | **Value:** 10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_glaive_bgdia",
+    "name": "Hellfire Glaive",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 6,
+    "value": "20 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Glaive",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d10 slashing | **Properties:** Heavy, Reach, Two-Handed | **Weight:** 6 lb | **Value:** 20 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_greataxe_bgdia",
+    "name": "Hellfire Greataxe",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 7,
+    "value": "30 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d12",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Greataxe",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d12",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d12 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 7 lb | **Value:** 30 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_greatclub_bgdia",
+    "name": "Hellfire Greatclub",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 10,
+    "value": "0.20 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Greatclub",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 bludgeoning | **Properties:** Two-Handed | **Weight:** 10 lb | **Value:** 0.20 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_greatsword_bgdia",
+    "name": "Hellfire Greatsword",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 6,
+    "value": "50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Greatsword",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 2d6 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 6 lb | **Value:** 50 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_halberd_bgdia",
+    "name": "Hellfire Halberd",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 6,
+    "value": "20 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Halberd",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d10 slashing | **Properties:** Heavy, Reach, Two-Handed | **Weight:** 6 lb | **Value:** 20 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_hand_crossbow_bgdia",
+    "name": "Hellfire Hand Crossbow",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "75 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Light",
+      "Loading"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Hand Crossbow",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d6 piercing | **Properties:** Ammunition, Light, Loading | **Weight:** 3 lb | **Value:** 75 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_handaxe_bgdia",
+    "name": "Hellfire Handaxe",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "5 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Light",
+      "Thrown"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Handaxe",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 slashing | **Properties:** Light, Thrown | **Weight:** 2 lb | **Value:** 5 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_heavy_crossbow_bgdia",
+    "name": "Hellfire Heavy Crossbow",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 18,
+    "value": "50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Heavy",
+      "Loading",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Heavy Crossbow",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d10 piercing | **Properties:** Ammunition, Heavy, Loading, Two-Handed | **Weight:** 18 lb | **Value:** 50 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_hooked_shortspear_bgdia",
+    "name": "Hellfire Hooked Shortspear",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Hooked Shortspear",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d4 piercing | **Properties:** Light | **Weight:** 2 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.\n\nOn a hit with this weapon, the wielder can forgo dealing damage and attempt to trip the target, in which case the target must succeed on a Strength saving throw or fall prone. The DC is 8 + the wielder's Strength modifier + the wielder's proficiency bonus.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>\n<p>On a hit with this weapon, the wielder can forgo dealing damage and attempt to trip the target, in which case the target must succeed on a Strength saving throw or fall prone. The DC is 8 + the wielder's Strength modifier + the wielder's proficiency bonus.</p>"
+  },
+  {
+    "id": "it_hellfire_hoopak_bgdia",
+    "name": "Hellfire Hoopak",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "0.10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Finesse",
+      "Special",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Hoopak",
+      "attackStat": "dex",
+      "isFinesse": true,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 piercing | **Properties:** Ammunition, Finesse, Special, Two-Handed | **Weight:** 2 lb | **Value:** 0.10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.\n\nA hoopak is a sturdy stick with a sling at one end and a pointed tip at the other.\n\n**Special.** When you make a melee attack with this weapon, you ignore its ammunition property. You can use the hoopak as a martial ranged weapon. If you do, it uses the ammunition property, uses sling bullets, and deals 1d4 bludgeoning damage on a hit.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>\n<p>A hoopak is a sturdy stick with a sling at one end and a pointed tip at the other.</p>\n<div class=\"item-subentry\"><strong>Special.</strong> <p>When you make a melee attack with this weapon, you ignore its ammunition property. You can use the hoopak as a martial ranged weapon. If you do, it uses the ammunition property, uses sling bullets, and deals 1d4 bludgeoning damage on a hit.</p></div>"
+  },
+  {
+    "id": "it_hellfire_hunting_rifle_bgdia",
+    "name": "Hellfire Hunting Rifle",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 8,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d10",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Hunting Rifle",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d10",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 2d10 piercing | **Properties:** AF, RLD, Two-Handed | **Weight:** 8 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_javelin_bgdia",
+    "name": "Hellfire Javelin",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "0.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Thrown"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Javelin",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 piercing | **Properties:** Thrown | **Weight:** 2 lb | **Value:** 0.50 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_lance_bgdia",
+    "name": "Hellfire Lance",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 6,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d12",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Reach",
+      "Special"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Lance",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d12",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d12 piercing | **Properties:** Reach, Special | **Weight:** 6 lb | **Value:** 10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.\n\n**Special.** You have disadvantage when you use a lance to attack a target within 5 feet of you. Also, a lance requires two hands to wield when you aren't mounted.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>\n<div class=\"item-subentry\"><strong>Special.</strong> <p>You have disadvantage when you use a lance to attack a target within 5 feet of you. Also, a lance requires two hands to wield when you aren't mounted.</p></div>"
+  },
+  {
+    "id": "it_hellfire_laser_pistol_bgdia",
+    "name": "Hellfire Laser Pistol",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "3d6",
+    "dmg2": null,
+    "dmgType": "radiant",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Laser Pistol",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "3d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Radiant"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 3d6 radiant | **Properties:** AF, RLD | **Weight:** 2 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_laser_rifle_bgdia",
+    "name": "Hellfire Laser Rifle",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 7,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "3d8",
+    "dmg2": null,
+    "dmgType": "radiant",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Laser Rifle",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "3d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Radiant"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 3d8 radiant | **Properties:** AF, RLD, Two-Handed | **Weight:** 7 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_light_crossbow_bgdia",
+    "name": "Hellfire Light Crossbow",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 5,
+    "value": "25 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Loading",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Light Crossbow",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d8 piercing | **Properties:** Ammunition, Loading, Two-Handed | **Weight:** 5 lb | **Value:** 25 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_light_hammer_bgdia",
+    "name": "Hellfire Light Hammer",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Light",
+      "Thrown"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Light Hammer",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d4 bludgeoning | **Properties:** Light, Thrown | **Weight:** 2 lb | **Value:** 2 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_light_repeating_crossbow_bgdia",
+    "name": "Hellfire Light Repeating Crossbow",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 5,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Light Repeating Crossbow",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d8 piercing | **Properties:** Ammunition, Two-Handed | **Weight:** 5 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.\n\nThis crossbow is fitted with a cartridge that can hold up to six crossbow bolts. It automatically reloads after firing until the cartridge runs out of ammunition. Reloading the cartridge takes an action.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>\n<p>This crossbow is fitted with a cartridge that can hold up to six crossbow bolts. It automatically reloads after firing until the cartridge runs out of ammunition. Reloading the cartridge takes an action.</p>"
+  },
+  {
+    "id": "it_hellfire_longbow_bgdia",
+    "name": "Hellfire Longbow",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Longbow",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d8 piercing | **Properties:** Ammunition, Heavy, Two-Handed | **Weight:** 2 lb | **Value:** 50 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_longsword_bgdia",
+    "name": "Hellfire Longsword",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "15 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Longsword",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb | **Value:** 15 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_mace_bgdia",
+    "name": "Hellfire Mace",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 4,
+    "value": "5 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Mace",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb | **Value:** 5 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_maul_bgdia",
+    "name": "Hellfire Maul",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 10,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Maul",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 2d6 bludgeoning | **Properties:** Heavy, Two-Handed | **Weight:** 10 lb | **Value:** 10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_morningstar_bgdia",
+    "name": "Hellfire Morningstar",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 4,
+    "value": "15 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Morningstar",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 piercing | **Weight:** 4 lb | **Value:** 15 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_musket_bgdia",
+    "name": "Hellfire Musket",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 10,
+    "value": "500 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d12",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "Loading",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Musket",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d12",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d12 piercing | **Properties:** AF, Loading, Two-Handed | **Weight:** 10 lb | **Value:** 500 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_net_bgdia",
+    "name": "Hellfire Net",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [
+      "Special",
+      "Thrown"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Net",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Properties:** Special, Thrown | **Weight:** 3 lb | **Value:** 1 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.\n\n**Special.** A Large or smaller creature hit by a net is restrained until it is freed. A net has no effect on creatures that are formless, or creatures that are Huge or larger. A creature can use its action to make a 10 Strength check, freeing itself or another creature within its reach on a success. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, ending the effect and destroying the net. When you use an action, bonus action, or reaction to attack with a net, you can make only one attack regardless of the number of attacks you can normally make.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>\n<div class=\"item-subentry\"><strong>Special.</strong> <p>A Large or smaller creature hit by a net is restrained until it is freed. A net has no effect on creatures that are formless, or creatures that are Huge or larger. A creature can use its action to make a 10 Strength check, freeing itself or another creature within its reach on a success. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, ending the effect and destroying the net. When you use an action, bonus action, or reaction to attack with a net, you can make only one attack regardless of the number of attacks you can normally make.</p></div>"
+  },
+  {
+    "id": "it_hellfire_pike_bgdia",
+    "name": "Hellfire Pike",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 18,
+    "value": "5 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Pike",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d10 piercing | **Properties:** Heavy, Reach, Two-Handed | **Weight:** 18 lb | **Value:** 5 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_pistol_bgdia",
+    "name": "Hellfire Pistol",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "250 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "Loading"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Pistol",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d10 piercing | **Properties:** AF, Loading | **Weight:** 3 lb | **Value:** 250 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_quarterstaff_bgdia",
+    "name": "Hellfire Quarterstaff",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 4,
+    "value": "0.20 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Quarterstaff",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 4 lb | **Value:** 0.20 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_rapier_bgdia",
+    "name": "Hellfire Rapier",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "25 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Rapier",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 25 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_revolver_bgdia",
+    "name": "Hellfire Revolver",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Revolver",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 2d8 piercing | **Properties:** AF, RLD | **Weight:** 3 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_scimitar_bgdia",
+    "name": "Hellfire Scimitar",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "25 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Scimitar",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 slashing | **Properties:** Finesse, Light | **Weight:** 3 lb | **Value:** 25 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_semiautomatic_pistol_bgdia",
+    "name": "Hellfire Semiautomatic Pistol",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Martial Weapon",
+    "rawType": "R|XPHB",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Semiautomatic Pistol",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, uncommon*\n\n**Damage:** 2d6 piercing | **Properties:** AF, RLD | **Weight:** 3 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_shortbow_bgdia",
+    "name": "Hellfire Shortbow",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "25 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Shortbow",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d6 piercing | **Properties:** Ammunition, Two-Handed | **Weight:** 2 lb | **Value:** 25 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_shortsword_bgdia",
+    "name": "Hellfire Shortsword",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Shortsword",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb | **Value:** 10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_shotgun_bgdia",
+    "name": "Hellfire Shotgun",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 7,
+    "value": null,
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "AF",
+      "RLD",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Shotgun",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 2d8 piercing | **Properties:** AF, RLD, Two-Handed | **Weight:** 7 lb\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_sickle_bgdia",
+    "name": "Hellfire Sickle",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Sickle",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d4 slashing | **Properties:** Light | **Weight:** 2 lb | **Value:** 1 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_sling_bgdia",
+    "name": "Hellfire Sling",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Ranged Weapon",
+    "rawType": "R",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 0,
+    "value": "0.10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Ammunition"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Sling",
+      "attackStat": "dex",
+      "isFinesse": false,
+      "isRanged": true,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Ranged Weapon, uncommon*\n\n**Damage:** 1d4 bludgeoning | **Properties:** Ammunition | **Weight:** 0 lb | **Value:** 0.10 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_spear_bgdia",
+    "name": "Hellfire Spear",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Thrown",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Spear",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 3 lb | **Value:** 1 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_staff_bgdia",
+    "name": "Hellfire Staff",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Simple Weapon",
+    "rawType": "SCF",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 4,
+    "value": "5 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Staff",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Simple Weapon, uncommon*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 4 lb | **Value:** 5 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_trident_bgdia",
+    "name": "Hellfire Trident",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 4,
+    "value": "5 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Thrown",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Trident",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 4 lb | **Value:** 5 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_war_pick_bgdia",
+    "name": "Hellfire War Pick",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "5 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire War Pick",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 piercing | **Weight:** 2 lb | **Value:** 5 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_warhammer_bgdia",
+    "name": "Hellfire Warhammer",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "15 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Warhammer",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 bludgeoning (or 1d10 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 2 lb | **Value:** 15 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_whip_bgdia",
+    "name": "Hellfire Whip",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Reach"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Whip",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d4 slashing | **Properties:** Finesse, Reach | **Weight:** 3 lb | **Value:** 2 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_wooden_staff_bgdia",
+    "name": "Hellfire Wooden Staff",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Simple Weapon",
+    "rawType": "SCF",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 4,
+    "value": "5 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Wooden Staff",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Simple Weapon, uncommon*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 4 lb | **Value:** 5 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>"
+  },
+  {
+    "id": "it_hellfire_yklwa_bgdia",
+    "name": "Hellfire Yklwa",
+    "source": "BGDIA",
+    "page": 223,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "uncommon",
+    "reqAttune": false,
+    "weight": 3,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Thrown"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hellfire Yklwa",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, uncommon*\n\n**Damage:** 1d8 piercing | **Properties:** Thrown | **Weight:** 3 lb | **Value:** 1 gp\n\n---\n\nThis weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.\n\nAny humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.\n\nA yklwa (pronounced YICK-ul-wah) is a simple melee weapon that is the traditional weapon of Chultan warriors. A yklwa consists of a 3-foot wooden shaft with a steel or stone blade up to 18 inches long. Although it has the thrown weapon property, the yklwa is not well balanced for throwing.",
+    "descriptionHtml": "<p>This weapon is fashioned from infernal iron and traced with veins of hellfire that shed dim light in a 5-foot-radius.</p>\n<p>Any humanoid killed by an attack made with this weapon has its soul funneled into the River Styx, where it's reborn instantly as a lemure devil.</p>\n<p>A yklwa (pronounced YICK-ul-wah) is a simple melee weapon that is the traditional weapon of Chultan warriors. A yklwa consists of a 3-foot wooden shaft with a steel or stone blade up to 18 inches long. Although it has the thrown weapon property, the yklwa is not well balanced for throwing.</p>"
   },
   {
     "id": "it_helm_of_devil_command_bgdia",
@@ -89,14 +2846,30 @@
     "source": "BGDIA",
     "page": 223,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "very rare",
     "reqAttune": "by a creature that can speak Infernal",
     "weight": null,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Dominate Monster",
+        "cleanName": "dominate monster",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, very rare (by a creature that can speak Infernal)*\n\n---\n\nThis bulky, eyeless helmet is made for a pit fiend but magically resizes to fit the heads of other wearers.\n\nWhile wearing the helm, you can see out of it as though you weren't wearing it. In addition, you know the exact location and type of all devils within 1,000 feet of you. You can telepathically communicate with a devil within range, or you can broadcast your thoughts to all devils within range. The devils receiving your broadcasted thoughts have no special means of replying to them.\n\nThe helm has 3 charges. As an action, you can expend 1 charge to cast dominate monster (save 21), which affects devils only. (The spell fails and the charge is wasted if you target any creature that's not a devil.) If a devil can see you when you cast this spell on it, the devil knows you tried to charm it. The helm regains all its charges 24 hours after its last charge is expended.\n\nIf you are not a devil, using the helm's dominate monster property in the Nine Hells has a 20 chance of attracting a narzugon, which arrives on the back of a nightmare mount in 1d4 hours. The narzugon tries to recover the helm, killing you if necessary to obtain it. If it gets the helm, the narzugon tries to deliver it to its infernal master.",
     "descriptionHtml": "<p>This bulky, eyeless helmet is made for a pit fiend but magically resizes to fit the heads of other wearers.</p>\n<p>While wearing the helm, you can see out of it as though you weren't wearing it. In addition, you know the exact location and type of all devils within 1,000 feet of you. You can telepathically communicate with a devil within range, or you can broadcast your thoughts to all devils within range. The devils receiving your broadcasted thoughts have no special means of replying to them.</p>\n<p>The helm has 3 charges. As an action, you can expend 1 charge to cast dominate monster (save 21), which affects devils only. (The spell fails and the charge is wasted if you target any creature that's not a devil.) If a devil can see you when you cast this spell on it, the devil knows you tried to charm it. The helm regains all its charges 24 hours after its last charge is expended.</p>\n<p>If you are not a devil, using the helm's dominate monster property in the Nine Hells has a 20 chance of attracting a narzugon, which arrives on the back of a nightmare mount in 1d4 hours. The narzugon tries to recover the helm, killing you if necessary to obtain it. If it gets the helm, the narzugon tries to deliver it to its infernal master.</p>"
   },
   {
@@ -105,14 +2878,24 @@
     "source": "BGDIA",
     "page": 224,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "uncommon",
     "reqAttune": false,
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, uncommon*\n\n**Weight:** 3 lb\n\n---\n\nAn infernal puzzle box is a cube-shaped container 5 to 6 inches on a side, composed of airtight, interlocking parts made from materials found in the Nine Hells. Most of these boxes are made of infernal iron, though some are carved from bone or horn. Infernal puzzle boxes are used to safeguard diabolical contracts signed between devils and mortals, even after the terms of these contracts are fulfilled. An empty infernal puzzle box weighs 3 pounds regardless of the materials used to fashion it.\n\nWhen an object small enough to fit inside an infernal puzzle box is placed in it, the container magically seals shut around the object, and no magic can force the box open. The sealed box becomes immune to all damage as well. Every infernal puzzle box is constructed with a unique means of opening it. The trick to solving the puzzle is always mundane, never magical. Once a creature figures out the trick or sequence of steps needed to open a particular infernal puzzle box, that creature can open the box as an action, allowing access to the box's contents.\n\nA creature that spends 1 hour holding an infernal puzzle box while trying to open it can make a 30 Intelligence (Investigation) check. If the check succeeds, the creature figures out the trick or sequence of steps needed to open the box. If the check fails by 5 or more, the creature must make a 18 Wisdom saving throw, taking 42 (12d6) psychic damage on a failed save, or half as much damage on a successful one.",
     "descriptionHtml": "<p>An infernal puzzle box is a cube-shaped container 5 to 6 inches on a side, composed of airtight, interlocking parts made from materials found in the Nine Hells. Most of these boxes are made of infernal iron, though some are carved from bone or horn. Infernal puzzle boxes are used to safeguard diabolical contracts signed between devils and mortals, even after the terms of these contracts are fulfilled. An empty infernal puzzle box weighs 3 pounds regardless of the materials used to fashion it.</p>\n<p>When an object small enough to fit inside an infernal puzzle box is placed in it, the container magically seals shut around the object, and no magic can force the box open. The sealed box becomes immune to all damage as well. Every infernal puzzle box is constructed with a unique means of opening it. The trick to solving the puzzle is always mundane, never magical. Once a creature figures out the trick or sequence of steps needed to open a particular infernal puzzle box, that creature can open the box as an action, allowing access to the box's contents.</p>\n<p>A creature that spends 1 hour holding an infernal puzzle box while trying to open it can make a 30 Intelligence (Investigation) check. If the check succeeds, the creature figures out the trick or sequence of steps needed to open the box. If the check fails by 5 or more, the creature must make a 18 Wisdom saving throw, taking 42 (12d6) psychic damage on a failed save, or half as much damage on a successful one.</p>"
   },
   {
@@ -121,16 +2904,45 @@
     "source": "BGDIA",
     "page": 224,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 2,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": "1d10",
     "dmgType": "bludgeoning",
+    "bonusWeapon": null,
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Matalotok",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, legendary (Requires Attunement)*\n\n**Damage:** 1d8 bludgeoning (or 1d10 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 2 lb\n\n---\n\nMatalotok, the Frost Father, is an ancient hammer fashioned by Thrym, the god of frost giants. The favored weapon of the demon lord Kostchtchie, Matalotok is frigid to the touch and wreathed in mist.\n\nYou are immune to cold damage while holding Matalotok. Whenever it deals damage to a creature, the hammer radiates a burst of intense cold in a 30-foot-radius sphere. Each creature in that area takes 10 (3d6) cold damage.",
     "descriptionHtml": "<p>Matalotok, the Frost Father, is an ancient hammer fashioned by Thrym, the god of frost giants. The favored weapon of the demon lord Kostchtchie, Matalotok is frigid to the touch and wreathed in mist.</p>\n<p>You are immune to cold damage while holding Matalotok. Whenever it deals damage to a creature, the hammer radiates a burst of intense cold in a 30-foot-radius sphere. Each creature in that area takes 10 (3d6) cold damage.</p>"
   },
   {
@@ -139,14 +2951,24 @@
     "source": "BGDIA",
     "page": 224,
     "type": "Heavy Armor",
+    "rawType": "HA",
     "rarity": "legendary",
     "reqAttune": false,
     "weight": 65,
     "value": null,
     "ac": 18,
+    "bonusAc": "+2",
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, legendary*\n\n**Armor Class:** 18 | **Weight:** 65 lb\n\n---\n\nYou gain a +2 bonus to AC and resistance to poison damage while you wear this armor. In addition, you gain advantage on ability checks and saving throws made to avoid or end the grappled condition on yourself.",
     "descriptionHtml": "<p>You gain a +2 bonus to AC and resistance to poison damage while you wear this armor. In addition, you gain advantage on ability checks and saving throws made to avoid or end the grappled condition on yourself.</p>"
   },
   {
@@ -155,14 +2977,24 @@
     "source": "BGDIA",
     "page": 99,
     "type": "Other",
+    "rawType": "OTH",
     "rarity": "unknown",
     "reqAttune": false,
     "weight": 4,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Other, unknown*\n\n**Weight:** 4 lb\n\n---\n\nA shatterstick is a nonmagical, 12-inch-long, 4-pound stake made of blue-tinged infernal iron mined on Cania, the eighth layer of the Nine Hells. When embedded in earth or pounded into solid rock, the stake emits a seismic vibration in a 20-foot radius centered on itself for 1 minute, shaking the ground in that area for the duration. When the effects ends, the shatterstick breaks apart, becoming useless, and all structures within 20 feet of it take 35 (10d6) bludgeoning damage.",
     "descriptionHtml": "<p>A shatterstick is a nonmagical, 12-inch-long, 4-pound stake made of blue-tinged infernal iron mined on Cania, the eighth layer of the Nine Hells. When embedded in earth or pounded into solid rock, the stake emits a seismic vibration in a 20-foot radius centered on itself for 1 minute, shaking the ground in that area for the duration. When the effects ends, the shatterstick breaks apart, becoming useless, and all structures within 20 feet of it take 35 (10d6) bludgeoning damage.</p>"
   },
   {
@@ -171,14 +3003,35 @@
     "source": "BGDIA",
     "page": 225,
     "type": "Shield",
+    "rawType": "S",
     "rarity": "legendary",
     "reqAttune": "Requires Attunement",
     "weight": 6,
     "value": null,
     "ac": 2,
+    "bonusAc": "+2",
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Fireball",
+        "cleanName": "fireball",
+        "castLevel": null
+      },
+      {
+        "name": "Wall Of Fire",
+        "cleanName": "wall of fire",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Shield, legendary (Requires Attunement)*\n\n**Armor Class:** 2 | **Weight:** 6 lb\n\n---\n\nThe Shield of the Hidden Lord is of celestial origin and serves as a prison for the pit fiend Gargauth, whose mortal followers revere it as a god. Over time, Gargauth's evil has warped the shield's appearance, so that its celestial motif and designs have become twisted into a fiendish face that subtly moves in disturbing ways.\n\nWhile holding this shield, you gain a +2 bonus to AC and resistance to fire damage.\n\n**Sentience.** The Shield of the Hidden Lord is sentient as long as it imprisons Gargauth. While sentient, the shield has the following properties:\n\n- The shield has an Intelligence of 22, a Wisdom of 18, and a Charisma of 24, as well as hearing and truesight out to a range of 120 feet.\n- The shield can speak, read, and understand Common and Infernal, and it can communicate telepathically with any creature it can sense within 120 feet of it. Its voice is a deep, hollow whisper.\n- The shield has 3 charges. You can use an action to expend 1 charge to cast fireball or 2 charges to cast wall of fire from the shield (save 21 for each). The wall of fire spell lasts for 1 minute (no concentration required). The shield regains all expended charges daily at dawn.\n- Anytime during your turn, the shield can choose to radiate an aura of dread for 1 minute. (This is not a power of the shield that you control.) Any creature hostile to you that starts its turn within 20 feet of the shield must make a 18 Wisdom saving throw. On a failed save, the creature is frightened until the start of its next turn. On a successful save, the creature is immune to this power of the shield for the next 24 hours. Once the shield uses this power, it can't use it again until the next dawn.\n\n**Gargauth's Personality.** Gargauth desperately seeks freedom but can't escape on its own. The pit fiend won't reveal its true nature, referring to itself only as the Hidden Lord. It drops hints and subtle suggestions that it is an angel trapped in an unholy prison. If released from the shield, the pit fiend honors the terms of whatever bargain it struck to facilitate its escape.\n\nWhile trapped in the shield, Gargauth carefully steers the shield's current owner toward committing acts of cruelty and domination, hoping to condemn the individual's soul to the Nine Hells. Conflict occurs if the shield's owner does anything that would make it more difficult for Gargauth to escape its prison, such as leaving the shield in a place where others are unlikely to find it.\n\nGargauth doesn't know how to escape from the shield. The pit fiend believes (incorrectly) that it can break free of the shield if it's brought to the Nine Hells, for it's convinced that the shield's powers are weaker there.\n\n**Freeing Gargauth.** Casting dispel evil and good on the shield has a 1 chance of freeing the pit fiend, or automatically succeeds if the spell is cast by a solar, a planetar, or an archdevil. A god can release the pit fiend by touching the shield and speaking Gargauth's name. When released, Gargauth appears in a random, unoccupied space as close to the shield as possible.",
     "descriptionHtml": "<p>The Shield of the Hidden Lord is of celestial origin and serves as a prison for the pit fiend Gargauth, whose mortal followers revere it as a god. Over time, Gargauth's evil has warped the shield's appearance, so that its celestial motif and designs have become twisted into a fiendish face that subtly moves in disturbing ways.</p>\n<p>While holding this shield, you gain a +2 bonus to AC and resistance to fire damage.</p>\n<div class=\"item-subentry\"><strong>Sentience.</strong> <p>The Shield of the Hidden Lord is sentient as long as it imprisons Gargauth. While sentient, the shield has the following properties:</p>\n<ul><li>The shield has an Intelligence of 22, a Wisdom of 18, and a Charisma of 24, as well as hearing and truesight out to a range of 120 feet.</li><li>The shield can speak, read, and understand Common and Infernal, and it can communicate telepathically with any creature it can sense within 120 feet of it. Its voice is a deep, hollow whisper.</li><li>The shield has 3 charges. You can use an action to expend 1 charge to cast fireball or 2 charges to cast wall of fire from the shield (save 21 for each). The wall of fire spell lasts for 1 minute (no concentration required). The shield regains all expended charges daily at dawn.</li><li>Anytime during your turn, the shield can choose to radiate an aura of dread for 1 minute. (This is not a power of the shield that you control.) Any creature hostile to you that starts its turn within 20 feet of the shield must make a 18 Wisdom saving throw. On a failed save, the creature is frightened until the start of its next turn. On a successful save, the creature is immune to this power of the shield for the next 24 hours. Once the shield uses this power, it can't use it again until the next dawn.</li></ul></div>\n<div class=\"item-subentry\"><strong>Gargauth's Personality.</strong> <p>Gargauth desperately seeks freedom but can't escape on its own. The pit fiend won't reveal its true nature, referring to itself only as the Hidden Lord. It drops hints and subtle suggestions that it is an angel trapped in an unholy prison. If released from the shield, the pit fiend honors the terms of whatever bargain it struck to facilitate its escape.</p>\n<p>While trapped in the shield, Gargauth carefully steers the shield's current owner toward committing acts of cruelty and domination, hoping to condemn the individual's soul to the Nine Hells. Conflict occurs if the shield's owner does anything that would make it more difficult for Gargauth to escape its prison, such as leaving the shield in a place where others are unlikely to find it.</p>\n<p>Gargauth doesn't know how to escape from the shield. The pit fiend believes (incorrectly) that it can break free of the shield if it's brought to the Nine Hells, for it's convinced that the shield's powers are weaker there.</p></div>\n<div class=\"item-subentry\"><strong>Freeing Gargauth.</strong> <p>Casting dispel evil and good on the shield has a 1 chance of freeing the pit fiend, or automatically succeeds if the spell is cast by a solar, a planetar, or an archdevil. A god can release the pit fiend by touching the shield and speaking Gargauth's name. When released, Gargauth appears in a random, unoccupied space as close to the shield as possible.</p></div>"
   },
   {
@@ -187,14 +3040,24 @@
     "source": "BGDIA",
     "page": 225,
     "type": "Wondrous Item",
+    "rawType": null,
     "rarity": "uncommon",
     "reqAttune": false,
     "weight": 0.333,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": null,
+    "dmg2": null,
     "dmgType": null,
+    "bonusWeapon": null,
     "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Wondrous Item, uncommon*\n\n**Weight:** 0.333 lb\n\n---\n\nSoul coins are about 5 inches across and about an inch thick, minted from infernal iron. Each coin weighs one-third of a pound, and is inscribed with Infernal writing and a spell that magically binds a single soul to the coin. Because each soul coin has a unique soul trapped within it, each has a story. A creature might have been imprisoned as a result of defaulting on a deal, while another might be the victim of a night hag's curse.\n\n**Carrying Soul Coins.** To hold a soul coin is to feel the soul bound within it—overcome with rage or fraught with despair.\n\nAn evil creature can carry as many soul coins as it wishes (up to its maximum weight allowance). A non-evil creature can carry a number of soul coins equal to or less than its Constitution modifier without penalty. A non-evil creature carrying a number of soul coins greater than its Constitution modifier has disadvantage on its attack rolls, ability checks, and saving throws.\n\n**Using a Soul Coin.** A soul coin has 3 charges. A creature carrying the coin can use its action to expend 1 charge from a soul coin and use it to do one of the following:\n\n- **Drain Life.** \n- **Query.** \n\n**Freeing a Soul.** Casting a spell that removes a curse on a soul coin frees the soul trapped within it, as does expending all of the coin's charges. The coin itself rusts from within and is destroyed once the soul is released. A freed soul travels to the realm of the god it served or the outer plane most closely tied to its alignment (DM's choice). The souls of lawful evil creatures released from soul coins typically emerge from the River Styx as lemure devils.\n\nA soul can also be freed by destroying the coin that contains it. A soul coin has AC 19, 1 hit point for each charge it has remaining, and immunity to all damage except that which is dealt by a hellfire weapon or an infernal war machine's furnace (see \"Soul Fuel|BGDIA|11|Soul Fuel\").\n\nFreeing a soul from a soul coin is considered a good act, even if the soul belongs to an evil creature.\n\n**Hellish Currency.** Soul coins are a currency of the Nine Hells and are highly valued by devils. The coins are used among the infernal hierarchy to barter for favors, bribe the unwilling, and reward the faithful for services rendered.\n\nSoul coins are created by Mammon and his greater devils on Minauros, the third layer of the Nine Hells, in a vast chamber where the captured souls of evil mortals are bound into the coins. These coins are then distributed throughout the Nine Hells to be used for goods and services, infernal deals, dark bargains, and bribes.",
     "descriptionHtml": "<p>Soul coins are about 5 inches across and about an inch thick, minted from infernal iron. Each coin weighs one-third of a pound, and is inscribed with Infernal writing and a spell that magically binds a single soul to the coin. Because each soul coin has a unique soul trapped within it, each has a story. A creature might have been imprisoned as a result of defaulting on a deal, while another might be the victim of a night hag's curse.</p>\n<div class=\"item-subentry\"><strong>Carrying Soul Coins.</strong> <p>To hold a soul coin is to feel the soul bound within it—overcome with rage or fraught with despair.</p>\n<p>An evil creature can carry as many soul coins as it wishes (up to its maximum weight allowance). A non-evil creature can carry a number of soul coins equal to or less than its Constitution modifier without penalty. A non-evil creature carrying a number of soul coins greater than its Constitution modifier has disadvantage on its attack rolls, ability checks, and saving throws.</p></div>\n<div class=\"item-subentry\"><strong>Using a Soul Coin.</strong> <p>A soul coin has 3 charges. A creature carrying the coin can use its action to expend 1 charge from a soul coin and use it to do one of the following:</p>\n<ul><li><div class=\"item-subentry\"><strong>Drain Life.</strong> </div></li><li><div class=\"item-subentry\"><strong>Query.</strong> </div></li></ul></div>\n<div class=\"item-subentry\"><strong>Freeing a Soul.</strong> <p>Casting a spell that removes a curse on a soul coin frees the soul trapped within it, as does expending all of the coin's charges. The coin itself rusts from within and is destroyed once the soul is released. A freed soul travels to the realm of the god it served or the outer plane most closely tied to its alignment (DM's choice). The souls of lawful evil creatures released from soul coins typically emerge from the River Styx as lemure devils.</p>\n<p>A soul can also be freed by destroying the coin that contains it. A soul coin has AC 19, 1 hit point for each charge it has remaining, and immunity to all damage except that which is dealt by a hellfire weapon or an infernal war machine's furnace (see \"Soul Fuel|BGDIA|11|Soul Fuel\").</p>\n<p>Freeing a soul from a soul coin is considered a good act, even if the soul belongs to an evil creature.</p></div>\n<div class=\"item-subentry\"><strong>Hellish Currency.</strong> <p>Soul coins are a currency of the Nine Hells and are highly valued by devils. The coins are used among the infernal hierarchy to barter for favors, bribe the unwilling, and reward the faithful for services rendered.</p>\n<p>Soul coins are created by Mammon and his greater devils on Minauros, the third layer of the Nine Hells, in a vast chamber where the captured souls of evil mortals are bound into the coins. These coins are then distributed throughout the Nine Hells to be used for goods and services, infernal deals, dark bargains, and bribes.</p></div>"
   },
   {
@@ -203,16 +3066,45 @@
     "source": "BGDIA",
     "page": 226,
     "type": "Melee Weapon",
+    "rawType": "M",
     "rarity": "artifact",
     "reqAttune": "by a creature the sword deems worthy",
     "weight": 3,
     "value": null,
     "ac": null,
+    "bonusAc": null,
     "dmg1": "1d8",
+    "dmg2": "1d10",
     "dmgType": "slashing",
+    "bonusWeapon": null,
     "properties": [
       "Versatile"
     ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Sword of Zariel",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, artifact (by a creature the sword deems worthy)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb\n\n---\n\nThis longsword belonged to the angel Zariel before her fall from grace. Fashioned from celestial steel, it gives off a faint glow and hum. The weapon chooses who can attune to it and who can't. It desires a wielder who embodies bravery and heroism.\n\n**Attunement.** The sword allows you to attune to it immediately, without having to take a short rest. The first time you attune to the sword, you are transformed into a heavenly, idealized version of yourself, blessed with otherworldly beauty and a touch of heaven in your heart. Neither magic nor divine intervention can reverse this transformation. Your alignment becomes lawful good, and you gain the following traits:\n\n- **Angelic Language.** \n- **Celestial Resistance.** \n- **Divine Presence.** \n- **Feathered Wings.** \n- **Truesight.** \n- **New Personality.** You gain new personality traits, determined by rolling once on each of the following tables. These traits override any conflicting personality trait, ideal, bond, or flaw.\n\n| d8 | Personality Trait |\n| --- | --- |\n| 1 | I treat all beings, even enemies, with respect. |\n| 2 | I won't tell a lie. |\n| 3 | I enjoy sharing my philosophical worldview and experiences with others. |\n| 4 | I cut right to the chase in every conversation. |\n| 5 | I often quote (or misquote) religious texts. |\n| 6 | I anger quickly when I witness cruelty or injustice. |\n| 7 | My praise and trust are earned and never given freely. |\n| 8 | I like everything clean and organized. |\n\n| d6 | Ideal |\n| --- | --- |\n| 1 | Charity. I always help those in need. (Good) |\n| 2 | Faith. I choose to follow the tenets of a particular lawful good deity to the letter. (Lawful) |\n| 3 | Responsibility. It is the duty of the strong to protect the weak. (Lawful) |\n| 4 | Respect. All people deserve to be treated with dignity. (Good) |\n| 5 | Honor. The way I conduct myself determines my reward in the afterlife. (Lawful) |\n| 6 | Redemption. All creatures are capable of change for the better. (Good) |\n\n| d6 | Bond |\n| --- | --- |\n| 1 | I have a favorite religious hymn that I constantly hum. |\n| 2 | I must keep a written record of my beliefs and the sins that I witness. When finished, this book will be my gift to the multiverse. |\n| 3 | I have cherished memories of Idyllglen, though I've only seen this bucolic town in dreams. |\n| 4 | I would die for those who fight beside me, regardless of their faults. |\n| 5 | I seek to honor the angel Zariel by destroying fiends and other evildoers wherever I find them. |\n| 6 | The Sword of Zariel has chosen me. I shall not fail to wield it justly. |\n\n| d6 | Flaw |\n| --- | --- |\n| 1 | I am too quick to judge others. |\n| 2 | I offer forgiveness too readily. |\n| 3 | I will sacrifice innocent lives for the greater good. |\n| 4 | Flaw? What flaw? I am flawless. Utter perfection! |\n| 5 | I allow nothing to stand in the way of my crusade to eradicate evil from the multiverse. |\n| 6 | I ignore those who do not support my plans, for my calling is higher than all others. |\n\n**Holy Light.** The sword sheds bright light in a 5-foot radius and dim light for an additional 5 feet. Fiends find the sword's light disconcerting and painful, even if they can't see it, and have disadvantage on attack rolls made within the weapon's radius of bright light.\n\nAs a bonus action, you can intensify the sword's light, causing it to shed bright light in a 15-foot radius and dim light for an additional 15 feet, or reduce its glow to its normal intensity.\n\n**Random Properties.** The sword has 2 Artifact Properties; Minor Beneficial Properties.\n\n**Searing Radiance.** The sword deals an extra 9 (2d8) radiant damage to any creature it hits, or 16 (3d10) radiant damage if you're wielding the weapon with two hands. An evil creature that takes this radiant damage must succeed on a 17 Constitution saving throw or be blinded until the end of its next turn.\n\n**Sentience.** The Sword of Zariel is a sentient, lawful good item with an Intelligence of 10, a Wisdom of 20, and a Charisma of 18. It has hearing and normal vision out to a range of 30 feet.\n\nThe sword communicates by transmitting emotion to the creature carrying or wielding it.\n\n**Truth Seer.** While holding the sword, you gain advantage on all Wisdom (Insight) checks.\n\n**Destroying the Sword.** Zariel can destroy the sword simply by grasping it. She couldn't bring herself to do so when she was an angel, but as an archdevil she has no compunction about ridding the multiverse of the weapon. The sword is also destroyed if it's used to shatter the Companion (see \"Shattering the Companion|BGDIA|8|shattering the companion\"), unless the blade is wielded by an angel of challenge rating 15 or higher, or a good-aligned cleric or paladin of at least 10th level.\n\nIf Zariel is killed for good (that is, if she dies in the Nine Hells), the sword becomes no harder to destroy than a normal longsword.",
     "descriptionHtml": "<p>This longsword belonged to the angel Zariel before her fall from grace. Fashioned from celestial steel, it gives off a faint glow and hum. The weapon chooses who can attune to it and who can't. It desires a wielder who embodies bravery and heroism.</p>\n<div class=\"item-subentry\"><strong>Attunement.</strong> <p>The sword allows you to attune to it immediately, without having to take a short rest. The first time you attune to the sword, you are transformed into a heavenly, idealized version of yourself, blessed with otherworldly beauty and a touch of heaven in your heart. Neither magic nor divine intervention can reverse this transformation. Your alignment becomes lawful good, and you gain the following traits:</p>\n<ul><li><div class=\"item-subentry\"><strong>Angelic Language.</strong> </div></li><li><div class=\"item-subentry\"><strong>Celestial Resistance.</strong> </div></li><li><div class=\"item-subentry\"><strong>Divine Presence.</strong> </div></li><li><div class=\"item-subentry\"><strong>Feathered Wings.</strong> </div></li><li><div class=\"item-subentry\"><strong>Truesight.</strong> </div></li><li><div class=\"item-subentry\"><strong>New Personality.</strong> <p>You gain new personality traits, determined by rolling once on each of the following tables. These traits override any conflicting personality trait, ideal, bond, or flaw.</p>\n<table class=\"item-table\"><thead><tr><th>d8</th><th>Personality Trait</th></tr></thead><tbody><tr><td>1</td><td>I treat all beings, even enemies, with respect.</td></tr><tr><td>2</td><td>I won't tell a lie.</td></tr><tr><td>3</td><td>I enjoy sharing my philosophical worldview and experiences with others.</td></tr><tr><td>4</td><td>I cut right to the chase in every conversation.</td></tr><tr><td>5</td><td>I often quote (or misquote) religious texts.</td></tr><tr><td>6</td><td>I anger quickly when I witness cruelty or injustice.</td></tr><tr><td>7</td><td>My praise and trust are earned and never given freely.</td></tr><tr><td>8</td><td>I like everything clean and organized.</td></tr></tbody></table>\n<table class=\"item-table\"><thead><tr><th>d6</th><th>Ideal</th></tr></thead><tbody><tr><td>1</td><td>Charity. I always help those in need. (Good)</td></tr><tr><td>2</td><td>Faith. I choose to follow the tenets of a particular lawful good deity to the letter. (Lawful)</td></tr><tr><td>3</td><td>Responsibility. It is the duty of the strong to protect the weak. (Lawful)</td></tr><tr><td>4</td><td>Respect. All people deserve to be treated with dignity. (Good)</td></tr><tr><td>5</td><td>Honor. The way I conduct myself determines my reward in the afterlife. (Lawful)</td></tr><tr><td>6</td><td>Redemption. All creatures are capable of change for the better. (Good)</td></tr></tbody></table>\n<table class=\"item-table\"><thead><tr><th>d6</th><th>Bond</th></tr></thead><tbody><tr><td>1</td><td>I have a favorite religious hymn that I constantly hum.</td></tr><tr><td>2</td><td>I must keep a written record of my beliefs and the sins that I witness. When finished, this book will be my gift to the multiverse.</td></tr><tr><td>3</td><td>I have cherished memories of Idyllglen, though I've only seen this bucolic town in dreams.</td></tr><tr><td>4</td><td>I would die for those who fight beside me, regardless of their faults.</td></tr><tr><td>5</td><td>I seek to honor the angel Zariel by destroying fiends and other evildoers wherever I find them.</td></tr><tr><td>6</td><td>The Sword of Zariel has chosen me. I shall not fail to wield it justly.</td></tr></tbody></table>\n<table class=\"item-table\"><thead><tr><th>d6</th><th>Flaw</th></tr></thead><tbody><tr><td>1</td><td>I am too quick to judge others.</td></tr><tr><td>2</td><td>I offer forgiveness too readily.</td></tr><tr><td>3</td><td>I will sacrifice innocent lives for the greater good.</td></tr><tr><td>4</td><td>Flaw? What flaw? I am flawless. Utter perfection!</td></tr><tr><td>5</td><td>I allow nothing to stand in the way of my crusade to eradicate evil from the multiverse.</td></tr><tr><td>6</td><td>I ignore those who do not support my plans, for my calling is higher than all others.</td></tr></tbody></table></div></li></ul></div>\n<div class=\"item-subentry\"><strong>Holy Light.</strong> <p>The sword sheds bright light in a 5-foot radius and dim light for an additional 5 feet. Fiends find the sword's light disconcerting and painful, even if they can't see it, and have disadvantage on attack rolls made within the weapon's radius of bright light.</p>\n<p>As a bonus action, you can intensify the sword's light, causing it to shed bright light in a 15-foot radius and dim light for an additional 15 feet, or reduce its glow to its normal intensity.</p></div>\n<div class=\"item-subentry\"><strong>Random Properties.</strong> <p>The sword has 2 Artifact Properties; Minor Beneficial Properties.</p></div>\n<div class=\"item-subentry\"><strong>Searing Radiance.</strong> <p>The sword deals an extra 9 (2d8) radiant damage to any creature it hits, or 16 (3d10) radiant damage if you're wielding the weapon with two hands. An evil creature that takes this radiant damage must succeed on a 17 Constitution saving throw or be blinded until the end of its next turn.</p></div>\n<div class=\"item-subentry\"><strong>Sentience.</strong> <p>The Sword of Zariel is a sentient, lawful good item with an Intelligence of 10, a Wisdom of 20, and a Charisma of 18. It has hearing and normal vision out to a range of 30 feet.</p>\n<p>The sword communicates by transmitting emotion to the creature carrying or wielding it.</p></div>\n<div class=\"item-subentry\"><strong>Truth Seer.</strong> <p>While holding the sword, you gain advantage on all Wisdom (Insight) checks.</p></div>\n<div class=\"item-subentry\"><strong>Destroying the Sword.</strong> <p>Zariel can destroy the sword simply by grasping it. She couldn't bring herself to do so when she was an angel, but as an archdevil she has no compunction about ridding the multiverse of the weapon. The sword is also destroyed if it's used to shatter the Companion (see \"Shattering the Companion|BGDIA|8|shattering the companion\"), unless the blade is wielded by an angel of challenge rating 15 or higher, or a good-aligned cleric or paladin of at least 10th level.</p>\n<p>If Zariel is killed for good (that is, if she dies in the Nine Hells), the sword becomes no harder to destroy than a normal longsword.</p></div>"
   }
 ]

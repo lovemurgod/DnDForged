@@ -68,22 +68,20 @@ if (fs.existsSync(CAMPAIGNS_FILE)) {
     }
 }
 
-// 2. Also add all Monster Manual (MM) and Curse of Strahd (CoS) creatures from bestiary catalog
+// 2. Add all creatures from bestiary catalog across all sources (MM, CoS, GGR, EGW, etc.)
 if (fs.existsSync(BESTIARY_CATALOG_FILE)) {
     try {
         const catalog = JSON.parse(fs.readFileSync(BESTIARY_CATALOG_FILE, 'utf8'));
         let coreAdded = 0;
         for (const mon of catalog) {
-            const src = (mon.source || '').toUpperCase();
-            if (src === 'MM' || src === 'COS' || src === 'XMM') {
-                if (mon.tokenImg) {
-                    const cleanRel = mon.tokenImg.replace(/^img\//, '');
-                    assetsToFetch.add(decodeURIComponent(cleanRel));
-                    coreAdded++;
-                }
+            const rawToken = mon.tokenImg || mon.tokenUrl;
+            if (rawToken) {
+                const cleanRel = rawToken.replace(/^(\/)?img\//, '');
+                assetsToFetch.add(decodeURIComponent(cleanRel));
+                coreAdded++;
             }
         }
-        console.log(`📦 Added ${coreAdded} core tokens (MM, CoS, XMM) from Bestiary catalog to offline library.`);
+        console.log(`📦 Added ${coreAdded} tokens across all bestiary sources to offline library.`);
     } catch (err) {
         console.error('Error reading bestiary catalog:', err);
     }

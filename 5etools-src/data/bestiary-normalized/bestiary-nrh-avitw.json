@@ -57,12 +57,28 @@
         "mod": -2
       }
     },
+    "str": 2,
+    "dex": 16,
+    "con": 11,
+    "int": 3,
+    "wis": 12,
+    "cha": 6,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+5"
+    },
     "skills": {
       "perception": "+3",
       "stealth": "+5"
     },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
     "senses": {
       "passivePerception": 13,
       "sensesString": "darkvision 60 ft."
@@ -74,7 +90,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_chimeric_creation_gg8x",
+        "id": "act_chimeric_creation_2g0v",
         "name": "Chimeric Creation",
         "actionType": "trait",
         "descriptionHtml": "<p>The fox has fur that changes color to match its surroundings, giving it advantage on Dexterity (Stealth) checks.</p>",
@@ -91,7 +107,7 @@
         }
       },
       {
-        "id": "act_keen_hearing_fauz",
+        "id": "act_keen_hearing_6qnl",
         "name": "Keen Hearing",
         "actionType": "trait",
         "descriptionHtml": "<p>The fox has advantage on Wisdom (Perception) checks that rely on hearing.</p>",
@@ -110,7 +126,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_2gdq",
+        "id": "act_bite_onbq",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}1 piercing damage.</p>",
@@ -198,9 +214,29 @@
         "mod": -5
       }
     },
+    "str": 15,
+    "dex": 6,
+    "con": 14,
+    "int": 1,
+    "wis": 6,
+    "cha": 1,
     "proficiencyBonus": 2,
+    "save": {},
     "saves": {},
+    "skill": {},
     "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 8,
     "senses": {
       "passivePerception": 8,
       "sensesString": "darkvision 60 ft."
@@ -212,7 +248,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_form_sj57",
+        "id": "act_immutable_form_6bf0",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The Scarlet Sentinel is immune to any spell or effect that would alter its form.</p>",
@@ -229,7 +265,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_c82p",
+        "id": "act_magic_resistance_qadd",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Scarlet Sentinel has advantage on saving throws against spells and other magical effects.</p>",
@@ -246,7 +282,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_b3ma",
+        "id": "act_magic_weapons_569m",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The Scarlet Sentinel's weapon attacks are magical.</p>",
@@ -265,7 +301,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_k4v3",
+        "id": "act_slam_wcix",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}11 (2d8 + 2) bludgeoning damage.</p>",
