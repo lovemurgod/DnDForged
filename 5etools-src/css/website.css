@@ -1118,6 +1118,279 @@ body {
     border-color: rgba(223, 160, 30, 0.3);
 }
 
+.manual-section-badge.player {
+    background: rgba(111, 162, 71, 0.15);
+    color: var(--color-green-bright);
+    border-color: rgba(111, 162, 71, 0.35);
+}
+
+.manual-section-badge.media {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    border-color: rgba(168, 85, 247, 0.35);
+}
+
+/* Informative Callout Boxes */
+.manual-callout {
+    background: rgba(16, 24, 38, 0.75);
+    border-left: 4px solid var(--color-gold);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin: 18px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+}
+
+.manual-callout.tip {
+    border-left-color: var(--color-vtt-blue);
+    background: rgba(10, 25, 45, 0.7);
+}
+
+.manual-callout.success {
+    border-left-color: var(--color-green-bright);
+    background: rgba(14, 36, 20, 0.7);
+}
+
+.manual-callout-icon {
+    font-size: 1.2rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+    color: var(--color-gold-bright);
+}
+
+.manual-callout.tip .manual-callout-icon {
+    color: var(--color-vtt-blue-bright);
+}
+
+.manual-callout.success .manual-callout-icon {
+    color: var(--color-green-bright);
+}
+
+.manual-callout-content {
+    flex: 1;
+}
+
+.manual-callout-content strong {
+    color: #ffffff;
+}
+
+.manual-callout-content code {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: var(--font-code);
+    color: var(--color-gold-bright);
+    font-size: 0.85em;
+}
+
+/* Linear Handbook / Documentation System */
+.doc-section-lead {
+    font-size: 1.02rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 22px;
+}
+
+.doc-section-subtitle {
+    font-family: var(--font-heading);
+    color: var(--color-gold-bright);
+    font-size: 1.25rem;
+    margin: 32px 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.doc-feature-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 18px 0;
+}
+
+.doc-feature-card {
+    background: rgba(13, 18, 30, 0.75);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px 24px;
+    transition: var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.doc-feature-card:hover {
+    border-color: var(--border-gold);
+    background: rgba(18, 25, 42, 0.9);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.doc-feature-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.doc-feature-title {
+    font-family: var(--font-heading);
+    font-size: 1.12rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.doc-feature-title i {
+    color: var(--color-gold-bright);
+    font-size: 1.05rem;
+    width: 24px;
+    text-align: center;
+}
+
+.doc-feature-title i.blue {
+    color: var(--color-vtt-blue-bright);
+}
+
+.doc-feature-title i.red {
+    color: #f87171;
+}
+
+.doc-feature-title i.green {
+    color: var(--color-green-bright);
+}
+
+.doc-feature-body {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.doc-feature-body p {
+    margin-bottom: 8px;
+}
+
+.doc-feature-body p:last-child {
+    margin-bottom: 0;
+}
+
+.doc-feature-body ul {
+    list-style: none;
+    margin-top: 10px;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.doc-feature-body ul li {
+    position: relative;
+    padding-left: 24px;
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+.doc-feature-body ul li i {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    color: var(--color-gold);
+    font-size: 0.75rem;
+}
+
+.doc-feature-body ul li strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.doc-feature-body code {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: var(--font-code);
+    color: var(--color-gold-bright);
+    font-size: 0.85em;
+    display: inline;
+}
+
+/* Numbered Step-by-Step Workflow List */
+.doc-workflow-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 18px 0;
+}
+
+.doc-workflow-item {
+    display: flex;
+    gap: 18px;
+    background: rgba(10, 15, 25, 0.7);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 18px 22px;
+    align-items: flex-start;
+    transition: var(--transition-fast);
+}
+
+.doc-workflow-item:hover {
+    border-color: var(--border-blue);
+    background: rgba(15, 22, 38, 0.85);
+}
+
+.doc-workflow-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(223, 160, 30, 0.15);
+    border: 1px solid rgba(223, 160, 30, 0.35);
+    color: var(--color-gold-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.doc-workflow-content {
+    flex: 1;
+}
+
+.doc-workflow-content h4 {
+    font-family: var(--font-heading);
+    font-size: 1.08rem;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+.doc-workflow-content p {
+    font-size: 0.91rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.doc-workflow-content code {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: var(--font-code);
+    color: var(--color-gold-bright);
+    font-size: 0.85em;
+}
+
 /* Button Inspector Grid & Cards */
 .btn-inspector-grid {
     display: grid;

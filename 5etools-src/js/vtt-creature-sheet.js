@@ -3610,15 +3610,22 @@ export function initVttCreatureSheet(vtt) {
             m.senses = sensesStr.split(',').map(s => s.trim());
             
             // Sync with token vision
-            let maxSight = 60; // default
-            const sightMatches = sensesStr.match(/\d+/g);
-            if (sightMatches) {
-                maxSight = Math.max(...sightMatches.map(n => parseInt(n)));
+            let maxSight = 0;
+            if (window.parseMonsterVision) {
+                maxSight = window.parseMonsterVision({ senses: m.senses });
+            } else {
+                const sightMatches = sensesStr.match(/(?:darkvision|blindsight|truesight|tremorsense)\s*(\d+)/ig);
+                if (sightMatches) {
+                    sightMatches.forEach(sm => {
+                        const num = parseInt(sm.match(/\d+/)?.[0] || 0);
+                        if (num > maxSight) maxSight = num;
+                    });
+                }
             }
             char.tokenSight = maxSight;
         } else {
             delete m.senses;
-            char.tokenSight = 60;
+            char.tokenSight = 0;
         }
 
         const langStr = content.querySelector('#cs-edit-lang').value.trim();
@@ -3845,6 +3852,27 @@ export function initVttCreatureSheet(vtt) {
 
         // Sync to players
         window.VTT.socket.emit('character:update', { character: char });
+
+        // Sync linked tokens on canvas
+        if (window.VTT?.canvasEngine) {
+            const tokens = window.VTT.canvasEngine.getTokens();
+            let changed = false;
+            Object.values(tokens).forEach(t => {
+                if (t.characterId === char.id || (t.name === char.name && !t.isPlayer)) {
+                    if (char.tokenSight !== undefined) {
+                        t.sightRange = char.tokenSight;
+                        changed = true;
+                    }
+                }
+            });
+            if (changed) {
+                const curMapId = window.VTT.canvasEngine.getCurrentMapId();
+                if (curMapId && window.VTT.socket) {
+                    window.VTT.socket.emit('token:update', { mapId: curMapId, tokens });
+                }
+                window.VTT.canvasEngine.renderAll();
+            }
+        }
 
         // Update UI
         if (overlay) overlay.remove();
@@ -4144,19 +4172,20 @@ export function initVttCreatureSheet(vtt) {
             // Upcast Logic
             if (upcastBonus && castLvl > spell.level) {
                 const extra = castLvl - spell.level;
-                const upcastMatch = upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                if (upcastMatch) {
-                    const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                    const extraDice = diceCount * extra;
-                    const uSize = "d" + upcastMatch[2];
-                    const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                    let m = formula.match(diceRegex);
-                    if (m) {
-                        const baseCount = m[1] ? parseInt(m[1]) : 1;
-                        formula = formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
+                const scaleFn = window.VTTSpellManager?.scaleUpcastFormula || window.scaleUpcastFormula;
+                if (scaleFn) {
+                    const scaledStr = scaleFn(upcastBonus, extra);
+                    if (scaledStr) formula = `${formula} ${scaledStr}`.trim();
+                } else {
+                    const upcastMatch = upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
+                    if (upcastMatch) {
+                        const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
+                        const extraDice = diceCount * extra;
+                        const uSize = "d" + upcastMatch[2];
+                        formula += ` + ${extraDice}${uSize}`;
+                    } else if (!isNaN(parseInt(upcastBonus))) {
+                        formula += ` + ${parseInt(upcastBonus) * extra}`;
                     }
-                } else if (!isNaN(parseInt(upcastBonus))) {
-                    formula += ` + ${parseInt(upcastBonus) * extra}`;
                 }
             }
             
@@ -4379,8 +4408,9 @@ export function initVttCreatureSheet(vtt) {
             const { level, idx, sp } = extractSpellContext(e.currentTarget);
             if (!sp) return;
             await ensureSpellIsParsed(sp);
+            const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
-            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+            if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
                 const baseLvl = parseInt(level.replace('level', '')) || 1;
                 upcastFn(baseLvl, (lvl) => {
                     if (lvl) rollNpcSpell(level, idx, 'roll', lvl, sp);
@@ -4411,8 +4441,9 @@ export function initVttCreatureSheet(vtt) {
             const { level, idx, sp } = extractSpellContext(e.currentTarget);
             if (!sp) return;
             await ensureSpellIsParsed(sp);
+            const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
-            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+            if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
                 const baseLvl = parseInt(level.replace('level', '')) || 1;
                 upcastFn(baseLvl, (lvl) => {
                     if (lvl) rollNpcSpell(level, idx, 'damage', lvl, sp);

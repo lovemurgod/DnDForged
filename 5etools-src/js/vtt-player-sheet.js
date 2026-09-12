@@ -1247,6 +1247,9 @@ function simulateRoll(formula, critRange = 20) {
         }
 
         tempPlayerAurasList.forEach((aura, idx) => {
+            if (aura.enabled === undefined) aura.enabled = true;
+            const isEnabled = aura.enabled !== false;
+            const auraName = aura.name || '';
             const range = aura.range !== undefined ? aura.range : 10;
             const shape = aura.shape || 'circle';
             const style = aura.style || 'both';
@@ -1259,23 +1262,33 @@ function simulateRoll(formula, critRange = 20) {
             card.style.border = '1px solid rgba(255,255,255,0.06)';
             card.style.borderRadius = '6px';
             card.style.padding = '10px';
-            card.style.background = 'rgba(0,0,0,0.15)';
+            card.style.background = isEnabled ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.08)';
+            card.style.opacity = isEnabled ? '1' : '0.7';
 
             card.innerHTML = `
                 <div class="aura-item-header" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none;">
-                    <span style="font-size: 0.8rem; font-weight: bold; color: var(--color-text-secondary); display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-chevron-right aura-chevron" style="transition: transform 0.2s; ${isExpanded ? 'transform: rotate(90deg);' : ''}"></i>
-                        Aura ${idx + 1}: ${range}ft ${shape.charAt(0).toUpperCase() + shape.slice(1)}
-                    </span>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="swatch-preview" style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 1px solid rgba(255,255,255,0.2);"></span>
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+                        <i class="fa-solid fa-chevron-right aura-chevron" style="transition: transform 0.2s; font-size: 0.75rem; color: var(--color-text-muted); ${isExpanded ? 'transform: rotate(90deg);' : ''}"></i>
+                        <label class="aura-toggle-wrapper" style="margin: 0; display: flex; align-items: center; cursor: pointer;" title="${isEnabled ? 'Disable Aura' : 'Enable Aura'}">
+                            <input type="checkbox" class="aura-enable-toggle" ${isEnabled ? 'checked' : ''} style="cursor: pointer; width: 14px; height: 14px; accent-color: var(--color-gold-base);">
+                        </label>
+                        <span class="aura-title-text" style="font-size: 0.8rem; font-weight: bold; color: ${isEnabled ? 'var(--color-text-primary)' : 'var(--color-text-muted)'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${auraName ? `<strong>${auraName}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${range}ft ${shape.charAt(0).toUpperCase() + shape.slice(1)}</span>
+                        </span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
+                        <span class="swatch-preview" style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 1px solid rgba(255,255,255,0.2); opacity: ${isEnabled ? '1' : '0.4'};"></span>
                         <button type="button" class="btn-delete-aura btn btn-icon btn-danger btn-xxs" style="padding: 2px 4px; font-size: 0.7rem; border-radius: 4px;" title="Delete Aura">
-                            <i class="fa-solid fa-trash"></i>
+                            <i class="fa-solid fa-trash pointer-events-none"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div class="aura-item-details ${isExpanded ? '' : 'vtt-hidden'}" style="margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 10px;">
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Aura Label / Name</label>
+                        <input type="text" class="aura-name-input" placeholder="e.g. Spirit Guardians, Aura of Courage" value="${auraName}" style="width: 100%; font-size: 0.8rem; padding: 4px 8px;">
+                    </div>
                     <div class="flex-row">
                         <div class="form-group w-50" style="margin-bottom: 0;">
                             <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Aura Range (ft)</label>
@@ -1324,7 +1337,7 @@ function simulateRoll(formula, critRange = 20) {
             const details = card.querySelector('.aura-item-details');
             const chevron = card.querySelector('.aura-chevron');
             header.addEventListener('click', (e) => {
-                if (e.target.closest('.btn-delete-aura')) return;
+                if (e.target.closest('.btn-delete-aura') || e.target.closest('.aura-toggle-wrapper')) return;
                 const collapsed = details.classList.contains('vtt-hidden');
                 if (collapsed) {
                     details.classList.remove('vtt-hidden');
@@ -1336,12 +1349,38 @@ function simulateRoll(formula, critRange = 20) {
                     tempPlayerAurasList[idx].isExpanded = false;
                 }
             });
+
+            const enableToggle = card.querySelector('.aura-enable-toggle');
+            const nameInput = card.querySelector('.aura-name-input');
+            const swatchPreview = card.querySelector('.swatch-preview');
+            const titleText = card.querySelector('.aura-title-text');
+
             const updateAuraTitle = () => {
-                card.querySelector('.aura-item-header span').innerHTML = `
-                    <i class="fa-solid fa-chevron-right aura-chevron" style="transition: transform 0.2s; transform: rotate(${tempPlayerAurasList[idx].isExpanded ? 90 : 0}deg);"></i>
-                    Aura ${idx + 1}: ${card.querySelector('.aura-range-input').value}ft ${card.querySelector('.aura-shape-select').value}
+                const rng = card.querySelector('.aura-range-input').value;
+                const shp = card.querySelector('.aura-shape-select').value;
+                const curName = tempPlayerAurasList[idx].name;
+                const isEn = tempPlayerAurasList[idx].enabled !== false;
+                titleText.innerHTML = `
+                    ${curName ? `<strong>${curName}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${rng}ft ${shp.charAt(0).toUpperCase() + shp.slice(1)}</span>
                 `;
+                titleText.style.color = isEn ? 'var(--color-text-primary)' : 'var(--color-text-muted)';
             };
+
+            enableToggle.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const en = enableToggle.checked;
+                tempPlayerAurasList[idx].enabled = en;
+                updateAuraTitle();
+                swatchPreview.style.opacity = en ? '1' : '0.4';
+                card.style.opacity = en ? '1' : '0.7';
+                card.style.background = en ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.08)';
+            });
+
+            nameInput.addEventListener('input', () => {
+                tempPlayerAurasList[idx].name = nameInput.value.trim();
+                updateAuraTitle();
+            });
+
             card.querySelector('.aura-range-input').addEventListener('input', (e) => { tempPlayerAurasList[idx].range = parseInt(e.target.value) || 10; updateAuraTitle(); });
             card.querySelector('.aura-shape-select').addEventListener('change', (e) => { tempPlayerAurasList[idx].shape = e.target.value; updateAuraTitle(); });
             card.querySelector('.aura-style-select').addEventListener('change', (e) => { tempPlayerAurasList[idx].style = e.target.value; });
@@ -1352,9 +1391,10 @@ function simulateRoll(formula, critRange = 20) {
             });
             card.querySelector('.aura-color-input').addEventListener('input', (e) => {
                 tempPlayerAurasList[idx].color = e.target.value;
-                card.querySelector('.swatch-preview').style.background = e.target.value;
+                swatchPreview.style.background = e.target.value;
             });
-            card.querySelector('.btn-delete-aura').addEventListener('click', () => {
+            card.querySelector('.btn-delete-aura').addEventListener('click', (e) => {
+                e.stopPropagation();
                 tempPlayerAurasList.splice(idx, 1);
                 renderPlayerAuraList();
             });
@@ -1566,7 +1606,7 @@ function simulateRoll(formula, critRange = 20) {
         // Aura add
         document.getElementById('btn-pc-token-add-aura').addEventListener('click', () => {
             tempPlayerAurasList.forEach(a => a.isExpanded = false);
-            tempPlayerAurasList.push({ range: 10, shape: 'circle', style: 'both', opacity: 0.3, color: '#d4af37', isExpanded: true });
+            tempPlayerAurasList.push({ name: '', enabled: true, range: 10, shape: 'circle', style: 'both', opacity: 0.3, color: '#d4af37', isExpanded: true });
             renderPlayerAuraList();
             const listContainer = document.getElementById('pc-token-auras-list');
             setTimeout(() => { listContainer.scrollTop = listContainer.scrollHeight; }, 50);
@@ -3058,9 +3098,14 @@ function simulateRoll(formula, critRange = 20) {
                     hp: c.hpCurrent || 0,
                     maxHp: c.hpMax || 0,
                     tempHp: c.tempHp || 0,
-                    size: size,
+                    size: c.tokenSize !== undefined ? c.tokenSize : size,
+                    customWidth: c.tokenCustomWidth,
+                    customHeight: c.tokenCustomHeight,
                     img: img, // Will be null for PCs, resolved by vtt-data-bridge.js
-                    characterId: c.id
+                    characterId: c.id,
+                    isCompanion: !!c.isCompanion,
+                    isPlayer: !c.isCompanion && !c.isCustomNpc,
+                    sightRange: c.tokenSight !== undefined ? c.tokenSight : (c.monsterData ? (window.parseMonsterVision ? window.parseMonsterVision(c.monsterData) : 0) : 0)
                 }));
                 e.dataTransfer.effectAllowed = 'copy';
             });
@@ -3447,7 +3492,9 @@ function simulateRoll(formula, critRange = 20) {
             parseInt(char.senses.blindsight) || 0,
             parseInt(char.senses.truesight) || 0
         );
-        char.tokenSight = maxSpecialVision > 0 ? maxSpecialVision : 60;
+        if (char.tokenSight === undefined) {
+            char.tokenSight = maxSpecialVision;
+        }
         
         char.spells = (typeof char.spells === 'object' && char.spells !== null && !Array.isArray(char.spells)) ? char.spells : { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [], legacy: [{ id: 'sp_legacy', name: 'Legacy Spells', description: char.spells || '' }] };
         char.bio = char.bio || { height: '', age: '', weight: '', backstory: '', notes: char.info || '' };
@@ -7141,13 +7188,17 @@ function simulateRoll(formula, critRange = 20) {
             let list = sp.damageList && sp.damageList.length > 0 ? JSON.parse(JSON.stringify(sp.damageList)) : [];
             if (list.length === 0 && sp.damage) list.push({ formula: sp.damage, type: sp.damageType || '', label: '' });
             
-            if (baseLvl === 0 && sp.cantripScale && list.length > 0) {
+            const scaleFn = window.VTTSpellManager?.scaleUpcastFormula || window.scaleUpcastFormula;
+
+            if (baseLvl === 0 && list.length > 0) {
                 let cCount = 1;
                 if (charLvl >= 5) cCount = 2;
                 if (charLvl >= 11) cCount = 3;
                 if (charLvl >= 17) cCount = 4;
-                for (let d of list) {
-                    if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
+                for (let idx = 0; idx < list.length; idx++) {
+                    const d = list[idx];
+                    const rowCantripScale = d.cantripScale !== undefined ? Boolean(d.cantripScale) : (idx === 0 ? Boolean(sp.cantripScale !== false) : false);
+                    if (rowCantripScale && d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
                         d.formula = d.formula.replace(/^(?:(\d+)\s*)?([dD]\s*\d+)/, (m, countStr, die) => {
                             const count = countStr !== undefined && countStr !== '' ? parseInt(countStr) : 1;
                             if (count === 0) {
@@ -7158,57 +7209,33 @@ function simulateRoll(formula, critRange = 20) {
                         });
                     }
                 }
-            } else if (castLvl > baseLvl && (sp.upcastBonus || list.some(d => d.upcastBonus)) && list.length > 0) {
-                const step = sp.upcastScaleStep || 1;
-                const extra = Math.floor((castLvl - baseLvl) / step);
-                if (extra > 0) {
-                    let rowSpecificScaled = false;
-                    for (let d of list) {
-                        if (d.upcastBonus) {
-                            const upcastMatch = d.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                            if (upcastMatch) {
-                                const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                                const extraDice = diceCount * extra;
-                                const uSize = "d" + upcastMatch[2];
-                                const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                                let m = d.formula.match(diceRegex);
-                                if (m) {
-                                    const baseCount = m[1] ? parseInt(m[1]) : 1;
-                                    d.formula = d.formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
-                                } else {
-                                    d.formula += ` + ${extraDice}${uSize}`;
+            } else if (castLvl > baseLvl && list.length > 0) {
+                let rowSpecificScaled = false;
+                for (let idx = 0; idx < list.length; idx++) {
+                    const d = list[idx];
+                    const rowUpcast = d.upcastBonus !== undefined ? d.upcastBonus : (idx === 0 ? sp.upcastBonus : '');
+                    if (rowUpcast && String(rowUpcast).trim() !== '') {
+                        const step = d.upcastScaleStep || sp.upcastScaleStep || 1;
+                        const extra = Math.floor((castLvl - baseLvl) / step);
+                        if (extra > 0) {
+                            if (scaleFn) {
+                                const scaledUpcastStr = scaleFn(rowUpcast, extra);
+                                if (scaledUpcastStr) {
+                                    d.formula = `${d.formula || ''} ${scaledUpcastStr}`.trim();
+                                    rowSpecificScaled = true;
                                 }
-                                rowSpecificScaled = true;
-                            } else if (!isNaN(parseInt(d.upcastBonus))) {
-                                d.formula += ` + ${parseInt(d.upcastBonus) * extra}`;
-                                rowSpecificScaled = true;
                             }
                         }
                     }
+                }
 
-                    if (!rowSpecificScaled && sp.upcastBonus) {
-                        const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                        if (upcastMatch) {
-                            const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                            const extraDice = diceCount * extra;
-                            const uSize = "d" + upcastMatch[2];
-                            
-                            let merged = false;
-                            for (let d of list) {
-                                const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                                let m = d.formula.match(diceRegex);
-                                if (m) {
-                                    const baseCount = m[1] ? parseInt(m[1]) : 1;
-                                    d.formula = d.formula.replace(diceRegex, `${baseCount + extraDice}${uSize}`);
-                                    merged = true;
-                                    break;
-                                }
-                            }
-                            if (!merged && list[0]) {
-                                list[0].formula += ` + ${extraDice}${uSize}`;
-                            }
-                        } else if (!isNaN(parseInt(sp.upcastBonus)) && list[0]) {
-                            list[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
+                if (!rowSpecificScaled && sp.upcastBonus && list[0] && scaleFn) {
+                    const step = sp.upcastScaleStep || 1;
+                    const extra = Math.floor((castLvl - baseLvl) / step);
+                    if (extra > 0) {
+                        const scaledUpcastStr = scaleFn(sp.upcastBonus, extra);
+                        if (scaledUpcastStr) {
+                            list[0].formula = `${list[0].formula || ''} ${scaledUpcastStr}`.trim();
                         }
                     }
                 }
@@ -7287,8 +7314,9 @@ function simulateRoll(formula, critRange = 20) {
             const sp = char.spells[level][idx];
             if (!sp) return;
             
+            const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || promptUpcastLevel;
-            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+            if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
                 upcastFn(parseInt(level.replace('level', '')) || 1, (lvl) => {
                     if (lvl) {
                         if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
@@ -7335,8 +7363,9 @@ function simulateRoll(formula, critRange = 20) {
             const sp = char.spells[level][idx];
             if (!sp) return;
             
+            const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || promptUpcastLevel;
-            if (level !== 'cantrip' && level !== 'legacy' && sp.upcastBonus && upcastFn) {
+            if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
                 upcastFn(parseInt(level.replace('level', '')) || 1, (lvl) => {
                     if (lvl) {
                         if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
@@ -7465,7 +7494,7 @@ function simulateRoll(formula, critRange = 20) {
                 truesight: parseInt(document.getElementById('pc-sense-truesight').value) || 0
             };
             const maxSpecialVision = Math.max(char.senses.darkvision, char.senses.devilSight, char.senses.blindsight, char.senses.truesight);
-            char.tokenSight = maxSpecialVision > 0 ? maxSpecialVision : 60;
+            char.tokenSight = maxSpecialVision;
 
             if (char.hpCurrent > char.hpMax) char.hpCurrent = char.hpMax;
 
@@ -8205,9 +8234,14 @@ function simulateRoll(formula, critRange = 20) {
             if (currentChar) {
                 // Populate modal fields with current char's settings
                 document.getElementById('pc-token-edit-size').value = currentChar.tokenSize || 1;
-                document.getElementById('pc-token-edit-sight').value = currentChar.tokenSight !== undefined ? currentChar.tokenSight : 60;
+                document.getElementById('pc-token-edit-sight').value = currentChar.tokenSight !== undefined ? currentChar.tokenSight : 0;
 
-                tempPlayerAurasList = (currentChar.tokenAuras || []).map((a, i) => ({ ...a, isExpanded: i === 0 }));
+                tempPlayerAurasList = (currentChar.tokenAuras || []).map((a, i) => ({
+                    ...a,
+                    enabled: a.enabled !== undefined ? a.enabled : true,
+                    name: a.name || '',
+                    isExpanded: i === 0
+                }));
                 renderPlayerAuraList();
 
                 document.getElementById('pc-token-edit-fx-overlay-enabled').checked = !!currentChar.fxOverlayEnabled;

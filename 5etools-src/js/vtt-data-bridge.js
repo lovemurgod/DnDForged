@@ -216,9 +216,9 @@ export function initVttDataBridge(vtt) {
         return 20;
     }
 
-    // Parse maximum vision distance from senses array
+    // Parse maximum vision distance from senses array (returns 0 if no special vision like darkvision)
     function parseMonsterVision(monster) {
-        if (!monster || !monster.senses) return 60;
+        if (!monster || !monster.senses) return 0;
         let maxVision = 0;
         const senses = Array.isArray(monster.senses) ? monster.senses : [monster.senses];
         senses.forEach(sense => {
@@ -230,8 +230,9 @@ export function initVttDataBridge(vtt) {
                 }
             }
         });
-        return maxVision > 0 ? maxVision : 60;
+        return maxVision;
     }
+    window.parseMonsterVision = parseMonsterVision;
 
     // Parse image location matching local folder structure with offline generator fallback
     function getMonsterImageUrl(monster) {
@@ -350,10 +351,35 @@ export function initVttDataBridge(vtt) {
                     }
                 }
 
+                const isCompanion = !!(charRef?.isCompanion || data.isCompanion);
+                const isCustomNpc = !!(charRef?.isCustomNpc || data.isCustomNpc);
+                const isPlayer = !isCompanion && !isCustomNpc && (data.isPlayer !== false);
+
                 const finalSize = charRef && charRef.tokenSize !== undefined ? charRef.tokenSize : data.size;
 
+                // Determine sight range:
+                // 1. charRef.tokenSight if explicitly saved
+                // 2. data.sightRange if provided
+                // 3. parseMonsterVision if monsterData exists
+                // 4. Default to 0 (no special vision in pitch darkness)
+                let resolvedSight = 0;
+                if (charRef && charRef.tokenSight !== undefined) {
+                    resolvedSight = parseInt(charRef.tokenSight);
+                } else if (data.sightRange !== undefined) {
+                    resolvedSight = parseInt(data.sightRange);
+                } else if (charRef?.monsterData) {
+                    resolvedSight = parseMonsterVision(charRef.monsterData);
+                } else if (charRef?.senses && typeof charRef.senses === 'object') {
+                    resolvedSight = Math.max(
+                        parseInt(charRef.senses.darkvision) || 0,
+                        parseInt(charRef.senses.devilSight) || 0,
+                        parseInt(charRef.senses.blindsight) || 0,
+                        parseInt(charRef.senses.truesight) || 0
+                    );
+                }
+
                 const token = {
-                    id: `token_pc_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                    id: `token_${isPlayer ? 'pc' : (isCompanion ? 'comp' : 'npc')}_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
                     name: data.name,
                     x: mouse.x - sizePx / 2,
                     y: mouse.y - sizePx / 2,
@@ -361,10 +387,15 @@ export function initVttDataBridge(vtt) {
                     maxHp: data.maxHp,
                     tempHp: data.tempHp || 0,
                     size: finalSize,
-                    sightRange: data.sightRange || 60,
+                    customWidth: charRef?.tokenCustomWidth || data.customWidth,
+                    customHeight: charRef?.tokenCustomHeight || data.customHeight,
+                    sightRange: resolvedSight,
                     img: tokenImg,
-                    isPlayer: true,
+                    isPlayer: isPlayer,
+                    isCompanion: isCompanion,
+                    isCustomNpc: isCustomNpc,
                     characterId: data.characterId,
+                    monsterData: charRef?.monsterData || data.monsterData || null,
                     layer: canvasEngine.getActiveLayer(),
                     isBorderless: true,
                     
@@ -374,6 +405,12 @@ export function initVttDataBridge(vtt) {
                     lightBright: data.lightBright !== undefined ? data.lightBright : (charRef ? charRef.tokenLightBright : 0),
                     lightDim: data.lightDim !== undefined ? data.lightDim : (charRef ? charRef.tokenLightDim : 0),
                     lightColor: data.lightColor || (charRef ? charRef.tokenLightColor : '#ffaa00'),
+                    lightAngle: data.lightAngle !== undefined ? data.lightAngle : (charRef && charRef.tokenLightAngle !== undefined ? charRef.tokenLightAngle : 360),
+                    lightRotation: data.lightRotation !== undefined ? data.lightRotation : (charRef && charRef.tokenLightRotation !== undefined ? charRef.tokenLightRotation : 0),
+                    lightAnimationType: data.lightAnimationType || (charRef ? charRef.tokenLightAnimationType : 'none'),
+                    lightAnimationSpeed: data.lightAnimationSpeed !== undefined ? data.lightAnimationSpeed : (charRef && charRef.tokenLightAnimationSpeed !== undefined ? charRef.tokenLightAnimationSpeed : 1.0),
+                    lightAnimationIntensity: data.lightAnimationIntensity !== undefined ? data.lightAnimationIntensity : (charRef && charRef.tokenLightAnimationIntensity !== undefined ? charRef.tokenLightAnimationIntensity : 0.10),
+                    lightAnimationColor2: data.lightAnimationColor2 || (charRef ? charRef.tokenLightAnimationColor2 : '#ffe082'),
                     fxOverlayEnabled: data.fxOverlayEnabled !== undefined ? data.fxOverlayEnabled : (charRef ? charRef.fxOverlayEnabled : false),
                     fxOverlayOpacity: data.fxOverlayOpacity !== undefined ? data.fxOverlayOpacity : (charRef ? charRef.fxOverlayOpacity : 0.3),
                     fxOverlayColor: data.fxOverlayColor || (charRef ? charRef.fxOverlayColor : '#007bff'),
@@ -835,15 +872,19 @@ export function initVttDataBridge(vtt) {
                 const size = npc.monsterData ? translateSizeCategory(npc.monsterData.size) : 1;
                 
                 e.dataTransfer.setData('application/json', JSON.stringify({
-                    type: 'player', // Treat as player token to retain character linkage
+                    type: 'player', // Retain character linkage
                     characterId: id,
+                    isCustomNpc: true,
+                    isPlayer: false,
                     name: npc.name,
                     hp: npc.hpCurrent,
                     maxHp: npc.hpMax,
                     tempHp: npc.tempHp || 0,
-                    size: size,
+                    size: npc.tokenSize !== undefined ? npc.tokenSize : size,
+                    customWidth: npc.tokenCustomWidth,
+                    customHeight: npc.tokenCustomHeight,
                     img: null,
-                    sightRange: parseMonsterVision(npc.monsterData)
+                    sightRange: npc.tokenSight !== undefined ? npc.tokenSight : parseMonsterVision(npc.monsterData)
                 }));
                 e.dataTransfer.effectAllowed = 'copy';
             });

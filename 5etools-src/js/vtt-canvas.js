@@ -2135,10 +2135,10 @@ let lastBroadcastedTokens = {};
 
         visionSources.forEach(source => {
             let cx, cy;
+            const { drawW, drawH, tokenRadius } = getTokenDrawDimensions(source);
             
             // Update on Drop logic: if dragging this token, use original position for vision raycast
             if (updateOnDrop && dragTargetId && (dragTargetId === source.id || selectedTokenIds.has(source.id)) && tokenDragOriginalPositions[source.id]) {
-                const { drawW, drawH } = getTokenDrawDimensions(source);
                 cx = tokenDragOriginalPositions[source.id].x + drawW / 2;
                 cy = tokenDragOriginalPositions[source.id].y + drawH / 2;
             } else {
@@ -2150,7 +2150,9 @@ let lastBroadcastedTokens = {};
             let sightRange = source.sightRange !== undefined ? parseInt(source.sightRange) : defaultSightRadius;
             if (isDaylightMode) sightRange = 99999;
             
-            const radius = (sightRange / grid.feetPerSquare) * grid.size * grid.scale; // convert feet to grid pixels properly scaled
+            const sightDistPx = (sightRange / grid.feetPerSquare) * grid.size * grid.scale; // convert feet to grid pixels properly scaled
+            // Vision begins from the token edge
+            const radius = sightRange > 0 ? (tokenRadius + sightDistPx) : (isDaylightMode ? 99999 : 0);
 
             if (radius <= 0) return;
 
@@ -2167,11 +2169,12 @@ let lastBroadcastedTokens = {};
                 }
                 ctxFog.closePath();
                 
-                // Soft fade for standard vision edge
+                // Soft fade for standard vision edge (starts feathering from 80% of reach beyond edge)
                 if (isDaylightMode) {
                     ctxFog.fillStyle = 'rgba(255, 255, 255, 1.0)';
                 } else {
-                    const grad = ctxFog.createRadialGradient(cx, cy, radius * 0.8, cx, cy, radius);
+                    const innerRadius = Math.max(tokenRadius, tokenRadius + sightDistPx * 0.8);
+                    const grad = ctxFog.createRadialGradient(cx, cy, innerRadius, cx, cy, radius);
                     grad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
                     grad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
                     ctxFog.fillStyle = grad;
@@ -3507,6 +3510,7 @@ let lastBroadcastedTokens = {};
                 }
                 
                 auras.forEach(aura => {
+                    if (aura.enabled === false) return;
                     const auraRange = parseFloat(aura.range) || 10;
                     const auraRangePx = (auraRange / grid.feetPerSquare) * grid.size * grid.scale;
                     const auraShape = aura.shape || 'circle';
@@ -6180,6 +6184,9 @@ window.emitTokenUpdates = function(currentTokens) {
         }
         
         tempAurasList.forEach((aura, idx) => {
+            if (aura.enabled === undefined) aura.enabled = true;
+            const isEnabled = aura.enabled !== false;
+            const auraName = aura.name || '';
             const range = aura.range !== undefined ? aura.range : 10;
             const shape = aura.shape || 'circle';
             const style = aura.style || 'both';
@@ -6192,24 +6199,34 @@ window.emitTokenUpdates = function(currentTokens) {
             card.style.border = '1px solid rgba(255,255,255,0.06)';
             card.style.borderRadius = '6px';
             card.style.padding = '10px';
-            card.style.background = 'rgba(0,0,0,0.15)';
+            card.style.background = isEnabled ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.08)';
+            card.style.opacity = isEnabled ? '1' : '0.7';
             card.dataset.index = idx;
             
             card.innerHTML = `
                 <div class="aura-item-header" style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none;">
-                    <span style="font-size: 0.8rem; font-weight: bold; color: var(--color-text-secondary); display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-chevron-right aura-chevron" style="transition: transform 0.2s; ${isExpanded ? 'transform: rotate(90deg);' : ''}"></i>
-                        Aura ${idx + 1}: ${range}ft ${shape.charAt(0).toUpperCase() + shape.slice(1)}
-                    </span>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="swatch-preview" style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 1px solid rgba(255,255,255,0.2);"></span>
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+                        <i class="fa-solid fa-chevron-right aura-chevron" style="transition: transform 0.2s; font-size: 0.75rem; color: var(--color-text-muted); ${isExpanded ? 'transform: rotate(90deg);' : ''}"></i>
+                        <label class="aura-toggle-wrapper" style="margin: 0; display: flex; align-items: center; cursor: pointer;" title="${isEnabled ? 'Disable Aura' : 'Enable Aura'}">
+                            <input type="checkbox" class="aura-enable-toggle" ${isEnabled ? 'checked' : ''} style="cursor: pointer; width: 14px; height: 14px; accent-color: var(--color-gold-base);">
+                        </label>
+                        <span class="aura-title-text" style="font-size: 0.8rem; font-weight: bold; color: ${isEnabled ? 'var(--color-text-primary)' : 'var(--color-text-muted)'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${auraName ? `<strong>${auraName}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${range}ft ${shape.charAt(0).toUpperCase() + shape.slice(1)}</span>
+                        </span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
+                        <span class="swatch-preview" style="width: 14px; height: 14px; border-radius: 50%; background: ${color}; border: 1px solid rgba(255,255,255,0.2); opacity: ${isEnabled ? '1' : '0.4'};"></span>
                         <button type="button" class="btn-delete-aura btn btn-icon btn-danger btn-xxs" style="padding: 2px 4px; font-size: 0.7rem; border-radius: 4px;" title="Delete Aura">
-                            <i class="fa-solid fa-trash"></i>
+                            <i class="fa-solid fa-trash pointer-events-none"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div class="aura-item-details ${isExpanded ? '' : 'vtt-hidden'}" style="margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 10px;">
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Aura Label / Name (e.g. Spirit Guardians)</label>
+                        <input type="text" class="aura-name-input" placeholder="e.g. Spirit Guardians, Paladin Aura" value="${auraName}" style="width: 100%; font-size: 0.8rem; padding: 4px 8px;">
+                    </div>
                     <div class="flex-row">
                         <div class="form-group w-50" style="margin-bottom: 0;">
                             <label style="font-size: 0.72rem; color: var(--color-text-secondary); margin-bottom: 2px;">Aura Range (ft)</label>
@@ -6266,7 +6283,7 @@ window.emitTokenUpdates = function(currentTokens) {
             const chevron = card.querySelector('.aura-chevron');
             
             header.addEventListener('click', (e) => {
-                if (e.target.closest('.btn-delete-aura')) return;
+                if (e.target.closest('.btn-delete-aura') || e.target.closest('.aura-toggle-wrapper')) return;
                 
                 const collapsed = details.classList.contains('vtt-hidden');
                 if (collapsed) {
@@ -6281,6 +6298,8 @@ window.emitTokenUpdates = function(currentTokens) {
             });
             
             // Input changes synchronization
+            const enableToggle = card.querySelector('.aura-enable-toggle');
+            const nameInput = card.querySelector('.aura-name-input');
             const rangeInput = card.querySelector('.aura-range-input');
             const shapeSelect = card.querySelector('.aura-shape-select');
             const styleSelect = card.querySelector('.aura-style-select');
@@ -6289,16 +6308,34 @@ window.emitTokenUpdates = function(currentTokens) {
             const colorInput = card.querySelector('.aura-color-input');
             const colorSwatches = card.querySelectorAll('.aura-color-swatches .swatch');
             const swatchPreview = card.querySelector('.swatch-preview');
+            const titleText = card.querySelector('.aura-title-text');
             
             const updateAuraTitle = () => {
                 const rng = rangeInput.value;
                 const shp = shapeSelect.value;
                 const shpTitle = shp.charAt(0).toUpperCase() + shp.slice(1);
-                card.querySelector('.aura-item-header span').innerHTML = `
-                    <i class="fa-solid fa-chevron-right aura-chevron" style="transition: transform 0.2s; transform: rotate(${tempAurasList[idx].isExpanded ? 90 : 0}deg);"></i>
-                    Aura ${idx + 1}: ${rng}ft ${shpTitle}
+                const curName = tempAurasList[idx].name;
+                const isEn = tempAurasList[idx].enabled !== false;
+                titleText.innerHTML = `
+                    ${curName ? `<strong>${curName}</strong>` : `Aura ${idx + 1}`}: <span style="font-weight: normal; opacity: 0.85;">${rng}ft ${shpTitle}</span>
                 `;
+                titleText.style.color = isEn ? 'var(--color-text-primary)' : 'var(--color-text-muted)';
             };
+
+            enableToggle.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const en = enableToggle.checked;
+                tempAurasList[idx].enabled = en;
+                updateAuraTitle();
+                swatchPreview.style.opacity = en ? '1' : '0.4';
+                card.style.opacity = en ? '1' : '0.7';
+                card.style.background = en ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.08)';
+            });
+
+            nameInput.addEventListener('input', () => {
+                tempAurasList[idx].name = nameInput.value.trim();
+                updateAuraTitle();
+            });
             
             rangeInput.addEventListener('input', () => {
                 tempAurasList[idx].range = parseInt(rangeInput.value) || 10;
@@ -6347,7 +6384,8 @@ window.emitTokenUpdates = function(currentTokens) {
             
             // Delete button handling
             const btnDeleteAura = card.querySelector('.btn-delete-aura');
-            btnDeleteAura.addEventListener('click', () => {
+            btnDeleteAura.addEventListener('click', (e) => {
+                e.stopPropagation();
                 tempAurasList.splice(idx, 1);
                 renderAuraList();
             });
@@ -6515,6 +6553,8 @@ window.emitTokenUpdates = function(currentTokens) {
         btnAddAura.addEventListener('click', () => {
             tempAurasList.forEach(a => a.isExpanded = false);
             tempAurasList.push({
+                name: '',
+                enabled: true,
                 range: 10,
                 shape: 'circle',
                 style: 'both',
@@ -6629,42 +6669,110 @@ window.emitTokenUpdates = function(currentTokens) {
             // ── Bi-directional HP sync & Visual Defaults ──
             const editedToken = tokens[selectedTokenIdForEdit];
 
-            if (editedToken && editedToken.characterId) {
-                const chars = vtt.campaignState?.characters;
-                if (chars && chars[editedToken.characterId]) {
-                    const char = chars[editedToken.characterId];
-                    char.hpCurrent = editedToken.hp;
-                    char.hpMax     = editedToken.maxHp;
-                    char.tempHp    = editedToken.tempHp ?? 0;
+            if (editedToken) {
+                if (editedToken.characterId) {
+                    const chars = vtt.campaignState?.characters;
+                    if (chars && chars[editedToken.characterId]) {
+                        const char = chars[editedToken.characterId];
+                        char.hpCurrent = editedToken.hp;
+                        char.hpMax     = editedToken.maxHp;
+                        char.tempHp    = editedToken.tempHp ?? 0;
 
-                    if (saveDefaults) {
-                        char.tokenSize = editedToken.size;
-                        char.tokenSight = editedToken.sightRange;
-                        char.tokenAuras = editedToken.auras;
-                        char.fxOverlayEnabled = editedToken.fxOverlayEnabled;
-                        char.fxOverlayOpacity = editedToken.fxOverlayOpacity;
-                        char.fxOverlayColor = editedToken.fxOverlayColor;
-                        char.fxVignetteEnabled = editedToken.fxVignetteEnabled;
-                        char.fxVignetteOpacity = editedToken.fxVignetteOpacity;
-                        char.fxVignetteColor = editedToken.fxVignetteColor;
-                        char.fxShadowEnabled = editedToken.fxShadowEnabled;
-                        char.fxShadowBlur = editedToken.fxShadowBlur;
-                        char.fxShadowOffset = editedToken.fxShadowOffset;
-                        char.fxShadowColor = editedToken.fxShadowColor;
-                        char.fxShadowOpacity = editedToken.fxShadowOpacity;
-                        char.tokenLightEnabled = editedToken.lightEnabled;
-                        char.tokenLightBright = editedToken.lightBright;
-                        char.tokenLightDim = editedToken.lightDim;
-                        char.tokenLightColor = editedToken.lightColor;
-                        char.tokenLightAngle = editedToken.lightAngle;
-                        char.tokenLightRotation = editedToken.lightRotation;
-                        char.tokenLightAnimationType = editedToken.lightAnimationType;
-                        char.tokenLightAnimationSpeed = editedToken.lightAnimationSpeed;
-                        char.tokenLightAnimationIntensity = editedToken.lightAnimationIntensity;
-                        char.tokenLightAnimationColor2 = editedToken.lightAnimationColor2;
+                        if (saveDefaults) {
+                            char.tokenSize = editedToken.size;
+                            if (editedToken.customWidth) char.tokenCustomWidth = editedToken.customWidth;
+                            else delete char.tokenCustomWidth;
+                            if (editedToken.customHeight) char.tokenCustomHeight = editedToken.customHeight;
+                            else delete char.tokenCustomHeight;
+
+                            char.tokenSight = editedToken.sightRange;
+                            char.tokenAuras = editedToken.auras;
+                            char.fxOverlayEnabled = editedToken.fxOverlayEnabled;
+                            char.fxOverlayOpacity = editedToken.fxOverlayOpacity;
+                            char.fxOverlayColor = editedToken.fxOverlayColor;
+                            char.fxVignetteEnabled = editedToken.fxVignetteEnabled;
+                            char.fxVignetteOpacity = editedToken.fxVignetteOpacity;
+                            char.fxVignetteColor = editedToken.fxVignetteColor;
+                            char.fxShadowEnabled = editedToken.fxShadowEnabled;
+                            char.fxShadowBlur = editedToken.fxShadowBlur;
+                            char.fxShadowOffset = editedToken.fxShadowOffset;
+                            char.fxShadowColor = editedToken.fxShadowColor;
+                            char.fxShadowOpacity = editedToken.fxShadowOpacity;
+                            char.tokenLightEnabled = editedToken.lightEnabled;
+                            char.tokenLightBright = editedToken.lightBright;
+                            char.tokenLightDim = editedToken.lightDim;
+                            char.tokenLightColor = editedToken.lightColor;
+                            char.tokenLightAngle = editedToken.lightAngle;
+                            char.tokenLightRotation = editedToken.lightRotation;
+                            char.tokenLightAnimationType = editedToken.lightAnimationType;
+                            char.tokenLightAnimationSpeed = editedToken.lightAnimationSpeed;
+                            char.tokenLightAnimationIntensity = editedToken.lightAnimationIntensity;
+                            char.tokenLightAnimationColor2 = editedToken.lightAnimationColor2;
+                        }
+
+                        vtt.socket.emit('character:update', { character: char });
                     }
+                } else if (saveDefaults && (editedToken.monsterData || !editedToken.isPlayer)) {
+                    // Bestiary token: prompt to save as Custom NPC in Campaign Library!
+                    const wantsToSave = confirm(`"${editedToken.name}" is a Bestiary creature. Would you like to save it as a Custom NPC in your Campaign Library so these token defaults (size, sight, light, auras, effects) are preserved?`);
+                    if (wantsToSave) {
+                        const newId = `npc_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+                        const cleanMonster = editedToken.monsterData ? JSON.parse(JSON.stringify(editedToken.monsterData)) : { name: editedToken.name };
+                        cleanMonster.name = editedToken.name;
 
-                    vtt.socket.emit('character:update', { character: char });
+                        const newChar = {
+                            id: newId,
+                            name: editedToken.name,
+                            isCustomNpc: true,
+                            isPlayer: false,
+                            hpCurrent: editedToken.hp,
+                            hpMax: editedToken.maxHp,
+                            tempHp: editedToken.tempHp || 0,
+                            tokenSize: editedToken.size,
+                            tokenCustomWidth: editedToken.customWidth,
+                            tokenCustomHeight: editedToken.customHeight,
+                            tokenSight: editedToken.sightRange,
+                            tokenImages: [{ url: editedToken.img || 'favicon.svg', name: 'Default Token', isDefault: true }],
+                            activeTokenIndex: 0,
+                            tokenAuras: editedToken.auras,
+                            fxOverlayEnabled: editedToken.fxOverlayEnabled,
+                            fxOverlayOpacity: editedToken.fxOverlayOpacity,
+                            fxOverlayColor: editedToken.fxOverlayColor,
+                            fxVignetteEnabled: editedToken.fxVignetteEnabled,
+                            fxVignetteOpacity: editedToken.fxVignetteOpacity,
+                            fxVignetteColor: editedToken.fxVignetteColor,
+                            fxShadowEnabled: editedToken.fxShadowEnabled,
+                            fxShadowBlur: editedToken.fxShadowBlur,
+                            fxShadowOffset: editedToken.fxShadowOffset,
+                            fxShadowColor: editedToken.fxShadowColor,
+                            fxShadowOpacity: editedToken.fxShadowOpacity,
+                            tokenLightEnabled: editedToken.lightEnabled,
+                            tokenLightBright: editedToken.lightBright,
+                            tokenLightDim: editedToken.lightDim,
+                            tokenLightColor: editedToken.lightColor,
+                            tokenLightAngle: editedToken.lightAngle,
+                            tokenLightRotation: editedToken.lightRotation,
+                            tokenLightAnimationType: editedToken.lightAnimationType,
+                            tokenLightAnimationSpeed: editedToken.lightAnimationSpeed,
+                            tokenLightAnimationIntensity: editedToken.lightAnimationIntensity,
+                            tokenLightAnimationColor2: editedToken.lightAnimationColor2,
+                            monsterData: cleanMonster
+                        };
+
+                        if (!vtt.campaignState.characters) vtt.campaignState.characters = {};
+                        vtt.campaignState.characters[newId] = newChar;
+
+                        editedToken.characterId = newId;
+                        editedToken.isCustomNpc = true;
+                        editedToken.isPlayer = false;
+
+                        if (vtt.socket) {
+                            vtt.socket.emit('character:update', { character: newChar });
+                        }
+                        if (window.VTT?.dataBridge?.renderCustomNpcList) {
+                            window.VTT.dataBridge.renderCustomNpcList();
+                        }
+                    }
                 }
             }
 
@@ -6678,6 +6786,34 @@ window.emitTokenUpdates = function(currentTokens) {
         const btnSaveDefaults = document.getElementById('btn-token-edit-save-defaults');
         if (btnSaveDefaults) {
             btnSaveDefaults.addEventListener('click', () => handleSave(true));
+        }
+
+        const btnSyncSight = document.getElementById('btn-token-sync-sight');
+        if (btnSyncSight) {
+            btnSyncSight.addEventListener('click', () => {
+                if (!selectedTokenIdForEdit) return;
+                const t = tokens[selectedTokenIdForEdit];
+                if (!t) return;
+                let calculatedSight = 0;
+                if (t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+                    const char = vtt.campaignState.characters[t.characterId];
+                    if (char.senses && typeof char.senses === 'object' && !Array.isArray(char.senses)) {
+                        calculatedSight = Math.max(
+                            parseInt(char.senses.darkvision) || 0,
+                            parseInt(char.senses.devilSight) || 0,
+                            parseInt(char.senses.blindsight) || 0,
+                            parseInt(char.senses.truesight) || 0
+                        );
+                    } else if (char.monsterData) {
+                        calculatedSight = (window.parseMonsterVision || parseMonsterVision)(char.monsterData);
+                    } else if (char.tokenSight !== undefined) {
+                        calculatedSight = parseInt(char.tokenSight) || 0;
+                    }
+                } else if (t.monsterData) {
+                    calculatedSight = (window.parseMonsterVision || parseMonsterVision)(t.monsterData);
+                }
+                document.getElementById('token-edit-sight').value = calculatedSight;
+            });
         }
 
         cancel.addEventListener('click', () => modal.classList.add('vtt-hidden'));
@@ -6722,15 +6858,21 @@ window.emitTokenUpdates = function(currentTokens) {
             document.getElementById('token-edit-custom-height').value = token.size || 1;
             document.getElementById('token-edit-custom-size-fields').classList.add('vtt-hidden');
         }
-        document.getElementById('token-edit-sight').value = token.sightRange !== undefined ? token.sightRange : 60;
-        if (token.isPlayer) {
-            document.getElementById('token-edit-sight').disabled = true;
-            document.getElementById('token-edit-sight').title = "Token Sight is managed automatically from the Character Sheet Build Tab Vision settings.";
-            document.getElementById('token-edit-sight').style.opacity = "0.6";
-        } else {
-            document.getElementById('token-edit-sight').disabled = false;
-            document.getElementById('token-edit-sight').title = "";
-            document.getElementById('token-edit-sight').style.opacity = "1";
+        document.getElementById('token-edit-sight').value = token.sightRange !== undefined ? token.sightRange : 0;
+        document.getElementById('token-edit-sight').disabled = false;
+        document.getElementById('token-edit-sight').title = "Sight distance in feet. Click 'Sync Sheet' to pull from sheet senses.";
+        document.getElementById('token-edit-sight').style.opacity = "1";
+
+        const btnSaveDefaults = document.getElementById('btn-token-edit-save-defaults');
+        if (btnSaveDefaults) {
+            const isBestiary = !token.characterId && (token.monsterData || !token.isPlayer);
+            if (isBestiary) {
+                btnSaveDefaults.innerHTML = '<i class="fa-solid fa-file-export"></i> Save as Custom NPC Defaults';
+                btnSaveDefaults.title = 'Promote this Bestiary monster to a Custom NPC with these token defaults';
+            } else {
+                btnSaveDefaults.innerHTML = '<i class="fa-solid fa-save"></i> Save Token Defaults';
+                btnSaveDefaults.title = 'Save these settings as defaults for this sheet';
+            }
         }
 
         const isLightEnabled = token.lightEnabled || false;
@@ -6784,6 +6926,8 @@ window.emitTokenUpdates = function(currentTokens) {
         // Clone into temporary active state and set the first one expanded
         tempAurasList = parsedAuras.map((a, i) => ({
             ...a,
+            enabled: a.enabled !== undefined ? a.enabled : true,
+            name: a.name || '',
             isExpanded: i === 0
         }));
 

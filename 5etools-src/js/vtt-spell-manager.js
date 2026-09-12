@@ -47,10 +47,44 @@ export function toSpellTitleCase(str) {
     }).join(' ');
 }
 
+export function scaleUpcastFormula(upcastFormula, extra) {
+    if (!upcastFormula || extra <= 0) return '';
+    let formula = String(upcastFormula).trim();
+    if (!formula) return '';
+
+    const tokenRegex = /([+-]?)\s*(?:(\d*)[dD](\d+)|(\d+))/g;
+    let scaledParts = [];
+    let match;
+
+    while ((match = tokenRegex.exec(formula)) !== null) {
+        const sign = match[1] === '-' ? -1 : 1;
+        if (match[3] !== undefined) {
+            const count = match[2] ? parseInt(match[2], 10) : 1;
+            const faces = match[3];
+            const scaledCount = count * extra;
+            const op = sign === -1 ? '-' : '+';
+            scaledParts.push(`${op} ${scaledCount}d${faces}`);
+        } else if (match[4] !== undefined) {
+            const num = parseInt(match[4], 10);
+            const scaledNum = num * extra;
+            const op = sign === -1 ? '-' : '+';
+            scaledParts.push(`${op} ${scaledNum}`);
+        }
+    }
+
+    if (scaledParts.length === 0) {
+        return `+ ${formula}`;
+    }
+
+    return scaledParts.join(' ');
+}
+
 if (typeof window !== 'undefined') {
     window.toSpellTitleCase = toSpellTitleCase;
+    window.scaleUpcastFormula = scaleUpcastFormula;
     window.VTTSpellManager = window.VTTSpellManager || {
         toSpellTitleCase: toSpellTitleCase,
+        scaleUpcastFormula: scaleUpcastFormula,
         loadSpells: () => loadSpells(),
         cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
         getSpellCache: () => sharedSpellCache,
@@ -676,69 +710,50 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
             }
         }
 
-        const isCantripRoll = (baseLvl === 0 && (sp.level === 0 || sp.level === undefined)) && Boolean(sp.cantripScale || sp.level === 0 || sp.isCantrip || (slKey === 'cantrip' && (sp.level === 0 || sp.level === undefined)));
+        const isCantripRoll = (baseLvl === 0 && (sp.level === 0 || sp.level === undefined));
         if (isCantripRoll) {
             let cCount = casterLvl >= 17 ? 4 : casterLvl >= 11 ? 3 : casterLvl >= 5 ? 2 : 1;
-            for (let d of dList) {
-                if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
-                    d.formula = d.formula.replace(/^(?:(\d+)\s*)?([dD]\s*\d+)/, (m, countStr, die) => {
-                        const count = countStr !== undefined && countStr !== '' ? parseInt(countStr) : 1;
-                        if (count === 0) {
-                            const extraDice = cCount - 1;
-                            return extraDice > 0 ? `${extraDice}${die}` : '0';
-                        }
-                        return `${cCount * count}${die}`;
-                    });
+            for (let idx = 0; idx < dList.length; idx++) {
+                const d = dList[idx];
+                const rowCantripScale = d.cantripScale !== undefined ? Boolean(d.cantripScale) : (idx === 0 ? Boolean(sp.cantripScale !== false) : false);
+                if (rowCantripScale) {
+                    if (d.formula && /(?:\d+\s*)?[dD]\s*\d+/.test(d.formula)) {
+                        d.formula = d.formula.replace(/^(?:(\d+)\s*)?([dD]\s*\d+)/, (m, countStr, die) => {
+                            const count = countStr !== undefined && countStr !== '' ? parseInt(countStr) : 1;
+                            if (count === 0) {
+                                const extraDice = cCount - 1;
+                                return extraDice > 0 ? `${extraDice}${die}` : '0';
+                            }
+                            return `${cCount * count}${die}`;
+                        });
+                    }
                 }
             }
-        } else if (castLvl > baseLvl && (sp.upcastBonus || dList.some(d => d.upcastBonus))) {
-            const step = sp.upcastScaleStep || 1;
-            const extra = Math.floor((castLvl - baseLvl) / step);
-            if (extra > 0) {
-                let rowSpecificScaled = false;
-                for (let d of dList) {
-                    if (d.upcastBonus) {
-                        const upcastMatch = d.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                        if (upcastMatch) {
-                            const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                            const uSize = "d" + upcastMatch[2];
-                            const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                            let mMatch = d.formula.match(diceRegex);
-                            if (mMatch) {
-                                const baseCount = mMatch[1] ? parseInt(mMatch[1]) : 1;
-                                d.formula = d.formula.replace(diceRegex, `${baseCount + (diceCount * extra)}${uSize}`);
-                            } else {
-                                d.formula += ` + ${diceCount * extra}${uSize}`;
-                            }
-                            rowSpecificScaled = true;
-                        } else if (!isNaN(parseInt(d.upcastBonus))) {
-                            d.formula += ` + ${parseInt(d.upcastBonus) * extra}`;
+        } else if (castLvl > baseLvl) {
+            let rowSpecificScaled = false;
+            for (let idx = 0; idx < dList.length; idx++) {
+                const d = dList[idx];
+                const rowUpcast = d.upcastBonus !== undefined ? d.upcastBonus : (idx === 0 ? sp.upcastBonus : '');
+                if (rowUpcast && String(rowUpcast).trim() !== '') {
+                    const step = d.upcastScaleStep || sp.upcastScaleStep || 1;
+                    const extra = Math.floor((castLvl - baseLvl) / step);
+                    if (extra > 0) {
+                        const scaledUpcastStr = scaleUpcastFormula(rowUpcast, extra);
+                        if (scaledUpcastStr) {
+                            d.formula = `${d.formula || ''} ${scaledUpcastStr}`.trim();
                             rowSpecificScaled = true;
                         }
                     }
                 }
+            }
 
-                if (!rowSpecificScaled && sp.upcastBonus) {
-                    const upcastMatch = sp.upcastBonus.match(/(?:(\d+)\s*)?[dD]\s*(\d+)/);
-                    if (upcastMatch) {
-                        const diceCount = upcastMatch[1] ? parseInt(upcastMatch[1]) : 1;
-                        const uSize = "d" + upcastMatch[2];
-                        let merged = false;
-                        for (let d of dList) {
-                            const diceRegex = new RegExp(`(?:(\\d+)\\s*)?[dD]\\s*${upcastMatch[2]}\\b`, 'i');
-                            let mMatch = d.formula.match(diceRegex);
-                            if (mMatch) {
-                                const baseCount = mMatch[1] ? parseInt(mMatch[1]) : 1;
-                                d.formula = d.formula.replace(diceRegex, `${baseCount + (diceCount * extra)}${uSize}`);
-                                merged = true;
-                                break;
-                            }
-                        }
-                        if (!merged && dList[0]) {
-                            dList[0].formula += ` + ${diceCount * extra}${uSize}`;
-                        }
-                    } else if (!isNaN(parseInt(sp.upcastBonus)) && dList[0]) {
-                        dList[0].formula += ` + ${parseInt(sp.upcastBonus) * extra}`;
+            if (!rowSpecificScaled && sp.upcastBonus && dList[0]) {
+                const step = sp.upcastScaleStep || 1;
+                const extra = Math.floor((castLvl - baseLvl) / step);
+                if (extra > 0) {
+                    const scaledUpcastStr = scaleUpcastFormula(sp.upcastBonus, extra);
+                    if (scaledUpcastStr) {
+                        dList[0].formula = `${dList[0].formula || ''} ${scaledUpcastStr}`.trim();
                     }
                 }
             }
@@ -1333,25 +1348,8 @@ export function initVttSpellManager(vtt) {
                             </select>
                         </div>
                     </div>
-                    <div id="modal-spell-damage-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:8px;"></div>
+                    <div id="modal-spell-damage-list" style="display:flex; flex-direction:column; gap:6px; margin-bottom:8px;"></div>
                     <button class="btn btn-secondary btn-xxs" id="btn-add-spell-damage" style="margin-bottom:8px;">+ Add Damage Row</button>
-                    <div class="form-group" style="margin-bottom:8px; display:flex; align-items:center; gap:8px;">
-                        <input type="checkbox" id="modal-spell-cantrip-scale">
-                        <label style="margin:0;">Enable Cantrip Player Level Scaling</label>
-                    </div>
-                    <div style="display:flex; gap:8px; margin-bottom:8px;">
-                        <div class="form-group" style="flex:2;">
-                            <label>Upcast Formula (Dice/Bonus)</label>
-                            <input type="text" id="modal-spell-upcast" placeholder="e.g. 1d8 or 1d6" style="width:100%;">
-                        </div>
-                        <div class="form-group" style="flex:1;">
-                            <label>Upcast Interval</label>
-                            <select id="modal-spell-upcast-step" style="width:100%;">
-                                <option value="1">Every 1 Level (Standard)</option>
-                                <option value="2">Every 2 Levels (Alternate)</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
 
                 <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2);">
@@ -1935,9 +1933,21 @@ export function initVttSpellManager(vtt) {
                 if (sp.damage) dmgList = [{ formula: sp.damage, type: sp.damageType || '' }];
             }
             modalSpellDamageRows = JSON.parse(JSON.stringify(dmgList || []));
-
-            const cantripScaleEl = document.getElementById('modal-spell-cantrip-scale');
-            if (cantripScaleEl) cantripScaleEl.checked = sp.cantripScale === undefined ? level === 'cantrip' : sp.cantripScale;
+            const isCantripLevel = level === 'cantrip' || sp.level === 0 || (spData && spData.level === 0);
+            modalSpellDamageRows.forEach((d, rIdx) => {
+                if (isCantripLevel) {
+                    if (d.cantripScale === undefined) {
+                        d.cantripScale = rIdx === 0 ? (sp.cantripScale !== undefined ? !!sp.cantripScale : true) : false;
+                    }
+                } else {
+                    if (d.upcastBonus === undefined) {
+                        d.upcastBonus = rIdx === 0 ? (sp.upcastBonus || (spData ? spData.upcastBonus : '') || '') : '';
+                    }
+                    if (d.upcastScaleStep === undefined) {
+                        d.upcastScaleStep = rIdx === 0 ? (sp.upcastScaleStep || (spData ? spData.upcastScaleStep : 1) || 1) : 1;
+                    }
+                }
+            });
 
             const deleteBtn = document.getElementById('modal-spell-delete');
             if (deleteBtn) {
@@ -1945,11 +1955,6 @@ export function initVttSpellManager(vtt) {
                 deleteBtn.dataset.level = level;
                 deleteBtn.dataset.idx = idx;
             }
-
-            const upcastEl = document.getElementById('modal-spell-upcast');
-            if (upcastEl) upcastEl.value = sp.upcastBonus || '';
-            const upcastStepEl = document.getElementById('modal-spell-upcast-step');
-            if (upcastStepEl) upcastStepEl.value = String(sp.upcastScaleStep || spData?.upcastScaleStep || 1);
 
             if (tabSearch) tabSearch.classList.add('vtt-hidden');
             if (tabCustom) tabCustom.classList.remove('vtt-hidden');
@@ -1991,14 +1996,8 @@ export function initVttSpellManager(vtt) {
             if (saveAbilityInput) saveAbilityInput.value = '';
             modalSpellDamageRows = [];
 
-            const cantripScaleEl = document.getElementById('modal-spell-cantrip-scale');
-            if (cantripScaleEl) cantripScaleEl.checked = level === 'cantrip';
-
             const deleteBtn = document.getElementById('modal-spell-delete');
             if (deleteBtn) deleteBtn.classList.add('vtt-hidden');
-
-            const upcastInput = document.getElementById('modal-spell-upcast');
-            if (upcastInput) upcastInput.value = '';
 
             if (tabCustom) tabCustom.classList.add('vtt-hidden');
             if (tabSearch) tabSearch.classList.remove('vtt-hidden');
@@ -2093,21 +2092,59 @@ export function initVttSpellManager(vtt) {
             { val: 'cha', label: 'CHA' }
         ];
 
-        list.innerHTML = modalSpellDamageRows.map((d, i) => `
-            <div style="display:flex; gap:4px; align-items:center; margin-bottom:4px;">
-                <input type="text" class="modal-spell-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="1d8" style="width:20%; padding:4px; font-size:0.8rem;" title="Damage / Healing Formula">
-                <select class="modal-spell-dmg-type" data-idx="${i}" style="width:20%; padding:4px; font-size:0.8rem;" title="Damage Type">
-                    <option value="">Type</option>
-                    ${dmgTypes.map(t => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('')}
-                </select>
-                <input type="text" class="modal-spell-dmg-label" data-idx="${i}" value="${d.label || ''}" placeholder="Label (e.g. Normal)" style="width:22%; padding:4px; font-size:0.8rem;" title="Damage Roll Label">
-                <select class="modal-spell-dmg-stat" data-idx="${i}" style="width:18%; padding:4px; font-size:0.8rem;" title="Ability Modifier">
-                    ${statOptions.map(s => `<option value="${s.val}" ${(d.stat || '').toLowerCase() === s.val.toLowerCase() ? 'selected' : ''}>${s.label}</option>`).join('')}
-                </select>
-                <input type="text" class="modal-spell-dmg-custom" data-idx="${i}" value="${d.custom || ''}" placeholder="Mod (+2)" style="width:13%; padding:4px; font-size:0.8rem;" title="Custom Modifier">
-                <button class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:7%; padding:4px 2px;" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
+        const lvlInput = document.getElementById('modal-spell-level');
+        const isCantrip = lvlInput && (lvlInput.value === 'cantrip' || lvlInput.value === '0' || lvlInput.value === 0);
+
+        list.innerHTML = modalSpellDamageRows.map((d, i) => {
+            const hasScaling = isCantrip 
+                ? Boolean(d.cantripScale) 
+                : Boolean(d.upcastBonus && String(d.upcastBonus).trim() !== '');
+
+            return `
+            <div class="modal-spell-dmg-row-container" data-idx="${i}" style="display:flex; flex-direction:column; gap:4px; margin-bottom:6px;">
+                <div style="display:flex; gap:4px; align-items:center;">
+                    <input type="text" class="modal-spell-dmg-formula" data-idx="${i}" value="${d.formula || ''}" placeholder="1d8" style="width:18%; padding:4px; font-size:0.8rem;" title="Damage / Healing Formula">
+                    <select class="modal-spell-dmg-type" data-idx="${i}" style="width:18%; padding:4px; font-size:0.8rem;" title="Damage Type">
+                        <option value="">Type</option>
+                        ${dmgTypes.map(t => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('')}
+                    </select>
+                    <input type="text" class="modal-spell-dmg-label" data-idx="${i}" value="${d.label || ''}" placeholder="Label (e.g. Normal)" style="width:20%; padding:4px; font-size:0.8rem;" title="Damage Roll Label">
+                    <select class="modal-spell-dmg-stat" data-idx="${i}" style="width:16%; padding:4px; font-size:0.8rem;" title="Ability Modifier">
+                        ${statOptions.map(s => `<option value="${s.val}" ${(d.stat || '').toLowerCase() === s.val.toLowerCase() ? 'selected' : ''}>${s.label}</option>`).join('')}
+                    </select>
+                    <input type="text" class="modal-spell-dmg-custom" data-idx="${i}" value="${d.custom || ''}" placeholder="Mod (+2)" style="width:11%; padding:4px; font-size:0.8rem;" title="Custom Modifier">
+                    <button type="button" class="btn btn-xs ${hasScaling ? 'btn-primary' : 'btn-secondary'} modal-spell-dmg-scale" data-idx="${i}" style="width:10%; padding:4px 2px; font-size:0.75rem; font-weight:${hasScaling ? 'bold' : 'normal'}; border-color:${hasScaling ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'};" title="Configure Scaling for this row">
+                        ${hasScaling ? '<i class="fa-solid fa-arrow-trend-up"></i> ' : ''}Scale
+                    </button>
+                    <button type="button" class="btn btn-xs btn-secondary modal-spell-dmg-del" data-idx="${i}" style="width:7%; padding:4px 2px;" title="Delete Row"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <div class="modal-spell-scale-drawer vtt-hidden" id="modal-spell-scale-drawer-${i}" style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; padding:8px 10px; margin-top:2px;">
+                    ${isCantrip ? `
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" class="modal-spell-row-cantrip-scale" id="modal-spell-row-cantrip-scale-${i}" data-idx="${i}" ${d.cantripScale ? 'checked' : ''} style="cursor:pointer;">
+                            <label for="modal-spell-row-cantrip-scale-${i}" style="margin:0; font-size:0.75rem; cursor:pointer; color:var(--color-text-primary);">
+                                Scale with Character Level (additional dice at 5th, 11th, and 17th level)
+                            </label>
+                        </div>
+                    ` : `
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <div style="flex:2; display:flex; flex-direction:column; gap:2px;">
+                                <label style="margin:0; font-size:0.75rem; color:var(--color-text-muted);">Upcast Formula (Dice / Flat per interval)</label>
+                                <input type="text" class="modal-spell-row-upcast-bonus" data-idx="${i}" value="${d.upcastBonus || ''}" placeholder="e.g. 1d4+1, 1d8, or +2" style="width:100%; padding:4px; font-size:0.8rem;">
+                            </div>
+                            <div style="flex:1; display:flex; flex-direction:column; gap:2px;">
+                                <label style="margin:0; font-size:0.75rem; color:var(--color-text-muted);">Upcast Interval</label>
+                                <select class="modal-spell-row-upcast-step" data-idx="${i}" style="width:100%; padding:4px; font-size:0.8rem;">
+                                    <option value="1" ${(d.upcastScaleStep || 1) == 1 ? 'selected' : ''}>Every 1 Level</option>
+                                    <option value="2" ${(d.upcastScaleStep || 1) == 2 ? 'selected' : ''}>Every 2 Levels</option>
+                                </select>
+                            </div>
+                        </div>
+                    `}
+                </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
 
         document.querySelectorAll('.modal-spell-dmg-formula').forEach(el => {
             el.addEventListener('input', (e) => { modalSpellDamageRows[e.target.dataset.idx].formula = e.target.value; });
@@ -2126,6 +2163,70 @@ export function initVttSpellManager(vtt) {
         document.querySelectorAll('.modal-spell-dmg-custom').forEach(el => {
             el.addEventListener('input', (e) => { modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value; });
             el.addEventListener('change', (e) => { modalSpellDamageRows[e.target.dataset.idx].custom = e.target.value; });
+        });
+        document.querySelectorAll('.modal-spell-dmg-scale').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const idx = e.currentTarget.dataset.idx;
+                const drawer = document.getElementById(`modal-spell-scale-drawer-${idx}`);
+                if (drawer) {
+                    drawer.classList.toggle('vtt-hidden');
+                }
+            });
+        });
+        document.querySelectorAll('.modal-spell-row-cantrip-scale').forEach(el => {
+            el.addEventListener('change', (e) => {
+                const idx = e.target.dataset.idx;
+                modalSpellDamageRows[idx].cantripScale = e.target.checked;
+                const scaleBtn = document.querySelector(`.modal-spell-dmg-scale[data-idx="${idx}"]`);
+                if (scaleBtn) {
+                    if (e.target.checked) {
+                        scaleBtn.classList.remove('btn-secondary');
+                        scaleBtn.classList.add('btn-primary');
+                        scaleBtn.style.borderColor = 'var(--color-gold-base)';
+                        scaleBtn.style.fontWeight = 'bold';
+                        scaleBtn.innerHTML = '<i class="fa-solid fa-arrow-trend-up"></i> Scale';
+                    } else {
+                        scaleBtn.classList.remove('btn-primary');
+                        scaleBtn.classList.add('btn-secondary');
+                        scaleBtn.style.borderColor = 'var(--color-border-subtle)';
+                        scaleBtn.style.fontWeight = 'normal';
+                        scaleBtn.innerHTML = 'Scale';
+                    }
+                }
+            });
+        });
+        document.querySelectorAll('.modal-spell-row-upcast-bonus').forEach(el => {
+            const updateUpcast = (e) => {
+                const idx = e.target.dataset.idx;
+                modalSpellDamageRows[idx].upcastBonus = e.target.value;
+                const scaleBtn = document.querySelector(`.modal-spell-dmg-scale[data-idx="${idx}"]`);
+                if (scaleBtn) {
+                    const hasUpcast = Boolean(e.target.value && e.target.value.trim() !== '');
+                    if (hasUpcast) {
+                        scaleBtn.classList.remove('btn-secondary');
+                        scaleBtn.classList.add('btn-primary');
+                        scaleBtn.style.borderColor = 'var(--color-gold-base)';
+                        scaleBtn.style.fontWeight = 'bold';
+                        scaleBtn.innerHTML = '<i class="fa-solid fa-arrow-trend-up"></i> Scale';
+                    } else {
+                        scaleBtn.classList.remove('btn-primary');
+                        scaleBtn.classList.add('btn-secondary');
+                        scaleBtn.style.borderColor = 'var(--color-border-subtle)';
+                        scaleBtn.style.fontWeight = 'normal';
+                        scaleBtn.innerHTML = 'Scale';
+                    }
+                }
+            };
+            el.addEventListener('input', updateUpcast);
+            el.addEventListener('change', updateUpcast);
+        });
+        document.querySelectorAll('.modal-spell-row-upcast-step').forEach(el => {
+            el.addEventListener('change', (e) => {
+                const idx = e.target.dataset.idx;
+                modalSpellDamageRows[idx].upcastScaleStep = parseInt(e.target.value) || 1;
+            });
         });
         document.querySelectorAll('.modal-spell-dmg-del').forEach(el => el.addEventListener('click', (e) => {
             modalSpellDamageRows.splice(e.currentTarget.dataset.idx, 1);
@@ -2358,7 +2459,20 @@ export function initVttSpellManager(vtt) {
         });
 
         document.getElementById('btn-add-spell-damage')?.addEventListener('click', () => {
-            modalSpellDamageRows.push({ id: 'dmg_' + Date.now(), formula: '1d8', type: '', label: '', stat: '', custom: '' });
+            const lvlInput = document.getElementById('modal-spell-level');
+            const isCantrip = lvlInput && (lvlInput.value === 'cantrip' || lvlInput.value === '0' || lvlInput.value === 0);
+            const isFirstRow = modalSpellDamageRows.length === 0;
+            modalSpellDamageRows.push({
+                id: 'dmg_' + Date.now(),
+                formula: '1d8',
+                type: '',
+                label: '',
+                stat: '',
+                custom: '',
+                cantripScale: isCantrip ? isFirstRow : false,
+                upcastBonus: '',
+                upcastScaleStep: 1
+            });
             renderModalSpellDamage();
         });
 
@@ -2391,9 +2505,9 @@ export function initVttSpellManager(vtt) {
                 const saveDcCustom = document.getElementById('modal-spell-save-dc-custom').value !== '' ? parseInt(document.getElementById('modal-spell-save-dc-custom').value) : null;
                 const saveAbility = document.getElementById('modal-spell-save-ability').value;
                 const damageList = modalSpellDamageRows;
-                const cantripScale = document.getElementById('modal-spell-cantrip-scale') ? document.getElementById('modal-spell-cantrip-scale').checked : false;
-                const upcastBonus = document.getElementById('modal-spell-upcast').value;
-                const upcastScaleStep = parseInt(document.getElementById('modal-spell-upcast-step')?.value) || 1;
+                const cantripScale = damageList.some(d => d.cantripScale);
+                const upcastBonus = damageList.find(d => d.upcastBonus && d.upcastBonus.trim() !== '')?.upcastBonus || damageList[0]?.upcastBonus || '';
+                const upcastScaleStep = parseInt(damageList.find(d => d.upcastScaleStep)?.upcastScaleStep) || parseInt(damageList[0]?.upcastScaleStep) || 1;
                 const usesType = document.getElementById('modal-spell-uses-type')?.value || 'slot';
                 const usesMaxRaw = document.getElementById('modal-spell-uses-max')?.value.trim();
                 const usesMax = usesMaxRaw !== undefined && usesMaxRaw !== '' ? (parseInt(usesMaxRaw) || 0) : undefined;
@@ -2812,6 +2926,7 @@ export function initVttSpellManager(vtt) {
         ensureSpellIsParsed: (sp) => ensureSpellIsParsed(sp),
         postSpellToChat: (sp, slKey, creatureName, visibility) => postSpellToChat(sp, slKey, creatureName, visibility),
         promptUpcastLevel: (baseLvl, callback) => promptUpcastLevel(baseLvl, callback),
+        scaleUpcastFormula: (formula, extra) => scaleUpcastFormula(formula, extra),
         rollSpell: (sp, slKey, casterObj, options) => rollSpell(sp, slKey, casterObj, options),
         ensureSpellModalsExist: () => ensureSpellModalsExist(),
         renderTogglesList: () => renderTogglesList(),

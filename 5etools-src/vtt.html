@@ -1376,7 +1376,12 @@
             
             <div class="form-group">
                 <label for="token-edit-sight">Sight Range (feet)</label>
-                <input type="number" id="token-edit-sight" min="0" max="240" step="5" value="60">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="number" id="token-edit-sight" min="0" max="240" step="5" value="60" style="flex: 1;">
+                    <button type="button" id="btn-token-sync-sight" class="btn btn-secondary btn-sm" title="Sync / Reset Sight from Sheet Senses" style="padding: 6px 10px; display: flex; align-items: center; gap: 6px; font-size: 0.75rem; white-space: nowrap;">
+                        <i class="fa-solid fa-arrows-rotate"></i> Sync Sheet
+                    </button>
+                </div>
             </div>
 
             <!-- Light Emission Settings Section -->
